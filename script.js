@@ -146,19 +146,6 @@ const fallbackProjects = [
     ]
   },
   {
-    title: "Class Profile Builder",
-    category: "Apps & Tools",
-    type: "Education app",
-    status: "Available",
-    description: "A local-first education utility for building and managing class profile data workflows.",
-    tags: ["Education", "Productivity", "Local-first"],
-    featured: false,
-    links: [
-      { label: "GitHub", url: "https://github.com/Samfa12-tech" },
-      { label: "Google Play developer", url: "https://play.google.com/store/apps/dev?id=7761853381809168545" }
-    ]
-  },
-  {
     title: "Mandible Wars",
     category: "Games",
     type: "Game",
