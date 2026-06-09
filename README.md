@@ -112,6 +112,31 @@ Add card artwork under `assets/thumbnails` and point each project to `image` and
   - `"image": "assets/thumbnails/toknight.webp"`
   - `"imageAlt": "Cover image for ToKnight"`
 
+## Thumbnail maintenance
+
+This repo includes a local thumbnail crawler to refresh card images from project
+links.
+
+- Refresh missing thumbnails only:
+
+  ```bash
+  npm run fetch:thumbnails
+  ```
+
+- Rebuild every thumbnail image from scratch (including already-existing files):
+
+  ```bash
+  npm run fetch:thumbnails -- --force
+  ```
+
+Notes:
+
+- The script updates `data/projects.json` with any new local image paths it finds.
+- It writes a local fallback image at `assets/thumbnails/fallback.webp` when no
+  valid image can be found.
+- Review the generated diff before committing and push only after checking the
+  updated thumbnails/images.
+
 ## Accessibility notes
 
 - Keyboard focus styles are included for all interactive controls.
