@@ -767,6 +767,8 @@
         "url": "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
       }
     ],
+    "thumbnail": "assets/thumbnails/drink-ost-6d4b8e.png",
+    "thumbnailAlt": "Cover image for Drink OST",
     "sortOrder": 31
   },
   {
@@ -786,6 +788,8 @@
         "url": "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
       }
     ],
+    "thumbnail": "assets/thumbnails/billions-of-years-1f8c2a.png",
+    "thumbnailAlt": "Cover image for Billions of Years",
     "sortOrder": 32
   },
   {
@@ -806,6 +810,8 @@
         "url": "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
       }
     ],
+    "thumbnail": "assets/thumbnails/td-pack-ost-f4e2a9.png",
+    "thumbnailAlt": "Cover image for Samfa12's Tower Defense Pack OST",
     "sortOrder": 33
   },
   {
