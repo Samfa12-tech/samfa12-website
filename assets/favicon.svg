@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Samfa12 favicon">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#73e4ff" />
+      <stop offset="100%" stop-color="#9b5cff" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#090d15" />
+  <circle cx="64" cy="44" r="26" fill="url(#g)" opacity="0.35" />
+  <path
+    fill="#ecf2ff"
+    d="M35 82h58v11H35zm8-38h42v6H43zm0 12h42v6H43zm0 12h34v6H43z"
+  />
+  <path
+    fill="url(#g)"
+    d="M64 12l15 30-15 8-15-8 15-30Zm0 84.5L37 94h6l20.6 6.2L64 116.5l0.4-16.3L85 94h6L64 96.5Z"
+  />
+</svg>
