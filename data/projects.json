@@ -1,853 +1,962 @@
 [
-    {
-        "title":  "Dust on the River",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "A river-based puzzle-adventure with atmospheric, low-pressure progression loops, exploration beats, and narrative moments across small game systems.",
-        "tags":  [
-                     "Game",
-                     "Adventure",
-                     "Samfa12"
-                 ],
-        "featured":  true,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/dust-on-the-river",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Drink",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "A Samfa12 game release available on Steam and Google Play.",
-        "tags":  [
-                     "Game",
-                     "Shooter",
-                     "Samfa12"
-                 ],
-        "featured":  true,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/drink",
-                          "label":  "Play on itch.io"
-                      },
-                      {
-                          "label":  "Steam publisher page",
-                          "url":  "https://store.steampowered.com/app/4419290/Drink/"
-                      },
-                      {
-                          "label":  "Google Play",
-                          "url":  "https://play.google.com/store/apps/details?id=com.samsmall.drink"
-                      }
-                  ]
-    },
-    {
-        "title":  "Night Shift at Possum\u0027s Cafe",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Coming soon to Google Play",
-        "description":  "A night-shift simulation of café operations in a stylized, humorous setting with service pacing, atmosphere, and progression.",
-        "tags":  [
-                     "Game",
-                     "Arcade",
-                     "Simulation",
-                     "Samfa12"
-                 ],
-        "featured":  true,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/possum-cafe",
-                          "label":  "Play on itch.io"
-                      },
-                      {
-                          "label":  "Coming soon on Google Play",
-                          "url":  "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
-                      }
-                  ]
-    },
-    {
-        "title":  "Pocket Chordsmith",
-        "category":  "Apps \u0026 Tools",
-        "type":  "Mobile app",
-        "status":  "Published",
-        "description":  "A mobile music-writing companion for fast chord mapping, quick harmony checks, and practical songwriting workflows.",
-        "tags":  [
-                     "Music",
-                     "Utility",
-                     "Apps"
-                 ],
-        "featured":  true,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/pocket-chordsmith",
-                          "label":  "Play on itch.io"
-                      },
-                      {
-                          "label":  "Google Play apps",
-                          "url":  "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
-                      },
-                      {
-                          "label":  "GitHub",
-                          "url":  "https://github.com/Samfa12-tech"
-                      }
-                  ]
-    },
-    {
-        "title":  "Bug Maze TD",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "A compact tactical tower-defense game using bite-sized levels and progressively harder enemy patterns.",
-        "tags":  [
-                     "Game",
-                     "Tower Defense",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/bug-maze-td",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Breakfast Beat",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "A rhythm-forward game centered on timing, progression, and playful challenge.",
-        "tags":  [
-                     "Game",
-                     "Rhythm",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/breakfast-beat",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Ship Blockade",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "A defense-in-depth arcade game with timing, resource pressure, and escalating threats.",
-        "tags":  [
-                     "Game",
-                     "Action",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/ship-blockade",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Hop Bunny",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "A playful jump-and-run challenge built around momentum, obstacle timing, and short-form progression.",
-        "tags":  [
-                     "Game",
-                     "Platformer",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/hop-bunny",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Backwater",
-        "category":  "Books",
-        "type":  "Book",
-        "status":  "Published",
-        "description":  "A post-collapse speculative novel about water, survival, control, and the cost of staying alive.",
-        "tags":  [
-                     "Novel",
-                     "Narrative",
-                     "Speculative",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/backwater",
-                          "label":  "Play on itch.io"
-                      },
-                      {
-                          "label":  "Amazon",
-                          "url":  "https://www.amazon.com.au/dp/B0GX2XQR3D"
-                      }
-                  ]
-    },
-    {
-        "title":  "Reckless Dentist",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "An arcade survival game with high-impact movement and escalating risk-reward decisions.",
-        "tags":  [
-                     "Game",
-                     "Arcade",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/reckless-dentist",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Gremlin Grenade Pinball",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "A quirky pinball-style game with quick scoring spikes and playful mechanics.",
-        "tags":  [
-                     "Game",
-                     "Pinball",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/gremlin-grenade-pinball",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Wonky Vehicle Lab",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Published",
-        "description":  "A sandboxy vehicle playground with quirky controls, experimental builds, and fast iteration loops.",
-        "tags":  [
-                     "Game",
-                     "Experimental",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/wonky-vehicle-lab",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "ToKnight",
-        "category":  "Books",
-        "type":  "Book",
-        "status":  "Published",
-        "description":  "A middle-grade fantasy adventure about Jason Proud, a mysterious knightly inheritance, and the first step into the ToKnight world.",
-        "tags":  [
-                     "Novel",
-                     "Fantasy",
-                     "Adventure"
-                 ],
-        "featured":  true,
-        "links":  [
-                      {
-                          "label":  "Play on itch.io",
-                          "url":  "https://samfa12.itch.io/toknight"
-                      },
-                      {
-                          "label":  "Amazon",
-                          "url":  "https://www.amazon.com.au/dp/B0GX2NG31Z"
-                      }
-                  ]
-    },
-    {
-        "title":  "Article 18",
-        "category":  "Books",
-        "type":  "Book",
-        "status":  "Published on itch.io and Google Play",
-        "description":  "A speculative noir novella available as ebook/PDF on itch.io and as audiobook / ebook through Google Play.",
-        "tags":  [
-                     "Speculative",
-                     "Science",
-                     "Literary"
-                 ],
-        "featured":  true,
-        "links":  [
-                      {
-                          "label":  "Play on itch.io",
-                          "url":  "https://samfa12.itch.io/article-18"
-                      },
-                      {
-                          "label":  "Google Play audiobook",
-                          "url":  "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?hl=en\u0026id=AQAAAEDaH2pfoM:"
-                      },
-                      {
-                          "label":  "Google Play books search",
-                          "url":  "https://www.google.com/search?q=site%3Abooks.google.com+Samfa12"
-                      }
-                  ]
-    },
-    {
-        "title":  "Google Play apps",
-        "category":  "Apps \u0026 Tools",
-        "type":  "Developer listing",
-        "status":  "Published",
-        "description":  "A publisher page listing Samfa12\u0027s Android games, tools, and experiments in one Google Play collection.",
-        "tags":  [
-                     "Android",
-                     "Creator",
-                     "Tools"
-                 ],
-        "featured":  true,
-        "links":  [
-                      {
-                          "label":  "Google Play developer",
-                          "url":  "https://play.google.com/store/apps/details?id=com.samsmall.spinvector"
-                      }
-                  ]
-    },
-    {
-        "title":  "TD Pack",
-        "category":  "Games",
-        "type":  "Android game collection",
-        "status":  "Published on Google Play",
-        "description":  "A collection of Samfa12 tower defence games and compact strategy releases for Android.",
-        "tags":  [
-                     "Game",
-                     "Android",
-                     "Strategy",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Google Play developer",
-                          "url":  "https://play.google.com/store/apps/dev?id=7761853381809168545"
-                      }
-                  ]
-    },
-    {
-        "title":  "Spin Vector",
-        "category":  "Games",
-        "type":  "Android game",
-        "status":  "Published on Google Play",
-        "description":  "A neon action arcade game from Samfa12, available through the Google Play developer page.",
-        "tags":  [
-                     "Game",
-                     "Android",
-                     "Arcade",
-                     "Samfa12"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/spin-vector",
-                          "label":  "Play on itch.io"
-                      },
-                      {
-                          "label":  "Google Play developer",
-                          "url":  "https://play.google.com/store/apps/dev?id=7761853381809168545"
-                      }
-                  ]
-    },
-    {
-        "title":  "Pocket DJ",
-        "category":  "Apps \u0026 Tools",
-        "type":  "Mobile app",
-        "status":  "Published",
-        "description":  "A DJ-oriented utility designed for set planning, pacing ideas, and rapid track utility on mobile.",
-        "tags":  [
-                     "Music",
-                     "DJ",
-                     "Utility"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/pocket-dj",
-                          "label":  "Play on itch.io"
-                      },
-                      {
-                          "label":  "Google Play developer",
-                          "url":  "https://play.google.com/store/apps/dev?id=7761853381809168545"
-                      }
-                  ]
-    },
-    {
-        "title":  "Godot MusicConductor / Godot assets",
-        "category":  "Assets",
-        "type":  "Asset pack",
-        "status":  "Published",
-        "description":  "A Godot-focused music toolkit for faster composition wiring, timeline prep, and implementation across game projects.",
-        "tags":  [
-                     "Godot",
-                     "Audio",
-                     "Indie tools"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Godot Asset Library",
-                          "url":  "https://godotengine.org/asset-library/asset/5174"
-                      }
-                  ]
-    },
-    {
-        "title":  "Mandible Wars",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Playable prototype",
-        "description":  "A compact prototype centered on tactical skirmishes, fast rounds, and replayable competitive action.",
-        "tags":  [
-                     "Game",
-                     "Prototype",
-                     "Action"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/mandible-wars",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Moon Mower",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Playable prototype",
-        "description":  "A short-form arcade prototype with quirky mechanics, repeated loops, and playful progression.",
-        "tags":  [
-                     "Game",
-                     "Arcade",
-                     "Indie"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/moon-mower",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Voxel Fish Tank",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Playable prototype",
-        "description":  "A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm.",
-        "tags":  [
-                     "Game",
-                     "Voxel",
-                     "Relax"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/fish-tank",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "Voxel Kart Pocket GP",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "Playable prototype",
-        "description":  "A compact kart game using pocket-scale tracks, stylized visuals, and punchy race sessions.",
-        "tags":  [
-                     "Game",
-                     "Racing",
-                     "Pocket format"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Find on itch.io",
-                          "url":  "https://samfa12.itch.io/"
-                      }
-                  ]
-    },
-    {
-        "title":  "Party Bus / Wasteland Run",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "In development",
-        "description":  "An energetic project concept around a drifting bus and wasteland route, balancing momentum with level progression.",
-        "tags":  [
-                     "Game",
-                     "Adventure",
-                     "Runner"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/party-bus",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "River Locks",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "In development",
-        "description":  "A game-logic concept exploring water-flow mechanics, sequencing, and timing-based challenges.",
-        "tags":  [
-                     "Game",
-                     "Puzzle",
-                     "Systems"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Find on itch.io",
-                          "url":  "https://samfa12.itch.io/"
-                      }
-                  ]
-    },
-    {
-        "title":  "Ant Farm",
-        "category":  "Games",
-        "type":  "Game",
-        "status":  "In development",
-        "description":  "A simulation sketch focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
-        "tags":  [
-                     "Game",
-                     "Simulation",
-                     "Growth"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "url":  "https://samfa12.itch.io/ant-farm",
-                          "label":  "Play on itch.io"
-                      }
-                  ]
-    },
-    {
-        "title":  "ToKnight 2: The Fire Beneath",
-        "category":  "Books",
-        "type":  "Book",
-        "status":  "Pre-order / Releases June 19, 2026",
-        "description":  "The second ToKnight book, continuing Jason Proud’s fantasy adventure with a buried dragon, family history, and fire beneath the school.",
-        "tags":  [
-                     "Novel",
-                     "Fantasy",
-                     "Sequel"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Play on itch.io",
-                          "url":  "https://samfa12.itch.io/toknight-2-the-fire-beneath"
-                      },
-                      {
-                          "label":  "Amazon",
-                          "url":  "https://www.amazon.com.au/dp/B0H3MW9LGP"
-                      }
-                  ]
-    },
-    {
-        "title":  "Free to a Good Home",
-        "category":  "Books",
-        "type":  "Book",
-        "status":  "Published",
-        "description":  "A grounded contemporary novel about care, belonging, family pressure, and the consequences of trying to do the right thing.",
-        "tags":  [
-                     "Narrative",
-                     "Drama",
-                     "Fiction"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Play on itch.io",
-                          "url":  "https://samfa12.itch.io/free-to-a-good-home"
-                      },
-                      {
-                          "label":  "Amazon",
-                          "url":  "https://www.amazon.com.au/dp/B0GZDH57ZC"
-                      }
-                  ]
-    },
-    {
-        "title":  "A Place of His Own",
-        "category":  "Books",
-        "type":  "Book",
-        "status":  "Pre-order / Releases July 1, 2026",
-        "description":  "A contemporary follow-up in the Good Home novels, about independence, family, support, and finding a place that can actually hold you.",
-        "tags":  [
-                     "Narrative",
-                     "Fiction",
-                     "Contemporary"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Play on itch.io",
-                          "url":  "https://samfa12.itch.io/a-place-of-his-own"
-                      },
-                      {
-                          "label":  "Amazon",
-                          "url":  "https://www.amazon.com.au/dp/B0H1Q3TGS7"
-                      }
-                  ]
-    },
-    {
-        "title":  "Concubine",
-        "category":  "Books",
-        "type":  "Book",
-        "status":  "Published",
-        "description":  "A dark political science fiction novel about occupation, power, personhood, resistance, faith, trauma, and control.",
-        "tags":  [
-                     "Novel",
-                     "Psychological",
-                     "Fiction"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Play on itch.io",
-                          "url":  "https://samfa12.itch.io/concubine"
-                      },
-                      {
-                          "label":  "Amazon",
-                          "url":  "https://www.amazon.com.au/dp/B0H1LG55MZ"
-                      }
-                  ]
-    },
-    {
-        "title":  "Sober",
-        "category":  "Books",
-        "type":  "Book",
-        "status":  "Published",
-        "description":  "A novel set in the world of Drink, following recovery, memory, habit, and the work of staying changed.",
-        "tags":  [
-                     "Narrative",
-                     "Fiction",
-                     "Contemporary"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Play on itch.io",
-                          "url":  "https://samfa12.itch.io/sober"
-                      },
-                      {
-                          "label":  "Amazon",
-                          "url":  "https://www.amazon.com.au/dp/B0GSQQMS4M"
-                      }
-                  ]
-    },
-    {
-        "title":  "Godot assets",
-        "category":  "Assets",
-        "type":  "Asset pack",
-        "status":  "Published",
-        "description":  "Reusable Godot assets designed to help with visual consistency and rapid iteration.",
-        "tags":  [
-                     "Godot",
-                     "Assets",
-                     "Indie tools"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Godot Asset Library",
-                          "url":  "https://godotengine.org/asset-library/asset/5174"
-                      }
-                  ]
-    },
-    {
-        "title":  "Music/audio workflow tools",
-        "category":  "Assets",
-        "type":  "Audio toolkit",
-        "status":  "Published",
-        "description":  "A practical music-audio toolkit aimed at builders who need reusable workflow assets quickly.",
-        "tags":  [
-                     "Music",
-                     "Audio",
-                     "Workflow"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Google Play apps",
-                          "url":  "https://play.google.com/store/apps/dev?id=7761853381809168545"
-                      },
-                      {
-                          "label":  "Spotify search",
-                          "url":  "https://open.spotify.com/search/Samfa12"
-                      }
-                  ]
-    },
-    {
-        "title":  "Game-dev helpers",
-        "category":  "Assets",
-        "type":  "Tooling",
-        "status":  "Published",
-        "description":  "Reusable game-production helpers for prototyping, tooling ideas, and indie workflow speed.",
-        "tags":  [
-                     "Game dev",
-                     "Tools",
-                     "Utility"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "GitHub",
-                          "url":  "https://github.com/Samfa12-tech"
-                      },
-                      {
-                          "label":  "Godot Asset Library",
-                          "url":  "https://godotengine.org/asset-library/asset/5174"
-                      }
-                  ]
-    },
-    {
-        "title":  "Spotify",
-        "category":  "Music",
-        "type":  "Music search",
-        "status":  "Available",
-        "description":  "A searchable music hub entry for Samfa12 catalog discovery on Spotify.",
-        "tags":  [
-                     "Music",
-                     "Listening",
-                     "Catalog"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Open in Spotify",
-                          "url":  "https://open.spotify.com/search/Samfa12"
-                      }
-                  ]
-    },
-    {
-        "title":  "YouTube Music",
-        "category":  "Music",
-        "type":  "Music search",
-        "status":  "Available",
-        "description":  "A searchable music hub entry for Samfa12 tracks and releases on YouTube Music.",
-        "tags":  [
-                     "Music",
-                     "Streaming",
-                     "Catalog"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Open in YouTube Music",
-                          "url":  "https://music.youtube.com/search?q=Samfa12"
-                      }
-                  ]
-    },
-    {
-        "title":  "GitHub",
-        "category":  "Social",
-        "type":  "Profile",
-        "status":  "Published",
-        "description":  "A public landing view for source repositories, releases, and development history across Samfa12 projects.",
-        "tags":  [
-                     "Code",
-                     "Repos",
-                     "Community"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Open profile",
-                          "url":  "https://github.com/Samfa12-tech"
-                      }
-                  ]
-    },
-    {
-        "title":  "X / Twitter",
-        "category":  "Social",
-        "type":  "Profile",
-        "status":  "Published",
-        "description":  "A concise channel for updates, experiments, and release notes.",
-        "tags":  [
-                     "Social",
-                     "Updates"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Open profile",
-                          "url":  "https://x.com/Samfa12"
-                      }
-                  ]
-    },
-    {
-        "title":  "Facebook",
-        "category":  "Social",
-        "type":  "Profile",
-        "status":  "Published",
-        "description":  "Community posting and updates on projects, work sessions, and announcements.",
-        "tags":  [
-                     "Community",
-                     "Social"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Open page",
-                          "url":  "https://www.facebook.com/people/Samfa12-Drink-Sober"
-                      }
-                  ]
-    },
-    {
-        "title":  "Reddit",
-        "category":  "Social",
-        "type":  "Profile",
-        "status":  "Published",
-        "description":  "A forum profile for sharing development discussions and creator experiences.",
-        "tags":  [
-                     "Community",
-                     "Forums"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Open profile",
-                          "url":  "https://www.reddit.com/user/Samfa12/"
-                      }
-                  ]
-    },
-    {
-        "title":  "itch.io",
-        "category":  "Social",
-        "type":  "Publisher page",
-        "status":  "Published",
-        "description":  "The central Samfa12 storefront entry for game demos, browser builds, and releases.",
-        "tags":  [
-                     "Games",
-                     "Storefront"
-                 ],
-        "featured":  false,
-        "links":  [
-                      {
-                          "label":  "Visit page",
-                          "url":  "https://samfa12.itch.io/"
-                      }
-                  ]
-    }
+  {
+    "title": "Dust on the River",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "A story-driven bushranger adventure about whether a violent past can ever really stay buried.",
+    "tags": [
+      "Game",
+      "Adventure",
+      "Samfa12"
+    ],
+    "featured": true,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/dust-on-the-river",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/dust-on-the-river.svg",
+    "imageAlt": "Cover image for Dust on the River",
+    "sortOrder": 0
+  },
+  {
+    "title": "Drink",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "A Samfa12 game release available on Steam and Google Play.",
+    "tags": [
+      "Game",
+      "Shooter",
+      "Samfa12"
+    ],
+    "featured": true,
+    "links": [
+      {
+        "label": "Play on itch.io",
+        "url": "https://samfa12.itch.io/drink"
+      },
+      {
+        "label": "Steam",
+        "url": "https://store.steampowered.com/app/4419290/Drink/"
+      },
+      {
+        "label": "Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.drink"
+      }
+    ],
+    "image": "assets/thumbnails/drink.svg",
+    "imageAlt": "Cover image for Drink",
+    "sortOrder": 1
+  },
+  {
+    "title": "Night Shift at Possum's Cafe",
+    "category": "Games",
+    "type": "Game",
+    "status": "Coming soon to Google Play",
+    "description": "A night-shift simulation of café operations in a stylized, humorous setting with service pacing, atmosphere, and progression.",
+    "tags": [
+      "Game",
+      "Arcade",
+      "Simulation",
+      "Samfa12"
+    ],
+    "featured": true,
+    "links": [
+      {
+        "label": "Play on itch.io",
+        "url": "https://samfa12.itch.io/possum-cafe"
+      },
+      {
+        "label": "Coming soon on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
+      }
+    ],
+    "image": "assets/thumbnails/night-shift-at-possum-s-cafe.svg",
+    "imageAlt": "Cover image for Night Shift at Possum's Cafe",
+    "sortOrder": 2
+  },
+  {
+    "title": "Pocket Chordsmith",
+    "category": "Apps & Tools",
+    "type": "Mobile app",
+    "status": "Published",
+    "description": "A mobile-friendly songwriting tool for sketching chords, melodies, drums, and game-ready music ideas.",
+    "tags": [
+      "Music",
+      "Utility",
+      "Apps"
+    ],
+    "featured": true,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/pocket-chordsmith",
+        "label": "Play on itch.io"
+      },
+      {
+        "label": "Google Play",
+        "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Samfa12-tech"
+      }
+    ],
+    "image": "assets/thumbnails/pocket-chordsmith.svg",
+    "imageAlt": "Cover image for Pocket Chordsmith",
+    "sortOrder": 3
+  },
+  {
+    "title": "Bug Maze TD",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "A compact tactical tower-defense game using bite-sized levels and progressively harder enemy patterns.",
+    "tags": [
+      "Game",
+      "Tower Defense",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/bug-maze-td",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/bug-maze-td.svg",
+    "imageAlt": "Cover image for Bug Maze TD",
+    "sortOrder": 4
+  },
+  {
+    "title": "Breakfast Beat",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "A rhythm-forward game centered on timing, progression, and playful challenge.",
+    "tags": [
+      "Game",
+      "Rhythm",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/breakfast-beat",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/breakfast-beat.svg",
+    "imageAlt": "Cover image for Breakfast Beat",
+    "sortOrder": 5
+  },
+  {
+    "title": "Ship Blockade",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "A defense-in-depth arcade game with timing, resource pressure, and escalating threats.",
+    "tags": [
+      "Game",
+      "Action",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/ship-blockade",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/ship-blockade.svg",
+    "imageAlt": "Cover image for Ship Blockade",
+    "sortOrder": 6
+  },
+  {
+    "title": "Hop Bunny",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "A playful jump-and-run challenge built around momentum, obstacle timing, and short-form progression.",
+    "tags": [
+      "Game",
+      "Platformer",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/hop-bunny",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/hop-bunny.svg",
+    "imageAlt": "Cover image for Hop Bunny",
+    "sortOrder": 7
+  },
+  {
+    "title": "Backwater",
+    "category": "Books",
+    "type": "Book",
+    "status": "Published",
+    "description": "A post-collapse speculative novel about water, survival, control, and the cost of staying alive.",
+    "tags": [
+      "Novel",
+      "Narrative",
+      "Speculative",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/backwater"
+      },
+      {
+        "label": "Amazon",
+        "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
+      }
+    ],
+    "image": "assets/thumbnails/backwater.svg",
+    "imageAlt": "Cover image for Backwater",
+    "sortOrder": 8
+  },
+  {
+    "title": "Reckless Dentist",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "An arcade survival game with high-impact movement and escalating risk-reward decisions.",
+    "tags": [
+      "Game",
+      "Arcade",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/reckless-dentist",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/reckless-dentist.svg",
+    "imageAlt": "Cover image for Reckless Dentist",
+    "sortOrder": 9
+  },
+  {
+    "title": "Gremlin Grenade Pinball",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "A quirky pinball-style game with quick scoring spikes and playful mechanics.",
+    "tags": [
+      "Game",
+      "Pinball",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/gremlin-grenade-pinball",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/gremlin-grenade-pinball.svg",
+    "imageAlt": "Cover image for Gremlin Grenade Pinball",
+    "sortOrder": 10
+  },
+  {
+    "title": "Wonky Vehicle Lab",
+    "category": "Games",
+    "type": "Game",
+    "status": "Published",
+    "description": "A sandboxy vehicle playground with quirky controls, experimental builds, and fast iteration loops.",
+    "tags": [
+      "Game",
+      "Experimental",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/wonky-vehicle-lab",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/wonky-vehicle-lab.svg",
+    "imageAlt": "Cover image for Wonky Vehicle Lab",
+    "sortOrder": 11
+  },
+  {
+    "title": "ToKnight",
+    "category": "Books",
+    "type": "Book",
+    "status": "Published",
+    "description": "A middle-grade fantasy adventure about Jason Proud, a mysterious inheritance, and the first step into the ToKnight world.",
+    "tags": [
+      "Novel",
+      "Fantasy",
+      "Adventure"
+    ],
+    "featured": true,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/toknight"
+      },
+      {
+        "label": "Amazon",
+        "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
+      }
+    ],
+    "image": "assets/thumbnails/toknight.svg",
+    "imageAlt": "Cover image for ToKnight",
+    "sortOrder": 12
+  },
+  {
+    "title": "Article 18",
+    "category": "Books",
+    "type": "Book",
+    "status": "Published — itch.io, Google Play",
+    "description": "A speculative noir novella available as ebook/PDF on itch.io and as audiobook / ebook through Google Play.",
+    "tags": [
+      "Speculative",
+      "Science",
+      "Literary"
+    ],
+    "featured": true,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/article-18"
+      },
+      {
+        "label": "Google Play audiobook",
+        "url": "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?hl=en&id=AQAAAEDaH2pfoM:"
+      },
+      {
+        "label": "Google Play books search",
+        "url": "https://www.google.com/search?q=site%3Abooks.google.com+Samfa12"
+      }
+    ],
+    "image": "assets/thumbnails/article-18.svg",
+    "imageAlt": "Cover image for Article 18",
+    "sortOrder": 13
+  },
+  {
+    "title": "Google Play apps",
+    "category": "Storefronts",
+    "type": "Developer listing",
+    "status": "Published",
+    "description": "A publisher page listing Samfa12's Android games, tools, and experiments in one Google Play collection.",
+    "tags": [
+      "Android",
+      "Creator",
+      "Tools"
+    ],
+    "featured": true,
+    "links": [
+      {
+        "label": "Google Play developer",
+        "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
+      }
+    ],
+    "image": "assets/thumbnails/google-play-apps.svg",
+    "imageAlt": "Cover image for Google Play apps",
+    "sortOrder": 14
+  },
+  {
+    "title": "TD Pack",
+    "category": "Games",
+    "type": "Android game collection",
+    "status": "Published on Google Play",
+    "description": "A collection of Samfa12 tower defence games and compact strategy releases for Android.",
+    "tags": [
+      "Game",
+      "Android",
+      "Strategy",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+      }
+    ],
+    "image": "assets/thumbnails/td-pack.svg",
+    "imageAlt": "Cover image for TD Pack",
+    "sortOrder": 15
+  },
+  {
+    "title": "Spin Vector",
+    "category": "Games",
+    "type": "Android game",
+    "status": "Published on Google Play",
+    "description": "A neon action arcade game from Samfa12, available through the Google Play developer page.",
+    "tags": [
+      "Game",
+      "Android",
+      "Arcade",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Play on itch.io",
+        "url": "https://samfa12.itch.io/spin-vector"
+      },
+      {
+        "label": "Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.spinvector"
+      }
+    ],
+    "image": "assets/thumbnails/spin-vector.svg",
+    "imageAlt": "Cover image for Spin Vector",
+    "sortOrder": 16
+  },
+  {
+    "title": "Pocket DJ",
+    "category": "Apps & Tools",
+    "type": "Mobile app",
+    "status": "Published",
+    "description": "A DJ-oriented utility designed for set planning, pacing ideas, and rapid track utility on mobile.",
+    "tags": [
+      "Music",
+      "DJ",
+      "Utility"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/pocket-dj",
+        "label": "Play on itch.io"
+      },
+      {
+        "label": "Google Play developer",
+        "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
+      }
+    ],
+    "image": "assets/thumbnails/pocket-dj.svg",
+    "imageAlt": "Cover image for Pocket DJ",
+    "sortOrder": 17
+  },
+  {
+    "title": "Godot MusicConductor / Godot assets",
+    "category": "Assets",
+    "type": "Asset pack",
+    "status": "Published",
+    "description": "A Godot-focused music toolkit for faster composition wiring, timeline prep, and implementation across game projects.",
+    "tags": [
+      "Godot",
+      "Audio",
+      "Indie tools"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Godot Asset Library",
+        "url": "https://godotengine.org/asset-library/asset/5174"
+      }
+    ],
+    "image": "assets/thumbnails/godot-musicconductor-godot-assets.svg",
+    "imageAlt": "Cover image for Godot MusicConductor / Godot assets",
+    "sortOrder": 18
+  },
+  {
+    "title": "Mandible Wars",
+    "category": "Games",
+    "type": "Game",
+    "status": "Playable prototype",
+    "description": "Ants vs termites in a mobile-first RTS-lite with squads, base building, fog of war, and bite-sized conquest maps.",
+    "tags": [
+      "Game",
+      "Prototype",
+      "Action"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/mandible-wars",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/mandible-wars.svg",
+    "imageAlt": "Cover image for Mandible Wars",
+    "sortOrder": 19
+  },
+  {
+    "title": "Moon Mower",
+    "category": "Games",
+    "type": "Game",
+    "status": "Playable prototype",
+    "description": "A short-form arcade prototype with quirky mechanics, repeated loops, and playful progression.",
+    "tags": [
+      "Game",
+      "Arcade",
+      "Indie"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/moon-mower",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/moon-mower.svg",
+    "imageAlt": "Cover image for Moon Mower",
+    "sortOrder": 20
+  },
+  {
+    "title": "Voxel Fish Tank",
+    "category": "Games",
+    "type": "Game",
+    "status": "Playable prototype",
+    "description": "A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm.",
+    "tags": [
+      "Game",
+      "Voxel",
+      "Relax"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/fish-tank",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/voxel-fish-tank.svg",
+    "imageAlt": "Cover image for Voxel Fish Tank",
+    "sortOrder": 21
+  },
+  {
+    "title": "Voxel Kart Pocket GP",
+    "category": "Games",
+    "type": "Game",
+    "status": "Playable prototype",
+    "description": "A compact kart game using pocket-scale tracks, stylized visuals, and punchy race sessions.",
+    "tags": [
+      "Game",
+      "Racing",
+      "Pocket format"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Play on itch.io",
+        "url": "https://samfa12.itch.io/"
+      }
+    ],
+    "image": "assets/thumbnails/voxel-kart-pocket-gp.svg",
+    "imageAlt": "Cover image for Voxel Kart Pocket GP",
+    "sortOrder": 22
+  },
+  {
+    "title": "Party Bus / Wasteland Run",
+    "category": "Games",
+    "type": "Game",
+    "status": "In development",
+    "description": "An energetic project concept around a drifting bus and wasteland route, balancing momentum with level progression.",
+    "tags": [
+      "Game",
+      "Adventure",
+      "Runner"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/party-bus",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/party-bus-wasteland-run.svg",
+    "imageAlt": "Cover image for Party Bus / Wasteland Run",
+    "sortOrder": 23
+  },
+  {
+    "title": "River Locks",
+    "category": "Games",
+    "type": "Game",
+    "status": "In development",
+    "description": "A game-logic concept exploring water-flow mechanics, sequencing, and timing-based challenges.",
+    "tags": [
+      "Game",
+      "Puzzle",
+      "Systems"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Play on itch.io",
+        "url": "https://samfa12.itch.io/"
+      }
+    ],
+    "image": "assets/thumbnails/river-locks.svg",
+    "imageAlt": "Cover image for River Locks",
+    "sortOrder": 24
+  },
+  {
+    "title": "Ant Farm",
+    "category": "Games",
+    "type": "Game",
+    "status": "In development",
+    "description": "A simulation sketch focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
+    "tags": [
+      "Game",
+      "Simulation",
+      "Growth"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "https://samfa12.itch.io/ant-farm",
+        "label": "Play on itch.io"
+      }
+    ],
+    "image": "assets/thumbnails/ant-farm.svg",
+    "imageAlt": "Cover image for Ant Farm",
+    "sortOrder": 25
+  },
+  {
+    "title": "ToKnight 2: The Fire Beneath",
+    "category": "Books",
+    "type": "Book",
+    "status": "Published",
+    "description": "The second ToKnight book, continuing Jason Proud’s fantasy adventure with a buried dragon, family history, and fire beneath the school.",
+    "tags": [
+      "Novel",
+      "Fantasy",
+      "Sequel"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/toknight-2-the-fire-beneath"
+      },
+      {
+        "label": "Amazon",
+        "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
+      }
+    ],
+    "image": "assets/thumbnails/toknight-2-the-fire-beneath.svg",
+    "imageAlt": "Cover image for ToKnight 2: The Fire Beneath",
+    "sortOrder": 26
+  },
+  {
+    "title": "Free to a Good Home",
+    "category": "Books",
+    "type": "Book",
+    "status": "Published",
+    "description": "A grounded contemporary novel about care, belonging, family pressure, and the consequences of trying to do the right thing.",
+    "tags": [
+      "Narrative",
+      "Drama",
+      "Fiction"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/free-to-a-good-home"
+      },
+      {
+        "label": "Amazon",
+        "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
+      }
+    ],
+    "image": "assets/thumbnails/free-to-a-good-home.svg",
+    "imageAlt": "Cover image for Free to a Good Home",
+    "sortOrder": 27
+  },
+  {
+    "title": "A Place of His Own",
+    "category": "Books",
+    "type": "Book",
+    "status": "Published",
+    "description": "A contemporary follow-up in the Good Home novels, about independence, family, support, and finding a place that can actually hold you.",
+    "tags": [
+      "Narrative",
+      "Fiction",
+      "Contemporary"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/a-place-of-his-own"
+      },
+      {
+        "label": "Amazon",
+        "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
+      }
+    ],
+    "image": "assets/thumbnails/a-place-of-his-own.svg",
+    "imageAlt": "Cover image for A Place of His Own",
+    "sortOrder": 28
+  },
+  {
+    "title": "Concubine",
+    "category": "Books",
+    "type": "Book",
+    "status": "Published",
+    "description": "A dark political science fiction novel about occupation, power, personhood, resistance, faith, trauma, and control.",
+    "tags": [
+      "Novel",
+      "Psychological",
+      "Fiction"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/concubine"
+      },
+      {
+        "label": "Amazon",
+        "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
+      }
+    ],
+    "image": "assets/thumbnails/concubine.svg",
+    "imageAlt": "Cover image for Concubine",
+    "sortOrder": 29
+  },
+  {
+    "title": "Sober",
+    "category": "Books",
+    "type": "Book",
+    "status": "Published",
+    "description": "A novel set in the world of Drink, following recovery, memory, habit, and the work of staying changed.",
+    "tags": [
+      "Narrative",
+      "Fiction",
+      "Contemporary"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/sober"
+      },
+      {
+        "label": "Amazon",
+        "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
+      }
+    ],
+    "image": "assets/thumbnails/sober.svg",
+    "imageAlt": "Cover image for Sober",
+    "sortOrder": 30
+  },
+  {
+    "title": "Godot assets",
+    "category": "Assets",
+    "type": "Asset pack",
+    "status": "Published",
+    "description": "Reusable Godot assets designed to help with visual consistency and rapid iteration.",
+    "tags": [
+      "Godot",
+      "Assets",
+      "Indie tools"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Godot Asset Library",
+        "url": "https://godotengine.org/asset-library/asset/5174"
+      }
+    ],
+    "image": "assets/thumbnails/godot-assets.svg",
+    "imageAlt": "Cover image for Godot assets",
+    "sortOrder": 31
+  },
+  {
+    "title": "Music/audio workflow tools",
+    "category": "Assets",
+    "type": "Audio toolkit",
+    "status": "Published",
+    "description": "A practical music-audio toolkit aimed at builders who need reusable workflow assets quickly.",
+    "tags": [
+      "Music",
+      "Audio",
+      "Workflow"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Google Play apps",
+        "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
+      },
+      {
+        "label": "Spotify search",
+        "url": "https://open.spotify.com/search/Samfa12"
+      }
+    ],
+    "image": "assets/thumbnails/music-audio-workflow-tools.svg",
+    "imageAlt": "Cover image for Music/audio workflow tools",
+    "sortOrder": 32
+  },
+  {
+    "title": "Game-dev helpers",
+    "category": "Assets",
+    "type": "Tooling",
+    "status": "Published",
+    "description": "Reusable game-production helpers for prototyping, tooling ideas, and indie workflow speed.",
+    "tags": [
+      "Game dev",
+      "Tools",
+      "Utility"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Samfa12-tech"
+      },
+      {
+        "label": "Godot Asset Library",
+        "url": "https://godotengine.org/asset-library/asset/5174"
+      }
+    ],
+    "image": "assets/thumbnails/game-dev-helpers.svg",
+    "imageAlt": "Cover image for Game-dev helpers",
+    "sortOrder": 33
+  },
+  {
+    "title": "Spotify",
+    "category": "Music",
+    "type": "Music search",
+    "status": "Available",
+    "description": "A searchable music hub entry for Samfa12 catalog discovery on Spotify.",
+    "tags": [
+      "Music",
+      "Listening",
+      "Catalog"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open in Spotify",
+        "url": "https://open.spotify.com/search/Samfa12"
+      }
+    ],
+    "image": "assets/thumbnails/spotify.svg",
+    "imageAlt": "Cover image for Spotify",
+    "sortOrder": 34
+  },
+  {
+    "title": "YouTube Music",
+    "category": "Music",
+    "type": "Music search",
+    "status": "Available",
+    "description": "A searchable music hub entry for Samfa12 tracks and releases on YouTube Music.",
+    "tags": [
+      "Music",
+      "Streaming",
+      "Catalog"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open in YouTube Music",
+        "url": "https://music.youtube.com/search?q=Samfa12"
+      }
+    ],
+    "image": "assets/thumbnails/youtube-music.svg",
+    "imageAlt": "Cover image for YouTube Music",
+    "sortOrder": 35
+  },
+  {
+    "title": "GitHub",
+    "category": "Social",
+    "type": "Profile",
+    "status": "Published",
+    "description": "A public landing view for source repositories, releases, and development history across Samfa12 projects.",
+    "tags": [
+      "Code",
+      "Repos",
+      "Community"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open profile",
+        "url": "https://github.com/Samfa12-tech"
+      }
+    ]
+  },
+  {
+    "title": "X / Twitter",
+    "category": "Social",
+    "type": "Profile",
+    "status": "Published",
+    "description": "A concise channel for updates, experiments, and release notes.",
+    "tags": [
+      "Social",
+      "Updates"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open profile",
+        "url": "https://x.com/Samfa12"
+      }
+    ]
+  },
+  {
+    "title": "Facebook",
+    "category": "Social",
+    "type": "Profile",
+    "status": "Published",
+    "description": "Community posting and updates on projects, work sessions, and announcements.",
+    "tags": [
+      "Community",
+      "Social"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open page",
+        "url": "https://www.facebook.com/people/Samfa12-Drink-Sober"
+      }
+    ]
+  },
+  {
+    "title": "Reddit",
+    "category": "Social",
+    "type": "Profile",
+    "status": "Published",
+    "description": "A forum profile for sharing development discussions and creator experiences.",
+    "tags": [
+      "Community",
+      "Forums"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open profile",
+        "url": "https://www.reddit.com/user/Samfa12/"
+      }
+    ]
+  },
+  {
+    "title": "itch.io",
+    "category": "Storefronts",
+    "type": "Publisher page",
+    "status": "Published",
+    "description": "The central Samfa12 storefront entry for game demos, browser builds, and releases.",
+    "tags": [
+      "Games",
+      "Storefront"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Visit page",
+        "url": "https://samfa12.itch.io/"
+      }
+    ]
+  }
 ]
+

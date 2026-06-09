@@ -11,6 +11,7 @@ apps, music, assets, and links for **Samfa12**.
 - `data/projects.json` – editable source of projects/cards
 - `assets/favicon.svg` – site icon
 - `assets/og-image.png` – social preview image
+- `assets/thumbnails/` – local project card thumbnails
 - `CNAME` – `samfa12.com` domain file
 - `.github/workflows/pages.yml` – optional GitHub Pages deploy workflow
 
@@ -37,6 +38,7 @@ Project categories used by the site:
 - `Assets`
 - `Music`
 - `Social`
+- `Storefronts`
 
 ## How to preview locally
 
@@ -97,6 +99,18 @@ Then enable **Enforce HTTPS** (when available).
 - Ensure GitHub Pages has the custom domain field set to `samfa12.com`.
 - Confirm Porkbun records match the list above.
 - This site is hosted via GitHub Pages only. No paid hosting is required.
+
+## Thumbnails
+
+Add card artwork under `assets/thumbnails` and point each project to `image` and
+`imageAlt` in `data/projects.json`.
+
+- Use local PNG/WebP/SVG files only (no hotlinked remote thumbnails).
+- Keep thumbnails at a 16:9 ratio for games/apps.
+- Use a 4:5 ratio for books when possible.
+- Example fields:
+  - `"image": "assets/thumbnails/toknight.webp"`
+  - `"imageAlt": "Cover image for ToKnight"`
 
 ## Accessibility notes
 
