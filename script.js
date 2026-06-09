@@ -139,12 +139,12 @@ const fallbackProjects = [
         "url": "https://samfa12.itch.io/article-18"
       },
       {
-        "label": "Google Play audiobook",
-        "url": "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?hl=en&id=AQAAAEDaH2pfoM:"
+        "label": "Google Play ebook",
+        "url": "https://play.google.com/store/books/details/Samfa12_Article_18?id=WVXaEQAAQBAJ"
       },
       {
-        "label": "Google Play books search",
-        "url": "https://www.google.com/search?q=site%3Abooks.google.com+Samfa12"
+        "label": "Google Play audiobook",
+        "url": "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?id=AQAAAEDaH2pfoM"
       }
     ]
   },
