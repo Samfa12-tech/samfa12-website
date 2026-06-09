@@ -102,15 +102,17 @@ Then enable **Enforce HTTPS** (when available).
 
 ## Thumbnails
 
-Add card artwork under `assets/thumbnails` and point each project to `image` and
-`imageAlt` in `data/projects.json`.
+Thumbnails are optional. Cards must render cleanly without them. When a project
+has artwork, store it locally under `assets/thumbnails/` and point the project to
+`thumbnail` and `thumbnailAlt` in `data/projects.json`.
 
-- Use local PNG/WebP/SVG files only (no hotlinked remote thumbnails).
+- Use local PNG/WebP/SVG files only. Do not hotlink remote thumbnails.
 - Keep thumbnails at a 16:9 ratio for games/apps.
 - Use a 4:5 ratio for books when possible.
+- Leave `thumbnail` unset when no safe local asset exists yet.
 - Example fields:
-  - `"image": "assets/thumbnails/toknight.webp"`
-  - `"imageAlt": "Cover image for ToKnight"`
+  - `"thumbnail": "assets/thumbnails/toknight.webp"`
+  - `"thumbnailAlt": "Cover image for ToKnight"`
 
 ## Thumbnail maintenance
 
@@ -131,11 +133,11 @@ links.
 
 Notes:
 
-- The script updates `data/projects.json` with any new local image paths it finds.
-- It writes a local fallback image at `assets/thumbnails/fallback.webp` when no
-  valid image can be found.
+- The script updates `data/projects.json` with any new local thumbnail paths it finds.
+- If no valid image can be found, the project is left without a thumbnail so the
+  card renders as text only.
 - Review the generated diff before committing and push only after checking the
-  updated thumbnails/images.
+  updated thumbnails.
 
 ## Accessibility notes
 

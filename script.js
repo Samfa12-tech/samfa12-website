@@ -546,8 +546,7 @@ const fallbackProjects = [
         "label": "Listen on Spotify",
         "url": "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
       }
-    ],
-    "image": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d801c2c3ceb854a445f2c340"
+    ]
   },
   {
     "title": "Billions of Years",
@@ -565,8 +564,7 @@ const fallbackProjects = [
         "label": "Listen on Spotify",
         "url": "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
       }
-    ],
-    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c8cb7e3323862ee6fde129eb"
+    ]
   },
   {
     "title": "Samfa12's Tower Defense Pack OST",
@@ -585,8 +583,6 @@ const fallbackProjects = [
         "label": "Listen on Spotify",
         "url": "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
       }
-    ],
-    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02b95875114a31d7c959bcfefc"
     ]
   },
   {
@@ -712,62 +708,79 @@ function escapeHtml(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+    .replace(/'/g, "&#039;");
 }
 
 function slugifyCategory(category) {
-  return category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  return String(category || "uncategorized")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-");
 }
 
-function projectImageHtml(project) {
-  const mediaClass = `project-media ${project.category === "Books" ? "project-media-book" : ""}`.trim();
-
-  if (!project.image) {
-    return `
-      <div class="${mediaClass} project-image-placeholder" aria-hidden="true">
-        <img
-          src="assets/thumbnails/fallback.webp"
-          alt="${escapeHtml(project.imageAlt || `Cover image for ${project.title}`)}"
-          class="project-image ${project.category === "Books" ? "project-image-cover" : ""}"
-          loading="lazy"
-          width="960"
-          height="540"
-        />
-      </div>
-    `;
+function isSafeLocalThumbnail(path) {
+  if (typeof path !== "string") {
+    return false;
   }
+
+  const normalized = path.trim().replace(/\\/g, "/");
+  if (!/^assets\/thumbnails\/[a-zA-Z0-9._/-]+\.(png|jpe?g|webp|gif|svg)$/i.test(normalized)) {
+    return false;
+  }
+
+  return !normalized.includes("..") && !/(fallback|placeholder|dummy|temp|default)/i.test(normalized);
+}
+
+function projectThumbnailHtml(project) {
+  const thumbnail = project.thumbnail ?? project.image;
+  if (!isSafeLocalThumbnail(thumbnail)) {
+    return "";
+  }
+
+  const thumbnailPath = thumbnail.trim().replace(/\\/g, "/");
+  const title = project.title || "Samfa12 project";
+  const category = project.category || "";
+  const mediaClass = `project-media ${category === "Books" ? "project-media-book" : ""}`.trim();
+  const imageClass = `project-image ${category === "Books" ? "project-image-cover" : ""}`.trim();
+  const alt = project.thumbnailAlt || project.imageAlt || `Cover image for ${title}`;
 
   return `
     <div class="${mediaClass}">
       <img
-        src="${escapeHtml(project.image)}"
-        alt="${escapeHtml(project.imageAlt || `Cover image for ${project.title}`)}"
-        class="project-image ${project.category === "Books" ? "project-image-cover" : ""}"
+        src="${escapeHtml(thumbnailPath)}"
+        alt="${escapeHtml(alt)}"
+        class="${imageClass}"
         loading="lazy"
         width="960"
         height="540"
+        onerror="this.closest('.project-media').hidden = true"
       />
     </div>
   `;
 }
 
-function normaliseImageFallbacks() {
+function hideBrokenThumbnails() {
   document.querySelectorAll("img.project-image").forEach((image) => {
     image.addEventListener("error", () => {
-      if (!image.dataset.fallbackUsed) {
-        image.src = "assets/thumbnails/fallback.webp";
-        image.dataset.fallbackUsed = "true";
+      const container = image.closest(".project-media");
+      if (container) {
+        container.hidden = true;
       }
     });
   });
 }
 
 function projectCardHtml(project) {
-  const tags = project.tags
+  const title = project.title || "Untitled project";
+  const category = project.category || "Uncategorized";
+  const tagList = Array.isArray(project.tags) ? project.tags : [];
+  const linkList = Array.isArray(project.links) ? project.links : [];
+  const tags = tagList
+    .filter((tag) => typeof tag === "string" && tag.trim())
     .map((tag) => `<span class="pill">${escapeHtml(tag)}</span>`)
     .join("");
 
-  const links = project.links
+  const links = linkList
+    .filter((link) => link?.url && link?.label)
     .map(
       (link) =>
         `<a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(
@@ -778,15 +791,15 @@ function projectCardHtml(project) {
 
   return `
     <article class="card">
-      ${projectImageHtml(project)}
-      <h3>${escapeHtml(project.title)}</h3>
+      ${projectThumbnailHtml(project)}
+      <h3>${escapeHtml(title)}</h3>
       <p class="project-meta">
-        <span class="pill">${escapeHtml(project.type)}</span>
-        <span class="pill">${escapeHtml(project.status)}</span>
+        <span class="pill">${escapeHtml(project.type || "Project")}</span>
+        <span class="pill">${escapeHtml(project.status || "Available")}</span>
       </p>
-      <p class="description">${escapeHtml(project.description)}</p>
-      <div class="links" aria-label="${escapeHtml(project.title)} links">${links}</div>
-      <p class="description" style="margin-top: 0.65rem;">${escapeHtml(project.category)}</p>
+      <p class="description">${escapeHtml(project.description || "")}</p>
+      <div class="links" aria-label="${escapeHtml(title)} links">${links}</div>
+      <p class="description" style="margin-top: 0.65rem;">${escapeHtml(category)}</p>
       <div class="project-meta">${tags}</div>
     </article>
   `;
@@ -894,7 +907,7 @@ async function initialize() {
   renderCategorySections(projects);
   buildFilterButtons();
   updateFilter("all");
-  normaliseImageFallbacks();
+  hideBrokenThumbnails();
   scrollToHashTarget();
 }
 

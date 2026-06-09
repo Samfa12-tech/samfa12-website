@@ -264,6 +264,10 @@ h1 {
   color: var(--text-muted);
 }
 
+.project-media[hidden] {
+  display: none;
+}
+
 .project-media-book {
   aspect-ratio: 4 / 5;
 }

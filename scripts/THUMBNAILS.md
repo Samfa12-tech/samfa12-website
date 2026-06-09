@@ -23,8 +23,9 @@ This repository includes a local script to refresh project card images for
 - For each project, picks a best-effort source URL from the project links.
 - Crawls page metadata and image tags to download a candidate image.
 - Writes local files to `assets/thumbnails/`.
-- Falls back to `assets/thumbnails/fallback.webp` when a project has no usable source image.
-- Updates `data/projects.json` image paths (and `imageAlt` when needed).
+- Leaves `thumbnail` unset when a project has no usable source image, so the
+  card renders as text only.
+- Updates `data/projects.json` thumbnail paths (and `thumbnailAlt` when needed).
 
 ## Recommended workflow
 

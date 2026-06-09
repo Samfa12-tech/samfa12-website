@@ -17,9 +17,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/dust-on-the-river-b9a9e3.png",
-    "imageAlt": "Cover image for Dust on the River",
-    "sortOrder": 0
+    "sortOrder": 0,
+    "thumbnail": "assets/thumbnails/dust-on-the-river-b9a9e3.png",
+    "thumbnailAlt": "Cover image for Dust on the River"
   },
   {
     "title": "Drink",
@@ -47,9 +47,9 @@
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.drink"
       }
     ],
-    "image": "assets/thumbnails/drink-2ad44b.png",
-    "imageAlt": "Cover image for Drink",
-    "sortOrder": 1
+    "sortOrder": 1,
+    "thumbnail": "assets/thumbnails/drink-2ad44b.png",
+    "thumbnailAlt": "Cover image for Drink"
   },
   {
     "title": "Night Shift at Possum's Cafe",
@@ -74,9 +74,9 @@
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
       }
     ],
-    "image": "assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg",
-    "imageAlt": "Cover image for Night Shift at Possum's Cafe",
-    "sortOrder": 2
+    "sortOrder": 2,
+    "thumbnail": "assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg",
+    "thumbnailAlt": "Cover image for Night Shift at Possum's Cafe"
   },
   {
     "title": "Pocket Chordsmith",
@@ -96,9 +96,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
-    "imageAlt": "Cover image for Pocket Chordsmith",
-    "sortOrder": 3
+    "sortOrder": 3,
+    "thumbnail": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
+    "thumbnailAlt": "Cover image for Pocket Chordsmith"
   },
   {
     "title": "Pocket Chordsmith Godot addon",
@@ -126,9 +126,9 @@
         "url": "https://store.godotengine.org/asset/samfa12/pocket-chordsmith/"
       }
     ],
-    "image": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
-    "imageAlt": "Cover image for Pocket Chordsmith Godot addon",
-    "sortOrder": 18
+    "sortOrder": 18,
+    "thumbnail": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
+    "thumbnailAlt": "Cover image for Pocket Chordsmith Godot addon"
   },
   {
     "title": "Bug Maze TD",
@@ -148,9 +148,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/bug-maze-td-078911.png",
-    "imageAlt": "Cover image for Bug Maze TD",
-    "sortOrder": 4
+    "sortOrder": 4,
+    "thumbnail": "assets/thumbnails/bug-maze-td-078911.png",
+    "thumbnailAlt": "Cover image for Bug Maze TD"
   },
   {
     "title": "Breakfast Beat",
@@ -170,9 +170,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/breakfast-beat-d686e6.jpg",
-    "imageAlt": "Cover image for Breakfast Beat",
-    "sortOrder": 5
+    "sortOrder": 5,
+    "thumbnail": "assets/thumbnails/breakfast-beat-d686e6.jpg",
+    "thumbnailAlt": "Cover image for Breakfast Beat"
   },
   {
     "title": "Ship Blockade",
@@ -192,9 +192,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/ship-blockade-59ef6d.jpg",
-    "imageAlt": "Cover image for Ship Blockade",
-    "sortOrder": 6
+    "sortOrder": 6,
+    "thumbnail": "assets/thumbnails/ship-blockade-59ef6d.jpg",
+    "thumbnailAlt": "Cover image for Ship Blockade"
   },
   {
     "title": "Hop Bunny",
@@ -214,9 +214,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/hop-bunny-b0d59d.png",
-    "imageAlt": "Cover image for Hop Bunny",
-    "sortOrder": 7
+    "sortOrder": 7,
+    "thumbnail": "assets/thumbnails/hop-bunny-b0d59d.png",
+    "thumbnailAlt": "Cover image for Hop Bunny"
   },
   {
     "title": "Backwater",
@@ -241,9 +241,9 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/backwater-245d41.png",
-    "imageAlt": "Cover image for Backwater",
-    "sortOrder": 8
+    "sortOrder": 8,
+    "thumbnail": "assets/thumbnails/backwater-245d41.png",
+    "thumbnailAlt": "Cover image for Backwater"
   },
   {
     "title": "Reckless Dentist",
@@ -263,9 +263,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/reckless-dentist-05c1f7.png",
-    "imageAlt": "Cover image for Reckless Dentist",
-    "sortOrder": 9
+    "sortOrder": 9,
+    "thumbnail": "assets/thumbnails/reckless-dentist-05c1f7.png",
+    "thumbnailAlt": "Cover image for Reckless Dentist"
   },
   {
     "title": "Gremlin Grenade Pinball",
@@ -285,9 +285,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/gremlin-grenade-pinball-4f4da7.png",
-    "imageAlt": "Cover image for Gremlin Grenade Pinball",
-    "sortOrder": 10
+    "sortOrder": 10,
+    "thumbnail": "assets/thumbnails/gremlin-grenade-pinball-4f4da7.png",
+    "thumbnailAlt": "Cover image for Gremlin Grenade Pinball"
   },
   {
     "title": "Wonky Vehicle Lab",
@@ -307,9 +307,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/wonky-vehicle-lab-10cf51.png",
-    "imageAlt": "Cover image for Wonky Vehicle Lab",
-    "sortOrder": 11
+    "sortOrder": 11,
+    "thumbnail": "assets/thumbnails/wonky-vehicle-lab-10cf51.png",
+    "thumbnailAlt": "Cover image for Wonky Vehicle Lab"
   },
   {
     "title": "ToKnight",
@@ -333,9 +333,9 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/toknight-47d9be.png",
-    "imageAlt": "Cover image for ToKnight",
-    "sortOrder": 12
+    "sortOrder": 12,
+    "thumbnail": "assets/thumbnails/toknight-47d9be.png",
+    "thumbnailAlt": "Cover image for ToKnight"
   },
   {
     "title": "Article 18",
@@ -363,9 +363,9 @@
         "url": "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?id=AQAAAEDaH2pfoM"
       }
     ],
-    "image": "assets/thumbnails/article-18-5b9e27.png",
-    "imageAlt": "Cover image for Article 18",
-    "sortOrder": 13
+    "sortOrder": 13,
+    "thumbnail": "assets/thumbnails/article-18-5b9e27.png",
+    "thumbnailAlt": "Cover image for Article 18"
   },
   {
     "title": "Google Play apps",
@@ -385,9 +385,9 @@
         "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
       }
     ],
-    "image": "assets/thumbnails/google-play-apps-5325de.png",
-    "imageAlt": "Cover image for Google Play apps",
-    "sortOrder": 14
+    "sortOrder": 14,
+    "thumbnail": "assets/thumbnails/google-play-apps-5325de.png",
+    "thumbnailAlt": "Cover image for Google Play apps"
   },
   {
     "title": "Samfa12's TD Pack",
@@ -408,9 +408,9 @@
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
       }
     ],
-    "image": "assets/thumbnails/td-pack-63e5f6.jpg",
-    "imageAlt": "Cover image for Samfa12's TD Pack",
-    "sortOrder": 15
+    "sortOrder": 15,
+    "thumbnail": "assets/thumbnails/td-pack-63e5f6.jpg",
+    "thumbnailAlt": "Cover image for Samfa12's TD Pack"
   },
   {
     "title": "Spin Vector",
@@ -439,9 +439,9 @@
         "url": "https://wavedash.com/games/spin-vector"
       }
     ],
-    "image": "assets/thumbnails/spin-vector-7f51f8.png",
-    "imageAlt": "Cover image for Spin Vector",
-    "sortOrder": 16
+    "sortOrder": 16,
+    "thumbnail": "assets/thumbnails/spin-vector-7f51f8.png",
+    "thumbnailAlt": "Cover image for Spin Vector"
   },
   {
     "title": "Pocket DJ",
@@ -465,9 +465,9 @@
         "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
       }
     ],
-    "image": "assets/thumbnails/pocket-dj-1c5717.png",
-    "imageAlt": "Cover image for Pocket DJ",
-    "sortOrder": 17
+    "sortOrder": 17,
+    "thumbnail": "assets/thumbnails/pocket-dj-1c5717.png",
+    "thumbnailAlt": "Cover image for Pocket DJ"
   },
   {
     "title": "Pocket DAW",
@@ -487,8 +487,6 @@
         "url": "https://samfa12.itch.io/pocket-chordsmith"
       }
     ],
-    "image": "assets/thumbnails/fallback.webp",
-    "imageAlt": "Cover image for Pocket DAW",
     "sortOrder": 18
   },
   {
@@ -509,9 +507,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/mandible-wars-5acb5c.png",
-    "imageAlt": "Cover image for Mandible Wars",
-    "sortOrder": 19
+    "sortOrder": 19,
+    "thumbnail": "assets/thumbnails/mandible-wars-5acb5c.png",
+    "thumbnailAlt": "Cover image for Mandible Wars"
   },
   {
     "title": "Moon Mower",
@@ -531,9 +529,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/moon-mower-66bed9.jpg",
-    "imageAlt": "Cover image for Moon Mower",
-    "sortOrder": 20
+    "sortOrder": 20,
+    "thumbnail": "assets/thumbnails/moon-mower-66bed9.jpg",
+    "thumbnailAlt": "Cover image for Moon Mower"
   },
   {
     "title": "Voxel Fish Tank",
@@ -553,9 +551,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/voxel-fish-tank-41a16e.jpg",
-    "imageAlt": "Cover image for Voxel Fish Tank",
-    "sortOrder": 21
+    "sortOrder": 21,
+    "thumbnail": "assets/thumbnails/voxel-fish-tank-41a16e.jpg",
+    "thumbnailAlt": "Cover image for Voxel Fish Tank"
   },
   {
     "title": "P.A.R.T.Y. Bus: Wasteland Run",
@@ -575,9 +573,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/party-bus-wasteland-run-597195.png",
-    "imageAlt": "Cover image for P.A.R.T.Y. Bus: Wasteland Run",
-    "sortOrder": 23
+    "sortOrder": 23,
+    "thumbnail": "assets/thumbnails/party-bus-wasteland-run-597195.png",
+    "thumbnailAlt": "Cover image for P.A.R.T.Y. Bus: Wasteland Run"
   },
   {
     "title": "Ant Farm",
@@ -597,9 +595,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/ant-farm-485b3d.png",
-    "imageAlt": "Cover image for Ant Farm",
-    "sortOrder": 24
+    "sortOrder": 24,
+    "thumbnail": "assets/thumbnails/ant-farm-485b3d.png",
+    "thumbnailAlt": "Cover image for Ant Farm"
   },
   {
     "title": "ToKnight 2: The Fire Beneath",
@@ -623,9 +621,9 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/toknight-2-the-fire-beneath-e439e0.png",
-    "imageAlt": "Cover image for ToKnight 2: The Fire Beneath",
-    "sortOrder": 26
+    "sortOrder": 26,
+    "thumbnail": "assets/thumbnails/toknight-2-the-fire-beneath-e439e0.png",
+    "thumbnailAlt": "Cover image for ToKnight 2: The Fire Beneath"
   },
   {
     "title": "Free to a Good Home",
@@ -649,9 +647,9 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/free-to-a-good-home-f3957d.jpg",
-    "imageAlt": "Cover image for Free to a Good Home",
-    "sortOrder": 27
+    "sortOrder": 27,
+    "thumbnail": "assets/thumbnails/free-to-a-good-home-f3957d.jpg",
+    "thumbnailAlt": "Cover image for Free to a Good Home"
   },
   {
     "title": "A Place of His Own",
@@ -675,9 +673,9 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/a-place-of-his-own-db90ff.jpg",
-    "imageAlt": "Cover image for A Place of His Own",
-    "sortOrder": 28
+    "sortOrder": 28,
+    "thumbnail": "assets/thumbnails/a-place-of-his-own-db90ff.jpg",
+    "thumbnailAlt": "Cover image for A Place of His Own"
   },
   {
     "title": "Concubine",
@@ -701,9 +699,9 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/concubine-90dda2.jpg",
-    "imageAlt": "Cover image for Concubine",
-    "sortOrder": 29
+    "sortOrder": 29,
+    "thumbnail": "assets/thumbnails/concubine-90dda2.jpg",
+    "thumbnailAlt": "Cover image for Concubine"
   },
   {
     "title": "Sober",
@@ -727,9 +725,9 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/sober-b6b2ac.jpg",
-    "imageAlt": "Cover image for Sober",
-    "sortOrder": 30
+    "sortOrder": 30,
+    "thumbnail": "assets/thumbnails/sober-b6b2ac.jpg",
+    "thumbnailAlt": "Cover image for Sober"
   },
   {
     "title": "Samfa12 on Spotify",
@@ -749,8 +747,6 @@
         "url": "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"
       }
     ],
-    "image": "assets/thumbnails/fallback.webp",
-    "imageAlt": "Cover image for Spotify",
     "sortOrder": 34
   },
   {
@@ -771,8 +767,6 @@
         "url": "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
       }
     ],
-    "image": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d801c2c3ceb854a445f2c340",
-    "imageAlt": "Cover image for Drink OST",
     "sortOrder": 31
   },
   {
@@ -792,8 +786,6 @@
         "url": "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
       }
     ],
-    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c8cb7e3323862ee6fde129eb",
-    "imageAlt": "Cover image for Billions of Years",
     "sortOrder": 32
   },
   {
@@ -814,8 +806,6 @@
         "url": "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
       }
     ],
-    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02b95875114a31d7c959bcfefc",
-    "imageAlt": "Cover image for Samfa12's Tower Defense Pack OST",
     "sortOrder": 33
   },
   {
@@ -836,8 +826,6 @@
         "url": "https://music.youtube.com/search?q=Samfa12"
       }
     ],
-    "image": "assets/thumbnails/fallback.webp",
-    "imageAlt": "Cover image for YouTube Music",
     "sortOrder": 35
   },
   {
@@ -857,9 +845,7 @@
         "label": "Open profile",
         "url": "https://github.com/Samfa12-tech"
       }
-    ],
-    "image": "assets/thumbnails/fallback.webp",
-    "imageAlt": "Cover image for GitHub"
+    ]
   },
   {
     "title": "X / Twitter",
@@ -877,9 +863,7 @@
         "label": "Open profile",
         "url": "https://x.com/Samfa12"
       }
-    ],
-    "image": "assets/thumbnails/fallback.webp",
-    "imageAlt": "Cover image for X / Twitter"
+    ]
   },
   {
     "title": "Facebook",
@@ -897,9 +881,7 @@
         "label": "Open page",
         "url": "https://www.facebook.com/people/Samfa12-Drink-Sober"
       }
-    ],
-    "image": "assets/thumbnails/fallback.webp",
-    "imageAlt": "Cover image for Facebook"
+    ]
   },
   {
     "title": "Reddit",
@@ -917,9 +899,7 @@
         "label": "Open profile",
         "url": "https://www.reddit.com/user/Samfa12/"
       }
-    ],
-    "image": "assets/thumbnails/fallback.webp",
-    "imageAlt": "Cover image for Reddit"
+    ]
   },
   {
     "title": "itch.io",
@@ -938,7 +918,7 @@
         "url": "https://samfa12.itch.io/"
       }
     ],
-    "image": "assets/thumbnails/itch-io-577717.png",
-    "imageAlt": "Cover image for itch.io"
+    "thumbnail": "assets/thumbnails/itch-io-577717.png",
+    "thumbnailAlt": "Cover image for itch.io"
   }
 ]

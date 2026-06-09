@@ -8,9 +8,7 @@ const __dirname = path.dirname(__filename);
 const root = path.resolve(__dirname, "..");
 const dataPath = path.join(root, "data", "projects.json");
 const thumbnailDir = path.join(root, "assets", "thumbnails");
-const fallbackPath = "assets/thumbnails/fallback.webp";
 
-const fallbackBase64 = "UklGRiIAAABXRUJQVlA4IBQAAAAwAQCdASoBAAEAAQAcJaQAA3AA/v7+/v7+/gAAAA==";
 const userAgent = "Mozilla/5.0 (compatible; Samfa12 website thumbnail crawler; +https://samfa12.website)";
 
 const args = new Set(process.argv.slice(2));
@@ -176,72 +174,80 @@ function extensionFor(contentType, imageUrl) {
   return ext || ".png";
 }
 
-async function ensureFallback() {
-  await fs.mkdir(thumbnailDir, { recursive: true });
-  const localFallback = path.join(root, "assets", "thumbnails", "fallback.webp");
-  if (!(await fileExists(localFallback))) {
-    await fs.writeFile(localFallback, Buffer.from(fallbackBase64, "base64"));
-  }
-}
-
 async function fetchProjectImage(project) {
   const sourceUrl = pickSourceUrl(project);
   if (!sourceUrl) {
-    return { image: fallbackPath, status: "fallback", reason: "No source link." };
+    return { thumbnail: null, status: "no-thumbnail", reason: "No source link." };
   }
 
   const response = await fetch(sourceUrl, { headers: { "User-Agent": userAgent }, redirect: "follow" });
   if (!response.ok) {
-    return { image: fallbackPath, status: "fallback", reason: `Source fetch failed: ${response.status}` };
+    return { thumbnail: null, status: "no-thumbnail", reason: `Source fetch failed: ${response.status}` };
   }
 
   const html = await response.text();
   const candidates = collectCandidates(html, sourceUrl);
   if (!candidates.length) {
-    return { image: fallbackPath, status: "fallback", reason: "No valid image candidate in source page." };
+    return { thumbnail: null, status: "no-thumbnail", reason: "No valid image candidate in source page." };
   }
 
   const selected = selectCandidate(candidates);
   const result = await download(selected);
   if (!result) {
-    return { image: fallbackPath, status: "fallback", reason: `Could not download candidate: ${selected}` };
+    return { thumbnail: null, status: "no-thumbnail", reason: `Could not download candidate: ${selected}` };
   }
 
+  await fs.mkdir(thumbnailDir, { recursive: true });
   const ext = extensionFor(result.contentType, selected);
   const filename = `${normaliseTitle(project.title)}-${crypto.createHash("sha1").update(selected).digest("hex").slice(0, 6)}${ext}`;
   const output = path.join(thumbnailDir, filename);
   await fs.writeFile(output, result.data);
-  return { image: `assets/thumbnails/${filename}`, status: "updated", reason: selected };
+  return { thumbnail: `assets/thumbnails/${filename}`, status: "updated", reason: selected };
 }
 
 async function run() {
-  await ensureFallback();
   const sourceData = JSON.parse(await fs.readFile(dataPath, "utf8"));
   const projects = sourceData.map((project) => ({ ...project }));
 
   const report = [];
 
   for (const project of projects) {
+    const existingPath = project.thumbnail || project.image;
     const hasRealImage =
-      Boolean(project.image) &&
-      !isPlaceholderPath(project.image) &&
-      project.image !== fallbackPath &&
-      (await fileExists(path.join(root, project.image)));
+      Boolean(existingPath) &&
+      !isPlaceholderPath(existingPath) &&
+      (await fileExists(path.join(root, existingPath)));
 
     if (!force && hasRealImage) {
+      project.thumbnail = existingPath;
+      if (!project.thumbnailAlt && project.imageAlt) {
+        project.thumbnailAlt = project.imageAlt;
+      }
+      delete project.image;
+      delete project.imageAlt;
       report.push({ title: project.title, status: "skipped", reason: "Existing real image." });
       continue;
     }
 
     try {
       const result = await fetchProjectImage(project);
-      project.image = result.image;
-      if (!project.imageAlt || /cover image/.test(project.imageAlt.toLowerCase())) {
-        project.imageAlt = `Cover image for ${project.title}`;
+      if (result.thumbnail) {
+        project.thumbnail = result.thumbnail;
+        if (!project.thumbnailAlt || /cover image/.test(project.thumbnailAlt.toLowerCase())) {
+          project.thumbnailAlt = `Cover image for ${project.title}`;
+        }
+      } else {
+        delete project.thumbnail;
+        delete project.thumbnailAlt;
       }
+      delete project.image;
+      delete project.imageAlt;
       report.push({ title: project.title, status: result.status, reason: result.reason });
     } catch (error) {
-      project.image = fallbackPath;
+      delete project.thumbnail;
+      delete project.thumbnailAlt;
+      delete project.image;
+      delete project.imageAlt;
       report.push({ title: project.title, status: "failed", reason: error?.message || "Unknown error." });
     }
 
@@ -252,14 +258,14 @@ async function run() {
 
   const statuses = {
     updated: report.filter((item) => item.status === "updated"),
-    fallback: report.filter((item) => item.status === "fallback"),
+    noThumbnail: report.filter((item) => item.status === "no-thumbnail"),
     failed: report.filter((item) => item.status === "failed"),
     skipped: report.filter((item) => item.status === "skipped"),
   };
 
   console.log(`Fetched ${projects.length} projects.`);
   console.log(`updated: ${statuses.updated.length}`);
-  console.log(`fallback: ${statuses.fallback.length}`);
+  console.log(`no-thumbnail: ${statuses.noThumbnail.length}`);
   console.log(`failed: ${statuses.failed.length}`);
   console.log(`skipped: ${statuses.skipped.length}`);
 }
