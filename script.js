@@ -1,4 +1,4 @@
-const categoryOrder = ["Games", "Books", "Apps & Tools", "Assets", "Music", "Storefronts", "Social"];
+const categoryOrder = ["Games", "Books", "Apps & Tools", "Music", "Storefronts", "Social"];
 
 const fallbackProjects = [
   {
@@ -74,9 +74,9 @@ const fallbackProjects = [
   {
     "title": "Pocket Chordsmith",
     "category": "Apps & Tools",
-    "type": "Mobile app",
+    "type": "Web app",
     "status": "Published",
-    "description": "A mobile music-writing companion for fast chord mapping, quick harmony checks, and practical songwriting workflows.",
+    "description": "A web-based songwriting utility for fast chord mapping, harmony checks, and practical music composition workflows.",
     "tags": [
       "Music",
       "Utility",
@@ -87,14 +87,33 @@ const fallbackProjects = [
       {
         "label": "Play on itch.io",
         "url": "https://samfa12.itch.io/pocket-chordsmith"
+      }
+    ]
+  },
+  {
+    "title": "Pocket Chordsmith Godot addon",
+    "category": "Apps & Tools",
+    "type": "Godot add-on",
+    "status": "Published",
+    "description": "A downloadable Godot add-on version of Pocket Chordsmith for composing in-editor and accelerating music prototyping.",
+    "tags": [
+      "Music",
+      "Godot",
+      "Utility"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Pocket Chordsmith itch.io",
+        "url": "https://samfa12.itch.io/pocket-chordsmith"
       },
       {
-        "label": "Google Play apps",
-        "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
+        "label": "Godot Asset Library",
+        "url": "https://godotengine.org/asset-library/asset/5174"
       },
       {
-        "label": "GitHub",
-        "url": "https://github.com/Samfa12-tech"
+        "label": "Godot Asset Store",
+        "url": "https://store.godotengine.org/asset/samfa12/pocket-chordsmith/"
       }
     ]
   },
@@ -168,7 +187,7 @@ const fallbackProjects = [
     ]
   },
   {
-    "title": "TD Pack",
+    "title": "Samfa12's TD Pack",
     "category": "Games",
     "type": "Android game collection",
     "status": "Published on Google Play",
@@ -208,6 +227,10 @@ const fallbackProjects = [
       {
         "label": "Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.spinvector"
+      },
+      {
+        "label": "Wavedash",
+        "url": "https://wavedash.com/games/spin-vector"
       }
     ]
   },
@@ -235,21 +258,21 @@ const fallbackProjects = [
     ]
   },
   {
-    "title": "Godot MusicConductor / Godot assets",
-    "category": "Assets",
-    "type": "Asset pack",
-    "status": "Published",
-    "description": "A Godot-focused music toolkit for faster composition wiring, timeline prep, and implementation across game projects.",
+    "title": "Pocket DAW",
+    "category": "Apps & Tools",
+    "type": "WIP tool",
+    "status": "In development",
+    "description": "A music production workflow tool in progress.",
     "tags": [
-      "Godot",
-      "Audio",
-      "Indie tools"
+      "Music",
+      "DAW",
+      "Utility"
     ],
     "featured": false,
     "links": [
       {
-        "label": "Godot Asset Library",
-        "url": "https://godotengine.org/asset-library/asset/5174"
+        "label": "Coming soon",
+        "url": "https://samfa12.itch.io"
       }
     ]
   },
@@ -311,26 +334,7 @@ const fallbackProjects = [
     ]
   },
   {
-    "title": "Voxel Kart Pocket GP",
-    "category": "Games",
-    "type": "Game",
-    "status": "Playable prototype",
-    "description": "A compact kart game using pocket-scale tracks, stylized visuals, and punchy race sessions.",
-    "tags": [
-      "Game",
-      "Racing",
-      "Pocket format"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "Play on itch.io",
-        "url": "https://samfa12.itch.io/"
-      }
-    ]
-  },
-  {
-    "title": "Party Bus / Wasteland Run",
+    "title": "P.A.R.T.Y. Bus: Wasteland Run",
     "category": "Games",
     "type": "Game",
     "status": "In development",
@@ -345,25 +349,6 @@ const fallbackProjects = [
       {
         "label": "Play on itch.io",
         "url": "https://samfa12.itch.io/party-bus"
-      }
-    ]
-  },
-  {
-    "title": "River Locks",
-    "category": "Games",
-    "type": "Game",
-    "status": "In development",
-    "description": "A game-logic concept exploring water-flow mechanics, sequencing, and timing-based challenges.",
-    "tags": [
-      "Game",
-      "Puzzle",
-      "Systems"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "Play on itch.io",
-        "url": "https://samfa12.itch.io/"
       }
     ]
   },
@@ -526,87 +511,82 @@ const fallbackProjects = [
     ]
   },
   {
-    "title": "Godot assets",
-    "category": "Assets",
-    "type": "Asset pack",
-    "status": "Published",
-    "description": "Reusable Godot assets designed to help with visual consistency and rapid iteration.",
-    "tags": [
-      "Godot",
-      "Assets",
-      "Indie tools"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "Godot Asset Library",
-        "url": "https://godotengine.org/asset-library/asset/5174"
-      }
-    ]
-  },
-  {
-    "title": "Music/audio workflow tools",
-    "category": "Assets",
-    "type": "Audio toolkit",
-    "status": "Published",
-    "description": "A practical music-audio toolkit aimed at builders who need reusable workflow assets quickly.",
-    "tags": [
-      "Music",
-      "Audio",
-      "Workflow"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "Google Play apps",
-        "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
-      },
-      {
-        "label": "Spotify search",
-        "url": "https://open.spotify.com/search/Samfa12"
-      }
-    ]
-  },
-  {
-    "title": "Game-dev helpers",
-    "category": "Assets",
-    "type": "Tooling",
-    "status": "Published",
-    "description": "Reusable game-production helpers for prototyping, tooling ideas, and indie workflow speed.",
-    "tags": [
-      "Game dev",
-      "Tools",
-      "Utility"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "GitHub",
-        "url": "https://github.com/Samfa12-tech"
-      },
-      {
-        "label": "Godot Asset Library",
-        "url": "https://godotengine.org/asset-library/asset/5174"
-      }
-    ]
-  },
-  {
-    "title": "Spotify",
+    "title": "Samfa12 on Spotify",
     "category": "Music",
-    "type": "Music search",
+    "type": "Artist profile",
     "status": "Available",
-    "description": "A searchable music hub entry for Samfa12 catalog discovery on Spotify.",
+    "description": "Samfa12's official Spotify artist page with released music and artist updates.",
     "tags": [
       "Music",
-      "Listening",
+      "Streaming",
       "Catalog"
     ],
     "featured": false,
     "links": [
       {
-        "label": "Open in Spotify",
-        "url": "https://open.spotify.com/search/Samfa12"
+        "label": "Open artist profile",
+        "url": "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"
       }
+    ]
+  },
+  {
+    "title": "Drink OST",
+    "category": "Music",
+    "type": "Album",
+    "status": "Published",
+    "description": "The Drink original soundtrack album.",
+    "tags": [
+      "Music",
+      "Album",
+      "Soundtrack"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Listen on Spotify",
+        "url": "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
+      }
+    ],
+    "image": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d801c2c3ceb854a445f2c340"
+  },
+  {
+    "title": "Billions of Years",
+    "category": "Music",
+    "type": "Album",
+    "status": "Published",
+    "description": "Samfa12 album release on Spotify.",
+    "tags": [
+      "Music",
+      "Album"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Listen on Spotify",
+        "url": "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
+      }
+    ],
+    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c8cb7e3323862ee6fde129eb"
+  },
+  {
+    "title": "Samfa12's Tower Defense Pack OST",
+    "category": "Music",
+    "type": "Album",
+    "status": "Published",
+    "description": "Samfa12's Tower Defense Pack soundtrack for Spotify.",
+    "tags": [
+      "Music",
+      "Album",
+      "Soundtrack"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Listen on Spotify",
+        "url": "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
+      }
+    ],
+    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02b95875114a31d7c959bcfefc"
     ]
   },
   {
@@ -745,7 +725,14 @@ function projectImageHtml(project) {
   if (!project.image) {
     return `
       <div class="${mediaClass} project-image-placeholder" aria-hidden="true">
-        <span>${escapeHtml(project.title)}</span>
+        <img
+          src="assets/thumbnails/fallback.webp"
+          alt="${escapeHtml(project.imageAlt || `Cover image for ${project.title}`)}"
+          class="project-image ${project.category === "Books" ? "project-image-cover" : ""}"
+          loading="lazy"
+          width="960"
+          height="540"
+        />
       </div>
     `;
   }
@@ -767,11 +754,9 @@ function projectImageHtml(project) {
 function normaliseImageFallbacks() {
   document.querySelectorAll("img.project-image").forEach((image) => {
     image.addEventListener("error", () => {
-      const fallback = document.createElement("div");
-      fallback.className = `project-image-fallback ${image.classList.contains("project-image-cover") ? "project-image-cover" : ""}`;
-      fallback.innerText = image.alt || "Project image unavailable";
-      if (image.parentElement) {
-        image.parentElement.replaceChildren(fallback);
+      if (!image.dataset.fallbackUsed) {
+        image.src = "assets/thumbnails/fallback.webp";
+        image.dataset.fallbackUsed = "true";
       }
     });
   });
@@ -810,6 +795,24 @@ function projectCardHtml(project) {
 function renderFeatured(projects) {
   const featured = projects.filter((project) => project.featured);
   featuredGrid.innerHTML = featured.map(projectCardHtml).join("");
+}
+
+function scrollToHashTarget() {
+  const hash = window.location.hash;
+  if (!hash) {
+    return;
+  }
+
+  const target = document.getElementById(hash.slice(1));
+  if (!target) {
+    return;
+  }
+
+  if (target.dataset.category) {
+    updateFilter("all");
+  }
+
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function renderCategorySections(projects) {
@@ -892,7 +895,10 @@ async function initialize() {
   buildFilterButtons();
   updateFilter("all");
   normaliseImageFallbacks();
+  scrollToHashTarget();
 }
+
+window.addEventListener("hashchange", scrollToHashTarget);
 
 initialize();
 

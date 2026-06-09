@@ -17,7 +17,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/dust-on-the-river.svg",
+    "image": "assets/thumbnails/dust-on-the-river-b9a9e3.png",
     "imageAlt": "Cover image for Dust on the River",
     "sortOrder": 0
   },
@@ -47,7 +47,7 @@
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.drink"
       }
     ],
-    "image": "assets/thumbnails/drink.svg",
+    "image": "assets/thumbnails/drink-2ad44b.png",
     "imageAlt": "Cover image for Drink",
     "sortOrder": 1
   },
@@ -74,16 +74,16 @@
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
       }
     ],
-    "image": "assets/thumbnails/night-shift-at-possum-s-cafe.svg",
+    "image": "assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg",
     "imageAlt": "Cover image for Night Shift at Possum's Cafe",
     "sortOrder": 2
   },
   {
     "title": "Pocket Chordsmith",
     "category": "Apps & Tools",
-    "type": "Mobile app",
+    "type": "Web app",
     "status": "Published",
-    "description": "A mobile-friendly songwriting tool for sketching chords, melodies, drums, and game-ready music ideas.",
+    "description": "A web-based songwriting utility for fast chord mapping, harmony checks, and practical music composition workflows.",
     "tags": [
       "Music",
       "Utility",
@@ -94,19 +94,41 @@
       {
         "url": "https://samfa12.itch.io/pocket-chordsmith",
         "label": "Play on itch.io"
-      },
-      {
-        "label": "Google Play",
-        "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
-      },
-      {
-        "label": "GitHub",
-        "url": "https://github.com/Samfa12-tech"
       }
     ],
-    "image": "assets/thumbnails/pocket-chordsmith.svg",
+    "image": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
     "imageAlt": "Cover image for Pocket Chordsmith",
     "sortOrder": 3
+  },
+  {
+    "title": "Pocket Chordsmith Godot addon",
+    "category": "Apps & Tools",
+    "type": "Godot add-on",
+    "status": "Published",
+    "description": "A downloadable Godot add-on version of Pocket Chordsmith for composing in-editor and accelerating music prototyping.",
+    "tags": [
+      "Music",
+      "Godot",
+      "Utility"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Pocket Chordsmith itch.io",
+        "url": "https://samfa12.itch.io/pocket-chordsmith"
+      },
+      {
+        "label": "Godot Asset Library",
+        "url": "https://godotengine.org/asset-library/asset/5174"
+      },
+      {
+        "label": "Godot Asset Store",
+        "url": "https://store.godotengine.org/asset/samfa12/pocket-chordsmith/"
+      }
+    ],
+    "image": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
+    "imageAlt": "Cover image for Pocket Chordsmith Godot addon",
+    "sortOrder": 18
   },
   {
     "title": "Bug Maze TD",
@@ -126,7 +148,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/bug-maze-td.svg",
+    "image": "assets/thumbnails/bug-maze-td-078911.png",
     "imageAlt": "Cover image for Bug Maze TD",
     "sortOrder": 4
   },
@@ -148,7 +170,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/breakfast-beat.svg",
+    "image": "assets/thumbnails/breakfast-beat-d686e6.jpg",
     "imageAlt": "Cover image for Breakfast Beat",
     "sortOrder": 5
   },
@@ -170,7 +192,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/ship-blockade.svg",
+    "image": "assets/thumbnails/ship-blockade-59ef6d.jpg",
     "imageAlt": "Cover image for Ship Blockade",
     "sortOrder": 6
   },
@@ -192,7 +214,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/hop-bunny.svg",
+    "image": "assets/thumbnails/hop-bunny-b0d59d.png",
     "imageAlt": "Cover image for Hop Bunny",
     "sortOrder": 7
   },
@@ -219,7 +241,7 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/backwater.svg",
+    "image": "assets/thumbnails/backwater-245d41.png",
     "imageAlt": "Cover image for Backwater",
     "sortOrder": 8
   },
@@ -241,7 +263,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/reckless-dentist.svg",
+    "image": "assets/thumbnails/reckless-dentist-05c1f7.png",
     "imageAlt": "Cover image for Reckless Dentist",
     "sortOrder": 9
   },
@@ -263,7 +285,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/gremlin-grenade-pinball.svg",
+    "image": "assets/thumbnails/gremlin-grenade-pinball-4f4da7.png",
     "imageAlt": "Cover image for Gremlin Grenade Pinball",
     "sortOrder": 10
   },
@@ -285,7 +307,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/wonky-vehicle-lab.svg",
+    "image": "assets/thumbnails/wonky-vehicle-lab-10cf51.png",
     "imageAlt": "Cover image for Wonky Vehicle Lab",
     "sortOrder": 11
   },
@@ -311,7 +333,7 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/toknight.svg",
+    "image": "assets/thumbnails/toknight-47d9be.png",
     "imageAlt": "Cover image for ToKnight",
     "sortOrder": 12
   },
@@ -341,7 +363,7 @@
         "url": "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?id=AQAAAEDaH2pfoM"
       }
     ],
-    "image": "assets/thumbnails/article-18.svg",
+    "image": "assets/thumbnails/article-18-5b9e27.png",
     "imageAlt": "Cover image for Article 18",
     "sortOrder": 13
   },
@@ -363,12 +385,12 @@
         "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
       }
     ],
-    "image": "assets/thumbnails/google-play-apps.svg",
+    "image": "assets/thumbnails/google-play-apps-5325de.png",
     "imageAlt": "Cover image for Google Play apps",
     "sortOrder": 14
   },
   {
-    "title": "TD Pack",
+    "title": "Samfa12's TD Pack",
     "category": "Games",
     "type": "Android game collection",
     "status": "Published on Google Play",
@@ -386,8 +408,8 @@
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
       }
     ],
-    "image": "assets/thumbnails/td-pack.svg",
-    "imageAlt": "Cover image for TD Pack",
+    "image": "assets/thumbnails/td-pack-63e5f6.jpg",
+    "imageAlt": "Cover image for Samfa12's TD Pack",
     "sortOrder": 15
   },
   {
@@ -411,9 +433,13 @@
       {
         "label": "Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.spinvector"
+      },
+      {
+        "label": "Wavedash",
+        "url": "https://wavedash.com/games/spin-vector"
       }
     ],
-    "image": "assets/thumbnails/spin-vector.svg",
+    "image": "assets/thumbnails/spin-vector-7f51f8.png",
     "imageAlt": "Cover image for Spin Vector",
     "sortOrder": 16
   },
@@ -439,30 +465,30 @@
         "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
       }
     ],
-    "image": "assets/thumbnails/pocket-dj.svg",
+    "image": "assets/thumbnails/pocket-dj-1c5717.png",
     "imageAlt": "Cover image for Pocket DJ",
     "sortOrder": 17
   },
   {
-    "title": "Godot MusicConductor / Godot assets",
-    "category": "Assets",
-    "type": "Asset pack",
-    "status": "Published",
-    "description": "A Godot-focused music toolkit for faster composition wiring, timeline prep, and implementation across game projects.",
+    "title": "Pocket DAW",
+    "category": "Apps & Tools",
+    "type": "WIP tool",
+    "status": "In development",
+    "description": "A music production workflow tool in progress.",
     "tags": [
-      "Godot",
-      "Audio",
-      "Indie tools"
+      "Music",
+      "DAW",
+      "Utility"
     ],
     "featured": false,
     "links": [
       {
-        "label": "Godot Asset Library",
-        "url": "https://godotengine.org/asset-library/asset/5174"
+        "label": "Coming soon",
+        "url": "https://samfa12.itch.io/pocket-chordsmith"
       }
     ],
-    "image": "assets/thumbnails/godot-musicconductor-godot-assets.svg",
-    "imageAlt": "Cover image for Godot MusicConductor / Godot assets",
+    "image": "assets/thumbnails/fallback.webp",
+    "imageAlt": "Cover image for Pocket DAW",
     "sortOrder": 18
   },
   {
@@ -483,7 +509,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/mandible-wars.svg",
+    "image": "assets/thumbnails/mandible-wars-5acb5c.png",
     "imageAlt": "Cover image for Mandible Wars",
     "sortOrder": 19
   },
@@ -505,7 +531,7 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/moon-mower.svg",
+    "image": "assets/thumbnails/moon-mower-66bed9.jpg",
     "imageAlt": "Cover image for Moon Mower",
     "sortOrder": 20
   },
@@ -527,34 +553,12 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/voxel-fish-tank.svg",
+    "image": "assets/thumbnails/voxel-fish-tank-41a16e.jpg",
     "imageAlt": "Cover image for Voxel Fish Tank",
     "sortOrder": 21
   },
   {
-    "title": "Voxel Kart Pocket GP",
-    "category": "Games",
-    "type": "Game",
-    "status": "Playable prototype",
-    "description": "A compact kart game using pocket-scale tracks, stylized visuals, and punchy race sessions.",
-    "tags": [
-      "Game",
-      "Racing",
-      "Pocket format"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "Play on itch.io",
-        "url": "https://samfa12.itch.io/"
-      }
-    ],
-    "image": "assets/thumbnails/voxel-kart-pocket-gp.svg",
-    "imageAlt": "Cover image for Voxel Kart Pocket GP",
-    "sortOrder": 22
-  },
-  {
-    "title": "Party Bus / Wasteland Run",
+    "title": "P.A.R.T.Y. Bus: Wasteland Run",
     "category": "Games",
     "type": "Game",
     "status": "In development",
@@ -571,31 +575,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/party-bus-wasteland-run.svg",
-    "imageAlt": "Cover image for Party Bus / Wasteland Run",
+    "image": "assets/thumbnails/party-bus-wasteland-run-597195.png",
+    "imageAlt": "Cover image for P.A.R.T.Y. Bus: Wasteland Run",
     "sortOrder": 23
-  },
-  {
-    "title": "River Locks",
-    "category": "Games",
-    "type": "Game",
-    "status": "In development",
-    "description": "A game-logic concept exploring water-flow mechanics, sequencing, and timing-based challenges.",
-    "tags": [
-      "Game",
-      "Puzzle",
-      "Systems"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "Play on itch.io",
-        "url": "https://samfa12.itch.io/"
-      }
-    ],
-    "image": "assets/thumbnails/river-locks.svg",
-    "imageAlt": "Cover image for River Locks",
-    "sortOrder": 24
   },
   {
     "title": "Ant Farm",
@@ -615,9 +597,9 @@
         "label": "Play on itch.io"
       }
     ],
-    "image": "assets/thumbnails/ant-farm.svg",
+    "image": "assets/thumbnails/ant-farm-485b3d.png",
     "imageAlt": "Cover image for Ant Farm",
-    "sortOrder": 25
+    "sortOrder": 24
   },
   {
     "title": "ToKnight 2: The Fire Beneath",
@@ -641,7 +623,7 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/toknight-2-the-fire-beneath.svg",
+    "image": "assets/thumbnails/toknight-2-the-fire-beneath-e439e0.png",
     "imageAlt": "Cover image for ToKnight 2: The Fire Beneath",
     "sortOrder": 26
   },
@@ -667,7 +649,7 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/free-to-a-good-home.svg",
+    "image": "assets/thumbnails/free-to-a-good-home-f3957d.jpg",
     "imageAlt": "Cover image for Free to a Good Home",
     "sortOrder": 27
   },
@@ -693,7 +675,7 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/a-place-of-his-own.svg",
+    "image": "assets/thumbnails/a-place-of-his-own-db90ff.jpg",
     "imageAlt": "Cover image for A Place of His Own",
     "sortOrder": 28
   },
@@ -719,7 +701,7 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/concubine.svg",
+    "image": "assets/thumbnails/concubine-90dda2.jpg",
     "imageAlt": "Cover image for Concubine",
     "sortOrder": 29
   },
@@ -745,105 +727,96 @@
         "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
       }
     ],
-    "image": "assets/thumbnails/sober.svg",
+    "image": "assets/thumbnails/sober-b6b2ac.jpg",
     "imageAlt": "Cover image for Sober",
     "sortOrder": 30
   },
   {
-    "title": "Godot assets",
-    "category": "Assets",
-    "type": "Asset pack",
-    "status": "Published",
-    "description": "Reusable Godot assets designed to help with visual consistency and rapid iteration.",
-    "tags": [
-      "Godot",
-      "Assets",
-      "Indie tools"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "Godot Asset Library",
-        "url": "https://godotengine.org/asset-library/asset/5174"
-      }
-    ],
-    "image": "assets/thumbnails/godot-assets.svg",
-    "imageAlt": "Cover image for Godot assets",
-    "sortOrder": 31
-  },
-  {
-    "title": "Music/audio workflow tools",
-    "category": "Assets",
-    "type": "Audio toolkit",
-    "status": "Published",
-    "description": "A practical music-audio toolkit aimed at builders who need reusable workflow assets quickly.",
-    "tags": [
-      "Music",
-      "Audio",
-      "Workflow"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "Google Play apps",
-        "url": "https://play.google.com/store/apps/dev?id=7761853381809168545"
-      },
-      {
-        "label": "Spotify search",
-        "url": "https://open.spotify.com/search/Samfa12"
-      }
-    ],
-    "image": "assets/thumbnails/music-audio-workflow-tools.svg",
-    "imageAlt": "Cover image for Music/audio workflow tools",
-    "sortOrder": 32
-  },
-  {
-    "title": "Game-dev helpers",
-    "category": "Assets",
-    "type": "Tooling",
-    "status": "Published",
-    "description": "Reusable game-production helpers for prototyping, tooling ideas, and indie workflow speed.",
-    "tags": [
-      "Game dev",
-      "Tools",
-      "Utility"
-    ],
-    "featured": false,
-    "links": [
-      {
-        "label": "GitHub",
-        "url": "https://github.com/Samfa12-tech"
-      },
-      {
-        "label": "Godot Asset Library",
-        "url": "https://godotengine.org/asset-library/asset/5174"
-      }
-    ],
-    "image": "assets/thumbnails/game-dev-helpers.svg",
-    "imageAlt": "Cover image for Game-dev helpers",
-    "sortOrder": 33
-  },
-  {
-    "title": "Spotify",
+    "title": "Samfa12 on Spotify",
     "category": "Music",
-    "type": "Music search",
+    "type": "Artist profile",
     "status": "Available",
-    "description": "A searchable music hub entry for Samfa12 catalog discovery on Spotify.",
+    "description": "Samfa12's official Spotify artist page with released music and artist updates.",
     "tags": [
       "Music",
-      "Listening",
+      "Streaming",
       "Catalog"
     ],
     "featured": false,
     "links": [
       {
-        "label": "Open in Spotify",
-        "url": "https://open.spotify.com/search/Samfa12"
+        "label": "Open artist profile",
+        "url": "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"
       }
     ],
-    "image": "assets/thumbnails/spotify.svg",
+    "image": "assets/thumbnails/fallback.webp",
     "imageAlt": "Cover image for Spotify",
     "sortOrder": 34
+  },
+  {
+    "title": "Drink OST",
+    "category": "Music",
+    "type": "Album",
+    "status": "Published",
+    "description": "The Drink original soundtrack album.",
+    "tags": [
+      "Music",
+      "Album",
+      "Soundtrack"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Listen on Spotify",
+        "url": "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
+      }
+    ],
+    "image": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d801c2c3ceb854a445f2c340",
+    "imageAlt": "Cover image for Drink OST",
+    "sortOrder": 31
+  },
+  {
+    "title": "Billions of Years",
+    "category": "Music",
+    "type": "Album",
+    "status": "Published",
+    "description": "Samfa12 album release on Spotify.",
+    "tags": [
+      "Music",
+      "Album"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Listen on Spotify",
+        "url": "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
+      }
+    ],
+    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c8cb7e3323862ee6fde129eb",
+    "imageAlt": "Cover image for Billions of Years",
+    "sortOrder": 32
+  },
+  {
+    "title": "Samfa12's Tower Defense Pack OST",
+    "category": "Music",
+    "type": "Album",
+    "status": "Published",
+    "description": "Samfa12's Tower Defense Pack soundtrack for Spotify.",
+    "tags": [
+      "Music",
+      "Album",
+      "Soundtrack"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Listen on Spotify",
+        "url": "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
+      }
+    ],
+    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02b95875114a31d7c959bcfefc",
+    "imageAlt": "Cover image for Samfa12's Tower Defense Pack OST",
+    "sortOrder": 33
   },
   {
     "title": "YouTube Music",
@@ -863,7 +836,7 @@
         "url": "https://music.youtube.com/search?q=Samfa12"
       }
     ],
-    "image": "assets/thumbnails/youtube-music.svg",
+    "image": "assets/thumbnails/fallback.webp",
     "imageAlt": "Cover image for YouTube Music",
     "sortOrder": 35
   },
@@ -884,7 +857,9 @@
         "label": "Open profile",
         "url": "https://github.com/Samfa12-tech"
       }
-    ]
+    ],
+    "image": "assets/thumbnails/fallback.webp",
+    "imageAlt": "Cover image for GitHub"
   },
   {
     "title": "X / Twitter",
@@ -902,7 +877,9 @@
         "label": "Open profile",
         "url": "https://x.com/Samfa12"
       }
-    ]
+    ],
+    "image": "assets/thumbnails/fallback.webp",
+    "imageAlt": "Cover image for X / Twitter"
   },
   {
     "title": "Facebook",
@@ -920,7 +897,9 @@
         "label": "Open page",
         "url": "https://www.facebook.com/people/Samfa12-Drink-Sober"
       }
-    ]
+    ],
+    "image": "assets/thumbnails/fallback.webp",
+    "imageAlt": "Cover image for Facebook"
   },
   {
     "title": "Reddit",
@@ -938,7 +917,9 @@
         "label": "Open profile",
         "url": "https://www.reddit.com/user/Samfa12/"
       }
-    ]
+    ],
+    "image": "assets/thumbnails/fallback.webp",
+    "imageAlt": "Cover image for Reddit"
   },
   {
     "title": "itch.io",
@@ -956,7 +937,8 @@
         "label": "Visit page",
         "url": "https://samfa12.itch.io/"
       }
-    ]
+    ],
+    "image": "assets/thumbnails/itch-io-577717.png",
+    "imageAlt": "Cover image for itch.io"
   }
 ]
-
