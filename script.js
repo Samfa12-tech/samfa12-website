@@ -23,8 +23,8 @@ const fallbackProjects = [
     tags: ["Game", "Shooter", "Samfa12"],
     featured: true,
     links: [
-      { label: "Steam publisher page", url: "https://store.steampowered.com/search/?publisher=Samfa12" },
-      { label: "Google Play developer", url: "https://play.google.com/store/apps/dev?id=7761853381809168545" }
+      { label: "Steam", url: "https://store.steampowered.com/app/4419290/Drink/" },
+      { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.drink" }
     ]
   },
   {
@@ -38,7 +38,7 @@ const fallbackProjects = [
     featured: true,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/possum-cafe" },
-      { label: "Coming soon on Google Play", url: "https://play.google.com/store/apps/dev?id=7761853381809168545" }
+      { label: "Coming soon on Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe" }
     ]
   },
   {
@@ -92,7 +92,7 @@ const fallbackProjects = [
     tags: ["Android", "Creator", "Tools"],
     featured: true,
     links: [
-      { label: "Google Play developer", url: "https://play.google.com/store/apps/dev?id=7761853381809168545" }
+      { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack" }
     ]
   },
   {
@@ -117,7 +117,7 @@ const fallbackProjects = [
     featured: false,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/spin-vector" },
-      { label: "Google Play developer", url: "https://play.google.com/store/apps/dev?id=7761853381809168545" }
+      { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.spinvector" }
     ]
   },
   {
