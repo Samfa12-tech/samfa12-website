@@ -1,0 +1,8 @@
+{
+  "name": "samfa12-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch:thumbnails": "node scripts/fetch-thumbnails.mjs"
+  }
+}
