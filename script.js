@@ -7,7 +7,7 @@ const fallbackProjects = [
     type: "Game",
     status: "Published",
     description:
-      "An atmospheric puzzle-adventure game combining gentle systems, exploration, and story moments.",
+      "A river-based puzzle-adventure with atmospheric, low-pressure progression loops, exploration beats, and narrative moments across small game systems.",
     tags: ["Game", "Adventure", "Samfa12"],
     featured: true,
     links: [
@@ -21,7 +21,7 @@ const fallbackProjects = [
     type: "Game",
     status: "Published",
     description:
-      "A late-night shift simulator with character moments, charming chaos, and cozy challenge.",
+      "A night-shift simulation of café operations in a stylized, humorous setting with service pacing, atmosphere, and progression.",
     tags: ["Game", "Arcade", "Simulation", "Samfa12"],
     featured: true,
     links: [
@@ -34,7 +34,7 @@ const fallbackProjects = [
     category: "Apps & Tools",
     type: "Mobile app",
     status: "Published",
-    description: "Music writing and harmony workflow tools for practical, fast song-making.",
+    description: "A mobile music-writing companion for fast chord mapping, quick harmony checks, and practical songwriting workflows.",
     tags: ["Music", "Utility", "Apps"],
     featured: true,
     links: [
@@ -48,7 +48,7 @@ const fallbackProjects = [
     type: "Book",
     status: "Published",
     description:
-      "A creative fantasy journey in the larger ToKnight universe.",
+      "A self-contained fantasy novel opening the ToKnight world with focused worldbuilding and character-driven conflict.",
     tags: ["Novel", "Fantasy", "Adventure"],
     featured: true,
     links: [
@@ -61,7 +61,7 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Published",
-    description: "A speculative title in the Samfa12 fiction and world-building portfolio.",
+    description: "A speculative fiction novel blending suspense with social and ethical questions in a near-future setting.",
     tags: ["Speculative", "Science", "Literary"],
     featured: true,
     links: [
@@ -74,7 +74,7 @@ const fallbackProjects = [
     category: "Apps & Tools",
     type: "Developer listing",
     status: "Published",
-    description: "The full range of Samfa12 Android releases and experiments.",
+    description: "A publisher page listing Samfa12's Android games, tools, and experiments in one Google Play collection.",
     tags: ["Android", "Creator", "Tools"],
     featured: true,
     links: [
@@ -86,7 +86,7 @@ const fallbackProjects = [
     category: "Apps & Tools",
     type: "Mobile app",
     status: "Published",
-    description: "A practical music utility with an emphasis on rapid creative workflows.",
+    description: "A DJ-oriented utility designed for set planning, pacing ideas, and rapid track utility on mobile.",
     tags: ["Music", "DJ", "Utility"],
     featured: false,
     links: [
@@ -98,7 +98,7 @@ const fallbackProjects = [
     category: "Assets",
     type: "Asset pack",
     status: "Published",
-    description: "Reusable music and audio tools designed for faster Godot projects.",
+    description: "A Godot-focused music toolkit for faster composition wiring, timeline prep, and implementation across game projects.",
     tags: ["Godot", "Audio", "Indie tools"],
     featured: false,
     links: [
@@ -110,7 +110,7 @@ const fallbackProjects = [
     category: "Apps & Tools",
     type: "Education app",
     status: "Available",
-    description: "An education-focused local app for profile-building workflows.",
+    description: "A local-first education utility for building and managing class profile data workflows.",
     tags: ["Education", "Productivity", "Local-first"],
     featured: false,
     links: [
@@ -123,7 +123,7 @@ const fallbackProjects = [
     category: "Games",
     type: "Game",
     status: "Known",
-    description: "A compact competitive prototype with tactical movement and bite-sized moments.",
+    description: "A compact prototype centered on tactical skirmishes, fast rounds, and replayable competitive action.",
     tags: ["Game", "Prototype", "Action"],
     featured: false,
     links: [
@@ -136,7 +136,7 @@ const fallbackProjects = [
     category: "Games",
     type: "Game",
     status: "Known",
-    description: "A compact, polished build with an offbeat loop and playful systems.",
+    description: "A short-form arcade prototype with quirky mechanics, repeated loops, and playful progression.",
     tags: ["Game", "Arcade", "Indie"],
     featured: false,
     links: [
@@ -149,7 +149,7 @@ const fallbackProjects = [
     category: "Games",
     type: "Game",
     status: "Known",
-    description: "An immersive, pixel-driven world with soothing but dynamic play patterns.",
+    description: "A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm.",
     tags: ["Game", "Voxel", "Relax"],
     featured: false,
     links: [
@@ -162,7 +162,7 @@ const fallbackProjects = [
     category: "Games",
     type: "Game",
     status: "Known",
-    description: "Pocket-sized kart racing energy with a colorful voxel production style.",
+    description: "A compact kart game using pocket-scale tracks, stylized visuals, and punchy race sessions.",
     tags: ["Game", "Racing", "Pocket format"],
     featured: false,
     links: [
@@ -175,7 +175,7 @@ const fallbackProjects = [
     category: "Games",
     type: "Game",
     status: "Known",
-    description: "A fast-moving journey with a stylized sci-fi bus concept and gameplay loops.",
+    description: "An energetic project concept around a drifting bus and wasteland route, balancing momentum with level progression.",
     tags: ["Game", "Adventure", "Runner"],
     featured: false,
     links: [
@@ -188,7 +188,7 @@ const fallbackProjects = [
     category: "Games",
     type: "Game",
     status: "Known",
-    description: "A systems-driven game concept centered around flow, timing, and progression.",
+    description: "A game-logic concept exploring water-flow mechanics, sequencing, and timing-based challenges.",
     tags: ["Game", "Puzzle", "Systems"],
     featured: false,
     links: [
@@ -201,7 +201,7 @@ const fallbackProjects = [
     category: "Games",
     type: "Game",
     status: "Known",
-    description: "An exploratory mini-game project with growth-and-manage mechanics.",
+    description: "A simulation sketch focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
     tags: ["Game", "Simulation", "Growth"],
     featured: false,
     links: [
@@ -214,7 +214,7 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Known",
-    description: "A continuing chapter in the world of ToKnight.",
+    description: "The next chapter in the ToKnight series, continuing the core lore and adding deeper stakes.",
     tags: ["Novel", "Fantasy", "Sequel"],
     featured: false,
     links: [
@@ -227,7 +227,7 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Known",
-    description: "A grounded and humane narrative from the Samfa12 catalog.",
+    description: "A literary study of belonging and consequence set in a character-forward narrative arc.",
     tags: ["Narrative", "Drama", "Fiction"],
     featured: false,
     links: [
@@ -240,7 +240,7 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Known",
-    description: "Character-first storytelling and quiet but powerful pacing.",
+    description: "An introspective fiction title about finding place, space, and self-determination.",
     tags: ["Narrative", "Fiction", "Contemporary"],
     featured: false,
     links: [
@@ -253,7 +253,7 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Known",
-    description: "An intense and imaginative work in the Samfa12 literary lineup.",
+    description: "A dark, intimate novel examining power, desire, and transformation through tense character conflict.",
     tags: ["Novel", "Psychological", "Fiction"],
     featured: false,
     links: [
@@ -266,7 +266,7 @@ const fallbackProjects = [
     category: "Assets",
     type: "Asset pack",
     status: "Published",
-    description: "Visual and utility packs for quick implementation in game projects.",
+    description: "Reusable Godot assets designed to help with visual consistency and rapid iteration.",
     tags: ["Godot", "Assets", "Indie tools"],
     featured: false,
     links: [
@@ -278,7 +278,7 @@ const fallbackProjects = [
     category: "Assets",
     type: "Audio toolkit",
     status: "Published",
-    description: "Reusable music workflow assets for small teams and solo creators.",
+    description: "A practical music-audio toolkit aimed at builders who need reusable workflow assets quickly.",
     tags: ["Music", "Audio", "Workflow"],
     featured: false,
     links: [
@@ -291,7 +291,7 @@ const fallbackProjects = [
     category: "Assets",
     type: "Tooling",
     status: "Published",
-    description: "Utility code, workflows, and ideas for building indie-ready game systems.",
+    description: "Reusable game-production helpers for prototyping, tooling ideas, and indie workflow speed.",
     tags: ["Game dev", "Tools", "Utility"],
     featured: false,
     links: [
@@ -304,7 +304,7 @@ const fallbackProjects = [
     category: "Music",
     type: "Music search",
     status: "Available",
-    description: "Explore and listen to music by Samfa12.",
+    description: "A searchable music hub entry for Samfa12 catalog discovery on Spotify.",
     tags: ["Music", "Listening", "Catalog"],
     featured: false,
     links: [
@@ -316,7 +316,7 @@ const fallbackProjects = [
     category: "Music",
     type: "Music search",
     status: "Available",
-    description: "Find Samfa12 releases and mixes on YouTube Music.",
+    description: "A searchable music hub entry for Samfa12 tracks and releases on YouTube Music.",
     tags: ["Music", "Streaming", "Catalog"],
     featured: false,
     links: [
@@ -328,7 +328,7 @@ const fallbackProjects = [
     category: "Social",
     type: "Profile",
     status: "Published",
-    description: "Code, repos, and development snapshots.",
+    description: "A public landing view for source repositories, releases, and development history across Samfa12 projects.",
     tags: ["Code", "Repos", "Community"],
     featured: false,
     links: [
@@ -340,7 +340,7 @@ const fallbackProjects = [
     category: "Social",
     type: "Profile",
     status: "Published",
-    description: "Quick updates and creator announcements.",
+    description: "A concise channel for updates, experiments, and release notes.",
     tags: ["Social", "Updates"],
     featured: false,
     links: [
@@ -352,7 +352,7 @@ const fallbackProjects = [
     category: "Social",
     type: "Profile",
     status: "Published",
-    description: "Public posts and community activity.",
+    description: "Community posting and updates on projects, work sessions, and announcements.",
     tags: ["Community", "Social"],
     featured: false,
     links: [
@@ -364,7 +364,7 @@ const fallbackProjects = [
     category: "Social",
     type: "Profile",
     status: "Published",
-    description: "Discussions and community participation.",
+    description: "A forum profile for sharing development discussions and creator experiences.",
     tags: ["Community", "Forums"],
     featured: false,
     links: [
@@ -376,7 +376,7 @@ const fallbackProjects = [
     category: "Social",
     type: "Publisher page",
     status: "Published",
-    description: "Primary game channel for browser and downloadable releases.",
+    description: "The central Samfa12 storefront entry for game demos, browser builds, and releases.",
     tags: ["Games", "Storefront"],
     featured: false,
     links: [

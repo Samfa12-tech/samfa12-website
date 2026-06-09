@@ -10,7 +10,7 @@ apps, music, assets, and links for **Samfa12**.
 - `script.js` – data-driven project rendering and filtering
 - `data/projects.json` – editable source of projects/cards
 - `assets/favicon.svg` – site icon
-- `assets/og-image.svg` – social preview image
+- `assets/og-image.png` – social preview image
 - `CNAME` – `samfa12.com` domain file
 - `.github/workflows/pages.yml` – optional GitHub Pages deploy workflow
 
@@ -103,4 +103,3 @@ Then enable **Enforce HTTPS** (when available).
 - Keyboard focus styles are included for all interactive controls.
 - External links open in a new tab with `rel="noopener noreferrer"`.
 - The layout is mobile-first with responsive grids and readable typography.
-
