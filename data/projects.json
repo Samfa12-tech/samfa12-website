@@ -174,13 +174,14 @@
     },
     {
         "title":  "Backwater",
-        "category":  "Games",
-        "type":  "Game",
+        "category":  "Books",
+        "type":  "Book",
         "status":  "Published",
-        "description":  "A slow-burning game loop focused on navigation, atmosphere, and exploratory pacing.",
+        "description":  "A literary work with a companion prototype game level release.",
         "tags":  [
-                     "Game",
-                     "Exploration",
+                     "Novel",
+                     "Narrative",
+                     "Speculative",
                      "Samfa12"
                  ],
         "featured":  false,
@@ -188,6 +189,10 @@
                       {
                           "url":  "https://samfa12.itch.io/backwater",
                           "label":  "Play on itch.io"
+                      },
+                      {
+                          "label":  "Amazon author page",
+                          "url":  "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
                       }
                   ]
     },

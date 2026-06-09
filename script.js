@@ -295,6 +295,19 @@ const fallbackProjects = [
     ]
   },
   {
+    title: "Backwater",
+    category: "Books",
+    type: "Book",
+    status: "Published",
+    description: "A literary work with a companion prototype game level.",
+    tags: ["Novel", "Narrative", "Speculative", "Samfa12"],
+    featured: false,
+    links: [
+      { label: "Play on itch.io", url: "https://samfa12.itch.io/backwater" },
+      { label: "Amazon author page", url: "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true" }
+    ]
+  },
+  {
     title: "Sober",
     category: "Books",
     type: "Book",
