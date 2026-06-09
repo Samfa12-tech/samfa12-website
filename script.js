@@ -61,20 +61,20 @@ const fallbackProjects = [
     type: "Book",
     status: "Published",
     description:
-      "A self-contained fantasy novel opening the ToKnight world with focused worldbuilding and character-driven conflict.",
+      "A middle-grade fantasy adventure about Jason Proud, a mysterious knightly inheritance, and the first step into the ToKnight world.",
     tags: ["Novel", "Fantasy", "Adventure"],
     featured: true,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/toknight" },
-      { label: "Amazon author page", url: "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true" }
+      { label: "Amazon", url: "https://www.amazon.com.au/dp/B0GX2NG31Z" }
     ]
   },
   {
     title: "Article 18",
     category: "Books",
     type: "Book",
-    status: "Published — itch.io, Google Play audiobook / ebook",
-    description: "A speculative fiction novel blending suspense with social and ethical questions in a near-future setting.",
+    status: "Published on itch.io and Google Play",
+    description: "A speculative noir novella available as ebook/PDF on itch.io and as audiobook / ebook through Google Play.",
     tags: ["Speculative", "Science", "Literary"],
     featured: true,
     links: [
@@ -246,13 +246,13 @@ const fallbackProjects = [
     title: "ToKnight 2: The Fire Beneath",
     category: "Books",
     type: "Book",
-    status: "Published",
-    description: "The next chapter in the ToKnight series, continuing the core lore and adding deeper stakes.",
+    status: "Pre-order / Releases June 19, 2026",
+    description: "The second ToKnight book, continuing Jason Proud’s fantasy adventure with a buried dragon, family history, and fire beneath the school.",
     tags: ["Novel", "Fantasy", "Sequel"],
     featured: false,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/toknight-2-the-fire-beneath" },
-      { label: "Amazon author page", url: "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true" }
+      { label: "Amazon", url: "https://www.amazon.com.au/dp/B0H3MW9LGP" }
     ]
   },
   {
@@ -260,25 +260,25 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Published",
-    description: "A literary study of belonging and consequence set in a character-forward narrative arc.",
+    description: "A grounded contemporary novel about care, belonging, family pressure, and the consequences of trying to do the right thing.",
     tags: ["Narrative", "Drama", "Fiction"],
     featured: false,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/free-to-a-good-home" },
-      { label: "Amazon author page", url: "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true" }
+      { label: "Amazon", url: "https://www.amazon.com.au/dp/B0GZDH57ZC" }
     ]
   },
   {
     title: "A Place of His Own",
     category: "Books",
     type: "Book",
-    status: "Published",
-    description: "An introspective fiction title about finding place, space, and self-determination.",
+    status: "Pre-order / Releases July 1, 2026",
+    description: "A contemporary follow-up in the Good Home novels, about independence, family, support, and finding a place that can actually hold you.",
     tags: ["Narrative", "Fiction", "Contemporary"],
     featured: false,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/a-place-of-his-own" },
-      { label: "Amazon author page", url: "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true" }
+      { label: "Amazon", url: "https://www.amazon.com.au/dp/B0H1Q3TGS7" }
     ]
   },
   {
@@ -286,12 +286,12 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Published",
-    description: "A dark, intimate novel examining power, desire, and transformation through tense character conflict.",
+    description: "A dark political science fiction novel about occupation, power, personhood, resistance, faith, trauma, and control.",
     tags: ["Novel", "Psychological", "Fiction"],
     featured: false,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/concubine" },
-      { label: "Amazon author page", url: "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true" }
+      { label: "Amazon", url: "https://www.amazon.com.au/dp/B0H1LG55MZ" }
     ]
   },
   {
@@ -299,12 +299,12 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Published",
-    description: "A literary work with a companion prototype game level.",
+    description: "A post-collapse speculative novel about water, survival, control, and the cost of staying alive.",
     tags: ["Novel", "Narrative", "Speculative", "Samfa12"],
     featured: false,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/backwater" },
-      { label: "Amazon author page", url: "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true" }
+      { label: "Amazon", url: "https://www.amazon.com.au/dp/B0GX2XQR3D" }
     ]
   },
   {
@@ -312,12 +312,12 @@ const fallbackProjects = [
     category: "Books",
     type: "Book",
     status: "Published",
-    description: "A literary title exploring loss, restraint, and emotional clarity through an intimate modern narrative.",
+    description: "A novel set in the world of Drink, following recovery, memory, habit, and the work of staying changed.",
     tags: ["Narrative", "Fiction", "Contemporary"],
     featured: false,
     links: [
       { label: "Play on itch.io", url: "https://samfa12.itch.io/sober" },
-      { label: "Amazon author page", url: "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true" }
+      { label: "Amazon", url: "https://www.amazon.com.au/dp/B0GSQQMS4M" }
     ]
   },
   {
