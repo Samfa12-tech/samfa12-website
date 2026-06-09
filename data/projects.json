@@ -390,6 +390,26 @@
     "thumbnailAlt": "Cover image for Google Play apps"
   },
   {
+    "title": "Steam",
+    "category": "Storefronts",
+    "type": "Publisher page",
+    "status": "Published",
+    "description": "Steam storefront entries for Samfa12 releases and demos.",
+    "tags": [
+      "Games",
+      "Storefront",
+      "Steam"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Visit Steam developer page",
+        "url": "https://store.steampowered.com/search/?publisher=Samfa12"
+      }
+    ],
+    "sortOrder": 15
+  },
+  {
     "title": "Samfa12's TD Pack",
     "category": "Games",
     "type": "Android game collection",
@@ -925,8 +945,6 @@
         "label": "Visit page",
         "url": "https://samfa12.itch.io/"
       }
-    ],
-    "thumbnail": "assets/thumbnails/itch-io-577717.png",
-    "thumbnailAlt": "Cover image for itch.io"
+    ]
   }
 ]
