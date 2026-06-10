@@ -318,14 +318,13 @@ h1 {
 .project-image-fallback {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: #0a1019;
 }
 
-.project-image-cover,
-.project-image-fallback.project-image-cover {
-  object-fit: contain;
-  background: #0a1019;
+.project-image-cover-fill {
+  object-fit: cover;
 }
 
 .project-image-fallback {

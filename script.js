@@ -161,8 +161,10 @@ function projectThumbnailHtml(project) {
   const thumbnailPath = thumbnail.trim().replace(/\\/g, "/");
   const title = project.title || "Samfa12 project";
   const category = project.category || "";
+  const fitClass =
+    category === "Books" ? "" : project.imageFit === "cover" ? "project-image-cover-fill" : "";
   const mediaClass = `project-media ${category === "Books" ? "project-media-book" : ""}`.trim();
-  const imageClass = `project-image ${category === "Books" ? "project-image-cover" : ""}`.trim();
+  const imageClass = `project-image ${fitClass}`.trim();
   const alt = project.thumbnailAlt || project.imageAlt || `Cover image for ${title}`;
 
   return `
@@ -321,7 +323,7 @@ function updateFilter(selectedCategory) {
 
 async function loadProjects() {
   try {
-    const response = await fetch("data/projects.json?v=20260610-4", { cache: "no-store" });
+    const response = await fetch("data/projects.json?v=20260610-5", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (!Array.isArray(data)) throw new Error("Invalid JSON data");
