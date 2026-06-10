@@ -203,6 +203,12 @@ h1 {
   border-radius: var(--radius-sm);
 }
 
+.section-coming-soon {
+  background: linear-gradient(145deg, rgba(115, 228, 255, 0.08), rgba(155, 92, 255, 0.08));
+  border-top: 1px solid rgba(115, 228, 255, 0.2);
+  border-bottom: 1px solid rgba(155, 92, 255, 0.2);
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -243,6 +249,36 @@ h1 {
   border-radius: 999px;
   padding: 0.2rem 0.55rem;
   white-space: nowrap;
+}
+
+.pill.status-published {
+  background: rgba(115, 228, 255, 0.2);
+  border-color: rgba(115, 228, 255, 0.5);
+  color: #d7f8ff;
+}
+
+.pill.status-coming-soon {
+  background: rgba(255, 186, 90, 0.2);
+  border-color: rgba(255, 186, 90, 0.48);
+  color: #ffe5bc;
+}
+
+.pill.status-development {
+  background: rgba(255, 162, 98, 0.2);
+  border-color: rgba(255, 162, 98, 0.48);
+  color: #ffd6bc;
+}
+
+.pill.status-prototype {
+  background: rgba(155, 92, 255, 0.2);
+  border-color: rgba(155, 92, 255, 0.5);
+  color: #e8dcff;
+}
+
+.pill.status-available {
+  background: rgba(134, 214, 174, 0.2);
+  border-color: rgba(134, 214, 174, 0.48);
+  color: #daf8e7;
 }
 
 .description {

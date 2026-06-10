@@ -1,4 +1,4 @@
-const categoryOrder = ["Games", "Books", "Apps & Tools", "Music", "Storefronts", "Social"];
+const categoryOrder = ["Games", "Books", "Apps & Tools", "Music", "Storefronts", "Social", "Assets"];
 
 const fallbackProjects = [
   {
@@ -698,6 +698,7 @@ const fallbackProjects = [
 ];
 
 const featuredGrid = document.getElementById("featured-grid");
+const comingSoonGrid = document.getElementById("coming-soon-grid");
 const categoryFilters = document.getElementById("category-filters");
 const categorySections = document.getElementById("category-sections");
 const dataStatus = document.getElementById("data-status");
@@ -715,6 +716,52 @@ function slugifyCategory(category) {
   return String(category || "uncategorized")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-");
+}
+
+function normalizeTitle(title) {
+  return String(title || "").replace(/^(the|a|an)\s+/i, "").toLowerCase();
+}
+
+function byTitle(a, b) {
+  return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
+}
+
+function bySortThenTitle(a, b) {
+  const aOrder = Number.isFinite(Number(a.sortOrder)) ? Number(a.sortOrder) : 9999;
+  const bOrder = Number.isFinite(Number(b.sortOrder)) ? Number(b.sortOrder) : 9999;
+  return aOrder - bOrder || byTitle(a, b);
+}
+
+function isComingSoonProject(project) {
+  const status = String(project.status || "").toLowerCase();
+  return (
+    status.includes("coming soon") ||
+    status.includes("in development") ||
+    status.includes("prototype") ||
+    status.includes("wip")
+  );
+}
+
+function getStatusClass(status) {
+  const value = String(status || "Available").toLowerCase();
+
+  if (value.includes("coming soon")) {
+    return "status-coming-soon";
+  }
+
+  if (value.includes("in development") || value.includes("wip")) {
+    return "status-development";
+  }
+
+  if (value.includes("prototype")) {
+    return "status-prototype";
+  }
+
+  if (value.includes("published")) {
+    return "status-published";
+  }
+
+  return "status-available";
 }
 
 function isSafeLocalThumbnail(path) {
@@ -772,6 +819,7 @@ function hideBrokenThumbnails() {
 function projectCardHtml(project) {
   const title = project.title || "Untitled project";
   const category = project.category || "Uncategorized";
+  const statusLabel = project.status || "Available";
   const tagList = Array.isArray(project.tags) ? project.tags : [];
   const linkList = Array.isArray(project.links) ? project.links : [];
   const tags = tagList
@@ -795,7 +843,7 @@ function projectCardHtml(project) {
       <h3>${escapeHtml(title)}</h3>
       <p class="project-meta">
         <span class="pill">${escapeHtml(project.type || "Project")}</span>
-        <span class="pill">${escapeHtml(project.status || "Available")}</span>
+        <span class="pill ${getStatusClass(statusLabel)}">${escapeHtml(statusLabel)}</span>
       </p>
       <p class="description">${escapeHtml(project.description || "")}</p>
       <div class="links" aria-label="${escapeHtml(title)} links">${links}</div>
@@ -806,8 +854,17 @@ function projectCardHtml(project) {
 }
 
 function renderFeatured(projects) {
-  const featured = projects.filter((project) => project.featured);
+  const featured = projects.filter((project) => project.featured === true).slice().sort(bySortThenTitle);
   featuredGrid.innerHTML = featured.map(projectCardHtml).join("");
+}
+
+function renderComingSoon(projects) {
+  if (!comingSoonGrid) {
+    return;
+  }
+
+  const comingSoon = projects.filter(isComingSoonProject).slice().sort(byTitle);
+  comingSoonGrid.innerHTML = comingSoon.map(projectCardHtml).join("");
 }
 
 function scrollToHashTarget() {
@@ -832,7 +889,7 @@ function renderCategorySections(projects) {
   categorySections.innerHTML = "";
 
   categoryOrder.forEach((category) => {
-    const list = projects.filter((project) => project.category === category);
+    const list = projects.filter((project) => project.category === category).slice().sort(byTitle);
     if (!list.length) {
       return;
     }
@@ -855,6 +912,7 @@ function renderCategorySections(projects) {
 }
 
 function buildFilterButtons() {
+  categoryFilters.innerHTML = "";
   const filters = ["all", ...categoryOrder];
   filters.forEach((filter, index) => {
     const label = filter === "all" ? "All" : filter;
@@ -886,7 +944,7 @@ function updateFilter(selectedCategory) {
 
 async function loadProjects() {
   try {
-    const response = await fetch("data/projects.json", { cache: "no-store" });
+    const response = await fetch("data/projects.json?v=20260609-3", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (!Array.isArray(data)) throw new Error("Invalid JSON data");
@@ -904,6 +962,7 @@ async function loadProjects() {
 async function initialize() {
   const projects = await loadProjects();
   renderFeatured(projects);
+  renderComingSoon(projects);
   renderCategorySections(projects);
   buildFilterButtons();
   updateFilter("all");
