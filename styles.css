@@ -135,6 +135,12 @@ button:focus-visible {
   max-width: 760px;
 }
 
+.section-intro {
+  color: var(--text-muted);
+  margin: -0.3rem 0 1rem;
+  max-width: 720px;
+}
+
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.18em;
