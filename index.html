@@ -28,7 +28,7 @@
     <meta name="twitter:site" content="@Samfa12" />
     <link rel="canonical" href="https://samfa12.com/" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-    <link rel="stylesheet" href="styles.css?v=20260610-2" />
+    <link rel="stylesheet" href="styles.css?v=20260610-4" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -61,17 +61,56 @@
         <a class="brand" href="#home">Samfa12</a>
         <nav aria-label="Primary navigation">
           <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#featured">Featured</a></li>
-            <li><a href="#coming-soon">Coming soon</a></li>
-            <li><a href="#games">Games</a></li>
-            <li><a href="#books">Books</a></li>
-            <li><a href="#apps-tools">Apps &amp; Tools</a></li>
-            <li><a href="#assets">Assets</a></li>
-            <li><a href="#music">Music</a></li>
-            <li><a href="#storefronts">Storefronts</a></li>
-            <li><a href="#social">Social</a></li>
-            <li><a href="#links">Links</a></li>
+            <li>
+              <a href="#home" data-analytics="nav-link" data-link-label="Home">Home</a>
+            </li>
+            <li>
+              <a href="#featured" data-analytics="nav-link" data-link-label="Featured"
+                >Featured</a
+              >
+            </li>
+            <li>
+              <a
+                href="#coming-soon"
+                data-analytics="nav-link"
+                data-link-label="Coming soon"
+                >Coming soon</a
+              >
+            </li>
+            <li>
+              <a href="#games" data-analytics="nav-link" data-link-label="Games">Games</a>
+            </li>
+            <li>
+              <a href="#books" data-analytics="nav-link" data-link-label="Books">Books</a>
+            </li>
+            <li>
+              <a
+                href="#apps-tools"
+                data-analytics="nav-link"
+                data-link-label="Apps &amp; Tools"
+                >Apps &amp; Tools</a
+              >
+            </li>
+            <li>
+              <a href="#assets" data-analytics="nav-link" data-link-label="Assets">Assets</a>
+            </li>
+            <li>
+              <a href="#music" data-analytics="nav-link" data-link-label="Music">Music</a>
+            </li>
+            <li>
+              <a
+                href="#storefronts"
+                data-analytics="nav-link"
+                data-link-label="Storefronts"
+                >Storefronts</a
+              >
+            </li>
+            <li>
+              <a href="#social" data-analytics="nav-link" data-link-label="Social">Social</a>
+            </li>
+            <li>
+              <a href="#links" data-analytics="nav-link" data-link-label="Links">Links</a>
+            </li>
           </ul>
         </nav>
       </div>
@@ -134,6 +173,8 @@
               href="https://github.com/Samfa12-tech"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="GitHub"
             >
               GitHub
             </a>
@@ -142,6 +183,8 @@
               href="https://www.facebook.com/messages/t/61577421161868/"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="Contact me"
             >
               Contact me
             </a>
@@ -150,6 +193,8 @@
               href="https://x.com/Samfa12"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="X / Twitter"
             >
               X / Twitter
             </a>
@@ -158,6 +203,8 @@
               href="https://www.facebook.com/people/Samfa12-Drink-Sober"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="Facebook"
             >
               Facebook
             </a>
@@ -166,6 +213,8 @@
               href="https://www.reddit.com/user/Samfa12/"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="Reddit"
             >
               Reddit
             </a>
@@ -174,6 +223,8 @@
               href="https://samfa12.itch.io/"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="itch.io"
             >
               itch.io
             </a>
@@ -182,6 +233,8 @@
               href="https://store.steampowered.com/search/?publisher=Samfa12"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="Steam publisher page"
             >
               Steam publisher page
             </a>
@@ -190,6 +243,8 @@
               href="https://play.google.com/store/apps/dev?id=7761853381809168545"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="Google Play apps"
             >
               Google Play apps
             </a>
@@ -198,6 +253,8 @@
               href="https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="Amazon author"
             >
               Amazon author
             </a>
@@ -206,6 +263,8 @@
               href="https://godotengine.org/asset-library/asset?filter=Samfa12"
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="Godot Asset Library"
             >
               Godot Asset Library
             </a>
@@ -224,7 +283,19 @@
       </div>
     </footer>
 
-    <script src="script.js?v=20260610-2" defer></script>
+    <script type="text/javascript">
+      (function(c, l, a, r, i, t, y) {
+        c[a] = c[a] || function() {
+          (c[a].q = c[a].q || []).push(arguments);
+        };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = "https://www.clarity.ms/tag/" + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, "clarity", "script", "x4qwugpfik");
+    </script>
+    <script src="script.js?v=20260610-4" defer></script>
   </body>
 </html>
 

@@ -206,9 +206,11 @@ function projectCardHtml(project) {
     .filter((link) => link?.url && link?.label)
     .map(
       (link) =>
-        `<a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(
+        `<a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" data-analytics="project-link" data-project-title="${escapeHtml(
+          title
+        )}" data-project-category="${escapeHtml(category)}" data-link-label="${escapeHtml(
           link.label
-        )}</a>`
+        )}">${escapeHtml(link.label)}</a>`
     )
     .join("");
 
@@ -319,7 +321,7 @@ function updateFilter(selectedCategory) {
 
 async function loadProjects() {
   try {
-    const response = await fetch("data/projects.json?v=20260610-2", { cache: "no-store" });
+    const response = await fetch("data/projects.json?v=20260610-4", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (!Array.isArray(data)) throw new Error("Invalid JSON data");
