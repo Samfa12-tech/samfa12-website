@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://samfa12.com/sitemap.xml
