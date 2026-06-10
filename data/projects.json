@@ -127,7 +127,7 @@
       }
     ],
     "sortOrder": 18,
-    "thumbnail": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
+    "thumbnail": "assets/thumbnails/pocket-chordsmith-godot-addon-icon.png",
     "thumbnailAlt": "Cover image for Pocket Chordsmith Godot addon"
   },
   {
@@ -769,6 +769,8 @@
         "url": "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"
       }
     ],
+    "thumbnail": "assets/thumbnails/spotify-icon.png",
+    "thumbnailAlt": "Logo for Samfa12 on Spotify",
     "sortOrder": 34
   },
   {
@@ -854,6 +856,8 @@
         "url": "https://music.youtube.com/search?q=Samfa12"
       }
     ],
+    "thumbnail": "assets/thumbnails/youtube-music-icon.png",
+    "thumbnailAlt": "Logo for YouTube Music",
     "sortOrder": 35
   },
   {
