@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "fetch:thumbnails": "node scripts/fetch-thumbnails.mjs"
+    "fetch:thumbnails": "node scripts/fetch-thumbnails.mjs",
+    "sync:pocket-apps": "node scripts/sync-pocket-apps.js"
   }
 }

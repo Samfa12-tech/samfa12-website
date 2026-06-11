@@ -125,6 +125,7 @@ button:focus-visible {
 
 .section {
   padding: var(--space-5) 0;
+  scroll-margin-top: 90px;
 }
 
 .hero {
@@ -139,6 +140,19 @@ button:focus-visible {
   color: var(--text-muted);
   margin: -0.3rem 0 1rem;
   max-width: 720px;
+}
+
+.section-note {
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 760px;
+}
+
+.section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 .eyebrow {
@@ -213,6 +227,21 @@ h1 {
   background: linear-gradient(145deg, rgba(115, 228, 255, 0.08), rgba(155, 92, 255, 0.08));
   border-top: 1px solid rgba(115, 228, 255, 0.2);
   border-bottom: 1px solid rgba(155, 92, 255, 0.2);
+}
+
+.section-pocket-audio {
+  background: linear-gradient(145deg, rgba(115, 228, 255, 0.06), rgba(20, 30, 44, 0.2));
+  border-top: 1px solid rgba(115, 228, 255, 0.18);
+  border-bottom: 1px solid rgba(115, 228, 255, 0.12);
+}
+
+.pocket-audio-head {
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.pocket-audio-grid {
+  margin-top: 1rem;
 }
 
 .card-grid {
@@ -425,6 +454,28 @@ h1 {
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
+  }
+}
+
+@media (max-width: 719px) {
+  .header-inner nav {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .nav-links {
+    gap: 0.45rem;
+  }
+
+  .nav-links a {
+    padding: 0.35rem 0.55rem;
+  }
+
+  .hero-actions .button,
+  .section-actions .button {
+    flex: 1 1 145px;
+    white-space: normal;
+    text-align: center;
   }
 }
 

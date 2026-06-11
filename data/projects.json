@@ -83,17 +83,28 @@
     "category": "Apps & Tools",
     "type": "Web app",
     "status": "Published",
-    "description": "A web-based songwriting utility for fast chord mapping, harmony checks, and practical music composition workflows.",
+    "description": "The Pocket Audio songwriting hub for sketching progressions, MIDI ideas, exports, and game-audio handoff workflows.",
     "tags": [
       "Music",
-      "Utility",
-      "Apps"
+      "Web Audio",
+      "Composition",
+      "MIDI",
+      "Game Audio",
+      "Source Available"
     ],
     "featured": true,
     "links": [
       {
+        "url": "/apps/pocket-chordsmith/",
+        "label": "Use on Samfa12.com"
+      },
+      {
         "url": "https://samfa12.itch.io/pocket-chordsmith",
-        "label": "Play on itch.io"
+        "label": "itch.io"
+      },
+      {
+        "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+        "label": "Source on GitHub"
       }
     ],
     "sortOrder": 3,
@@ -105,11 +116,13 @@
     "category": "Assets",
     "type": "Godot add-on",
     "status": "Published",
-    "description": "A downloadable Godot add-on version of Pocket Chordsmith for composing in-editor and accelerating music prototyping.",
+    "description": "An MIT-licensed Godot addon for importing Pocket Chordsmith data, compiling chart resources, and driving adaptive music callbacks in games.",
     "tags": [
       "Music",
       "Godot",
-      "Utility"
+      "Game Audio",
+      "Adaptive Music",
+      "Open Source"
     ],
     "featured": false,
     "links": [
@@ -124,6 +137,10 @@
       {
         "label": "Godot Asset Store",
         "url": "https://store.godotengine.org/asset/samfa12/pocket-chordsmith/"
+      },
+      {
+        "label": "Addon source",
+        "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith/tree/main/addons/pocket_chordsmith"
       }
     ],
     "sortOrder": 18,
@@ -468,17 +485,27 @@
     "category": "Apps & Tools",
     "type": "Mobile app",
     "status": "Published",
-    "description": "A DJ-oriented utility designed for set planning, pacing ideas, and rapid track utility on mobile.",
+    "description": "A Pocket Audio live remixing tool for turning Pocket Chordsmith song ideas into performance pads, loops, builds, drops, and FX.",
     "tags": [
       "Music",
       "DJ",
-      "Utility"
+      "Live Remixing",
+      "Web Audio",
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
       {
+        "url": "/apps/pocket-dj/",
+        "label": "Use on Samfa12.com"
+      },
+      {
         "url": "https://samfa12.itch.io/pocket-dj",
-        "label": "Play on itch.io"
+        "label": "itch.io"
+      },
+      {
+        "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+        "label": "Source on GitHub"
       }
     ],
     "sortOrder": 17,
@@ -490,11 +517,13 @@
     "category": "Apps & Tools",
     "type": "WIP tool",
     "status": "In development",
-    "description": "A music production workflow tool in progress.",
+    "description": "A Pocket Audio arrangement and production experiment that builds on the same song-data and export direction as Pocket Chordsmith.",
     "tags": [
       "Music",
       "DAW",
-      "Utility"
+      "Arrangement",
+      "Production",
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [

@@ -73,10 +73,17 @@ const fallbackProjects = [
   }
 ];
 const featuredGrid = document.getElementById("featured-grid");
+const pocketAudioGrid = document.getElementById("pocket-audio-grid");
 const comingSoonGrid = document.getElementById("coming-soon-grid");
 const categoryFilters = document.getElementById("category-filters");
 const categorySections = document.getElementById("category-sections");
 const dataStatus = document.getElementById("data-status");
+const pocketAudioTitles = [
+  "Pocket Chordsmith",
+  "Pocket DJ",
+  "Pocket DAW",
+  "Pocket Chordsmith Godot addon",
+];
 
 function escapeHtml(value) {
   return String(value)
@@ -237,6 +244,20 @@ function renderFeatured(projects) {
   featuredGrid.innerHTML = featured.map(projectCardHtml).join("");
 }
 
+function renderPocketAudio(projects) {
+  if (!pocketAudioGrid) {
+    return;
+  }
+
+  const titleOrder = new Map(pocketAudioTitles.map((title, index) => [title, index]));
+  const pocketAudioProjects = projects
+    .filter((project) => titleOrder.has(project.title))
+    .slice()
+    .sort((a, b) => titleOrder.get(a.title) - titleOrder.get(b.title));
+
+  pocketAudioGrid.innerHTML = pocketAudioProjects.map(projectCardHtml).join("");
+}
+
 function renderComingSoon(projects) {
   if (!comingSoonGrid) {
     return;
@@ -323,7 +344,7 @@ function updateFilter(selectedCategory) {
 
 async function loadProjects() {
   try {
-    const response = await fetch("data/projects.json?v=20260610-5", { cache: "no-store" });
+    const response = await fetch("data/projects.json?v=20260611-1", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (!Array.isArray(data)) throw new Error("Invalid JSON data");
@@ -341,6 +362,7 @@ async function loadProjects() {
 async function initialize() {
   const projects = await loadProjects();
   renderFeatured(projects);
+  renderPocketAudio(projects);
   renderComingSoon(projects);
   renderCategorySections(projects);
   buildFilterButtons();

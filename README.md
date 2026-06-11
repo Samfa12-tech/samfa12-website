@@ -9,6 +9,10 @@ apps, music, assets, and links for **Samfa12**.
 - `styles.css` – dark, responsive styling and component styles
 - `script.js` – data-driven project rendering and filtering
 - `data/projects.json` – editable source of projects/cards
+- Pocket Audio homepage section linking Pocket Chordsmith, Pocket DJ, Pocket DAW,
+  the Godot addon, and the public source home
+- `apps/pocket-chordsmith/` – hosted single-file Pocket Chordsmith app route
+- `apps/pocket-dj/` – hosted single-file Pocket DJ app route
 - `assets/favicon.svg` – site icon
 - `assets/og-image.png` – social preview image
 - `assets/thumbnails/` – local project card thumbnails
@@ -56,6 +60,30 @@ Option B: VS Code Live Server
 
 - Open the folder in VS Code.
 - Right-click `index.html` and choose **Open with Live Server**.
+
+## Sync hosted Pocket Audio apps
+
+After releasing a new Pocket Chordsmith or Pocket DJ single-file build in the
+Pocket Chordsmith repo, refresh the hosted app routes with:
+
+```bash
+npm run sync:pocket-apps
+```
+
+By default the script reads from:
+
+`C:\Users\sam_s\Documents\Pocket Chordsmith`
+
+It picks the newest matching single-file HTML in each app folder, writes it to
+`apps/pocket-chordsmith/index.html` and `apps/pocket-dj/index.html`, reapplies
+Samfa12 metadata/canonical tags, and refreshes the local Pocket Audio Core files
+used by the hosted apps.
+
+Optional overrides:
+
+- `POCKET_CHORDSMITH_ROOT` – use a different Pocket Chordsmith repo folder
+- `POCKET_CHORDSMITH_HTML` – use a specific Chordsmith HTML file
+- `POCKET_DJ_HTML` – use a specific Pocket DJ HTML file
 
 ## How to enable GitHub Pages
 

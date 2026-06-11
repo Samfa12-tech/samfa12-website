@@ -1,0 +1,48 @@
+{
+  "name": "pocket-audio-core",
+  "version": "0.1.0-scaffold",
+  "private": true,
+  "type": "module",
+  "description": "Shared headless audio runtime scaffold for the Pocket Chordsmith family.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samfa12-tech/Pocket-Chordsmith.git",
+    "directory": "packages/pocket-audio-core"
+  },
+  "main": "./dist/pocket-audio-core.esm.js",
+  "module": "./dist/pocket-audio-core.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/pocket-audio-core.esm.js",
+      "default": "./dist/pocket-audio-core.esm.js"
+    },
+    "./src": "./src/index.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test",
+    "test:core": "node --test tests/core.test.js",
+    "test:golden": "node --test tests/golden.test.js --test-name-pattern \"golden event trace|fixture index\"",
+    "test:render": "node --test tests/golden.test.js --test-name-pattern \"audio metrics\"",
+    "update:golden": "node scripts/update-golden.mjs"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "pocket-audio",
+    "pocket-chordsmith",
+    "web-audio",
+    "music-composition",
+    "adaptive-music",
+    "game-audio",
+    "godot",
+    "midi",
+    "wav",
+    "pcs1",
+    "songwriting"
+  ],
+  "license": "UNLICENSED"
+}

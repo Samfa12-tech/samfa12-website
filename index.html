@@ -6,7 +6,7 @@
     <title>Samfa12 | Games, books, tools, music, and strange little worlds</title>
     <meta
       name="description"
-      content="Samfa12 is a portfolio hub for indie games, books, apps, music, tools, and creative experiments."
+      content="Samfa12 is a portfolio hub for indie games, books, apps, music, browser-based Pocket Audio tools, and creative experiments."
     />
     <meta name="author" content="Samfa12" />
     <meta
@@ -15,42 +15,62 @@
     />
     <meta
       property="og:description"
-      content="Everything by Samfa12: games, books, tools, music, and experiments."
+      content="Everything by Samfa12: games, books, tools, music, browser-based Pocket Audio, and experiments."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://samfa12.com" />
-    <meta property="og:image" content="/assets/og-image.png" />
+    <meta property="og:image" content="https://samfa12.com/assets/og-image.png" />
     <meta property="og:locale" content="en_AU" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Samfa12 | Games, books, tools, music, and strange little worlds" />
-    <meta name="twitter:description" content="Everything by Samfa12, built for creators and players." />
-    <meta name="twitter:image" content="/assets/og-image.png" />
+    <meta name="twitter:description" content="Everything by Samfa12, including browser-based Pocket Audio tools for songs, live remixing, and game audio." />
+    <meta name="twitter:image" content="https://samfa12.com/assets/og-image.png" />
     <meta name="twitter:site" content="@Samfa12" />
     <link rel="canonical" href="https://samfa12.com/" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-    <link rel="stylesheet" href="styles.css?v=20260610-5" />
+    <link rel="stylesheet" href="styles.css?v=20260611-1" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Samfa12",
-        "url": "https://samfa12.com",
-        "logo": "https://samfa12.com/assets/favicon.svg",
-        "sameAs": [
-          "https://github.com/Samfa12-tech",
-          "https://x.com/Samfa12",
-          "https://www.facebook.com/people/Samfa12-Drink-Sober",
-          "https://www.reddit.com/user/Samfa12/",
-          "https://samfa12.itch.io/",
-          "https://store.steampowered.com/search/?publisher=Samfa12",
-          "https://play.google.com/store/apps/dev?id=7761853381809168545",
-          "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true",
-          "https://open.spotify.com/search/Samfa12",
-          "https://music.youtube.com/search?q=Samfa12",
-          "https://www.google.com/search?q=site%3Abooks.google.com+Samfa12",
-          "https://godotengine.org/asset-library/asset?filter=Samfa12"
-        ],
-        "description": "Creative indie portal for games, books, tools, music, and digital experiments."
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "Samfa12",
+            "url": "https://samfa12.com",
+            "logo": "https://samfa12.com/assets/favicon.svg",
+            "sameAs": [
+              "https://github.com/Samfa12-tech",
+              "https://x.com/Samfa12",
+              "https://www.facebook.com/people/Samfa12-Drink-Sober",
+              "https://www.reddit.com/user/Samfa12/",
+              "https://samfa12.itch.io/",
+              "https://store.steampowered.com/search/?publisher=Samfa12",
+              "https://play.google.com/store/apps/dev?id=7761853381809168545",
+              "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true",
+              "https://open.spotify.com/search/Samfa12",
+              "https://music.youtube.com/search?q=Samfa12",
+              "https://www.google.com/search?q=site%3Abooks.google.com+Samfa12",
+              "https://godotengine.org/asset-library/asset?filter=Samfa12"
+            ],
+            "knowsAbout": [
+              "Indie games",
+              "Books",
+              "Music tools",
+              "Pocket Audio",
+              "Pocket Chordsmith",
+              "Adaptive game audio"
+            ],
+            "description": "Creative indie portal for games, books, tools, music, Pocket Audio, and digital experiments."
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "Pocket Audio / Pocket Chordsmith",
+            "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+            "codeRepository": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+            "programmingLanguage": ["JavaScript", "TypeScript", "GDScript"],
+            "description": "Public source home for the browser-based Pocket Chordsmith and Pocket DJ apps, Pocket DAW experiments, Pocket Audio Core, and the Pocket Chordsmith Godot addon."
+          }
+        ]
       }
     </script>
   </head>
@@ -67,6 +87,14 @@
             <li>
               <a href="#featured" data-analytics="nav-link" data-link-label="Featured"
                 >Featured</a
+              >
+            </li>
+            <li>
+              <a
+                href="#pocket-audio"
+                data-analytics="nav-link"
+                data-link-label="Pocket Audio"
+                >Pocket Audio</a
               >
             </li>
             <li>
@@ -127,6 +155,7 @@
           <div class="hero-actions">
             <a href="#games" class="button">Play games</a>
             <a href="#books" class="button button-ghost">Read books</a>
+            <a href="#pocket-audio" class="button button-ghost">Pocket Audio</a>
             <a href="#apps-tools" class="button button-ghost">Apps &amp; tools</a>
             <a href="#links" class="button button-ghost">Links</a>
           </div>
@@ -138,6 +167,93 @@
           <h2>Featured</h2>
           <p id="data-status" class="status" role="status" aria-live="polite" hidden></p>
           <div id="featured-grid" class="card-grid featured-grid" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section id="pocket-audio" class="section section-pocket-audio">
+        <div class="container">
+          <div class="section-head pocket-audio-head">
+            <div>
+              <h2>Pocket Audio tools</h2>
+              <p class="section-intro">
+                Pocket Audio is a family of browser-based music tools for sketching
+                songs, exporting ideas, live remixing, and bringing adaptive music
+                into games.
+              </p>
+              <p class="section-note">
+                The public source home connects Pocket Chordsmith, Pocket DJ, Pocket
+                DAW experiments, the MIT-licensed Godot addon, and shared game-audio
+                tooling.
+              </p>
+            </div>
+            <div class="section-actions">
+              <a
+                class="button"
+                href="/apps/pocket-chordsmith/"
+                data-analytics="pocket-audio-link"
+                data-link-label="Use Pocket Chordsmith"
+              >
+                Use Pocket Chordsmith
+              </a>
+              <a
+                class="button button-ghost"
+                href="/apps/pocket-dj/"
+                data-analytics="pocket-audio-link"
+                data-link-label="Use Pocket DJ"
+              >
+                Use Pocket DJ
+              </a>
+              <a
+                class="button button-ghost"
+                href="https://github.com/Samfa12-tech/Pocket-Chordsmith"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-analytics="pocket-audio-link"
+                data-link-label="Source on GitHub"
+              >
+                Source on GitHub
+              </a>
+            </div>
+          </div>
+          <div id="pocket-audio-grid" class="card-grid pocket-audio-grid" aria-live="polite"></div>
+          <noscript>
+            <div class="card-grid pocket-audio-grid">
+              <article class="card">
+                <h3>Pocket Chordsmith</h3>
+                <p class="description">
+                  Song sketching, chord progressions, MIDI ideas, and export paths for
+                  the wider Pocket Audio workflow.
+                </p>
+                <div class="links">
+                  <a href="/apps/pocket-chordsmith/">Use on Samfa12.com</a>
+                  <a href="https://samfa12.itch.io/pocket-chordsmith" target="_blank" rel="noopener noreferrer">itch.io</a>
+                  <a href="https://github.com/Samfa12-tech/Pocket-Chordsmith" target="_blank" rel="noopener noreferrer">Public source home</a>
+                </div>
+              </article>
+              <article class="card">
+                <h3>Pocket DJ</h3>
+                <p class="description">
+                  Live remixing and performance tools that connect back to Pocket
+                  Chordsmith song data.
+                </p>
+                <div class="links">
+                  <a href="/apps/pocket-dj/">Use on Samfa12.com</a>
+                  <a href="https://samfa12.itch.io/pocket-dj" target="_blank" rel="noopener noreferrer">itch.io</a>
+                </div>
+              </article>
+              <article class="card">
+                <h3>Pocket Chordsmith Godot addon</h3>
+                <p class="description">
+                  MIT-licensed Godot addon for importing Pocket Chordsmith data and
+                  driving adaptive music callbacks in games.
+                </p>
+                <div class="links">
+                  <a href="https://github.com/Samfa12-tech/Pocket-Chordsmith/tree/main/addons/pocket_chordsmith" target="_blank" rel="noopener noreferrer">Addon source</a>
+                  <a href="https://godotengine.org/asset-library/asset/5174" target="_blank" rel="noopener noreferrer">Godot Asset Library</a>
+                </div>
+              </article>
+            </div>
+          </noscript>
         </div>
       </section>
 
@@ -177,6 +293,16 @@
               data-link-label="GitHub"
             >
               GitHub
+            </a>
+            <a
+              class="button button-ghost"
+              href="https://github.com/Samfa12-tech/Pocket-Chordsmith"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-analytics="sitewide-link"
+              data-link-label="Pocket Audio source"
+            >
+              Pocket Audio source
             </a>
             <a
               class="button button-ghost"
@@ -295,7 +421,7 @@
         y.parentNode.insertBefore(t, y);
       })(window, document, "clarity", "script", "x4qwugpfik");
     </script>
-    <script src="script.js?v=20260610-5" defer></script>
+    <script src="script.js?v=20260611-1" defer></script>
   </body>
 </html>
 
