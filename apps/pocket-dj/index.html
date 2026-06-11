@@ -425,7 +425,7 @@ function isLocalHandoffHost(){
 }
 function resolvePocketChordsmithUrl(){
   if(isLocalHandoffHost()){
-    try{ return new URL("../chordsmith-web/index.html", window.location.href).href; }catch(e){}
+    try{ return new URL("../pocket-chordsmith/index.html", window.location.href).href; }catch(e){}
   }
   return POCKET_CHORDSMITH_URL;
 }

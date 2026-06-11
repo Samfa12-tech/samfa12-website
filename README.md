@@ -1,16 +1,22 @@
 # Samfa12 Official Portal
 
 This is a static portfolio website for `samfa12.com`, showcasing games, books,
-apps, music, assets, and links for **Samfa12**.
+apps, Pocket Audio, music, and links for **Samfa12**.
 
 ## What this site includes
 
-- `index.html` – all sections and layout
+- `index.html` – compact homepage overview
+- `games/index.html` – games catalogue
+- `books/index.html` – books catalogue
+- `apps/index.html` – apps and tools catalogue
+- `pocket-audio/index.html` – Pocket Audio family/workflow page
+- `music/index.html` – music and audio catalogue
+- `links/index.html` – full social/store/source links page
 - `styles.css` – dark, responsive styling and component styles
-- `script.js` – data-driven project rendering and filtering
+- `script.js` – data-driven rendering for the homepage and section pages
 - `data/projects.json` – editable source of projects/cards
-- Pocket Audio homepage section linking Pocket Chordsmith, Pocket DJ, Pocket DAW,
-  the Godot addon, and the public source home
+- Pocket Audio homepage strip linking Pocket Chordsmith, Pocket DJ, the source
+  repo, and the full family page
 - `apps/pocket-chordsmith/` – hosted single-file Pocket Chordsmith app route
 - `apps/pocket-dj/` – hosted single-file Pocket DJ app route
 - `assets/favicon.svg` – site icon
@@ -34,7 +40,7 @@ Each project entry has:
 - `featured` (`true`/`false`)
 - `links` (array of `{ "label": "...", "url": "..." }`)
 
-Project categories used by the site:
+Project categories used by the data:
 
 - `Games`
 - `Books`
@@ -43,6 +49,10 @@ Project categories used by the site:
 - `Music`
 - `Social`
 - `Storefronts`
+
+The homepage intentionally renders only a small featured sampler. Full project
+cards belong on the relevant section pages so projects do not repeat across
+multiple homepage bands.
 
 ## How to preview locally
 
