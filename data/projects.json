@@ -288,8 +288,8 @@
     "title": "Gremlin Grenade Pinball",
     "category": "Games",
     "type": "Game",
-    "status": "Published",
-    "description": "A quirky pinball-style game with quick scoring spikes and playful mechanics.",
+    "status": "Prototype",
+    "description": "A quirky pinball-style prototype with quick scoring spikes and playful mechanics.",
     "tags": [
       "Game",
       "Pinball",
@@ -310,8 +310,8 @@
     "title": "Wonky Vehicle Lab",
     "category": "Games",
     "type": "Game",
-    "status": "Published",
-    "description": "A sandboxy vehicle playground with quirky controls, experimental builds, and fast iteration loops.",
+    "status": "Prototype",
+    "description": "A sandboxy vehicle playground prototype with quirky controls, experimental builds, and fast iteration loops.",
     "tags": [
       "Game",
       "Experimental",
@@ -395,7 +395,7 @@
       "Creator",
       "Tools"
     ],
-    "featured": true,
+    "featured": false,
     "links": [
       {
         "label": "Google Play developer",
@@ -628,8 +628,8 @@
     "title": "Ant Farm",
     "category": "Games",
     "type": "Game",
-    "status": "In development",
-    "description": "A simulation sketch focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
+    "status": "Prototype",
+    "description": "A simulation prototype focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
     "tags": [
       "Game",
       "Simulation",
@@ -650,8 +650,8 @@
     "title": "ToKnight 2: The Fire Beneath",
     "category": "Books",
     "type": "Book",
-    "status": "Published",
-    "description": "The second ToKnight book, continuing Jason Proud’s fantasy adventure with a buried dragon, family history, and fire beneath the school.",
+    "status": "Coming Soon — Available 19 June",
+    "description": "The second ToKnight book, continuing Jason Proud’s fantasy adventure with a buried dragon, family history, and fire beneath the school. Available for preorder now.",
     "tags": [
       "Novel",
       "Fantasy",
@@ -702,8 +702,8 @@
     "title": "A Place of His Own",
     "category": "Books",
     "type": "Book",
-    "status": "Published",
-    "description": "A contemporary follow-up in the Good Home novels, about independence, family, support, and finding a place that can actually hold you.",
+    "status": "Coming Soon — Available 1 July",
+    "description": "A contemporary follow-up in the Good Home novels, about independence, family, support, and finding a place that can actually hold you. Available for preorder now.",
     "tags": [
       "Narrative",
       "Fiction",
@@ -955,6 +955,25 @@
       {
         "label": "Open profile",
         "url": "https://www.reddit.com/user/Samfa12/"
+      }
+    ]
+  },
+  {
+    "title": "YouTube",
+    "category": "Social",
+    "type": "Channel",
+    "status": "Published",
+    "description": "Official Samfa12 YouTube channel for videos, uploads, and creator updates.",
+    "tags": [
+      "Video",
+      "Channel",
+      "Social"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open channel",
+        "url": "https://www.youtube.com/@samsmall12"
       }
     ]
   },
