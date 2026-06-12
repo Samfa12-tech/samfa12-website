@@ -212,6 +212,8 @@ h1 {
   border-radius: 999px;
   font-weight: 600;
   min-height: 42px;
+  max-width: 100%;
+  min-width: 0;
   white-space: nowrap;
 }
 
@@ -537,12 +539,15 @@ h1 {
 
 .link-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 0.75rem;
 }
 
 .link-grid .button {
+  width: 100%;
+  min-width: 0;
   min-height: 48px;
+  overflow: hidden;
   white-space: normal;
   text-align: center;
   padding-inline: 0.85rem;
@@ -550,13 +555,16 @@ h1 {
 
 .link-grid .button .icon-label {
   width: 100%;
+  max-width: 100%;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .link-grid .button .icon-label span:last-child {
+  flex: 1 1 auto;
   min-width: 0;
   overflow-wrap: anywhere;
+  line-height: 1.2;
 }
 
 .site-footer {

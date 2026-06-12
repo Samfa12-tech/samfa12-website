@@ -425,8 +425,8 @@
       }
     ],
     "sortOrder": 14.1,
-    "thumbnail": "assets/thumbnails/amazon-author.svg",
-    "thumbnailAlt": "Logo card for Amazon author"
+    "thumbnail": "assets/thumbnails/amazon-author-card.png",
+    "thumbnailAlt": "Amazon logo card for Samfa12 author page"
   },
   {
     "title": "Godot Asset Library",
@@ -447,8 +447,8 @@
       }
     ],
     "sortOrder": 14.2,
-    "thumbnail": "assets/thumbnails/godot-asset-library.svg",
-    "thumbnailAlt": "Logo card for Godot Asset Library"
+    "thumbnail": "assets/thumbnails/godot-asset-library-card.png",
+    "thumbnailAlt": "Godot logo card for Samfa12 Asset Library profile"
   },
   {
     "title": "Spotify",
@@ -490,7 +490,9 @@
         "url": "https://store.steampowered.com/search/?publisher=Samfa12"
       }
     ],
-    "sortOrder": 15
+    "sortOrder": 15,
+    "thumbnail": "assets/thumbnails/steam-storefront-card.png",
+    "thumbnailAlt": "Steam logo card for Samfa12 publisher page"
   },
   {
     "title": "Samfa12's TD Pack",
@@ -968,7 +970,9 @@
         "label": "Open profile",
         "url": "https://github.com/Samfa12-tech"
       }
-    ]
+    ],
+    "thumbnail": "assets/thumbnails/github-social-card.png",
+    "thumbnailAlt": "GitHub logo card for Samfa12 source repositories"
   },
   {
     "title": "X / Twitter",
@@ -986,7 +990,9 @@
         "label": "Open profile",
         "url": "https://x.com/Samfa12"
       }
-    ]
+    ],
+    "thumbnail": "assets/thumbnails/x-twitter-social-card.png",
+    "thumbnailAlt": "X logo card for Samfa12 updates"
   },
   {
     "title": "Facebook",
@@ -1004,7 +1010,9 @@
         "label": "Open page",
         "url": "https://www.facebook.com/people/Samfa12-Drink-Sober"
       }
-    ]
+    ],
+    "thumbnail": "assets/thumbnails/facebook-social-card.png",
+    "thumbnailAlt": "Facebook logo card for Samfa12 community page"
   },
   {
     "title": "Reddit",
@@ -1022,7 +1030,9 @@
         "label": "Open profile",
         "url": "https://www.reddit.com/user/Samfa12/"
       }
-    ]
+    ],
+    "thumbnail": "assets/thumbnails/reddit-social-card.png",
+    "thumbnailAlt": "Reddit logo card for Samfa12 profile"
   },
   {
     "title": "YouTube",
@@ -1041,7 +1051,9 @@
         "label": "Open channel",
         "url": "https://www.youtube.com/@samsmall12"
       }
-    ]
+    ],
+    "thumbnail": "assets/thumbnails/youtube-channel-card.png",
+    "thumbnailAlt": "YouTube logo card for Samfa12 channel"
   },
   {
     "title": "itch.io",
@@ -1059,6 +1071,8 @@
         "label": "Visit page",
         "url": "https://samfa12.itch.io/"
       }
-    ]
+    ],
+    "thumbnail": "assets/thumbnails/itch-io-card.png",
+    "thumbnailAlt": "itch.io logo card for Samfa12 storefront"
   }
 ]
