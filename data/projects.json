@@ -407,6 +407,72 @@
     "thumbnailAlt": "Cover image for Google Play apps"
   },
   {
+    "title": "Amazon author",
+    "category": "Storefronts",
+    "type": "Author page",
+    "status": "Published",
+    "description": "Amazon author page for Samfa12 novels, ebooks, and related book releases.",
+    "tags": [
+      "Books",
+      "Storefront",
+      "Author"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Visit Amazon author page",
+        "url": "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"
+      }
+    ],
+    "sortOrder": 14.1,
+    "thumbnail": "assets/thumbnails/amazon-author.svg",
+    "thumbnailAlt": "Logo card for Amazon author"
+  },
+  {
+    "title": "Godot Asset Library",
+    "category": "Storefronts",
+    "type": "Asset library profile",
+    "status": "Published",
+    "description": "Godot Asset Library listings for Samfa12 tools, add-ons, and workflow helpers.",
+    "tags": [
+      "Godot",
+      "Assets",
+      "Open Source"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open Godot Asset Library profile",
+        "url": "https://godotengine.org/asset-library/asset?filter=Samfa12"
+      }
+    ],
+    "sortOrder": 14.2,
+    "thumbnail": "assets/thumbnails/godot-asset-library.svg",
+    "thumbnailAlt": "Logo card for Godot Asset Library"
+  },
+  {
+    "title": "Spotify",
+    "category": "Storefronts",
+    "type": "Artist profile",
+    "status": "Available",
+    "description": "Samfa12's Spotify artist profile with released music, albums, and soundtrack entries.",
+    "tags": [
+      "Music",
+      "Streaming",
+      "Catalog"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Open Spotify artist profile",
+        "url": "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"
+      }
+    ],
+    "sortOrder": 14.3,
+    "thumbnail": "assets/thumbnails/spotify-icon.png",
+    "thumbnailAlt": "Logo for Spotify"
+  },
+  {
     "title": "Steam",
     "category": "Storefronts",
     "type": "Publisher page",

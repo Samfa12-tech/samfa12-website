@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="t d">
+  <title id="t">Godot Asset Library</title>
+  <desc id="d">Godot Asset Library profile card for Samfa12</desc>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#19324c" stop-opacity="0.96" />
+      <stop offset="100%" stop-color="#09131f" stop-opacity="0.96" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#g)" />
+  <rect x="2" y="2" width="956" height="536" fill="none" stroke="rgba(115, 228, 255, 0.35)" stroke-width="3" />
+  <g transform="translate(92 130)">
+    <path d="M120 0 83 24 38 18 18 59 0 102l22 39-2 49 38 23 25 42 46-7 39 26 39-26 46 7 25-42 38-23-2-49 22-39-18-43-20-41-45 6L120 0Z" fill="#7fc6ff" stroke="#d9f7ff" stroke-width="8" stroke-linejoin="round" />
+    <circle cx="84" cy="103" r="18" fill="#09131f" />
+    <circle cx="156" cy="103" r="18" fill="#09131f" />
+    <circle cx="84" cy="99" r="5" fill="#d9f7ff" />
+    <circle cx="156" cy="99" r="5" fill="#d9f7ff" />
+    <path d="M78 158c15 19 33 28 42 28s27-9 42-28" fill="none" stroke="#09131f" stroke-width="12" stroke-linecap="round" />
+  </g>
+  <text x="390" y="240" fill="#f8fbff" font-size="58" font-family="Arial, Helvetica, sans-serif" font-weight="700">Godot Asset Library</text>
+  <text x="390" y="310" fill="#9db5d4" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="500">Tools, add-ons, and workflow helpers</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="t d">
+  <title id="t">Amazon author</title>
+  <desc id="d">Amazon author profile card for Samfa12</desc>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#251a08" stop-opacity="0.97" />
+      <stop offset="100%" stop-color="#09131f" stop-opacity="0.97" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#g)" />
+  <rect x="2" y="2" width="956" height="536" fill="none" stroke="rgba(115, 228, 255, 0.35)" stroke-width="3" />
+  <text x="66" y="246" fill="#f8fbff" font-size="72" font-family="Arial, Helvetica, sans-serif" font-weight="700">amazon</text>
+  <path d="M90 296c70 52 184 69 287 52 63-10 122-34 170-69" fill="none" stroke="#ffb24a" stroke-width="18" stroke-linecap="round" />
+  <path d="M520 257l41 27-47 11" fill="none" stroke="#ffb24a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <text x="66" y="356" fill="#9db5d4" font-size="30" font-family="Arial, Helvetica, sans-serif" font-weight="500">Author page</text>
+</svg>

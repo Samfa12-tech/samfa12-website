@@ -1,14 +1,14 @@
 # Samfa12 Official Portal
 
 This is a static portfolio website for `samfa12.com`, showcasing games, books,
-apps, Pocket Audio, music, and links for **Samfa12**.
+Pocket Audio, music, and links for **Samfa12**.
 
 ## What this site includes
 
 - `index.html` – compact homepage overview
 - `games/index.html` – games catalogue
 - `books/index.html` – books catalogue
-- `apps/index.html` – apps and tools catalogue
+- `apps/index.html` – redirect from the old Apps section to Pocket Audio
 - `pocket-audio/index.html` – Pocket Audio family/workflow page
 - `music/index.html` – music and audio catalogue
 - `links/index.html` – full social/store/source links page
@@ -44,7 +44,6 @@ Project categories used by the data:
 
 - `Games`
 - `Books`
-- `Apps & Tools`
 - `Assets`
 - `Music`
 - `Social`

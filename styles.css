@@ -541,6 +541,24 @@ h1 {
   gap: 0.75rem;
 }
 
+.link-grid .button {
+  min-height: 48px;
+  white-space: normal;
+  text-align: center;
+  padding-inline: 0.85rem;
+}
+
+.link-grid .button .icon-label {
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.link-grid .button .icon-label span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .site-footer {
   padding: var(--space-4) 0;
   border-top: 1px solid var(--border);
