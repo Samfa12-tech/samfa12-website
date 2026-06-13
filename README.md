@@ -19,7 +19,8 @@ Pocket Audio, music, and links for **Samfa12**.
   repo, and the full family page
 - `apps/pocket-chordsmith/` – hosted single-file Pocket Chordsmith app route
 - `apps/pocket-dj/` – hosted single-file Pocket DJ app route
-- `assets/favicon.svg` – site icon
+- `assets/favicon.png` – browser/page icon derived from the Samfa12 character image
+- `assets/samfa12-character.jpg` – Samfa12 character image used in the header brand mark
 - `assets/og-image.png` – social preview image
 - `assets/thumbnails/` – local project card thumbnails
 - `CNAME` – `samfa12.com` domain file
@@ -52,6 +53,14 @@ Project categories used by the data:
 The homepage intentionally renders only a small featured sampler. Full project
 cards belong on the relevant section pages so projects do not repeat across
 multiple homepage bands.
+
+## Page shell conventions
+
+When adding a new public site page, keep the shared Samfa12 brand treatment in
+the header: the `.brand` link should include the `assets/samfa12-character.jpg`
+image with class `brand-mark` immediately before the `Samfa12` text. New pages
+should also use `/assets/favicon.png` for the browser/page icon and load the
+current shared `styles.css` cache-busted URL.
 
 ## How to preview locally
 
