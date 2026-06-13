@@ -305,7 +305,7 @@ function renderLinks(projects) {
 
 async function loadProjects() {
   try {
-    const response = await fetch("/data/projects.json?v=20260612-1", { cache: "no-store" });
+    const response = await fetch("/data/projects.json?v=20260613-1", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (!Array.isArray(data)) throw new Error("Invalid JSON data");

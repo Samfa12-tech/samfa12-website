@@ -583,9 +583,9 @@
   {
     "title": "Pocket DAW",
     "category": "Apps & Tools",
-    "type": "WIP tool",
-    "status": "In development",
-    "description": "A Pocket Audio arrangement and production experiment that builds on the same song-data and export direction as Pocket Chordsmith.",
+    "type": "Web app",
+    "status": "Published",
+    "description": "A Pocket Audio arrangement and production tool that builds on the same song-data and export direction as Pocket Chordsmith.",
     "tags": [
       "Music",
       "DAW",
@@ -596,8 +596,8 @@
     "featured": false,
     "links": [
       {
-        "label": "Coming soon",
-        "url": "https://samfa12.itch.io/pocket-chordsmith"
+        "label": "Use on itch.io",
+        "url": "https://samfa12.itch.io/pocket-daw"
       }
     ],
     "sortOrder": 18,
