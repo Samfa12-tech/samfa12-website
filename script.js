@@ -46,7 +46,7 @@ const topLinks = [
   ["YouTube", "https://www.youtube.com/@samsmall12"],
   ["YouTube Music", "https://music.youtube.com/search?q=Samfa12"],
   ["X / Twitter", "https://x.com/Samfa12"],
-  ["Facebook", "https://www.facebook.com/people/Samfa12-Drink-Sober"],
+  ["Facebook", "https://www.facebook.com/profile.php?id=61577421161868"],
   ["Reddit", "https://www.reddit.com/user/Samfa12/"],
   ["Godot Asset Library", "https://godotengine.org/asset-library/asset?filter=Samfa12"],
 ];
