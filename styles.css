@@ -96,10 +96,25 @@ button:focus-visible {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   color: var(--text);
   font-size: 1.1rem;
+  min-width: max-content;
+}
+
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  display: block;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid rgba(115, 228, 255, 0.42);
+  box-shadow: 0 0 0 2px rgba(9, 13, 21, 0.92), 0 8px 20px rgba(5, 10, 20, 0.3);
 }
 
 .nav-links {
@@ -621,6 +636,16 @@ h1 {
 }
 
 @media (max-width: 719px) {
+  .brand {
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+
   .header-inner nav {
     width: 100%;
     min-width: 0;
