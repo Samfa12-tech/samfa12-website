@@ -583,9 +583,9 @@
   {
     "title": "Pocket DAW",
     "category": "Apps & Tools",
-    "type": "Web app",
+    "type": "Windows App",
     "status": "Published",
-    "description": "A Pocket Audio arrangement and production tool that builds on the same song-data and export direction as Pocket Chordsmith.",
+    "description": "A Desktop Digital Audio Workspace that builds on the same song-data and export direction as Pocket Chordsmith.",
     "tags": [
       "Music",
       "DAW",
