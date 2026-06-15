@@ -8,7 +8,7 @@ Pocket Audio, music, and links for **Samfa12**.
 - `index.html` – compact homepage overview
 - `games/index.html` – games catalogue
 - `books/index.html` – books catalogue
-- `apps/index.html` – redirect from the old Apps section to Pocket Audio
+- `apps/index.html` – Pocket Audio apps hub for browser-hosted tools
 - `pocket-audio/index.html` – Pocket Audio family/workflow page
 - `music/index.html` – music and audio catalogue
 - `links/index.html` – full social/store/source links page
