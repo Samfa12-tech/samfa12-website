@@ -630,8 +630,8 @@
     "title": "Moon Mower",
     "category": "Games",
     "type": "Game",
-    "status": "Playable prototype",
-    "description": "A short-form arcade prototype with quirky mechanics, repeated loops, and playful progression.",
+    "status": "Published",
+    "description": "A short-form arcade game with quirky mechanics, repeated loops, and playful progression.",
     "tags": [
       "Game",
       "Arcade",
@@ -645,14 +645,14 @@
       }
     ],
     "sortOrder": 20,
-    "thumbnail": "assets/thumbnails/moon-mower-66bed9.jpg",
+    "thumbnail": "assets/thumbnails/moon-mower-icon.png",
     "thumbnailAlt": "Cover image for Moon Mower"
   },
   {
-    "title": "Voxel Fish Tank",
+    "title": "Pocket Fish Tank",
     "category": "Games",
     "type": "Game",
-    "status": "Playable prototype",
+    "status": "Published",
     "description": "A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm.",
     "tags": [
       "Game",
@@ -668,7 +668,7 @@
     ],
     "sortOrder": 21,
     "thumbnail": "assets/thumbnails/voxel-fish-tank-41a16e.jpg",
-    "thumbnailAlt": "Cover image for Voxel Fish Tank"
+    "thumbnailAlt": "Cover image for Pocket Fish Tank"
   },
   {
     "title": "P.A.R.T.Y. Bus: Wasteland Run",
@@ -693,11 +693,11 @@
     "thumbnailAlt": "Cover image for P.A.R.T.Y. Bus: Wasteland Run"
   },
   {
-    "title": "Ant Farm",
+    "title": "Pocket Ant Farm",
     "category": "Games",
     "type": "Game",
-    "status": "Prototype",
-    "description": "A simulation prototype focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
+    "status": "Published",
+    "description": "A simulation game focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
     "tags": [
       "Game",
       "Simulation",
@@ -712,7 +712,7 @@
     ],
     "sortOrder": 24,
     "thumbnail": "assets/thumbnails/ant-farm-485b3d.png",
-    "thumbnailAlt": "Cover image for Ant Farm"
+    "thumbnailAlt": "Cover image for Pocket Ant Farm"
   },
   {
     "title": "ToKnight 2: The Fire Beneath",
