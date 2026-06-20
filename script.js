@@ -120,6 +120,7 @@ function getIconKey(label, url, title = "") {
   if (text.includes("reddit.com") || /\breddit\b/.test(text)) return "reddit";
   if (text.includes("youtube.com") || /\byoutube\b/.test(text)) return "youtube";
   if (text.includes("x.com") || /\bx\s*\/\s*twitter\b/.test(text) || /\btwitter\b/.test(text)) return "x";
+  if (/\bplay\b/.test(text)) return "play";
   return "";
 }
 
@@ -147,6 +148,8 @@ function iconSvg(key) {
       '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 12.01s0-3.26-.42-4.83a2.52 2.52 0 0 0-1.77-1.78C19.24 5 12 5 12 5s-7.24 0-8.81.4A2.52 2.52 0 0 0 1.42 7.2C1 8.75 1 12 1 12s0 3.26.42 4.82a2.52 2.52 0 0 0 1.77 1.78C4.76 19 12 19 12 19s7.24 0 8.81-.4a2.52 2.52 0 0 0 1.77-1.78c.42-1.56.42-4.81.42-4.81ZM9.1 15.5v-7l6.05 3.5-6.05 3.5Z"/></svg>',
     x:
       '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.77 7.74L23 22h-6.2l-4.85-6.33L6.4 22H3.3l7.24-8.27L1 2h6.36l4.38 5.77L18.9 2Zm-1.09 18h1.72L6.43 3.9H4.58L17.81 20Z"/></svg>',
+    play:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.4c0-.9.98-1.45 1.75-.98l9.18 5.6a1.15 1.15 0 0 1 0 1.96l-9.18 5.6A1.15 1.15 0 0 1 8 16.6V5.4Z"/></svg>',
   };
 
   return icons[key] || "";
@@ -201,7 +204,10 @@ function projectCardHtml(project) {
     .filter((link) => link?.url && link?.label)
     .map((link) => {
       const url = String(link.url);
-      return `<a href="${escapeHtml(url)}"${linkAttributes(url)} data-analytics="project-link" data-project-title="${escapeHtml(
+      const isFullscreenGame = link.fullscreen === true;
+      const classAttr = isFullscreenGame ? ' class="project-play-link"' : "";
+      const fullscreenAttr = isFullscreenGame ? ` data-fullscreen-game="${escapeHtml(url)}"` : "";
+      return `<a href="${escapeHtml(url)}"${classAttr}${linkAttributes(url)}${fullscreenAttr} data-analytics="project-link" data-project-title="${escapeHtml(
         title
       )}" data-project-category="${escapeHtml(category)}" data-link-label="${escapeHtml(link.label)}">${iconLabelHtml(
         link.label,
@@ -226,6 +232,61 @@ function projectCardHtml(project) {
     </article>
   `;
 }
+
+function closeFullscreenGameOverlay(overlay) {
+  const target = overlay || document.querySelector(".fullscreen-game-shell");
+  if (!target) return;
+
+  const removeOverlay = () => {
+    target.remove();
+    document.body.classList.remove("game-fullscreen-open");
+  };
+
+  if (document.fullscreenElement === target) {
+    document.exitFullscreen().finally(removeOverlay).catch(removeOverlay);
+    return;
+  }
+
+  removeOverlay();
+}
+
+function openFullscreenGame(url, title) {
+  closeFullscreenGameOverlay();
+
+  const overlay = document.createElement("div");
+  overlay.className = "fullscreen-game-shell";
+  overlay.innerHTML = `
+    <button class="fullscreen-game-close" type="button" aria-label="Close ${escapeHtml(title)}">Close</button>
+    <iframe title="${escapeHtml(title)}" src="${escapeHtml(url)}" allow="fullscreen; autoplay; gamepad" loading="eager"></iframe>
+  `;
+
+  document.body.appendChild(overlay);
+  document.body.classList.add("game-fullscreen-open");
+
+  overlay.querySelector(".fullscreen-game-close")?.addEventListener("click", () => {
+    closeFullscreenGameOverlay(overlay);
+  });
+
+  if (overlay.requestFullscreen) {
+    overlay.requestFullscreen().catch(() => {
+      // The fixed overlay remains full-window when browser fullscreen is blocked.
+    });
+  }
+}
+
+document.addEventListener("click", (event) => {
+  const link = event.target.closest("[data-fullscreen-game]");
+  if (!link) return;
+
+  event.preventDefault();
+  openFullscreenGame(link.getAttribute("href"), link.dataset.projectTitle || link.textContent.trim() || "Game");
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && document.querySelector(".fullscreen-game-shell")) {
+    closeFullscreenGameOverlay();
+  }
+});
 
 function hideBrokenThumbnails() {
   document.querySelectorAll("img.project-image").forEach((image) => {
