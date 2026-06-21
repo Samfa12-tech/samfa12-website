@@ -534,6 +534,30 @@
     });
   }
 
+  function initializeSiteClock() {
+    const clocks = document.querySelectorAll("[data-site-time]");
+    if (!clocks.length) return;
+
+    const formatter = new Intl.DateTimeFormat([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const updateClock = () => {
+      const now = new Date();
+      const label = formatter.format(now);
+      const datetime = now.toISOString();
+      clocks.forEach((clock) => {
+        clock.textContent = label;
+        clock.setAttribute("datetime", datetime);
+        clock.setAttribute("aria-label", `Local time ${label}`);
+      });
+    };
+
+    updateClock();
+    window.setInterval(updateClock, 60000);
+  }
+
   function getFocusable(container) {
     return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR)).filter((element) => {
       return !element.hasAttribute("disabled") && element.getAttribute("aria-hidden") !== "true";
@@ -913,6 +937,7 @@
   async function initialize() {
     document.documentElement.classList.add("js-enhanced");
     setCurrentYear();
+    initializeSiteClock();
     initializeNavigation();
     initializeGameOverlay();
     renderLoadingState();
