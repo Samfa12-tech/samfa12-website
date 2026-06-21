@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260621-1";
+  const DATA_VERSION = "20260621-2";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const FOCUSABLE_SELECTOR =
     'a[href], button:not([disabled]), iframe, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
