@@ -40,6 +40,11 @@ Each project entry has:
 - `tags`
 - `featured` (`true`/`false`)
 - `links` (array of `{ "label": "...", "url": "..." }`)
+- optional homepage presentation fields:
+  - `homepageRank` – positive integer used to order homepage picks
+  - `homepageSize` – `hero`, `tall`, `wide`, or `standard`
+  - `accent` – `cyan`, `violet`, `spark`, `green`, or `pink`
+  - `imageFit` – `contain` when full art must stay visible, `cover` only when cropping is intentional
 
 Project categories used by the data:
 
@@ -50,9 +55,10 @@ Project categories used by the data:
 - `Social`
 - `Storefronts`
 
-The homepage intentionally renders only a small featured sampler. Full project
-cards belong on the relevant section pages so projects do not repeat across
-multiple homepage bands.
+The homepage intentionally renders only a small featured sampler. It chooses
+projects from `homepageRank` first, then `featured`, then sensible fallback
+ordering. Full project cards belong on the relevant section pages so projects
+do not repeat across multiple homepage bands.
 
 ## Page shell conventions
 

@@ -11,6 +11,10 @@
       "Samfa12"
     ],
     "featured": true,
+    "homepageRank": 1,
+    "homepageSize": "hero",
+    "accent": "cyan",
+    "imageFit": "contain",
     "links": [
       {
         "url": "https://samfa12.itch.io/dust-on-the-river",
@@ -33,6 +37,10 @@
       "Samfa12"
     ],
     "featured": true,
+    "homepageRank": 5,
+    "homepageSize": "wide",
+    "accent": "cyan",
+    "imageFit": "contain",
     "links": [
       {
         "label": "Play on itch.io",
@@ -91,6 +99,10 @@
       "Samfa12"
     ],
     "featured": false,
+    "homepageRank": 4,
+    "homepageSize": "standard",
+    "accent": "violet",
+    "imageFit": "contain",
     "links": [
       {
         "url": "/games/bug-swarm/",
@@ -117,6 +129,10 @@
       "Source Available"
     ],
     "featured": false,
+    "homepageRank": 2,
+    "homepageSize": "tall",
+    "accent": "green",
+    "imageFit": "contain",
     "links": [
       {
         "url": "/apps/pocket-chordsmith/",
@@ -274,11 +290,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Read on itch.io",
-        "url": "https://samfa12.itch.io/backwater"
-      },
-      {
-        "label": "Amazon",
+        "label": "Amazon Kindle",
         "url": "https://www.amazon.com.au/dp/B0GX2XQR3D"
       }
     ],
@@ -364,13 +376,13 @@
       "Adventure"
     ],
     "featured": true,
+    "homepageRank": 3,
+    "homepageSize": "standard",
+    "accent": "spark",
+    "imageFit": "contain",
     "links": [
       {
-        "label": "Read on itch.io",
-        "url": "https://samfa12.itch.io/toknight"
-      },
-      {
-        "label": "Amazon",
+        "label": "Amazon Kindle",
         "url": "https://www.amazon.com.au/dp/B0GX2NG31Z"
       }
     ],
@@ -752,11 +764,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Read on itch.io",
-        "url": "https://samfa12.itch.io/toknight-2-the-fire-beneath"
-      },
-      {
-        "label": "Amazon",
+        "label": "Amazon Kindle",
         "url": "https://www.amazon.com.au/dp/B0H3MW9LGP"
       }
     ],
@@ -778,11 +786,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Read on itch.io",
-        "url": "https://samfa12.itch.io/free-to-a-good-home"
-      },
-      {
-        "label": "Amazon",
+        "label": "Amazon Kindle",
         "url": "https://www.amazon.com.au/dp/B0GZDH57ZC"
       }
     ],
@@ -804,11 +808,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Read on itch.io",
-        "url": "https://samfa12.itch.io/a-place-of-his-own"
-      },
-      {
-        "label": "Amazon",
+        "label": "Amazon Kindle",
         "url": "https://www.amazon.com.au/dp/B0H1Q3TGS7"
       }
     ],
@@ -830,11 +830,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Read on itch.io",
-        "url": "https://samfa12.itch.io/concubine"
-      },
-      {
-        "label": "Amazon",
+        "label": "Amazon Kindle",
         "url": "https://www.amazon.com.au/dp/B0H1LG55MZ"
       }
     ],
@@ -856,11 +852,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Read on itch.io",
-        "url": "https://samfa12.itch.io/sober"
-      },
-      {
-        "label": "Amazon",
+        "label": "Amazon Kindle",
         "url": "https://www.amazon.com.au/dp/B0GSQQMS4M"
       }
     ],
@@ -902,6 +894,10 @@
       "Soundtrack"
     ],
     "featured": false,
+    "homepageRank": 6,
+    "homepageSize": "standard",
+    "accent": "pink",
+    "imageFit": "contain",
     "links": [
       {
         "label": "Listen on Spotify",
