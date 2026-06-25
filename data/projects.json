@@ -115,6 +115,35 @@
     "thumbnailAlt": "Key art for Bug Swarm"
   },
   {
+    "title": "Cursed Cutter",
+    "category": "Games",
+    "type": "Browser game",
+    "status": "Playable",
+    "description": "A semi rogue-lite browser action game built in Babylon.js. Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.",
+    "tags": [
+      "Game",
+      "Browser",
+      "Action",
+      "Rogue-lite",
+      "Babylon.js",
+      "Samfa12"
+    ],
+    "featured": false,
+    "homepageSize": "standard",
+    "accent": "violet",
+    "imageFit": "contain",
+    "links": [
+      {
+        "url": "/games/cursed-cutter/",
+        "label": "Play now",
+        "fullscreen": true
+      }
+    ],
+    "sortOrder": 3.5,
+    "thumbnail": "assets/thumbnails/cursed-cutter-icon.png",
+    "thumbnailAlt": "Icon for Cursed Cutter"
+  },
+  {
     "title": "Pocket Chordsmith",
     "category": "Apps & Tools",
     "type": "Web app",

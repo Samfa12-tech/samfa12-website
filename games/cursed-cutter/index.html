@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="theme-color" content="#08150f" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>Curse Cutter: Last Garden</title>
+<meta name="description" content="A pocket roguelite garden horror by Samfa12. Cut cursed weeds, survive midnight, and seal the Rootgate." />
+<link rel="icon" type="image/png" href="icon.png" />
+<link rel="apple-touch-icon" href="icon.png" />
+<style>
+  :root{
+    --ink:#f5f3df; --muted:#a9b8a9; --panel:#0b1714e8; --panel2:#14241fe8; --line:#d9f4c522;
+    --leaf:#8ef08a; --acid:#c5ff66; --gold:#ffd56a; --curse:#c96cff; --danger:#ff6c7d; --blue:#6edcff;
+    --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#07110d;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;touch-action:none}
+  button,select,input{font:inherit}
+  button{border:1px solid var(--line);background:linear-gradient(180deg,#1d342b,#10221b);color:var(--ink);border-radius:14px;min-height:44px;padding:10px 14px;font-weight:900;letter-spacing:.01em;box-shadow:inset 0 1px 0 #ffffff14,0 8px 18px #0005;cursor:pointer}
+  button:active{transform:scale(.975)} button:disabled{opacity:.45;cursor:default;transform:none}
+  button.primary{background:linear-gradient(180deg,#4fa84f,#236a38);border-color:#a7ff9b66}
+  button.gold{background:linear-gradient(180deg,#b77c2d,#6e3c17);border-color:#ffe19c77}
+  button.ghost{background:#ffffff0a;box-shadow:none}
+  #renderCanvas{display:block;width:100vw;height:100dvh;outline:0;background:#0d261a;touch-action:none}
+  #ui{position:fixed;inset:0;pointer-events:none;user-select:none;-webkit-user-select:none}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 32px #0008;backdrop-filter:blur(10px)}
+  .hudTop{position:absolute;top:calc(8px + var(--safe-t));left:9px;right:9px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start;pointer-events:none}
+  .objectiveCard{padding:10px 11px;min-width:0;max-width:650px}.objectiveLine{display:flex;gap:8px;justify-content:space-between;align-items:center}.eyebrow{font-size:10px;color:var(--muted);font-weight:900;letter-spacing:.12em;text-transform:uppercase}.objective{font-weight:1000;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.percent{font-size:23px;font-weight:1000;color:var(--leaf);text-shadow:0 0 16px #8eff7b55}.meter{height:9px;border-radius:999px;background:#ffffff12;overflow:hidden;border:1px solid #ffffff0f;margin-top:7px}.fill{height:100%;width:0%;border-radius:999px;transition:width .12s linear}.clearFill{background:linear-gradient(90deg,#2b8656,var(--leaf),var(--acid));box-shadow:0 0 12px #8ef08a55}.bedStatus{margin-top:7px;color:#d4e7d2;font-size:11px;font-weight:900;letter-spacing:.03em;background:#ffffff0b;border:1px solid #ffffff12;border-radius:999px;padding:5px 8px;display:inline-block}
+  .statusCard{padding:9px 10px;width:min(42vw,280px);pointer-events:auto}.statusGrid{display:grid;grid-template-columns:1fr auto;gap:6px 9px;align-items:center}.statLabel{font-size:10px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.07em}.statValue{font-size:12px;font-weight:1000;text-align:right}.miniMeter{height:6px;background:#ffffff12;border-radius:999px;overflow:hidden;grid-column:1/-1;margin-top:-3px}.armorFill{background:linear-gradient(90deg,#7bc6ff,#d9f0ff)}.energyFill{background:linear-gradient(90deg,#f3b84e,#fff28a)}.curseFill{background:linear-gradient(90deg,#754ac6,#dc65ff,#ff6e9e)}
+  .hudButtons{position:absolute;right:9px;top:calc(145px + var(--safe-t));display:grid;gap:7px;pointer-events:auto;z-index:8}.iconBtn{width:44px;height:44px;min-height:44px;padding:0;display:grid;place-items:center;font-size:19px;background:#0b1714d9}
+  #toast{position:absolute;left:50%;top:calc(132px + var(--safe-t));transform:translateX(-50%);width:min(88vw,520px);padding:9px 13px;text-align:center;font-weight:1000;font-size:13px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none}.toastShow{opacity:1!important;transform:translateX(-50%) translateY(4px)!important}
+  #sealPrompt{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);text-align:center;opacity:0;transition:.2s;pointer-events:none;text-shadow:0 5px 24px #000}.sealShow{opacity:1!important}
+  #midnightCountdown{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%) scale(.9);min-width:120px;text-align:center;font-size:clamp(64px,28vw,150px);font-weight:1000;line-height:.9;color:#ffedf1;text-shadow:0 0 18px #ff6c7d,0 0 42px #b3154b,0 12px 28px #000;opacity:0;pointer-events:none;z-index:12;transition:opacity .08s,transform .08s}.midnightShow{opacity:1!important;transform:translate(-50%,-50%) scale(1.08)!important}.midnightSub{display:block;margin-top:8px;font-size:13px;letter-spacing:.16em;color:#ffd5d5;text-shadow:0 3px 12px #000;text-transform:uppercase}.sealTitle{font-size:clamp(23px,5vw,48px);font-weight:1000;letter-spacing:.07em;color:var(--gold)}.sealSub{font-size:13px;font-weight:900;color:#fff3c7}.sealMeter{width:min(66vw,420px);height:12px;margin:10px auto 0;background:#0008;border:1px solid #ffe59c55;border-radius:999px;overflow:hidden}.sealFill{height:100%;width:0;background:linear-gradient(90deg,#a75fff,#ffe276,#aaff87);box-shadow:0 0 18px #ffe27e88}
+  .runStrip{position:absolute;left:50%;bottom:calc(11px + var(--safe-b));transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:11px;color:#d8e7db;pointer-events:none;white-space:nowrap}.runStrip strong{color:white}.desktopHint{display:none}
+  .touchControls{position:absolute;inset:auto 0 calc(12px + var(--safe-b));display:grid;grid-template-columns:1fr 1fr;align-items:end;padding:0 14px;pointer-events:none}.joystick{width:122px;height:122px;border-radius:50%;border:1px solid #ffffff35;background:radial-gradient(circle,#ffffff13,#ffffff05 60%,#0003);box-shadow:inset 0 0 0 1px #ffffff0a,0 12px 28px #0008;position:relative;pointer-events:auto;touch-action:none}.joyKnob{width:56px;height:56px;border-radius:50%;background:linear-gradient(180deg,#d6f5d055,#6bbf7655);border:1px solid #e4ffe38a;position:absolute;left:33px;top:33px;box-shadow:0 8px 20px #0009;transform:translate(0,0)}.actionCluster{display:flex;justify-content:flex-end;align-items:flex-end;gap:10px;pointer-events:none}.actionBtn{pointer-events:auto;display:grid;place-items:center;text-align:center;border-radius:50%;padding:0;color:white;text-shadow:0 2px 5px #000;touch-action:none}.cutBtn{width:104px;height:104px;background:radial-gradient(circle at 35% 28%,#dfff81cc,#4a9d42cc 52%,#183d23ee);border:2px solid #eaffaeaa;box-shadow:0 0 24px #99ff6b44,0 14px 28px #0008;font-size:17px}.cutBtn.active{filter:brightness(1.3);box-shadow:0 0 36px #bcff78aa,0 14px 28px #0008;transform:scale(.97)}.dodgeBtn{width:68px;height:68px;background:radial-gradient(circle at 35% 28%,#9bdcffbb,#275f91dd 60%,#10243ddd);border:1px solid #b9eaff99;font-size:11px}.dodgeBtn.cooling{opacity:.45}
+  .cameraTouchZone{position:absolute;right:0;top:calc(148px + var(--safe-t));bottom:calc(126px + var(--safe-b));width:44vw;pointer-events:auto;touch-action:none;display:flex;align-items:flex-end;justify-content:flex-end;padding:0 16px 8px 0;opacity:.68;transition:opacity .18s;z-index:2}
+  .cameraTouchZone span{font-size:10px;font-weight:1000;letter-spacing:.09em;color:#eaffdf;background:#06120db4;border:1px solid #ffffff24;border-radius:999px;padding:5px 8px;text-shadow:0 2px 8px #000;box-shadow:0 8px 18px #0006;backdrop-filter:blur(6px)}
+  .cameraTouchZone.active{opacity:.95}.cameraTouchZone.used{opacity:.28}
+  .overlay{position:absolute;inset:0;background:radial-gradient(circle at 50% 28%,#1b3e2ac7,#050a08ed 72%);display:none;place-items:center;padding:calc(14px + var(--safe-t)) 14px calc(14px + var(--safe-b));pointer-events:auto;overflow:auto;z-index:20}.overlay.open{display:grid}.panel{width:min(96vw,850px);max-height:calc(100dvh - 28px - var(--safe-t) - var(--safe-b));overflow:auto;padding:16px}.hero{display:grid;grid-template-columns:minmax(0,1fr) 172px auto;gap:14px;align-items:start}.heroArt{width:172px;aspect-ratio:1/1;border-radius:24px;border:1px solid #d7ffc640;object-fit:cover;box-shadow:0 18px 42px #000a,0 0 0 1px #ffffff10 inset;background:#0e1c18}.logo{font-size:clamp(31px,8vw,62px);line-height:.88;font-weight:1000;letter-spacing:-.04em;margin:2px 0 6px;background:linear-gradient(180deg,#f8ffd6 0%,#b8ff8d 45%,#7ddc70 72%,#d6a55b 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 12px 30px #000}.tagline{color:#c6d4c8;font-size:14px;line-height:1.45;max-width:620px}.heroBlurb{margin-top:8px;padding:9px 11px;background:linear-gradient(180deg,#ffffff10,#ffffff06);border:1px solid #ffffff12;border-radius:14px;color:#dde9d6;font-size:11.5px;line-height:1.45}.backendBadge{border:1px solid #c8ff9d33;background:#8fff7a12;border-radius:999px;padding:7px 10px;color:#cfffad;font-size:11px;font-weight:1000;white-space:nowrap}.sectionTitle{display:flex;justify-content:space-between;gap:8px;align-items:end;margin:17px 0 8px}.sectionTitle h2{font-size:14px;margin:0;text-transform:uppercase;letter-spacing:.1em}.small{font-size:11px;color:var(--muted)}.workshopGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.upgrade{padding:11px;text-align:left;min-height:122px;display:flex;flex-direction:column;align-items:stretch}.upgradeTop{display:flex;justify-content:space-between;gap:8px;font-size:13px}.upgradeName{font-weight:1000}.upgradeLevel{color:var(--gold);font-size:11px}.upgradeDesc{color:#b9c7ba;font-size:11.5px;line-height:1.35;margin:6px 0;flex:1}.upgradeCost{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#f7dfa1}.notesGrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.note{padding:10px;border:1px solid #ffffff12;background:#ffffff08;border-radius:12px;font-size:11.5px;line-height:1.4;color:#d9e4d8}.note.locked{color:#879188;filter:saturate(.2)}.settingsGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.setting{background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:9px;font-size:11px}.setting select{width:100%;margin-top:5px;background:#102018;color:white;border:1px solid #ffffff20;border-radius:10px;padding:7px}.setting label{display:flex;gap:7px;align-items:center}.menuActions{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:14px}.menuStats{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:#c9d5ca}.menuStats span{background:#ffffff08;border:1px solid #ffffff10;border-radius:999px;padding:6px 9px}.choicePanel{width:min(94vw,760px);padding:17px;text-align:center}.choicePanel h2{font-size:24px;margin:0 0 5px}.choiceGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}.choiceCard{min-height:190px;text-align:left;padding:13px;background:linear-gradient(180deg,#203a2d,#0f2119);border-color:#b9ff8c33}.choiceIcon{font-size:31px}.choiceName{font-size:16px;font-weight:1000;margin:8px 0 4px}.choiceDesc{font-size:12px;line-height:1.45;color:#c4d1c5}.endPanel{width:min(93vw,570px);padding:18px;text-align:center}.endTitle{font-size:32px;font-weight:1000;margin:0}.endTitle.win{color:var(--gold)}.endTitle.fail{color:var(--danger)}.endReason{color:#c8d2c8;margin:4px 0 13px}.resultGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.resultStat{padding:10px;background:#ffffff09;border:1px solid #ffffff11;border-radius:12px}.resultStat b{display:block;font-size:21px}.resultStat span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.fieldNote{margin:12px 0;padding:12px;border-radius:12px;border:1px solid #d3ff9e33;background:#7ccf5d10;text-align:left;font-size:12px;line-height:1.45}.fieldNote strong{color:var(--gold)}.pausePanel{width:min(90vw,400px);padding:18px;text-align:center}.pausePanel h2{font-size:28px;margin:0 0 8px}.pausePanel .menuActions{justify-content:center}.loading{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#183824,#050906 72%);z-index:50;pointer-events:auto}.loadingInner{text-align:center;font-weight:1000}.spinner{width:54px;height:54px;border-radius:50%;border:4px solid #ffffff18;border-top-color:var(--leaf);margin:0 auto 12px;animation:spin .9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+  #damageFlash{position:absolute;inset:0;background:radial-gradient(circle,transparent 36%,#ff345a77 100%);opacity:0;pointer-events:none;mix-blend-mode:screen;transition:opacity .08s}.damageOn{opacity:1!important}
+  #vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 48%,transparent 52%,#02070488 100%);pointer-events:none}
+  .hidden{display:none!important}
+  @media (hover:hover) and (pointer:fine){.touchControls{display:none}.cameraTouchZone{display:none}.desktopHint{display:block}.runStrip{bottom:12px}}
+  @media (max-width:700px){.workshopGrid{grid-template-columns:1fr 1fr}.settingsGrid{grid-template-columns:1fr 1fr}.notesGrid{grid-template-columns:1fr}.choiceGrid{grid-template-columns:1fr}.choiceCard{min-height:118px}.choiceIcon{font-size:24px}.panel{padding:13px}.hudTop{grid-template-columns:1fr}.statusCard{width:100%;display:none}.hudButtons{top:calc(100px + var(--safe-t))}.runStrip{font-size:10px}.logo{font-size:39px}.backendBadge{display:none}.hero{grid-template-columns:1fr}.heroArt{width:min(56vw,220px);justify-self:center}}
+  @media (max-width:390px){.joystick{width:108px;height:108px}.joyKnob{left:29px;top:29px;width:50px;height:50px}.cutBtn{width:92px;height:92px}.dodgeBtn{width:60px;height:60px}.workshopGrid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.resultGrid{grid-template-columns:1fr 1fr}.objective{font-size:12px}.percent{font-size:19px}}
+  @media (orientation:landscape) and (max-height:520px) and (pointer:coarse){.hudTop{grid-template-columns:minmax(0,1fr) auto}.statusCard{display:block;width:240px}.objectiveCard{max-width:520px}.touchControls{bottom:calc(5px + var(--safe-b))}.joystick{width:96px;height:96px}.joyKnob{left:25px;top:25px;width:46px;height:46px}.cutBtn{width:84px;height:84px}.dodgeBtn{width:56px;height:56px}.runStrip{display:none}.hudButtons{top:calc(107px + var(--safe-t))}.panel{max-height:94dvh}}
+</style>
+</head>
+<body>
+<canvas id="renderCanvas"></canvas>
+<div id="ui">
+  <div class="loading" id="loading"><div class="loadingInner"><div class="spinner"></div><div>Waking the cursed garden…</div><div class="small" id="loadingDetail">Preparing WebGPU</div></div></div>
+
+  <div class="hudTop">
+    <div class="card objectiveCard">
+      <div class="objectiveLine"><div><div class="eyebrow">Current task</div><div class="objective" id="objectiveText">Clear every cursed bed</div></div><div class="percent" id="clearText">0%</div></div>
+      <div class="meter"><div class="fill clearFill" id="clearFill"></div></div>
+      <div class="bedStatus" id="bedStatus">Beds clear now: 0 / 5</div>
+    </div>
+    <div class="card statusCard">
+      <div class="statusGrid">
+        <div class="statLabel">Armour</div><div class="statValue" id="armorText">100 / 100</div><div class="miniMeter"><div class="fill armorFill" id="armorFill"></div></div>
+        <div class="statLabel">Spool charge</div><div class="statValue" id="energyText">100 / 100</div><div class="miniMeter"><div class="fill energyFill" id="energyFill"></div></div>
+        <div class="statLabel">Curse pressure</div><div class="statValue" id="curseText">0%</div><div class="miniMeter"><div class="fill curseFill" id="curseFill"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hudButtons"><button class="iconBtn" id="audioBtn" aria-label="Toggle audio">🔊</button><button class="iconBtn" id="pauseBtn" aria-label="Pause">☰</button></div>
+  <div class="card" id="toast">Shift started</div>
+  <div id="sealPrompt"><div class="sealTitle">ROOTGATE EXPOSED</div><div class="sealSub">Stand in the ring and hold CUT before anything grows back.</div><div class="sealMeter"><div class="sealFill" id="sealFill"></div></div></div>
+  <div id="midnightCountdown"><span id="midnightCountText">10</span><span class="midnightSub">seconds to midnight</span></div>
+  <div class="card runStrip"><span>Time <strong id="timeText">0:00</strong></span><span>Cut <strong id="cutText">0</strong></span><span>Rootlings <strong id="killText">0</strong></span><span>Shards <strong id="runShardText">0</strong></span><span class="desktopHint">WASD • Space/Cut • Shift/Dodge • drag to orbit</span></div>
+
+  <div class="touchControls" id="touchControls">
+    <div class="joystick" id="joystick"><div class="joyKnob" id="joyKnob"></div></div>
+    <div class="actionCluster"><button class="actionBtn dodgeBtn" id="dodgeBtn">DODGE</button><button class="actionBtn cutBtn" id="cutBtn">CUT</button></div>
+  </div>
+  <div class="cameraTouchZone" id="cameraTouchZone"><span>DRAG TO LOOK</span></div>
+
+  <div class="overlay open" id="startOverlay">
+    <div class="card panel">
+      <div class="hero"><div><div class="eyebrow">A pocket roguelite garden horror</div><div class="logo">CURSE<br>CUTTER</div><div class="tagline">You are the last armoured groundskeeper. Cut five beds before they regrow, survive the rootlings, then stand in the centre and tune your whipper-snipper to close the Rootgate before midnight reaches 100%.</div><div class="heroBlurb">Third-person Babylon.js garden combat with WebGPU/WebGL fallback, touch controls, dynamic lighting, Pocket Chordsmith-style audio, and persistent roguelite upgrades.</div></div><img class="heroArt" src="icon.png" alt="Curse Cutter icon" /><div class="backendBadge" id="backendBadge">ENGINE</div></div>
+      <div class="sectionTitle"><h2>Workshop</h2><div class="small">Root shards: <strong id="bankShardText">0</strong></div></div>
+      <div class="workshopGrid" id="workshopGrid"></div>
+      <div class="sectionTitle"><h2>Field notes</h2><div class="small" id="noteCount">0 / 6 recovered</div></div>
+      <div class="notesGrid" id="notesGrid"></div>
+      <div class="sectionTitle"><h2>Shift settings</h2><div class="small">Saved on this device</div></div>
+      <div class="settingsGrid">
+        <div class="setting"><label>Graphics</label><select id="qualitySelect"><option value="high">High</option><option value="balanced">Balanced</option><option value="performance">Performance</option></select></div>
+        <div class="setting"><label><input type="checkbox" id="musicToggle" checked> Pocket Chordsmith music</label></div>
+        <div class="setting"><label><input type="checkbox" id="sfxToggle" checked> Cutter + creature SFX</label></div>
+        <div class="setting"><label><input type="checkbox" id="cameraAssistToggle" checked> Camera follow assist</label></div>
+      </div>
+      <div class="menuActions"><div class="menuStats"><span>Runs <b id="runsText">0</b></span><span>Best clear <b id="bestClearText">0%</b></span><span>Closures <b id="winsText">0</b></span></div><button class="primary" id="startBtn">Begin Night Shift</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="choiceOverlay"><div class="card choicePanel"><div class="eyebrow">Improvised field upgrade</div><h2>Choose what keeps you alive</h2><div class="small">The Rootgate adapts. So do you.</div><div class="choiceGrid" id="choiceGrid"></div></div></div>
+
+  <div class="overlay" id="endOverlay"><div class="card endPanel"><div class="endTitle fail" id="endTitle">SHIFT LOST</div><div class="endReason" id="endReason">The garden took you back.</div><div class="resultGrid"><div class="resultStat"><b id="endClear">0%</b><span>Peak clear</span></div><div class="resultStat"><b id="endCuts">0</b><span>Weeds cut</span></div><div class="resultStat"><b id="endReward">+0</b><span>Root shards</span></div><div class="resultStat"><b id="endTime">0:00</b><span>Shift time</span></div><div class="resultStat"><b id="endKills">0</b><span>Rootlings</span></div><div class="resultStat"><b id="endRuns">1</b><span>Attempt</span></div></div><div class="fieldNote" id="fieldNote"></div><div class="menuActions"><button id="workshopBtn">Workshop</button><button class="primary" id="retryBtn">Start Another Shift</button></div></div></div>
+
+  <div class="overlay" id="pauseOverlay"><div class="card pausePanel"><div class="eyebrow">Night shift suspended</div><h2>PAUSED</h2><div class="small">The weeds are politely pretending not to grow.</div><div class="menuActions"><button id="quitBtn">Abandon Shift</button><button class="primary" id="resumeBtn">Resume</button></div></div></div>
+  <div id="damageFlash"></div><div id="vignette"></div>
+</div>
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script>
+(async()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const canvas=$('renderCanvas'), loading=$('loading'), loadingDetail=$('loadingDetail'), cameraZone=$('cameraTouchZone');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const damp=(current,target,rate,dt)=>lerp(current,target,1-Math.pow(rate,dt));
+const TAU=Math.PI*2;
+const angleDiff=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
+const dampAngle=(current,target,rate,dt)=>current+angleDiff(target,current)*(1-Math.pow(rate,dt));
+const fmtTime=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+const hex3=h=>BABYLON.Color3.FromHexString(h);
+const V3=BABYLON.Vector3;
+const SAVE_KEY='curse_cutter_last_garden_v1';
+const NOTE_TEXTS=[
+  'The weeds are not plants. They are fingers, all pointing toward the old well.',
+  'Salted soil remembers being clean. Clear one whole bed and it will hold its breath for a little while.',
+  'The Rootgate listens for a steady cutting pitch. A drained spool cannot finish the sealing chord.',
+  'Mara Venn closed this gate once. Her armour was found in the shed; her name was scratched out of every roster.',
+  'The brass garden wasps still know the patrol route. Wind one up and it will trim whatever you miss.',
+  'The curse is not beneath the garden. The garden is a lid. Keep it cut, and the thing below keeps dreaming.'
+];
+const DEFAULT_SAVE={version:1,shards:0,runs:0,wins:0,bestClear:0,bestTime:null,notes:[],upgrades:{armor:0,line:0,guard:0,cell:0,salt:0,drone:0},settings:{quality:'high',music:true,sfx:true,cameraAssist:true}};
+const deepClone=o=>JSON.parse(JSON.stringify(o));
+function loadSave(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');
+    if(!raw) return deepClone(DEFAULT_SAVE);
+    const s=deepClone(DEFAULT_SAVE);
+    Object.assign(s,raw); s.upgrades=Object.assign({},DEFAULT_SAVE.upgrades,raw.upgrades||{}); s.settings=Object.assign({},DEFAULT_SAVE.settings,raw.settings||{});
+    s.notes=Array.isArray(raw.notes)?raw.notes.filter(n=>Number.isInteger(n)&&n>=0&&n<NOTE_TEXTS.length):[];
+    return s;
+  }catch(e){return deepClone(DEFAULT_SAVE)}
+}
+let save=loadSave();
+function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(save))}catch(e){}}
+const UPGRADE_DEFS={
+  armor:{icon:'🛡️',name:'Tempered Harness',desc:'More armour at the start of every shift.',max:5,cost:l=>8+Math.round(l*l*5),value:l=>`+${l*18} armour`},
+  line:{icon:'⚙️',name:'Carbide Line',desc:'Cuts weeds and rootlings faster.',max:5,cost:l=>10+Math.round(l*l*6),value:l=>`+${l*18}% cut power`},
+  guard:{icon:'⭕',name:'Wide Guard',desc:'A broader cutting reach forgives rough footwork.',max:5,cost:l=>11+Math.round(l*l*7),value:l=>`+${(l*.15).toFixed(2)} m reach`},
+  cell:{icon:'🔋',name:'Twin Cell Pack',desc:'More spool charge and quicker recovery.',max:5,cost:l=>9+Math.round(l*l*6),value:l=>`+${l*14} charge`},
+  salt:{icon:'🧂',name:'Salt Hopper',desc:'Cleared beds stay dormant longer before regrowth.',max:5,cost:l=>13+Math.round(l*l*8),value:l=>`+${l*3}s bed lock`},
+  drone:{icon:'🐝',name:'Brass Garden Wasp',desc:'Unlocks and improves autonomous helper drones.',max:5,cost:l=>l===0?18:18+Math.round(l*l*10),value:l=>l===0?'Locked':`${1+Math.floor((l-1)/2)} helper${l>=3?'s':''}`}
+};
+const FIELD_UPGRADES=[
+  {id:'overclock',icon:'⚡',name:'Overclocked Spool',desc:'+28% cutting damage this shift.',apply:s=>s.damageMul*=1.28},
+  {id:'wide',icon:'🌀',name:'Titanium Guard',desc:'+0.34 m cutting reach this shift.',apply:s=>s.cutRadius+=.34},
+  {id:'battery',icon:'🔋',name:'Hot-Swap Cell',desc:'+28 maximum charge and refill it.',apply:s=>{s.maxEnergy+=28;s.energy=s.maxEnergy}},
+  {id:'plate',icon:'🛡️',name:'Riveted Plating',desc:'+26 maximum armour and repair 26.',apply:s=>{s.maxHp+=26;s.hp=Math.min(s.maxHp,s.hp+26)}},
+  {id:'salt',icon:'🧂',name:'Iron Mulch',desc:'+7 seconds of dormancy after clearing a bed.',apply:s=>s.zoneLock+=7},
+  {id:'step',icon:'🥾',name:'Groundskeeper’s Step',desc:'+16% movement speed.',apply:s=>s.speed*=1.16},
+  {id:'efficiency',icon:'♻️',name:'Balanced Head',desc:'Cutting consumes 22% less charge.',apply:s=>s.energyCost*=.78},
+  {id:'tonic',icon:'💚',name:'Root Tonic',desc:'Every 18 weeds cut repairs 5 armour.',apply:s=>s.healEvery=Math.max(10,s.healEvery-6)},
+  {id:'echo',icon:'🎵',name:'Echo Chord',desc:'Every 12 weeds triggers a damaging shockwave.',apply:s=>s.echoEvery=Math.max(6,s.echoEvery-4)},
+  {id:'wasp',icon:'🐝',name:'Borrowed Garden Wasp',desc:'Add one helper drone for this shift.',apply:s=>s.tempDrones++}
+];
+function upgradeCost(id){const d=UPGRADE_DEFS[id],l=save.upgrades[id]||0;return d.cost(l)}
+function renderWorkshop(){
+  $('bankShardText').textContent=save.shards;
+  $('runsText').textContent=save.runs; $('bestClearText').textContent=`${Math.floor(save.bestClear)}%`; $('winsText').textContent=save.wins;
+  const grid=$('workshopGrid'); grid.innerHTML='';
+  Object.entries(UPGRADE_DEFS).forEach(([id,d])=>{
+    const l=save.upgrades[id]||0, max=l>=d.max, cost=upgradeCost(id);
+    const b=document.createElement('button'); b.className='upgrade'; b.disabled=max||save.shards<cost;
+    b.innerHTML=`<div class="upgradeTop"><span class="upgradeName">${d.icon} ${d.name}</span><span class="upgradeLevel">${max?'MAX':`Lv ${l}/${d.max}`}</span></div><div class="upgradeDesc">${d.desc}</div><div class="upgradeCost"><span>${d.value(l)}</span><strong>${max?'Complete':`${cost} ◆`}</strong></div>`;
+    b.addEventListener('click',()=>{if(max||save.shards<cost)return;save.shards-=cost;save.upgrades[id]=l+1;persist();AudioSys.ui();renderWorkshop();showToast(`${d.name} upgraded`) });
+    grid.appendChild(b);
+  });
+  const notes=$('notesGrid'); notes.innerHTML='';
+  NOTE_TEXTS.forEach((text,i)=>{const div=document.createElement('div');const unlocked=save.notes.includes(i);div.className='note'+(unlocked?'':' locked');div.innerHTML=unlocked?`<strong>Note ${i+1}</strong><br>${text}`:`<strong>Note ${i+1}</strong><br>Unread field evidence`;notes.appendChild(div)});
+  $('noteCount').textContent=`${save.notes.length} / ${NOTE_TEXTS.length} recovered`;
+  $('qualitySelect').value=save.settings.quality;$('musicToggle').checked=save.settings.music;$('sfxToggle').checked=save.settings.sfx;$('cameraAssistToggle').checked=save.settings.cameraAssist;
+}
+let backendName='WebGL 2';
+async function makeEngine(){
+  loadingDetail.textContent='Checking WebGPU support';
+  if(navigator.gpu&&BABYLON.WebGPUEngine){
+    try{
+      const e=new BABYLON.WebGPUEngine(canvas,{antialias:true,adaptToDeviceRatio:true,powerPreference:'high-performance'});
+      await e.initAsync(); backendName='WebGPU'; return e;
+    }catch(err){console.warn('WebGPU fallback',err)}
+  }
+  backendName='WebGL 2';
+  return new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:false,stencil:true,antialias:true,adaptToDeviceRatio:true,powerPreference:'high-performance'},true);
+}
+const engine=await makeEngine();
+$('backendBadge').textContent=backendName;
+loadingDetail.textContent=`Building garden with ${backendName}`;
+const scene=new BABYLON.Scene(engine);
+scene.clearColor=new BABYLON.Color4(.035,.085,.06,1);
+scene.fogMode=BABYLON.Scene.FOGMODE_EXP2; scene.fogDensity=.0085; scene.fogColor=new BABYLON.Color3(.065,.14,.095);
+scene.ambientColor=new BABYLON.Color3(.22,.26,.21);
+scene.skipPointerMovePicking=true;
+scene.imageProcessingConfiguration.contrast=1.08;scene.imageProcessingConfiguration.exposure=1.08;scene.imageProcessingConfiguration.toneMappingEnabled=true;
+if(BABYLON.ImageProcessingConfiguration.TONEMAPPING_ACES!==undefined)scene.imageProcessingConfiguration.toneMappingType=BABYLON.ImageProcessingConfiguration.TONEMAPPING_ACES;
+const camera=new BABYLON.FreeCamera('gardenCamera',new V3(0,7,-12),scene);camera.minZ=.12;camera.maxZ=220;camera.fov=.86;scene.activeCamera=camera;
+const hemi=new BABYLON.HemisphericLight('nightFill',new V3(.2,1,.15),scene);hemi.intensity=.58;hemi.groundColor=hex3('#1e3b25');
+const moon=new BABYLON.DirectionalLight('moon',new V3(-.36,-.86,.28),scene);moon.position=new V3(28,48,-34);moon.intensity=1.38;moon.diffuse=hex3('#d8eaff');moon.specular=hex3('#b6d6ff');
+let shadowSize=1024;
+const shadowGen=new BABYLON.ShadowGenerator(shadowSize,moon);shadowGen.usePercentageCloserFiltering=true;shadowGen.filteringQuality=BABYLON.ShadowGenerator.QUALITY_MEDIUM;shadowGen.bias=.0007;shadowGen.normalBias=.025;
+const portalLight=new BABYLON.PointLight('portalLight',new V3(0,2,0),scene);portalLight.diffuse=hex3('#bc58ff');portalLight.intensity=4;portalLight.range=24;
+const helmetLight=new BABYLON.SpotLight('helmetLight',new V3(0,2,0),new V3(0,-.1,1),Math.PI/4,2,scene);helmetLight.diffuse=hex3('#eaffc6');helmetLight.intensity=3.2;helmetLight.range=18;
+const lampLights=[];
+let pipeline=null;
+try{pipeline=new BABYLON.DefaultRenderingPipeline('polish',true,scene,[camera]);pipeline.fxaaEnabled=true;pipeline.bloomEnabled=true;pipeline.bloomThreshold=.72;pipeline.bloomWeight=.28;pipeline.bloomKernel=48;pipeline.samples=2}catch(e){console.warn('Pipeline unavailable',e)}
+const glow=new BABYLON.GlowLayer('gardenGlow',scene,{blurKernelSize:32});glow.intensity=.55;
+function applyQuality(){
+  const q=save.settings.quality||'high';
+  engine.setHardwareScalingLevel(q==='performance'?1.55:q==='balanced'?1.23:1);
+  if(pipeline){pipeline.bloomEnabled=q!=='performance';pipeline.samples=q==='high'?2:1;pipeline.bloomWeight=q==='high'?.34:q==='balanced'?.28:.18}
+  shadowGen.mapSize=q==='high'?1024:q==='balanced'?768:512;
+  if(window.atmosphere){
+    atmosphere.fireflies.emitRate=q==='performance'?14:q==='balanced'?24:38;
+    atmosphere.fireflies.manualEmitCount=0;
+    atmosphere.mist.emitRate=q==='performance'?0:q==='balanced'?8:16;
+  }
+}
+applyQuality();
+function stdMat(name,diffuse,emissive=null,spec='#111914',alpha=1){
+  const m=new BABYLON.StandardMaterial(name,scene);m.diffuseColor=hex3(diffuse);m.specularColor=hex3(spec);m.specularPower=32;m.alpha=alpha;if(emissive)m.emissiveColor=hex3(emissive);return m;
+}
+function pbrMat(name,base,emissive=null,metal=.1,rough=.72){const m=new BABYLON.PBRMaterial(name,scene);m.albedoColor=hex3(base);m.metallic=metal;m.roughness=rough;if(emissive){m.emissiveColor=hex3(emissive);m.emissiveIntensity=1}return m}
+function noiseTexture(name,base,accent,seed=1,density=650){
+  const tex=new BABYLON.DynamicTexture(name,{width:512,height:512},scene,false);const c=tex.getContext();const rng=makeRng(seed);c.fillStyle=base;c.fillRect(0,0,512,512);
+  for(let i=0;i<density;i++){c.globalAlpha=.08+rng()*.18;c.fillStyle=rng()>.5?accent:base;const x=rng()*512,y=rng()*512,s=1+rng()*10;c.fillRect(x,y,s,s*(.3+rng()))}c.globalAlpha=1;tex.update(false);tex.wrapU=tex.wrapV=BABYLON.Texture.WRAP_ADDRESSMODE;return tex;
+}
+const mats={
+  grass:stdMat('grass','#3d7040'),soil:stdMat('soil','#604735'),stone:stdMat('stone','#7a847f'),stoneDark:stdMat('stoneDark','#4a5750'),hedge:stdMat('hedge','#285f35'),hedge2:stdMat('hedge2','#397546'),wood:stdMat('wood','#6b4630'),metal:pbrMat('metal','#8fa09a',null,.68,.36),armor:pbrMat('armor','#dcc85b',null,.58,.32),armorDark:pbrMat('armorDark','#2c563d',null,.45,.42),visor:pbrMat('visor','#8ee5e4','#17484f',.18,.15),rubber:stdMat('rubber','#202622'),root:stdMat('root','#341b32','#3d154a'),portal:stdMat('portal','#7933b0','#bd55ff'),portalGold:stdMat('portalGold','#b98634','#ffd36b'),weed:stdMat('weed','#70cb5d','#143d19'),bramble:stdMat('bramble','#87549a','#3c1748'),bloom:stdMat('bloom','#c85be8','#d25aff'),leafGlow:stdMat('leafGlow','#b6ff86','#75e65f'),enemy:stdMat('enemy','#582a61','#b63ed1'),eye:stdMat('eye','#ffd777','#ffb743'),drone:pbrMat('drone','#c79643','#4f2b08',.75,.32),droneGlow:stdMat('droneGlow','#9fffd8','#56e6c4'),water:stdMat('water','#3b7e8d','#165061', '#b8f6ff',.72),white:stdMat('white','#e5ead9'),red:stdMat('red','#a93a48','#4a1218')
+};
+mats.grass.diffuseTexture=noiseTexture('grassTex','#315c35','#50804c',117,900);mats.grass.diffuseTexture.uScale=mats.grass.diffuseTexture.vScale=12;
+mats.soil.diffuseTexture=noiseTexture('soilTex','#493425','#77533a',221,700);mats.soil.diffuseTexture.uScale=mats.soil.diffuseTexture.vScale=8;
+mats.stone.diffuseTexture=noiseTexture('stoneTex','#68706d','#89908b',441,500);mats.stone.diffuseTexture.uScale=mats.stone.diffuseTexture.vScale=5;
+function makeRng(seedStart){let s=seedStart>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function box(name,w,h,d,pos,mat,parent=null,cast=false){const m=BABYLON.MeshBuilder.CreateBox(name,{width:w,height:h,depth:d},scene);m.position.copyFrom(pos);m.material=mat;if(parent)m.parent=parent;m.receiveShadows=true;if(cast)shadowGen.addShadowCaster(m);return m}
+function cyl(name,h,diam,pos,mat,parent=null,tess=12,cast=false){const m=BABYLON.MeshBuilder.CreateCylinder(name,{height:h,diameter:diam,tessellation:tess},scene);m.position.copyFrom(pos);m.material=mat;if(parent)m.parent=parent;m.receiveShadows=true;if(cast)shadowGen.addShadowCaster(m);return m}
+const worldRoot=new BABYLON.TransformNode('gardenRoot',scene);
+function buildSky(){
+  const sky=BABYLON.MeshBuilder.CreateSphere('sky',{diameter:180,segments:24,sideOrientation:BABYLON.Mesh.BACKSIDE},scene);const sm=new BABYLON.StandardMaterial('skyMat',scene);sm.disableLighting=true;sm.backFaceCulling=false;
+  const tex=new BABYLON.DynamicTexture('skyTex',{width:1024,height:512},scene,false);const c=tex.getContext();const g=c.createLinearGradient(0,0,0,512);g.addColorStop(0,'#08152b');g.addColorStop(.55,'#153629');g.addColorStop(1,'#2c2a1f');c.fillStyle=g;c.fillRect(0,0,1024,512);const r=makeRng(9482);for(let i=0;i<420;i++){const a=.25+r()*.75;c.globalAlpha=a;c.fillStyle=r()>.88?'#dfffd2':'#d8e9ff';const x=r()*1024,y=r()*260,s=r()>.96?2:1;c.fillRect(x,y,s,s)}c.globalAlpha=1;tex.update(false);sm.emissiveTexture=tex;sm.diffuseColor=BABYLON.Color3.Black();sky.material=sm;sky.infiniteDistance=true;
+  const moonDisc=BABYLON.MeshBuilder.CreateDisc('moonDisc',{radius:4,tessellation:48},scene);moonDisc.position.set(-35,42,45);moonDisc.rotation.y=Math.PI;const mm=stdMat('moonDiscMat','#d9e7ce','#d9f2d2');mm.disableLighting=true;moonDisc.material=mm;
+}
+buildSky();
+function buildGarden(){
+  const ground=BABYLON.MeshBuilder.CreateGround('mainLawn',{width:60,height:60,subdivisions:2},scene);ground.material=mats.grass;ground.position.y=0;ground.receiveShadows=true;ground.parent=worldRoot;
+  const beds=[[-11,11],[11,11],[-11,-11],[11,-11]];
+  beds.forEach((p,i)=>{
+    // Phone fix: the soil used to be a raised box in a later rendering group, which made it draw like a dark overlay.
+    // Keep beds as normal depth-tested world geometry: a flat soil plane plus four low edging rails.
+    const soil=BABYLON.MeshBuilder.CreateGround('soilBed'+i,{width:16.6,height:16.6,subdivisions:1},scene);
+    soil.position.set(p[0],.132,p[1]);
+    soil.material=mats.soil;
+    soil.parent=worldRoot;
+    soil.receiveShadows=true;
+    soil.isPickable=false;
+    const frameY=.085, frameH=.14, outer=18.0, rail=.72, inner=16.6;
+    const north=box('bedFrameN'+i,outer,frameH,rail,new V3(p[0],frameY,p[1]-(inner+rail)/2),mats.stoneDark,worldRoot);
+    const south=box('bedFrameS'+i,outer,frameH,rail,new V3(p[0],frameY,p[1]+(inner+rail)/2),mats.stoneDark,worldRoot);
+    const west=box('bedFrameW'+i,rail,frameH,inner,new V3(p[0]-(inner+rail)/2,frameY,p[1]),mats.stoneDark,worldRoot);
+    const east=box('bedFrameE'+i,rail,frameH,inner,new V3(p[0]+(inner+rail)/2,frameY,p[1]),mats.stoneDark,worldRoot);
+    [north,south,west,east].forEach(m=>{m.receiveShadows=true;m.isPickable=false;});
+  });
+  box('pathNS',4.2,.16,55,new V3(0,.11,0),mats.stone,worldRoot);box('pathEW',55,.16,4.2,new V3(0,.12,0),mats.stone,worldRoot);
+  const ring=BABYLON.MeshBuilder.CreateTorus('pathRing',{diameter:18,thickness:3.1,tessellation:64},scene);ring.position.y=.14;ring.scaling.y=.12;ring.material=mats.stone;ring.receiveShadows=true;ring.parent=worldRoot;
+  const centre=BABYLON.MeshBuilder.CreateCylinder('centrePad',{height:.24,diameter:9,tessellation:64},scene);centre.position.y=.12;centre.material=mats.stoneDark;centre.receiveShadows=true;centre.parent=worldRoot;
+  for(let i=0;i<30;i++){
+    const z=-28+i*(56/29);const x=-28+i*(56/29);const left=box('wallL'+i,1.9,.65,1,new V3(-29,.3,z),mats.stoneDark,worldRoot,false);const right=box('wallR'+i,1.9,.65,1,new V3(29,.3,z),mats.stoneDark,worldRoot,false);const top=box('wallT'+i,1,.65,1.9,new V3(x,.3,29),mats.stoneDark,worldRoot,false);const bot=box('wallB'+i,1,.65,1.9,new V3(x,.3,-29),mats.stoneDark,worldRoot,false);
+  }
+  const hedgeSegs=16;
+  for(let i=0;i<hedgeSegs;i++){
+    const t=-26+i*(52/(hedgeSegs-1));const h=2.7+(i%3)*.18;
+    [['hL',-28.2,t,1.8,h,3.5],['hR',28.2,t,1.8,h,3.5],['hT',t,28.2,3.5,h,1.8],['hB',t,-28.2,3.5,h,1.8]].forEach((v,j)=>{const m=box(v[0]+i,v[3],v[4],v[5],new V3(v[1],.75+v[4]/2,v[2]),j%2?mats.hedge2:mats.hedge,worldRoot,true);m.rotation.y=(i%2)*.05});
+  }
+  // Tool shed
+  const shed=new BABYLON.TransformNode('shed',scene);shed.position.set(-20,0,23);shed.parent=worldRoot;box('shedBody',8,4.7,5,new V3(0,2.35,0),mats.wood,shed,true);const roof=box('shedRoof',9,.5,6,new V3(0,5,0),mats.red,shed,true);roof.rotation.z=.06;box('shedDoor',2.4,3.8,.22,new V3(0,1.9,-2.58),mats.armorDark,shed,true);box('shedWindow',1.5,1.4,.18,new V3(2.3,3,-2.6),mats.visor,shed,false);
+  // Greenhouse silhouette
+  const gh=new BABYLON.TransformNode('greenhouse',scene);gh.position.set(20,0,23);gh.parent=worldRoot;for(let i=-2;i<=2;i++){box('ghPost'+i,.18,4,.18,new V3(i*1.35,2,0),mats.metal,gh,true)}box('ghBase',7,.3,4,new V3(0,.15,0),mats.metal,gh,true);const glass=box('ghGlass',6.7,3.5,3.7,new V3(0,2,0),mats.water,gh,false);glass.visibility=.42;
+  // Fountain basin
+  const basin=BABYLON.MeshBuilder.CreateTorus('fountainBasin',{diameter:5.5,thickness:.5,tessellation:48},scene);basin.position.set(22,.25,-22);basin.material=mats.stone;basin.parent=worldRoot;const water=BABYLON.MeshBuilder.CreateCylinder('fountainWater',{height:.12,diameter:4.8,tessellation:48},scene);water.position.set(22,.23,-22);water.material=mats.water;water.parent=worldRoot;const stem=cyl('fountainStem',2,.6,new V3(22,1,-22),mats.stone,worldRoot,16,true);const bowl=BABYLON.MeshBuilder.CreateTorus('fountainBowl',{diameter:2.8,thickness:.35,tessellation:32},scene);bowl.position.set(22,1.9,-22);bowl.material=mats.stone;bowl.parent=worldRoot;
+  // Lamp posts
+  [[-23,0],[23,0],[0,-23],[0,23]].forEach((p,i)=>{const post=cyl('lampPost'+i,4,.28,new V3(p[0],2,p[1]),mats.metal,worldRoot,10,true);const cap=cyl('lampCap'+i,.55,1,new V3(p[0],4.2,p[1]),mats.eye,worldRoot,12,true);const light=new BABYLON.PointLight('lampLight'+i,new V3(p[0],4.2,p[1]),scene);light.diffuse=hex3('#ffd996');light.intensity=1.15;light.range=13;lampLights.push({light,seed:i*1.7})});
+  // Small tools and crates
+  [[-24,-20],[-21,-20],[-23,-17]].forEach((p,i)=>box('crate'+i,1.5,1.4,1.5,new V3(p[0],.7,p[1]),mats.wood,worldRoot,true));
+}
+buildGarden();
+function radialTexture(name,inner,outer){const tex=new BABYLON.DynamicTexture(name,{width:64,height:64},scene,false);const c=tex.getContext();const g=c.createRadialGradient(32,32,2,32,32,32);g.addColorStop(0,inner);g.addColorStop(.35,inner);g.addColorStop(1,outer);c.fillStyle=g;c.fillRect(0,0,64,64);tex.update(false);return tex}
+const particleTex=radialTexture('particleTex','#ffffff','#ffffff00');
+function buildAtmosphere(){
+  const fireflies=new BABYLON.ParticleSystem('fireflies',260,scene);fireflies.particleTexture=particleTex;fireflies.emitter=new V3(0,1.2,0);fireflies.minEmitBox=new V3(-28,.2,-28);fireflies.maxEmitBox=new V3(28,4.8,28);fireflies.color1=new BABYLON.Color4(.78,1,.58,.75);fireflies.color2=new BABYLON.Color4(.72,.45,1,.55);fireflies.colorDead=new BABYLON.Color4(.08,.12,.09,0);fireflies.minSize=.05;fireflies.maxSize=.16;fireflies.minLifeTime=1.4;fireflies.maxLifeTime=3.8;fireflies.emitRate=38;fireflies.gravity=new V3(0,.03,0);fireflies.direction1=new V3(-.15,.12,-.15);fireflies.direction2=new V3(.15,.42,.15);fireflies.minEmitPower=.08;fireflies.maxEmitPower=.32;fireflies.blendMode=BABYLON.ParticleSystem.BLENDMODE_ADD;fireflies.start();
+  const mist=new BABYLON.ParticleSystem('groundMist',180,scene);mist.particleTexture=particleTex;mist.emitter=new V3(0,.08,0);mist.minEmitBox=new V3(-22,0,-22);mist.maxEmitBox=new V3(22,.25,22);mist.color1=new BABYLON.Color4(.46,.8,.62,.08);mist.color2=new BABYLON.Color4(.6,.34,.9,.06);mist.colorDead=new BABYLON.Color4(.05,.08,.07,0);mist.minSize=1.2;mist.maxSize=2.8;mist.minLifeTime=2.8;mist.maxLifeTime=5.2;mist.emitRate=16;mist.gravity=new V3(0,.015,0);mist.direction1=new V3(-.08,.01,-.08);mist.direction2=new V3(.08,.08,.08);mist.minEmitPower=.03;mist.maxEmitPower=.1;mist.blendMode=BABYLON.ParticleSystem.BLENDMODE_STANDARD;mist.start();
+  return{fireflies,mist};
+}
+const atmosphere=window.atmosphere=buildAtmosphere();
+const leafParticles=new BABYLON.ParticleSystem('leafBits',650,scene);leafParticles.particleTexture=particleTex;leafParticles.emitter=new V3(0,0,0);leafParticles.minEmitBox=new V3(-.15,0,-.15);leafParticles.maxEmitBox=new V3(.15,.1,.15);leafParticles.color1=new BABYLON.Color4(.45,1,.28,1);leafParticles.color2=new BABYLON.Color4(.75,.4,1,1);leafParticles.colorDead=new BABYLON.Color4(.1,.15,.08,0);leafParticles.minSize=.04;leafParticles.maxSize=.16;leafParticles.minLifeTime=.25;leafParticles.maxLifeTime=.7;leafParticles.emitRate=0;leafParticles.gravity=new V3(0,-4.5,0);leafParticles.direction1=new V3(-2,1,-2);leafParticles.direction2=new V3(2,4,2);leafParticles.minAngularSpeed=-8;leafParticles.maxAngularSpeed=8;leafParticles.minEmitPower=.6;leafParticles.maxEmitPower=2.4;leafParticles.updateSpeed=.012;leafParticles.start();
+const cutterParticles=new BABYLON.ParticleSystem('cutterDust',320,scene);cutterParticles.particleTexture=particleTex;cutterParticles.emitter=new V3(0,0,0);cutterParticles.color1=new BABYLON.Color4(.65,1,.3,.85);cutterParticles.color2=new BABYLON.Color4(1,.85,.35,.8);cutterParticles.colorDead=new BABYLON.Color4(.2,.4,.1,0);cutterParticles.minSize=.02;cutterParticles.maxSize=.08;cutterParticles.minLifeTime=.12;cutterParticles.maxLifeTime=.35;cutterParticles.emitRate=0;cutterParticles.gravity=new V3(0,-2,0);cutterParticles.direction1=new V3(-1,.2,-1);cutterParticles.direction2=new V3(1,1.5,1);cutterParticles.minEmitPower=.4;cutterParticles.maxEmitPower=1.8;cutterParticles.start();
+function emitCut(pos,count=8,purple=false){leafParticles.emitter=pos.clone();leafParticles.color1=purple?new BABYLON.Color4(.8,.25,1,1):new BABYLON.Color4(.4,1,.26,1);leafParticles.color2=purple?new BABYLON.Color4(1,.5,.8,1):new BABYLON.Color4(.95,.8,.25,1);leafParticles.manualEmitCount=count}
+function buildPortal(){
+  const root=new BABYLON.TransformNode('rootgate',scene);root.position.y=.2;
+  const torus=BABYLON.MeshBuilder.CreateTorus('portalRing',{diameter:6.4,thickness:.48,tessellation:64},scene);torus.material=mats.portal;torus.parent=root;torus.position.y=.2;
+  const inner=BABYLON.MeshBuilder.CreateCylinder('portalDisc',{height:.18,diameter:5.4,tessellation:64},scene);inner.material=mats.portal;inner.parent=root;inner.position.y=.03;
+  const knot=BABYLON.MeshBuilder.CreateTorusKnot('portalKnot',{radius:1.55,tube:.16,radialSegments:96,tubularSegments:12,p:2,q:3},scene);knot.material=mats.portal;knot.parent=root;knot.position.y=.48;knot.scaling.y=.22;
+  const beam=BABYLON.MeshBuilder.CreateCylinder('portalBeam',{height:5,diameterTop:.4,diameterBottom:4.2,tessellation:48},scene);const bm=stdMat('beamMat','#7d32aa','#c859ff','#ffffff',.17);bm.disableLighting=true;bm.backFaceCulling=false;beam.material=bm;beam.parent=root;beam.position.y=2.4;
+  for(let i=0;i<8;i++){const a=i/8*TAU;const points=[];for(let j=0;j<7;j++){const t=j/6;const r=2.3+t*3.6;points.push(new V3(Math.sin(a+t*.35)*r,.08+Math.sin(t*Math.PI)*.3,Math.cos(a+t*.35)*r))}const tube=BABYLON.MeshBuilder.CreateTube('rootTendril'+i,{path:points,radius:.11+(i%2)*.035,tessellation:7,cap:BABYLON.Mesh.CAP_ALL},scene);tube.material=mats.root;tube.parent=root;tube.receiveShadows=true}
+  const ps=new BABYLON.ParticleSystem('portalMotes',900,scene);ps.particleTexture=particleTex;ps.emitter=new V3(0,.3,0);ps.minEmitBox=new V3(-2.4,0,-2.4);ps.maxEmitBox=new V3(2.4,.5,2.4);ps.color1=new BABYLON.Color4(.65,.18,1,.8);ps.color2=new BABYLON.Color4(1,.35,.75,.65);ps.colorDead=new BABYLON.Color4(.2,0,.35,0);ps.minSize=.04;ps.maxSize=.16;ps.minLifeTime=.7;ps.maxLifeTime=2.2;ps.emitRate=90;ps.gravity=new V3(0,.18,0);ps.direction1=new V3(-.3,.3,-.3);ps.direction2=new V3(.3,1.5,.3);ps.minEmitPower=.2;ps.maxEmitPower=.8;ps.blendMode=BABYLON.ParticleSystem.BLENDMODE_ADD;ps.start();
+  return{root,torus,inner,knot,beam,beamMat:bm,particles:ps,pulse:0};
+}
+const portal=buildPortal();
+function buildPlayer(){
+  const root=new BABYLON.TransformNode('playerRoot',scene);const body=new BABYLON.TransformNode('playerVisual',scene);body.parent=root;
+  const torso=box('torso',1.15,1.45,.72,new V3(0,1.65,0),mats.armorDark,body,true);const chest=box('chestPlate',1.25,.78,.18,new V3(0,1.82,.43),mats.armor,body,true);chest.rotation.x=-.08;
+  const backpack=box('batteryPack',.8,1.15,.38,new V3(0,1.72,-.55),mats.metal,body,true);const coil=cyl('batteryCoil',.76,.3,new V3(0,1.75,-.79),mats.energy||mats.eye,body,12,true);coil.rotation.z=Math.PI/2;
+  const helmet=cyl('helmet',.62,.86,new V3(0,2.72,.03),mats.armor,body,16,true);const visor=box('faceShield',.75,.35,.12,new V3(0,2.72,.45),mats.visor,body,false);visor.rotation.x=-.12;const lamp=cyl('helmetLamp',.28,.24,new V3(.28,2.93,.37),mats.eye,body,10,false);lamp.rotation.x=Math.PI/2;
+  const leftArm=new BABYLON.TransformNode('leftArm',scene);leftArm.parent=body;leftArm.position.set(-.72,2.1,0);const la=box('leftArmMesh',.36,1.1,.42,new V3(0,-.42,.12),mats.armorDark,leftArm,true);leftArm.rotation.z=-.12;
+  const rightArm=new BABYLON.TransformNode('rightArm',scene);rightArm.parent=body;rightArm.position.set(.72,2.08,.05);const ra=box('rightArmMesh',.36,1.12,.42,new V3(0,-.42,.16),mats.armorDark,rightArm,true);rightArm.rotation.z=.18;
+  const leftLeg=new BABYLON.TransformNode('leftLeg',scene);leftLeg.parent=body;leftLeg.position.set(-.34,1.05,0);box('leftLegMesh',.44,1.2,.48,new V3(0,-.43,0),mats.armorDark,leftLeg,true);box('leftBoot',.54,.34,.75,new V3(0,-1.02,.12),mats.rubber,leftLeg,true);
+  const rightLeg=new BABYLON.TransformNode('rightLeg',scene);rightLeg.parent=body;rightLeg.position.set(.34,1.05,0);box('rightLegMesh',.44,1.2,.48,new V3(0,-.43,0),mats.armorDark,rightLeg,true);box('rightBoot',.54,.34,.75,new V3(0,-1.02,.12),mats.rubber,rightLeg,true);
+  const weapon=new BABYLON.TransformNode('weaponRoot',scene);weapon.parent=body;weapon.position.set(.62,1.8,.42);weapon.rotation.set(-1.06,.14,-.24);
+  const shaft=cyl('cutterShaft',2.9,.11,new V3(0,-1.15,0),mats.metal,weapon,10,true);const grip=box('cutterGrip',.5,.22,.3,new V3(-.12,-.1,0),mats.rubber,weapon,true);const headRoot=new BABYLON.TransformNode('cutterHeadRoot',scene);headRoot.parent=weapon;headRoot.position.set(.02,-2.48,.22);const guard=BABYLON.MeshBuilder.CreateTorus('cutterGuard',{diameter:1.2,thickness:.12,tessellation:32},scene);guard.material=mats.metal;guard.parent=headRoot;guard.rotation.x=Math.PI/2;const hub=cyl('cutterHub',.18,.36,new V3(0,0,0),mats.armor,headRoot,14,true);const line=box('cutterLine',1.6,.035,.035,new V3(0,-.1,0),mats.leafGlow,headRoot,false);line.rotation.y=.4;
+  return{root,body,leftArm,rightArm,leftLeg,rightLeg,weapon,headRoot,line,moveAmount:0,yaw:0,pos:new V3(-1,.15,-24),dash:0,dashCooldown:0,invuln:0,shake:0};
+}
+const player=buildPlayer();player.root.position.copyFrom(player.pos);
+function buildDrone(index){
+  const root=new BABYLON.TransformNode('drone'+index,scene);const body=box('droneBody'+index,.78,.34,.58,new V3(0,0,0),mats.drone,root,true);const eye=box('droneEye'+index,.3,.14,.08,new V3(0,.02,.33),mats.droneGlow,root,false);const rotor=new BABYLON.TransformNode('droneRotor'+index,scene);rotor.parent=root;rotor.position.y=.27;const bar1=box('rotorA'+index,1.2,.045,.08,new V3(0,0,0),mats.metal,rotor,false);const bar2=box('rotorB'+index,.08,.045,1.2,new V3(0,0,0),mats.metal,rotor,false);return{root,rotor,index,target:null,attackClock:0,beam:null}
+}
+const drones=[];
+function syncDrones(){
+  const desired=(runStats.droneCount||0)+(runStats.tempDrones||0);
+  while(drones.length<desired)drones.push(buildDrone(drones.length));
+  drones.forEach((d,i)=>d.root.setEnabled(i<desired));
+}
+function makeTuftSource(name,material,blades=5,wide=false){
+  const parts=[];
+  for(let i=0;i<blades;i++){const a=i/blades*TAU;const h=(wide?1.15:1.4)+(i%3)*.18;const b=BABYLON.MeshBuilder.CreateCylinder(name+'Blade'+i,{height:h,diameterTop:.02,diameterBottom:wide?.16:.12,tessellation:4},scene);b.position.set(Math.sin(a)*.15,h/2,Math.cos(a)*.15);b.rotation.z=Math.sin(a)*.23;b.rotation.x=Math.cos(a)*.23;b.material=material;parts.push(b)}
+  const merged=BABYLON.Mesh.MergeMeshes(parts,true,true,undefined,false,true);merged.name=name;merged.material=material;merged.alwaysSelectAsActiveMesh=true;merged.doNotSyncBoundingInfo=true;return merged;
+}
+const weedSources={grass:makeTuftSource('weedSource',mats.weed,6,false),bramble:makeTuftSource('brambleSource',mats.bramble,8,true),bloom:makeTuftSource('bloomSource',mats.bloom,9,true)};
+Object.values(weedSources).forEach(m=>{m.receiveShadows=false;m.isPickable=false});
+const ZONE_DEFS=[{name:'Northwest Bed',kind:'rect',x:-11,z:11,w:15,h:15,count:58},{name:'Northeast Bed',kind:'rect',x:11,z:11,w:15,h:15,count:58},{name:'Southwest Bed',kind:'rect',x:-11,z:-11,w:15,h:15,count:58},{name:'Southeast Bed',kind:'rect',x:11,z:-11,w:15,h:15,count:58},{name:'Root Ring',kind:'ring',r0:5.1,r1:9.2,count:62}];
+const weeds=[];const zones=ZONE_DEFS.map((d,i)=>({id:i,name:d.name,lockUntil:0,wasClear:false,clearCount:0,total:0}));
+function randomZonePoint(def,rng){
+  if(def.kind==='rect')return{x:def.x+(rng()-.5)*def.w,z:def.z+(rng()-.5)*def.h};
+  const a=rng()*TAU,r=Math.sqrt(lerp(def.r0*def.r0,def.r1*def.r1,rng()));return{x:Math.sin(a)*r,z:Math.cos(a)*r};
+}
+function resetWeeds(seed=1001){
+  weeds.length=0;zones.forEach(z=>{z.lockUntil=0;z.wasClear=false;z.clearCount=0;z.total=0});const rng=makeRng(seed);
+  ZONE_DEFS.forEach((def,zone)=>{
+    const placed=[];
+    for(let i=0;i<def.count;i++){
+      let p,tries=0;do{p=randomZonePoint(def,rng);tries++}while(placed.some(q=>(q.x-p.x)**2+(q.z-p.z)**2<.18)&&tries<20);placed.push(p);
+      const roll=rng();const kind=roll>.955?'bloom':roll>.78?'bramble':'grass';const maxHp=kind==='grass'?.56:kind==='bramble'?1.15:2.25;
+      weeds.push({x:p.x,z:p.z,zone,kind,growth:.82+rng()*.18,maxHp,hp:maxHp,regrow:0,baseDelay:kind==='grass'?8+rng()*4:kind==='bramble'?10+rng()*5:14+rng()*5,seed:rng()*1000,yaw:rng()*TAU,scale:.78+rng()*.5,cut:false});zones[zone].total++;
+    }
+  });updateWeedVisuals(true);
+}
+let weedVisualClock=0;
+function updateWeedVisuals(force=false){
+  const by={grass:[],bramble:[],bloom:[]};const t=game.time||0;
+  weeds.forEach(w=>{if(w.growth<=.025)return;const sway=Math.sin(t*1.9+w.seed)*.07;const q=BABYLON.Quaternion.RotationYawPitchRoll(w.yaw+sway,sway*.22,Math.cos(t*1.3+w.seed)*.035);const sy=Math.max(.05,w.growth)*w.scale;const sx=w.scale*(w.kind==='bloom'?1.15:.9);const m=BABYLON.Matrix.Compose(new V3(sx,sy,sx),q,new V3(w.x,.08,w.z));by[w.kind].push(...m.m)});
+  Object.entries(by).forEach(([kind,arr])=>{weedSources[kind].thinInstanceSetBuffer('matrix',new Float32Array(arr),16,true)});
+}
+const rootlings=[];const pickups=[];
+function clearActors(){rootlings.splice(0).forEach(e=>e.root.dispose());pickups.splice(0).forEach(p=>p.mesh.dispose())}
+function spawnRootling(){
+  if(rootlings.length>=10||game.mode!=='running')return;const a=Math.random()*TAU,r=1.4+Math.random()*1.6;const root=new BABYLON.TransformNode('rootling',scene);root.position.set(Math.sin(a)*r,1.0,Math.cos(a)*r);
+  const core=BABYLON.MeshBuilder.CreateSphere('rootlingCore',{diameter:1.15,segments:10},scene);core.material=mats.enemy;core.parent=root;shadowGen.addShadowCaster(core);
+  for(let i=0;i<5;i++){const spike=BABYLON.MeshBuilder.CreateCylinder('rootlingSpike',{height:.75,diameterTop:0,diameterBottom:.28,tessellation:5},scene);spike.material=mats.bramble;spike.parent=root;const ang=i/5*TAU;spike.position.set(Math.sin(ang)*.5,Math.cos(i*2)*.12,Math.cos(ang)*.5);spike.rotation.z=Math.PI/2;spike.rotation.y=-ang}
+  const eye=BABYLON.MeshBuilder.CreateSphere('rootlingEye',{diameter:.25,segments:8},scene);eye.material=mats.eye;eye.parent=root;eye.position.set(0,.1,.56);
+  rootlings.push({root,core,hp:1.8+game.curse*.018,speed:1.7+game.curse*.009,hitCd:0,seed:Math.random()*100,stun:0});AudioSys.rootling();
+}
+function killRootling(e){const idx=rootlings.indexOf(e);if(idx<0)return;emitCut(e.root.position,18,true);spawnPickup(e.root.position.clone(),'shard');if(Math.random()<.4)spawnPickup(e.root.position.clone().add(new V3(.3,0,.2)),'dew');e.root.dispose();rootlings.splice(idx,1);game.kills++;game.insight+=7;AudioSys.enemyDown();maybeFieldChoice()}
+function spawnPickup(pos,type){const mesh=type==='shard'?BABYLON.MeshBuilder.CreatePolyhedron('rootShard',{type:1,size:.28},scene):BABYLON.MeshBuilder.CreateSphere('dew',{diameter:.38,segments:8},scene);mesh.material=type==='shard'?mats.portalGold:mats.droneGlow;mesh.position.copyFrom(pos);mesh.position.y=.55;pickups.push({mesh,type,baseY:.55,life:18,seed:Math.random()*10})}
+function updatePickups(dt){for(let i=pickups.length-1;i>=0;i--){const p=pickups[i];p.life-=dt;p.mesh.rotation.y+=dt*2.4;p.mesh.position.y=p.baseY+Math.sin(game.time*3+p.seed)*.14;const dx=p.mesh.position.x-player.pos.x,dz=p.mesh.position.z-player.pos.z;if(dx*dx+dz*dz<1.6){if(p.type==='shard'){game.runShards++;AudioSys.pickup()}else{runStats.energy=Math.min(runStats.maxEnergy,runStats.energy+24);runStats.hp=Math.min(runStats.maxHp,runStats.hp+6);AudioSys.dew()}p.mesh.dispose();pickups.splice(i,1);continue}if(p.life<=0){p.mesh.dispose();pickups.splice(i,1)}}}
+const game={mode:'menu',time:0,curse:0,curseWarn:0,midnightShown:11,clear:0,peakClear:0,cuts:0,kills:0,runShards:0,insight:0,nextInsight:55,choiceLevel:0,spawnClock:10,portalOpen:false,seal:0,portalWindow:0,lastCutToast:0,backend:backendName};
+let runStats={};
+function deriveRunStats(){
+  const u=save.upgrades;const maxHp=100+u.armor*18,maxEnergy=100+u.cell*14;
+  return{maxHp,hp:maxHp,maxEnergy,energy:maxEnergy,shiftSeconds:155+u.armor*8+u.salt*4,damageMul:1+u.line*.18,cutRadius:1.4+u.guard*.15,speed:4.85,energyCost:22*(1-u.cell*.025),energyRegen:14+u.cell*1.1,zoneLock:20+u.salt*3,regrowBonus:u.salt*1.1,sealDuration:6.2-u.salt*.25,droneCount:u.drone?1+Math.floor((u.drone-1)/2):0,dronePower:u.drone?(.65+u.drone*.18):0,tempDrones:0,healEvery:24,echoEvery:16,lastHealCut:0,lastEchoCut:0};
+}
+function resetRun(){
+  Object.assign(game,{mode:'running',time:0,curse:0,curseWarn:0,midnightShown:11,clear:0,peakClear:0,cuts:0,kills:0,runShards:0,insight:0,nextInsight:55,choiceLevel:0,spawnClock:9,portalOpen:false,seal:0,portalWindow:0,lastCutToast:0});runStats=deriveRunStats();
+  player.pos.set(-1,.15,-24);player.yaw=0;player.root.position.copyFrom(player.pos);player.root.rotation.y=0;player.dash=0;player.dashCooldown=0;player.invuln=0;player.shake=0;lastDamageFeedback=0;targetCameraYaw=0;cameraYaw=0;targetCameraPitch=.52;cameraPitch=.52;cameraDistance=8.1;lastCameraInput=0;
+  resetWeeds(3811+(save.runs+1)*977);clearActors();syncDrones();updatePortalVisuals(0);input.cut=false;input.moveX=0;input.moveY=0;input.left=input.right=input.up=input.down=false;setCutButton(false);$('choiceOverlay').classList.remove('open');$('endOverlay').classList.remove('open');$('pauseOverlay').classList.remove('open');$('startOverlay').classList.remove('open');AudioSys.startRun();showToast(`Clear the beds and seal the Rootgate before midnight: ${Math.ceil(runStats.shiftSeconds)} seconds`);
+}
+function showToast(text,duration=2200){const el=$('toast');el.textContent=text;el.classList.add('toastShow');clearTimeout(showToast._t);showToast._t=setTimeout(()=>el.classList.remove('toastShow'),duration)}
+function computeClear(){let cut=0;zones.forEach(z=>z.clearCount=0);weeds.forEach(w=>{if(w.growth<=.025){cut++;zones[w.zone].clearCount++}});game.clear=cut/weeds.length*100;game.peakClear=Math.max(game.peakClear,game.clear);return cut}
+function updateZones(){
+  zones.forEach(z=>{
+    const all=z.clearCount===z.total;
+    if(all&&!z.wasClear){z.wasClear=true;z.lockUntil=game.time+runStats.zoneLock;AudioSys.zoneClear();showToast(`${z.name} mulched — ${Math.ceil(runStats.zoneLock)} seconds dormant`);game.insight+=10;maybeFieldChoice()}
+    if(!all&&z.wasClear&&game.time>=z.lockUntil)z.wasClear=false;
+  });
+}
+function cutWeed(w,pos){
+  w.growth=0;w.hp=0;w.cut=true;w.regrow=w.baseDelay+runStats.regrowBonus;game.cuts++;game.insight+=w.kind==='bloom'?5:w.kind==='bramble'?2:1;emitCut(pos, w.kind==='bloom'?14:7,w.kind!=='grass');AudioSys.cut(w.kind);
+  if(game.cuts-runStats.lastHealCut>=runStats.healEvery){runStats.lastHealCut=game.cuts;runStats.hp=Math.min(runStats.maxHp,runStats.hp+5);showToast('Root tonic repaired 5 armour',1100)}
+  if(game.cuts-runStats.lastEchoCut>=runStats.echoEvery){runStats.lastEchoCut=game.cuts;shockwave(pos);showToast('Echo chord!',900)}
+  if(game.cuts%34===0)spawnPickup(pos.clone(),'dew');maybeFieldChoice();
+}
+function shockwave(pos){AudioSys.echo();emitCut(pos,28,false);weeds.forEach(w=>{const d=(w.x-pos.x)**2+(w.z-pos.z)**2;if(w.growth>.025&&d<16){w.hp-=.65*runStats.damageMul;if(w.hp<=0)cutWeed(w,new V3(w.x,.2,w.z))}});rootlings.slice().forEach(e=>{const d=(e.root.position.x-pos.x)**2+(e.root.position.z-pos.z)**2;if(d<20){e.hp-=1.4;if(e.hp<=0)killRootling(e)}})}
+function processCut(dt){
+  const active=input.cut&&runStats.energy>1&&game.mode==='running';AudioSys.setCutting(active,runStats.energy/runStats.maxEnergy);setCutButton(active);
+  if(!active){runStats.energy=Math.min(runStats.maxEnergy,runStats.energy+runStats.energyRegen*dt);cutterParticles.emitRate=0;return}
+  const sealing=game.portalOpen&&(player.pos.x*player.pos.x+player.pos.z*player.pos.z<8.2);runStats.energy=Math.max(0,runStats.energy-runStats.energyCost*(sealing?.42:1)*dt);const fwd=new V3(Math.sin(player.yaw),0,Math.cos(player.yaw));const right=new V3(fwd.z,0,-fwd.x);const sweep=Math.sin(game.time*9.5)*.68;const centre=player.pos.add(fwd.scale(1.72)).add(right.scale(sweep));centre.y=.24;cutterParticles.emitter=centre;cutterParticles.emitRate=78;
+  const r=runStats.cutRadius,r2=r*r,damage=5.8*runStats.damageMul*dt;
+  weeds.forEach(w=>{if(w.growth<=.025)return;const dx=w.x-centre.x,dz=w.z-centre.z;if(dx*dx+dz*dz<=r2){w.hp-=damage*(w.growth<.45?1.3:1);w.growth=Math.max(.12,Math.min(w.growth,w.hp/w.maxHp));if(w.hp<=0)cutWeed(w,new V3(w.x,.2,w.z))}});
+  rootlings.slice().forEach(e=>{const dx=e.root.position.x-centre.x,dz=e.root.position.z-centre.z;if(dx*dx+dz*dz<(r+1)**2){e.hp-=damage*.72;e.stun=.15;if(e.hp<=0)killRootling(e)}});
+}
+function updateRegrowth(dt){
+  const curseMul=1+game.curse*.012;
+  weeds.forEach(w=>{
+    if(w.growth<=.025){const z=zones[w.zone];if(game.time<z.lockUntil)return;w.regrow-=dt;if(w.regrow<=0){w.growth=.08;w.hp=w.maxHp*.28;w.cut=false}}
+    else if(w.growth<1){w.growth=Math.min(1,w.growth+dt*(w.kind==='grass'?.115:w.kind==='bramble'?.085:.055)*curseMul);w.hp=Math.max(w.hp,w.maxHp*w.growth)}
+  });
+}
+function maybeFieldChoice(){
+  if(game.mode!=='running'||game.insight<game.nextInsight||game.choiceLevel>=4)return;game.choiceLevel++;game.nextInsight+=65+game.choiceLevel*38;openFieldChoice();
+}
+function openFieldChoice(){
+  game.mode='choice';AudioSys.setPaused(true);const pool=FIELD_UPGRADES.slice();const picks=[];while(picks.length<3&&pool.length){const idx=Math.floor(Math.random()*pool.length);picks.push(pool.splice(idx,1)[0])}const grid=$('choiceGrid');grid.innerHTML='';picks.forEach(u=>{const b=document.createElement('button');b.className='choiceCard';b.innerHTML=`<div class="choiceIcon">${u.icon}</div><div class="choiceName">${u.name}</div><div class="choiceDesc">${u.desc}</div>`;b.addEventListener('click',()=>{u.apply(runStats);syncDrones();$('choiceOverlay').classList.remove('open');game.mode='running';AudioSys.setPaused(false);AudioSys.upgrade();showToast(`${u.name} fitted`) });grid.appendChild(b)});$('choiceOverlay').classList.add('open');
+}
+function updatePortalState(dt){
+  const allClear=game.clear>=99.999;
+  if(allClear&&!game.portalOpen){game.portalOpen=true;game.portalWindow=10;game.seal=0;AudioSys.portalOpen();showToast('100% clear — Rootgate exposed!',3000)}
+  if(game.portalOpen){game.portalWindow-=dt;const dx=player.pos.x,dz=player.pos.z;const inside=dx*dx+dz*dz<8.2;const active=input.cut&&runStats.energy>1&&inside&&allClear;if(active){game.seal+=dt}else game.seal=Math.max(0,game.seal-dt*.18);
+    if(!allClear||game.portalWindow<=0){game.portalOpen=false;game.seal=Math.max(0,game.seal-1.2);showToast('A weed woke — the Rootgate shield returned')}
+    if(game.seal>=runStats.sealDuration){endRun(true,'The Rootgate folded shut beneath a perfect garden.')}
+  }
+}
+function updatePortalVisuals(dt){
+  const open=game.portalOpen;portal.pulse=Math.max(0,portal.pulse-dt*2.5);portal.root.rotation.y+=dt*(open?1.2:.35);portal.knot.rotation.z+=dt*(open?1.8:.6);const beat=AudioSys.visualBeat||0;const pulse=1+Math.sin(game.time*3.2)*.035+beat*.06;portal.torus.scaling.set(pulse,open?.72:.22,pulse);portal.inner.scaling.y=.25;portal.beam.scaling.x=portal.beam.scaling.z=open?.7:1;portal.beam.scaling.y=open?.35:1;portal.beam.visibility=open?.1:.42;portal.torus.material=open?mats.portalGold:mats.portal;portal.inner.material=open?mats.portalGold:mats.portal;portal.knot.material=open?mats.portalGold:mats.portal;portal.beamMat.emissiveColor=open?hex3('#ffd36b'):hex3('#c859ff');portalLight.diffuse=open?hex3('#ffd36b'):hex3('#bc58ff');portalLight.intensity=(open?5.2:3.5)+beat*2;portal.particles.color1=open?new BABYLON.Color4(1,.72,.2,.9):new BABYLON.Color4(.65,.18,1,.8);portal.particles.emitRate=open?160:90;
+}
+let lastDamageFeedback=0;
+function damagePlayer(amount,source='The curse',options={}){
+  if(game.mode!=='running')return;
+  const continuous=!!options.continuous;
+  if(!continuous&&player.invuln>0)return;
+  const hit=Math.max(0,Number(amount)||0);
+  if(hit<=0)return;
+  runStats.hp=Math.max(0,runStats.hp-hit);
+  if(!continuous)player.invuln=options.invuln??.45;
+  const now=performance.now();
+  const feedbackGap=continuous?(options.feedbackGap||260):80;
+  if(now-lastDamageFeedback>feedbackGap){
+    lastDamageFeedback=now;
+    player.shake=Math.min(1,player.shake+(options.shake??(continuous ? .22 : .5)));
+    $('damageFlash').classList.add('damageOn');
+    setTimeout(()=>$('damageFlash').classList.remove('damageOn'),continuous?70:110);
+    AudioSys.damage();
+    if(navigator.vibrate)navigator.vibrate(continuous?18:40);
+  }
+  if(runStats.hp<=0){
+    runStats.hp=0;
+    endRun(false,`${source} broke through your armour.`);
+  }
+}
+function updateRootlings(dt){
+  game.spawnClock-=dt;if(game.spawnClock<=0){spawnRootling();game.spawnClock=clamp(12-game.curse*.075,4.2,12)}
+  rootlings.forEach(e=>{e.hitCd=Math.max(0,e.hitCd-dt);e.stun=Math.max(0,e.stun-dt);const dx=player.pos.x-e.root.position.x,dz=player.pos.z-e.root.position.z;const dist=Math.hypot(dx,dz)||1;if(e.stun<=0){e.root.position.x+=dx/dist*e.speed*dt;e.root.position.z+=dz/dist*e.speed*dt}e.root.position.y=.9+Math.sin(game.time*4+e.seed)*.18;e.root.rotation.y=Math.atan2(dx,dz);e.root.rotation.z=Math.sin(game.time*3+e.seed)*.12;if(dist<1.15&&e.hitCd<=0){damagePlayer(16+game.curse*.08,'A rootling',{invuln:.55,shake:.7});e.hitCd=1.05;e.stun=.25}});
+}
+function updateDrones(dt){
+  const active=drones.filter(d=>d.root.isEnabled());active.forEach((d,i)=>{const a=game.time*(1.4+i*.12)+i/Math.max(1,active.length)*TAU;const radius=2.1+(i%2)*.5;d.root.position.set(player.pos.x+Math.sin(a)*radius,2.5+Math.sin(a*2)*.18,player.pos.z+Math.cos(a)*radius);d.root.rotation.y=a+Math.PI;d.rotor.rotation.y+=dt*18;d.attackClock-=dt;if(d.attackClock<=0){let best=null,bd=36;weeds.forEach(w=>{if(w.growth<=.025)return;const dd=(w.x-d.root.position.x)**2+(w.z-d.root.position.z)**2;if(dd<bd){bd=dd;best=w}});if(best){best.hp-=runStats.dronePower;if(best.hp<=0)cutWeed(best,new V3(best.x,.2,best.z));else emitCut(new V3(best.x,.4,best.z),2,best.kind!=='grass');d.attackClock=.32;AudioSys.drone()}else d.attackClock=.5}})
+}
+const input={moveX:0,moveY:0,cut:false,left:false,right:false,up:false,down:false};
+let targetCameraYaw=0,targetCameraPitch=.52,cameraYaw=0,cameraPitch=.52,cameraDistance=8.1,lastCameraInput=0;
+function doDodge(){if(game.mode!=='running'||player.dashCooldown>0)return;player.dash=.28;player.dashCooldown=2.2;player.invuln=.38;AudioSys.dodge();if(navigator.vibrate)navigator.vibrate(18)}
+function updatePlayer(dt){
+  player.dash=Math.max(0,player.dash-dt);player.dashCooldown=Math.max(0,player.dashCooldown-dt);player.invuln=Math.max(0,player.invuln-dt);
+  const mx=clamp(input.moveX+(input.right?1:0)-(input.left?1:0),-1,1),my=clamp(input.moveY+(input.up?1:0)-(input.down?1:0),-1,1);const len=Math.hypot(mx,my);let move=new V3(0,0,0);
+  if(len>.08){const nx=mx/Math.max(1,len),ny=my/Math.max(1,len);const f=new V3(Math.sin(cameraYaw),0,Math.cos(cameraYaw)),r=new V3(f.z,0,-f.x);move=f.scale(ny).add(r.scale(nx));const targetYaw=Math.atan2(move.x,move.z);player.yaw=dampAngle(player.yaw,targetYaw,.0008,dt);player.moveAmount=damp(player.moveAmount,1,.015,dt)}else player.moveAmount=damp(player.moveAmount,0,.02,dt);
+  const speed=runStats.speed*(player.dash>0?2.25:1);player.pos.addInPlace(move.scale(speed*dt));player.pos.x=clamp(player.pos.x,-26.5,26.5);player.pos.z=clamp(player.pos.z,-26.5,26.5);player.root.position.x=damp(player.root.position.x,player.pos.x,.0001,dt);player.root.position.z=damp(player.root.position.z,player.pos.z,.0001,dt);player.root.position.y=.15+Math.sin(game.time*9)*.035*player.moveAmount;player.root.rotation.y=player.yaw;
+  const walk=Math.sin(game.time*10)*.55*player.moveAmount;player.leftLeg.rotation.x=walk;player.rightLeg.rotation.x=-walk;player.leftArm.rotation.x=-walk*.45;player.rightArm.rotation.x=walk*.3;player.body.rotation.z=damp(player.body.rotation.z,-mx*.08,.04,dt);player.weapon.rotation.y=Math.sin(game.time*9.5)*.32*(input.cut?1:.15);player.headRoot.rotation.y+=dt*(input.cut?34:4);player.line.rotation.y+=dt*(input.cut?55:4);
+  if(save.settings.cameraAssist&&performance.now()-lastCameraInput>1700&&len>.1)targetCameraYaw=dampAngle(targetCameraYaw,player.yaw,.06,dt);
+  helmetLight.position.set(player.pos.x,2.8,player.pos.z);helmetLight.direction.set(Math.sin(player.yaw),-.16,Math.cos(player.yaw));
+}
+function isPlayerMesh(mesh){
+  let n=mesh;
+  while(n){if(n===player.root||n===player.body||n===player.weapon||n===player.headRoot)return true;n=n.parent}
+  return false;
+}
+function isCameraOccluder(mesh){
+  if(!mesh||!mesh.isEnabled()||mesh.visibility===0)return false;
+  if(isPlayerMesh(mesh))return false;
+  const name=(mesh.name||'').toLowerCase();
+  if(name.includes('sky')||name.includes('soilbed')||name.includes('bedframe')||name.includes('portalbeam')||name.includes('portaldisc')||name.includes('portalknot')||name.includes('line')||name.includes('drone')||name.includes('weedsource'))return false;
+  return true;
+}
+function updateCamera(dt){
+  cameraYaw=dampAngle(cameraYaw,targetCameraYaw,.00055,dt);cameraPitch=damp(cameraPitch,targetCameraPitch,.00055,dt);
+  const target=new V3(player.pos.x,1.75,player.pos.z);const f=new V3(Math.sin(cameraYaw),0,Math.cos(cameraYaw));const horiz=Math.cos(cameraPitch)*cameraDistance;let desired=target.subtract(f.scale(horiz));desired.y=target.y+Math.sin(cameraPitch)*cameraDistance+1.45;
+  const toDesired=desired.subtract(target);const dist=toDesired.length();
+  if(dist>.001){
+    const dir=toDesired.scale(1/dist);const ray=new BABYLON.Ray(target,dir,dist);const hit=scene.pickWithRay(ray,m=>isCameraOccluder(m),true);
+    if(hit&&hit.hit&&hit.pickedPoint){
+      const safe=Math.max(2.35,hit.distance-.55);desired=target.add(dir.scale(safe));
+    }
+  }
+  const shake=player.shake;player.shake=Math.max(0,player.shake-dt*2.5);if(shake>0){desired.x+=(Math.random()-.5)*shake*.35;desired.y+=(Math.random()-.5)*shake*.2;desired.z+=(Math.random()-.5)*shake*.35}
+  camera.position.x=damp(camera.position.x,desired.x,.0004,dt);camera.position.y=damp(camera.position.y,desired.y,.0004,dt);camera.position.z=damp(camera.position.z,desired.z,.0004,dt);camera.setTarget(target);
+}
+function updateGame(dt){
+  if(game.mode!=='running')return;game.time+=dt;game.curse=clamp(game.time/(runStats.shiftSeconds||155)*100,0,100);
+  if(game.curse>=100){endRun(false,'Midnight struck before the Rootgate was sealed. The garden reset around you.');return}
+  if(game.curse>=90&&game.curseWarn<2){game.curseWarn=2;showToast('MIDNIGHT IMMINENT — seal the Rootgate now!',2600)}
+  else if(game.curse>=75&&game.curseWarn<1){game.curseWarn=1;showToast('Curse pressure critical — less than a quarter shift remains',2400)}
+  updatePlayer(dt);processCut(dt);updateRegrowth(dt);const cut=computeClear();updateZones();updatePortalState(dt);updateRootlings(dt);updateDrones(dt);updatePickups(dt);
+  if(!game.portalOpen){const d=Math.hypot(player.pos.x,player.pos.z);if(d<2.4)damagePlayer(24*dt,'The shielded Rootgate',{continuous:true,feedbackGap:220,shake:.28})}
+  weedVisualClock-=dt;if(weedVisualClock<=0){weedVisualClock=save.settings.quality==='performance'?.16:save.settings.quality==='balanced'?.1:.065;updateWeedVisuals()}
+}
+function unlockNotes(win){
+  const before=new Set(save.notes);if(save.runs>=1)before.add(0);if(save.bestClear>=35)before.add(1);if(save.runs>=3)before.add(2);if(save.bestClear>=70)before.add(3);if(save.upgrades.drone>0)before.add(4);if(win)before.add(5);const added=[...before].filter(n=>!save.notes.includes(n));save.notes=[...before].sort();return added[0]??null;
+}
+function endRun(win,reason){
+  if(game.mode==='ended')return;game.mode='ended';input.cut=false;setCutButton(false);AudioSys.endRun(win);const reward=Math.floor(4+game.peakClear/8+game.kills*.65+game.runShards+(win?25:0));save.shards+=reward;save.runs++;if(win){save.wins++;if(save.bestTime===null||game.time<save.bestTime)save.bestTime=game.time}save.bestClear=Math.max(save.bestClear,game.peakClear);const note=unlockNotes(win);persist();
+  $('endTitle').textContent=win?'ROOTGATE CLOSED':'SHIFT LOST';$('endTitle').className='endTitle '+(win?'win':'fail');$('endReason').textContent=reason;$('endClear').textContent=`${Math.floor(game.peakClear)}%`;$('endCuts').textContent=game.cuts;$('endReward').textContent=`+${reward}`;$('endTime').textContent=fmtTime(game.time);$('endKills').textContent=game.kills;$('endRuns').textContent=save.runs;
+  $('fieldNote').innerHTML=note!==null?`<strong>New field note recovered:</strong><br>${NOTE_TEXTS[note]}`:`<strong>Groundskeeper’s observation:</strong><br>${win?'The silence after the final chord is real. For tonight, the garden is only a garden.':'The curse kept what it learned. Your workshop upgrades will not be lost.'}`;
+  const cd=$('midnightCountdown');if(cd)cd.classList.remove('midnightShow');$('endOverlay').classList.add('open');renderWorkshop();
+}
+function updateHud(){
+  const secondsLeft=Math.max(0,Math.ceil((runStats.shiftSeconds||155)-game.time));
+  const clearBeds=zones.filter(z=>z.total&&z.clearCount/z.total>=.98).length;
+  $('clearText').textContent=`${Math.floor(game.clear)}%`;$('clearFill').style.width=`${game.clear}%`;$('armorText').textContent=`${Math.ceil(runStats.hp||0)} / ${Math.ceil(runStats.maxHp||0)}`;$('armorFill').style.width=`${runStats.maxHp?runStats.hp/runStats.maxHp*100:0}%`;$('energyText').textContent=`${Math.ceil(runStats.energy||0)} / ${Math.ceil(runStats.maxEnergy||0)}`;$('energyFill').style.width=`${runStats.maxEnergy?runStats.energy/runStats.maxEnergy*100:0}%`;$('curseText').textContent=`${Math.floor(game.curse)}% / ${secondsLeft}s`;$('curseFill').style.width=`${game.curse}%`;$('timeText').textContent=fmtTime(game.time);$('cutText').textContent=game.cuts;$('killText').textContent=game.kills;$('runShardText').textContent=game.runShards;
+  $('objectiveText').textContent=(runStats.hp<=20?'ARMOUR CRITICAL — escape or cut fast':secondsLeft<=10?'MIDNIGHT COUNTDOWN — finish now':game.curse>=90?'MIDNIGHT! Seal or fail':game.portalOpen?'Seal the exposed Rootgate':game.clear>80?'Finish every regrowing patch':'Clear every cursed bed');$('sealPrompt').classList.toggle('sealShow',game.portalOpen);$('sealFill').style.width=`${clamp(game.seal/(runStats.sealDuration||6)*100,0,100)}%`;
+  const bedStatus=$('bedStatus');if(bedStatus)bedStatus.textContent=game.portalOpen?'All beds clear — Rootgate exposed':`Beds clear now: ${clearBeds} / ${zones.length}`;
+  const countdown=$('midnightCountdown'),countText=$('midnightCountText');if(countdown&&countText){const show=game.mode==='running'&&secondsLeft<=10&&secondsLeft>0;countText.textContent=secondsLeft;countdown.classList.toggle('midnightShow',show)}
+  $('dodgeBtn').classList.toggle('cooling',player.dashCooldown>0);$('dodgeBtn').textContent=player.dashCooldown>0?player.dashCooldown.toFixed(1):'DODGE';
+}
+function updatePortalAndLights(dt){updatePortalVisuals(dt);AudioSys.visualBeat=Math.max(0,AudioSys.visualBeat-dt*3.8);lampLights.forEach((l,i)=>l.light.intensity=1.14+Math.sin(game.time*4.1+l.seed)*.1);if(glow)glow.intensity=.52+(game.portalOpen?.12:.05)+(AudioSys.visualBeat||0)*.06;portalLight.range=game.portalOpen?26:24;hemi.intensity=.56+Math.sin(game.time*.35)*.02}
+function renderZonePips(){/* v1.7: replaced tiny zone bars with a clear text readout. */}
+renderZonePips();
+const AudioSys={ctx:null,master:null,music:null,sfx:null,cutGain:null,portalGain:null,cutOsc:[],next:0,step:0,timer:null,noise:null,muted:false,paused:false,visualBeat:0,lastCut:0,
+  ensure(){if(this.ctx)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;this.ctx=new C();this.master=this.ctx.createGain();this.music=this.ctx.createGain();this.sfx=this.ctx.createGain();this.master.gain.value=1;this.music.gain.value=.26;this.sfx.gain.value=.62;this.music.connect(this.master);this.sfx.connect(this.master);this.master.connect(this.ctx.destination);
+    const len=this.ctx.sampleRate*1.5;this.noise=this.ctx.createBuffer(1,len,this.ctx.sampleRate);const d=this.noise.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+    const filter=this.ctx.createBiquadFilter();filter.type='bandpass';filter.frequency.value=680;filter.Q.value=1.4;this.cutGain=this.ctx.createGain();this.cutGain.gain.value=.0001;[0,1].forEach(i=>{const o=this.ctx.createOscillator();o.type=i?'square':'sawtooth';o.frequency.value=i?128:72;o.connect(filter);o.start();this.cutOsc.push(o)});filter.connect(this.cutGain);this.cutGain.connect(this.sfx);
+    const po=this.ctx.createOscillator(),pf=this.ctx.createBiquadFilter();po.type='sine';po.frequency.value=42;pf.type='lowpass';pf.frequency.value=170;this.portalGain=this.ctx.createGain();this.portalGain.gain.value=.06;po.connect(pf);pf.connect(this.portalGain);this.portalGain.connect(this.sfx);po.start();
+    this.next=this.ctx.currentTime+.08;this.timer=setInterval(()=>this.schedule(),25);this.applySettings();
+  },
+  applySettings(){if(!this.ctx)return;const now=this.ctx.currentTime;this.music.gain.setTargetAtTime(save.settings.music&&!this.muted&&!this.paused?.29:.0001,now,.04);this.sfx.gain.setTargetAtTime(save.settings.sfx&&!this.muted?.68:.0001,now,.04)},
+  setPaused(v){this.paused=v;this.applySettings()},
+  toggle(){this.ensure();this.muted=!this.muted;this.applySettings();$('audioBtn').textContent=this.muted?'🔇':'🔊'},
+  startRun(){this.ensure();if(!this.ctx)return;if(this.ctx.state==='suspended')this.ctx.resume();this.step=0;this.next=this.ctx.currentTime+.08;this.paused=false;this.applySettings();this.ui()},endRun(win){this.setCutting(false,1);this.setPaused(true);win?this.chime([72,76,79,84]):this.chime([55,52,48])},
+  tone(freq,t,dur=.12,type='sine',gain=.08,dest=null,filterFreq=0){if(!this.ctx||this.muted)return;const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(Math.max(.0001,gain),t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);let node=o;if(filterFreq){const f=this.ctx.createBiquadFilter();f.type='lowpass';f.frequency.value=filterFreq;o.connect(f);node=f}node.connect(g);g.connect(dest||this.sfx);o.start(t);o.stop(t+dur+.03)},
+  noiseHit(t,dur=.06,gain=.05,hp=1000,dest=null){if(!this.ctx||this.muted)return;const s=this.ctx.createBufferSource(),f=this.ctx.createBiquadFilter(),g=this.ctx.createGain();s.buffer=this.noise;f.type='highpass';f.frequency.value=hp;g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(f);f.connect(g);g.connect(dest||this.sfx);s.start(t,Math.random());s.stop(t+dur)},
+  schedule(){if(!this.ctx||this.paused||game.mode!=='running'||!save.settings.music||this.muted)return;const bpm=104+game.curse*.18,stepDur=60/bpm/4;while(this.next<this.ctx.currentTime+.18){const s=this.step%16,bar=Math.floor(this.step/16),t=this.next,intensity=.35+game.clear*.004+game.curse*.003;const prog=[0,5,3,6],scale=[0,2,3,5,7,8,10],root=50,degree=prog[bar%4],pc=scale[degree];if(s===0||s===8)this.kick(t,s===0?1:0.8);if(s===4||s===12)this.snare(t);if(s%2===0)this.hat(t,s===14,.45+intensity*.35);if(game.curse>40&&s%2===1)this.hat(t,false,.18);if([0,6,8,14].includes(s))this.tone(440*Math.pow(2,(root+pc-24-69)/12),t,stepDur*1.6,'sawtooth',.055+intensity*.02,this.music,420);if(s===0){[0,3,7].forEach((iv,i)=>this.tone(440*Math.pow(2,(root+pc+12+iv-69)/12),t+i*.012,stepDur*5.4,'triangle',.028,this.music,1800))}if(game.clear>35&&[2,5,10,13].includes(s)){const hook=[0,3,7,10,7,5,3,2],n=root+24+hook[(bar*4+Math.floor(s/3))%hook.length];this.tone(440*Math.pow(2,(n-69)/12),t,stepDur*1.8,'square',.024+intensity*.012,this.music,2500)}if(s%4===0){this.visualBeat=1}this.next+=stepDur;this.step++}},
+  kick(t,p=1){if(!this.ctx)return;const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type='sine';o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(42,t+.13);g.gain.setValueAtTime(.23*p,t);g.gain.exponentialRampToValueAtTime(.0001,t+.17);o.connect(g);g.connect(this.music);o.start(t);o.stop(t+.18)},snare(t){this.noiseHit(t,.11,.11,1400,this.music)},hat(t,open=false,p=.5){this.noiseHit(t,open?.12:.035,(open?.05:.032)*p,open?3600:5200,this.music)},
+  setCutting(v,energy=1){if(!this.ctx||!this.cutGain)return;const t=this.ctx.currentTime;this.cutGain.gain.setTargetAtTime(v&&save.settings.sfx&&!this.muted?.12:.0001,t,.025);this.cutOsc[0].frequency.setTargetAtTime(76+energy*22,t,.03);this.cutOsc[1].frequency.setTargetAtTime(132+energy*35,t,.03);if(this.portalGain)this.portalGain.gain.setTargetAtTime(game.portalOpen?.025:.055,t,.08)},
+  cut(kind){if(!this.ctx||performance.now()-this.lastCut<55)return;this.lastCut=performance.now();const t=this.ctx.currentTime;this.noiseHit(t,kind==='grass'?.045:.075,kind==='grass'?.035:.06,kind==='grass'?1600:850);this.tone(kind==='bloom'?220:kind==='bramble'?160:115,t,.055,'triangle',.025)},zoneClear(){this.chime([60,67,72])},portalOpen(){this.chime([48,55,60,67,72]);this.visualBeat=1},damage(){if(!this.ctx)return;this.noiseHit(this.ctx.currentTime,.16,.14,260);this.tone(68,this.ctx.currentTime,.18,'sawtooth',.1)},pickup(){this.chime([76,83])},dew(){this.chime([72,79,84])},upgrade(){this.chime([65,69,72,77])},ui(){if(this.ctx)this.tone(640,this.ctx.currentTime,.04,'sine',.035)},dodge(){if(this.ctx)this.noiseHit(this.ctx.currentTime,.12,.08,700)},rootling(){if(this.ctx)this.tone(92,this.ctx.currentTime,.28,'sawtooth',.07)},enemyDown(){this.chime([57,64,69])},drone(){if(this.ctx)this.tone(980,this.ctx.currentTime,.025,'square',.012)},echo(){this.chime([52,59,64,71])},
+  chime(notes){this.ensure();if(!this.ctx)return;notes.forEach((n,i)=>this.tone(440*Math.pow(2,(n-69)/12),this.ctx.currentTime+i*.07,.22,'sine',.055))}
+};
+function setCutButton(v){$('cutBtn').classList.toggle('active',v)}
+function openMenu(){game.mode='menu';AudioSys.setPaused(true);$('startOverlay').classList.add('open');$('endOverlay').classList.remove('open');$('pauseOverlay').classList.remove('open');renderWorkshop()}
+function togglePause(){if(game.mode==='running'){game.mode='paused';AudioSys.setPaused(true);$('pauseOverlay').classList.add('open')}else if(game.mode==='paused'){game.mode='running';AudioSys.setPaused(false);$('pauseOverlay').classList.remove('open')}}
+$('startBtn').addEventListener('click',()=>{AudioSys.ensure();resetRun()});$('retryBtn').addEventListener('click',()=>resetRun());$('workshopBtn').addEventListener('click',openMenu);$('pauseBtn').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();togglePause()},{passive:false});$('resumeBtn').addEventListener('click',togglePause);$('quitBtn').addEventListener('click',()=>endRun(false,'You abandoned the shift before the garden was safe.'));$('audioBtn').addEventListener('click',()=>AudioSys.toggle());$('dodgeBtn').addEventListener('pointerdown',e=>{e.preventDefault();doDodge()});
+$('qualitySelect').addEventListener('change',e=>{save.settings.quality=e.target.value;persist();applyQuality();showToast('Graphics setting applied')});$('musicToggle').addEventListener('change',e=>{save.settings.music=e.target.checked;persist();AudioSys.applySettings()});$('sfxToggle').addEventListener('change',e=>{save.settings.sfx=e.target.checked;persist();AudioSys.applySettings()});$('cameraAssistToggle').addEventListener('change',e=>{save.settings.cameraAssist=e.target.checked;persist()});
+const cutBtn=$('cutBtn');cutBtn.addEventListener('pointerdown',e=>{e.preventDefault();input.cut=true;cutBtn.setPointerCapture?.(e.pointerId)});['pointerup','pointercancel','pointerleave'].forEach(ev=>cutBtn.addEventListener(ev,e=>{input.cut=false;setCutButton(false)}));
+const joy=$('joystick'),knob=$('joyKnob');let joyId=null;
+function updateJoy(e){const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;const max=r.width*.31,l=Math.hypot(dx,dy)||1;if(l>max){dx=dx/l*max;dy=dy/l*max}knob.style.transform=`translate(${dx}px,${dy}px)`;input.moveX=dx/max;input.moveY=-dy/max}
+joy.addEventListener('pointerdown',e=>{e.preventDefault();joyId=e.pointerId;joy.setPointerCapture?.(e.pointerId);updateJoy(e)});joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId)updateJoy(e)});function endJoy(e){if(e.pointerId!==joyId)return;joyId=null;input.moveX=input.moveY=0;knob.style.transform='translate(0,0)'}joy.addEventListener('pointerup',endJoy);joy.addEventListener('pointercancel',endJoy);
+const keyMap={KeyW:'up',ArrowUp:'up',KeyS:'down',ArrowDown:'down',KeyA:'left',ArrowLeft:'left',KeyD:'right',ArrowRight:'right'};
+window.addEventListener('keydown',e=>{if(keyMap[e.code]){input[keyMap[e.code]]=true;e.preventDefault()}if(e.code==='Space'){input.cut=true;e.preventDefault()}if(e.code==='ShiftLeft'||e.code==='ShiftRight'){doDodge();e.preventDefault()}if(e.code==='Escape')togglePause()},{passive:false});window.addEventListener('keyup',e=>{if(keyMap[e.code]){input[keyMap[e.code]]=false;e.preventDefault()}if(e.code==='Space'){input.cut=false;e.preventDefault()}},{passive:false});
+let camPointer=null,camLastX=0,camLastY=0;
+function beginCameraDrag(e){if(game.mode!=='running')return;camPointer=e.pointerId;camLastX=e.clientX;camLastY=e.clientY;e.currentTarget?.setPointerCapture?.(e.pointerId);cameraZone?.classList.add('active','used');lastCameraInput=performance.now();e.preventDefault()}
+function moveCameraDrag(e){if(e.pointerId!==camPointer)return;const dx=e.clientX-camLastX,dy=e.clientY-camLastY;camLastX=e.clientX;camLastY=e.clientY;/* Horizontal drag already feels correct; vertical drag is intentionally natural-touch (drag down looks down, drag up looks up). */ targetCameraYaw+=dx*.0048;targetCameraPitch=clamp(targetCameraPitch+dy*.0032,.24,.74);lastCameraInput=performance.now();e.preventDefault()}
+function endCameraDrag(e){if(e.pointerId===camPointer){camPointer=null;cameraZone?.classList.remove('active')}}
+if(cameraZone){cameraZone.addEventListener('pointerdown',beginCameraDrag,{passive:false});cameraZone.addEventListener('pointermove',moveCameraDrag,{passive:false});cameraZone.addEventListener('pointerup',endCameraDrag);cameraZone.addEventListener('pointercancel',endCameraDrag);cameraZone.addEventListener('contextmenu',e=>e.preventDefault())}
+canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button===0&&game.mode==='running'){input.cut=true;return}if(e.pointerType==='mouse'&&e.button===2)beginCameraDrag(e)});
+canvas.addEventListener('pointermove',moveCameraDrag,{passive:false});
+canvas.addEventListener('pointerup',e=>{if(e.pointerType==='mouse'&&e.button===0)input.cut=false;endCameraDrag(e)});canvas.addEventListener('pointercancel',e=>{endCameraDrag(e);input.cut=false});canvas.addEventListener('contextmenu',e=>e.preventDefault());
+let last=performance.now(),hudClock=0;
+engine.runRenderLoop(()=>{const now=performance.now();let dt=Math.min(.033,(now-last)/1000);last=now;if(game.mode==='running')updateGame(dt);updateCamera(dt);updatePortalAndLights(dt);hudClock-=dt;if(hudClock<=0){hudClock=.08;updateHud()}scene.render()});
+window.addEventListener('resize',()=>engine.resize());document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.mode==='running')togglePause()});
+renderWorkshop();runStats=deriveRunStats();resetWeeds(3811);updateHud();loading.classList.add('hidden');showToast(`${backendName} ready`);
+})();
+</script>
+</body>
+</html>
