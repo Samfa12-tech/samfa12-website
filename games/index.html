@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Games | Samfa12</title>
-    <meta
-      name="description"
-      content="Browse Samfa12 indie games, playable releases, prototypes, Android games, Steam entries, and itch.io builds."
-    />
+    <meta name="description" content="Browse Samfa12 indie games, playable releases, prototypes, Android games, Steam entries, and itch.io builds." />
     <meta name="theme-color" content="#050714" />
     <meta property="og:title" content="Games | Samfa12" />
     <meta property="og:description" content="A catalogue of Samfa12 games, from published releases to playable prototypes." />
@@ -19,19 +16,17 @@
     <link rel="icon" type="image/png" href="/assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/styles.css?v=20260621-2" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css?v=20260626-static-games" />
     <style>
-      #project-grid[data-static-games-fallback] .project-card {
+      #project-grid .project-card {
         opacity: 1 !important;
         transform: none !important;
+        visibility: visible !important;
       }
     </style>
   </head>
-  <body data-page="catalogue" data-category="Games">
+  <body data-page="games-static" data-category="Games">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header" data-site-header>
       <div class="container header-inner">
@@ -54,7 +49,7 @@
             <li><a href="/music/">Music</a></li>
             <li><a href="/links/">Links</a></li>
           </ul>
-          <button class="surprise-button" type="button" data-surprise disabled>Surprise me</button>
+          <button class="surprise-button" type="button" disabled>Surprise me</button>
         </nav>
       </div>
     </header>
@@ -69,80 +64,139 @@
       </section>
       <section class="section section-tight">
         <div class="container">
-          <p id="data-status" class="status" role="status" aria-live="polite" hidden></p>
-          <div id="project-grid" class="catalogue-grid" aria-live="polite" data-static-games-fallback="true">
+          <div id="project-grid" class="catalogue-grid">
             <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
-              <div class="project-media">
-                <img class="project-image" src="/assets/thumbnails/dust-on-the-river-b9a9e3.png" alt="Cover image for Dust on the River" loading="lazy" decoding="async" width="960" height="540" />
-              </div>
-              <p class="project-label">Game</p>
-              <h3>Dust on the River</h3>
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/dust-on-the-river-b9a9e3.png" alt="Cover image for Dust on the River" loading="eager" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Dust on the River</h3>
               <p class="card-description">A story-driven bushranger adventure about whether a violent past can ever really stay buried.</p>
               <p class="project-meta"><span class="pill status-published">Published</span></p>
-              <div class="project-actions" aria-label="Dust on the River links">
-                <a class="project-link project-link-primary" href="https://samfa12.itch.io/dust-on-the-river" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
-              </div>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/dust-on-the-river" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
             </article>
             <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
-              <div class="project-media">
-                <img class="project-image" src="/assets/thumbnails/bug-swarm-experiment.png" alt="Key art for Bug Swarm" loading="lazy" decoding="async" width="960" height="540" />
-              </div>
-              <p class="project-label">Browser game</p>
-              <h3>Bug Swarm</h3>
-              <p class="card-description">A browser-hosted swarm defense experiment with fast bug floods, kid-made towers, upgrades, and touch-first play.</p>
-              <p class="project-meta"><span class="pill status-experimental">Experimental</span></p>
-              <div class="project-actions" aria-label="Bug Swarm links">
-                <a class="project-link project-link-primary project-play-link" href="/games/bug-swarm/" data-fullscreen-game="/games/bug-swarm/" data-project-title="Bug Swarm">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
-              </div>
-            </article>
-            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
-              <div class="project-media">
-                <img class="project-image" src="/assets/thumbnails/drink-2ad44b.png" alt="Cover image for Drink" loading="lazy" decoding="async" width="960" height="540" />
-              </div>
-              <p class="project-label">Game</p>
-              <h3>Drink</h3>
-              <p class="card-description">A Samfa12 game release available on Steam and Google Play.</p>
-              <p class="project-meta"><span class="pill status-published">Published</span></p>
-              <div class="project-actions" aria-label="Drink links">
-                <a class="project-link project-link-primary" href="https://samfa12.itch.io/drink" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
-                <a class="project-link" href="https://store.steampowered.com/app/4419290/Drink/" target="_blank" rel="noopener noreferrer">Steam <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
-              </div>
-            </article>
-            <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
-              <div class="project-media">
-                <img class="project-image" src="/assets/thumbnails/cursed-cutter-icon.png" alt="Icon for Cursed Cutter" loading="lazy" decoding="async" width="960" height="540" />
-              </div>
-              <p class="project-label">Browser game</p>
-              <h3>Cursed Cutter</h3>
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/cursed-cutter-icon.png" alt="Icon for Cursed Cutter" loading="eager" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Browser game</p><h3>Cursed Cutter</h3>
               <p class="card-description">A semi rogue-lite browser action game built in Babylon.js. Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.</p>
               <p class="project-meta"><span class="pill status-available">Playable</span></p>
-              <div class="project-actions" aria-label="Cursed Cutter links">
-                <a class="project-link project-link-primary project-play-link" href="/games/cursed-cutter/" data-fullscreen-game="/games/cursed-cutter/" data-project-title="Cursed Cutter">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
-              </div>
+              <div class="project-actions"><a class="project-link project-link-primary" href="/games/cursed-cutter/">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
             </article>
             <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
-              <div class="project-media">
-                <img class="project-image" src="/assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg" alt="Cover image for Night Shift at Possum's Cafe" loading="lazy" decoding="async" width="960" height="540" />
-              </div>
-              <p class="project-label">Game</p>
-              <h3>Night Shift at Possum's Cafe</h3>
-              <p class="card-description">A night-shift simulation of café operations in a stylized, humorous setting with service pacing, atmosphere, and progression.</p>
-              <p class="project-meta"><span class="pill status-coming-soon">Coming soon to Google Play</span></p>
-              <div class="project-actions" aria-label="Night Shift at Possum's Cafe links">
-                <a class="project-link project-link-primary" href="https://samfa12.itch.io/possum-cafe" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
-              </div>
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/drink-2ad44b.png" alt="Cover image for Drink" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Drink</h3>
+              <p class="card-description">A Samfa12 game release available on Steam and Google Play.</p>
+              <p class="project-meta"><span class="pill status-published">Published</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/drink" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a><a class="project-link" href="https://store.steampowered.com/app/4419290/Drink/" target="_blank" rel="noopener noreferrer">Steam <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
             </article>
             <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
-              <div class="project-media">
-                <img class="project-image" src="/assets/thumbnails/bug-maze-td-078911.png" alt="Cover image for Bug Maze TD" loading="lazy" decoding="async" width="960" height="540" />
-              </div>
-              <p class="project-label">Game</p>
-              <h3>Bug Maze TD</h3>
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/bug-swarm-experiment.png" alt="Key art for Bug Swarm" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Browser game</p><h3>Bug Swarm</h3>
+              <p class="card-description">A browser-hosted swarm defense experiment with fast bug floods, kid-made towers, upgrades, and touch-first play.</p>
+              <p class="project-meta"><span class="pill status-experimental">Experimental</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="/games/bug-swarm/">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg" alt="Cover image for Night Shift at Possum's Cafe" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Night Shift at Possum's Cafe</h3>
+              <p class="card-description">A night-shift simulation of café operations in a stylized, humorous setting with service pacing, atmosphere, and progression.</p>
+              <p class="project-meta"><span class="pill status-coming-soon">Coming soon to Google Play</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/possum-cafe" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/bug-maze-td-078911.png" alt="Cover image for Bug Maze TD" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Bug Maze TD</h3>
               <p class="card-description">A compact tactical tower-defense game using bite-sized levels and progressively harder enemy patterns.</p>
               <p class="project-meta"><span class="pill status-published">Published</span></p>
-              <div class="project-actions" aria-label="Bug Maze TD links">
-                <a class="project-link project-link-primary" href="https://samfa12.itch.io/bug-maze-td" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
-              </div>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/bug-maze-td" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/breakfast-beat-d686e6.jpg" alt="Cover image for Breakfast Beat" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Breakfast Beat</h3>
+              <p class="card-description">A rhythm-forward game centered on timing, progression, and playful challenge.</p>
+              <p class="project-meta"><span class="pill status-published">Published</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/breakfast-beat" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/ship-blockade-59ef6d.jpg" alt="Cover image for Ship Blockade" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Ship Blockade</h3>
+              <p class="card-description">A defense-in-depth arcade game with timing, resource pressure, and escalating threats.</p>
+              <p class="project-meta"><span class="pill status-published">Published</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/ship-blockade" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/hop-bunny-b0d59d.png" alt="Cover image for Hop Bunny" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Hop Bunny</h3>
+              <p class="card-description">A playful jump-and-run challenge built around momentum, obstacle timing, and short-form progression.</p>
+              <p class="project-meta"><span class="pill status-published">Published</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/hop-bunny" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/reckless-dentist-05c1f7.png" alt="Cover image for Reckless Dentist" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Reckless Dentist</h3>
+              <p class="card-description">An arcade survival game with high-impact movement and escalating risk-reward decisions.</p>
+              <p class="project-meta"><span class="pill status-published">Published</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/reckless-dentist" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/gremlin-grenade-pinball-4f4da7.png" alt="Cover image for Gremlin Grenade Pinball" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Gremlin Grenade Pinball</h3>
+              <p class="card-description">A quirky pinball-style prototype with quick scoring spikes and playful mechanics.</p>
+              <p class="project-meta"><span class="pill status-prototype">Prototype</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/gremlin-grenade-pinball" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/wonky-vehicle-lab-10cf51.png" alt="Cover image for Wonky Vehicle Lab" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Wonky Vehicle Lab</h3>
+              <p class="card-description">A sandboxy vehicle playground prototype with quirky controls, experimental builds, and fast iteration loops.</p>
+              <p class="project-meta"><span class="pill status-prototype">Prototype</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/wonky-vehicle-lab" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/td-pack-63e5f6.jpg" alt="Cover image for Samfa12's TD Pack" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Android game collection</p><h3>Samfa12's TD Pack</h3>
+              <p class="card-description">A collection of Samfa12 tower defence games and compact strategy releases for Android.</p>
+              <p class="project-meta"><span class="pill status-published">Published on Google Play</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack" target="_blank" rel="noopener noreferrer">Google Play <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/spin-vector-7f51f8.png" alt="Cover image for Spin Vector" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Android game</p><h3>Spin Vector</h3>
+              <p class="card-description">A neon action arcade game from Samfa12, available through the Google Play developer page.</p>
+              <p class="project-meta"><span class="pill status-published">Published on Google Play</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/spin-vector" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a><a class="project-link" href="https://play.google.com/store/apps/details?id=com.samsmall.spinvector" target="_blank" rel="noopener noreferrer">Google Play <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/mandible-wars-5acb5c.png" alt="Cover image for Mandible Wars" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Mandible Wars</h3>
+              <p class="card-description">Ants vs termites in a mobile-first RTS-lite with squads, base building, fog of war, and bite-sized conquest maps.</p>
+              <p class="project-meta"><span class="pill status-prototype">Playable prototype</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/mandible-wars" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/moon-mower-icon.png" alt="Cover image for Moon Mower" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Moon Mower</h3>
+              <p class="card-description">A short-form arcade game with quirky mechanics, repeated loops, and playful progression.</p>
+              <p class="project-meta"><span class="pill status-published">Published</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/moon-mower" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/voxel-fish-tank-41a16e.jpg" alt="Cover image for Pocket Fish Tank" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Pocket Fish Tank</h3>
+              <p class="card-description">A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm.</p>
+              <p class="project-meta"><span class="pill status-published">Published</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/fish-tank" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="violet">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/party-bus-wasteland-run-597195.png" alt="Cover image for P.A.R.T.Y. Bus: Wasteland Run" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>P.A.R.T.Y. Bus: Wasteland Run</h3>
+              <p class="card-description">An energetic project concept around a drifting bus and wasteland route, balancing momentum with level progression.</p>
+              <p class="project-meta"><span class="pill status-development">In development</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/party-bus" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
+            </article>
+            <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
+              <div class="project-media"><img class="project-image" src="/assets/thumbnails/ant-farm-485b3d.png" alt="Cover image for Pocket Ant Farm" loading="lazy" decoding="async" width="960" height="540" /></div>
+              <p class="project-label">Game</p><h3>Pocket Ant Farm</h3>
+              <p class="card-description">A simulation game focused on colony growth, maintenance rhythms, and scalable growth mechanics.</p>
+              <p class="project-meta"><span class="pill status-published">Published</span></p>
+              <div class="project-actions"><a class="project-link project-link-primary" href="https://samfa12.itch.io/ant-farm" target="_blank" rel="noopener noreferrer">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div>
             </article>
           </div>
         </div>
@@ -153,32 +207,17 @@
       <div class="container">
         <div class="footer-grid">
           <div>
-            <a class="footer-brand" href="/" aria-label="Samfa12 home">
-              <span class="brand-orb" aria-hidden="true">
-                <img class="brand-mark" src="/assets/samfa12-character.jpg" alt="" width="40" height="40" />
-              </span>
-              <span>Samfa12</span>
-            </a>
+            <a class="footer-brand" href="/" aria-label="Samfa12 home"><span class="brand-orb" aria-hidden="true"><img class="brand-mark" src="/assets/samfa12-character.jpg" alt="" width="40" height="40" /></span><span>Samfa12</span></a>
             <p class="footer-copy">Games, stories, music, tools, and experiments from the Samfa12 signal lab.</p>
             <p class="footer-signoff">End of transmission. Start another?</p>
           </div>
           <nav aria-label="Footer navigation">
             <h2 class="footer-heading">Explore</h2>
-            <div class="footer-links">
-              <a href="/books/">Books</a>
-              <a href="/pocket-audio/">Pocket Audio</a>
-              <a href="/music/">Music</a>
-              <a href="/links/">Links</a>
-            </div>
+            <div class="footer-links"><a href="/books/">Books</a><a href="/pocket-audio/">Pocket Audio</a><a href="/music/">Music</a><a href="/links/">Links</a></div>
           </nav>
           <div>
             <h2 class="footer-heading">Signals</h2>
-            <div class="footer-links">
-              <a href="https://samfa12.itch.io/" target="_blank" rel="noopener noreferrer">itch.io</a>
-              <a href="https://store.steampowered.com/search/?publisher=Samfa12" target="_blank" rel="noopener noreferrer">Steam</a>
-              <a href="https://play.google.com/store/apps/dev?id=7761853381809168545" target="_blank" rel="noopener noreferrer">Google Play</a>
-            </div>
-            <button class="footer-surprise" type="button" data-surprise disabled>Surprise me</button>
+            <div class="footer-links"><a href="https://samfa12.itch.io/" target="_blank" rel="noopener noreferrer">itch.io</a><a href="https://store.steampowered.com/search/?publisher=Samfa12" target="_blank" rel="noopener noreferrer">Steam</a><a href="https://play.google.com/store/apps/dev?id=7761853381809168545" target="_blank" rel="noopener noreferrer">Google Play</a></div>
           </div>
         </div>
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
@@ -186,169 +225,22 @@
     </footer>
     <script>
       (() => {
-        const fallbackProjects = [
-          {
-            title: "Dust on the River",
-            category: "Games",
-            type: "Game",
-            status: "Published",
-            description: "A story-driven bushranger adventure about whether a violent past can ever really stay buried.",
-            tags: ["Game", "Adventure", "Samfa12"],
-            featured: true,
-            homepageRank: 1,
-            accent: "cyan",
-            imageFit: "contain",
-            links: [{ url: "https://samfa12.itch.io/dust-on-the-river", label: "Play on itch.io" }],
-            sortOrder: 0,
-            thumbnail: "assets/thumbnails/dust-on-the-river-b9a9e3.png",
-            thumbnailAlt: "Cover image for Dust on the River",
-          },
-          {
-            title: "Drink",
-            category: "Games",
-            type: "Game",
-            status: "Published",
-            description: "A Samfa12 game release available on Steam and Google Play.",
-            tags: ["Game", "Shooter", "Samfa12"],
-            featured: true,
-            homepageRank: 5,
-            accent: "cyan",
-            imageFit: "contain",
-            links: [
-              { label: "Play on itch.io", url: "https://samfa12.itch.io/drink" },
-              { label: "Steam", url: "https://store.steampowered.com/app/4419290/Drink/" },
-              { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.drink" },
-            ],
-            sortOrder: 1,
-            thumbnail: "assets/thumbnails/drink-2ad44b.png",
-            thumbnailAlt: "Cover image for Drink",
-          },
-          {
-            title: "Night Shift at Possum's Cafe",
-            category: "Games",
-            type: "Game",
-            status: "Coming soon to Google Play",
-            description: "A night-shift simulation of café operations in a stylized, humorous setting with service pacing, atmosphere, and progression.",
-            tags: ["Game", "Arcade", "Simulation", "Samfa12"],
-            featured: true,
-            links: [{ label: "Play on itch.io", url: "https://samfa12.itch.io/possum-cafe" }],
-            sortOrder: 2,
-            thumbnail: "assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg",
-            thumbnailAlt: "Cover image for Night Shift at Possum's Cafe",
-          },
-          {
-            title: "Bug Swarm",
-            category: "Games",
-            type: "Browser game",
-            status: "Experimental",
-            description: "A browser-hosted swarm defense experiment with fast bug floods, kid-made towers, upgrades, and touch-first play.",
-            tags: ["Game", "Experimental", "Tower Defense", "Samfa12"],
-            featured: false,
-            homepageRank: 4,
-            accent: "violet",
-            imageFit: "contain",
-            links: [{ url: "/games/bug-swarm/", label: "Play now", fullscreen: true }],
-            sortOrder: 3,
-            thumbnail: "assets/thumbnails/bug-swarm-experiment.png",
-            thumbnailAlt: "Key art for Bug Swarm",
-          },
-          {
-            title: "Cursed Cutter",
-            category: "Games",
-            type: "Browser game",
-            status: "Playable",
-            description: "A semi rogue-lite browser action game built in Babylon.js. Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.",
-            tags: ["Game", "Browser", "Action", "Rogue-lite", "Babylon.js", "Samfa12"],
-            featured: false,
-            accent: "violet",
-            imageFit: "contain",
-            links: [{ url: "/games/cursed-cutter/", label: "Play now", fullscreen: true }],
-            sortOrder: 3.5,
-            thumbnail: "assets/thumbnails/cursed-cutter-icon.png",
-            thumbnailAlt: "Icon for Cursed Cutter",
-          },
-          {
-            title: "Bug Maze TD",
-            category: "Games",
-            type: "Game",
-            status: "Published",
-            description: "A compact tactical tower-defense game using bite-sized levels and progressively harder enemy patterns.",
-            tags: ["Game", "Tower Defense", "Samfa12"],
-            featured: false,
-            links: [{ url: "https://samfa12.itch.io/bug-maze-td", label: "Play on itch.io" }],
-            sortOrder: 4,
-            thumbnail: "assets/thumbnails/bug-maze-td-078911.png",
-            thumbnailAlt: "Cover image for Bug Maze TD",
-          },
-        ];
-
-        const grid = document.getElementById("project-grid");
-        const status = document.getElementById("data-status");
-        const staticFallbackMarkup = grid ? grid.innerHTML : "";
-        const fallbackMessage = "Showing the built-in games list while live project data catches up.";
-
-        const markCardsVisible = () => {
-          if (!grid) return;
-          grid.querySelectorAll(".project-card").forEach((card) => card.classList.add("is-visible"));
-        };
-
-        const hasProjectCards = () => Boolean(grid?.querySelector(".project-card"));
-        const hasSkeletonCards = () => Boolean(grid?.querySelector(".skeleton-card"));
-
-        const showStaticGames = () => {
-          if (!grid) return;
-          if (!hasProjectCards() || hasSkeletonCards()) {
-            grid.dataset.staticGamesFallback = "true";
-            grid.innerHTML = staticFallbackMarkup;
-            if (status && status.hidden) {
-              status.textContent = fallbackMessage;
-              status.hidden = false;
-            }
+        document.querySelectorAll('[data-current-year]').forEach((el) => { el.textContent = String(new Date().getFullYear()); });
+        const toggle = document.querySelector('[data-menu-toggle]');
+        const panel = document.querySelector('[data-nav-panel]');
+        if (!toggle || !panel) return;
+        toggle.addEventListener('click', () => {
+          const open = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!open));
+          document.body.classList.toggle('nav-menu-open', !open);
+        });
+        panel.addEventListener('click', (event) => {
+          if (event.target.closest('a')) {
+            toggle.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('nav-menu-open');
           }
-          markCardsVisible();
-        };
-
-        const fallbackResponse = () =>
-          new Response(JSON.stringify(fallbackProjects), {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-          });
-
-        const isProjectDataRequest = (input) => {
-          try {
-            const rawUrl = typeof input === "string" ? input : input?.url;
-            if (!rawUrl) return false;
-            return new URL(rawUrl, window.location.href).pathname === "/data/projects.json";
-          } catch {
-            return false;
-          }
-        };
-
-        if (window.fetch && window.Response) {
-          const nativeFetch = window.fetch.bind(window);
-          window.fetch = (input, init) => {
-            if (!isProjectDataRequest(input)) return nativeFetch(input, init);
-
-            const liveData = nativeFetch(input, init)
-              .then((response) => (response.ok ? response : fallbackResponse()))
-              .catch(() => fallbackResponse());
-            const timeoutData = new Promise((resolve) => window.setTimeout(() => resolve(fallbackResponse()), 2400));
-
-            return Promise.race([liveData, timeoutData]);
-          };
-        }
-
-        markCardsVisible();
-        if ("MutationObserver" in window && grid) {
-          new MutationObserver(() => window.requestAnimationFrame(showStaticGames)).observe(grid, {
-            childList: true,
-            subtree: true,
-          });
-        }
-        [350, 1400, 3000, 6500].forEach((delay) => window.setTimeout(showStaticGames, delay));
-        window.addEventListener("pageshow", () => window.setTimeout(showStaticGames, 120));
+        });
       })();
     </script>
-    <script src="/script.js?v=20260626-2" defer></script>
   </body>
 </html>
