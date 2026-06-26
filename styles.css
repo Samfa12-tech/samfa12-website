@@ -1435,7 +1435,7 @@ body[data-page="apps"] .project-card-catalogue {
   display: none;
 }
 
-.js-enhanced [data-reveal] {
+.js-enhanced.reveal-ready [data-reveal] {
   opacity: 0;
   transform: translateY(18px);
   transition:
@@ -1443,7 +1443,7 @@ body[data-page="apps"] .project-card-catalogue {
     transform 480ms var(--ease-out);
 }
 
-.js-enhanced [data-reveal].is-visible {
+.js-enhanced.reveal-ready [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1721,7 +1721,7 @@ body[data-page="apps"] .project-card-catalogue {
     transition-duration: 0.001ms !important;
   }
 
-  .js-enhanced [data-reveal] {
+  .js-enhanced.reveal-ready [data-reveal] {
     opacity: 1;
     transform: none;
   }

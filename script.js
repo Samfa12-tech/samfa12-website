@@ -1,10 +1,75 @@
 (() => {
-  const DATA_VERSION = "20260621-2";
+  const DATA_VERSION = "20260627-2";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
+  const FETCH_TIMEOUT_MS = 8000;
   const FOCUSABLE_SELECTOR =
     'a[href], button:not([disabled]), iframe, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
   const fallbackProjects = [
+    {
+      title: "Dust on the River",
+      category: "Games",
+      type: "Game",
+      status: "Published",
+      description: "A story-driven bushranger adventure about whether a violent past can ever really stay buried.",
+      featured: true,
+      links: [{ label: "Play on itch.io", url: "https://samfa12.itch.io/dust-on-the-river" }],
+      sortOrder: 0,
+      thumbnail: "assets/thumbnails/dust-on-the-river-b9a9e3.png",
+    },
+    {
+      title: "Cursed Cutter",
+      category: "Games",
+      type: "Browser game",
+      status: "Playable",
+      description: "Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.",
+      links: [{ label: "Play now", url: "/games/cursed-cutter/" }],
+      sortOrder: 3.5,
+      thumbnail: "assets/thumbnails/cursed-cutter-icon.png",
+    },
+    {
+      title: "ToKnight",
+      category: "Books",
+      type: "Book",
+      status: "Published",
+      description: "A middle-grade fantasy adventure about Jason Proud and the first step into the ToKnight world.",
+      featured: true,
+      links: [{ label: "Amazon Kindle", url: "https://www.amazon.com.au/dp/B0GX2NG31Z" }],
+      sortOrder: 12,
+      thumbnail: "assets/thumbnails/toknight-47d9be.png",
+    },
+    {
+      title: "Pocket Chordsmith",
+      category: "Apps & Tools",
+      type: "Web app",
+      status: "Published",
+      description: "The Pocket Audio songwriting hub for sketching progressions, MIDI ideas, exports, and game-audio handoff workflows.",
+      featured: true,
+      links: [{ label: "Use on Samfa12.com", url: "/apps/pocket-chordsmith/" }],
+      sortOrder: 3,
+      thumbnail: "assets/thumbnails/pocket-chordsmith-0f81a2.png",
+    },
+    {
+      title: "Pocket Chordsmith Godot addon",
+      category: "Assets",
+      type: "Godot add-on",
+      status: "Published",
+      description: "A Godot addon for importing Pocket Chordsmith data and driving adaptive music callbacks in games.",
+      links: [{ label: "Godot Asset Library", url: "https://godotengine.org/asset-library/asset/5174" }],
+      sortOrder: 18,
+      thumbnail: "assets/thumbnails/pocket-chordsmith-godot-addon-icon.png",
+    },
+    {
+      title: "Drink OST",
+      category: "Music",
+      type: "Album",
+      status: "Published",
+      description: "The Drink original soundtrack album.",
+      featured: true,
+      links: [{ label: "Listen on Spotify", url: "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg" }],
+      sortOrder: 31,
+      thumbnail: "assets/thumbnails/drink-ost-6d4b8e.png",
+    },
     {
       title: "Samfa12 itch.io",
       category: "Storefronts",
@@ -73,6 +138,7 @@
   let activeGameLauncher = null;
   let navigationReady = false;
   let overlayReady = false;
+  let revealObserver = null;
 
   function createElement(tagName, attributes = {}, children = []) {
     const element = document.createElement(tagName);
@@ -199,6 +265,10 @@
     return Array.isArray(projects) ? projects.map(normalizeProject).filter(Boolean) : [];
   }
 
+  function getFallbackProjects() {
+    return normalizeProjects(fallbackProjects);
+  }
+
   function getStatusClass(status) {
     const value = String(status || "Available").toLowerCase();
     if (value.includes("coming soon")) return "status-coming-soon";
@@ -244,6 +314,14 @@
     return project.links.find((link) => safeUrl(link.url)) || null;
   }
 
+  function gridHasUsefulCards(element) {
+    return Boolean(element?.querySelector(".project-card, .mini-lab-card"));
+  }
+
+  function canUseFullscreenOverlay() {
+    return finePointer.matches && window.innerWidth >= 760 && "HTMLIFrameElement" in window;
+  }
+
   function projectThumbnail(project, priority = false) {
     const thumbnail = project.thumbnail ?? project.image;
     const hasThumbnail = isSafeLocalThumbnail(thumbnail);
@@ -258,7 +336,6 @@
     const fit = project.imageFit === "cover" ? "cover" : "contain";
     const image = createElement("img", {
       className: `project-image ${fit === "cover" ? "project-image-cover-fill" : ""}`.trim(),
-      src: rootRelativePath(thumbnail),
       alt: project.thumbnailAlt || project.imageAlt || `Cover image for ${project.title}`,
       loading: priority ? "eager" : "lazy",
       decoding: "async",
@@ -270,6 +347,7 @@
       const fallback = createElement("span", { className: "project-image-fallback", text: project.title });
       image.closest(".project-media")?.replaceChildren(fallback);
     });
+    image.src = rootRelativePath(thumbnail);
 
     return createElement("div", { className: mediaClass }, [image]);
   }
@@ -292,7 +370,7 @@
       anchor.rel = "noopener noreferrer";
     }
 
-    if (link.fullscreen === true && !isExternalUrl(href)) {
+    if (link.fullscreen === true && !isExternalUrl(href) && canUseFullscreenOverlay()) {
       anchor.dataset.fullscreenGame = href;
       anchor.classList.add("project-play-link");
     }
@@ -350,6 +428,46 @@
     }
 
     return article;
+  }
+
+  function buildProjectFragment(projects, variant = "catalogue") {
+    const fragment = document.createDocumentFragment();
+    let cardCount = 0;
+
+    projects.forEach((project, index) => {
+      try {
+        const card = createProjectCard(project, { variant, index });
+        if (card?.classList?.contains("project-card")) {
+          fragment.append(card);
+          cardCount += 1;
+        }
+      } catch (error) {
+        console.warn("Skipping project card that could not be rendered:", project?.title || project, error);
+      }
+    });
+
+    return { fragment, cardCount };
+  }
+
+  function replaceGridWithBuiltCards(element, fragment, cardCount, emptyMessage) {
+    if (!element) return false;
+
+    if (cardCount > 0) {
+      element.replaceChildren(fragment);
+      initializeReveals(element);
+      initializePointerGlow(element);
+      return true;
+    }
+
+    if (gridHasUsefulCards(element)) {
+      if (emptyMessage) showDataStatus(emptyMessage, false);
+      initializeReveals(element);
+      return false;
+    }
+
+    element.replaceChildren();
+    if (emptyMessage) showDataStatus(emptyMessage, false);
+    return false;
   }
 
   function createMiniLabCard() {
@@ -411,6 +529,7 @@
   function renderLoadingState() {
     const grid = document.getElementById("featured-grid") || document.getElementById("project-grid");
     if (!grid) return;
+    if (gridHasUsefulCards(grid)) return;
     grid.replaceChildren();
     const count = document.body.dataset.page === "home" ? 6 : 4;
     for (let index = 0; index < count; index += 1) {
@@ -418,49 +537,95 @@
     }
   }
 
-  function renderGrid(element, projects, variant = "catalogue") {
-    if (!element) return;
-    element.replaceChildren();
-    projects.forEach((project, index) => element.append(createProjectCard(project, { variant, index })));
+  function renderGrid(element, projects, options = {}) {
+    const { variant = "catalogue", emptyMessage = "No matching project records were found. Showing the saved page content instead." } = options;
+    const { fragment, cardCount } = buildProjectFragment(projects, variant);
+    return replaceGridWithBuiltCards(element, fragment, cardCount, emptyMessage);
+  }
+
+  function usePageFallbackIfEmpty(grid, list, predicate, message) {
+    if (list.length || gridHasUsefulCards(grid)) return list;
+    const fallbackList = getFallbackProjects().filter(predicate).slice().sort(bySortThenTitle);
+    if (fallbackList.length) {
+      showDataStatus(message, true);
+      return fallbackList;
+    }
+    return list;
   }
 
   function renderHome(projects) {
     const grid = document.getElementById("featured-grid");
     if (!grid) return;
-    grid.replaceChildren();
+    const fragment = document.createDocumentFragment();
+    let cardCount = 0;
+    let selectedProjects = selectHomeProjects(projects);
 
-    selectHomeProjects(projects).forEach((project, index) => {
-      grid.append(createProjectCard(project, { variant: "featured", index }));
-      if (index === 0) grid.append(createMiniLabCard());
+    if (!selectedProjects.length && !gridHasUsefulCards(grid)) {
+      selectedProjects = selectHomeProjects(getFallbackProjects());
+      if (selectedProjects.length) {
+        showDataStatus("Featured project data is incomplete. Showing saved fallback cards instead.", true);
+      }
+    }
+
+    selectedProjects.forEach((project, index) => {
+      try {
+        const card = createProjectCard(project, { variant: "featured", index });
+        fragment.append(card);
+        cardCount += 1;
+        if (index === 0) fragment.append(createMiniLabCard());
+      } catch (error) {
+        console.warn("Skipping homepage card that could not be rendered:", project?.title || project, error);
+      }
     });
+
+    replaceGridWithBuiltCards(grid, fragment, cardCount, "Featured project data is unavailable. Showing the saved page content instead.");
+    initializeMiniLabs();
   }
 
   function renderCatalogue(projects) {
     const grid = document.getElementById("project-grid");
     const category = document.body.dataset.category;
-    const list = projects.filter((project) => project.category === category).slice().sort(bySortThenTitle);
-    renderGrid(grid, list);
+    const predicate = (project) => project.category === category;
+    const list = usePageFallbackIfEmpty(
+      grid,
+      projects.filter(predicate).slice().sort(bySortThenTitle),
+      predicate,
+      `${category || "This catalogue"} data is incomplete. Showing saved fallback cards instead.`
+    );
+    renderGrid(grid, list, {
+      emptyMessage: `${category || "This catalogue"} records are unavailable right now. Showing the saved page content instead.`,
+    });
   }
 
   function renderApps(projects) {
     const grid = document.getElementById("project-grid");
-    const list = projects
-      .filter((project) => project.category === "Apps & Tools" || project.category === "Assets")
-      .slice()
-      .sort(bySortThenTitle);
-    renderGrid(grid, list);
+    const predicate = (project) => project.category === "Apps & Tools" || project.category === "Assets";
+    const list = usePageFallbackIfEmpty(
+      grid,
+      projects.filter(predicate).slice().sort(bySortThenTitle),
+      predicate,
+      "App and tool data is incomplete. Showing saved fallback cards instead."
+    );
+    renderGrid(grid, list, {
+      emptyMessage: "App and tool records are unavailable right now. Showing the saved page content instead.",
+    });
   }
 
   function renderPocketAudio(projects) {
     const grid = document.getElementById("project-grid");
-    const list = projects
-      .filter((project) => {
-        const text = `${project.title} ${project.description} ${project.tags.join(" ")}`.toLowerCase();
-        return (project.category === "Apps & Tools" || project.category === "Assets") && text.includes("pocket");
-      })
-      .slice()
-      .sort(bySortThenTitle);
-    renderGrid(grid, list);
+    const predicate = (project) => {
+      const text = `${project.title} ${project.description} ${project.tags.join(" ")}`.toLowerCase();
+      return (project.category === "Apps & Tools" || project.category === "Assets") && text.includes("pocket");
+    };
+    const list = usePageFallbackIfEmpty(
+      grid,
+      projects.filter(predicate).slice().sort(bySortThenTitle),
+      predicate,
+      "Pocket Audio data is incomplete. Showing saved fallback cards instead."
+    );
+    renderGrid(grid, list, {
+      emptyMessage: "Pocket Audio records are unavailable right now. Showing the saved page content instead.",
+    });
   }
 
   function renderLinkGroups() {
@@ -486,11 +651,16 @@
   function renderLinks(projects) {
     renderLinkGroups();
     const grid = document.getElementById("project-grid");
-    const list = projects
-      .filter((project) => ["Social", "Storefronts"].includes(project.category))
-      .slice()
-      .sort(bySortThenTitle);
-    renderGrid(grid, list);
+    const predicate = (project) => ["Social", "Storefronts"].includes(project.category);
+    const list = usePageFallbackIfEmpty(
+      grid,
+      projects.filter(predicate).slice().sort(bySortThenTitle),
+      predicate,
+      "Link directory data is incomplete. Showing saved fallback cards instead."
+    );
+    renderGrid(grid, list, {
+      emptyMessage: "Link directory records are unavailable right now. Showing the saved page content instead.",
+    });
   }
 
   function renderPage(projects) {
@@ -513,16 +683,35 @@
     dataStatus.hidden = false;
   }
 
+  function hideDataStatus() {
+    if (!dataStatus) return;
+    dataStatus.hidden = true;
+    dataStatus.replaceChildren();
+  }
+
+  async function fetchJsonWithTimeout(url, timeoutMs = FETCH_TIMEOUT_MS) {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  }
+
   async function loadProjects() {
     try {
-      const response = await fetch(DATA_URL);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
+      const data = await fetchJsonWithTimeout(DATA_URL);
       const projects = normalizeProjects(data);
       if (!projects.length) throw new Error("No project records");
+      hideDataStatus();
       return { projects, loaded: true };
-    } catch {
-      showDataStatus("Project data could not be loaded. Static navigation still works, and fallback cards are shown for preview.", true);
+    } catch (error) {
+      console.warn("Project data could not be loaded:", error);
+      showDataStatus("Project data could not be loaded. Saved catalogue cards are still available.", true);
       return { projects: normalizeProjects(fallbackProjects), loaded: false };
     }
   }
@@ -758,34 +947,50 @@
     });
   }
 
-  function initializeReveals() {
-    const elements = document.querySelectorAll(".section, .page-hero, .project-card, .mini-lab-card, .nav-tile, .workflow-card, .link-group");
+  function initializeReveals(root = document) {
+    const elements = root.querySelectorAll(".section, .page-hero, .project-card, .mini-lab-card, .nav-tile, .workflow-card, .link-group");
     elements.forEach((element) => {
       if (!element.hasAttribute("data-reveal")) element.setAttribute("data-reveal", "");
+      const rect = element.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.96 && rect.bottom > 0) {
+        element.classList.add("is-visible");
+      }
     });
+    document.documentElement.classList.add("reveal-ready");
 
-    if (reducedMotion.matches || !("IntersectionObserver" in window)) {
+    if (reducedMotion.matches || typeof window.IntersectionObserver !== "function") {
       elements.forEach((element) => element.classList.add("is-visible"));
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
-    );
+    if (!revealObserver) {
+      revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          });
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+      );
+    }
 
-    elements.forEach((element) => observer.observe(element));
+    elements.forEach((element) => {
+      if (element.classList.contains("is-visible")) return;
+      revealObserver.observe(element);
+    });
+
+    window.setTimeout(() => {
+      elements.forEach((element) => element.classList.add("is-visible"));
+    }, 1400);
   }
 
-  function initializePointerGlow() {
+  function initializePointerGlow(root = document) {
     if (!finePointer.matches || reducedMotion.matches) return;
-    document.querySelectorAll(".project-card-featured").forEach((card) => {
+    root.querySelectorAll(".project-card-featured").forEach((card) => {
+      if (card.dataset.pointerGlowReady === "true") return;
+      card.dataset.pointerGlowReady = "true";
       let frame = 0;
       card.addEventListener(
         "pointermove",
@@ -919,6 +1124,7 @@
     if (overlayReady) return;
     overlayReady = true;
     document.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element) || !canUseFullscreenOverlay()) return;
       const link = event.target.closest("[data-fullscreen-game]");
       if (!link) return;
       event.preventDefault();
@@ -940,13 +1146,19 @@
     initializeSiteClock();
     initializeNavigation();
     initializeGameOverlay();
+    initializeReveals();
     renderLoadingState();
 
+    const primaryGrid = document.getElementById("featured-grid") || document.getElementById("project-grid");
+    const hasSavedCards = gridHasUsefulCards(primaryGrid);
     const { projects, loaded } = await loadProjects();
-    renderPage(projects);
+    if (loaded || !hasSavedCards) {
+      renderPage(projects);
+    } else {
+      initializeReveals(primaryGrid);
+    }
     initializeSurprise(projects, loaded);
     initializeMiniLabs();
-    initializeReveals();
     initializePointerGlow();
     initializeHeroParallax();
   }

@@ -50,6 +50,7 @@ Project categories used by the data:
 
 - `Games`
 - `Books`
+- `Apps & Tools`
 - `Assets`
 - `Music`
 - `Social`
@@ -69,6 +70,17 @@ should also use `/assets/favicon.png` for the browser/page icon and load the
 current shared `styles.css` cache-busted URL.
 
 ## How to preview locally
+
+Before previewing after project data changes, run:
+
+```bash
+npm run validate:catalogue
+```
+
+This checks that `data/projects.json` parses, key catalogue pages still have
+records, local routes such as `/games/cursed-cutter/` exist, and unsafe card
+URLs or thumbnail paths are caught before deploy. Missing thumbnail files are
+reported as warnings because cards render text fallbacks when artwork is absent.
 
 Option A: Simple Python server
 
