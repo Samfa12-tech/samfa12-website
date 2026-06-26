@@ -24,6 +24,12 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css?v=20260621-2" />
+    <style>
+      #project-grid[data-static-games-fallback] .project-card {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
   </head>
   <body data-page="catalogue" data-category="Games">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -64,8 +70,7 @@
       <section class="section section-tight">
         <div class="container">
           <p id="data-status" class="status" role="status" aria-live="polite" hidden></p>
-          <div id="project-grid" class="catalogue-grid" aria-live="polite"></div>
-          <div id="games-static-fallback" class="catalogue-grid" aria-label="Static games catalogue fallback" hidden>
+          <div id="project-grid" class="catalogue-grid" aria-live="polite" data-static-games-fallback="true">
             <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
               <div class="project-media">
                 <img class="project-image" src="/assets/thumbnails/dust-on-the-river-b9a9e3.png" alt="Cover image for Dust on the River" loading="lazy" decoding="async" width="960" height="540" />
@@ -87,7 +92,7 @@
               <p class="card-description">A browser-hosted swarm defense experiment with fast bug floods, kid-made towers, upgrades, and touch-first play.</p>
               <p class="project-meta"><span class="pill status-experimental">Experimental</span></p>
               <div class="project-actions" aria-label="Bug Swarm links">
-                <a class="project-link project-link-primary" href="/games/bug-swarm/">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
+                <a class="project-link project-link-primary project-play-link" href="/games/bug-swarm/" data-fullscreen-game="/games/bug-swarm/" data-project-title="Bug Swarm">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
               </div>
             </article>
             <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
@@ -112,7 +117,7 @@
               <p class="card-description">A semi rogue-lite browser action game built in Babylon.js. Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.</p>
               <p class="project-meta"><span class="pill status-available">Playable</span></p>
               <div class="project-actions" aria-label="Cursed Cutter links">
-                <a class="project-link project-link-primary" href="/games/cursed-cutter/">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
+                <a class="project-link project-link-primary project-play-link" href="/games/cursed-cutter/" data-fullscreen-game="/games/cursed-cutter/" data-project-title="Cursed Cutter">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
               </div>
             </article>
             <article class="project-card project-card-catalogue card-size-standard" data-accent="cyan">
@@ -179,46 +184,171 @@
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
       </div>
     </footer>
-    <script src="/script.js?v=20260626-1" defer></script>
     <script>
       (() => {
+        const fallbackProjects = [
+          {
+            title: "Dust on the River",
+            category: "Games",
+            type: "Game",
+            status: "Published",
+            description: "A story-driven bushranger adventure about whether a violent past can ever really stay buried.",
+            tags: ["Game", "Adventure", "Samfa12"],
+            featured: true,
+            homepageRank: 1,
+            accent: "cyan",
+            imageFit: "contain",
+            links: [{ url: "https://samfa12.itch.io/dust-on-the-river", label: "Play on itch.io" }],
+            sortOrder: 0,
+            thumbnail: "assets/thumbnails/dust-on-the-river-b9a9e3.png",
+            thumbnailAlt: "Cover image for Dust on the River",
+          },
+          {
+            title: "Drink",
+            category: "Games",
+            type: "Game",
+            status: "Published",
+            description: "A Samfa12 game release available on Steam and Google Play.",
+            tags: ["Game", "Shooter", "Samfa12"],
+            featured: true,
+            homepageRank: 5,
+            accent: "cyan",
+            imageFit: "contain",
+            links: [
+              { label: "Play on itch.io", url: "https://samfa12.itch.io/drink" },
+              { label: "Steam", url: "https://store.steampowered.com/app/4419290/Drink/" },
+              { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.drink" },
+            ],
+            sortOrder: 1,
+            thumbnail: "assets/thumbnails/drink-2ad44b.png",
+            thumbnailAlt: "Cover image for Drink",
+          },
+          {
+            title: "Night Shift at Possum's Cafe",
+            category: "Games",
+            type: "Game",
+            status: "Coming soon to Google Play",
+            description: "A night-shift simulation of café operations in a stylized, humorous setting with service pacing, atmosphere, and progression.",
+            tags: ["Game", "Arcade", "Simulation", "Samfa12"],
+            featured: true,
+            links: [{ label: "Play on itch.io", url: "https://samfa12.itch.io/possum-cafe" }],
+            sortOrder: 2,
+            thumbnail: "assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg",
+            thumbnailAlt: "Cover image for Night Shift at Possum's Cafe",
+          },
+          {
+            title: "Bug Swarm",
+            category: "Games",
+            type: "Browser game",
+            status: "Experimental",
+            description: "A browser-hosted swarm defense experiment with fast bug floods, kid-made towers, upgrades, and touch-first play.",
+            tags: ["Game", "Experimental", "Tower Defense", "Samfa12"],
+            featured: false,
+            homepageRank: 4,
+            accent: "violet",
+            imageFit: "contain",
+            links: [{ url: "/games/bug-swarm/", label: "Play now", fullscreen: true }],
+            sortOrder: 3,
+            thumbnail: "assets/thumbnails/bug-swarm-experiment.png",
+            thumbnailAlt: "Key art for Bug Swarm",
+          },
+          {
+            title: "Cursed Cutter",
+            category: "Games",
+            type: "Browser game",
+            status: "Playable",
+            description: "A semi rogue-lite browser action game built in Babylon.js. Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.",
+            tags: ["Game", "Browser", "Action", "Rogue-lite", "Babylon.js", "Samfa12"],
+            featured: false,
+            accent: "violet",
+            imageFit: "contain",
+            links: [{ url: "/games/cursed-cutter/", label: "Play now", fullscreen: true }],
+            sortOrder: 3.5,
+            thumbnail: "assets/thumbnails/cursed-cutter-icon.png",
+            thumbnailAlt: "Icon for Cursed Cutter",
+          },
+          {
+            title: "Bug Maze TD",
+            category: "Games",
+            type: "Game",
+            status: "Published",
+            description: "A compact tactical tower-defense game using bite-sized levels and progressively harder enemy patterns.",
+            tags: ["Game", "Tower Defense", "Samfa12"],
+            featured: false,
+            links: [{ url: "https://samfa12.itch.io/bug-maze-td", label: "Play on itch.io" }],
+            sortOrder: 4,
+            thumbnail: "assets/thumbnails/bug-maze-td-078911.png",
+            thumbnailAlt: "Cover image for Bug Maze TD",
+          },
+        ];
+
         const grid = document.getElementById("project-grid");
-        const fallback = document.getElementById("games-static-fallback");
         const status = document.getElementById("data-status");
-        const fallbackMessage = "Showing a static games list because the live catalogue did not finish loading on this device.";
+        const staticFallbackMarkup = grid ? grid.innerHTML : "";
+        const fallbackMessage = "Showing the built-in games list while live project data catches up.";
 
-        if (!grid || !fallback) return;
-
-        const hasRenderedCards = () => Boolean(grid.querySelector(".project-card"));
-
-        const showDynamicCards = () => {
-          if (!hasRenderedCards()) return false;
-          grid.hidden = false;
-          fallback.hidden = true;
-          if (status && status.textContent === fallbackMessage) {
-            status.textContent = "";
-            status.hidden = true;
-          }
-          return true;
+        const markCardsVisible = () => {
+          if (!grid) return;
+          grid.querySelectorAll(".project-card").forEach((card) => card.classList.add("is-visible"));
         };
 
-        const showStaticFallback = () => {
-          if (showDynamicCards()) return;
-          grid.hidden = true;
-          fallback.hidden = false;
-          if (status && status.hidden) {
-            status.textContent = fallbackMessage;
-            status.hidden = false;
+        const hasProjectCards = () => Boolean(grid?.querySelector(".project-card"));
+        const hasSkeletonCards = () => Boolean(grid?.querySelector(".skeleton-card"));
+
+        const showStaticGames = () => {
+          if (!grid) return;
+          if (!hasProjectCards() || hasSkeletonCards()) {
+            grid.dataset.staticGamesFallback = "true";
+            grid.innerHTML = staticFallbackMarkup;
+            if (status && status.hidden) {
+              status.textContent = fallbackMessage;
+              status.hidden = false;
+            }
+          }
+          markCardsVisible();
+        };
+
+        const fallbackResponse = () =>
+          new Response(JSON.stringify(fallbackProjects), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          });
+
+        const isProjectDataRequest = (input) => {
+          try {
+            const rawUrl = typeof input === "string" ? input : input?.url;
+            if (!rawUrl) return false;
+            return new URL(rawUrl, window.location.href).pathname === "/data/projects.json";
+          } catch {
+            return false;
           }
         };
 
-        if ("MutationObserver" in window) {
-          new MutationObserver(showDynamicCards).observe(grid, { childList: true, subtree: true });
+        if (window.fetch && window.Response) {
+          const nativeFetch = window.fetch.bind(window);
+          window.fetch = (input, init) => {
+            if (!isProjectDataRequest(input)) return nativeFetch(input, init);
+
+            const liveData = nativeFetch(input, init)
+              .then((response) => (response.ok ? response : fallbackResponse()))
+              .catch(() => fallbackResponse());
+            const timeoutData = new Promise((resolve) => window.setTimeout(() => resolve(fallbackResponse()), 2400));
+
+            return Promise.race([liveData, timeoutData]);
+          };
         }
 
-        window.setTimeout(showStaticFallback, 1600);
-        window.setTimeout(showStaticFallback, 3500);
+        markCardsVisible();
+        if ("MutationObserver" in window && grid) {
+          new MutationObserver(() => window.requestAnimationFrame(showStaticGames)).observe(grid, {
+            childList: true,
+            subtree: true,
+          });
+        }
+        [350, 1400, 3000, 6500].forEach((delay) => window.setTimeout(showStaticGames, delay));
+        window.addEventListener("pageshow", () => window.setTimeout(showStaticGames, 120));
       })();
     </script>
+    <script src="/script.js?v=20260626-2" defer></script>
   </body>
 </html>
