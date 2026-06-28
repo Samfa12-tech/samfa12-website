@@ -1988,6 +1988,11 @@ function makePocketDawDownloadHandoffFileName(){
   const suffix = Math.random().toString(36).slice(2, 8);
   return `pocket-chordsmith-to-pocket-daw-${stamp}-${suffix}.pcs1.txt`;
 }
+function makeGodotDownloadHandoffFileName(){
+  const stamp = Date.now().toString(36);
+  const suffix = Math.random().toString(36).slice(2, 8);
+  return `pocket-chordsmith-to-godot-${stamp}-${suffix}.pcs1.txt`;
+}
 function setPushHandoffStatus(message){
   if(els.pushHandoffStatus) els.pushHandoffStatus.textContent = message;
 }
@@ -2139,6 +2144,7 @@ async function postCodeToGodotReceiver(endpoint, code){
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {"Content-Type":"application/json"},
+      targetAddressSpace: "loopback",
       body: JSON.stringify({
         type: "pocket-chordsmith.push-to-godot",
         format: "PCS1",
@@ -2171,10 +2177,27 @@ async function pushCodeDirectlyToGodot(code){
     if(result.ok) return result;
     failures.push(result.error || endpoint);
   }
-  return {ok:false, error: failures.filter(Boolean).join("; ") || "Godot receiver unavailable"};
+  const uniqueFailures = [...new Set(failures.filter(Boolean))];
+  return {ok:false, error: uniqueFailures.join("; ") || "Godot receiver unavailable"};
 }
 function submitCodeToGodotReceiver(code){
   return submitGodotReceiverForm(GODOT_PUSH_ENDPOINTS[0], code);
+}
+function localNetworkAccessPolicyState(){
+  const policy = document.permissionsPolicy || document.featurePolicy;
+  if(!policy || typeof policy.allowsFeature !== "function") return "unknown";
+  try{
+    if(policy.allowsFeature("loopback-network") === false) return "blocked";
+  }catch(e){}
+  try{
+    if(policy.allowsFeature("local-network-access") === false) return "blocked";
+  }catch(e){}
+  return "allowed";
+}
+function godotLoopbackBlockMessage(error){
+  const base = "Chrome blocked hosted Pocket Chordsmith from reaching localhost.";
+  const detail = error ? ` (${error})` : "";
+  return `${base}${detail} Open a local/standalone Chordsmith build or paste the PCS1 code in Godot > Chordsmith tab > Paste JSON/Code > Import.`;
 }
 async function pushToPocketDj(){
   stopLivePlaybackBeforeHandoff();
@@ -2196,17 +2219,22 @@ async function pushToPocketDj(){
     "Pocket DJ song code copied",
     "Pocket DJ song code is ready in the project box; clipboard was blocked"
   );
+  const blockedPopupMessage = copied
+    ? `Pocket DJ code copied. Pop-up blocked; open ${targetBaseUrl} and paste Import.`
+    : `Pocket DJ pop-up and clipboard were blocked. Copy the PCS1 code from the project box, open ${targetBaseUrl}, then paste Import.`;
   const opened = openHandoffUrl(
     targetUrl,
-    `Pocket DJ code copied. Pop-up blocked; open ${targetBaseUrl} and paste Import.`,
+    blockedPopupMessage,
     payload,
     preparedWindow
   );
   if(opened){
-    setStatus(copied ? "Song sent to Pocket DJ. Opening Pocket DJ..." : "Song sent to Pocket DJ. Opening target...");
-    setPushHandoffStatus(saved ? "Pocket DJ will import this song when it opens." : "Pocket DJ will import from the launch URL; clipboard is also ready as fallback.");
+    setStatus(copied ? "Song sent to Pocket DJ. Opening Pocket DJ..." : "Song sent to Pocket DJ. Opening target with manual paste fallback in the project box.");
+    setPushHandoffStatus(saved ? "Pocket DJ will import this song when it opens." : "Pocket DJ will import from the launch URL; the PCS1 code remains in the project box for manual paste.");
   }else{
-    setPushHandoffStatus(`Open ${targetBaseUrl}, paste the PCS1 code, then press Import.`);
+    setPushHandoffStatus(copied
+      ? `Open ${targetBaseUrl}, paste the copied PCS1 code, then press Import.`
+      : `Pop-up and clipboard were blocked. Copy the PCS1 code from the project box, open ${targetBaseUrl}, then press Import.`);
   }
 }
 async function pushToPocketDaw(){
@@ -2269,7 +2297,15 @@ async function pushToPocketDaw(){
     setPushHandoffStatus("Pocket DAW opened but did not confirm local receipt. Paste the PCS1 code into Import.");
   }else{
     const downloaded = downloadTextFallback("pocket-chordsmith-to-pocket-daw.pcs1.txt", code);
-    setPushHandoffStatus(downloaded ? "Pocket DAW did not open. Share code copied and downloaded for manual import." : "Pocket DAW did not open. Share code is copied and ready in the project box.");
+    if(downloaded && copied){
+      setPushHandoffStatus("Pocket DAW did not open. Share code was copied and downloaded for manual import.");
+    }else if(downloaded){
+      setPushHandoffStatus("Pocket DAW did not open and clipboard was blocked. A PCS1 handoff file was downloaded; the code is also in the project box for manual import.");
+    }else if(copied){
+      setPushHandoffStatus("Pocket DAW did not open. Share code is copied and ready in the project box for manual import.");
+    }else{
+      setPushHandoffStatus("Pocket DAW did not open and clipboard/download fallback failed. Copy the PCS1 code from the project box into Pocket DAW Import.");
+    }
   }
 }
 async function pushToGodot(){
@@ -2293,8 +2329,26 @@ async function pushToGodot(){
     setPushHandoffStatus(message);
     return;
   }
+  if(localNetworkAccessPolicyState() === "blocked"){
+    const copied = await copyTextForHandoff(
+      code,
+      "Godot import code copied",
+      "Godot import code is ready in the project box; clipboard was blocked"
+    );
+    const downloaded = copied ? false : downloadTextFallback(makeGodotDownloadHandoffFileName(), code);
+    const message = godotLoopbackBlockMessage(direct.error);
+    setStatus(copied ? "Godot push blocked by browser local-network permissions; PCS1 code copied." : "Godot push blocked by browser local-network permissions.");
+    if(copied){
+      setPushHandoffStatus(`${message} PCS1 code was copied.`);
+    }else if(downloaded){
+      setPushHandoffStatus(`${message} Clipboard was blocked by itch, so a PCS1 handoff text file was downloaded and the code remains in the project box.`);
+    }else{
+      setPushHandoffStatus(`${message} Clipboard and download fallback were blocked; select the PCS1 code from the project box manually.`);
+    }
+    return;
+  }
   if(submitCodeToGodotReceiver(code)){
-    const message = "Godot push submitted through browser fallback. Check the Chordsmith tab, then Save Chart Resource.";
+    const message = "Godot push submitted through browser fallback. Check the Chordsmith tab, then Save Chart Resource. If nothing appears, paste the PCS1 code from the project box.";
     setStatus(message);
     setPushHandoffStatus(`${message} Fetch was unavailable (${direct.error}).`);
     return;
@@ -26314,6 +26368,10 @@ function buildSequenceEvents(){
       const bar = Math.floor(step / stepsPerBar());
       const ch = section.progression[bar] || state.availableChords[0];
 
+      if(isLofiActive() && state.lofiTexture?.enabled){
+        events.push({type:"texture", time, dur: Math.max(0.08, Math.min(0.24, stepDur)), step, section:section.name, audioProfile:LOFI_AUDIO_PROFILE_ID, lofiPreset:state.lofiPreset || "", lofiTexture:sanitizeLofiTexture(state.lofiTexture, state.lofiPreset)});
+      }
+
       if(step % stepsPerBar() === 0){
         chordRhythmStarts(time).forEach(([st, dur]) => {
           events.push({type:"chord", chord: ch, time: st, dur: Math.min(dur, state.timeSig * beatDur()), step, section:section.name});
@@ -26455,6 +26513,9 @@ function normalizeChordsmithTraceEvent(ev){
   if(ev.notes !== undefined) out.midiNotes = ev.notes.slice();
   if(ev.tone !== undefined) out.tone = ev.tone;
   if(ev.direction !== undefined) out.direction = ev.direction;
+  if(ev.audioProfile !== undefined) out.audioProfile = ev.audioProfile;
+  if(ev.lofiPreset !== undefined) out.lofiPreset = ev.lofiPreset;
+  if(ev.lofiTexture !== undefined) out.lofiTexture = {...ev.lofiTexture};
   return out;
 }
 
