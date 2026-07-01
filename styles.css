@@ -1084,19 +1084,19 @@ body[data-page="apps"] .project-card-catalogue {
   letter-spacing: 0.08em;
 }
 
-.audio-pad[data-tone="dream"] {
+.audio-pad[data-tone="lofi"] {
   border-color: rgba(100, 230, 164, 0.34);
 }
 
-.audio-pad[data-tone="drift"] {
+.audio-pad[data-tone="chip"] {
   border-color: rgba(148, 102, 255, 0.42);
 }
 
-.audio-pad[data-tone="pulse"] {
+.audio-pad[data-tone="western"] {
   border-color: rgba(85, 231, 255, 0.38);
 }
 
-.audio-pad[data-tone="lift"] {
+.audio-pad[data-tone="standard"] {
   border-color: rgba(255, 182, 110, 0.38);
 }
 

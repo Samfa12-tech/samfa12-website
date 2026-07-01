@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260627-2";
+  const DATA_VERSION = "20260701-1";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const FETCH_TIMEOUT_MS = 8000;
   const FOCUSABLE_SELECTOR =
@@ -472,14 +472,14 @@
 
   function createMiniLabCard() {
     const pads = [
-      ["DREAM", "dream"],
-      ["DRIFT", "drift"],
-      ["PULSE", "pulse"],
-      ["LIFT", "lift"],
+      ["LOFI", "lofi"],
+      ["CHIP", "chip"],
+      ["WESTERN", "western"],
+      ["STANDARD", "standard"],
     ];
     const card = createElement("article", { className: "mini-lab-card", dataset: { pocketMiniLab: "", reveal: "" } }, [
       createElement("p", { className: "project-label", text: "Pocket Audio // Mini lab" }),
-      createElement("h3", { text: "Tap a signal to hear it." }),
+      createElement("h3", { text: "Tap a style to loop four bars." }),
       createElement("div", { className: "mini-wave", "aria-hidden": "true" }),
     ]);
 
@@ -492,6 +492,7 @@
           text: label,
           dataset: { tone },
           "aria-pressed": "false",
+          "aria-label": `Play ${label.toLowerCase()} four-bar Pocket Audio demo loop`,
         })
       );
     });
@@ -878,28 +879,348 @@
       const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
       const pads = Array.from(root.querySelectorAll(".audio-pad"));
       const stopButton = root.querySelector("[data-stop-audio]");
-      const tones = {
-        dream: [261.63, 329.63, 392.0],
-        drift: [220.0, 277.18, 329.63],
-        pulse: [196.0, 246.94, 392.0],
-        lift: [293.66, 369.99, 440.0],
+      const demoLoops = {
+        lofi: {
+          bpm: 82,
+          swing: 0.11,
+          padWave: "triangle",
+          bassWave: "sine",
+          leadWave: "triangle",
+          padGain: 0.026,
+          bassGain: 0.07,
+          leadGain: 0.045,
+          filterFreq: 1450,
+          chords: [
+            [57, 60, 64, 67],
+            [53, 57, 60, 64],
+            [55, 59, 62, 65],
+            [52, 55, 59, 64],
+          ],
+          bass: [45, null, 45, 52, 41, null, 48, 41, 43, null, 50, 43, 40, null, 47, 40],
+          melody: [
+            [2, 72, 2],
+            [6, 69, 2],
+            [10, 67, 2],
+            [18, 69, 2],
+            [22, 64, 4],
+            [34, 71, 2],
+            [38, 67, 3],
+            [50, 64, 2],
+            [56, 60, 4],
+          ],
+          kickSteps: [0, 10, 24, 32, 42, 56],
+          snareSteps: [16, 48],
+          hatSteps: [4, 12, 20, 28, 36, 44, 52, 60],
+        },
+        chip: {
+          bpm: 142,
+          swing: 0,
+          padWave: "square",
+          bassWave: "triangle",
+          leadWave: "square",
+          padGain: 0.017,
+          bassGain: 0.06,
+          leadGain: 0.04,
+          filterFreq: 6200,
+          chords: [
+            [60, 64, 67],
+            [65, 69, 72],
+            [67, 71, 74],
+            [60, 67, 72],
+          ],
+          bass: [48, 48, 55, 55, 53, 53, 60, 60, 55, 55, 62, 62, 48, 48, 55, 47],
+          melody: [
+            [0, 72, 1],
+            [2, 76, 1],
+            [4, 79, 2],
+            [8, 76, 1],
+            [10, 72, 1],
+            [12, 84, 2],
+            [18, 77, 1],
+            [20, 81, 1],
+            [22, 84, 2],
+            [28, 79, 2],
+            [32, 83, 1],
+            [34, 86, 1],
+            [36, 79, 2],
+            [42, 74, 1],
+            [44, 76, 1],
+            [48, 72, 2],
+            [56, 79, 2],
+            [60, 84, 2],
+          ],
+          kickSteps: [0, 8, 24, 32, 40, 56],
+          snareSteps: [16, 48],
+          hatSteps: Array.from({ length: 32 }, (_, index) => index * 2),
+        },
+        western: {
+          bpm: 104,
+          swing: 0.04,
+          padWave: "sawtooth",
+          bassWave: "triangle",
+          leadWave: "sawtooth",
+          padGain: 0.018,
+          bassGain: 0.07,
+          leadGain: 0.038,
+          filterFreq: 2600,
+          chords: [
+            [50, 57, 62, 66],
+            [55, 59, 62, 67],
+            [57, 61, 64, 69],
+            [50, 57, 62, 66],
+          ],
+          bass: [38, 45, 38, 45, 43, 50, 43, 50, 45, 52, 45, 52, 38, 45, 38, 45],
+          melody: [
+            [0, 74, 2],
+            [4, 76, 2],
+            [8, 78, 2],
+            [12, 74, 2],
+            [18, 71, 2],
+            [22, 74, 2],
+            [26, 67, 2],
+            [32, 76, 2],
+            [36, 78, 2],
+            [40, 81, 2],
+            [48, 74, 2],
+            [54, 69, 2],
+            [58, 66, 3],
+          ],
+          kickSteps: [0, 8, 16, 24, 32, 40, 48, 56],
+          snareSteps: [4, 12, 20, 28, 36, 44, 52, 60],
+          hatSteps: [2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62],
+        },
+        standard: {
+          bpm: 112,
+          swing: 0.02,
+          padWave: "triangle",
+          bassWave: "sawtooth",
+          leadWave: "sine",
+          padGain: 0.023,
+          bassGain: 0.062,
+          leadGain: 0.04,
+          filterFreq: 3200,
+          chords: [
+            [60, 64, 67],
+            [55, 59, 62],
+            [57, 60, 64],
+            [53, 57, 60],
+          ],
+          bass: [48, null, 48, 55, 43, null, 50, 43, 45, null, 52, 45, 41, null, 48, 41],
+          melody: [
+            [0, 67, 2],
+            [4, 72, 2],
+            [8, 71, 2],
+            [12, 67, 2],
+            [18, 69, 2],
+            [22, 67, 2],
+            [26, 62, 2],
+            [32, 64, 2],
+            [36, 67, 2],
+            [40, 72, 2],
+            [48, 69, 3],
+            [54, 67, 2],
+            [58, 64, 3],
+          ],
+          kickSteps: [0, 8, 24, 32, 40, 56],
+          snareSteps: [16, 48],
+          hatSteps: Array.from({ length: 16 }, (_, index) => index * 4 + 2),
+        },
       };
       let context = null;
+      let masterGain = null;
+      let noiseBuffer = null;
       let activeNodes = [];
+      let activeTimers = [];
+      let activeDemo = "";
+
+      const midiToFrequency = (note) => 440 * 2 ** ((note - 69) / 12);
+
+      const getContext = async () => {
+        context = context || new AudioContextCtor();
+        if (!masterGain) {
+          masterGain = context.createGain();
+          masterGain.gain.setValueAtTime(0.78, context.currentTime);
+          masterGain.connect(context.destination);
+        }
+        if (context.state === "suspended") await context.resume();
+        return context;
+      };
+
+      const getNoiseBuffer = () => {
+        if (noiseBuffer) return noiseBuffer;
+        const length = Math.max(1, Math.floor(context.sampleRate));
+        noiseBuffer = context.createBuffer(1, length, context.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let index = 0; index < length; index += 1) {
+          data[index] = Math.random() * 2 - 1;
+        }
+        return noiseBuffer;
+      };
+
+      const trackNode = (source, gain, startTime) => {
+        const node = { source, gain, startTime };
+        activeNodes.push(node);
+        source.addEventListener("ended", () => {
+          activeNodes = activeNodes.filter((item) => item !== node);
+        });
+      };
+
+      const scheduleTone = ({ note, frequency, time, duration, type = "sine", gain = 0.04, attack = 0.01, release = 0.08, detune = 0, filterFreq = 4200 }) => {
+        const oscillator = context.createOscillator();
+        const noteGain = context.createGain();
+        const filter = context.createBiquadFilter();
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(frequency || midiToFrequency(note), time);
+        oscillator.detune.setValueAtTime(detune, time);
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(filterFreq, time);
+        filter.Q.setValueAtTime(0.8, time);
+        noteGain.gain.setValueAtTime(0.0001, time);
+        noteGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, gain), time + attack);
+        noteGain.gain.setTargetAtTime(0.0001, time + Math.max(attack, duration), release);
+        oscillator.connect(filter).connect(noteGain).connect(masterGain);
+        oscillator.start(time);
+        oscillator.stop(time + duration + release * 4);
+        trackNode(oscillator, noteGain, time);
+      };
+
+      const scheduleNoise = ({ time, duration, gain = 0.03, filterType = "highpass", filterFreq = 5200, q = 0.7 }) => {
+        const source = context.createBufferSource();
+        const noiseGain = context.createGain();
+        const filter = context.createBiquadFilter();
+        source.buffer = getNoiseBuffer();
+        filter.type = filterType;
+        filter.frequency.setValueAtTime(filterFreq, time);
+        filter.Q.setValueAtTime(q, time);
+        noiseGain.gain.setValueAtTime(0.0001, time);
+        noiseGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, gain), time + 0.006);
+        noiseGain.gain.setTargetAtTime(0.0001, time + duration, 0.025);
+        source.connect(filter).connect(noiseGain).connect(masterGain);
+        source.start(time, 0, duration + 0.1);
+        source.stop(time + duration + 0.12);
+        trackNode(source, noiseGain, time);
+      };
+
+      const scheduleKick = (time) => {
+        const oscillator = context.createOscillator();
+        const kickGain = context.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(120, time);
+        oscillator.frequency.exponentialRampToValueAtTime(42, time + 0.18);
+        kickGain.gain.setValueAtTime(0.0001, time);
+        kickGain.gain.exponentialRampToValueAtTime(0.16, time + 0.008);
+        kickGain.gain.setTargetAtTime(0.0001, time + 0.12, 0.045);
+        oscillator.connect(kickGain).connect(masterGain);
+        oscillator.start(time);
+        oscillator.stop(time + 0.42);
+        trackNode(oscillator, kickGain, time);
+      };
+
+      const scheduleSnare = (time, western = false) => {
+        scheduleNoise({ time, duration: western ? 0.075 : 0.11, gain: western ? 0.025 : 0.04, filterType: "bandpass", filterFreq: western ? 2400 : 1800, q: 1.1 });
+        scheduleTone({ frequency: western ? 180 : 210, time, duration: 0.055, type: "triangle", gain: western ? 0.018 : 0.025, release: 0.035, filterFreq: 1200 });
+      };
+
+      const stepTime = (loopStart, step, stepLength, swing) => loopStart + step * stepLength + (step % 2 === 1 ? swing * stepLength : 0);
+
+      const scheduleFourBars = (loopStart, demoId) => {
+        const demo = demoLoops[demoId] || demoLoops.standard;
+        const beatLength = 60 / demo.bpm;
+        const stepLength = beatLength / 4;
+        const loopLength = beatLength * 16;
+
+        demo.chords.forEach((chord, barIndex) => {
+          const chordTime = loopStart + barIndex * beatLength * 4;
+          chord.forEach((note, noteIndex) => {
+            scheduleTone({
+              note,
+              time: chordTime + noteIndex * 0.012,
+              duration: beatLength * 3.7,
+              type: demo.padWave,
+              gain: demo.padGain,
+              attack: demoId === "chip" ? 0.01 : 0.08,
+              release: demoId === "chip" ? 0.05 : 0.32,
+              detune: (noteIndex - 1) * (demoId === "lofi" ? 5 : 2),
+              filterFreq: demo.filterFreq,
+            });
+          });
+        });
+
+        demo.bass.forEach((note, beatIndex) => {
+          if (note === null) return;
+          scheduleTone({
+            note,
+            time: loopStart + beatIndex * beatLength,
+            duration: beatLength * (demoId === "western" ? 0.42 : 0.58),
+            type: demo.bassWave,
+            gain: demo.bassGain,
+            attack: 0.008,
+            release: 0.07,
+            filterFreq: demoId === "chip" ? 3600 : 1400,
+          });
+        });
+
+        demo.melody.forEach(([step, note, durationSteps]) => {
+          scheduleTone({
+            note,
+            time: stepTime(loopStart, step, stepLength, demo.swing),
+            duration: Math.max(stepLength * 0.8, durationSteps * stepLength * 0.86),
+            type: demo.leadWave,
+            gain: demo.leadGain,
+            attack: demoId === "western" ? 0.006 : 0.012,
+            release: demoId === "lofi" ? 0.16 : 0.07,
+            detune: demoId === "western" ? 6 : 0,
+            filterFreq: demoId === "western" ? 2200 : demo.filterFreq,
+          });
+        });
+
+        demo.kickSteps.forEach((step) => scheduleKick(stepTime(loopStart, step, stepLength, demo.swing)));
+        demo.snareSteps.forEach((step) => scheduleSnare(stepTime(loopStart, step, stepLength, demo.swing), demoId === "western"));
+        demo.hatSteps.forEach((step) => {
+          scheduleNoise({
+            time: stepTime(loopStart, step, stepLength, demo.swing),
+            duration: demoId === "lofi" ? 0.045 : 0.032,
+            gain: demoId === "chip" ? 0.022 : 0.017,
+            filterType: "highpass",
+            filterFreq: demoId === "western" ? 3600 : 6200,
+            q: 0.8,
+          });
+        });
+
+        return loopLength;
+      };
+
+      const queueNextLoop = (loopStart, demoId) => {
+        const demo = demoLoops[demoId] || demoLoops.standard;
+        const loopLength = (60 / demo.bpm) * 16;
+        const delay = Math.max(0, (loopStart - context.currentTime - 0.25) * 1000);
+        const timer = window.setTimeout(() => {
+          if (activeDemo !== demoId) return;
+          scheduleFourBars(loopStart, demoId);
+          queueNextLoop(loopStart + loopLength, demoId);
+        }, delay);
+        activeTimers.push(timer);
+      };
 
       const stopAll = () => {
-        activeNodes.forEach(({ oscillator, gain }) => {
+        activeTimers.forEach((timer) => window.clearTimeout(timer));
+        activeTimers = [];
+        activeDemo = "";
+        root.dataset.playing = "false";
+        root.dataset.currentTone = "";
+        activeNodes.forEach(({ source, gain, startTime }) => {
           try {
             const now = context?.currentTime || 0;
             gain?.gain.cancelScheduledValues(now);
             gain?.gain.setTargetAtTime(0.0001, now, 0.02);
-            oscillator?.stop(now + 0.08);
+            source?.stop(Math.max(now + 0.08, (startTime || now) + 0.001));
           } catch {
             // Already stopped.
           }
         });
         activeNodes = [];
         pads.forEach((pad) => pad.setAttribute("aria-pressed", "false"));
+        if (stopButton) stopButton.disabled = true;
       };
 
       if (!AudioContextCtor) {
@@ -910,38 +1231,26 @@
         if (stopButton) stopButton.disabled = true;
         return;
       }
+      if (stopButton) stopButton.disabled = true;
 
-      const playTone = async (button) => {
-        context = context || new AudioContextCtor();
-        if (context.state === "suspended") await context.resume();
+      const playLoop = async (button) => {
+        await getContext();
+        stopAll();
+        await getContext();
 
-        const tone = button.dataset.tone;
-        const frequencies = tones[tone] || tones.dream;
-        const now = context.currentTime;
-        button.setAttribute("aria-pressed", "true");
+        const demoId = button.dataset.tone || "standard";
+        activeDemo = demoId;
+        root.dataset.playing = "true";
+        root.dataset.currentTone = demoId;
+        pads.forEach((pad) => pad.setAttribute("aria-pressed", String(pad === button)));
+        if (stopButton) stopButton.disabled = false;
 
-        frequencies.forEach((frequency, index) => {
-          const oscillator = context.createOscillator();
-          const gain = context.createGain();
-          oscillator.type = index === 1 ? "triangle" : "sine";
-          oscillator.frequency.setValueAtTime(frequency, now);
-          oscillator.detune.setValueAtTime((index - 1) * 4, now);
-          gain.gain.setValueAtTime(0.0001, now);
-          gain.gain.exponentialRampToValueAtTime(0.045, now + 0.035);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
-          oscillator.connect(gain).connect(context.destination);
-          oscillator.start(now);
-          oscillator.stop(now + 0.9);
-          activeNodes.push({ oscillator, gain });
-          oscillator.addEventListener("ended", () => {
-            activeNodes = activeNodes.filter((node) => node.oscillator !== oscillator);
-          });
-        });
-
-        window.setTimeout(() => button.setAttribute("aria-pressed", "false"), 520);
+        const startTime = context.currentTime + 0.08;
+        const loopLength = scheduleFourBars(startTime, demoId);
+        queueNextLoop(startTime + loopLength, demoId);
       };
 
-      pads.forEach((button) => button.addEventListener("click", () => playTone(button)));
+      pads.forEach((button) => button.addEventListener("click", () => playLoop(button)));
       stopButton?.addEventListener("click", stopAll);
       window.addEventListener("pagehide", stopAll);
     });
