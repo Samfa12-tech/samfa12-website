@@ -827,8 +827,8 @@
     "title": "A Place of His Own",
     "category": "Books",
     "type": "Book",
-    "status": "Coming Soon — Available 1 July",
-    "description": "A contemporary follow-up in the Good Home novels, about independence, family, support, and finding a place that can actually hold you. Available for preorder now.",
+    "status": "Published",
+    "description": "A contemporary follow-up in the Good Home novels, about independence, family, support, and finding a place that can actually hold you.",
     "tags": [
       "Narrative",
       "Fiction",
@@ -844,6 +844,32 @@
     "sortOrder": 28,
     "thumbnail": "assets/thumbnails/a-place-of-his-own-db90ff.jpg",
     "thumbnailAlt": "Cover image for A Place of His Own"
+  },
+  {
+    "title": "Colossal",
+    "category": "Books",
+    "type": "Book",
+    "status": "Coming Soon — Available 1 August 2026",
+    "description": "An adult historical fiction tragedy set in the blood, sand, and spectacle of ancient Rome, following an enslaved gladiator who turns fame into a weapon.",
+    "tags": [
+      "Novel",
+      "Historical Fiction",
+      "Rome"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Read on itch.io",
+        "url": "https://samfa12.itch.io/colossal"
+      },
+      {
+        "label": "Amazon Kindle",
+        "url": "https://www.amazon.com.au/dp/B0H738LPJ5"
+      }
+    ],
+    "sortOrder": 28.5,
+    "thumbnail": "assets/thumbnails/colossal.png",
+    "thumbnailAlt": "Cover image for Colossal"
   },
   {
     "title": "Concubine",
