@@ -43,7 +43,6 @@ export * from "./mastering/master-chain.js";
 export * from "./mastering/mix-assistant.js";
 export * from "./mastering/qc.js";
 export * from "./mastering/reports.js";
-export * from "./mastering/batch-release.js";
 export * from "./fx/filter.js";
 export * from "./fx/built-in-fx.js";
 export * from "./fx/pro-eq.js";

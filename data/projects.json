@@ -217,6 +217,38 @@
     "thumbnailAlt": "Cover image for Pocket Chordsmith Godot addon"
   },
   {
+    "title": "Pocket Audio Handoff",
+    "category": "Apps & Tools",
+    "type": "Static transfer helper",
+    "status": "Published",
+    "description": "A static samfa12.com helper for moving Pocket Chordsmith PCS1 songs between phone, desktop Pocket DAW, and the Godot addon without a server-side relay.",
+    "tags": [
+      "Music",
+      "Pocket Audio",
+      "PCS1",
+      "Mobile",
+      "Game Audio"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "url": "/apps/pocket-audio-handoff/",
+        "label": "Open handoff helper"
+      },
+      {
+        "url": "/apps/pocket-chordsmith/",
+        "label": "Use Pocket Chordsmith"
+      },
+      {
+        "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+        "label": "Source on GitHub"
+      }
+    ],
+    "sortOrder": 4,
+    "thumbnail": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
+    "thumbnailAlt": "Cover image for Pocket Audio Handoff"
+  },
+  {
     "title": "Bug Maze TD",
     "category": "Games",
     "type": "Game",
