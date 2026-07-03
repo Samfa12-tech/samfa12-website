@@ -121,6 +121,71 @@ Optional overrides:
 - `POCKET_CHORDSMITH_HTML` – use a specific Chordsmith HTML file
 - `POCKET_DJ_HTML` – use a specific Pocket DJ HTML file
 
+## Pocket Audio handoff relay
+
+`apps/pocket-audio-handoff/` works as a static fallback with hash links, QR,
+copy, and `.pcs1.txt` download. The phone-to-desktop short-code flow is backed
+by a small Cloudflare Worker scaffold in `workers/pocket-audio-handoff/`.
+
+The intended production flow is:
+
+1. Phone opens Pocket Chordsmith and chooses Mobile transfer.
+2. Chordsmith posts the PCS1 song to the relay and opens the handoff page with a
+   short `SAM-...` transfer code.
+3. Desktop opens `https://samfa12.com/apps/pocket-audio-handoff/`, enters the
+   short code, then chooses Pocket DAW or Godot import actions.
+
+Relay validation:
+
+```bash
+npm run test:handoff-relay
+```
+
+Local phone/debug smoke:
+
+```bash
+npm run dev:handoff
+```
+
+Open the printed `Phone/LAN` URL on the phone, for example:
+
+`http://192.168.1.20:8787/apps/pocket-chordsmith/`
+
+Then:
+
+1. In Chordsmith, open Settings and tap Mobile transfer.
+2. Tap Open samfa12.
+3. Confirm the handoff page shows a short `SAM-...` code.
+4. On the desktop, open
+   `http://127.0.0.1:8787/apps/pocket-audio-handoff/`, enter that code, and
+   confirm the PCS1 loads.
+5. Use Copy for Godot or Open Pocket DAW from the desktop page.
+
+The local dev server serves the static site and the relay API from the same LAN
+origin, so phone tests do not need the Cloudflare Worker to be deployed first.
+
+Production relay setup:
+
+```bash
+npx wrangler login
+npm run setup:handoff-kv
+npm run deploy:handoff-relay
+RELAY_BASE_URL=https://pocket-audio-handoff.samfa12.workers.dev/api/pocket-audio-handoff npm run verify:handoff-live
+```
+
+Wrangler is Cloudflare's command-line deploy tool. The login step opens a
+browser window for a Cloudflare account. After that, `setup:handoff-kv` creates
+the short-lived transfer storage and updates `wrangler.toml`; `deploy:handoff-relay`
+publishes the relay.
+
+Do not use `wrangler deploy --temporary` for end-to-end handoff testing. A
+temporary no-account Worker does not have persistent KV storage, so create and
+redeem requests can land on different Worker instances and lose the transfer.
+
+The static page defaults to
+`https://pocket-audio-handoff.samfa12.workers.dev/api/pocket-audio-handoff`.
+Change the page constant if the worker is deployed under a different route.
+
 ## How to enable GitHub Pages
 
 ### Option 1: Branch settings (recommended)
@@ -154,6 +219,10 @@ In GitHub Pages settings, set the custom domain to:
 - `samfa12.com`
 
 Then enable **Enforce HTTPS** (when available).
+
+Pocket Audio handoff short codes do not require Porkbun DNS changes when using
+the default `workers.dev` relay URL. Porkbun is only involved later if you want a
+custom API hostname such as `handoff.samfa12.com`.
 
 ## Troubleshooting
 

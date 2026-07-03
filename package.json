@@ -5,6 +5,11 @@
   "scripts": {
     "fetch:thumbnails": "node scripts/fetch-thumbnails.mjs",
     "sync:pocket-apps": "node scripts/sync-pocket-apps.js",
-    "validate:catalogue": "node scripts/validate-catalogue.mjs"
+    "dev:handoff": "node scripts/serve-pocket-handoff-dev.mjs",
+    "validate:catalogue": "node scripts/validate-catalogue.mjs",
+    "test:handoff-relay": "node --test tests/pocket-audio-handoff-relay.test.mjs",
+    "setup:handoff-kv": "npx wrangler kv namespace create HANDOFFS --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config && npx wrangler kv namespace create HANDOFFS --preview --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config",
+    "deploy:handoff-relay": "npx wrangler deploy --config workers/pocket-audio-handoff/wrangler.toml",
+    "verify:handoff-live": "node scripts/verify-pocket-handoff-live.mjs"
   }
 }

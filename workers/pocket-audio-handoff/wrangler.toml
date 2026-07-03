@@ -1,0 +1,15 @@
+name = "pocket-audio-handoff"
+main = "worker.js"
+compatibility_date = "2026-07-03"
+workers_dev = true
+preview_urls = true
+
+[vars]
+PUBLIC_HANDOFF_BASE_URL = "https://samfa12.com/apps/pocket-audio-handoff/"
+HANDOFF_TTL_SECONDS = "1800"
+HANDOFF_MAX_CHARS = "100000"
+
+[[kv_namespaces]]
+binding = "HANDOFFS"
+id = "99b61056ed9c4a8592f7727669fc2fff"
+preview_id = "92cf111e757e42959891b31321ec83d2"
