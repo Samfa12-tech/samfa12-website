@@ -8,7 +8,8 @@
     "tags": [
       "Game",
       "Adventure",
-      "Samfa12"
+      "Samfa12",
+      "Pocket Audio"
     ],
     "featured": true,
     "homepageRank": 1,
@@ -69,7 +70,8 @@
       "Game",
       "Arcade",
       "Simulation",
-      "Samfa12"
+      "Samfa12",
+      "Pocket Audio"
     ],
     "featured": true,
     "links": [
@@ -402,7 +404,8 @@
     "tags": [
       "Game",
       "Pinball",
-      "Samfa12"
+      "Samfa12",
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
@@ -627,6 +630,29 @@
     "thumbnailAlt": "Cover image for Samfa12's TD Pack"
   },
   {
+    "title": "Samfa12 Chill Pack",
+    "category": "Games",
+    "type": "Android chill pack",
+    "status": "Coming Soon — Closed testing on Google Play",
+    "description": "A pocket collection of six small lofi and chill scenes, including Pocket Fish Tank, Pocket Ant Farm, Moon Mower, and three more cosy worlds built around shared Pocket Audio.",
+    "tags": [
+      "Game",
+      "Android",
+      "Relax",
+      "Pocket Audio"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Google Play closed testing",
+        "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+      }
+    ],
+    "sortOrder": 15.5,
+    "thumbnail": "assets/thumbnails/samfa12-chill-pack-app-icon.png",
+    "thumbnailAlt": "App icon for Samfa12 Chill Pack"
+  },
+  {
     "title": "Spin Vector",
     "category": "Games",
     "type": "Android game",
@@ -636,7 +662,8 @@
       "Game",
       "Android",
       "Arcade",
-      "Samfa12"
+      "Samfa12",
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
@@ -744,7 +771,8 @@
     "tags": [
       "Game",
       "Arcade",
-      "Indie"
+      "Indie",
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
@@ -766,7 +794,8 @@
     "tags": [
       "Game",
       "Voxel",
-      "Relax"
+      "Relax",
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
@@ -788,7 +817,8 @@
     "tags": [
       "Game",
       "Adventure",
-      "Runner"
+      "Runner",
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
@@ -810,7 +840,8 @@
     "tags": [
       "Game",
       "Simulation",
-      "Growth"
+      "Growth",
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
@@ -1049,6 +1080,29 @@
     "thumbnail": "assets/thumbnails/td-pack-ost-f4e2a9.png",
     "thumbnailAlt": "Cover image for Samfa12's Tower Defense Pack OST",
     "sortOrder": 33
+  },
+  {
+    "title": "Lofi and Chill OST",
+    "category": "Music",
+    "type": "Album",
+    "status": "Coming Soon on Spotify",
+    "description": "An upcoming soundtrack album for Samfa12 Chill Pack, collecting lofi and chill Pocket Audio cues from its cosy small-scene world.",
+    "tags": [
+      "Music",
+      "Album",
+      "Soundtrack",
+      "Pocket Audio"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Follow on Spotify",
+        "url": "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"
+      }
+    ],
+    "thumbnail": "assets/thumbnails/lofi-and-chill-ost-album-art.png",
+    "thumbnailAlt": "Cover image for Lofi and Chill OST",
+    "sortOrder": 33.5
   },
   {
     "title": "YouTube Music",
