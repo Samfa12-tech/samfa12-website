@@ -63,8 +63,8 @@
     "title": "Night Shift at Possum's Cafe",
     "category": "Games",
     "type": "Game",
-    "status": "Coming soon to Google Play",
-    "description": "A night-shift simulation of café operations in a stylized, humorous setting with service pacing, atmosphere, and progression.",
+    "status": "Published on Google Play",
+    "description": "A night-shift simulation of cafe operations in a stylized, humorous setting with service pacing, atmosphere, and progression, now live on Google Play.",
     "tags": [
       "Game",
       "Arcade",
@@ -78,7 +78,7 @@
         "url": "https://samfa12.itch.io/possum-cafe"
       },
       {
-        "label": "Coming soon on Google Play",
+        "label": "Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
       }
     ],
