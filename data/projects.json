@@ -253,7 +253,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A compact tactical tower-defense game using bite-sized levels and progressively harder enemy patterns.",
+    "description": "A compact tactical tower-defense game using bite-sized levels and progressively harder enemy patterns. Featured in Samfa12's TD Pack.",
     "tags": [
       "Game",
       "Tower Defense",
@@ -264,6 +264,10 @@
       {
         "url": "https://samfa12.itch.io/bug-maze-td",
         "label": "Play on itch.io"
+      },
+      {
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack",
+        "label": "Featured in Samfa12's TD Pack"
       }
     ],
     "sortOrder": 4,
@@ -275,7 +279,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A rhythm-forward game centered on timing, progression, and playful challenge.",
+    "description": "A rhythm-forward game centered on timing, progression, and playful challenge. Featured in Samfa12's TD Pack.",
     "tags": [
       "Game",
       "Rhythm",
@@ -286,6 +290,10 @@
       {
         "url": "https://samfa12.itch.io/breakfast-beat",
         "label": "Play on itch.io"
+      },
+      {
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack",
+        "label": "Featured in Samfa12's TD Pack"
       }
     ],
     "sortOrder": 5,
@@ -297,7 +305,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A defense-in-depth arcade game with timing, resource pressure, and escalating threats.",
+    "description": "A defense-in-depth arcade game with timing, resource pressure, and escalating threats. Featured in Samfa12's TD Pack.",
     "tags": [
       "Game",
       "Action",
@@ -308,6 +316,10 @@
       {
         "url": "https://samfa12.itch.io/ship-blockade",
         "label": "Play on itch.io"
+      },
+      {
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack",
+        "label": "Featured in Samfa12's TD Pack"
       }
     ],
     "sortOrder": 6,
