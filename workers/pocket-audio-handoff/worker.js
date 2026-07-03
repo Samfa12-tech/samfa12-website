@@ -236,6 +236,8 @@ function allowedCorsOrigin(origin, env) {
   const allowed = new Set([
     "https://samfa12.com",
     "https://www.samfa12.com",
+    "https://html-classic.itch.zone",
+    "https://html.itch.zone",
     "http://127.0.0.1:4174",
     "http://localhost:4174",
     "http://127.0.0.1:8000",

@@ -36,6 +36,34 @@ test("creates and redeems a short Pocket Audio handoff code", async () => {
   assert.equal(redeemed.metadata.key, "C");
 });
 
+test("allows itch-hosted Chordsmith builds to preflight relay requests", async () => {
+  const preflight = await handleRequest(new Request("https://relay.test/api/pocket-audio-handoff/transfers", {
+    method: "OPTIONS",
+    headers: {
+      origin: "https://html-classic.itch.zone",
+      "access-control-request-method": "POST",
+      "access-control-request-headers": "content-type"
+    }
+  }), env);
+
+  assert.equal(preflight.status, 204);
+  assert.equal(preflight.headers.get("access-control-allow-origin"), "https://html-classic.itch.zone");
+  assert.equal(preflight.headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
+  assert.equal(preflight.headers.get("access-control-allow-headers"), "content-type");
+
+  const create = await handleRequest(new Request("https://relay.test/api/pocket-audio-handoff/transfers", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      origin: "https://html-classic.itch.zone"
+    },
+    body: JSON.stringify({ code: "PCS1:itch-relay-test" })
+  }), env);
+
+  assert.equal(create.status, 201);
+  assert.equal(create.headers.get("access-control-allow-origin"), "https://html-classic.itch.zone");
+});
+
 test("rejects non-PCS1 payloads and oversized songs", async () => {
   const bad = await handleRequest(new Request("https://relay.test/transfers", {
     method: "POST",
