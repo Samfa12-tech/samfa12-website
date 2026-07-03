@@ -927,6 +927,10 @@ h3 {
   margin: 0;
 }
 
+.project-meta-catalogue-labels {
+  margin-top: calc(var(--space-3) * -0.35);
+}
+
 .pill {
   display: inline-flex;
   min-height: 28px;
@@ -938,6 +942,12 @@ h3 {
   padding: 0.2rem 0.6rem;
   font-size: 0.76rem;
   font-weight: 800;
+}
+
+.pill-catalogue-label {
+  border-color: color-mix(in srgb, var(--card-accent), transparent 58%);
+  background: color-mix(in srgb, var(--card-accent), transparent 90%);
+  color: var(--text);
 }
 
 .status-published,
@@ -1032,6 +1042,12 @@ body[data-page="apps"] .project-card-catalogue {
 
 .status button {
   margin-left: var(--space-3);
+}
+
+.status[data-state="summary"] {
+  border-color: rgba(85, 231, 255, 0.28);
+  background: rgba(85, 231, 255, 0.08);
+  color: #dcf9ff;
 }
 
 .skeleton-grid {
@@ -1293,6 +1309,62 @@ body[data-page="apps"] .project-card-catalogue {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
+}
+
+.catalogue-controls {
+  margin-bottom: var(--space-4);
+}
+
+.catalogue-controls[hidden] {
+  display: none;
+}
+
+.catalogue-controls-panel {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at top left, rgba(85, 231, 255, 0.08), transparent 42%),
+    rgba(11, 18, 34, 0.8);
+}
+
+.catalogue-control-group {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.catalogue-control-group-sort {
+  max-width: 320px;
+}
+
+.catalogue-control-label {
+  margin: 0;
+  color: var(--cyan);
+  font-family: "IBM Plex Mono", "Space Mono", Consolas, monospace;
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.catalogue-select {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(17, 26, 45, 0.92);
+  color: var(--text);
+  padding: 0.7rem 0.95rem;
+  font: inherit;
+  font-weight: 700;
+}
+
+.catalogue-select:focus-visible {
+  outline: 2px solid rgba(85, 231, 255, 0.85);
+  outline-offset: 2px;
 }
 
 .filter-btn {
@@ -1672,6 +1744,14 @@ body[data-page="apps"] .project-card-catalogue {
 
   .pad-grid {
     grid-template-columns: 1fr;
+  }
+
+  .catalogue-controls-panel {
+    padding: var(--space-3);
+  }
+
+  .catalogue-control-group-sort {
+    max-width: none;
   }
 }
 

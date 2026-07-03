@@ -132,6 +132,7 @@
   ];
 
   const dataStatus = document.getElementById("data-status");
+  const catalogueControls = document.getElementById("catalogue-controls");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const finePointer = window.matchMedia("(pointer: fine)");
   let activeGameOverlay = null;
@@ -139,6 +140,20 @@
   let navigationReady = false;
   let overlayReady = false;
   let revealObserver = null;
+  const CATALOGUE_FILTER_CONFIG = {
+    Games: {
+      filterLabel: "Platform",
+      filterLabelPlural: "platforms",
+      sortLabel: "Platform",
+      labelOrder: ["Browser", "itch.io", "Google Play", "Steam", "Wavedash"],
+    },
+    Books: {
+      filterLabel: "Storefront",
+      filterLabelPlural: "storefronts",
+      sortLabel: "Storefront",
+      labelOrder: ["Amazon", "Google Play", "itch.io"],
+    },
+  };
 
   function createElement(tagName, attributes = {}, children = []) {
     const element = document.createElement(tagName);
@@ -214,6 +229,26 @@
     }
   }
 
+  function safeHostname(url) {
+    try {
+      return new URL(url, window.location.origin).hostname.toLowerCase();
+    } catch {
+      return "";
+    }
+  }
+
+  function safePathname(url) {
+    try {
+      return new URL(url, window.location.origin).pathname.toLowerCase();
+    } catch {
+      return "";
+    }
+  }
+
+  function isLocalGameRoute(url) {
+    return typeof url === "string" && /^\/games\/.+/.test(url);
+  }
+
   function isExternalUrl(url) {
     try {
       return new URL(url, window.location.origin).origin !== window.location.origin;
@@ -237,6 +272,58 @@
     return normalized.startsWith("/") ? normalized : `/${normalized}`;
   }
 
+  function pushUniqueLabel(labels, label) {
+    if (label && !labels.includes(label)) labels.push(label);
+  }
+
+  function orderCatalogueLabels(labels, labelOrder) {
+    return labelOrder.filter((label) => labels.includes(label));
+  }
+
+  function deriveGameCatalogueLabels(project, links) {
+    const labels = [];
+    const primaryUrl = links[0]?.url || "";
+    const type = String(project.type || "").toLowerCase();
+
+    if (type.includes("browser") || isLocalGameRoute(primaryUrl)) {
+      pushUniqueLabel(labels, "Browser");
+    }
+
+    links.forEach((link) => {
+      const host = safeHostname(link.url);
+      const path = safePathname(link.url);
+      if (isLocalGameRoute(link.url)) pushUniqueLabel(labels, "Browser");
+      if (host.endsWith("itch.io")) pushUniqueLabel(labels, "itch.io");
+      if (host === "play.google.com" && path.startsWith("/store/apps")) pushUniqueLabel(labels, "Google Play");
+      if (host === "store.steampowered.com") pushUniqueLabel(labels, "Steam");
+      if (host === "wavedash.com" || host.endsWith(".wavedash.com")) pushUniqueLabel(labels, "Wavedash");
+    });
+
+    return orderCatalogueLabels(labels, CATALOGUE_FILTER_CONFIG.Games.labelOrder);
+  }
+
+  function deriveBookCatalogueLabels(links) {
+    const labels = [];
+
+    links.forEach((link) => {
+      const host = safeHostname(link.url);
+      const path = safePathname(link.url);
+      if (host.includes("amazon.")) pushUniqueLabel(labels, "Amazon");
+      if (host === "play.google.com" && (path.startsWith("/store/books") || path.startsWith("/store/audiobooks"))) {
+        pushUniqueLabel(labels, "Google Play");
+      }
+      if (host.endsWith("itch.io")) pushUniqueLabel(labels, "itch.io");
+    });
+
+    return orderCatalogueLabels(labels, CATALOGUE_FILTER_CONFIG.Books.labelOrder);
+  }
+
+  function deriveCatalogueLabels(project, links) {
+    if (project.category === "Games") return deriveGameCatalogueLabels(project, links);
+    if (project.category === "Books") return deriveBookCatalogueLabels(links);
+    return [];
+  }
+
   function normalizeProject(project) {
     if (!project || typeof project !== "object" || !project.title) return null;
     const links = Array.isArray(project.links)
@@ -248,6 +335,7 @@
           })
           .filter(Boolean)
       : [];
+    const catalogueLabels = deriveCatalogueLabels(project, links);
 
     return {
       ...project,
@@ -258,6 +346,7 @@
       description: String(project.description || ""),
       tags: Array.isArray(project.tags) ? project.tags.filter((tag) => typeof tag === "string" && tag.trim()) : [],
       links,
+      catalogueLabels,
     };
   }
 
@@ -407,6 +496,14 @@
     ]);
     article.append(meta);
 
+    if (!isFeatured && project.catalogueLabels.length) {
+      const labels = createElement("p", { className: "project-meta project-meta-catalogue-labels" });
+      project.catalogueLabels.forEach((label) => {
+        labels.append(createElement("span", { className: "pill pill-catalogue-label", text: label }));
+      });
+      article.append(labels);
+    }
+
     if (primaryLink) {
       const actions = createElement("div", { className: "project-actions", "aria-label": `${project.title} links` });
       actions.append(projectLink(primaryLink, project, true));
@@ -449,7 +546,7 @@
     return { fragment, cardCount };
   }
 
-  function replaceGridWithBuiltCards(element, fragment, cardCount, emptyMessage) {
+  function replaceGridWithBuiltCards(element, fragment, cardCount, emptyMessage, preserveExistingOnEmpty = true) {
     if (!element) return false;
 
     if (cardCount > 0) {
@@ -459,7 +556,7 @@
       return true;
     }
 
-    if (gridHasUsefulCards(element)) {
+    if (preserveExistingOnEmpty && gridHasUsefulCards(element)) {
       if (emptyMessage) showDataStatus(emptyMessage, false);
       initializeReveals(element);
       return false;
@@ -539,9 +636,13 @@
   }
 
   function renderGrid(element, projects, options = {}) {
-    const { variant = "catalogue", emptyMessage = "No matching project records were found. Showing the saved page content instead." } = options;
+    const {
+      variant = "catalogue",
+      emptyMessage = "No matching project records were found. Showing the saved page content instead.",
+      preserveExistingOnEmpty = true,
+    } = options;
     const { fragment, cardCount } = buildProjectFragment(projects, variant);
-    return replaceGridWithBuiltCards(element, fragment, cardCount, emptyMessage);
+    return replaceGridWithBuiltCards(element, fragment, cardCount, emptyMessage, preserveExistingOnEmpty);
   }
 
   function usePageFallbackIfEmpty(grid, list, predicate, message) {
@@ -583,7 +684,104 @@
     initializeMiniLabs();
   }
 
-  function renderCatalogue(projects) {
+  function getCatalogueConfig(category) {
+    return CATALOGUE_FILTER_CONFIG[String(category || "")] || null;
+  }
+
+  function getCatalogueGroupRank(project, config) {
+    const rank = config.labelOrder.findIndex((label) => project.catalogueLabels.includes(label));
+    return rank >= 0 ? rank : config.labelOrder.length;
+  }
+
+  function sortCatalogueProjects(projects, sortMode, config) {
+    const list = projects.slice();
+    if (sortMode === "title") return list.sort(byTitle);
+    if (sortMode === "label") {
+      return list.sort((a, b) => getCatalogueGroupRank(a, config) - getCatalogueGroupRank(b, config) || byTitle(a, b));
+    }
+    return list.sort(bySortThenTitle);
+  }
+
+  function buildCatalogueStatusMessage({ category, config, filterValue, sortValue, total, visibleCount, loaded }) {
+    const labelText = filterValue === "All" ? `All ${config.filterLabelPlural}` : filterValue;
+    const sortText = sortValue === "curated" ? "Curated" : sortValue === "title" ? "Title A-Z" : config.sortLabel;
+    const noun = String(category || "records").toLowerCase();
+    const sourceNote = loaded ? "" : " Saved catalogue data is in use because live data could not be loaded.";
+
+    if (visibleCount === 0) {
+      return `No ${noun} match ${labelText}. Sort: ${sortText}.${sourceNote}`;
+    }
+
+    return `Showing ${visibleCount} of ${total} ${noun}. Filter: ${labelText}. Sort: ${sortText}.${sourceNote}`;
+  }
+
+  function createCatalogueControls(config, filterOptions, state, onFilterChange, onSortChange) {
+    if (!catalogueControls) return null;
+
+    const buttons = [createElement("button", {
+      className: "filter-btn",
+      type: "button",
+      text: "All",
+      dataset: { filterValue: "All" },
+      "aria-controls": "project-grid",
+      "aria-pressed": state.filter === "All" ? "true" : "false",
+    })];
+
+    filterOptions.forEach((label) => {
+      buttons.push(createElement("button", {
+        className: "filter-btn",
+        type: "button",
+        text: label,
+        dataset: { filterValue: label },
+        "aria-controls": "project-grid",
+        "aria-pressed": state.filter === label ? "true" : "false",
+      }));
+    });
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => onFilterChange(button.dataset.filterValue || "All"));
+    });
+
+    const sortSelect = createElement("select", {
+      className: "catalogue-select",
+      id: "catalogue-sort",
+      "aria-controls": "project-grid",
+    }, [
+      createElement("option", { value: "curated", text: "Curated" }),
+      createElement("option", { value: "title", text: "Title A-Z" }),
+      createElement("option", { value: "label", text: config.sortLabel }),
+    ]);
+    sortSelect.value = state.sort;
+    sortSelect.addEventListener("change", (event) => onSortChange(event.target.value));
+
+    const filterRow = createElement("div", { className: "filter-row", role: "group", "aria-label": `${config.filterLabel} filters` }, buttons);
+    const panel = createElement("div", { className: "catalogue-controls-panel" }, [
+      createElement("div", { className: "catalogue-control-group" }, [
+        createElement("p", { className: "catalogue-control-label", text: config.filterLabel }),
+        filterRow,
+      ]),
+      createElement("label", { className: "catalogue-control-group catalogue-control-group-sort", htmlFor: "catalogue-sort" }, [
+        createElement("span", { className: "catalogue-control-label", text: "Sort" }),
+        sortSelect,
+      ]),
+    ]);
+
+    catalogueControls.replaceChildren(panel);
+    catalogueControls.hidden = false;
+
+    return {
+      sync(nextState) {
+        buttons.forEach((button) => {
+          const active = (button.dataset.filterValue || "All") === nextState.filter;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        sortSelect.value = nextState.sort;
+      },
+    };
+  }
+
+  function renderCatalogue(projects, context = {}) {
     const grid = document.getElementById("project-grid");
     const category = document.body.dataset.category;
     const predicate = (project) => project.category === category;
@@ -593,9 +791,63 @@
       predicate,
       `${category || "This catalogue"} data is incomplete. Showing saved fallback cards instead.`
     );
-    renderGrid(grid, list, {
-      emptyMessage: `${category || "This catalogue"} records are unavailable right now. Showing the saved page content instead.`,
-    });
+    const config = getCatalogueConfig(category);
+
+    if (!config) {
+      if (catalogueControls) {
+        catalogueControls.hidden = true;
+        catalogueControls.replaceChildren();
+      }
+      renderGrid(grid, list, {
+        emptyMessage: `${category || "This catalogue"} records are unavailable right now. Showing the saved page content instead.`,
+      });
+      return;
+    }
+
+    const filterOptions = config.labelOrder.filter((label) => list.some((project) => project.catalogueLabels.includes(label)));
+    const state = { filter: "All", sort: "curated" };
+    const controls = createCatalogueControls(
+      config,
+      filterOptions,
+      state,
+      (filterValue) => {
+        state.filter = filterValue;
+        applyCatalogueState();
+      },
+      (sortValue) => {
+        state.sort = sortValue;
+        applyCatalogueState();
+      }
+    );
+
+    function applyCatalogueState() {
+      controls?.sync(state);
+      const filtered = state.filter === "All" ? list.slice() : list.filter((project) => project.catalogueLabels.includes(state.filter));
+      const sorted = sortCatalogueProjects(filtered, state.sort, config);
+      const emptyMessage =
+        state.filter === "All"
+          ? `No ${String(category || "catalogue").toLowerCase()} records are available right now.`
+          : `No ${String(category || "catalogue").toLowerCase()} match ${state.filter}.`;
+
+      renderGrid(grid, sorted, {
+        emptyMessage,
+        preserveExistingOnEmpty: false,
+      });
+      showDataStatus(
+        buildCatalogueStatusMessage({
+          category,
+          config,
+          filterValue: state.filter,
+          sortValue: state.sort,
+          total: list.length,
+          visibleCount: sorted.length,
+          loaded: context.loaded !== false,
+        }),
+        { tone: context.loaded === false ? "warning" : "summary" }
+      );
+    }
+
+    applyCatalogueState();
   }
 
   function renderApps(projects) {
@@ -664,19 +916,25 @@
     });
   }
 
-  function renderPage(projects) {
+  function renderPage(projects, context = {}) {
     const page = document.body.dataset.page;
     if (page === "home") renderHome(projects);
-    if (page === "catalogue") renderCatalogue(projects);
+    if (page === "catalogue") renderCatalogue(projects, context);
     if (page === "apps") renderApps(projects);
     if (page === "pocket-audio") renderPocketAudio(projects);
     if (page === "links") renderLinks(projects);
   }
 
-  function showDataStatus(message, canRetry = false) {
+  function showDataStatus(message, options = {}) {
     if (!dataStatus) return;
+    const normalizedOptions =
+      typeof options === "boolean"
+        ? { canRetry: options, tone: "warning" }
+        : { canRetry: options.canRetry === true, tone: options.tone || "warning" };
+
     dataStatus.replaceChildren(document.createTextNode(message));
-    if (canRetry) {
+    dataStatus.dataset.state = normalizedOptions.tone;
+    if (normalizedOptions.canRetry) {
       const retry = createElement("button", { className: "filter-btn", type: "button", text: "Retry" });
       retry.addEventListener("click", () => window.location.reload());
       dataStatus.append(retry);
@@ -687,6 +945,7 @@
   function hideDataStatus() {
     if (!dataStatus) return;
     dataStatus.hidden = true;
+    delete dataStatus.dataset.state;
     dataStatus.replaceChildren();
   }
 
@@ -708,11 +967,11 @@
       const data = await fetchJsonWithTimeout(DATA_URL);
       const projects = normalizeProjects(data);
       if (!projects.length) throw new Error("No project records");
-      hideDataStatus();
+      if (document.body.dataset.page !== "catalogue") hideDataStatus();
       return { projects, loaded: true };
     } catch (error) {
       console.warn("Project data could not be loaded:", error);
-      showDataStatus("Project data could not be loaded. Saved catalogue cards are still available.", true);
+      showDataStatus("Project data could not be loaded. Saved catalogue cards are still available.", { canRetry: true, tone: "warning" });
       return { projects: normalizeProjects(fallbackProjects), loaded: false };
     }
   }
@@ -1462,7 +1721,7 @@
     const hasSavedCards = gridHasUsefulCards(primaryGrid);
     const { projects, loaded } = await loadProjects();
     if (loaded || !hasSavedCards) {
-      renderPage(projects);
+      renderPage(projects, { loaded });
     } else {
       initializeReveals(primaryGrid);
     }
