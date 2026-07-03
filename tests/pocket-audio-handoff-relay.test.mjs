@@ -64,6 +64,24 @@ test("allows itch-hosted Chordsmith builds to preflight relay requests", async (
   assert.equal(create.headers.get("access-control-allow-origin"), "https://html-classic.itch.zone");
 });
 
+test("accepts large mobile Chordsmith songs within the relay cap", async () => {
+  const largeCode = `PCS1:${"x".repeat(125000)}`;
+  const create = await handleRequest(new Request("https://relay.test/api/pocket-audio-handoff/transfers", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      origin: "https://html-classic.itch.zone"
+    },
+    body: JSON.stringify({ code: largeCode })
+  }), { ...env, HANDOFF_MAX_CHARS: "500000" });
+
+  assert.equal(create.status, 201);
+  const created = await create.json();
+  const read = await handleRequest(new Request(`https://relay.test/api/pocket-audio-handoff/transfers/${created.shortCode}`), env);
+  assert.equal(read.status, 200);
+  assert.equal((await read.json()).code, largeCode);
+});
+
 test("rejects non-PCS1 payloads and oversized songs", async () => {
   const bad = await handleRequest(new Request("https://relay.test/transfers", {
     method: "POST",

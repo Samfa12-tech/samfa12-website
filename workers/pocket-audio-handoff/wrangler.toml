@@ -7,7 +7,7 @@ preview_urls = true
 [vars]
 PUBLIC_HANDOFF_BASE_URL = "https://samfa12.com/apps/pocket-audio-handoff/"
 HANDOFF_TTL_SECONDS = "1800"
-HANDOFF_MAX_CHARS = "100000"
+HANDOFF_MAX_CHARS = "500000"
 
 [[kv_namespaces]]
 binding = "HANDOFFS"
