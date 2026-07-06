@@ -20,6 +20,10 @@
       {
         "url": "https://samfa12.itch.io/dust-on-the-river",
         "label": "Play on itch.io"
+      },
+      {
+        "label": "Novelisation on Amazon (1 Sep 2026)",
+        "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
       }
     ],
     "sortOrder": 0,
@@ -465,6 +469,29 @@
     "sortOrder": 12,
     "thumbnail": "assets/thumbnails/toknight-47d9be.png",
     "thumbnailAlt": "Cover image for ToKnight"
+  },
+  {
+    "title": "Dust on the River",
+    "category": "Books",
+    "type": "Book",
+    "status": "Coming soon — 1 Sep 2026",
+    "description": "The novelisation of Dust on the River is coming to Amazon.",
+    "tags": [
+      "Adventure",
+      "Mystery",
+      "Western",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Amazon pre-order",
+        "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
+      }
+    ],
+    "sortOrder": 13.5,
+    "thumbnail": "assets/thumbnails/dust-on-the-river-novelisation-cover.png",
+    "thumbnailAlt": "Cover image for Dust on the River novelisation"
   },
   {
     "title": "Article 18",
