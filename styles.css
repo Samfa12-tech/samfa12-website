@@ -757,6 +757,45 @@ h3 {
   font-family: "IBM Plex Mono", "Space Mono", Consolas, monospace;
 }
 
+.community-cta {
+  padding: 0 0 var(--space-6);
+}
+
+.community-cta-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  align-items: center;
+  gap: var(--space-5);
+  border: 1px solid rgba(100, 230, 164, 0.28);
+  border-radius: var(--radius-feature);
+  background:
+    radial-gradient(circle at 12% 20%, rgba(100, 230, 164, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(85, 231, 255, 0.11), rgba(148, 102, 255, 0.12)),
+    rgba(13, 20, 38, 0.82);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6);
+}
+
+.community-cta h2 {
+  margin: var(--space-2) 0 var(--space-3);
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: var(--step-2);
+  line-height: 1;
+}
+
+.community-cta p {
+  max-width: 700px;
+  margin: 0;
+  color: var(--muted);
+}
+
+.community-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
 .bento-grid {
   display: grid;
   grid-auto-flow: dense;
@@ -1216,6 +1255,147 @@ body[data-page="apps"] .project-card-catalogue {
   margin-top: var(--space-2);
 }
 
+.join-hero .hero-inner {
+  max-width: 940px;
+}
+
+.join-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--space-5);
+}
+
+.join-card {
+  --card-accent: var(--cyan);
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--card-accent), transparent 66%);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(circle at 16% 8%, color-mix(in srgb, var(--card-accent), transparent 82%), transparent 44%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), transparent 38%),
+    var(--surface);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6);
+  scroll-margin-top: calc(var(--header-height) + 1.5rem);
+}
+
+.join-card h2 {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: var(--step-2);
+  line-height: 1.05;
+}
+
+.join-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.join-card .button {
+  justify-self: start;
+}
+
+.join-card-mailing {
+  --card-accent: var(--green);
+}
+
+.join-card-testing {
+  --card-accent: var(--spark);
+}
+
+.join-note,
+.privacy-note {
+  border: 1px solid rgba(255, 182, 110, 0.28);
+  border-radius: var(--radius-md);
+  background: rgba(255, 182, 110, 0.08);
+  padding: var(--space-4);
+}
+
+.tester-help {
+  display: grid;
+  gap: var(--space-3);
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-4);
+}
+
+.tester-help h3 {
+  font-size: var(--step-1);
+}
+
+.tester-help ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text-soft);
+}
+
+.join-link-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.join-link-grid a {
+  position: relative;
+  display: grid;
+  min-height: 132px;
+  align-content: end;
+  gap: var(--space-2);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background:
+    linear-gradient(145deg, rgba(85, 231, 255, 0.08), rgba(148, 102, 255, 0.08)),
+    var(--surface);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+  transition:
+    transform var(--duration-ui) var(--ease-out),
+    border-color var(--duration-ui) var(--ease-out),
+    box-shadow var(--duration-ui) var(--ease-out);
+}
+
+.join-link-grid a::before {
+  position: absolute;
+  right: 1rem;
+  top: 0.85rem;
+  color: var(--spark);
+  content: "->";
+  font-family: "IBM Plex Mono", "Space Mono", Consolas, monospace;
+  font-weight: 800;
+}
+
+.join-link-grid a:hover,
+.join-link-grid a:focus-visible {
+  transform: translateY(-4px);
+  border-color: var(--cyan);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.32), var(--shadow-glow);
+}
+
+.join-link-grid span {
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: var(--step-1);
+  font-weight: 800;
+}
+
+.join-link-grid small {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.privacy-note {
+  max-width: 900px;
+  margin: var(--space-5) 0 0;
+  color: var(--text-soft);
+}
+
 .workflow-section {
   overflow: clip;
 }
@@ -1651,6 +1831,19 @@ body[data-page="apps"] .project-card-catalogue {
     flex-direction: column;
   }
 
+  .community-cta-inner,
+  .join-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .community-cta-actions {
+    justify-content: flex-start;
+  }
+
+  .join-link-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .workflow {
     grid-template-columns: 1fr;
   }
@@ -1720,6 +1913,7 @@ body[data-page="apps"] .project-card-catalogue {
   .bento-grid,
   .catalogue-grid,
   .card-grid,
+  .join-link-grid,
   .explore-doors,
   .footer-grid {
     grid-template-columns: 1fr;
@@ -1735,11 +1929,17 @@ body[data-page="apps"] .project-card-catalogue {
 
   .project-card,
   .mini-lab-card,
+  .join-card,
   .nav-tile,
   .link-group,
   .workflow-card {
     padding: var(--space-4);
     border-radius: var(--radius-md);
+  }
+
+  .community-cta-inner {
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
   }
 
   .pad-grid {
