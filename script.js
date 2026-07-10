@@ -1,6 +1,8 @@
 (() => {
-  const DATA_VERSION = "20260701-1";
+  const DATA_VERSION = "20260711-1";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
+  const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
+  const CLARITY_PROJECT_ID = "x4qwugpfik";
   const FETCH_TIMEOUT_MS = 8000;
   const FOCUSABLE_SELECTOR =
     'a[href], button:not([disabled]), iframe, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -25,7 +27,7 @@
       description: "Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.",
       links: [{ label: "Play now", url: "/games/cursed-cutter/" }],
       sortOrder: 3.5,
-      thumbnail: "assets/thumbnails/cursed-cutter-icon.png",
+      thumbnail: "assets/thumbnails/cursed-cutter-icon.webp",
     },
     {
       title: "ToKnight",
@@ -68,7 +70,7 @@
       featured: true,
       links: [{ label: "Listen on Spotify", url: "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg" }],
       sortOrder: 31,
-      thumbnail: "assets/thumbnails/drink-ost-6d4b8e.png",
+      thumbnail: "assets/thumbnails/drink-ost-6d4b8e.webp",
     },
     {
       title: "Samfa12 itch.io",
@@ -235,6 +237,101 @@
     } catch {
       return "";
     }
+  }
+
+  function readAnalyticsConsent() {
+    try {
+      const value = window.localStorage.getItem(ANALYTICS_STORAGE_KEY);
+      return value === "granted" || value === "denied" ? value : "unset";
+    } catch {
+      return "unset";
+    }
+  }
+
+  function writeAnalyticsConsent(value) {
+    try {
+      window.localStorage.setItem(ANALYTICS_STORAGE_KEY, value);
+    } catch {
+      // The choice still applies to this page when storage is unavailable.
+    }
+  }
+
+  function loadClarityAnalytics() {
+    if (document.querySelector("script[data-samfa12-clarity]")) return;
+    window.clarity = window.clarity || function clarityQueue() {
+      (window.clarity.q = window.clarity.q || []).push(arguments);
+    };
+    const script = document.createElement("script");
+    script.async = true;
+    script.dataset.samfa12Clarity = "true";
+    script.src = `https://www.clarity.ms/tag/${CLARITY_PROJECT_ID}`;
+    document.head.append(script);
+  }
+
+  function removeAnalyticsChoice() {
+    document.querySelector("[data-analytics-choice]")?.remove();
+  }
+
+  function showAnalyticsChoice() {
+    removeAnalyticsChoice();
+    const previouslyLoaded = Boolean(document.querySelector("script[data-samfa12-clarity]"));
+    const message = createElement("p", {
+      className: "analytics-choice-copy",
+      text: "Optional analytics help Samfa12 find broken or confusing parts of the site. They stay off unless you allow them.",
+    });
+    const privacyLink = createElement("a", { className: "analytics-choice-link", href: "/privacy/", text: "Privacy details" });
+    const allowButton = createElement("button", {
+      className: "button analytics-choice-allow",
+      type: "button",
+      text: "Allow analytics",
+    });
+    const declineButton = createElement("button", {
+      className: "button button-ghost analytics-choice-decline",
+      type: "button",
+      text: readAnalyticsConsent() === "granted" ? "Disable analytics" : "No thanks",
+    });
+    const choice = createElement("aside", {
+      className: "analytics-choice",
+      role: "region",
+      "aria-label": "Analytics preference",
+      dataset: { analyticsChoice: "" },
+    }, [
+      createElement("div", { className: "analytics-choice-text" }, [
+        createElement("p", { className: "eyebrow", text: "Privacy signal" }),
+        message,
+        privacyLink,
+      ]),
+      createElement("div", { className: "analytics-choice-actions" }, [allowButton, declineButton]),
+    ]);
+
+    allowButton.addEventListener("click", () => {
+      writeAnalyticsConsent("granted");
+      loadClarityAnalytics();
+      removeAnalyticsChoice();
+    });
+    declineButton.addEventListener("click", () => {
+      writeAnalyticsConsent("denied");
+      removeAnalyticsChoice();
+      if (previouslyLoaded) window.location.reload();
+    });
+    document.body.append(choice);
+  }
+
+  function initializeAnalyticsPreferences() {
+    const consent = readAnalyticsConsent();
+    if (consent === "granted") loadClarityAnalytics();
+    else if (consent === "unset") showAnalyticsChoice();
+
+    const signals = document.querySelector(".site-footer .footer-grid > div:last-child .footer-links");
+    if (!signals || signals.querySelector("[data-analytics-preferences]")) return;
+    const preferences = createElement("button", {
+      className: "footer-link-button",
+      type: "button",
+      text: "Analytics preferences",
+      dataset: { analyticsPreferences: "" },
+    });
+    preferences.addEventListener("click", showAnalyticsChoice);
+    signals.append(preferences);
   }
 
   function safePathname(url) {
@@ -471,6 +568,7 @@
   function createProjectCard(project, options = {}) {
     const { variant = "catalogue", index = 0 } = options;
     const isFeatured = variant === "featured";
+    const isSpotlight = variant === "spotlight";
     const size = isFeatured ? getHomepageSize(project, index) : "standard";
     const primaryLink = getPrimaryLink(project);
     const article = createElement("article", {
@@ -482,10 +580,10 @@
     });
 
     appendChildren(article, [
-      projectThumbnail(project, isFeatured && index === 0),
+      projectThumbnail(project, (isFeatured || isSpotlight) && index === 0),
       createElement("p", {
         className: "project-label",
-        text: `${project.type}${isFeatured ? ` // ${project.category}` : ""}`,
+        text: `${project.type}${isFeatured || isSpotlight ? ` // ${project.category}` : ""}`,
       }),
       createElement("h3", { text: project.title }),
       createElement("p", { className: "card-description", text: project.description }),
@@ -496,7 +594,7 @@
     ]);
     article.append(meta);
 
-    if (!isFeatured && project.catalogueLabels.length) {
+    if (!isFeatured && !isSpotlight && project.catalogueLabels.length) {
       const labels = createElement("p", { className: "project-meta project-meta-catalogue-labels" });
       project.catalogueLabels.forEach((label) => {
         labels.append(createElement("span", { className: "pill pill-catalogue-label", text: label }));
@@ -505,10 +603,14 @@
     }
 
     if (primaryLink) {
-      const actions = createElement("div", { className: "project-actions", "aria-label": `${project.title} links` });
+      const actions = createElement("div", {
+        className: "project-actions",
+        role: "group",
+        "aria-label": `${project.title} links`,
+      });
       actions.append(projectLink(primaryLink, project, true));
 
-      if (!isFeatured) {
+      if (!isFeatured && !isSpotlight) {
         project.links.slice(1).forEach((link) => {
           const node = projectLink(link, project, false);
           if (node) actions.append(node);
@@ -518,7 +620,7 @@
       article.append(actions);
     }
 
-    if (!isFeatured && project.tags.length) {
+    if (!isFeatured && !isSpotlight && project.tags.length) {
       const tags = createElement("p", { className: "project-meta" });
       project.tags.slice(0, 5).forEach((tag) => tags.append(createElement("span", { className: "pill", text: tag })));
       article.append(tags);
@@ -783,6 +885,7 @@
 
   function renderCatalogue(projects, context = {}) {
     const grid = document.getElementById("project-grid");
+    const spotlightGrid = document.getElementById("spotlight-grid");
     const category = document.body.dataset.category;
     const predicate = (project) => project.category === category;
     const list = usePageFallbackIfEmpty(
@@ -792,6 +895,16 @@
       `${category || "This catalogue"} data is incomplete. Showing saved fallback cards instead.`
     );
     const config = getCatalogueConfig(category);
+
+    if (spotlightGrid) {
+      const spotlight = list.filter((project) => project.featured === true).slice(0, 4);
+      renderGrid(spotlightGrid, spotlight, {
+        variant: "spotlight",
+        emptyMessage: "",
+        preserveExistingOnEmpty: false,
+      });
+      spotlightGrid.closest("[data-spotlight-section]")?.toggleAttribute("hidden", spotlight.length === 0);
+    }
 
     if (!config) {
       if (catalogueControls) {
@@ -1026,12 +1139,14 @@
     const toggle = document.querySelector("[data-menu-toggle]");
     const panel = document.querySelector("[data-nav-panel]");
     if (!toggle || !panel) return;
+    toggle.setAttribute("aria-label", "Open menu");
     panel.setAttribute("tabindex", "-1");
 
     const closeMenu = (returnFocus = true) => {
       if (!document.body.classList.contains("nav-menu-open")) return;
       document.body.classList.remove("nav-menu-open");
       toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open menu");
       if ("inert" in HTMLElement.prototype) {
         document.querySelectorAll("main, footer").forEach((element) => {
           element.inert = false;
@@ -1043,6 +1158,7 @@
     const openMenu = () => {
       document.body.classList.add("nav-menu-open");
       toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-label", "Close menu");
       if ("inert" in HTMLElement.prototype) {
         document.querySelectorAll("main, footer").forEach((element) => {
           element.inert = true;
@@ -1713,6 +1829,7 @@
     setCurrentYear();
     initializeSiteClock();
     initializeNavigation();
+    initializeAnalyticsPreferences();
     initializeGameOverlay();
     initializeReveals();
     renderLoadingState();

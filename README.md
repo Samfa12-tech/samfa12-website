@@ -12,6 +12,8 @@ Pocket Audio, music, and links for **Samfa12**.
 - `pocket-audio/index.html` – Pocket Audio family/workflow page
 - `music/index.html` – music and audio catalogue
 - `links/index.html` – full social/store/source links page
+- `privacy/index.html` – analytics, signup, handoff, and external-platform privacy information
+- `404.html` – branded GitHub Pages recovery page
 - `styles.css` – dark, responsive styling and component styles
 - `script.js` – data-driven rendering for the homepage and section pages
 - `data/projects.json` – editable source of projects/cards
@@ -22,6 +24,7 @@ Pocket Audio, music, and links for **Samfa12**.
 - `assets/favicon.png` – browser/page icon derived from the Samfa12 character image
 - `assets/samfa12-character.jpg` – Samfa12 character image used in the header brand mark
 - `assets/og-image.png` – social preview image
+- `assets/og-image-v2.png` – current 1200×630 social preview image
 - `assets/thumbnails/` – local project card thumbnails
 - `CNAME` – `samfa12.com` domain file
 - `.github/workflows/pages.yml` – optional GitHub Pages deploy workflow
@@ -91,6 +94,27 @@ python -m http.server 8000
 Then open:
 
 `http://localhost:8000`
+
+## Shared cache versions
+
+After changing `styles.css`, `script.js`, or `data/projects.json`, update the
+shared cache key across the static pages:
+
+```bash
+npm run bump:cache -- 20260711-2
+```
+
+Use the current date plus an incrementing release number. The command updates
+the shared stylesheet/script query strings and the project-data version used by
+`script.js`.
+
+## Analytics and privacy
+
+Microsoft Clarity is opt-in. The shared site script shows an analytics choice,
+stores the visitor's preference locally, and loads Clarity only after consent.
+Visitors can reopen the choice through **Analytics preferences** in the footer.
+Keep `/privacy/` accurate when signup providers, analytics, or the Pocket Audio
+handoff retention period change.
 
 Option B: VS Code Live Server
 

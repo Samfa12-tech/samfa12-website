@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>Join Samfa12 | Mailing List and Tester Signup</title>
     <meta
       name="description"
@@ -16,14 +17,16 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://samfa12.com/join/" />
-    <meta property="og:image" content="https://samfa12.com/assets/og-image.png" />
+    <meta property="og:image" content="https://samfa12.com/assets/og-image-v2.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Join Samfa12" />
     <meta
       name="twitter:description"
       content="Mailing list updates, early tester signup, and official Samfa12 destinations."
     />
-    <meta name="twitter:image" content="https://samfa12.com/assets/og-image.png" />
+    <meta name="twitter:image" content="https://samfa12.com/assets/og-image-v2.png" />
     <link rel="canonical" href="https://samfa12.com/join/" />
     <link rel="icon" type="image/png" href="/assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,7 +35,7 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=20260709-1" />
+    <link rel="stylesheet" href="/styles.css?v=20260711-1" />
   </head>
   <body data-page="join">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -76,6 +79,7 @@
             <a
               class="button"
               href="https://docs.google.com/forms/d/e/1FAIpQLSfLRVStTUVhjK_6MwqWix5ouoJFLFx3XTXWC9wZGRmCweB8JA/viewform"
+              aria-label="Join the Mailing List — opens Google Form in a new tab"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -84,6 +88,7 @@
             <a
               class="button button-ghost"
               href="https://docs.google.com/forms/d/e/1FAIpQLSedW3OI4t32GI19toulgtkQxvny8FYyFUb5XVLf6tyzaW6TeQ/viewform"
+              aria-label="Become a Tester — opens Google Form in a new tab"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -95,6 +100,7 @@
 
       <section class="section section-tight">
         <div class="container join-grid">
+          <h2 class="sr-only">Ways to join Samfa12</h2>
           <article id="mailing-list" class="join-card join-card-mailing">
             <p class="eyebrow">Section 1</p>
             <h2>Join the mailing list</h2>
@@ -105,6 +111,7 @@
             <a
               class="button"
               href="https://docs.google.com/forms/d/e/1FAIpQLSfLRVStTUVhjK_6MwqWix5ouoJFLFx3XTXWC9wZGRmCweB8JA/viewform"
+              aria-label="Join the Mailing List — opens Google Form in a new tab"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -122,6 +129,7 @@
             <a
               class="button button-ghost"
               href="https://docs.google.com/forms/d/e/1FAIpQLSedW3OI4t32GI19toulgtkQxvny8FYyFUb5XVLf6tyzaW6TeQ/viewform"
+              aria-label="Become a Tester — opens Google Form in a new tab"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -155,7 +163,7 @@
               </p>
             </div>
           </div>
-          <div class="join-link-grid" aria-label="Official Samfa12 links">
+          <div class="join-link-grid" role="group" aria-label="Official Samfa12 links">
             <a href="https://play.google.com/store/apps/dev?id=7761853381809168545" target="_blank" rel="noopener noreferrer">
               <span>Google Play</span>
               <small>Android games and app releases</small>
@@ -195,7 +203,8 @@
           </div>
           <p class="privacy-note">
             Samfa12 only uses your details for updates, testing invites and related release news. You can unsubscribe or
-            ask to be removed at any time.
+            ask to be removed at any time. Read the <a href="/privacy/">Samfa12 privacy page</a> for analytics, signup,
+            retention, and external-platform details.
           </p>
         </div>
       </section>
@@ -230,6 +239,7 @@
               <a href="https://samfa12.itch.io/" target="_blank" rel="noopener noreferrer">itch.io</a>
               <a href="https://github.com/Samfa12-tech" target="_blank" rel="noopener noreferrer">GitHub</a>
               <a href="https://x.com/Samfa12" target="_blank" rel="noopener noreferrer">X / Twitter</a>
+              <a href="/privacy/">Privacy</a>
             </div>
             <button class="footer-surprise" type="button" data-surprise disabled>Surprise me</button>
           </div>
@@ -237,6 +247,6 @@
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
       </div>
     </footer>
-    <script src="/script.js?v=20260701-1" defer></script>
+    <script src="/script.js?v=20260711-1" defer></script>
   </body>
 </html>

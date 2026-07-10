@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>Samfa12 | Games, stories, music, and Pocket Audio</title>
     <meta
       name="description"
@@ -17,7 +18,9 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://samfa12.com/" />
-    <meta property="og:image" content="https://samfa12.com/assets/og-image.png" />
+    <meta property="og:image" content="https://samfa12.com/assets/og-image-v2.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="en_AU" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Samfa12 | Games, stories, music, and Pocket Audio" />
@@ -25,7 +28,7 @@
       name="twitter:description"
       content="Games, books, music, Pocket Audio tools, and unusual experiments from Samfa12."
     />
-    <meta name="twitter:image" content="https://samfa12.com/assets/og-image.png" />
+    <meta name="twitter:image" content="https://samfa12.com/assets/og-image-v2.png" />
     <meta name="twitter:site" content="@Samfa12" />
     <link rel="canonical" href="https://samfa12.com/" />
     <link rel="icon" type="image/png" href="/assets/favicon.png" />
@@ -35,7 +38,7 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=20260709-1" />
+    <link rel="stylesheet" href="/styles.css?v=20260711-1" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -173,13 +176,13 @@
             <span class="signal-dot" aria-hidden="true"></span>
             <span class="signal-label">Local time</span>
           </div>
-          <div class="signal-items" aria-label="Site areas">
+          <div class="signal-items" role="group" aria-label="Site areas">
             <span>Playable worlds</span>
             <span>Story signals</span>
             <span>Pocket Audio</span>
             <span>Source experiments</span>
           </div>
-          <time class="signal-time" data-site-time>--:--</time>
+          <time class="signal-time" data-site-time datetime="00:00">00:00</time>
         </div>
       </section>
 
@@ -192,7 +195,7 @@
               Get release news, early access opportunities and tester invites for upcoming Samfa12 games and projects.
             </p>
           </div>
-          <div class="community-cta-actions" aria-label="Join Samfa12 actions">
+          <div class="community-cta-actions" role="group" aria-label="Join Samfa12 actions">
             <a class="button" href="/join/#mailing-list">Join the Mailing List</a>
             <a class="button button-ghost" href="/join/#tester-signup">Become a Tester</a>
           </div>
@@ -282,6 +285,7 @@
               <a href="https://samfa12.itch.io/" target="_blank" rel="noopener noreferrer">itch.io</a>
               <a href="https://github.com/Samfa12-tech" target="_blank" rel="noopener noreferrer">GitHub</a>
               <a href="https://x.com/Samfa12" target="_blank" rel="noopener noreferrer">X / Twitter</a>
+              <a href="/privacy/">Privacy</a>
             </div>
             <button class="footer-surprise" type="button" data-surprise disabled>Surprise me</button>
           </div>
@@ -290,18 +294,6 @@
       </div>
     </footer>
 
-    <script type="text/javascript">
-      (function(c, l, a, r, i, t, y) {
-        c[a] = c[a] || function() {
-          (c[a].q = c[a].q || []).push(arguments);
-        };
-        t = l.createElement(r);
-        t.async = 1;
-        t.src = "https://www.clarity.ms/tag/" + i;
-        y = l.getElementsByTagName(r)[0];
-        y.parentNode.insertBefore(t, y);
-      })(window, document, "clarity", "script", "x4qwugpfik");
-    </script>
-    <script src="/script.js?v=20260701-1" defer></script>
+    <script src="/script.js?v=20260711-1" defer></script>
   </body>
 </html>

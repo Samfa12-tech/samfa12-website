@@ -28,6 +28,7 @@
   --space-9: 7rem;
   --radius-sm: 12px;
   --radius-md: 18px;
+  --radius-lg: 28px;
   --radius-card: 24px;
   --radius-feature: 32px;
   --shadow-card: 0 24px 70px rgba(0, 0, 0, 0.28);
@@ -1048,6 +1049,31 @@ h3 {
   gap: var(--space-5);
 }
 
+.catalogue-spotlight {
+  margin-bottom: var(--space-8);
+}
+
+.catalogue-spotlight[hidden] {
+  display: none;
+}
+
+.spotlight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.project-card-spotlight {
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--card-accent), transparent 82%), transparent 52%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), transparent 38%),
+    rgba(14, 22, 40, 0.9);
+}
+
+.catalogue-full-head {
+  margin-bottom: var(--space-5);
+}
+
 .project-card-catalogue {
   min-height: 100%;
 }
@@ -1436,7 +1462,9 @@ body[data-page="apps"] .project-card-catalogue {
   font-weight: 900;
 }
 
-.workflow-card strong {
+.workflow-card strong,
+.workflow-card h3 {
+  margin: 0;
   font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
   font-size: var(--step-1);
 }
@@ -1591,13 +1619,23 @@ body[data-page="apps"] .project-card-catalogue {
 }
 
 .footer-links a,
+.footer-link-button,
 .footer-signoff {
   color: var(--text-soft);
 }
 
 .footer-links a:hover,
-.footer-links a:focus-visible {
+.footer-links a:focus-visible,
+.footer-link-button:hover,
+.footer-link-button:focus-visible {
   color: var(--cyan);
+}
+
+.footer-link-button {
+  margin: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
 }
 
 .footer-signoff {
@@ -1617,6 +1655,58 @@ body[data-page="apps"] .project-card-catalogue {
   margin: var(--space-6) 0 0;
   color: rgba(217, 225, 242, 0.62);
   font-size: var(--step--1);
+}
+
+.analytics-choice {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  left: max(1rem, env(safe-area-inset-left));
+  z-index: 1200;
+  display: grid;
+  width: min(760px, calc(100% - 2rem));
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-5);
+  margin-left: auto;
+  border: 1px solid rgba(85, 231, 255, 0.38);
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(circle at top right, rgba(148, 102, 255, 0.18), transparent 45%),
+    rgba(5, 7, 20, 0.97);
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.55);
+  padding: var(--space-4);
+}
+
+.analytics-choice-text,
+.analytics-choice-actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.analytics-choice .eyebrow,
+.analytics-choice-copy {
+  margin: 0;
+}
+
+.analytics-choice-copy {
+  color: var(--text-soft);
+}
+
+.analytics-choice-link {
+  width: fit-content;
+  color: var(--cyan);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.analytics-choice-actions {
+  min-width: 180px;
+}
+
+.analytics-choice-actions .button {
+  width: 100%;
 }
 
 .fullscreen-game-shell {
@@ -1744,6 +1834,10 @@ body[data-page="apps"] .project-card-catalogue {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .spotlight-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .explore-doors {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1790,7 +1884,7 @@ body[data-page="apps"] .project-card-catalogue {
     overflow: auto;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius-card);
-    background: rgba(9, 13, 28, 0.98);
+    background: #090d1c;
     box-shadow: var(--shadow-card);
     padding: var(--space-5);
     visibility: hidden;
@@ -1911,6 +2005,7 @@ body[data-page="apps"] .project-card-catalogue {
   }
 
   .bento-grid,
+  .spotlight-grid,
   .catalogue-grid,
   .card-grid,
   .join-link-grid,
@@ -1952,6 +2047,14 @@ body[data-page="apps"] .project-card-catalogue {
 
   .catalogue-control-group-sort {
     max-width: none;
+  }
+
+  .analytics-choice {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-choice-actions {
+    min-width: 0;
   }
 }
 

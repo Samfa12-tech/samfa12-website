@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>Games | Samfa12</title>
     <meta
       name="description"
@@ -13,8 +14,13 @@
     <meta property="og:description" content="A catalogue of Samfa12 games, from published releases to playable prototypes." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://samfa12.com/games/" />
-    <meta property="og:image" content="https://samfa12.com/assets/og-image.png" />
+    <meta property="og:image" content="https://samfa12.com/assets/og-image-v2.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Games | Samfa12" />
+    <meta name="twitter:description" content="A catalogue of Samfa12 games, from published releases to playable prototypes." />
+    <meta name="twitter:image" content="https://samfa12.com/assets/og-image-v2.png" />
     <link rel="canonical" href="https://samfa12.com/games/" />
     <link rel="icon" type="image/png" href="/assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,7 +29,7 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=20260709-1" />
+    <link rel="stylesheet" href="/styles.css?v=20260711-1" />
   </head>
   <body data-page="catalogue" data-category="Games">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -64,6 +70,23 @@
       </section>
       <section class="section section-tight">
         <div class="container">
+          <section class="catalogue-spotlight" aria-labelledby="games-start-here-title" data-spotlight-section hidden>
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Start here</p>
+                <h2 id="games-start-here-title">Flagship releases.</h2>
+                <p class="section-intro">Three strong entry points into Samfa12 games before you browse the full lab.</p>
+              </div>
+            </div>
+            <div id="spotlight-grid" class="spotlight-grid"></div>
+          </section>
+          <div class="section-head catalogue-full-head">
+            <div>
+              <p class="eyebrow">Full catalogue</p>
+              <h2>Browse every game.</h2>
+              <p class="section-intro">Filter by platform or sort the complete collection of releases and experiments.</p>
+            </div>
+          </div>
           <div id="catalogue-controls" class="catalogue-controls" hidden></div>
           <p id="data-status" class="status" role="status" aria-live="polite" hidden></p>
           <div id="project-grid" class="catalogue-grid" aria-live="polite">
@@ -83,7 +106,7 @@
               <h3>Dust on the River</h3>
               <p class="card-description">A story-driven bushranger adventure about whether a violent past can ever really stay buried.</p>
               <p class="project-meta"><span class="pill status-published">Published</span></p>
-              <div class="project-actions" aria-label="Dust on the River links">
+              <div class="project-actions" role="group" aria-label="Dust on the River links">
                 <a class="project-link project-link-primary" href="https://samfa12.itch.io/dust-on-the-river">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
               </div>
             </article>
@@ -91,7 +114,7 @@
               <div class="project-media">
                 <img
                   class="project-image"
-                  src="/assets/thumbnails/drink-2ad44b.png"
+                  src="/assets/thumbnails/drink-2ad44b.webp"
                   alt="Cover image for Drink"
                   loading="lazy"
                   decoding="async"
@@ -103,7 +126,7 @@
               <h3>Drink</h3>
               <p class="card-description">A Samfa12 game release available on Steam, Google Play, and itch.io.</p>
               <p class="project-meta"><span class="pill status-published">Published</span></p>
-              <div class="project-actions" aria-label="Drink links">
+              <div class="project-actions" role="group" aria-label="Drink links">
                 <a class="project-link project-link-primary" href="https://samfa12.itch.io/drink">Play on itch.io <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
               </div>
             </article>
@@ -111,7 +134,7 @@
               <div class="project-media">
                 <img
                   class="project-image"
-                  src="/assets/thumbnails/bug-swarm-experiment.png"
+                  src="/assets/thumbnails/bug-swarm-experiment.webp"
                   alt="Key art for Bug Swarm"
                   loading="lazy"
                   decoding="async"
@@ -123,7 +146,7 @@
               <h3>Bug Swarm</h3>
               <p class="card-description">A browser-hosted swarm defense experiment with fast bug floods, kid-made towers, upgrades, and touch-first play.</p>
               <p class="project-meta"><span class="pill status-experimental">Experimental</span></p>
-              <div class="project-actions" aria-label="Bug Swarm links">
+              <div class="project-actions" role="group" aria-label="Bug Swarm links">
                 <a class="project-link project-link-primary" href="/games/bug-swarm/">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
               </div>
             </article>
@@ -131,7 +154,7 @@
               <div class="project-media">
                 <img
                   class="project-image"
-                  src="/assets/thumbnails/cursed-cutter-icon.png"
+                  src="/assets/thumbnails/cursed-cutter-icon.webp"
                   alt="Icon for Cursed Cutter"
                   loading="lazy"
                   decoding="async"
@@ -143,7 +166,7 @@
               <h3>Cursed Cutter</h3>
               <p class="card-description">Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.</p>
               <p class="project-meta"><span class="pill status-available">Playable</span></p>
-              <div class="project-actions" aria-label="Cursed Cutter links">
+              <div class="project-actions" role="group" aria-label="Cursed Cutter links">
                 <a class="project-link project-link-primary" href="/games/cursed-cutter/">Play now <span class="link-arrow" aria-hidden="true">-&gt;</span></a>
               </div>
             </article>
@@ -181,6 +204,7 @@
               <a href="https://samfa12.itch.io/" target="_blank" rel="noopener noreferrer">itch.io</a>
               <a href="https://store.steampowered.com/search/?publisher=Samfa12" target="_blank" rel="noopener noreferrer">Steam</a>
               <a href="https://play.google.com/store/apps/dev?id=7761853381809168545" target="_blank" rel="noopener noreferrer">Google Play</a>
+              <a href="/privacy/">Privacy</a>
             </div>
             <button class="footer-surprise" type="button" data-surprise disabled>Surprise me</button>
           </div>
@@ -188,6 +212,6 @@
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
       </div>
     </footer>
-    <script src="/script.js?v=20260701-1" defer></script>
+    <script src="/script.js?v=20260711-1" defer></script>
   </body>
 </html>

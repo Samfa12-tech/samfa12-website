@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "bump:cache": "node scripts/bump-cache-version.mjs",
     "fetch:thumbnails": "node scripts/fetch-thumbnails.mjs",
     "sync:pocket-apps": "node scripts/sync-pocket-apps.js",
+    "validate:site": "node scripts/validate-site.mjs",
     "dev:handoff": "node scripts/serve-pocket-handoff-dev.mjs",
     "validate:catalogue": "node scripts/validate-catalogue.mjs",
     "test:handoff-relay": "node --test tests/pocket-audio-handoff-relay.test.mjs",

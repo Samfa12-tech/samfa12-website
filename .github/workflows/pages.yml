@@ -33,7 +33,21 @@ jobs:
             --exclude='.git' \
             --exclude='.github' \
             --exclude='.codex-remote-attachments' \
+            --exclude='.wrangler' \
             --exclude='_site' \
+            --exclude='/artifacts/' \
+            --exclude='/tests/' \
+            --exclude='/scripts/' \
+            --exclude='/workers/' \
+            --exclude='**/docs/' \
+            --exclude='**/tests/' \
+            --exclude='**/scripts/' \
+            --exclude='**/README.md' \
+            --exclude='**/package.json' \
+            --exclude='**/package-lock.json' \
+            --exclude='/AGENTS.md' \
+            --exclude='/.gitignore' \
+            --exclude='/qa-*.png' \
             ./ _site/
       - name: Upload site
         uses: actions/upload-pages-artifact@v3

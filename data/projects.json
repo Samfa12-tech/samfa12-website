@@ -61,7 +61,7 @@
       }
     ],
     "sortOrder": 1,
-    "thumbnail": "assets/thumbnails/drink-2ad44b.png",
+    "thumbnail": "assets/thumbnails/drink-2ad44b.webp",
     "thumbnailAlt": "Cover image for Drink"
   },
   {
@@ -117,7 +117,7 @@
       }
     ],
     "sortOrder": 3,
-    "thumbnail": "assets/thumbnails/bug-swarm-experiment.png",
+    "thumbnail": "assets/thumbnails/bug-swarm-experiment.webp",
     "thumbnailAlt": "Key art for Bug Swarm"
   },
   {
@@ -146,7 +146,7 @@
       }
     ],
     "sortOrder": 3.5,
-    "thumbnail": "assets/thumbnails/cursed-cutter-icon.png",
+    "thumbnail": "assets/thumbnails/cursed-cutter-icon.webp",
     "thumbnailAlt": "Icon for Cursed Cutter"
   },
   {
@@ -490,7 +490,7 @@
       }
     ],
     "sortOrder": 13.5,
-    "thumbnail": "assets/thumbnails/dust-on-the-river-novelisation-cover.png",
+    "thumbnail": "assets/thumbnails/dust-on-the-river-novelisation-cover.webp",
     "thumbnailAlt": "Cover image for Dust on the River novelisation"
   },
   {
@@ -671,12 +671,12 @@
     "featured": false,
     "links": [
       {
-        "label": "Google Play closed testing",
-        "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        "label": "Become a tester",
+        "url": "/join/#tester-signup"
       }
     ],
     "sortOrder": 15.5,
-    "thumbnail": "assets/thumbnails/samfa12-chill-pack-app-icon.png",
+    "thumbnail": "assets/thumbnails/samfa12-chill-pack-app-icon.webp",
     "thumbnailAlt": "App icon for Samfa12 Chill Pack"
   },
   {
@@ -809,7 +809,7 @@
       }
     ],
     "sortOrder": 20,
-    "thumbnail": "assets/thumbnails/moon-mower-icon.png",
+    "thumbnail": "assets/thumbnails/moon-mower-icon.webp",
     "thumbnailAlt": "Cover image for Moon Mower"
   },
   {
@@ -878,7 +878,7 @@
       }
     ],
     "sortOrder": 24,
-    "thumbnail": "assets/thumbnails/ant-farm-485b3d.png",
+    "thumbnail": "assets/thumbnails/ant-farm-485b3d.webp",
     "thumbnailAlt": "Cover image for Pocket Ant Farm"
   },
   {
@@ -1061,7 +1061,7 @@
         "url": "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
       }
     ],
-    "thumbnail": "assets/thumbnails/drink-ost-6d4b8e.png",
+    "thumbnail": "assets/thumbnails/drink-ost-6d4b8e.webp",
     "thumbnailAlt": "Cover image for Drink OST",
     "sortOrder": 31
   },
@@ -1082,7 +1082,7 @@
         "url": "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
       }
     ],
-    "thumbnail": "assets/thumbnails/billions-of-years-1f8c2a.png",
+    "thumbnail": "assets/thumbnails/billions-of-years-1f8c2a.webp",
     "thumbnailAlt": "Cover image for Billions of Years",
     "sortOrder": 32
   },
@@ -1104,7 +1104,7 @@
         "url": "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
       }
     ],
-    "thumbnail": "assets/thumbnails/td-pack-ost-f4e2a9.png",
+    "thumbnail": "assets/thumbnails/td-pack-ost-f4e2a9.webp",
     "thumbnailAlt": "Cover image for Samfa12's Tower Defense Pack OST",
     "sortOrder": 33
   },
@@ -1127,7 +1127,7 @@
         "url": "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"
       }
     ],
-    "thumbnail": "assets/thumbnails/lofi-and-chill-ost-album-art.png",
+    "thumbnail": "assets/thumbnails/lofi-and-chill-ost-album-art.webp",
     "thumbnailAlt": "Cover image for Lofi and Chill OST",
     "sortOrder": 33.5
   },
