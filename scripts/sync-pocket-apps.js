@@ -11,6 +11,9 @@ const pocketRoot = process.env.POCKET_CHORDSMITH_ROOT
   : path.join(os.homedir(), "Documents", "Pocket Chordsmith");
 
 const pocketAudioCoreSource = path.join(pocketRoot, "packages", "pocket-audio-core");
+const handoffSource = process.env.POCKET_AUDIO_HANDOFF_HTML
+  ? path.resolve(process.env.POCKET_AUDIO_HANDOFF_HTML)
+  : path.join(pocketRoot, "apps", "pocket-audio-handoff", "index.html");
 
 const pocketAudioCoreImportBlock = `const POCKET_AUDIO_CORE_IMPORT_PATHS = [
   "./pocket-audio-core/src/index.js",
@@ -194,6 +197,33 @@ async function syncApp(app) {
   };
 }
 
+async function syncHandoffApp() {
+  if (!(await exists(handoffSource))) {
+    throw new Error(`POCKET_AUDIO_HANDOFF_HTML points to a missing file: ${handoffSource}`);
+  }
+  const destination = path.join(root, "apps", "pocket-audio-handoff", "index.html");
+  const [canonical, hosted] = await Promise.all([
+    fs.readFile(handoffSource, "utf8"),
+    fs.readFile(destination, "utf8"),
+  ]);
+  const style = canonical.match(/<style>([\s\S]*?)<\/style>/i)?.[1];
+  const main = canonical.match(/<main>([\s\S]*?)<\/main>/i)?.[1];
+  const appScript = canonical.match(/<script>\s*(const HANDOFF_PARAM[\s\S]*?)<\/script>/i)?.[1];
+  if (!style || !main || !appScript) {
+    throw new Error(`Pocket Audio Handoff source does not contain the managed style, main, and app-script blocks: ${handoffSource}`);
+  }
+  const hostedStyle = `${style.trimEnd()}\n    body > .privacy-note{width:min(920px,calc(100vw - 24px)); margin:0 auto 42px}\n  `;
+  let output = hosted.replace(/<style>[\s\S]*?<\/style>/i, `<style>${hostedStyle}</style>`);
+  output = output.replace(/<main\s+id=["']main["']>[\s\S]*?<\/main>/i, `<main id="main">${main}</main>`);
+  output = output.replace(/<script>\s*const HANDOFF_PARAM[\s\S]*?<\/script>/i, `<script>\n${appScript.trim()}\n  </script>`);
+  await fs.writeFile(destination, output.replace(/\r\n/g, "\n"), "utf8");
+  return {
+    name: "Pocket Audio Handoff",
+    source: path.relative(root, handoffSource),
+    destination: path.relative(root, destination),
+  };
+}
+
 async function run() {
   if (!(await exists(pocketRoot))) {
     throw new Error(
@@ -209,6 +239,7 @@ async function run() {
   for (const app of apps) {
     synced.push(await syncApp(app));
   }
+  synced.push(await syncHandoffApp());
 
   console.log("Synced Pocket Audio apps:");
   for (const item of synced) {
