@@ -122,8 +122,8 @@
     "title": "The Horde — Ray Tracing Tech Demo",
     "category": "Games",
     "type": "Tech demo",
-    "status": "Coming soon — Android and Windows",
-    "description": "A coming-soon ray-tracing tech demo for Android and Windows.",
+    "status": "Released — Android and Windows",
+    "description": "A downloadable ray-tracing tech demo for Android and Windows.",
     "tags": [
       "Game",
       "Tech Demo",
@@ -136,7 +136,7 @@
     "imageFit": "contain",
     "links": [
       {
-        "label": "View on itch.io",
+        "label": "Download on itch.io",
         "url": "https://samfa12.itch.io/the-horde"
       },
       {
