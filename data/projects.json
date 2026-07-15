@@ -93,6 +93,58 @@
     "thumbnailAlt": "Cover image for Night Shift at Possum's Cafe"
   },
   {
+    "title": "The Last Guard",
+    "category": "Games",
+    "type": "Game",
+    "status": "Released — still in development",
+    "description": "You are the last guard on a once-impenetrable fortress wall as thousands of orcs advance. Defend the wall. Defend your honour.",
+    "tags": [
+      "Game",
+      "Action",
+      "Defense",
+      "In Development",
+      "Samfa12"
+    ],
+    "featured": false,
+    "accent": "spark",
+    "imageFit": "contain",
+    "links": [
+      {
+        "label": "Play on itch.io",
+        "url": "https://samfa12.itch.io/the-last-guard"
+      }
+    ],
+    "sortOrder": 2.1,
+    "thumbnail": "assets/thumbnails/the-last-guard.webp",
+    "thumbnailAlt": "The Last Guard key art showing a lone fortress gun facing a vast orc army"
+  },
+  {
+    "title": "The Horde — Ray Tracing Tech Demo",
+    "category": "Games",
+    "type": "Tech demo",
+    "status": "Coming soon — Android and Windows",
+    "description": "A coming-soon ray-tracing tech demo for Android and Windows.",
+    "tags": [
+      "Game",
+      "Tech Demo",
+      "Ray Tracing",
+      "Android",
+      "Windows"
+    ],
+    "featured": false,
+    "accent": "spark",
+    "imageFit": "contain",
+    "links": [
+      {
+        "label": "View on itch.io",
+        "url": "https://samfa12.itch.io/the-horde"
+      }
+    ],
+    "sortOrder": 2.2,
+    "thumbnail": "assets/thumbnails/the-horde-ray-tracing-tech-demo.webp",
+    "thumbnailAlt": "Dark gothic lantern artwork for The Horde ray-tracing tech demo"
+  },
+  {
     "title": "Bug Swarm",
     "category": "Games",
     "type": "Browser game",
