@@ -1334,6 +1334,23 @@ body[data-page="apps"] .project-card-catalogue {
   --card-accent: var(--spark);
 }
 
+.support-section {
+  padding-top: 0;
+}
+
+.join-card-support {
+  --card-accent: var(--cyan);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.support-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
 .join-note,
 .privacy-note {
   border: 1px solid rgba(255, 182, 110, 0.28);
@@ -1931,6 +1948,14 @@ body[data-page="apps"] .project-card-catalogue {
   }
 
   .community-cta-actions {
+    justify-content: flex-start;
+  }
+
+  .join-card-support {
+    grid-template-columns: 1fr;
+  }
+
+  .support-actions {
     justify-content: flex-start;
   }
 
