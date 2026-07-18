@@ -106,6 +106,11 @@ const cname = fs.readFileSync(path.join(root, "CNAME"), "utf8").trim();
 if (cname !== "samfa12.com") fail(`CNAME must contain only samfa12.com, found ${JSON.stringify(cname)}`);
 
 const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
+const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1].trim());
+const duplicateSitemapLocations = [...new Set(sitemapLocations.filter((location, index) => sitemapLocations.indexOf(location) !== index))];
+for (const location of duplicateSitemapLocations) {
+  fail(`sitemap.xml: duplicate location ${location}`);
+}
 for (const route of requiredSitemapRoutes) {
   if (!sitemap.includes(`<loc>https://samfa12.com${route}</loc>`)) fail(`sitemap.xml: missing ${route}`);
 }
