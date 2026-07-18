@@ -13,7 +13,8 @@ The main public site files are:
 - `data/projects.json` for project/card content
 - section pages under `games/`, `books/`, `music/`, `links/`, and
   `pocket-audio/`
-- hosted app routes under `apps/pocket-chordsmith/` and `apps/pocket-dj/`
+- hosted app routes under `apps/pocket-chordsmith/`, `apps/pocket-dj/`, and
+  `apps/what-would-win/`
 
 There is no bundler or framework for the main site. Keep changes static and
 GitHub Pages-friendly unless the project is intentionally being migrated.
@@ -39,7 +40,7 @@ npm run sync:pocket-apps
 `data/projects.json`. Review its diff before committing.
 
 `sync:pocket-apps` copies fresh single-file Pocket Chordsmith and Pocket DJ
-builds from `C:\Users\sam_s\Documents\Pocket Chordsmith` by default. Use
+builds from the current user's `Documents\Pocket Chordsmith` folder by default. Use
 `POCKET_CHORDSMITH_ROOT`, `POCKET_CHORDSMITH_HTML`, or `POCKET_DJ_HTML` only
 when intentionally overriding the source.
 
@@ -57,6 +58,9 @@ when intentionally overriding the source.
 - Treat files under `apps/pocket-chordsmith/` and `apps/pocket-dj/` as hosted
   release copies. Prefer updating them through `npm run sync:pocket-apps`
   instead of hand-editing generated app HTML.
+- Treat `apps/what-would-win/` as a generated release copy. Update it from the
+  tested `app/dist/` output in the What Would Win repository; do not hand-edit
+  its bundled HTML, CSS, JavaScript, or legal notices here.
 
 ## Validation
 

@@ -23,10 +23,17 @@ const requiredSitemapRoutes = [
   "/books/",
   "/pocket-audio/",
   "/apps/",
+  "/apps/what-would-win/",
   "/music/",
   "/links/",
   "/join/",
   "/privacy/",
+];
+const hostedAppPages = [
+  {
+    path: "apps/what-would-win/index.html",
+    canonical: "https://samfa12.com/apps/what-would-win/",
+  },
 ];
 const failures = [];
 
@@ -77,6 +84,24 @@ for (const relativePath of corePages) {
   }
 }
 
+for (const app of hostedAppPages) {
+  const filePath = path.join(root, app.path);
+  if (!fs.existsSync(filePath)) {
+    fail(`${app.path}: missing hosted app shell`);
+    continue;
+  }
+  const html = fs.readFileSync(filePath, "utf8");
+  if (!/<title>[^<]+<\/title>/i.test(html)) fail(`${app.path}: missing title`);
+  if (!/<meta\s+name="viewport"/i.test(html)) fail(`${app.path}: missing viewport metadata`);
+  if (!html.includes(`<link rel="canonical" href="${app.canonical}"`)) fail(`${app.path}: incorrect canonical URL`);
+  if (!html.includes('<div id="root"></div>')) fail(`${app.path}: missing application root mount`);
+  if (!html.includes('rel="manifest"')) fail(`${app.path}: missing web app manifest`);
+  for (const tag of html.matchAll(/<[^>]+\b(?:href|src)=["']([^"']+)["'][^>]*>/gis)) {
+    const target = localTarget(filePath, tag[1]);
+    if (target && !fs.existsSync(target)) fail(`${app.path}: missing local reference ${tag[1]}`);
+  }
+}
+
 const cname = fs.readFileSync(path.join(root, "CNAME"), "utf8").trim();
 if (cname !== "samfa12.com") fail(`CNAME must contain only samfa12.com, found ${JSON.stringify(cname)}`);
 
@@ -91,4 +116,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Site validation passed for ${corePages.length} core pages.`);
+console.log(`Site validation passed for ${corePages.length} core pages and ${hostedAppPages.length} hosted app.`);

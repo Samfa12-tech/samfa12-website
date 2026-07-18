@@ -8,7 +8,7 @@ Pocket Audio, music, and links for **Samfa12**.
 - `index.html` – compact homepage overview
 - `games/index.html` – games catalogue
 - `books/index.html` – books catalogue
-- `apps/index.html` – Pocket Audio apps hub for browser-hosted tools
+- `apps/index.html` – browser-hosted apps and tools hub
 - `pocket-audio/index.html` – Pocket Audio family/workflow page
 - `music/index.html` – music and audio catalogue
 - `links/index.html` – full social/store/source links page
@@ -21,6 +21,7 @@ Pocket Audio, music, and links for **Samfa12**.
   repo, and the full family page
 - `apps/pocket-chordsmith/` – hosted single-file Pocket Chordsmith app route
 - `apps/pocket-dj/` – hosted single-file Pocket DJ app route
+- `apps/what-would-win/` – hosted production build of the What Would Win simulator
 - `assets/favicon.png` – browser/page icon derived from the Samfa12 character image
 - `assets/samfa12-character.jpg` – Samfa12 character image used in the header brand mark
 - `assets/og-image.png` – social preview image
@@ -132,7 +133,7 @@ npm run sync:pocket-apps
 
 By default the script reads from:
 
-`C:\Users\sam_s\Documents\Pocket Chordsmith`
+the current user's `Documents\Pocket Chordsmith` folder
 
 It picks the newest matching single-file HTML in each app folder, writes it to
 `apps/pocket-chordsmith/index.html` and `apps/pocket-dj/index.html`, reapplies
@@ -144,6 +145,16 @@ Optional overrides:
 - `POCKET_CHORDSMITH_ROOT` – use a different Pocket Chordsmith repo folder
 - `POCKET_CHORDSMITH_HTML` – use a specific Chordsmith HTML file
 - `POCKET_DJ_HTML` – use a specific Pocket DJ HTML file
+
+## Deploy What Would Win
+
+The hosted route is a release copy of the Vite build from the separate
+`What Would Win` repository. Build and test that project first, then replace
+the contents of `apps/what-would-win/` with the contents of its `app/dist/`
+folder. Keep the app's relative Vite base so hashed assets resolve correctly
+from the subpath. Copy its social image to
+`assets/thumbnails/what-would-win-og.png`, then run the catalogue and site
+validation commands before committing.
 
 ## Pocket Audio handoff relay
 
