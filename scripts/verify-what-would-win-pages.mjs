@@ -23,7 +23,8 @@ for (const required of [
   "icons/icon-192.png",
   "icons/icon-512.png",
   "social/what-would-win-og.png",
+  "legal-notices.txt",
 ]) {
   if (!fs.existsSync(path.join(path.dirname(hosted), required))) throw new Error(`What Would Win Pages artifact is missing ${required}.`);
 }
-console.log(`What Would Win Pages artifact verified (${assets.length} built asset reference(s), manifest, icons, and social card).`);
+console.log(`What Would Win Pages artifact verified (${assets.length} built asset reference(s), manifest, icons, social card, and legal notices).`);

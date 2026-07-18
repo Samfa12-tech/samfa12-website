@@ -46,7 +46,7 @@ builds from `C:\Users\sam_s\Documents\Pocket Chordsmith` by default. Use
 when intentionally overriding the source.
 
 `sync:what-would-win` copies a completed build from `C:\Users\sam_s\Documents\What Would Win\app\dist`
-by default to `apps/what-would-win/`. Use `WHAT_WOULD_WIN_ROOT` only when intentionally overriding the source checkout, then run `verify:what-would-win-pages` before release.
+by default to `apps/what-would-win/`. Use `WHAT_WOULD_WIN_ROOT` only when intentionally overriding the source checkout, then run `verify:what-would-win-pages` before release. The copied artifact must retain the source-generated `legal-notices.txt` alongside its manifest, icons and social image.
 
 ## Editing Guidance
 

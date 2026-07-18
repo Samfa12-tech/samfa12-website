@@ -26,6 +26,7 @@ async function validateBuild(buildRoot) {
     "icons/icon-192.png",
     "icons/icon-512.png",
     "social/what-would-win-og.png",
+    "legal-notices.txt",
   ]) await fs.access(path.join(buildRoot, required));
 }
 
