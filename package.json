@@ -6,6 +6,8 @@
     "bump:cache": "node scripts/bump-cache-version.mjs",
     "fetch:thumbnails": "node scripts/fetch-thumbnails.mjs",
     "sync:pocket-apps": "node scripts/sync-pocket-apps.js",
+    "sync:what-would-win": "node scripts/sync-what-would-win.mjs",
+    "verify:what-would-win-pages": "node scripts/verify-what-would-win-pages.mjs",
     "validate:site": "node scripts/validate-site.mjs",
     "dev:handoff": "node scripts/serve-pocket-handoff-dev.mjs",
     "validate:catalogue": "node scripts/validate-catalogue.mjs",

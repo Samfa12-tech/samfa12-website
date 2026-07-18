@@ -8,7 +8,8 @@ Pocket Audio, music, and links for **Samfa12**.
 - `index.html` – compact homepage overview
 - `games/index.html` – games catalogue
 - `books/index.html` – books catalogue
-- `apps/index.html` – Pocket Audio apps hub for browser-hosted tools
+- `apps/index.html` – apps and tools hub for browser-hosted releases
+- `apps/what-would-win/` – synced What Would Win release route (generated, not hand-edited)
 - `pocket-audio/index.html` – Pocket Audio family/workflow page
 - `music/index.html` – music and audio catalogue
 - `links/index.html` – full social/store/source links page
@@ -48,6 +49,7 @@ Each project entry has:
   - `homepageSize` – `hero`, `tall`, `wide`, or `standard`
   - `accent` – `cyan`, `violet`, `spark`, `green`, or `pink`
   - `imageFit` – `contain` when full art must stay visible, `cover` only when cropping is intentional
+  - `catalogues` – optional secondary catalogue memberships, such as an app also appearing in `Games`
 
 Project categories used by the data:
 
@@ -144,6 +146,18 @@ Optional overrides:
 - `POCKET_CHORDSMITH_ROOT` – use a different Pocket Chordsmith repo folder
 - `POCKET_CHORDSMITH_HTML` – use a specific Chordsmith HTML file
 - `POCKET_DJ_HTML` – use a specific Pocket DJ HTML file
+
+## Sync What Would Win
+
+After building the What Would Win source app, publish its generated static build to the portal route with:
+
+```bash
+npm run sync:what-would-win
+npm run verify:what-would-win-pages
+```
+
+The command copies `app/dist/` from `C:\Users\sam_s\Documents\What Would Win` by default into
+`apps/what-would-win/`. Set `WHAT_WOULD_WIN_ROOT` to use another source checkout. Treat the copied route as a release artifact: update it through the sync command, not by hand.
 
 ## Pocket Audio handoff relay
 

@@ -42,7 +42,7 @@
       "Samfa12"
     ],
     "featured": true,
-    "homepageRank": 5,
+    "homepageRank": 6,
     "homepageSize": "wide",
     "accent": "cyan",
     "imageFit": "contain",
@@ -161,7 +161,7 @@
       "Samfa12"
     ],
     "featured": false,
-    "homepageRank": 4,
+    "homepageRank": 5,
     "homepageSize": "standard",
     "accent": "violet",
     "imageFit": "contain",
@@ -204,6 +204,36 @@
     "sortOrder": 3.5,
     "thumbnail": "assets/thumbnails/cursed-cutter-icon.webp",
     "thumbnailAlt": "Icon for Cursed Cutter"
+  },
+  {
+    "title": "What Would Win",
+    "category": "Apps & Tools",
+    "catalogues": [
+      "Games"
+    ],
+    "type": "Interactive simulator",
+    "status": "Published",
+    "description": "Settle absurd one-vs-many creature matchups with a transparent, reproducible simulation.",
+    "tags": [
+      "Simulator",
+      "Creatures",
+      "One vs Many",
+      "Non-graphic"
+    ],
+    "featured": false,
+    "homepageRank": 4,
+    "homepageSize": "wide",
+    "accent": "spark",
+    "imageFit": "cover",
+    "links": [
+      {
+        "label": "Use now",
+        "url": "/apps/what-would-win/"
+      }
+    ],
+    "sortOrder": 3.75,
+    "thumbnail": "assets/thumbnails/what-would-win.png",
+    "thumbnailAlt": "What Would Win creature matchup simulator interface"
   },
   {
     "title": "Pocket Chordsmith",
@@ -1107,7 +1137,7 @@
       "Soundtrack"
     ],
     "featured": false,
-    "homepageRank": 6,
+    "homepageRank": 7,
     "homepageSize": "standard",
     "accent": "pink",
     "imageFit": "contain",
