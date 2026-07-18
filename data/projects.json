@@ -42,7 +42,7 @@
       "Samfa12"
     ],
     "featured": true,
-    "homepageRank": 5,
+    "homepageRank": 6,
     "homepageSize": "wide",
     "accent": "cyan",
     "imageFit": "contain",
@@ -161,7 +161,7 @@
       "Samfa12"
     ],
     "featured": false,
-    "homepageRank": 4,
+    "homepageRank": 5,
     "homepageSize": "standard",
     "accent": "violet",
     "imageFit": "contain",
@@ -206,6 +206,41 @@
     "thumbnailAlt": "Icon for Cursed Cutter"
   },
   {
+    "title": "What Would Win",
+    "category": "Apps & Tools",
+    "catalogues": [
+      "Games"
+    ],
+    "type": "Interactive simulator",
+    "status": "Published",
+    "description": "Settle absurd one-versus-many creature matchups with a transparent deterministic model and reproducible seeded Monte Carlo trials.",
+    "tags": [
+      "Simulation",
+      "Creatures",
+      "One vs Many",
+      "Non-graphic",
+      "Open Source"
+    ],
+    "featured": false,
+    "homepageRank": 4,
+    "homepageSize": "wide",
+    "accent": "spark",
+    "imageFit": "cover",
+    "links": [
+      {
+        "label": "Use now",
+        "url": "/apps/what-would-win/"
+      },
+      {
+        "label": "Source on GitHub",
+        "url": "https://github.com/Samfa12-tech/What-Would-Win"
+      }
+    ],
+    "sortOrder": 3.75,
+    "thumbnail": "assets/thumbnails/what-would-win.png",
+    "thumbnailAlt": "What Would Win creature matchup simulator interface"
+  },
+  {
     "title": "Pocket Chordsmith",
     "category": "Apps & Tools",
     "type": "Web app",
@@ -241,36 +276,6 @@
     "sortOrder": 3,
     "thumbnail": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
     "thumbnailAlt": "Cover image for Pocket Chordsmith"
-  },
-  {
-    "title": "What Would Win",
-    "category": "Apps & Tools",
-    "type": "Interactive simulator",
-    "status": "Published",
-    "description": "A transparent, text-first one-versus-many creature simulator using a deterministic model plus seeded Monte Carlo trials.",
-    "tags": [
-      "Simulation",
-      "Creatures",
-      "Monte Carlo",
-      "Browser",
-      "Open Source"
-    ],
-    "featured": false,
-    "accent": "spark",
-    "imageFit": "contain",
-    "links": [
-      {
-        "url": "/apps/what-would-win/",
-        "label": "Run a matchup"
-      },
-      {
-        "url": "https://github.com/Samfa12-tech/What-Would-Win",
-        "label": "Source on GitHub"
-      }
-    ],
-    "sortOrder": 3.5,
-    "thumbnail": "assets/thumbnails/what-would-win-og.png",
-    "thumbnailAlt": "What Would Win one-versus-many creature simulator artwork"
   },
   {
     "title": "Pocket Chordsmith Godot addon",
@@ -1137,7 +1142,7 @@
       "Soundtrack"
     ],
     "featured": false,
-    "homepageRank": 6,
+    "homepageRank": 7,
     "homepageSize": "standard",
     "accent": "pink",
     "imageFit": "contain",

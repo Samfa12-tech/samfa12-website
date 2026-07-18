@@ -13,8 +13,7 @@ The main public site files are:
 - `data/projects.json` for project/card content
 - section pages under `games/`, `books/`, `music/`, `links/`, and
   `pocket-audio/`
-- hosted app routes under `apps/pocket-chordsmith/`, `apps/pocket-dj/`, and
-  `apps/what-would-win/`
+- hosted app routes under `apps/`, including generated release copies for Pocket Audio and What Would Win
 
 There is no bundler or framework for the main site. Keep changes static and
 GitHub Pages-friendly unless the project is intentionally being migrated.
@@ -34,6 +33,8 @@ Then open `http://localhost:8000`.
 ```bash
 npm run fetch:thumbnails
 npm run sync:pocket-apps
+npm run sync:what-would-win
+npm run verify:what-would-win-pages
 ```
 
 `fetch:thumbnails` updates local thumbnail files and may edit
@@ -43,6 +44,13 @@ npm run sync:pocket-apps
 builds from the current user's `Documents\Pocket Chordsmith` folder by default. Use
 `POCKET_CHORDSMITH_ROOT`, `POCKET_CHORDSMITH_HTML`, or `POCKET_DJ_HTML` only
 when intentionally overriding the source.
+
+`sync:what-would-win` copies a completed build from the current user's
+`Documents\What Would Win\app\dist` folder by default to
+`apps/what-would-win/`. Use `WHAT_WOULD_WIN_ROOT` only when intentionally
+overriding the source checkout, then run `verify:what-would-win-pages` before
+release. The copied artifact must retain the source-generated
+`legal-notices.txt` alongside its manifest, icons and social image.
 
 ## Editing Guidance
 
@@ -55,12 +63,10 @@ when intentionally overriding the source.
 - New public pages should use `/assets/favicon.png` and the shared `styles.css`
   cache-busted URL pattern already used by existing pages.
 - Preserve the `CNAME` file with only `samfa12.com` for GitHub Pages.
-- Treat files under `apps/pocket-chordsmith/` and `apps/pocket-dj/` as hosted
-  release copies. Prefer updating them through `npm run sync:pocket-apps`
-  instead of hand-editing generated app HTML.
-- Treat `apps/what-would-win/` as a generated release copy. Update it from the
-  tested `app/dist/` output in the What Would Win repository; do not hand-edit
-  its bundled HTML, CSS, JavaScript, or legal notices here.
+- Treat files under `apps/pocket-chordsmith/`, `apps/pocket-dj/`, and
+  `apps/what-would-win/` as hosted release copies. Prefer updating them through
+  their matching `npm run sync:*` command instead of hand-editing generated app
+  HTML, CSS, JavaScript, or legal notices.
 
 ## Validation
 

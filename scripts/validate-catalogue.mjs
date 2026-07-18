@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dataPath = path.join(root, "data", "projects.json");
 const errors = [];
 const warnings = [];
+const allowedCatalogues = new Set(["Games", "Books", "Apps & Tools", "Assets", "Music", "Social", "Storefronts"]);
 
 function readProjects() {
   try {
@@ -88,34 +89,63 @@ function normalizeRecord(record, index) {
     }
   }
 
-  return { ...record, title, category, validLinks };
+  let catalogues = [];
+  if (record.catalogues !== undefined) {
+    if (!Array.isArray(record.catalogues)) {
+      errors.push(`${title || `Record ${index + 1}`} catalogues must be an array of allowed category names.`);
+    } else {
+      catalogues = record.catalogues.map((catalogue) => typeof catalogue === "string" ? catalogue.trim() : catalogue);
+      catalogues.forEach((catalogue) => {
+        if (typeof catalogue !== "string" || !allowedCatalogues.has(catalogue)) {
+          errors.push(`${title || `Record ${index + 1}`} has an invalid catalogue: ${JSON.stringify(catalogue)}.`);
+        }
+      });
+      if (new Set(catalogues).size !== catalogues.length) errors.push(`${title || `Record ${index + 1}`} catalogues must not contain duplicates.`);
+    }
+  }
+  return { ...record, title, category, catalogues, validLinks };
+}
+
+function isInCatalogue(project, catalogue) {
+  return project.category === catalogue || project.catalogues.includes(catalogue);
 }
 
 const projects = readProjects().map(normalizeRecord).filter(Boolean);
+const homepageRanks = new Map();
+for (const project of projects) {
+  if (project.homepageRank === undefined) continue;
+  const rank = Number(project.homepageRank);
+  if (!Number.isInteger(rank) || rank < 1) {
+    errors.push(`${project.title} homepageRank must be a positive integer.`);
+    continue;
+  }
+  if (homepageRanks.has(rank)) errors.push(`Homepage rank ${rank} is shared by ${homepageRanks.get(rank)} and ${project.title}.`);
+  else homepageRanks.set(rank, project.title);
+}
 
 const pageChecks = [
   {
     label: "/games/",
-    predicate: (project) => project.category === "Games",
+    predicate: (project) => isInCatalogue(project, "Games"),
   },
   {
     label: "/books/",
-    predicate: (project) => project.category === "Books",
+    predicate: (project) => isInCatalogue(project, "Books"),
   },
   {
     label: "/music/",
-    predicate: (project) => project.category === "Music",
+    predicate: (project) => isInCatalogue(project, "Music"),
   },
   {
     label: "/pocket-audio/",
     predicate: (project) => {
       const text = `${project.title} ${project.description || ""} ${(project.tags || []).join(" ")}`.toLowerCase();
-      return (project.category === "Apps & Tools" || project.category === "Assets") && text.includes("pocket");
+      return (isInCatalogue(project, "Apps & Tools") || isInCatalogue(project, "Assets")) && text.includes("pocket");
     },
   },
   {
     label: "/apps/",
-    predicate: (project) => project.category === "Apps & Tools" || project.category === "Assets",
+    predicate: (project) => isInCatalogue(project, "Apps & Tools") || isInCatalogue(project, "Assets"),
   },
   {
     label: "/links/",
@@ -133,6 +163,13 @@ if (!cursedCutter) {
   errors.push("Cursed Cutter is missing from data/projects.json.");
 } else if (!cursedCutter.validLinks.some((link) => link.url === "/games/cursed-cutter/")) {
   errors.push("Cursed Cutter must link to /games/cursed-cutter/.");
+}
+
+const whatWouldWin = projects.find((project) => project.title === "What Would Win");
+if (!whatWouldWin) {
+  errors.push("What Would Win is missing from data/projects.json.");
+} else if (!isInCatalogue(whatWouldWin, "Games") || !whatWouldWin.validLinks.some((link) => link.url === "/apps/what-would-win/")) {
+  errors.push("What Would Win must appear in Games and link to /apps/what-would-win/.");
 }
 
 if (warnings.length) {

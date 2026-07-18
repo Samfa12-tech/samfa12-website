@@ -416,8 +416,8 @@
   }
 
   function deriveCatalogueLabels(project, links) {
-    if (project.category === "Games") return deriveGameCatalogueLabels(project, links);
-    if (project.category === "Books") return deriveBookCatalogueLabels(links);
+    if (isInCatalogue(project, "Games")) return deriveGameCatalogueLabels(project, links);
+    if (isInCatalogue(project, "Books")) return deriveBookCatalogueLabels(links);
     return [];
   }
 
@@ -432,7 +432,10 @@
           })
           .filter(Boolean)
       : [];
-    const catalogueLabels = deriveCatalogueLabels(project, links);
+    const catalogues = Array.isArray(project.catalogues)
+      ? project.catalogues.filter((catalogue) => typeof catalogue === "string" && catalogue.trim()).map((catalogue) => catalogue.trim())
+      : [];
+    const catalogueLabels = deriveCatalogueLabels({ ...project, catalogues }, links);
 
     return {
       ...project,
@@ -442,9 +445,14 @@
       status: String(project.status || "Available"),
       description: String(project.description || ""),
       tags: Array.isArray(project.tags) ? project.tags.filter((tag) => typeof tag === "string" && tag.trim()) : [],
+      catalogues,
       links,
       catalogueLabels,
     };
+  }
+
+  function isInCatalogue(project, catalogue) {
+    return project.category === catalogue || Array.isArray(project.catalogues) && project.catalogues.includes(catalogue);
   }
 
   function normalizeProjects(projects) {
@@ -887,7 +895,7 @@
     const grid = document.getElementById("project-grid");
     const spotlightGrid = document.getElementById("spotlight-grid");
     const category = document.body.dataset.category;
-    const predicate = (project) => project.category === category;
+    const predicate = (project) => isInCatalogue(project, category);
     const list = usePageFallbackIfEmpty(
       grid,
       projects.filter(predicate).slice().sort(bySortThenTitle),
@@ -965,7 +973,7 @@
 
   function renderApps(projects) {
     const grid = document.getElementById("project-grid");
-    const predicate = (project) => project.category === "Apps & Tools" || project.category === "Assets";
+    const predicate = (project) => isInCatalogue(project, "Apps & Tools") || isInCatalogue(project, "Assets");
     const list = usePageFallbackIfEmpty(
       grid,
       projects.filter(predicate).slice().sort(bySortThenTitle),

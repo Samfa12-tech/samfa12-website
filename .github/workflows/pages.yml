@@ -49,6 +49,8 @@ jobs:
             --exclude='/.gitignore' \
             --exclude='/qa-*.png' \
             ./ _site/
+      - name: Verify What Would Win artifact
+        run: WHAT_WOULD_WIN_SITE_ROOT=_site node scripts/verify-what-would-win-pages.mjs
       - name: Upload site
         uses: actions/upload-pages-artifact@v5
         with:

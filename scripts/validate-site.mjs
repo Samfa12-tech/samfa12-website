@@ -110,6 +110,16 @@ for (const route of requiredSitemapRoutes) {
   if (!sitemap.includes(`<loc>https://samfa12.com${route}</loc>`)) fail(`sitemap.xml: missing ${route}`);
 }
 
+const whatWouldWinRoute = path.join(root, "apps", "what-would-win", "index.html");
+if (!fs.existsSync(whatWouldWinRoute)) {
+  fail("apps/what-would-win/index.html: missing hosted app route");
+} else {
+  const hosted = fs.readFileSync(whatWouldWinRoute, "utf8");
+  if (!/<div\s+id=["']root["']/i.test(hosted)) fail("apps/what-would-win/index.html: missing Vite app root");
+  if (!/assets\//i.test(hosted)) fail("apps/what-would-win/index.html: missing built asset reference");
+  if (!fs.existsSync(path.join(root, "apps", "what-would-win", "legal-notices.txt"))) fail("apps/what-would-win/legal-notices.txt: missing public licensing notices");
+}
+
 if (failures.length) {
   console.error(`Site validation failed with ${failures.length} issue(s):`);
   failures.forEach((message) => console.error(`- ${message}`));
