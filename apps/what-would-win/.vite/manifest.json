@@ -1,0 +1,50 @@
+{
+  "index.html": {
+    "file": "assets/index-Bdku6dJi.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/components/TechnicalReport.tsx",
+      "src/components/CustomCreatureEditor.tsx",
+      "src/model04/runtime.ts"
+    ],
+    "css": [
+      "assets/index-CeD5SOi2.css"
+    ],
+    "assets": [
+      "assets/creatures-B1rRzeOl.json"
+    ]
+  },
+  "src/components/CustomCreatureEditor.tsx": {
+    "file": "assets/CustomCreatureEditor-C3qON_YY.js",
+    "name": "CustomCreatureEditor",
+    "src": "src/components/CustomCreatureEditor.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "src/components/TechnicalReport.tsx": {
+    "file": "assets/TechnicalReport-Dm2iZo1D.js",
+    "name": "TechnicalReport",
+    "src": "src/components/TechnicalReport.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "src/data/creatures.json": {
+    "file": "assets/creatures-B1rRzeOl.json",
+    "src": "src/data/creatures.json"
+  },
+  "src/model04/runtime.ts": {
+    "file": "assets/runtime-BOZsBXuN.js",
+    "name": "runtime",
+    "src": "src/model04/runtime.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  }
+}
