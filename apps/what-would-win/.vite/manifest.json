@@ -1,10 +1,11 @@
 {
   "index.html": {
-    "file": "assets/index-Bdku6dJi.js",
+    "file": "assets/index-D5dXxWyU.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
+      "src/components/Model04Dossier.tsx",
       "src/components/TechnicalReport.tsx",
       "src/components/CustomCreatureEditor.tsx",
       "src/model04/runtime.ts"
@@ -17,7 +18,7 @@
     ]
   },
   "src/components/CustomCreatureEditor.tsx": {
-    "file": "assets/CustomCreatureEditor-C3qON_YY.js",
+    "file": "assets/CustomCreatureEditor-C0QQ2tqd.js",
     "name": "CustomCreatureEditor",
     "src": "src/components/CustomCreatureEditor.tsx",
     "isDynamicEntry": true,
@@ -25,8 +26,17 @@
       "index.html"
     ]
   },
+  "src/components/Model04Dossier.tsx": {
+    "file": "assets/Model04Dossier-CcfU8uaR.js",
+    "name": "Model04Dossier",
+    "src": "src/components/Model04Dossier.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
   "src/components/TechnicalReport.tsx": {
-    "file": "assets/TechnicalReport-Dm2iZo1D.js",
+    "file": "assets/TechnicalReport-BZOvWwmu.js",
     "name": "TechnicalReport",
     "src": "src/components/TechnicalReport.tsx",
     "isDynamicEntry": true,
@@ -39,7 +49,7 @@
     "src": "src/data/creatures.json"
   },
   "src/model04/runtime.ts": {
-    "file": "assets/runtime-BOZsBXuN.js",
+    "file": "assets/runtime-B4xggXzJ.js",
     "name": "runtime",
     "src": "src/model04/runtime.ts",
     "isDynamicEntry": true,
