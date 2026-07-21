@@ -1,6 +1,6 @@
 (() => {
   const api = {};
-  api.version = "0.1.0-scaffold";
+  api.version = "0.2.0";
   api.PCS_SHARE_PREFIX = "PCS1:";
   api.SECTION_IDS = Object.freeze(["A","B","C","D","E","F","G","H"]);
   api.STEM_IDS = Object.freeze(["drums","bass","chords","melody","guitar"]);
@@ -26,7 +26,7 @@
     sections: {},
     sequence: Array.isArray(raw.songSequence) && raw.songSequence.length ? raw.songSequence : ["A"],
     markers: [],
-    compatibility: { coreVersion: "0.1.0-scaffold", limitations: ["IIFE scaffold normalizer is minimal."] }
+    compatibility: { coreVersion: "0.2.0", limitations: ["The dependency-free IIFE normalizer is a compact compatibility fallback."] }
   });
   api.PocketAudio = class PocketAudio {
     constructor(options = {}) { this.options = options; this.profile = options.profile || "composer"; this.project = null; this.playing = false; this.listeners = new Map(); this.musicStates = new Map(Object.entries(options.musicStates || options.stateMap || {})); this.currentMusicState = null; this.intensity = Number(options.intensity || 0); this.ducking = { enabled:false, amount:0, releaseMs:0 }; }
