@@ -1200,11 +1200,11 @@
     "sortOrder": 33
   },
   {
-    "title": "Lofi and Chill OST",
+    "title": "Samfa12's Lofi and Chill Pack Original Soundtrack",
     "category": "Music",
     "type": "Album",
-    "status": "Coming Soon on Spotify",
-    "description": "An upcoming soundtrack album for Samfa12 Chill Pack, collecting lofi and chill Pocket Audio cues from its cosy small-scene world.",
+    "status": "Published",
+    "description": "The official soundtrack album for Samfa12 Chill Pack, collecting lofi and chill Pocket Audio cues from its cosy small-scene world.",
     "tags": [
       "Music",
       "Album",
@@ -1214,12 +1214,12 @@
     "featured": false,
     "links": [
       {
-        "label": "Follow on Spotify",
-        "url": "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"
+        "label": "Listen on Spotify",
+        "url": "https://open.spotify.com/album/0VxBtatSWXbnCt5oPW1t3F"
       }
     ],
     "thumbnail": "assets/thumbnails/lofi-and-chill-ost-album-art.webp",
-    "thumbnailAlt": "Cover image for Lofi and Chill OST",
+    "thumbnailAlt": "Cover image for Samfa12's Lofi and Chill Pack Original Soundtrack",
     "sortOrder": 33.5
   },
   {
