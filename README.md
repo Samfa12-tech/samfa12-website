@@ -118,6 +118,34 @@ Visitors can reopen the choice through **Analytics preferences** in the footer.
 Keep `/privacy/` accurate when signup providers, analytics, or the Pocket Audio
 handoff retention period change.
 
+### Local analytics bridge
+
+The analytics bridge collects aggregate Clarity and Cloudflare data into the
+ignored `.analytics/` folder. It does not download session recordings, visitor
+identifiers, Pocket Audio handoff payloads, or URL query strings.
+See [`docs/ANALYTICS.md`](docs/ANALYTICS.md) for the data boundaries, exact
+token permissions, automation schedule, interpretation rules, and recovery.
+
+1. Copy `.env.analytics.example` to `.env.analytics`.
+2. Add a Microsoft Clarity Data Export API token.
+3. Add a Cloudflare token restricted to the `samfa12.com` zone with read-only
+   **Account Analytics**, **Zone Analytics**, and **Zone Read** permissions.
+4. Check the configuration and collect a snapshot:
+
+```bash
+npm run analytics:check
+npm run analytics:collect
+npm run analytics:report
+```
+
+Run `analytics:collect` once per day because Clarity's export API has a short
+lookback window. The Cloudflare collector reads the plan's available eight-day
+window and stitches unique days across local snapshots. A like-for-like
+seven-day comparison appears after enough daily snapshots have accumulated.
+
+Tokens belong only in `.env.analytics`, which is ignored by Git. Reports and
+snapshots are also local-only by default.
+
 Option B: VS Code Live Server
 
 - Open the folder in VS Code.

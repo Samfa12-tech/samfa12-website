@@ -1,3 +1,5 @@
 .wrangler/
+.env.analytics
+.analytics/
 artifacts/
 qa-*.png
