@@ -3,8 +3,8 @@
     "file": "assets/contracts-B6CT538-.js",
     "name": "contracts"
   },
-  "_reconstruction-D7Fzffyj.js": {
-    "file": "assets/reconstruction-D7Fzffyj.js",
+  "_reconstruction-B5acuP25.js": {
+    "file": "assets/reconstruction-B5acuP25.js",
     "name": "reconstruction",
     "imports": [
       "index.html"
@@ -18,7 +18,7 @@
     "src": "_reconstruction-DLMbIJrm.css"
   },
   "index.html": {
-    "file": "assets/index-DSvxxXJA.js",
+    "file": "assets/index-CoYTeWVJ.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -39,7 +39,7 @@
     ]
   },
   "src/components/CustomCreatureEditor.tsx": {
-    "file": "assets/CustomCreatureEditor-CgKJ_A3K.js",
+    "file": "assets/CustomCreatureEditor-Va7ivMAv.js",
     "name": "CustomCreatureEditor",
     "src": "src/components/CustomCreatureEditor.tsx",
     "isDynamicEntry": true,
@@ -48,21 +48,21 @@
     ]
   },
   "src/components/LikelyBattlePanel.tsx": {
-    "file": "assets/LikelyBattlePanel-p9nKIWwl.js",
+    "file": "assets/LikelyBattlePanel-BLK-FfdU.js",
     "name": "LikelyBattlePanel",
     "src": "src/components/LikelyBattlePanel.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
       "src/storyboard/index.ts",
-      "_reconstruction-D7Fzffyj.js"
+      "_reconstruction-B5acuP25.js"
     ],
     "css": [
-      "assets/LikelyBattlePanel-CHB2mDpw.css"
+      "assets/LikelyBattlePanel-DHNpEc7C.css"
     ]
   },
   "src/components/Model04Dossier.tsx": {
-    "file": "assets/Model04Dossier-BIaxb14h.js",
+    "file": "assets/Model04Dossier-sXYkla3t.js",
     "name": "Model04Dossier",
     "src": "src/components/Model04Dossier.tsx",
     "isDynamicEntry": true,
@@ -71,14 +71,14 @@
     ]
   },
   "src/components/TacticalReconstructionPanel.tsx": {
-    "file": "assets/TacticalReconstructionPanel-CPBoumXV.js",
+    "file": "assets/TacticalReconstructionPanel-DW8tT5F1.js",
     "name": "TacticalReconstructionPanel",
     "src": "src/components/TacticalReconstructionPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
       "src/storyboard/index.ts",
-      "_reconstruction-D7Fzffyj.js",
+      "_reconstruction-B5acuP25.js",
       "_contracts-B6CT538-.js"
     ],
     "dynamicImports": [
@@ -89,7 +89,7 @@
     ]
   },
   "src/components/TechnicalReport.tsx": {
-    "file": "assets/TechnicalReport-gtlggQz5.js",
+    "file": "assets/TechnicalReport-Dhu4hqsd.js",
     "name": "TechnicalReport",
     "src": "src/components/TechnicalReport.tsx",
     "isDynamicEntry": true,
@@ -98,7 +98,7 @@
     ]
   },
   "src/components/tactical/TacticalScene.tsx": {
-    "file": "assets/TacticalScene-DK5R70FQ.js",
+    "file": "assets/TacticalScene-CA5D06fU.js",
     "name": "TacticalScene",
     "src": "src/components/tactical/TacticalScene.tsx",
     "isDynamicEntry": true,
@@ -112,7 +112,7 @@
     "src": "src/data/creatures.json"
   },
   "src/model04/runtime.ts": {
-    "file": "assets/runtime-BJrKJ33b.js",
+    "file": "assets/runtime-BX4Kx8iW.js",
     "name": "runtime",
     "src": "src/model04/runtime.ts",
     "isDynamicEntry": true,
@@ -121,7 +121,7 @@
     ]
   },
   "src/storyboard/index.ts": {
-    "file": "assets/storyboard-SQoRPSJw.js",
+    "file": "assets/storyboard-BNUuP7zw.js",
     "name": "storyboard",
     "src": "src/storyboard/index.ts",
     "isDynamicEntry": true,
