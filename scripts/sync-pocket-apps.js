@@ -44,6 +44,11 @@ const apps = [
         destination: "icon.png",
         optional: true,
       },
+      {
+        source: path.join(pocketRoot, "apps", "chordsmith-web", "src", "genre-composer.js"),
+        destination: "src/genre-composer.js",
+        optional: false,
+      },
     ],
   },
   {
@@ -185,7 +190,9 @@ async function syncApp(app) {
       }
       throw new Error(`Required file missing for ${app.name}: ${copy.source}`);
     }
-    await fs.copyFile(copy.source, path.join(app.destinationDir, copy.destination));
+    const copyDestination = path.join(app.destinationDir, copy.destination);
+    await fs.mkdir(path.dirname(copyDestination), { recursive: true });
+    await fs.copyFile(copy.source, copyDestination);
   }
 
   await copyPocketAudioCore(app.destinationDir);
