@@ -12,8 +12,6 @@
       "Pocket Audio"
     ],
     "featured": true,
-    "homepageRank": 1,
-    "homepageSize": "hero",
     "accent": "cyan",
     "imageFit": "contain",
     "links": [
@@ -1042,7 +1040,7 @@
     "title": "Colossal",
     "category": "Books",
     "type": "Book",
-    "status": "Coming Soon — Available 1 August 2026",
+    "status": "Published",
     "description": "An adult historical fiction tragedy set in the blood, sand, and spectacle of ancient Rome, following an enslaved gladiator who turns fame into a weapon.",
     "tags": [
       "Novel",
@@ -1056,7 +1054,7 @@
         "url": "https://samfa12.itch.io/colossal"
       },
       {
-        "label": "Preorder on Amazon",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H738LPJ5"
       }
     ],
@@ -1075,7 +1073,11 @@
       "Psychological",
       "Fiction"
     ],
-    "featured": false,
+    "featured": true,
+    "homepageRank": 1,
+    "homepageSize": "hero",
+    "accent": "spark",
+    "imageFit": "contain",
     "links": [
       {
         "label": "Amazon Kindle",
