@@ -3,12 +3,12 @@
     "file": "assets/contracts-BUvRjqEC.js",
     "name": "contracts"
   },
-  "_laymanNarrative-Fal1S17w.js": {
-    "file": "assets/laymanNarrative-Fal1S17w.js",
+  "_laymanNarrative-ClBPjX1i.js": {
+    "file": "assets/laymanNarrative-ClBPjX1i.js",
     "name": "laymanNarrative",
     "imports": [
       "_quantity-y9gkKp1G.js",
-      "_storyboard-Cp8rEVEa.js"
+      "_storyboard-BsE74sB0.js"
     ]
   },
   "_quantity-y9gkKp1G.js": {
@@ -19,8 +19,8 @@
     "file": "assets/react-Ca03aNmg.js",
     "name": "react"
   },
-  "_reconstruction-Crx0pmSa.js": {
-    "file": "assets/reconstruction-Crx0pmSa.js",
+  "_reconstruction-DH38Aqfw.js": {
+    "file": "assets/reconstruction-DH38Aqfw.js",
     "name": "reconstruction",
     "imports": [
       "_react-Ca03aNmg.js",
@@ -34,18 +34,18 @@
     "file": "assets/reconstruction-DLMbIJrm.css",
     "src": "_reconstruction-DLMbIJrm.css"
   },
-  "_storyboard-Cp8rEVEa.js": {
-    "file": "assets/storyboard-Cp8rEVEa.js",
+  "_storyboard-BsE74sB0.js": {
+    "file": "assets/storyboard-BsE74sB0.js",
     "name": "storyboard",
     "imports": [
       "_react-Ca03aNmg.js",
       "_quantity-y9gkKp1G.js",
-      "_laymanNarrative-Fal1S17w.js",
+      "_laymanNarrative-ClBPjX1i.js",
       "src/components/LikelyBattlePanel.tsx"
     ]
   },
   "index.html": {
-    "file": "assets/index-6XluSWXd.js",
+    "file": "assets/index-D-LTyOL-.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -60,18 +60,18 @@
       "src/components/StatControls.tsx",
       "src/components/MethodologyPanel.tsx",
       "src/components/SimpleResultPanel.tsx",
-      "_storyboard-Cp8rEVEa.js",
+      "_storyboard-BsE74sB0.js",
       "src/model04/runtime.ts"
     ],
     "css": [
-      "assets/index-BGEr-QzE.css"
+      "assets/index-DASTPtU0.css"
     ],
     "assets": [
       "assets/creatures-D9tbDjYx.json"
     ]
   },
   "src/components/CreaturePanel.tsx": {
-    "file": "assets/CreaturePanel-BBn_wQy4.js",
+    "file": "assets/CreaturePanel-TlTDRZlk.js",
     "name": "CreaturePanel",
     "src": "src/components/CreaturePanel.tsx",
     "isDynamicEntry": true,
@@ -85,7 +85,7 @@
     ]
   },
   "src/components/CustomCreatureEditor.tsx": {
-    "file": "assets/CustomCreatureEditor-C2PK0dWo.js",
+    "file": "assets/CustomCreatureEditor-YIHkoTom.js",
     "name": "CustomCreatureEditor",
     "src": "src/components/CustomCreatureEditor.tsx",
     "isDynamicEntry": true,
@@ -95,7 +95,7 @@
     ]
   },
   "src/components/LikelyBattlePanel.tsx": {
-    "file": "assets/LikelyBattlePanel-BJrrGou5.js",
+    "file": "assets/LikelyBattlePanel-DgO_mrOp.js",
     "name": "LikelyBattlePanel",
     "src": "src/components/LikelyBattlePanel.tsx",
     "isDynamicEntry": true,
@@ -103,16 +103,16 @@
       "_react-Ca03aNmg.js",
       "_quantity-y9gkKp1G.js",
       "index.html",
-      "_storyboard-Cp8rEVEa.js",
-      "_laymanNarrative-Fal1S17w.js",
-      "_reconstruction-Crx0pmSa.js"
+      "_storyboard-BsE74sB0.js",
+      "_laymanNarrative-ClBPjX1i.js",
+      "_reconstruction-DH38Aqfw.js"
     ],
     "css": [
       "assets/LikelyBattlePanel-DMni_-2-.css"
     ]
   },
   "src/components/MethodologyPanel.tsx": {
-    "file": "assets/MethodologyPanel-9cyYKuHk.js",
+    "file": "assets/MethodologyPanel-CIvV9Bje.js",
     "name": "MethodologyPanel",
     "src": "src/components/MethodologyPanel.tsx",
     "isDynamicEntry": true,
@@ -121,7 +121,7 @@
     ]
   },
   "src/components/Model04Dossier.tsx": {
-    "file": "assets/Model04Dossier-DkgL_VhH.js",
+    "file": "assets/Model04Dossier-CO4eigRZ.js",
     "name": "Model04Dossier",
     "src": "src/components/Model04Dossier.tsx",
     "isDynamicEntry": true,
@@ -130,7 +130,7 @@
     ]
   },
   "src/components/ResultPanel.tsx": {
-    "file": "assets/ResultPanel-CyRINoLf.js",
+    "file": "assets/ResultPanel-C6QIwASy.js",
     "name": "ResultPanel",
     "src": "src/components/ResultPanel.tsx",
     "isDynamicEntry": true,
@@ -146,19 +146,19 @@
     ]
   },
   "src/components/SimpleResultPanel.tsx": {
-    "file": "assets/SimpleResultPanel-BhAPUc_4.js",
+    "file": "assets/SimpleResultPanel-Dv0qe9Qw.js",
     "name": "SimpleResultPanel",
     "src": "src/components/SimpleResultPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_react-Ca03aNmg.js",
       "index.html",
-      "_storyboard-Cp8rEVEa.js",
-      "_laymanNarrative-Fal1S17w.js"
+      "_storyboard-BsE74sB0.js",
+      "_laymanNarrative-ClBPjX1i.js"
     ]
   },
   "src/components/StatControls.tsx": {
-    "file": "assets/StatControls-e9V7V6qr.js",
+    "file": "assets/StatControls-D7lwcUod.js",
     "name": "StatControls",
     "src": "src/components/StatControls.tsx",
     "isDynamicEntry": true,
@@ -167,15 +167,15 @@
     ]
   },
   "src/components/TacticalReconstructionPanel.tsx": {
-    "file": "assets/TacticalReconstructionPanel-ebuwTKdZ.js",
+    "file": "assets/TacticalReconstructionPanel-BjatzaWx.js",
     "name": "TacticalReconstructionPanel",
     "src": "src/components/TacticalReconstructionPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_react-Ca03aNmg.js",
       "index.html",
-      "_storyboard-Cp8rEVEa.js",
-      "_reconstruction-Crx0pmSa.js",
+      "_storyboard-BsE74sB0.js",
+      "_reconstruction-DH38Aqfw.js",
       "_contracts-BUvRjqEC.js"
     ],
     "dynamicImports": [
@@ -186,7 +186,7 @@
     ]
   },
   "src/components/TechnicalReport.tsx": {
-    "file": "assets/TechnicalReport-Bs4X6kA2.js",
+    "file": "assets/TechnicalReport-CNKFJgkT.js",
     "name": "TechnicalReport",
     "src": "src/components/TechnicalReport.tsx",
     "isDynamicEntry": true,
@@ -195,7 +195,7 @@
     ]
   },
   "src/components/tactical/TacticalScene.tsx": {
-    "file": "assets/TacticalScene-CkqYe8JW.js",
+    "file": "assets/TacticalScene-DpB6lSD7.js",
     "name": "TacticalScene",
     "src": "src/components/tactical/TacticalScene.tsx",
     "isDynamicEntry": true,
@@ -210,7 +210,7 @@
     "src": "src/data/creatures.json"
   },
   "src/model04/runtime.ts": {
-    "file": "assets/runtime-BJzB4Dls.js",
+    "file": "assets/runtime-YfObVr8X.js",
     "name": "runtime",
     "src": "src/model04/runtime.ts",
     "isDynamicEntry": true,
