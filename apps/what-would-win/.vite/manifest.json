@@ -3,6 +3,14 @@
     "file": "assets/contracts-BUvRjqEC.js",
     "name": "contracts"
   },
+  "_laymanNarrative-Fal1S17w.js": {
+    "file": "assets/laymanNarrative-Fal1S17w.js",
+    "name": "laymanNarrative",
+    "imports": [
+      "_quantity-y9gkKp1G.js",
+      "_storyboard-Cp8rEVEa.js"
+    ]
+  },
   "_quantity-y9gkKp1G.js": {
     "file": "assets/quantity-y9gkKp1G.js",
     "name": "quantity"
@@ -11,8 +19,8 @@
     "file": "assets/react-Ca03aNmg.js",
     "name": "react"
   },
-  "_reconstruction-CYlwYgE5.js": {
-    "file": "assets/reconstruction-CYlwYgE5.js",
+  "_reconstruction-Crx0pmSa.js": {
+    "file": "assets/reconstruction-Crx0pmSa.js",
     "name": "reconstruction",
     "imports": [
       "_react-Ca03aNmg.js",
@@ -26,17 +34,18 @@
     "file": "assets/reconstruction-DLMbIJrm.css",
     "src": "_reconstruction-DLMbIJrm.css"
   },
-  "_storyboard-DV1Kzsb0.js": {
-    "file": "assets/storyboard-DV1Kzsb0.js",
+  "_storyboard-Cp8rEVEa.js": {
+    "file": "assets/storyboard-Cp8rEVEa.js",
     "name": "storyboard",
     "imports": [
       "_react-Ca03aNmg.js",
       "_quantity-y9gkKp1G.js",
+      "_laymanNarrative-Fal1S17w.js",
       "src/components/LikelyBattlePanel.tsx"
     ]
   },
   "index.html": {
-    "file": "assets/index-9oGem0ZC.js",
+    "file": "assets/index-6XluSWXd.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -51,18 +60,18 @@
       "src/components/StatControls.tsx",
       "src/components/MethodologyPanel.tsx",
       "src/components/SimpleResultPanel.tsx",
-      "_storyboard-DV1Kzsb0.js",
+      "_storyboard-Cp8rEVEa.js",
       "src/model04/runtime.ts"
     ],
     "css": [
-      "assets/index-DBwsjb1R.css"
+      "assets/index-BGEr-QzE.css"
     ],
     "assets": [
       "assets/creatures-D9tbDjYx.json"
     ]
   },
   "src/components/CreaturePanel.tsx": {
-    "file": "assets/CreaturePanel-Dr9muesq.js",
+    "file": "assets/CreaturePanel-BBn_wQy4.js",
     "name": "CreaturePanel",
     "src": "src/components/CreaturePanel.tsx",
     "isDynamicEntry": true,
@@ -76,7 +85,7 @@
     ]
   },
   "src/components/CustomCreatureEditor.tsx": {
-    "file": "assets/CustomCreatureEditor-CuqCfNIp.js",
+    "file": "assets/CustomCreatureEditor-C2PK0dWo.js",
     "name": "CustomCreatureEditor",
     "src": "src/components/CustomCreatureEditor.tsx",
     "isDynamicEntry": true,
@@ -86,7 +95,7 @@
     ]
   },
   "src/components/LikelyBattlePanel.tsx": {
-    "file": "assets/LikelyBattlePanel-BOKI6hEG.js",
+    "file": "assets/LikelyBattlePanel-BJrrGou5.js",
     "name": "LikelyBattlePanel",
     "src": "src/components/LikelyBattlePanel.tsx",
     "isDynamicEntry": true,
@@ -94,15 +103,16 @@
       "_react-Ca03aNmg.js",
       "_quantity-y9gkKp1G.js",
       "index.html",
-      "_storyboard-DV1Kzsb0.js",
-      "_reconstruction-CYlwYgE5.js"
+      "_storyboard-Cp8rEVEa.js",
+      "_laymanNarrative-Fal1S17w.js",
+      "_reconstruction-Crx0pmSa.js"
     ],
     "css": [
-      "assets/LikelyBattlePanel-BbSIO_Qh.css"
+      "assets/LikelyBattlePanel-DMni_-2-.css"
     ]
   },
   "src/components/MethodologyPanel.tsx": {
-    "file": "assets/MethodologyPanel-DyUUDUel.js",
+    "file": "assets/MethodologyPanel-9cyYKuHk.js",
     "name": "MethodologyPanel",
     "src": "src/components/MethodologyPanel.tsx",
     "isDynamicEntry": true,
@@ -111,7 +121,7 @@
     ]
   },
   "src/components/Model04Dossier.tsx": {
-    "file": "assets/Model04Dossier-Bf5j0nYK.js",
+    "file": "assets/Model04Dossier-DkgL_VhH.js",
     "name": "Model04Dossier",
     "src": "src/components/Model04Dossier.tsx",
     "isDynamicEntry": true,
@@ -120,7 +130,7 @@
     ]
   },
   "src/components/ResultPanel.tsx": {
-    "file": "assets/ResultPanel-CIJEbpl-.js",
+    "file": "assets/ResultPanel-CyRINoLf.js",
     "name": "ResultPanel",
     "src": "src/components/ResultPanel.tsx",
     "isDynamicEntry": true,
@@ -136,17 +146,19 @@
     ]
   },
   "src/components/SimpleResultPanel.tsx": {
-    "file": "assets/SimpleResultPanel-Cioqdoth.js",
+    "file": "assets/SimpleResultPanel-BhAPUc_4.js",
     "name": "SimpleResultPanel",
     "src": "src/components/SimpleResultPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_react-Ca03aNmg.js",
-      "index.html"
+      "index.html",
+      "_storyboard-Cp8rEVEa.js",
+      "_laymanNarrative-Fal1S17w.js"
     ]
   },
   "src/components/StatControls.tsx": {
-    "file": "assets/StatControls-_Sx1RKZS.js",
+    "file": "assets/StatControls-e9V7V6qr.js",
     "name": "StatControls",
     "src": "src/components/StatControls.tsx",
     "isDynamicEntry": true,
@@ -155,15 +167,15 @@
     ]
   },
   "src/components/TacticalReconstructionPanel.tsx": {
-    "file": "assets/TacticalReconstructionPanel-vW5qJAJv.js",
+    "file": "assets/TacticalReconstructionPanel-ebuwTKdZ.js",
     "name": "TacticalReconstructionPanel",
     "src": "src/components/TacticalReconstructionPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_react-Ca03aNmg.js",
       "index.html",
-      "_storyboard-DV1Kzsb0.js",
-      "_reconstruction-CYlwYgE5.js",
+      "_storyboard-Cp8rEVEa.js",
+      "_reconstruction-Crx0pmSa.js",
       "_contracts-BUvRjqEC.js"
     ],
     "dynamicImports": [
@@ -174,7 +186,7 @@
     ]
   },
   "src/components/TechnicalReport.tsx": {
-    "file": "assets/TechnicalReport-CJiHIyCT.js",
+    "file": "assets/TechnicalReport-Bs4X6kA2.js",
     "name": "TechnicalReport",
     "src": "src/components/TechnicalReport.tsx",
     "isDynamicEntry": true,
@@ -183,7 +195,7 @@
     ]
   },
   "src/components/tactical/TacticalScene.tsx": {
-    "file": "assets/TacticalScene-BAanAhE8.js",
+    "file": "assets/TacticalScene-CkqYe8JW.js",
     "name": "TacticalScene",
     "src": "src/components/tactical/TacticalScene.tsx",
     "isDynamicEntry": true,
@@ -198,7 +210,7 @@
     "src": "src/data/creatures.json"
   },
   "src/model04/runtime.ts": {
-    "file": "assets/runtime-ZWMf-0lM.js",
+    "file": "assets/runtime-BJzB4Dls.js",
     "name": "runtime",
     "src": "src/model04/runtime.ts",
     "isDynamicEntry": true,
