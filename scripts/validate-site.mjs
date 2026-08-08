@@ -115,6 +115,28 @@ for (const route of requiredSitemapRoutes) {
   if (!sitemap.includes(`<loc>https://samfa12.com${route}</loc>`)) fail(`sitemap.xml: missing ${route}`);
 }
 
+for (const location of sitemapLocations) {
+  const sitePrefix = "https://samfa12.com";
+  if (!location.startsWith(sitePrefix)) {
+    fail(`sitemap.xml: non-canonical site URL ${location}`);
+    continue;
+  }
+  const route = location.slice(sitePrefix.length);
+  const relativePath = route === "/" ? "index.html" : path.join(route.replace(/^\//, ""), "index.html");
+  const filePath = path.join(root, relativePath);
+  if (!fs.existsSync(filePath)) {
+    fail(`sitemap.xml: ${route} has no local page`);
+    continue;
+  }
+  const html = fs.readFileSync(filePath, "utf8");
+  if (!html.includes(`<link rel="canonical" href="${location}"`)) {
+    fail(`${relativePath}: missing or incorrect canonical URL for sitemap route ${route}`);
+  }
+  if (/<meta\s+name=["']robots["'][^>]*content=["'][^"']*\bnoindex\b/i.test(html)) {
+    fail(`${relativePath}: sitemap route must not be noindex`);
+  }
+}
+
 const whatWouldWinRoute = path.join(root, "apps", "what-would-win", "index.html");
 if (!fs.existsSync(whatWouldWinRoute)) {
   fail("apps/what-would-win/index.html: missing hosted app route");
