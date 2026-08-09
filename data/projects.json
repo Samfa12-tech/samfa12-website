@@ -971,6 +971,22 @@
     "thumbnailAlt": "Cover image for Pocket Ant Farm"
   },
   {
+    "title": "Briarhold",
+    "category": "Games",
+    "type": "Game",
+    "status": "Coming Soon",
+    "description": "Briarhold is an upcoming multiplayer co-op first-person action-defence roguelite. Explore the old stone together, prepare repairable defences between attacks, then combine weapons and tactics when the Briar Host reaches the walls.",
+    "tags": [
+      "Multiplayer Co-op",
+      "Action Defence"
+    ],
+    "featured": false,
+    "links": [],
+    "sortOrder": 25,
+    "thumbnail": "assets/thumbnails/briarhold-samfa12-icon-512.webp",
+    "thumbnailAlt": "Briarhold emblem: a gold oak leaf and Warden sword encircled by thorns beneath a moonlit stone arch."
+  },
+  {
     "title": "ToKnight 2: The Fire Beneath",
     "category": "Books",
     "type": "Book",
