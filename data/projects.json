@@ -746,10 +746,10 @@
     "thumbnailAlt": "Cover image for Samfa12's TD Pack"
   },
   {
-    "title": "Samfa12 Chill Pack",
+    "title": "Samfa12's Lofi and Chill Pack",
     "category": "Games",
     "type": "Android chill pack",
-    "status": "Coming Soon — Closed testing on Google Play",
+    "status": "Published on Google Play",
     "description": "A pocket collection of six small lofi and chill scenes, including Pocket Fish Tank, Pocket Ant Farm, Moon Mower, and three more cosy worlds built around shared Pocket Audio.",
     "tags": [
       "Game",
@@ -760,8 +760,8 @@
     "featured": false,
     "links": [
       {
-        "label": "Become a tester",
-        "url": "/join/#tester-signup"
+        "label": "Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
       }
     ],
     "sortOrder": 15.5,
