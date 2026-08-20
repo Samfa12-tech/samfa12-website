@@ -33,11 +33,12 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A Samfa12 game release available on Steam and Google Play, with its story continued in the sequel novel Sober.",
+    "description": "A top-down pixel-art game set before the novel Sober, available on Steam and Google Play.",
     "tags": [
       "Game",
-      "Shooter",
-      "Sober sequel",
+      "Top-down",
+      "Pixel art",
+      "Story precedes Sober",
       "Samfa12"
     ],
     "featured": true,
@@ -95,13 +96,12 @@
     "title": "The Last Guard",
     "category": "Games",
     "type": "Game",
-    "status": "Released — in development",
+    "status": "Released",
     "description": "You are the last guard on a once-impenetrable fortress wall as thousands of orcs advance. Defend the wall. Defend your honour.",
     "tags": [
       "Game",
       "Action",
       "Defense",
-      "In Development",
       "Samfa12"
     ],
     "featured": false,
@@ -121,12 +121,14 @@
     "title": "The Horde — Ray Tracing Tech Demo",
     "category": "Games",
     "type": "Tech demo",
-    "status": "Released — Android & Windows",
-    "description": "A downloadable ray-tracing tech demo for Android and Windows.",
+    "status": "Experimental — in development",
+    "description": "An experimental ray-tracing tech demo in development for Android and Windows.",
     "tags": [
       "Game",
       "Tech Demo",
       "Ray Tracing",
+      "Experimental",
+      "In Development",
       "Android",
       "Windows"
     ],
@@ -150,13 +152,14 @@
   {
     "title": "Bug Swarm",
     "category": "Games",
-    "type": "Browser game",
+    "type": "Spiritual sequel to Bug Maze TD",
     "status": "Experimental",
-    "description": "A browser-hosted swarm defense experiment with fast bug floods, kid-made towers, upgrades, and touch-first play.",
+    "description": "A spiritual sequel to Bug Maze TD: a browser-hosted swarm defense experiment with fast bug floods, kid-made towers, upgrades, and touch-first play.",
     "tags": [
       "Game",
       "Experimental",
       "Tower Defense",
+      "Spiritual sequel to Bug Maze TD",
       "Samfa12"
     ],
     "featured": false,
@@ -964,21 +967,24 @@
   {
     "title": "Moon Mower",
     "category": "Games",
-    "type": "Featured in Samfa12's Lofi and Chill Pack",
+    "type": "Game",
     "status": "Published",
-    "description": "A short-form arcade game with quirky mechanics, repeated loops, and playful progression.",
+    "description": "A short-form arcade game with quirky mechanics, repeated loops, and playful progression. Featured in Samfa12's Lofi and Chill Pack.",
     "tags": [
       "Game",
       "Arcade",
       "Indie",
-      "Pocket Audio",
-      "Samfa12's Lofi and Chill Pack"
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
       {
         "url": "https://samfa12.itch.io/moon-mower",
         "label": "Play on itch.io"
+      },
+      {
+        "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+        "label": "Featured in Samfa12's Lofi and Chill Pack"
       }
     ],
     "sortOrder": 20,
@@ -988,21 +994,24 @@
   {
     "title": "Pocket Fish Tank",
     "category": "Games",
-    "type": "Featured in Samfa12's Lofi and Chill Pack",
+    "type": "Game",
     "status": "Published",
-    "description": "A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm.",
+    "description": "A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm. Featured in Samfa12's Lofi and Chill Pack.",
     "tags": [
       "Game",
       "Voxel",
       "Relax",
-      "Pocket Audio",
-      "Samfa12's Lofi and Chill Pack"
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
       {
         "url": "https://samfa12.itch.io/fish-tank",
         "label": "Play on itch.io"
+      },
+      {
+        "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+        "label": "Featured in Samfa12's Lofi and Chill Pack"
       }
     ],
     "sortOrder": 21,
@@ -1035,21 +1044,24 @@
   {
     "title": "Pocket Ant Farm",
     "category": "Games",
-    "type": "Featured in Samfa12's Lofi and Chill Pack",
+    "type": "Game",
     "status": "Published",
-    "description": "A simulation game focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
+    "description": "A simulation game focused on colony growth, maintenance rhythms, and scalable growth mechanics. Featured in Samfa12's Lofi and Chill Pack.",
     "tags": [
       "Game",
       "Simulation",
       "Growth",
-      "Pocket Audio",
-      "Samfa12's Lofi and Chill Pack"
+      "Pocket Audio"
     ],
     "featured": false,
     "links": [
       {
         "url": "https://samfa12.itch.io/ant-farm",
         "label": "Play on itch.io"
+      },
+      {
+        "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+        "label": "Featured in Samfa12's Lofi and Chill Pack"
       }
     ],
     "sortOrder": 24,
