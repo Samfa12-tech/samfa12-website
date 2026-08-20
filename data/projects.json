@@ -3,8 +3,8 @@
     "title": "Dust on the River",
     "category": "Games",
     "type": "Game",
-    "status": "Published",
-    "description": "A story-driven bushranger adventure about whether a violent past can ever really stay buried.",
+    "status": "Closed testing on Google Play",
+    "description": "A story-driven bushranger adventure about whether a violent past can ever really stay buried, now in closed testing on Google Play.",
     "tags": [
       "Game",
       "Adventure",
@@ -964,14 +964,15 @@
   {
     "title": "Moon Mower",
     "category": "Games",
-    "type": "Game",
+    "type": "Featured in Samfa12's Lofi and Chill Pack",
     "status": "Published",
     "description": "A short-form arcade game with quirky mechanics, repeated loops, and playful progression.",
     "tags": [
       "Game",
       "Arcade",
       "Indie",
-      "Pocket Audio"
+      "Pocket Audio",
+      "Samfa12's Lofi and Chill Pack"
     ],
     "featured": false,
     "links": [
@@ -987,14 +988,15 @@
   {
     "title": "Pocket Fish Tank",
     "category": "Games",
-    "type": "Game",
+    "type": "Featured in Samfa12's Lofi and Chill Pack",
     "status": "Published",
     "description": "A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm.",
     "tags": [
       "Game",
       "Voxel",
       "Relax",
-      "Pocket Audio"
+      "Pocket Audio",
+      "Samfa12's Lofi and Chill Pack"
     ],
     "featured": false,
     "links": [
@@ -1033,14 +1035,15 @@
   {
     "title": "Pocket Ant Farm",
     "category": "Games",
-    "type": "Game",
+    "type": "Featured in Samfa12's Lofi and Chill Pack",
     "status": "Published",
     "description": "A simulation game focused on colony growth, maintenance rhythms, and scalable growth mechanics.",
     "tags": [
       "Game",
       "Simulation",
       "Growth",
-      "Pocket Audio"
+      "Pocket Audio",
+      "Samfa12's Lofi and Chill Pack"
     ],
     "featured": false,
     "links": [
@@ -1056,12 +1059,13 @@
   {
     "title": "Briarhold",
     "category": "Games",
-    "type": "Game",
+    "type": "Spiritual sequel to The Last Guard",
     "status": "Coming soon",
-    "description": "Briarhold is an upcoming multiplayer co-op first-person action-defence roguelite. Explore the old stone together, prepare repairable defences between attacks, then combine weapons and tactics when the Briar Host reaches the walls.",
+    "description": "A spiritual sequel to The Last Guard, Briarhold is an upcoming multiplayer co-op first-person action-defence roguelite. Explore the old stone together, prepare repairable defences between attacks, then combine weapons and tactics when the Briar Host reaches the walls.",
     "tags": [
       "Multiplayer Co-op",
-      "Action Defence"
+      "Action Defence",
+      "Spiritual sequel to The Last Guard"
     ],
     "featured": false,
     "links": [],

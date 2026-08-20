@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260820-6";
+  const DATA_VERSION = "20260820-7";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
