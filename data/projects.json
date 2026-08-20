@@ -33,10 +33,11 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A Samfa12 game release available on Steam and Google Play.",
+    "description": "A Samfa12 game release available on Steam and Google Play, with its story continued in the sequel novel Sober.",
     "tags": [
       "Game",
       "Shooter",
+      "Sober sequel",
       "Samfa12"
     ],
     "featured": true,
@@ -536,13 +537,15 @@
   {
     "title": "ToKnight",
     "category": "Books",
-    "type": "Book",
+    "type": "Jason Proud series — Book 1",
     "status": "Published",
-    "description": "A middle-grade fantasy adventure about Jason Proud, a mysterious inheritance, and the first step into the ToKnight world.",
+    "description": "The opening Jason Proud adventure: a middle-grade fantasy about a mysterious inheritance and the first step into the ToKnight world.",
     "tags": [
       "Novel",
       "Fantasy",
-      "Adventure"
+      "Adventure",
+      "Jason Proud series",
+      "Book 1"
     ],
     "featured": true,
     "homepageRank": 4,
@@ -1069,13 +1072,15 @@
   {
     "title": "ToKnight 2: The Fire Beneath",
     "category": "Books",
-    "type": "Book",
+    "type": "Jason Proud series — Book 2",
     "status": "Published",
-    "description": "The second ToKnight book, continuing Jason Proud’s fantasy adventure with a buried dragon, family history, and fire beneath the school.",
+    "description": "The second Jason Proud adventure, continuing the ToKnight story with a buried dragon, family history, and fire beneath the school.",
     "tags": [
       "Novel",
       "Fantasy",
-      "Sequel"
+      "Sequel",
+      "Jason Proud series",
+      "Book 2"
     ],
     "featured": false,
     "links": [
@@ -1091,13 +1096,15 @@
   {
     "title": "Free to a Good Home",
     "category": "Books",
-    "type": "Book",
+    "type": "The Good Home novels — Book 1",
     "status": "Published",
-    "description": "A grounded contemporary novel about care, belonging, family pressure, and the consequences of trying to do the right thing.",
+    "description": "The first Good Home novel: a grounded contemporary story about care, belonging, family pressure, and the consequences of trying to do the right thing.",
     "tags": [
       "Narrative",
       "Drama",
-      "Fiction"
+      "Fiction",
+      "The Good Home novels",
+      "Book 1"
     ],
     "featured": false,
     "links": [
@@ -1113,13 +1120,15 @@
   {
     "title": "A Place of His Own",
     "category": "Books",
-    "type": "Book",
+    "type": "The Good Home novels — Book 2",
     "status": "Published",
-    "description": "A contemporary follow-up in the Good Home novels, about independence, family, support, and finding a place that can actually hold you.",
+    "description": "The second Good Home novel, about independence, family, support, and finding a place that can actually hold you.",
     "tags": [
       "Narrative",
       "Fiction",
-      "Contemporary"
+      "Contemporary",
+      "The Good Home novels",
+      "Book 2"
     ],
     "featured": false,
     "links": [
@@ -1187,13 +1196,15 @@
   {
     "title": "Sober",
     "category": "Books",
-    "type": "Book",
+    "type": "Drink — sequel novel",
     "status": "Published",
-    "description": "A novel set in the world of Drink, following recovery, memory, habit, and the work of staying changed.",
+    "description": "A sequel novel to the game Drink, following recovery, memory, habit, and the work of staying changed.",
     "tags": [
       "Narrative",
       "Fiction",
-      "Contemporary"
+      "Contemporary",
+      "Drink",
+      "Sequel"
     ],
     "featured": false,
     "links": [
