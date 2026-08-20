@@ -22,6 +22,7 @@ const htmlFiles = [
   "links/index.html",
   "join/index.html",
   "privacy/index.html",
+  "stats/index.html",
 ];
 
 for (const relativePath of htmlFiles) {

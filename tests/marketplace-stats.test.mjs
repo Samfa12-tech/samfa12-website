@@ -4,7 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { zipSync, strToU8 } from "fflate";
-import { assertHistory, assertNoSensitivePublicData, assertPublicStats, equivalentMarketplaceSnapshot, marketplaceChanges, newSteamState, projectMappings } from "../scripts/marketplace/core.mjs";
+import { assertHistory, assertNoSensitivePublicData, assertPublicStats, equivalentMarketplaceSnapshot, marketplaceChanges, newSteamState, projectMappings, validateItchAndSteamConfig } from "../scripts/marketplace/core.mjs";
 import { collectItch } from "../scripts/marketplace/itch.mjs";
 import { applyGooglePlayRow, collectGooglePlay, parseGoogleReportArchive, summarizeGooglePlayOrders } from "../scripts/marketplace/google-play.mjs";
 import { collectSteam, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
@@ -129,4 +129,10 @@ test("catalogue URL mappings use current project data instead of duplicated titl
   assert.equal(mappings.steam.get("4419290"), "Drink");
   assert.equal(mappings.googlePlay.get("com.samsmall.drink"), "Drink");
   assert.deepEqual(summarizeSteamState({ schemaVersion: 1, changedDatesHighwatermark: "0", daily: {} }).totals, { grossUnits: 0, returnedUnits: 0, netUnits: 0 });
+});
+
+test("provider-only verification requires only itch and Steam credentials", () => {
+  assert.deepEqual(validateItchAndSteamConfig({ itchApiKey: "itch", steamFinancialApiKey: "steam" }), []);
+  assert.deepEqual(validateItchAndSteamConfig({ itchApiKey: "", steamFinancialApiKey: "steam" }), ["ITCH_API_KEY"]);
+  assert.deepEqual(validateItchAndSteamConfig({ itchApiKey: "itch", steamFinancialApiKey: "" }), ["STEAM_FINANCIAL_API_KEY"]);
 });

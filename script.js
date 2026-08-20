@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260801-1";
+  const DATA_VERSION = "20260820-1";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -138,6 +138,12 @@
   const marketplaceStatsSection = document.querySelector("[data-marketplace-stats]");
   const marketplaceStatsGrid = document.querySelector("[data-marketplace-stats-grid]");
   const marketplaceStatsUpdated = document.querySelector("[data-marketplace-stats-updated]");
+  const marketplaceDashboard = document.querySelector("[data-marketplace-dashboard]");
+  const marketplaceDashboardOverview = document.querySelector("[data-marketplace-dashboard-overview]");
+  const marketplaceDashboardUpdated = document.querySelector("[data-marketplace-dashboard-updated]");
+  const marketplaceTrend = document.querySelector("[data-marketplace-trend]");
+  const marketplaceProjects = document.querySelector("[data-marketplace-projects]");
+  const marketplaceDashboardUnavailable = document.querySelector("[data-marketplace-dashboard-unavailable]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const finePointer = window.matchMedia("(pointer: fine)");
   let activeGameOverlay = null;
@@ -1136,12 +1142,46 @@
     if (!requiredTotals.every(([value, minimum]) => isFiniteInteger(value, { minimum }))) return null;
     if (!requiredChanges.every((value) => isFiniteInteger(value, { minimum: Number.NEGATIVE_INFINITY }))) return null;
     if (totals.combined.paidUnits !== totals.itch.purchases + totals.steam.netUnits + totals.googlePlay.netPaidAppPurchases) return null;
+    if (!validateMarketplaceProjects(data.projects)) return null;
 
+    return data;
+  }
+
+  function validateMarketplaceProjects(projects) {
+    if (!projects || typeof projects !== "object") return false;
+    const integerMetrics = (project, keys) => project && typeof project.title === "string" && project.title.trim() && keys.every((key) => isFiniteInteger(project[key]));
+    return Array.isArray(projects.itch)
+      && Array.isArray(projects.steam)
+      && Array.isArray(projects.googlePlay)
+      && projects.itch.every((project) => integerMetrics(project, ["views", "downloads", "purchases"]) && typeof project.url === "string")
+      && projects.steam.every((project) => integerMetrics(project, ["grossUnits", "returnedUnits", "netUnits"]) && typeof project.appId === "string")
+      && projects.googlePlay.every((project) => integerMetrics(project, ["grossPaidAppPurchases", "fullyRefundedPaidAppOrders", "netPaidAppPurchases"]) && typeof project.packageId === "string");
+  }
+
+  function validateMarketplaceHistory(data) {
+    if (!data || typeof data !== "object" || data.schemaVersion !== 1 || !Array.isArray(data.snapshots) || !data.snapshots.length) return null;
+    const seen = new Set();
+    for (const snapshot of data.snapshots) {
+      if (!snapshot || typeof snapshot.capturedAt !== "string" || Number.isNaN(Date.parse(snapshot.capturedAt)) || seen.has(snapshot.capturedAt)) return null;
+      seen.add(snapshot.capturedAt);
+      const values = [snapshot.itch?.views, snapshot.itch?.downloads, snapshot.itch?.purchases, snapshot.steam?.netUnits, snapshot.googlePlay?.netPaidAppPurchases, snapshot.combined?.paidUnits];
+      if (!values.every((value) => isFiniteInteger(value))) return null;
+      if (snapshot.combined.paidUnits !== snapshot.itch.purchases + snapshot.steam.netUnits + snapshot.googlePlay.netPaidAppPurchases) return null;
+    }
     return data;
   }
 
   function formatMarketplaceNumber(value) {
     return new Intl.NumberFormat("en-AU").format(value);
+  }
+
+  function formatMarketplaceDate(value) {
+    return new Intl.DateTimeFormat("en-AU", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      timeZone: "Australia/Sydney",
+    }).format(new Date(value));
   }
 
   function formatMarketplaceChange(value, noun) {
@@ -1175,13 +1215,7 @@
   function renderMarketplaceStats(data) {
     if (!marketplaceStatsSection || !marketplaceStatsGrid || !marketplaceStatsUpdated) return;
 
-    const refreshed = new Date(data.generatedAt);
-    const refreshedText = new Intl.DateTimeFormat("en-AU", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      timeZone: "Australia/Sydney",
-    }).format(refreshed);
+    const refreshedText = formatMarketplaceDate(data.generatedAt);
 
     marketplaceStatsGrid.replaceChildren(
       createMarketplaceStatsCard({
@@ -1234,21 +1268,118 @@
     marketplaceStatsSection.classList.add("is-visible");
   }
 
-  async function loadMarketplaceStats() {
-    if (!marketplaceStatsSection) return;
+  function createMarketplaceTrend(history) {
+    const snapshots = history.snapshots.slice(-12);
+    const maxUnits = Math.max(...snapshots.map((snapshot) => snapshot.combined.paidUnits), 1);
+    const bars = createElement("ol", { className: "stats-trend-bars", "aria-label": "Combined paid units by weekly snapshot" });
+    snapshots.forEach((snapshot) => {
+      const units = snapshot.combined.paidUnits;
+      const height = Math.max(8, Math.round((units / maxUnits) * 100));
+      bars.appendChild(createElement("li", { className: "stats-trend-point", styleProps: { "--trend-height": `${height}%` } }, [
+        createElement("span", { className: "stats-trend-value", text: formatMarketplaceNumber(units) }),
+        createElement("span", { className: "stats-trend-bar", "aria-hidden": "true" }),
+        createElement("time", { className: "stats-trend-date", dateTime: snapshot.capturedAt, text: new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", timeZone: "Australia/Sydney" }).format(new Date(snapshot.capturedAt)) }),
+        createElement("span", { className: "sr-only", text: `${formatMarketplaceDate(snapshot.capturedAt)}: ${formatMarketplaceNumber(units)} combined paid units.` }),
+      ]));
+    });
+    return [bars, createElement("figcaption", { text: "Combined paid units are the only cross-storefront metric shown in the trend." })];
+  }
 
+  function createMarketplaceProjectPanel({ id, platform, projects, metrics }) {
+    const titleId = `stats-projects-${id}`;
+    const panel = createElement("section", { className: `stats-project-panel stats-project-panel-${id}`, "aria-labelledby": titleId }, [
+      createElement("p", { className: "technical-label", text: platform }),
+      createElement("h3", { id: titleId, text: `${platform} releases` }),
+    ]);
+    if (!projects.length) {
+      panel.appendChild(createElement("p", { className: "stats-project-empty", text: "No published project records are available for this storefront yet." }));
+      return panel;
+    }
+    const table = createElement("table", { className: "stats-project-table" });
+    const headerRow = createElement("tr");
+    headerRow.appendChild(createElement("th", { scope: "col", text: "Release" }));
+    metrics.forEach((metric) => headerRow.appendChild(createElement("th", { scope: "col", text: metric.label })));
+    table.appendChild(createElement("thead", {}, [headerRow]));
+    const body = createElement("tbody");
+    projects.forEach((project) => {
+      const row = createElement("tr");
+      row.appendChild(createElement("th", { scope: "row", text: project.title }));
+      metrics.forEach((metric) => row.appendChild(createElement("td", { text: formatMarketplaceNumber(project[metric.key]) })));
+      body.appendChild(row);
+    });
+    table.appendChild(body);
+    panel.appendChild(table);
+    return panel;
+  }
+
+  function renderMarketplaceDashboard(data, history) {
+    if (!marketplaceDashboard || !marketplaceDashboardOverview || !marketplaceDashboardUpdated || !marketplaceTrend || !marketplaceProjects) return;
+    marketplaceDashboardOverview.replaceChildren(
+      createMarketplaceStatsCard({
+        id: "dashboard-combined",
+        platform: "Across storefronts",
+        primaryLabel: "Lifetime paid units",
+        primaryValue: data.totals.combined.paidUnits,
+        detailMetrics: [
+          { label: "itch.io purchases", value: data.totals.itch.purchases },
+          { label: "Steam + Play units", value: data.totals.steam.netUnits + data.totals.googlePlay.netPaidAppPurchases },
+        ],
+        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.combined.paidUnits, "paid unit"),
+      }),
+      createMarketplaceStatsCard({ id: "dashboard-itch", platform: "itch.io", primaryLabel: "Lifetime downloads", primaryValue: data.totals.itch.downloads, detailMetrics: [{ label: "Views", value: data.totals.itch.views }, { label: "Purchases", value: data.totals.itch.purchases }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.itch.downloads, "download") }),
+      createMarketplaceStatsCard({ id: "dashboard-steam", platform: "Steam", primaryLabel: "Net game units sold", primaryValue: data.totals.steam.netUnits, detailMetrics: [{ label: "Gross units", value: data.totals.steam.grossUnits }, { label: "Returned units", value: data.totals.steam.returnedUnits }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.steam.netUnits, "net sale") }),
+      createMarketplaceStatsCard({ id: "dashboard-google-play", platform: "Google Play", primaryLabel: "Net paid-app purchases", primaryValue: data.totals.googlePlay.netPaidAppPurchases, detailMetrics: [{ label: "Gross purchases", value: data.totals.googlePlay.grossPaidAppPurchases }, { label: "Fully refunded orders", value: data.totals.googlePlay.fullyRefundedPaidAppOrders }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.googlePlay.netPaidAppPurchases, "paid-app purchase") })
+    );
+    marketplaceDashboardUpdated.textContent = `Updated weekly · Last refreshed ${formatMarketplaceDate(data.generatedAt)}`;
+    marketplaceTrend.replaceChildren(...createMarketplaceTrend(history));
+    marketplaceProjects.replaceChildren(
+      createMarketplaceProjectPanel({ id: "itch", platform: "itch.io", projects: data.projects.itch, metrics: [{ key: "views", label: "Views" }, { key: "downloads", label: "Downloads" }, { key: "purchases", label: "Purchases" }] }),
+      createMarketplaceProjectPanel({ id: "steam", platform: "Steam", projects: data.projects.steam, metrics: [{ key: "grossUnits", label: "Gross units" }, { key: "returnedUnits", label: "Returned" }, { key: "netUnits", label: "Net units" }] }),
+      createMarketplaceProjectPanel({ id: "google-play", platform: "Google Play", projects: data.projects.googlePlay, metrics: [{ key: "grossPaidAppPurchases", label: "Gross purchases" }, { key: "fullyRefundedPaidAppOrders", label: "Fully refunded" }, { key: "netPaidAppPurchases", label: "Net purchases" }] })
+    );
+    marketplaceDashboardUnavailable.hidden = true;
+    marketplaceDashboard.hidden = false;
+  }
+
+  function showMarketplaceDashboardUnavailable() {
+    if (!marketplaceDashboardUnavailable) return;
+    marketplaceDashboard.hidden = true;
+    marketplaceDashboardUnavailable.hidden = false;
+  }
+
+  async function loadMarketplaceStats() {
+    if (!marketplaceStatsSection && !marketplaceDashboard) return;
+
+    let data;
     try {
-      const data = validateMarketplaceStats(
+      data = validateMarketplaceStats(
         await fetchJsonWithTimeout("/data/public-stats.json", FETCH_TIMEOUT_MS, {
           cache: "no-store",
           headers: { "Cache-Control": "no-cache" },
         })
       );
       if (!data) throw new Error("Invalid marketplace statistics schema");
-      renderMarketplaceStats(data);
     } catch (error) {
-      marketplaceStatsSection.hidden = true;
+      if (marketplaceStatsSection) marketplaceStatsSection.hidden = true;
+      showMarketplaceDashboardUnavailable();
       console.warn("Marketplace statistics are unavailable:", error?.message || error);
+      return;
+    }
+
+    renderMarketplaceStats(data);
+    if (!marketplaceDashboard) return;
+    try {
+      const history = validateMarketplaceHistory(
+        await fetchJsonWithTimeout("/data/public-stats-history.json", FETCH_TIMEOUT_MS, {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        })
+      );
+      if (!history) throw new Error("Invalid marketplace history schema");
+      renderMarketplaceDashboard(data, history);
+    } catch (error) {
+      showMarketplaceDashboardUnavailable();
+      console.warn("Marketplace history is unavailable:", error?.message || error);
     }
   }
 

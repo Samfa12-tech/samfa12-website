@@ -949,6 +949,225 @@ h3 {
   color: var(--muted);
 }
 
+.marketplace-stats-note .text-link {
+  margin-left: var(--space-1);
+}
+
+.stats-dashboard {
+  padding-top: var(--space-7);
+}
+
+.stats-dashboard[hidden],
+.stats-unavailable[hidden] {
+  display: none;
+}
+
+.stats-dashboard-head,
+.stats-panel-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.stats-dashboard-head {
+  margin-bottom: var(--space-5);
+}
+
+.stats-dashboard-head h2,
+.stats-panel-head h3,
+.stats-method h2 {
+  margin: var(--space-2) 0 0;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  line-height: 1;
+}
+
+.stats-dashboard-head h2 {
+  font-size: var(--step-3);
+}
+
+.stats-dashboard-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.stats-dashboard-overview .marketplace-stat-dashboard-combined {
+  --marketplace-accent: var(--spark);
+}
+
+.stats-trend-panel,
+.stats-project-panel,
+.stats-method,
+.stats-unavailable-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent 42%), var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.stats-trend-panel {
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+}
+
+.stats-panel-head h3 {
+  font-size: var(--step-1);
+}
+
+.stats-panel-note {
+  margin: 0;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", "Space Mono", Consolas, monospace;
+  font-size: var(--step--1);
+}
+
+.stats-trend-figure {
+  margin: var(--space-5) 0 0;
+}
+
+.stats-trend-bars {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(3rem, 1fr));
+  align-items: end;
+  min-height: 15rem;
+  gap: clamp(0.35rem, 1.5vw, 1rem);
+  margin: 0;
+  padding: var(--space-4) 0 0;
+  list-style: none;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.stats-trend-point {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: end;
+  min-height: 13rem;
+  gap: var(--space-2);
+  color: var(--muted);
+  text-align: center;
+}
+
+.stats-trend-value,
+.stats-trend-date {
+  font-family: "IBM Plex Mono", "Space Mono", Consolas, monospace;
+  font-size: clamp(0.62rem, 1.2vw, 0.78rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-trend-bar {
+  display: block;
+  align-self: end;
+  width: min(100%, 3.5rem);
+  height: var(--trend-height);
+  min-height: 0.75rem;
+  margin-inline: auto;
+  border: 1px solid color-mix(in srgb, var(--cyan), transparent 25%);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cyan), white 18%), color-mix(in srgb, var(--violet), transparent 8%));
+  box-shadow: 0 0 20px color-mix(in srgb, var(--cyan), transparent 72%);
+}
+
+.stats-trend-figure figcaption {
+  margin-top: var(--space-3);
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.stats-projects {
+  margin-top: var(--space-7);
+}
+
+.stats-project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.stats-project-panel {
+  min-width: 0;
+  padding: var(--space-5);
+  overflow: hidden;
+}
+
+.stats-project-panel .technical-label {
+  margin: 0;
+}
+
+.stats-project-panel h3 {
+  margin: var(--space-2) 0 var(--space-4);
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: var(--step-1);
+}
+
+.stats-project-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+}
+
+.stats-project-table th,
+.stats-project-table td {
+  padding: var(--space-2) var(--space-1);
+  border-top: 1px solid var(--line);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-project-table thead th {
+  color: var(--muted);
+  font-family: "IBM Plex Mono", "Space Mono", Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+  vertical-align: bottom;
+}
+
+.stats-project-table th:first-child {
+  width: 100%;
+  text-align: left;
+}
+
+.stats-project-table tbody th {
+  color: var(--text-soft);
+  font-weight: 700;
+}
+
+.stats-project-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+.stats-method {
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+}
+
+.stats-method p:last-child {
+  max-width: 65ch;
+  margin-bottom: 0;
+  color: var(--text-soft);
+}
+
+.stats-unavailable-card {
+  max-width: 52rem;
+  padding: clamp(var(--space-5), 7vw, var(--space-8));
+}
+
+.stats-unavailable-card h2 {
+  max-width: 20ch;
+  margin: var(--space-2) 0 var(--space-3);
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: var(--step-3);
+  line-height: 1;
+}
+
+.stats-unavailable-card p {
+  max-width: 60ch;
+  color: var(--text-soft);
+}
+
 .bento-grid {
   display: grid;
   grid-auto-flow: dense;
@@ -2324,5 +2543,40 @@ body[data-page="apps"] .project-card-catalogue {
     border: 1px solid ButtonText;
     background: ButtonFace;
     color: ButtonText;
+  }
+}
+
+@media (max-width: 1080px) {
+  .stats-dashboard-overview,
+  .stats-project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .stats-dashboard-head,
+  .stats-panel-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .stats-dashboard-overview,
+  .stats-project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-trend-panel,
+  .stats-project-panel,
+  .stats-method {
+    padding: var(--space-4);
+  }
+
+  .stats-trend-bars {
+    grid-template-columns: repeat(12, minmax(2.7rem, 1fr));
+    min-height: 13rem;
+  }
+
+  .stats-trend-point {
+    min-height: 11rem;
   }
 }

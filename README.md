@@ -9,6 +9,7 @@ Pocket Audio, music, and links for **Samfa12**.
 - `games/index.html` – games catalogue
 - `books/index.html` – books catalogue
 - `apps/index.html` – apps and tools hub for browser-hosted releases
+- `stats/index.html` – public marketplace statistics dashboard
 - `apps/what-would-win/` – synced What Would Win release route (generated, not hand-edited)
 - `pocket-audio/index.html` – Pocket Audio family/workflow page
 - `music/index.html` – music and audio catalogue
@@ -148,8 +149,9 @@ snapshots are also local-only by default.
 
 ### Public marketplace statistics
 
-The **Samfa12 by the Numbers** section is a separate, weekly public aggregate
-of itch.io, Steam, and Google Play unit activity. It is not part of the private
+The **Samfa12 by the Numbers** homepage section and the full `/stats/` dashboard
+are a separate, weekly public aggregate of itch.io, Steam, and Google Play unit
+activity. They are not part of the private
 Clarity/Cloudflare analytics bridge: it publishes only sanitised unit counts,
 never revenue or provider payloads. Amazon/KDP is deliberately deferred to a
 future stage.

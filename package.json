@@ -17,6 +17,7 @@
     "test:analytics": "node --test tests/analytics-bridge.test.mjs",
     "marketplace:check": "node scripts/check-marketplace-config.mjs",
     "marketplace:update": "node scripts/update-marketplace-stats.mjs",
+    "marketplace:verify-providers": "node scripts/verify-marketplace-providers.mjs",
     "test:marketplace": "node --test tests/marketplace-stats.test.mjs",
     "test:handoff-relay": "node --test tests/pocket-audio-handoff-relay.test.mjs",
     "setup:handoff-kv": "npx wrangler kv namespace create HANDOFFS --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config && npx wrangler kv namespace create HANDOFFS --preview --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config",

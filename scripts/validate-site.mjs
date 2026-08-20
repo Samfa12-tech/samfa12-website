@@ -16,6 +16,7 @@ const corePages = [
   "links/index.html",
   "join/index.html",
   "privacy/index.html",
+  "stats/index.html",
 ];
 const requiredSitemapRoutes = [
   "/",
@@ -29,6 +30,7 @@ const requiredSitemapRoutes = [
   "/links/",
   "/join/",
   "/privacy/",
+  "/stats/",
 ];
 const hostedAppPages = [
   {
@@ -163,6 +165,13 @@ try {
 const homepageScript = fs.readFileSync(path.join(root, "script.js"), "utf8");
 if (!homepageScript.includes("/data/public-stats.json") || !homepageScript.includes("no-store")) {
   fail("script.js: marketplace stats must be fetched with a revalidation-safe request.");
+}
+if (!homepageScript.includes("/data/public-stats-history.json") || !homepageScript.includes("validateMarketplaceHistory")) {
+  fail("script.js: marketplace dashboard must validate its public history feed.");
+}
+const statsPage = fs.readFileSync(path.join(root, "stats", "index.html"), "utf8");
+for (const requiredMarker of ["data-marketplace-dashboard", "data-marketplace-dashboard-unavailable", "data-marketplace-trend", "data-marketplace-projects"]) {
+  if (!statsPage.includes(requiredMarker)) fail(`stats/index.html: missing dashboard marker ${requiredMarker}`);
 }
 const pagesWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
 if (!pagesWorkflow.includes("--exclude='/ops/'")) fail(".github/workflows/pages.yml: ops/ must be excluded from the Pages artifact.");

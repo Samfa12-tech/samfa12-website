@@ -19,8 +19,9 @@ cookies, or stored browser sessions are used.
 ## Public metrics
 
 `data/public-stats.json` is the versioned public dataset consumed by the
-homepage. `data/public-stats-history.json` keeps compact, sanitised snapshots
-for week-over-week changes. Current headline values are:
+homepage and `/stats/` dashboard. `data/public-stats-history.json` keeps
+compact, sanitised snapshots for week-over-week changes and the dashboard's
+aggregate trend. Current headline values are:
 
 - itch.io: lifetime views, downloads, and purchases for published projects.
 - Steam: gross, returned, and authoritative net **game units sold** from Steam
@@ -36,7 +37,8 @@ metric.
 
 The initial repository state is deliberately uninitialised until all three
 providers complete a successful collection. The homepage hides the dynamic
-section rather than presenting placeholder zeroes as real figures.
+section and `/stats/` shows a pending state rather than presenting placeholder
+zeroes as real figures.
 
 ## Local configuration and commands
 
@@ -58,6 +60,7 @@ Downloads/Desktop once it is stored deliberately.
 ```bash
 npm run marketplace:check
 npm run marketplace:update
+npm run marketplace:verify-providers
 npm run test:marketplace
 npm run validate:catalogue
 npm run validate:site
@@ -67,6 +70,9 @@ npm run validate:site
 `marketplace:update` is atomic: an authentication, network, parsing, or privacy
 validation failure leaves the existing public data, history, and sanitised Steam
 state unchanged. A valid zero is not an error.
+`marketplace:verify-providers` checks itch.io and Steam only, reports
+sanitised aggregate counters, and never writes state or public data. It is for
+connection verification while an all-provider update is pending.
 
 The collectors use official server-side/provider report APIs only. itch earnings
 and Steam financial fields are discarded during normalisation. Google order
@@ -93,6 +99,11 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
 
 `GOOGLE_PLAY_SALES_URI` is intentionally configured in the workflow as the
 non-secret value `gs://pubsite_prod_7761853381809168545/sales/`.
+
+When Google Play access is still propagating, use **Actions → Verify itch.io
+and Steam marketplace access → Run workflow** to test those two configured
+secrets safely. This manual workflow has read-only repository permissions and
+cannot commit or publish partial statistics.
 
 ### itch.io
 

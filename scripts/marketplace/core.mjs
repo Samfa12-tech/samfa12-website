@@ -42,13 +42,18 @@ export async function loadMarketplaceConfig({ cwd = process.cwd(), env = process
 }
 
 export function validateMarketplaceConfig(config) {
-  const missing = [];
-  if (!config.itchApiKey) missing.push("ITCH_API_KEY");
-  if (!config.steamFinancialApiKey) missing.push("STEAM_FINANCIAL_API_KEY");
+  const missing = validateItchAndSteamConfig(config);
   if (!config.googlePlayServiceAccountJson && !config.googlePlayServiceAccountJsonPath) {
     missing.push("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON or GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH");
   }
   if (!parseGoogleStorageUri(config.googlePlaySalesUri)) missing.push("GOOGLE_PLAY_SALES_URI (valid gs:// bucket/prefix)");
+  return missing;
+}
+
+export function validateItchAndSteamConfig(config) {
+  const missing = [];
+  if (!config.itchApiKey) missing.push("ITCH_API_KEY");
+  if (!config.steamFinancialApiKey) missing.push("STEAM_FINANCIAL_API_KEY");
   return missing;
 }
 
