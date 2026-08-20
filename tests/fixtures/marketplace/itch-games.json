@@ -1,0 +1,24 @@
+{
+  "games": [
+    {
+      "id": 101,
+      "title": "Test Orchard",
+      "url": "https://samfa12.itch.io/test-orchard",
+      "published": true,
+      "views_count": 18,
+      "downloads_count": 9,
+      "purchases_count": 2,
+      "earnings": 99999
+    },
+    {
+      "id": 102,
+      "title": "Draft Only",
+      "url": "https://samfa12.itch.io/draft-only",
+      "published": false,
+      "views_count": 50,
+      "downloads_count": 50,
+      "purchases_count": 50,
+      "earnings": 99999
+    }
+  ]
+}

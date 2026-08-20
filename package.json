@@ -15,9 +15,17 @@
     "analytics:collect": "node scripts/collect-analytics.mjs",
     "analytics:report": "node scripts/report-analytics.mjs",
     "test:analytics": "node --test tests/analytics-bridge.test.mjs",
+    "marketplace:check": "node scripts/check-marketplace-config.mjs",
+    "marketplace:update": "node scripts/update-marketplace-stats.mjs",
+    "test:marketplace": "node --test tests/marketplace-stats.test.mjs",
     "test:handoff-relay": "node --test tests/pocket-audio-handoff-relay.test.mjs",
     "setup:handoff-kv": "npx wrangler kv namespace create HANDOFFS --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config && npx wrangler kv namespace create HANDOFFS --preview --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config",
     "deploy:handoff-relay": "npx wrangler deploy --config workers/pocket-audio-handoff/wrangler.toml",
     "verify:handoff-live": "node scripts/verify-pocket-handoff-live.mjs"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^8.0.1",
+    "csv-parse": "^6.1.0",
+    "fflate": "^0.8.2"
   }
 }

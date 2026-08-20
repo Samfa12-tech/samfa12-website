@@ -135,6 +135,9 @@
 
   const dataStatus = document.getElementById("data-status");
   const catalogueControls = document.getElementById("catalogue-controls");
+  const marketplaceStatsSection = document.querySelector("[data-marketplace-stats]");
+  const marketplaceStatsGrid = document.querySelector("[data-marketplace-stats-grid]");
+  const marketplaceStatsUpdated = document.querySelector("[data-marketplace-stats-updated]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const finePointer = window.matchMedia("(pointer: fine)");
   let activeGameOverlay = null;
@@ -1070,12 +1073,12 @@
     dataStatus.replaceChildren();
   }
 
-  async function fetchJsonWithTimeout(url, timeoutMs = FETCH_TIMEOUT_MS) {
+  async function fetchJsonWithTimeout(url, timeoutMs = FETCH_TIMEOUT_MS, requestOptions = {}) {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
 
     try {
-      const response = await fetch(url, { signal: controller.signal });
+      const response = await fetch(url, { ...requestOptions, signal: controller.signal });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return await response.json();
     } finally {
@@ -1094,6 +1097,158 @@
       console.warn("Project data could not be loaded:", error);
       showDataStatus("Project data could not be loaded. Saved catalogue cards are still available.", { canRetry: true, tone: "warning" });
       return { projects: normalizeProjects(fallbackProjects), loaded: false };
+    }
+  }
+
+  function isFiniteInteger(value, { minimum = 0 } = {}) {
+    return Number.isInteger(value) && Number.isFinite(value) && value >= minimum;
+  }
+
+  function validateMarketplaceStats(data) {
+    if (!data || typeof data !== "object" || data.schemaVersion !== 1) return null;
+    if (typeof data.generatedAt !== "string" || Number.isNaN(Date.parse(data.generatedAt))) return null;
+
+    const totals = data.totals;
+    const change = data.change?.sincePreviousSnapshot;
+    if (!totals || !change || typeof totals !== "object" || typeof change !== "object") return null;
+
+    const requiredTotals = [
+      [totals.itch?.views, 0],
+      [totals.itch?.downloads, 0],
+      [totals.itch?.purchases, 0],
+      [totals.steam?.grossUnits, 0],
+      [totals.steam?.returnedUnits, 0],
+      [totals.steam?.netUnits, 0],
+      [totals.googlePlay?.grossPaidAppPurchases, 0],
+      [totals.googlePlay?.fullyRefundedPaidAppOrders, 0],
+      [totals.googlePlay?.netPaidAppPurchases, 0],
+      [totals.combined?.paidUnits, 0],
+    ];
+    const requiredChanges = [
+      change.itch?.views,
+      change.itch?.downloads,
+      change.itch?.purchases,
+      change.steam?.netUnits,
+      change.googlePlay?.netPaidAppPurchases,
+      change.combined?.paidUnits,
+    ];
+
+    if (!requiredTotals.every(([value, minimum]) => isFiniteInteger(value, { minimum }))) return null;
+    if (!requiredChanges.every((value) => isFiniteInteger(value, { minimum: Number.NEGATIVE_INFINITY }))) return null;
+    if (totals.combined.paidUnits !== totals.itch.purchases + totals.steam.netUnits + totals.googlePlay.netPaidAppPurchases) return null;
+
+    return data;
+  }
+
+  function formatMarketplaceNumber(value) {
+    return new Intl.NumberFormat("en-AU").format(value);
+  }
+
+  function formatMarketplaceChange(value, noun) {
+    if (value === 0) return "No change this week";
+    const unit = Math.abs(value) === 1 ? noun : `${noun}s`;
+    return `${value > 0 ? "+" : "-"}${formatMarketplaceNumber(Math.abs(value))} ${unit} this week`;
+  }
+
+  function createMarketplaceMetric(label, value, className = "") {
+    return createElement("div", { className: `marketplace-stat-metric ${className}`.trim() }, [
+      createElement("dt", { text: label }),
+      createElement("dd", { text: formatMarketplaceNumber(value) }),
+    ]);
+  }
+
+  function createMarketplaceStatsCard({ id, platform, primaryLabel, primaryValue, detailMetrics, changeText }) {
+    const titleId = `marketplace-stat-${id}`;
+    const details = createElement("dl", { className: "marketplace-stat-details" });
+    detailMetrics.forEach((metric) => details.appendChild(createMarketplaceMetric(metric.label, metric.value)));
+
+    return createElement("article", { className: `marketplace-stat-card marketplace-stat-${id}`, "aria-labelledby": titleId }, [
+      createElement("p", { id: titleId, className: "technical-label", text: platform }),
+      createElement("dl", { className: "marketplace-stat-primary" }, [
+        createMarketplaceMetric(primaryLabel, primaryValue),
+      ]),
+      details,
+      createElement("p", { className: "marketplace-stat-change", text: changeText }),
+    ]);
+  }
+
+  function renderMarketplaceStats(data) {
+    if (!marketplaceStatsSection || !marketplaceStatsGrid || !marketplaceStatsUpdated) return;
+
+    const refreshed = new Date(data.generatedAt);
+    const refreshedText = new Intl.DateTimeFormat("en-AU", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      timeZone: "Australia/Sydney",
+    }).format(refreshed);
+
+    marketplaceStatsGrid.replaceChildren(
+      createMarketplaceStatsCard({
+        id: "itch",
+        platform: "itch.io",
+        primaryLabel: "Lifetime downloads",
+        primaryValue: data.totals.itch.downloads,
+        detailMetrics: [
+          { label: "Views", value: data.totals.itch.views },
+          { label: "Purchases", value: data.totals.itch.purchases },
+        ],
+        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.itch.downloads, "download"),
+      }),
+      createMarketplaceStatsCard({
+        id: "steam",
+        platform: "Steam",
+        primaryLabel: "Net game units sold",
+        primaryValue: data.totals.steam.netUnits,
+        detailMetrics: [
+          { label: "Gross units", value: data.totals.steam.grossUnits },
+          { label: "Returned units", value: data.totals.steam.returnedUnits },
+        ],
+        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.steam.netUnits, "net sale"),
+      }),
+      createMarketplaceStatsCard({
+        id: "google-play",
+        platform: "Google Play",
+        primaryLabel: "Net paid-app purchases",
+        primaryValue: data.totals.googlePlay.netPaidAppPurchases,
+        detailMetrics: [
+          { label: "Gross purchases", value: data.totals.googlePlay.grossPaidAppPurchases },
+          { label: "Fully refunded orders", value: data.totals.googlePlay.fullyRefundedPaidAppOrders },
+        ],
+        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.googlePlay.netPaidAppPurchases, "paid-app purchase"),
+      }),
+      createMarketplaceStatsCard({
+        id: "combined",
+        platform: "Across storefronts",
+        primaryLabel: "Total paid units",
+        primaryValue: data.totals.combined.paidUnits,
+        detailMetrics: [
+          { label: "itch.io purchases", value: data.totals.itch.purchases },
+          { label: "Steam + Play units", value: data.totals.steam.netUnits + data.totals.googlePlay.netPaidAppPurchases },
+        ],
+        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.combined.paidUnits, "paid unit"),
+      })
+    );
+    marketplaceStatsUpdated.textContent = `Updated weekly · Last refreshed ${refreshedText}`;
+    marketplaceStatsSection.hidden = false;
+    marketplaceStatsSection.classList.add("is-visible");
+  }
+
+  async function loadMarketplaceStats() {
+    if (!marketplaceStatsSection) return;
+
+    try {
+      const data = validateMarketplaceStats(
+        await fetchJsonWithTimeout("/data/public-stats.json", FETCH_TIMEOUT_MS, {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        })
+      );
+      if (!data) throw new Error("Invalid marketplace statistics schema");
+      renderMarketplaceStats(data);
+    } catch (error) {
+      marketplaceStatsSection.hidden = true;
+      console.warn("Marketplace statistics are unavailable:", error?.message || error);
     }
   }
 
@@ -1841,6 +1996,8 @@
     initializeGameOverlay();
     initializeReveals();
     renderLoadingState();
+
+    void loadMarketplaceStats();
 
     const primaryGrid = document.getElementById("featured-grid") || document.getElementById("project-grid");
     const hasSavedCards = gridHasUsefulCards(primaryGrid);

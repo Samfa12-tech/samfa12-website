@@ -797,6 +797,158 @@ h3 {
   gap: var(--space-3);
 }
 
+.marketplace-stats {
+  position: relative;
+  padding-top: var(--space-7);
+  padding-bottom: var(--space-7);
+}
+
+.marketplace-stats[hidden] {
+  display: none;
+}
+
+.marketplace-stats-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.marketplace-stats-head h2 {
+  margin: var(--space-2) 0 0;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: var(--step-2);
+  line-height: 1;
+}
+
+.marketplace-stats-updated,
+.marketplace-stats-note,
+.marketplace-stat-change,
+.marketplace-stat-metric dt {
+  font-family: "IBM Plex Mono", "Space Mono", Consolas, monospace;
+  font-size: var(--step--1);
+}
+
+.marketplace-stats-updated {
+  margin: 0;
+  color: var(--muted);
+  text-align: right;
+}
+
+.marketplace-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.marketplace-stat-card {
+  --marketplace-accent: var(--cyan);
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 100%;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--marketplace-accent), transparent 66%);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--marketplace-accent), transparent 84%), transparent 42%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent 36%),
+    var(--surface);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-5);
+}
+
+.marketplace-stat-card::after {
+  position: absolute;
+  top: 0;
+  right: var(--space-5);
+  left: var(--space-5);
+  height: 2px;
+  background: var(--marketplace-accent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--marketplace-accent), transparent 28%);
+  content: "";
+}
+
+.marketplace-stat-steam {
+  --marketplace-accent: var(--violet);
+}
+
+.marketplace-stat-google-play {
+  --marketplace-accent: var(--green);
+}
+
+.marketplace-stat-combined {
+  --marketplace-accent: var(--spark);
+}
+
+.marketplace-stat-card .technical-label {
+  color: var(--marketplace-accent);
+}
+
+.marketplace-stat-primary,
+.marketplace-stat-details {
+  margin: 0;
+}
+
+.marketplace-stat-primary {
+  margin-top: auto;
+}
+
+.marketplace-stat-primary .marketplace-stat-metric {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.marketplace-stat-primary dd {
+  order: -1;
+  margin: 0;
+  color: var(--text);
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+}
+
+.marketplace-stat-metric dt {
+  color: var(--muted);
+}
+
+.marketplace-stat-details {
+  display: grid;
+  gap: var(--space-2);
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-3);
+}
+
+.marketplace-stat-details .marketplace-stat-metric {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.marketplace-stat-details dd {
+  margin: 0;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.marketplace-stat-change {
+  margin: 0;
+  color: var(--marketplace-accent);
+  font-weight: 700;
+}
+
+.marketplace-stats-note {
+  margin: var(--space-4) 0 0;
+  color: var(--muted);
+}
+
 .bento-grid {
   display: grid;
   grid-auto-flow: dense;
@@ -1851,6 +2003,10 @@ body[data-page="apps"] .project-card-catalogue {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .marketplace-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .spotlight-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1933,6 +2089,15 @@ body[data-page="apps"] .project-card-catalogue {
   .section-head {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .marketplace-stats-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .marketplace-stats-updated {
+    text-align: left;
   }
 
   .signal-strip-inner,
@@ -2030,6 +2195,7 @@ body[data-page="apps"] .project-card-catalogue {
   }
 
   .bento-grid,
+  .marketplace-stats-grid,
   .spotlight-grid,
   .catalogue-grid,
   .card-grid,

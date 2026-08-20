@@ -1,0 +1,3 @@
+Order Number,Product Type,Financial Status,Package ID,Buyer Currency,Charged Amount
+TEST-ORDER-004,Paid app,Refund,com.samsmall.possumcafe,ZZZ,-999.00
+TEST-ORDER-007,Paid app,charged,com.samsmall.drink,ZZZ,999.00

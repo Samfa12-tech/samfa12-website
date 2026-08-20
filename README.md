@@ -146,6 +146,17 @@ seven-day comparison appears after enough daily snapshots have accumulated.
 Tokens belong only in `.env.analytics`, which is ignored by Git. Reports and
 snapshots are also local-only by default.
 
+### Public marketplace statistics
+
+The **Samfa12 by the Numbers** section is a separate, weekly public aggregate
+of itch.io, Steam, and Google Play unit activity. It is not part of the private
+Clarity/Cloudflare analytics bridge: it publishes only sanitised unit counts,
+never revenue or provider payloads. Amazon/KDP is deliberately deferred to a
+future stage.
+
+For the credential setup, public-data boundaries, local commands, and GitHub
+Actions operation guide, see [`docs/MARKETPLACE_STATS.md`](docs/MARKETPLACE_STATS.md).
+
 Option B: VS Code Live Server
 
 - Open the folder in VS Code.

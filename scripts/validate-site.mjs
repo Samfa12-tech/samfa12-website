@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { assertHistory, assertPublicStats } from "./marketplace/core.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const corePages = [
@@ -146,6 +147,25 @@ if (!fs.existsSync(whatWouldWinRoute)) {
   if (!/assets\//i.test(hosted)) fail("apps/what-would-win/index.html: missing built asset reference");
   if (!fs.existsSync(path.join(root, "apps", "what-would-win", "legal-notices.txt"))) fail("apps/what-would-win/legal-notices.txt: missing public licensing notices");
 }
+
+try {
+  assertPublicStats(JSON.parse(fs.readFileSync(path.join(root, "data", "public-stats.json"), "utf8")));
+} catch (error) {
+  fail(`data/public-stats.json: ${error.message}`);
+}
+
+try {
+  assertHistory(JSON.parse(fs.readFileSync(path.join(root, "data", "public-stats-history.json"), "utf8")));
+} catch (error) {
+  fail(`data/public-stats-history.json: ${error.message}`);
+}
+
+const homepageScript = fs.readFileSync(path.join(root, "script.js"), "utf8");
+if (!homepageScript.includes("/data/public-stats.json") || !homepageScript.includes("no-store")) {
+  fail("script.js: marketplace stats must be fetched with a revalidation-safe request.");
+}
+const pagesWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
+if (!pagesWorkflow.includes("--exclude='/ops/'")) fail(".github/workflows/pages.yml: ops/ must be excluded from the Pages artifact.");
 
 if (failures.length) {
   console.error(`Site validation failed with ${failures.length} issue(s):`);

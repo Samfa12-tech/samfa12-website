@@ -36,6 +36,7 @@ jobs:
             --exclude='.wrangler' \
             --exclude='_site' \
             --exclude='/artifacts/' \
+            --exclude='/ops/' \
             --exclude='/tests/' \
             --exclude='/scripts/' \
             --exclude='/workers/' \

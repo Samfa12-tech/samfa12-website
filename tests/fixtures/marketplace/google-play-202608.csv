@@ -1,0 +1,7 @@
+Order Number,Product Type,Financial Status,Package ID,Buyer Currency,Charged Amount
+TEST-ORDER-001,Paid app,Charged,com.samsmall.drink,ZZZ,999.00
+TEST-ORDER-002,One-time product,Charged,com.samsmall.drink,ZZZ,999.00
+TEST-ORDER-003,Subscription,Charged,com.samsmall.possumcafe,ZZZ,999.00
+TEST-ORDER-004,Paid app,Charged,com.samsmall.possumcafe,ZZZ,999.00
+TEST-ORDER-005,Paid app,Charged,com.samsmall.samfa12tdpack,ZZZ,999.00
+TEST-ORDER-006,Paid app,Partial refund,com.samsmall.samfa12tdpack,ZZZ,-100.00
