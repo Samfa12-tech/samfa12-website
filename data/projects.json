@@ -40,7 +40,7 @@
       "Samfa12"
     ],
     "featured": true,
-    "homepageRank": 6,
+    "homepageRank": 7,
     "homepageSize": "wide",
     "accent": "cyan",
     "imageFit": "contain",
@@ -159,7 +159,7 @@
       "Samfa12"
     ],
     "featured": false,
-    "homepageRank": 5,
+    "homepageRank": 6,
     "homepageSize": "standard",
     "accent": "violet",
     "imageFit": "contain",
@@ -220,7 +220,7 @@
       "Open Source"
     ],
     "featured": false,
-    "homepageRank": 4,
+    "homepageRank": 5,
     "homepageSize": "wide",
     "accent": "spark",
     "imageFit": "cover",
@@ -253,7 +253,7 @@
       "Source Available"
     ],
     "featured": false,
-    "homepageRank": 2,
+    "homepageRank": 3,
     "homepageSize": "standard",
     "accent": "green",
     "imageFit": "contain",
@@ -545,7 +545,7 @@
       "Adventure"
     ],
     "featured": true,
-    "homepageRank": 3,
+    "homepageRank": 4,
     "homepageSize": "standard",
     "accent": "spark",
     "imageFit": "contain",
@@ -581,6 +581,86 @@
     "sortOrder": 13.5,
     "thumbnail": "assets/thumbnails/dust-on-the-river-novelisation-cover.webp",
     "thumbnailAlt": "Cover image for Dust on the River novelisation"
+  },
+  {
+    "title": "The Wall that Lied",
+    "category": "Books",
+    "type": "The Broken Road Trilogy — Book 1",
+    "status": "Coming soon — 1 Oct 2026",
+    "description": "The Broken Road Trilogy begins. A fractured road, a city behind stone, and a truth that was never meant to survive.",
+    "tags": [
+      "Novel",
+      "Fantasy",
+      "Adventure",
+      "The Broken Road Trilogy",
+      "Book 1"
+    ],
+    "featured": true,
+    "homepageRank": 1,
+    "homepageSize": "wide",
+    "accent": "spark",
+    "imageFit": "contain",
+    "links": [
+      {
+        "label": "Pre-order on Amazon",
+        "url": "https://www.amazon.com.au/dp/B0H6VJ4VG1"
+      }
+    ],
+    "sortOrder": 13.6,
+    "thumbnail": "assets/thumbnails/the-wall-that-lied-amazon-cover.jpg",
+    "thumbnailAlt": "Cover for The Wall that Lied, Book 1 of The Broken Road Trilogy"
+  },
+  {
+    "title": "No Wall to Hold",
+    "category": "Books",
+    "type": "The Broken Road Trilogy — Book 2",
+    "status": "Coming soon — 1 Nov 2026",
+    "description": "The road continues. The second book in The Broken Road Trilogy arrives one month after Book 1.",
+    "tags": [
+      "Novel",
+      "Fantasy",
+      "Adventure",
+      "The Broken Road Trilogy",
+      "Book 2"
+    ],
+    "featured": false,
+    "accent": "spark",
+    "imageFit": "contain",
+    "links": [
+      {
+        "label": "Pre-order on Amazon",
+        "url": "https://www.amazon.com.au/dp/B0H233JY8P"
+      }
+    ],
+    "sortOrder": 13.7,
+    "thumbnail": "assets/thumbnails/no-wall-to-hold-amazon-cover.jpg",
+    "thumbnailAlt": "Cover for No Wall to Hold, Book 2 of The Broken Road Trilogy"
+  },
+  {
+    "title": "What We Save",
+    "category": "Books",
+    "type": "The Broken Road Trilogy — Book 3",
+    "status": "Coming soon — 1 Dec 2026",
+    "description": "The final road arrives 1 December, completing The Broken Road Trilogy.",
+    "tags": [
+      "Novel",
+      "Fantasy",
+      "Adventure",
+      "The Broken Road Trilogy",
+      "Book 3",
+      "Finale"
+    ],
+    "featured": false,
+    "accent": "spark",
+    "links": [
+      {
+        "label": "Pre-order on Amazon",
+        "url": "https://www.amazon.com.au/dp/B0HC46KFJP"
+      }
+    ],
+    "sortOrder": 13.8,
+    "thumbnail": "assets/thumbnails/what-we-save-front-cover.webp",
+    "thumbnailAlt": "Cover for What We Save, Book 3 of The Broken Road Trilogy"
   },
   {
     "title": "Article 18",
@@ -1090,7 +1170,7 @@
       "Fiction"
     ],
     "featured": true,
-    "homepageRank": 1,
+    "homepageRank": 2,
     "homepageSize": "hero",
     "accent": "spark",
     "imageFit": "contain",
@@ -1160,7 +1240,7 @@
       "Soundtrack"
     ],
     "featured": false,
-    "homepageRank": 7,
+    "homepageRank": 8,
     "homepageSize": "standard",
     "accent": "pink",
     "imageFit": "contain",
