@@ -20,7 +20,7 @@
         "label": "Play on itch.io"
       },
       {
-        "label": "Novelisation on Amazon (1 Sep 2026)",
+        "label": "Pre-order novelisation on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
       }
     ],
@@ -51,11 +51,11 @@
         "url": "https://samfa12.itch.io/drink"
       },
       {
-        "label": "Steam",
+        "label": "View on Steam",
         "url": "https://store.steampowered.com/app/4419290/Drink/"
       },
       {
-        "label": "Google Play",
+        "label": "View on Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.drink"
       }
     ],
@@ -67,7 +67,7 @@
     "title": "Night Shift at Possum's Cafe",
     "category": "Games",
     "type": "Game",
-    "status": "Published on Google Play",
+    "status": "Published",
     "description": "A night-shift simulation of cafe operations in a stylized, humorous setting with service pacing, atmosphere, and progression, now live on Google Play.",
     "tags": [
       "Game",
@@ -83,7 +83,7 @@
         "url": "https://samfa12.itch.io/possum-cafe"
       },
       {
-        "label": "Google Play",
+        "label": "View on Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
       }
     ],
@@ -95,7 +95,7 @@
     "title": "The Last Guard",
     "category": "Games",
     "type": "Game",
-    "status": "Released — still in development",
+    "status": "Released — in development",
     "description": "You are the last guard on a once-impenetrable fortress wall as thousands of orcs advance. Defend the wall. Defend your honour.",
     "tags": [
       "Game",
@@ -121,7 +121,7 @@
     "title": "The Horde — Ray Tracing Tech Demo",
     "category": "Games",
     "type": "Tech demo",
-    "status": "Released — Android and Windows",
+    "status": "Released — Android & Windows",
     "description": "A downloadable ray-tracing tech demo for Android and Windows.",
     "tags": [
       "Game",
@@ -459,7 +459,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Amazon Kindle",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0GX2XQR3D"
       }
     ],
@@ -554,7 +554,7 @@
     "imageFit": "contain",
     "links": [
       {
-        "label": "Amazon Kindle",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0GX2NG31Z"
       }
     ],
@@ -577,7 +577,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Amazon pre-order",
+        "label": "Pre-order on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
       }
     ],
@@ -679,15 +679,15 @@
     "featured": true,
     "links": [
       {
-        "label": "Read on itch.io",
+        "label": "Download on itch.io",
         "url": "https://samfa12.itch.io/article-18"
       },
       {
-        "label": "Google Play ebook",
+        "label": "Read ebook on Google Play",
         "url": "https://play.google.com/store/books/details/Samfa12_Article_18?id=WVXaEQAAQBAJ"
       },
       {
-        "label": "Google Play audiobook",
+        "label": "Listen on Google Play",
         "url": "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?id=AQAAAEDaH2pfoM"
       }
     ],
@@ -809,7 +809,7 @@
     "title": "Samfa12's TD Pack",
     "category": "Games",
     "type": "Android game collection",
-    "status": "Published on Google Play",
+    "status": "Published",
     "description": "A collection of Samfa12 tower defence games and compact strategy releases for Android.",
     "tags": [
       "Game",
@@ -820,7 +820,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Google Play",
+        "label": "Get it on Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
       }
     ],
@@ -832,7 +832,7 @@
     "title": "Samfa12's Lofi and Chill Pack",
     "category": "Games",
     "type": "Android chill pack",
-    "status": "Published on Google Play",
+    "status": "Published",
     "description": "A pocket collection of six small lofi and chill scenes, including Pocket Fish Tank, Pocket Ant Farm, Moon Mower, and three more cosy worlds built around shared Pocket Audio.",
     "tags": [
       "Game",
@@ -843,7 +843,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Google Play",
+        "label": "Get it on Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
       }
     ],
@@ -855,7 +855,7 @@
     "title": "Spin Vector",
     "category": "Games",
     "type": "Android game",
-    "status": "Published on Google Play",
+    "status": "Published",
     "description": "A neon action arcade game from Samfa12, available through the Google Play developer page.",
     "tags": [
       "Game",
@@ -871,11 +871,11 @@
         "url": "https://samfa12.itch.io/spin-vector"
       },
       {
-        "label": "Google Play",
+        "label": "View on Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.spinvector"
       },
       {
-        "label": "Wavedash",
+        "label": "View on Wavedash",
         "url": "https://wavedash.com/games/spin-vector"
       }
     ],
@@ -943,7 +943,7 @@
     "title": "Mandible Wars",
     "category": "Games",
     "type": "Game",
-    "status": "Playable prototype",
+    "status": "Prototype — playable",
     "description": "Ants vs termites in a mobile-first RTS-lite with squads, base building, fog of war, and bite-sized conquest maps.",
     "tags": [
       "Game",
@@ -1057,7 +1057,7 @@
     "title": "Briarhold",
     "category": "Games",
     "type": "Game",
-    "status": "Coming Soon",
+    "status": "Coming soon",
     "description": "Briarhold is an upcoming multiplayer co-op first-person action-defence roguelite. Explore the old stone together, prepare repairable defences between attacks, then combine weapons and tactics when the Briar Host reaches the walls.",
     "tags": [
       "Multiplayer Co-op",
@@ -1085,7 +1085,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Amazon Kindle",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H3MW9LGP"
       }
     ],
@@ -1109,7 +1109,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Amazon Kindle",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0GZDH57ZC"
       }
     ],
@@ -1133,7 +1133,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Amazon Kindle",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H1Q3TGS7"
       }
     ],
@@ -1154,10 +1154,6 @@
     ],
     "featured": false,
     "links": [
-      {
-        "label": "See more on itch.io",
-        "url": "https://samfa12.itch.io/colossal"
-      },
       {
         "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H738LPJ5"
@@ -1185,7 +1181,7 @@
     "imageFit": "contain",
     "links": [
       {
-        "label": "Amazon Kindle",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H1LG55MZ"
       }
     ],
@@ -1209,7 +1205,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Amazon Kindle",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0GSQQMS4M"
       }
     ],
