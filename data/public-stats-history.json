@@ -1,4 +1,22 @@
 {
   "schemaVersion": 1,
-  "snapshots": []
+  "snapshots": [
+    {
+      "capturedAt": "2026-08-21T06:52:54.179Z",
+      "itch": {
+        "views": 4041,
+        "downloads": 99,
+        "purchases": 2
+      },
+      "steam": {
+        "netUnits": 0
+      },
+      "googlePlay": {
+        "netPaidAppPurchases": 131
+      },
+      "combined": {
+        "paidUnits": 133
+      }
+    }
+  ]
 }
