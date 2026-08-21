@@ -84,6 +84,21 @@ detail report read-only and logs only its sanitised gross, returned, and net
 unit totals. Use it to compare a known date from Steamworks with API access;
 it does not backfill or publish data.
 
+If Steam financial API access is unavailable but an owner has exported an
+authoritative Steam Sales CSV, the one-time, local import command below can
+publish a sanitised baseline. It reads the CSV outside the repository, retains
+only direct `Steam` package unit counts, excludes `Retail` activations and all
+financial/identifying fields, and resets the Steam high-watermark to `0` so a
+future working API can authoritatively refresh the full history:
+
+```bash
+npm run marketplace:import-steam-csv -- --csv "C:\path\to\SteamSales.csv" --app-id 4419290
+```
+
+Review and commit only the resulting public data, history, and sanitised Steam
+state—never the downloaded CSV. This is a baseline, not a substitute for a
+working ongoing API integration.
+
 The collectors use official server-side/provider report APIs only. itch earnings
 and Steam financial fields are discarded during normalisation. Google order
 numbers are held only in memory while calculating paid-app purchase outcomes and
