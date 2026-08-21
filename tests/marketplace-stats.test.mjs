@@ -7,7 +7,7 @@ import { zipSync, strToU8 } from "fflate";
 import { assertHistory, assertNoSensitivePublicData, assertPublicStats, equivalentMarketplaceSnapshot, marketplaceChanges, newSteamState, parseGooglePlaySalesUri, projectMappings, validateItchAndSteamConfig, validateMarketplaceConfig } from "../scripts/marketplace/core.mjs";
 import { collectItch } from "../scripts/marketplace/itch.mjs";
 import { applyGooglePlayRow, collectGooglePlay, googlePlayReportListingError, listGooglePlaySalesReports, parseGoogleReportArchive, summarizeGooglePlayOrders } from "../scripts/marketplace/google-play.mjs";
-import { collectSteam, describeSteamChangedDatesResponse, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
+import { collectSteam, describeSteamChangedDatesResponse, getDailySales, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const fixture = (...parts) => path.join(root, "tests", "fixtures", "marketplace", ...parts);
@@ -38,15 +38,15 @@ test("Steam follows changed-date pages, filters non-package sales and keeps only
       const request = new URL(url);
       assert.equal(request.searchParams.get("include_view_grants"), "true");
       calls.push(`${request.pathname}:${request.searchParams.get("date") || ""}:${request.searchParams.get("highwatermark_id") || ""}`);
-      if (request.pathname.includes("GetChangedDates")) return response({ response: { dates: ["2026-08-10", "2026-08-11"], result_highwatermark: "21" } });
+      if (request.pathname.includes("GetChangedDates")) return response({ response: { dates: ["2026/08/10", "2026/08/11"], result_highwatermark: "21" } });
       if (request.searchParams.get("date") === "2026-08-10" && request.searchParams.get("highwatermark_id") === "0") {
-        return response({ response: { sales: [{ line_item_type: "Package", package_sale_type: "Steam", primary_appid: "4419290", gross_units_sold: 3, returned_units: -1, net_units_sold: 2, gross_sales_usd: 999 }], max_id: "5" } });
+        return response({ response: { sales: [{ line_item_type: "Package", package_sale_type: "Steam", primary_appid: "4419290", gross_units_sold: 3, gross_units_returned: -1, net_units_sold: 2, gross_sales_usd: 999 }], max_id: "5" } });
       }
       if (request.searchParams.get("date") === "2026-08-10") return response({ response: { sales: [], max_id: "5" } });
       return response({ response: { sales: [
         { line_item_type: "Package", package_sale_type: "Retail", primary_appid: "4419290", gross_units_sold: 90, net_units_sold: 90 },
         { line_item_type: "MicroTxn", package_sale_type: "Steam", primary_appid: "4419290", gross_units_sold: 80, net_units_sold: 80 },
-        { line_item_type: "Package", package_sale_type: "Steam", primary_appid: "4419290", gross_units_sold: 1, returned_units: 0, net_units_sold: 1 },
+        { line_item_type: "Package", package_sale_type: "Steam", primary_appid: "4419290", gross_units_sold: 1, gross_units_returned: 0, net_units_sold: 1 },
       ], max_id: "0" } });
     },
   });
@@ -87,6 +87,25 @@ test("Steam changed-date diagnostics report only response shape, never provider 
   assert.equal(diagnostic, "nested response; dates missing; highwatermark missing; provider error fields error,message");
   assert.doesNotMatch(diagnostic, /12345|not-for-logs/);
   assert.equal(describeSteamChangedDatesResponse({ response: { dates: [], result_highwatermark: "8" } }), "nested response; dates array; highwatermark present; provider error fields none");
+});
+
+test("Steam detailed-sales probe validates its date and returns sanitised unit totals", async () => {
+  await assert.rejects(() => getDailySales({ apiKey: "not-a-real-key", date: "12-03-2026" }), /YYYY-MM-DD/);
+  const result = await getDailySales({
+    apiKey: "not-a-real-key",
+    date: "2026-03-12",
+    fetchImpl: async (url) => {
+      const request = new URL(url);
+      assert.equal(request.searchParams.get("date"), "2026-03-12");
+      assert.equal(request.searchParams.get("include_view_grants"), "true");
+      return response({ response: { sales: [
+        { line_item_type: "Package", package_sale_type: "Steam", primary_appid: "4419290", gross_units_sold: 4, gross_units_returned: -1, net_units_sold: 3, gross_sales_usd: 999 },
+        { line_item_type: "Package", package_sale_type: "Retail", primary_appid: "4419290", gross_units_sold: 9, net_units_sold: 9 },
+      ], max_id: "0" } });
+    },
+  });
+  assert.deepEqual(result, { "4419290": { grossUnits: 4, returnedUnits: 1, netUnits: 3 } });
+  assert.doesNotMatch(JSON.stringify(result), /sales_usd|financial|price/i);
 });
 
 test("Google Play handles header-based multi-report charges, refunds, partial refunds, and never persists order IDs", async () => {

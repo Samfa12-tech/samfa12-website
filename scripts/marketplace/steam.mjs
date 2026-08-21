@@ -38,24 +38,26 @@ export function describeSteamChangedDatesResponse(payload) {
 }
 
 export async function getDailySales({ apiKey, date, fetchImpl = fetch }) {
+  const reportDate = normalizeDate(date);
+  if (!reportDate) throw new Error("Steam detailed sales requires a YYYY-MM-DD report date.");
   let highwatermarkId = "0";
   const totals = new Map();
   for (let page = 0; page < 10_000; page += 1) {
     const url = new URL(`${BASE_URL}/GetDetailedSales/v001/`);
     url.searchParams.set("key", apiKey);
-    url.searchParams.set("date", date);
+    url.searchParams.set("date", reportDate);
     url.searchParams.set("highwatermark_id", highwatermarkId);
     url.searchParams.set("include_view_grants", "true");
     const payload = await requestJson({ fetchImpl, url, label: "Steam detailed sales" });
     const response = payload.response || payload;
     const rows = response.sales || response.rows || response.results || response.detailed_sales;
     const maxId = response.max_id ?? response.maxId;
-    if (!Array.isArray(rows) || maxId === undefined || maxId === null) throw new Error(`Steam detailed sales returned an unexpected response for ${date}.`);
+    if (!Array.isArray(rows) || maxId === undefined || maxId === null) throw new Error(`Steam detailed sales returned an unexpected response for ${reportDate}.`);
     mergeSalesRows(totals, rows);
     if (String(maxId) === String(highwatermarkId)) return mapToObject(totals);
     highwatermarkId = String(maxId);
   }
-  throw new Error(`Steam detailed sales pagination did not complete for ${date}.`);
+  throw new Error(`Steam detailed sales pagination did not complete for ${reportDate}.`);
 }
 
 export function summarizeSteamState(state, projectNames = new Map()) {
@@ -92,7 +94,7 @@ export function mergeSalesRows(totals, rows) {
     if (!/^\d+$/.test(appId)) continue;
     const current = totals.get(appId) || { grossUnits: 0, returnedUnits: 0, netUnits: 0 };
     current.grossUnits += nonNegativeInteger(field(row, "gross_units_sold", "grossUnitsSold", "gross_units"));
-    current.returnedUnits += Math.abs(Number(field(row, "returned_units", "returnedUnits", "return_units", "refunded_units")) || 0);
+    current.returnedUnits += Math.abs(Number(field(row, "gross_units_returned", "grossUnitsReturned", "returned_units", "returnedUnits", "return_units", "refunded_units")) || 0);
     current.netUnits += finiteInteger(field(row, "net_units_sold", "netUnitsSold", "net_units"));
     totals.set(appId, current);
   }
@@ -112,6 +114,6 @@ function mapToObject(values) {
 }
 
 function normalizeDate(value) {
-  const date = String(value || "").slice(0, 10);
-  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : "";
+  const match = /^(\d{4})[-/]?(\d{2})[-/]?(\d{2})$/.exec(String(value || "").trim());
+  return match ? `${match[1]}-${match[2]}-${match[3]}` : "";
 }

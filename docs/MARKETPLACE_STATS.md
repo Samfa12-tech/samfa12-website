@@ -78,6 +78,11 @@ state unchanged. A valid zero is not an error.
 `marketplace:verify-providers` checks itch.io and Steam only, reports
 sanitised aggregate counters, and never writes state or public data. It is for
 connection verification while an all-provider update is pending.
+The manual **Verify itch.io and Steam marketplace access** workflow also accepts
+an optional `steam_debug_date` (YYYY-MM-DD). It requests that date's Steam
+detail report read-only and logs only its sanitised gross, returned, and net
+unit totals. Use it to compare a known date from Steamworks with API access;
+it does not backfill or publish data.
 
 The collectors use official server-side/provider report APIs only. itch earnings
 and Steam financial fields are discarded during normalisation. Google order
