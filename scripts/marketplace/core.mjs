@@ -46,7 +46,7 @@ export function validateMarketplaceConfig(config) {
   if (!config.googlePlayServiceAccountJson && !config.googlePlayServiceAccountJsonPath) {
     missing.push("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON or GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH");
   }
-  if (!parseGooglePlaySalesUri(config.googlePlaySalesUri)) missing.push("GOOGLE_PLAY_SALES_URI (Play Console Financial report gs://pubsite_prod_rev_... URI)");
+  if (!parseGooglePlaySalesUri(config.googlePlaySalesUri)) missing.push("GOOGLE_PLAY_SALES_URI (Play Console Financial report gs://pubsite_prod_... URI with sales/ path)");
   return missing;
 }
 
@@ -65,7 +65,7 @@ export function parseGoogleStorageUri(value) {
 
 export function parseGooglePlaySalesUri(value) {
   const location = parseGoogleStorageUri(value);
-  if (!location || !/^pubsite_prod_rev_[a-z0-9]+$/i.test(location.bucket)) return null;
+  if (!location || !/^pubsite_prod_(?:rev_)?[a-z0-9]+$/i.test(location.bucket)) return null;
   if (location.prefix !== "" && location.prefix !== "sales/") return null;
   return { bucket: location.bucket, prefix: "sales/" };
 }
