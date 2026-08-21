@@ -7,7 +7,7 @@ import { zipSync, strToU8 } from "fflate";
 import { assertHistory, assertNoSensitivePublicData, assertPublicStats, equivalentMarketplaceSnapshot, marketplaceChanges, newSteamState, parseGooglePlaySalesUri, projectMappings, validateItchAndSteamConfig, validateMarketplaceConfig } from "../scripts/marketplace/core.mjs";
 import { collectItch } from "../scripts/marketplace/itch.mjs";
 import { applyGooglePlayRow, collectGooglePlay, googlePlayReportListingError, listGooglePlaySalesReports, parseGoogleReportArchive, summarizeGooglePlayOrders } from "../scripts/marketplace/google-play.mjs";
-import { collectSteam, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
+import { collectSteam, describeSteamChangedDatesResponse, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const fixture = (...parts) => path.join(root, "tests", "fixtures", "marketplace", ...parts);
@@ -68,6 +68,13 @@ test("Steam re-reported dates replace their complete stored aggregate", async ()
   });
   assert.deepEqual(result.state.daily["2026-08-10"]["4419290"], { grossUnits: 1, returnedUnits: 0, netUnits: 1 });
   assert.deepEqual(result.totals, { grossUnits: 2, returnedUnits: 0, netUnits: 2 });
+});
+
+test("Steam changed-date diagnostics report only response shape, never provider values", () => {
+  const diagnostic = describeSteamChangedDatesResponse({ response: { error: "account 12345 is not authorised", message: "key=not-for-logs" } });
+  assert.equal(diagnostic, "nested response; dates missing; highwatermark missing; provider error fields error,message");
+  assert.doesNotMatch(diagnostic, /12345|not-for-logs/);
+  assert.equal(describeSteamChangedDatesResponse({ response: { dates: [], result_highwatermark: "8" } }), "nested response; dates array; highwatermark present; provider error fields none");
 });
 
 test("Google Play handles header-based multi-report charges, refunds, partial refunds, and never persists order IDs", async () => {

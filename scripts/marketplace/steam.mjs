@@ -20,9 +20,20 @@ export async function getChangedDates({ apiKey, highwatermark = "0", fetchImpl =
   const dates = response.dates || response.changed_dates || response.changedDates;
   const resultHighwatermark = response.result_highwatermark ?? response.resultHighwatermark;
   if (!Array.isArray(dates) || resultHighwatermark === undefined || resultHighwatermark === null) {
-    throw new Error("Steam changed dates returned an unexpected response.");
+    throw new Error(`Steam changed dates returned an incomplete response (${describeSteamChangedDatesResponse(payload)}). Verify that STEAM_FINANCIAL_API_KEY is the active key from a dedicated Financial API Group with Financial permission.`);
   }
   return { dates: [...new Set(dates.map(normalizeDate).filter(Boolean))], highwatermark: String(resultHighwatermark) };
+}
+
+export function describeSteamChangedDatesResponse(payload) {
+  const nestedResponse = payload?.response && typeof payload.response === "object" && !Array.isArray(payload.response);
+  const response = nestedResponse ? payload.response : payload;
+  if (!response || typeof response !== "object" || Array.isArray(response)) return "response is not an object";
+  const fields = Object.keys(response);
+  const datesState = Array.isArray(response.dates || response.changed_dates || response.changedDates) ? "array" : fields.some((field) => ["dates", "changed_dates", "changedDates"].includes(field)) ? "not an array" : "missing";
+  const highwatermarkState = fields.some((field) => ["result_highwatermark", "resultHighwatermark"].includes(field)) ? "present" : "missing";
+  const errorFields = fields.filter((field) => ["error", "eresult", "message"].includes(field));
+  return `${nestedResponse ? "nested response" : "root response"}; dates ${datesState}; highwatermark ${highwatermarkState}; provider error fields ${errorFields.join(",") || "none"}`;
 }
 
 export async function getDailySales({ apiKey, date, fetchImpl = fetch }) {
