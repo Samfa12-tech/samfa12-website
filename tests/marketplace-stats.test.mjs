@@ -72,6 +72,16 @@ test("Steam re-reported dates replace their complete stored aggregate", async ()
   assert.deepEqual(result.totals, { grossUnits: 2, returnedUnits: 0, netUnits: 2 });
 });
 
+test("Steam accepts an omitted changed-date array as a valid empty provider result", async () => {
+  const result = await collectSteam({
+    apiKey: "not-a-real-key",
+    state: newSteamState(),
+    fetchImpl: async () => response({ response: { result_highwatermark: "0" } }),
+  });
+  assert.deepEqual(result.totals, { grossUnits: 0, returnedUnits: 0, netUnits: 0 });
+  assert.equal(result.state.changedDatesHighwatermark, "0");
+});
+
 test("Steam changed-date diagnostics report only response shape, never provider values", () => {
   const diagnostic = describeSteamChangedDatesResponse({ response: { error: "account 12345 is not authorised", message: "key=not-for-logs" } });
   assert.equal(diagnostic, "nested response; dates missing; highwatermark missing; provider error fields error,message");

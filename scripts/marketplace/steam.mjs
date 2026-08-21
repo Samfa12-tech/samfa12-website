@@ -18,7 +18,7 @@ export async function getChangedDates({ apiKey, highwatermark = "0", fetchImpl =
   url.searchParams.set("include_view_grants", "true");
   const payload = await requestJson({ fetchImpl, url, label: "Steam changed dates" });
   const response = payload.response || payload;
-  const dates = response.dates || response.changed_dates || response.changedDates;
+  const dates = response.dates ?? response.changed_dates ?? response.changedDates ?? [];
   const resultHighwatermark = response.result_highwatermark ?? response.resultHighwatermark;
   if (!Array.isArray(dates) || resultHighwatermark === undefined || resultHighwatermark === null) {
     throw new Error(`Steam changed dates returned an incomplete response (${describeSteamChangedDatesResponse(payload)}). Verify that STEAM_FINANCIAL_API_KEY is the active key from a dedicated Financial API Group with Financial permission.`);
