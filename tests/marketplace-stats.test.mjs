@@ -7,6 +7,7 @@ import { zipSync, strToU8 } from "fflate";
 import { assertHistory, assertNoSensitivePublicData, assertPublicStats, equivalentMarketplaceSnapshot, marketplaceChanges, newSteamState, parseGooglePlaySalesUri, projectMappings, validateItchAndSteamConfig, validateMarketplaceConfig } from "../scripts/marketplace/core.mjs";
 import { collectItch } from "../scripts/marketplace/itch.mjs";
 import { applyGooglePlayRow, collectGooglePlay, googlePlayReportListingError, listGooglePlaySalesReports, parseGoogleReportArchive, summarizeGooglePlayOrders } from "../scripts/marketplace/google-play.mjs";
+import { parseSteamSalesCsv } from "../scripts/marketplace/steam-csv.mjs";
 import { collectSteam, describeSteamChangedDatesResponse, describeSteamDetailedSalesResponse, getDailySales, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -113,6 +114,24 @@ test("Steam detailed-sales diagnostics report only response shape, never provide
   assert.equal(diagnostic, "nested response; rows missing; max id missing; provider error fields error,message");
   assert.doesNotMatch(diagnostic, /12345|not-for-logs/);
   assert.equal(describeSteamDetailedSalesResponse({ response: { results: [], max_id: "0" } }), "nested response; rows array; max id present; provider error fields none");
+});
+
+test("Steam CSV baseline retains only direct package-unit aggregates", () => {
+  const source = [
+    "sep=,",
+    "Steam Sales data for Example Partner",
+    "",
+    "Date,Type,Gross Units Sold,Chargeback/Returns,Net Units Sold,Gross Steam Sales (USD),Country",
+    "2026-03-12,Steam,2,0,2,4.99,AU",
+    "2026-03-14,Steam,2,1,1,4.99,AU",
+    "2026-03-14,Retail,9,0,9,0.00,AU",
+  ].join("\n");
+  const result = parseSteamSalesCsv(source);
+  assert.deepEqual(result, {
+    "2026-03-12": { grossUnits: 2, returnedUnits: 0, netUnits: 2 },
+    "2026-03-14": { grossUnits: 2, returnedUnits: 1, netUnits: 1 },
+  });
+  assert.doesNotMatch(JSON.stringify(result), /sales|country|retail/i);
 });
 
 test("Google Play handles header-based multi-report charges, refunds, partial refunds, and never persists order IDs", async () => {

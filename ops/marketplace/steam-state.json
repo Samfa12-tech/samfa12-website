@@ -1,5 +1,111 @@
 {
   "schemaVersion": 1,
-  "changedDatesHighwatermark": "2080668510085",
-  "daily": {}
+  "changedDatesHighwatermark": "0",
+  "daily": {
+    "2026-03-12": {
+      "4419290": {
+        "grossUnits": 2,
+        "returnedUnits": 0,
+        "netUnits": 2
+      }
+    },
+    "2026-03-14": {
+      "4419290": {
+        "grossUnits": 2,
+        "returnedUnits": 1,
+        "netUnits": 1
+      }
+    },
+    "2026-03-22": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-03-23": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-03-24": {
+      "4419290": {
+        "grossUnits": 2,
+        "returnedUnits": 0,
+        "netUnits": 2
+      }
+    },
+    "2026-04-13": {
+      "4419290": {
+        "grossUnits": 3,
+        "returnedUnits": 0,
+        "netUnits": 3
+      }
+    },
+    "2026-04-14": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-05-03": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-05-11": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-05-31": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-06-29": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-06-30": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-07-07": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-07-26": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-07-30": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    }
+  }
 }

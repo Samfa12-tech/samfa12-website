@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-21T06:52:54.179Z",
+  "generatedAt": "2026-08-21T08:33:19.863Z",
   "totals": {
     "itch": {
       "views": 4041,
@@ -8,9 +8,9 @@
       "purchases": 2
     },
     "steam": {
-      "grossUnits": 0,
-      "returnedUnits": 0,
-      "netUnits": 0
+      "grossUnits": 20,
+      "returnedUnits": 1,
+      "netUnits": 19
     },
     "googlePlay": {
       "grossPaidAppPurchases": 164,
@@ -18,24 +18,24 @@
       "netPaidAppPurchases": 131
     },
     "combined": {
-      "paidUnits": 133
+      "paidUnits": 152
     }
   },
   "change": {
     "sincePreviousSnapshot": {
       "itch": {
-        "views": 4041,
-        "downloads": 99,
-        "purchases": 2
+        "views": 0,
+        "downloads": 0,
+        "purchases": 0
       },
       "steam": {
-        "netUnits": 0
+        "netUnits": 19
       },
       "googlePlay": {
-        "netPaidAppPurchases": 131
+        "netPaidAppPurchases": 0
       },
       "combined": {
-        "paidUnits": 133
+        "paidUnits": 19
       }
     }
   },
@@ -282,7 +282,15 @@
         "purchases": 0
       }
     ],
-    "steam": [],
+    "steam": [
+      {
+        "appId": "4419290",
+        "title": "Drink",
+        "grossUnits": 20,
+        "returnedUnits": 1,
+        "netUnits": 19
+      }
+    ],
     "googlePlay": [
       {
         "packageId": "com.samsmall.drink",
