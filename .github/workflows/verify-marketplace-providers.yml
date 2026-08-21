@@ -2,6 +2,11 @@ name: Verify itch.io and Steam marketplace access
 
 on:
   workflow_dispatch:
+    inputs:
+      steam_debug_date:
+        description: Optional YYYY-MM-DD date for a read-only Steam sales aggregate probe
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -29,4 +34,5 @@ jobs:
         env:
           ITCH_API_KEY: ${{ secrets.ITCH_API_KEY }}
           STEAM_FINANCIAL_API_KEY: ${{ secrets.STEAM_FINANCIAL_API_KEY }}
+          STEAM_DEBUG_DATE: ${{ inputs.steam_debug_date }}
         run: npm run marketplace:verify-providers
