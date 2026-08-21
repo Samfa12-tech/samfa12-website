@@ -167,6 +167,14 @@ test("catalogue URL mappings use current project data instead of duplicated titl
   assert.deepEqual(summarizeSteamState({ schemaVersion: 1, changedDatesHighwatermark: "0", daily: {} }).totals, { grossUnits: 0, returnedUnits: 0, netUnits: 0 });
 });
 
+test("Google Play pack listings are not relabelled as an included featured scene", () => {
+  const mappings = projectMappings([
+    { title: "Samfa12's Lofi and Chill Pack", links: [{ label: "Get it on Google Play", url: "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack" }] },
+    { title: "Pocket Ant Farm", links: [{ label: "Featured in Samfa12's Lofi and Chill Pack", url: "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack" }] },
+  ]);
+  assert.equal(mappings.googlePlay.get("com.samfa12.lofiandchillpack"), "Samfa12's Lofi and Chill Pack");
+});
+
 test("provider-only verification requires only itch and Steam credentials", () => {
   assert.deepEqual(validateItchAndSteamConfig({ itchApiKey: "itch", steamFinancialApiKey: "steam" }), []);
   assert.deepEqual(validateItchAndSteamConfig({ itchApiKey: "", steamFinancialApiKey: "steam" }), ["ITCH_API_KEY"]);

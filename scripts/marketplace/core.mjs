@@ -183,7 +183,8 @@ export function projectMappings(projects = []) {
         const appId = /\/app\/(\d+)/.exec(url.pathname)?.[1];
         if (url.hostname.endsWith("steampowered.com") && appId) maps.steam.set(appId, project.title);
         const packageId = url.hostname.endsWith("play.google.com") ? url.searchParams.get("id") : null;
-        if (packageId) maps.googlePlay.set(packageId, project.title);
+        const isFeaturedGooglePlayLink = /^featured in\b/i.test(String(link?.label || "").trim());
+        if (packageId && (!isFeaturedGooglePlayLink || !maps.googlePlay.has(packageId))) maps.googlePlay.set(packageId, project.title);
       } catch {
         // Project URL validation is handled by the catalogue validator.
       }
