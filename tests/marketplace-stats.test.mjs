@@ -7,7 +7,7 @@ import { zipSync, strToU8 } from "fflate";
 import { assertHistory, assertNoSensitivePublicData, assertPublicStats, equivalentMarketplaceSnapshot, marketplaceChanges, newSteamState, parseGooglePlaySalesUri, projectMappings, validateItchAndSteamConfig, validateMarketplaceConfig } from "../scripts/marketplace/core.mjs";
 import { collectItch } from "../scripts/marketplace/itch.mjs";
 import { applyGooglePlayRow, collectGooglePlay, googlePlayReportListingError, listGooglePlaySalesReports, parseGoogleReportArchive, summarizeGooglePlayOrders } from "../scripts/marketplace/google-play.mjs";
-import { collectSteam, describeSteamChangedDatesResponse, getDailySales, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
+import { collectSteam, describeSteamChangedDatesResponse, describeSteamDetailedSalesResponse, getDailySales, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const fixture = (...parts) => path.join(root, "tests", "fixtures", "marketplace", ...parts);
@@ -106,6 +106,13 @@ test("Steam detailed-sales probe validates its date and returns sanitised unit t
   });
   assert.deepEqual(result, { "4419290": { grossUnits: 4, returnedUnits: 1, netUnits: 3 } });
   assert.doesNotMatch(JSON.stringify(result), /sales_usd|financial|price/i);
+});
+
+test("Steam detailed-sales diagnostics report only response shape, never provider values", () => {
+  const diagnostic = describeSteamDetailedSalesResponse({ response: { error: "partner 12345 is not authorised", message: "key=not-for-logs" } });
+  assert.equal(diagnostic, "nested response; rows missing; max id missing; provider error fields error,message");
+  assert.doesNotMatch(diagnostic, /12345|not-for-logs/);
+  assert.equal(describeSteamDetailedSalesResponse({ response: { results: [], max_id: "0" } }), "nested response; rows array; max id present; provider error fields none");
 });
 
 test("Google Play handles header-based multi-report charges, refunds, partial refunds, and never persists order IDs", async () => {

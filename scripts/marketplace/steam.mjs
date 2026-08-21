@@ -52,12 +52,25 @@ export async function getDailySales({ apiKey, date, fetchImpl = fetch }) {
     const response = payload.response || payload;
     const rows = response.sales || response.rows || response.results || response.detailed_sales;
     const maxId = response.max_id ?? response.maxId;
-    if (!Array.isArray(rows) || maxId === undefined || maxId === null) throw new Error(`Steam detailed sales returned an unexpected response for ${reportDate}.`);
+    if (!Array.isArray(rows) || maxId === undefined || maxId === null) {
+      throw new Error(`Steam detailed sales returned an incomplete response for ${reportDate} (${describeSteamDetailedSalesResponse(payload)}). Verify that STEAM_FINANCIAL_API_KEY is the active key from a dedicated Financial API Group with Financial permission.`);
+    }
     mergeSalesRows(totals, rows);
     if (String(maxId) === String(highwatermarkId)) return mapToObject(totals);
     highwatermarkId = String(maxId);
   }
   throw new Error(`Steam detailed sales pagination did not complete for ${reportDate}.`);
+}
+
+export function describeSteamDetailedSalesResponse(payload) {
+  const nestedResponse = payload?.response && typeof payload.response === "object" && !Array.isArray(payload.response);
+  const response = nestedResponse ? payload.response : payload;
+  if (!response || typeof response !== "object" || Array.isArray(response)) return "response is not an object";
+  const fields = Object.keys(response);
+  const rowsState = ["sales", "rows", "results", "detailed_sales"].some((field) => Array.isArray(response[field])) ? "array" : fields.some((field) => ["sales", "rows", "results", "detailed_sales"].includes(field)) ? "not an array" : "missing";
+  const maxIdState = fields.some((field) => ["max_id", "maxId"].includes(field)) ? "present" : "missing";
+  const errorFields = fields.filter((field) => ["error", "eresult", "message"].includes(field));
+  return `${nestedResponse ? "nested response" : "root response"}; rows ${rowsState}; max id ${maxIdState}; provider error fields ${errorFields.join(",") || "none"}`;
 }
 
 export function summarizeSteamState(state, projectNames = new Map()) {
