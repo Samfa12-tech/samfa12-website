@@ -20,7 +20,7 @@ export async function verifyGooglePlaySalesAccess(options = {}) {
 
 export async function listGooglePlaySalesReports({ serviceAccountJson, serviceAccountJsonPath, salesUri, storage } = {}) {
   const location = parseGooglePlaySalesUri(salesUri);
-  if (!location) throw new Error("Google Play sales URI must be the Financial report gs://pubsite_prod_rev_... URI copied from Play Console.");
+  if (!location) throw new Error("Google Play sales URI must be the Financial report gs://pubsite_prod_... URI copied from Play Console, with its sales/ report path.");
   const client = storage || await createStorage({ serviceAccountJson, serviceAccountJsonPath });
   let files;
   try {

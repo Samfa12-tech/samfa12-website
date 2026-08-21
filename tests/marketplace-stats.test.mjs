@@ -98,15 +98,16 @@ test("Google Play lists every historical monthly ZIP under the configured sales 
 test("Google Play accepts the Console bucket URI and derives its sales report prefix", () => {
   assert.deepEqual(parseGooglePlaySalesUri("gs://pubsite_prod_rev_123456"), { bucket: "pubsite_prod_rev_123456", prefix: "sales/" });
   assert.deepEqual(parseGooglePlaySalesUri("gs://pubsite_prod_rev_123456/sales/"), { bucket: "pubsite_prod_rev_123456", prefix: "sales/" });
+  assert.deepEqual(parseGooglePlaySalesUri("gs://pubsite_prod_123456/sales/"), { bucket: "pubsite_prod_123456", prefix: "sales/" });
 });
 
-test("Google Play configuration rejects missing, stale-looking, and non-sales report URIs", () => {
+test("Google Play configuration rejects missing, non-Play, and non-sales report URIs", () => {
   const complete = { itchApiKey: "itch", steamFinancialApiKey: "steam", googlePlayServiceAccountJson: "{}", googlePlayServiceAccountJsonPath: "" };
   assert.equal(parseGooglePlaySalesUri(""), null);
-  assert.equal(parseGooglePlaySalesUri("gs://pubsite_prod_7761853381809168545/sales/"), null);
+  assert.equal(parseGooglePlaySalesUri("gs://unrelated-bucket/sales/"), null);
   assert.equal(parseGooglePlaySalesUri("gs://pubsite_prod_rev_123456/earnings/"), null);
   assert.match(validateMarketplaceConfig({ ...complete, googlePlaySalesUri: "" }).join(", "), /GOOGLE_PLAY_SALES_URI/);
-  assert.match(validateMarketplaceConfig({ ...complete, googlePlaySalesUri: "gs://pubsite_prod_7761853381809168545/sales/" }).join(", "), /GOOGLE_PLAY_SALES_URI/);
+  assert.match(validateMarketplaceConfig({ ...complete, googlePlaySalesUri: "gs://unrelated-bucket/sales/" }).join(", "), /GOOGLE_PLAY_SALES_URI/);
 });
 
 test("Google Play report enumeration returns matching reports and sanitises storage list denial", async () => {

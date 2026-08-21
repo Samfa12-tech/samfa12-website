@@ -51,7 +51,8 @@ STEAM_FINANCIAL_API_KEY=...
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH=/absolute/path/to/service-account.json
 # Or: GOOGLE_PLAY_SERVICE_ACCOUNT_JSON={...}
 # Copy this exact non-secret bucket URI from Play Console > Download reports > Financial.
-# It resembles gs://pubsite_prod_rev_...; the collector derives the sales/ prefix.
+# It resembles gs://pubsite_prod_rev_... (or an older pubsite_prod_... bucket);
+# the collector derives the sales/ prefix when the copied URI is bucket-only.
 GOOGLE_PLAY_SALES_URI=gs://pubsite_prod_rev_...
 ```
 
@@ -104,9 +105,11 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
 Also create the **repository variable** `GOOGLE_PLAY_SALES_URI` in **GitHub →
 repository → Settings → Secrets and variables → Actions → Variables**. Copy its
 value directly from **Play Console → Download reports → Financial → Copy Cloud
-Storage URI**. It is a non-secret bucket identifier, normally beginning
-`gs://pubsite_prod_rev_`; the collector appends the required `sales/` report
-prefix. The workflow never falls back to a hardcoded bucket.
+Storage URI**. It is a non-secret bucket identifier. Current docs show
+`gs://pubsite_prod_rev_...`; older Play-issued `gs://pubsite_prod_...` values
+are also accepted when copied from that Console. The collector appends the
+required `sales/` report prefix for bucket-only URIs. The workflow never falls
+back to a hardcoded bucket.
 
 When Google Play access is still propagating, use **Actions → Verify itch.io
 and Steam marketplace access → Run workflow** to test those two configured
