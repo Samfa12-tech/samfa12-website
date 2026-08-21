@@ -15,6 +15,7 @@ export async function getChangedDates({ apiKey, highwatermark = "0", fetchImpl =
   const url = new URL(`${BASE_URL}/GetChangedDatesForPartner/v001/`);
   url.searchParams.set("key", apiKey);
   url.searchParams.set("highwatermark", String(highwatermark));
+  url.searchParams.set("include_view_grants", "true");
   const payload = await requestJson({ fetchImpl, url, label: "Steam changed dates" });
   const response = payload.response || payload;
   const dates = response.dates || response.changed_dates || response.changedDates;
@@ -44,6 +45,7 @@ export async function getDailySales({ apiKey, date, fetchImpl = fetch }) {
     url.searchParams.set("key", apiKey);
     url.searchParams.set("date", date);
     url.searchParams.set("highwatermark_id", highwatermarkId);
+    url.searchParams.set("include_view_grants", "true");
     const payload = await requestJson({ fetchImpl, url, label: "Steam detailed sales" });
     const response = payload.response || payload;
     const rows = response.sales || response.rows || response.results || response.detailed_sales;
