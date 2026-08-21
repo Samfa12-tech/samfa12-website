@@ -36,6 +36,7 @@ test("Steam follows changed-date pages, filters non-package sales and keeps only
     projectNames: new Map([["4419290", "Test Steam game"]]),
     fetchImpl: async (url) => {
       const request = new URL(url);
+      assert.equal(request.searchParams.get("include_view_grants"), "true");
       calls.push(`${request.pathname}:${request.searchParams.get("date") || ""}:${request.searchParams.get("highwatermark_id") || ""}`);
       if (request.pathname.includes("GetChangedDates")) return response({ response: { dates: ["2026-08-10", "2026-08-11"], result_highwatermark: "21" } });
       if (request.searchParams.get("date") === "2026-08-10" && request.searchParams.get("highwatermark_id") === "0") {
@@ -62,6 +63,7 @@ test("Steam re-reported dates replace their complete stored aggregate", async ()
     apiKey: "not-a-real-key", state,
     fetchImpl: async (url) => {
       const request = new URL(url);
+      assert.equal(request.searchParams.get("include_view_grants"), "true");
       if (request.pathname.includes("GetChangedDates")) return response({ response: { dates: ["2026-08-10"], result_highwatermark: "22" } });
       return response({ response: { sales: [{ line_item_type: "Package", package_sale_type: "Steam", primary_appid: "4419290", gross_units_sold: 1, returned_units: 0, net_units_sold: 1 }], max_id: "0" } });
     },
