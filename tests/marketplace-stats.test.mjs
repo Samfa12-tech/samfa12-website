@@ -4,9 +4,9 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { zipSync, strToU8 } from "fflate";
-import { assertHistory, assertNoSensitivePublicData, assertPublicStats, equivalentMarketplaceSnapshot, marketplaceChanges, newSteamState, projectMappings, validateItchAndSteamConfig } from "../scripts/marketplace/core.mjs";
+import { assertHistory, assertNoSensitivePublicData, assertPublicStats, equivalentMarketplaceSnapshot, marketplaceChanges, newSteamState, parseGooglePlaySalesUri, projectMappings, validateItchAndSteamConfig, validateMarketplaceConfig } from "../scripts/marketplace/core.mjs";
 import { collectItch } from "../scripts/marketplace/itch.mjs";
-import { applyGooglePlayRow, collectGooglePlay, parseGoogleReportArchive, summarizeGooglePlayOrders } from "../scripts/marketplace/google-play.mjs";
+import { applyGooglePlayRow, collectGooglePlay, googlePlayReportListingError, listGooglePlaySalesReports, parseGoogleReportArchive, summarizeGooglePlayOrders } from "../scripts/marketplace/google-play.mjs";
 import { collectSteam, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -87,12 +87,47 @@ test("Google Play lists every historical monthly ZIP under the configured sales 
   const september = await readFile(fixture("google-play-202609.csv"), "utf8");
   const archive = (name, csv) => ({ name, download: async () => [zipSync({ "report.csv": strToU8(csv) })] });
   const storage = { bucket: (bucket) => ({ getFiles: async ({ prefix }) => {
-    assert.equal(bucket, "test-report-bucket");
+    assert.equal(bucket, "pubsite_prod_rev_123456");
     assert.equal(prefix, "sales/");
     return [[archive("sales/salesreport_202608.zip", august), archive("sales/salesreport_202609.zip", september)]];
   } }) };
-  const result = await collectGooglePlay({ salesUri: "gs://test-report-bucket/sales/", storage });
+  const result = await collectGooglePlay({ salesUri: "gs://pubsite_prod_rev_123456/sales/", storage });
   assert.equal(result.totals.netPaidAppPurchases, 3);
+});
+
+test("Google Play accepts the Console bucket URI and derives its sales report prefix", () => {
+  assert.deepEqual(parseGooglePlaySalesUri("gs://pubsite_prod_rev_123456"), { bucket: "pubsite_prod_rev_123456", prefix: "sales/" });
+  assert.deepEqual(parseGooglePlaySalesUri("gs://pubsite_prod_rev_123456/sales/"), { bucket: "pubsite_prod_rev_123456", prefix: "sales/" });
+});
+
+test("Google Play configuration rejects missing, stale-looking, and non-sales report URIs", () => {
+  const complete = { itchApiKey: "itch", steamFinancialApiKey: "steam", googlePlayServiceAccountJson: "{}", googlePlayServiceAccountJsonPath: "" };
+  assert.equal(parseGooglePlaySalesUri(""), null);
+  assert.equal(parseGooglePlaySalesUri("gs://pubsite_prod_7761853381809168545/sales/"), null);
+  assert.equal(parseGooglePlaySalesUri("gs://pubsite_prod_rev_123456/earnings/"), null);
+  assert.match(validateMarketplaceConfig({ ...complete, googlePlaySalesUri: "" }).join(", "), /GOOGLE_PLAY_SALES_URI/);
+  assert.match(validateMarketplaceConfig({ ...complete, googlePlaySalesUri: "gs://pubsite_prod_7761853381809168545/sales/" }).join(", "), /GOOGLE_PLAY_SALES_URI/);
+});
+
+test("Google Play report enumeration returns matching reports and sanitises storage list denial", async () => {
+  const report = { name: "sales/salesreport_202608.zip" };
+  const storage = { bucket: (bucket) => ({ getFiles: async ({ prefix }) => {
+    assert.equal(bucket, "pubsite_prod_rev_123456");
+    assert.equal(prefix, "sales/");
+    return [[report, { name: "sales/estimatedsalesreport_202608.zip" }]];
+  } }) };
+  assert.deepEqual(await listGooglePlaySalesReports({ salesUri: "gs://pubsite_prod_rev_123456", storage }), [report]);
+  const deniedStorage = { bucket: () => ({ getFiles: async () => { throw { code: 403, message: "samfa12-marketplace-reporting@example.com cannot list gs://pubsite_prod_rev_secret/sales/" }; } }) };
+  await assert.rejects(
+    listGooglePlaySalesReports({ salesUri: "gs://pubsite_prod_rev_123456", storage: deniedStorage }),
+    (error) => {
+      assert.match(error.message, /storage\.objects\.list/);
+      assert.match(error.message, /View app information and download bulk reports/);
+      assert.doesNotMatch(error.message, /example\.com|pubsite_prod_rev_secret/);
+      return true;
+    },
+  );
+  assert.match(googlePlayReportListingError({ code: 403 }).message, /Global/);
 });
 
 test("public schema privacy guard and snapshots accept legitimate negative weekly movement while rejecting financial data", () => {

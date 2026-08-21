@@ -30,13 +30,13 @@ export async function loadMarketplaceConfig({ cwd = process.cwd(), env = process
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
   }
-  const value = (name, fallback = "") => String(env[name] || fileValues[name] || fallback).trim();
+  const value = (name) => String(env[name] || fileValues[name] || "").trim();
   return {
     itchApiKey: value("ITCH_API_KEY"),
     steamFinancialApiKey: value("STEAM_FINANCIAL_API_KEY"),
     googlePlayServiceAccountJson: value("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"),
     googlePlayServiceAccountJsonPath: value("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH"),
-    googlePlaySalesUri: value("GOOGLE_PLAY_SALES_URI", "gs://pubsite_prod_7761853381809168545/sales/"),
+    googlePlaySalesUri: value("GOOGLE_PLAY_SALES_URI"),
     envPath,
   };
 }
@@ -46,7 +46,7 @@ export function validateMarketplaceConfig(config) {
   if (!config.googlePlayServiceAccountJson && !config.googlePlayServiceAccountJsonPath) {
     missing.push("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON or GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH");
   }
-  if (!parseGoogleStorageUri(config.googlePlaySalesUri)) missing.push("GOOGLE_PLAY_SALES_URI (valid gs:// bucket/prefix)");
+  if (!parseGooglePlaySalesUri(config.googlePlaySalesUri)) missing.push("GOOGLE_PLAY_SALES_URI (Play Console Financial report gs://pubsite_prod_rev_... URI)");
   return missing;
 }
 
@@ -61,6 +61,13 @@ export function parseGoogleStorageUri(value) {
   const match = /^gs:\/\/([a-z0-9._-]+)(?:\/(.*))?$/i.exec(String(value || "").trim());
   if (!match) return null;
   return { bucket: match[1], prefix: match[2] || "" };
+}
+
+export function parseGooglePlaySalesUri(value) {
+  const location = parseGoogleStorageUri(value);
+  if (!location || !/^pubsite_prod_rev_[a-z0-9]+$/i.test(location.bucket)) return null;
+  if (location.prefix !== "" && location.prefix !== "sales/") return null;
+  return { bucket: location.bucket, prefix: "sales/" };
 }
 
 export async function requestJson({ fetchImpl = fetch, url, options = {}, label = "Provider", attempts = 3 }) {

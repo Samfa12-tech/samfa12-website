@@ -36,7 +36,7 @@ jobs:
           ITCH_API_KEY: ${{ secrets.ITCH_API_KEY }}
           STEAM_FINANCIAL_API_KEY: ${{ secrets.STEAM_FINANCIAL_API_KEY }}
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-          GOOGLE_PLAY_SALES_URI: gs://pubsite_prod_7761853381809168545/sales/
+          GOOGLE_PLAY_SALES_URI: ${{ vars.GOOGLE_PLAY_SALES_URI }}
         run: npm run marketplace:check
 
       - name: Update sanitised marketplace statistics
@@ -44,7 +44,7 @@ jobs:
           ITCH_API_KEY: ${{ secrets.ITCH_API_KEY }}
           STEAM_FINANCIAL_API_KEY: ${{ secrets.STEAM_FINANCIAL_API_KEY }}
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-          GOOGLE_PLAY_SALES_URI: gs://pubsite_prod_7761853381809168545/sales/
+          GOOGLE_PLAY_SALES_URI: ${{ vars.GOOGLE_PLAY_SALES_URI }}
         run: npm run marketplace:update
 
       - name: Test marketplace statistics
