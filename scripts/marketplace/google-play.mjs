@@ -2,21 +2,35 @@ import { Storage } from "@google-cloud/storage";
 import { parse } from "csv-parse/sync";
 import { unzipSync } from "fflate";
 import { readFile } from "node:fs/promises";
-import { GOOGLE_PLAY_READ_ONLY_SCOPE, nonNegativeInteger, parseGoogleStorageUri } from "./core.mjs";
+import { GOOGLE_PLAY_READ_ONLY_SCOPE, nonNegativeInteger, parseGooglePlaySalesUri } from "./core.mjs";
 
 export async function collectGooglePlay({ serviceAccountJson, serviceAccountJsonPath, salesUri, projectNames = new Map(), storage } = {}) {
-  const location = parseGoogleStorageUri(salesUri);
-  if (!location) throw new Error("Google Play sales URI must be a gs:// bucket/prefix.");
-  const client = storage || await createStorage({ serviceAccountJson, serviceAccountJsonPath });
-  const [files] = await client.bucket(location.bucket).getFiles({ prefix: location.prefix });
-  const reports = files.filter((file) => new RegExp(`^${escapeRegExp(location.prefix)}salesreport_\\d{6}\\.zip$`, "i").test(file.name));
-  if (!reports.length) throw new Error("Google Play returned no historical sales reports.");
+  const reports = await listGooglePlaySalesReports({ serviceAccountJson, serviceAccountJsonPath, salesUri, storage });
   const orderMap = new Map();
-  for (const file of reports.sort((a, b) => a.name.localeCompare(b.name))) {
+  for (const file of reports) {
     const [archive] = await file.download();
     for (const row of parseGoogleReportArchive(archive)) applyGooglePlayRow(orderMap, row);
   }
   return summarizeGooglePlayOrders(orderMap, projectNames);
+}
+
+export async function verifyGooglePlaySalesAccess(options = {}) {
+  await listGooglePlaySalesReports(options);
+}
+
+export async function listGooglePlaySalesReports({ serviceAccountJson, serviceAccountJsonPath, salesUri, storage } = {}) {
+  const location = parseGooglePlaySalesUri(salesUri);
+  if (!location) throw new Error("Google Play sales URI must be the Financial report gs://pubsite_prod_rev_... URI copied from Play Console.");
+  const client = storage || await createStorage({ serviceAccountJson, serviceAccountJsonPath });
+  let files;
+  try {
+    [files] = await client.bucket(location.bucket).getFiles({ prefix: location.prefix });
+  } catch (error) {
+    throw googlePlayReportListingError(error);
+  }
+  const reports = files.filter((file) => new RegExp(`^${escapeRegExp(location.prefix)}salesreport_\\d{6}\\.zip$`, "i").test(file.name));
+  if (!reports.length) throw new Error("Google Play returned no historical sales reports.");
+  return reports.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export async function createStorage({ serviceAccountJson, serviceAccountJsonPath }) {
@@ -94,3 +108,12 @@ export function summarizeGooglePlayOrders(orderMap, projectNames = new Map()) {
 
 function normalise(value) { return String(value || "").trim().toLowerCase().replace(/\s+/g, " "); }
 function escapeRegExp(value) { return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+export function googlePlayReportListingError(error) {
+  const code = Number(error?.code);
+  const message = String(error?.message || "");
+  if (code === 403 || /(?:HTTP\\s*)?403|storage\.objects\.list/i.test(message)) {
+    return new Error("Google Play report listing was denied (storage.objects.list). Verify the exact Cloud Storage URI copied from Play Console > Download reports > Financial; invite the service account in Play Console; and grant Global 'View app information and download bulk reports (read-only)' plus Global 'View financial data, orders, and cancellation survey responses'.");
+  }
+  return new Error("Google Play sales report enumeration failed. Check the Play Console reporting URI and service-account access.");
+}

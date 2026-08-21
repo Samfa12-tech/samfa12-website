@@ -50,7 +50,9 @@ ITCH_API_KEY=...
 STEAM_FINANCIAL_API_KEY=...
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH=/absolute/path/to/service-account.json
 # Or: GOOGLE_PLAY_SERVICE_ACCOUNT_JSON={...}
-GOOGLE_PLAY_SALES_URI=gs://pubsite_prod_7761853381809168545/sales/
+# Copy this exact non-secret bucket URI from Play Console > Download reports > Financial.
+# It resembles gs://pubsite_prod_rev_...; the collector derives the sales/ prefix.
+GOOGLE_PLAY_SALES_URI=gs://pubsite_prod_rev_...
 ```
 
 Do not modify, reuse, or put marketplace values in `.env.analytics`. Keep the
@@ -66,7 +68,9 @@ npm run validate:catalogue
 npm run validate:site
 ```
 
-`marketplace:check` reports missing variable names without printing values.
+`marketplace:check` reports missing/invalid variable names without printing
+values, then confirms that the Google service account can enumerate the
+configured Financial sales reports before the updater calls the other providers.
 `marketplace:update` is atomic: an authentication, network, parsing, or privacy
 validation failure leaves the existing public data, history, and sanitised Steam
 state unchanged. A valid zero is not an error.
@@ -97,8 +101,12 @@ STEAM_FINANCIAL_API_KEY
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
 ```
 
-`GOOGLE_PLAY_SALES_URI` is intentionally configured in the workflow as the
-non-secret value `gs://pubsite_prod_7761853381809168545/sales/`.
+Also create the **repository variable** `GOOGLE_PLAY_SALES_URI` in **GitHub →
+repository → Settings → Secrets and variables → Actions → Variables**. Copy its
+value directly from **Play Console → Download reports → Financial → Copy Cloud
+Storage URI**. It is a non-secret bucket identifier, normally beginning
+`gs://pubsite_prod_rev_`; the collector appends the required `sales/` report
+prefix. The workflow never falls back to a hardcoded bucket.
 
 When Google Play access is still propagating, use **Actions → Verify itch.io
 and Steam marketplace access → Run workflow** to test those two configured
@@ -139,7 +147,7 @@ to a self-hosted runner or another runner with known static egress.
 2. Create a service account for the reporting job and download a JSON key.
 3. Copy its service-account email address.
 4. In Google Play Console, open **Users and permissions**, invite that email,
-   and grant only:
+   and grant these permissions at **Global** scope:
    - **View app information and download bulk reports (read-only)**
    - **View financial data, orders, and cancellation survey responses**
 5. Do not grant release, publishing, or administrator permissions.
@@ -156,6 +164,12 @@ https://www.googleapis.com/auth/devstorage.read_only
 Do not commit the downloaded service-account key. After successfully entering
 the GitHub secret, delete unnecessary local copies and retain it only in the
 credential store you deliberately chose.
+
+If the workflow reports `storage.objects.list` denied, do not replace the
+published figures with zeroes or remove Google Play from the update. Copy the
+Financial Cloud Storage URI again, then check that the service account is
+invited in Play Console and has both Global permissions above before rerunning
+the workflow.
 
 ## First successful run
 
