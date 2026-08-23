@@ -153,8 +153,9 @@ The **Samfa12 by the Numbers** homepage section and the full `/stats/` dashboard
 are a separate, weekly public aggregate of itch.io, Steam, and Google Play unit
 activity. They are not part of the private
 Clarity/Cloudflare analytics bridge: it publishes only sanitised unit counts,
-never revenue or provider payloads. Amazon/KDP is deliberately deferred to a
-future stage.
+never revenue or provider payloads. Amazon/KDP figures are imported manually
+from downloaded KDP reports and retain only per-book net units and KENP pages
+read.
 
 For the credential setup, public-data boundaries, local commands, and GitHub
 Actions operation guide, see [`docs/MARKETPLACE_STATS.md`](docs/MARKETPLACE_STATS.md).

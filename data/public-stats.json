@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-21T08:33:19.863Z",
+  "generatedAt": "2026-08-23T04:25:52.740Z",
   "totals": {
     "itch": {
       "views": 4041,
@@ -19,6 +19,10 @@
     },
     "combined": {
       "paidUnits": 152
+    },
+    "amazon": {
+      "netUnits": 11,
+      "pagesRead": 2781
     }
   },
   "change": {
@@ -327,9 +331,39 @@
         "fullyRefundedPaidAppOrders": 9,
         "netPaidAppPurchases": 51
       }
+    ],
+    "amazon": [
+      {
+        "title": "A Place of His Own",
+        "netUnits": 0,
+        "pagesRead": 593
+      },
+      {
+        "title": "Backwater",
+        "netUnits": 0,
+        "pagesRead": 750
+      },
+      {
+        "title": "Concubine",
+        "netUnits": 2,
+        "pagesRead": 306
+      },
+      {
+        "title": "Free to a Good Home",
+        "netUnits": 1,
+        "pagesRead": 691
+      },
+      {
+        "title": "Sober",
+        "netUnits": 7,
+        "pagesRead": 441
+      },
+      {
+        "title": "ToKnight",
+        "netUnits": 1,
+        "pagesRead": 0
+      }
     ]
   },
-  "futureProviders": [
-    "amazon"
-  ]
+  "futureProviders": []
 }

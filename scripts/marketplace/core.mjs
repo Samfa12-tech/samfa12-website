@@ -4,7 +4,7 @@ import path from "node:path";
 export const PUBLIC_STATS_SCHEMA_VERSION = 1;
 export const GOOGLE_PLAY_READ_ONLY_SCOPE = "https://www.googleapis.com/auth/devstorage.read_only";
 
-const BANNED_PUBLIC_KEY = /(?:revenue|earning|gross[_-]?sales|net[_-]?sales|tax|price|currency|country|email|order[_-]?number|customer|partnerid|financial)/i;
+const BANNED_PUBLIC_KEY = /(?:revenue|earning|royalt(?:y|ies)|payout|gross[_-]?sales|net[_-]?sales|tax|price|currency|country|email|order[_-]?number|customer|partnerid|financial)/i;
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
 
 export function parseEnvFile(source = "") {
@@ -137,6 +137,11 @@ export function assertPublicStats(value) {
   for (const [label, count] of countPaths) {
     if (!Number.isInteger(count) || count < 0) throw new Error(`Public stats ${label} must be a non-negative integer.`);
   }
+  if (value.totals?.amazon) {
+    for (const [label, count] of [["totals.amazon.netUnits", value.totals.amazon.netUnits], ["totals.amazon.pagesRead", value.totals.amazon.pagesRead]]) {
+      if (!Number.isInteger(count) || count < 0) throw new Error(`Public stats ${label} must be a non-negative integer.`);
+    }
+  }
   const deltaPaths = [
     ["change.sincePreviousSnapshot.itch.views", value.change?.sincePreviousSnapshot?.itch?.views], ["change.sincePreviousSnapshot.itch.downloads", value.change?.sincePreviousSnapshot?.itch?.downloads], ["change.sincePreviousSnapshot.itch.purchases", value.change?.sincePreviousSnapshot?.itch?.purchases],
     ["change.sincePreviousSnapshot.steam.netUnits", value.change?.sincePreviousSnapshot?.steam?.netUnits], ["change.sincePreviousSnapshot.googlePlay.netPaidAppPurchases", value.change?.sincePreviousSnapshot?.googlePlay?.netPaidAppPurchases], ["change.sincePreviousSnapshot.combined.paidUnits", value.change?.sincePreviousSnapshot?.combined?.paidUnits],
@@ -146,6 +151,16 @@ export function assertPublicStats(value) {
   }
   for (const provider of ["itch", "steam", "googlePlay"]) {
     if (!Array.isArray(value.projects?.[provider])) throw new Error(`Public stats projects.${provider} must be an array.`);
+  }
+  if (Boolean(value.totals?.amazon) !== Boolean(value.projects?.amazon)) throw new Error("Amazon totals and projects must be provided together.");
+  if (value.projects?.amazon !== undefined) {
+    if (!Array.isArray(value.projects.amazon)) throw new Error("Public stats projects.amazon must be an array.");
+    for (const project of value.projects.amazon) {
+      if (!project || typeof project.title !== "string" || !project.title.trim()) throw new Error("Amazon project title must be a non-empty string.");
+      for (const [label, count] of [["netUnits", project.netUnits], ["pagesRead", project.pagesRead]]) {
+        if (!Number.isInteger(count) || count < 0) throw new Error(`Amazon project ${label} must be a non-negative integer.`);
+      }
+    }
   }
   return value;
 }

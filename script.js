@@ -1142,6 +1142,8 @@
     if (!requiredTotals.every(([value, minimum]) => isFiniteInteger(value, { minimum }))) return null;
     if (!requiredChanges.every((value) => isFiniteInteger(value, { minimum: Number.NEGATIVE_INFINITY }))) return null;
     if (totals.combined.paidUnits !== totals.itch.purchases + totals.steam.netUnits + totals.googlePlay.netPaidAppPurchases) return null;
+    if (Boolean(totals.amazon) !== Boolean(data.projects?.amazon)) return null;
+    if (totals.amazon && ![totals.amazon.netUnits, totals.amazon.pagesRead].every((value) => isFiniteInteger(value))) return null;
     if (!validateMarketplaceProjects(data.projects)) return null;
 
     return data;
@@ -1153,6 +1155,7 @@
     return Array.isArray(projects.itch)
       && Array.isArray(projects.steam)
       && Array.isArray(projects.googlePlay)
+      && (projects.amazon === undefined || (Array.isArray(projects.amazon) && projects.amazon.every((project) => integerMetrics(project, ["netUnits", "pagesRead"]))))
       && projects.itch.every((project) => integerMetrics(project, ["views", "downloads", "purchases"]) && typeof project.url === "string")
       && projects.steam.every((project) => integerMetrics(project, ["grossUnits", "returnedUnits", "netUnits"]) && typeof project.appId === "string")
       && projects.googlePlay.every((project) => integerMetrics(project, ["grossPaidAppPurchases", "fullyRefundedPaidAppOrders", "netPaidAppPurchases"]) && typeof project.packageId === "string");
@@ -1314,7 +1317,7 @@
 
   function renderMarketplaceDashboard(data, history) {
     if (!marketplaceDashboard || !marketplaceDashboardOverview || !marketplaceDashboardUpdated || !marketplaceTrend || !marketplaceProjects) return;
-    marketplaceDashboardOverview.replaceChildren(
+    const overviewCards = [
       createMarketplaceStatsCard({
         id: "dashboard-combined",
         platform: "Across storefronts",
@@ -1329,14 +1332,18 @@
       createMarketplaceStatsCard({ id: "dashboard-itch", platform: "itch.io", primaryLabel: "Lifetime downloads", primaryValue: data.totals.itch.downloads, detailMetrics: [{ label: "Views", value: data.totals.itch.views }, { label: "Purchases", value: data.totals.itch.purchases }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.itch.downloads, "download") }),
       createMarketplaceStatsCard({ id: "dashboard-steam", platform: "Steam", primaryLabel: "Net game units sold", primaryValue: data.totals.steam.netUnits, detailMetrics: [{ label: "Gross units", value: data.totals.steam.grossUnits }, { label: "Returned units", value: data.totals.steam.returnedUnits }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.steam.netUnits, "net sale") }),
       createMarketplaceStatsCard({ id: "dashboard-google-play", platform: "Google Play", primaryLabel: "Net paid-app purchases", primaryValue: data.totals.googlePlay.netPaidAppPurchases, detailMetrics: [{ label: "Gross purchases", value: data.totals.googlePlay.grossPaidAppPurchases }, { label: "Fully refunded orders", value: data.totals.googlePlay.fullyRefundedPaidAppOrders }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.googlePlay.netPaidAppPurchases, "paid-app purchase") })
-    );
-    marketplaceDashboardUpdated.textContent = `Updated weekly · Last refreshed ${formatMarketplaceDate(data.generatedAt)}`;
+    ];
+    if (data.totals.amazon) overviewCards.push(createMarketplaceStatsCard({ id: "dashboard-amazon", platform: "Amazon KDP", primaryLabel: "Net book sales", primaryValue: data.totals.amazon.netUnits, detailMetrics: [{ label: "KENP pages read", value: data.totals.amazon.pagesRead }], changeText: "KDP report snapshot" }));
+    marketplaceDashboardOverview.replaceChildren(...overviewCards);
+    marketplaceDashboardUpdated.textContent = `Last refreshed ${formatMarketplaceDate(data.generatedAt)}`;
     marketplaceTrend.replaceChildren(...createMarketplaceTrend(history));
-    marketplaceProjects.replaceChildren(
+    const projectPanels = [
       createMarketplaceProjectPanel({ id: "itch", platform: "itch.io", projects: data.projects.itch, metrics: [{ key: "views", label: "Views" }, { key: "downloads", label: "Downloads" }, { key: "purchases", label: "Purchases" }] }),
       createMarketplaceProjectPanel({ id: "steam", platform: "Steam", projects: data.projects.steam, metrics: [{ key: "grossUnits", label: "Gross units" }, { key: "returnedUnits", label: "Returned" }, { key: "netUnits", label: "Net units" }] }),
       createMarketplaceProjectPanel({ id: "google-play", platform: "Google Play", projects: data.projects.googlePlay, metrics: [{ key: "grossPaidAppPurchases", label: "Gross purchases" }, { key: "fullyRefundedPaidAppOrders", label: "Fully refunded" }, { key: "netPaidAppPurchases", label: "Net purchases" }] })
-    );
+    ];
+    if (data.projects.amazon) projectPanels.push(createMarketplaceProjectPanel({ id: "amazon", platform: "Amazon KDP", projects: data.projects.amazon, metrics: [{ key: "netUnits", label: "Net sales" }, { key: "pagesRead", label: "KENP read" }] }));
+    marketplaceProjects.replaceChildren(...projectPanels);
     marketplaceDashboardUnavailable.hidden = true;
     marketplaceDashboard.hidden = false;
   }

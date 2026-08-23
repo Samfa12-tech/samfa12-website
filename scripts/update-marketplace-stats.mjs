@@ -17,7 +17,9 @@ const statePath = path.join(root, "ops", "marketplace", "steam-state.json");
 const statsPath = path.join(root, "data", "public-stats.json");
 const historyPath = path.join(root, "data", "public-stats-history.json");
 const previousState = await readJsonOr(statePath, newSteamState());
+const previousStats = await readJsonOr(statsPath, { schemaVersion: 1, status: "uninitialised" });
 const previousHistory = await readJsonOr(historyPath, { schemaVersion: 1, snapshots: [] });
+assertPublicStats(previousStats);
 assertHistory(previousHistory);
 
 const [itch, steam, googlePlay] = await Promise.all([
@@ -43,10 +45,14 @@ const snapshot = compactSnapshot(generatedAt, totals);
 const publicStats = {
   schemaVersion: 1,
   generatedAt,
-  totals,
+  totals: previousStats.totals?.amazon ? { ...totals, amazon: previousStats.totals.amazon } : totals,
   change: { sincePreviousSnapshot: marketplaceChanges(prior, totals) },
-  projects: { itch: itch.projects, steam: steam.projects, googlePlay: googlePlay.projects },
-  futureProviders: ["amazon"],
+  projects: previousStats.projects?.amazon
+    ? { itch: itch.projects, steam: steam.projects, googlePlay: googlePlay.projects, amazon: previousStats.projects.amazon }
+    : { itch: itch.projects, steam: steam.projects, googlePlay: googlePlay.projects },
+  futureProviders: previousStats.projects?.amazon
+    ? (previousStats.futureProviders || []).filter((provider) => provider !== "amazon")
+    : ["amazon"],
 };
 assertPublicStats(publicStats);
 const history = {

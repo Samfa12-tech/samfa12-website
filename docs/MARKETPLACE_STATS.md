@@ -1,7 +1,8 @@
 # Public marketplace statistics
 
 The weekly **Samfa12 by the Numbers** update publishes sanitised, lifetime
-aggregate unit counts from itch.io, Steam, and Google Play. It is separate from
+aggregate unit counts from itch.io, Steam, and Google Play, plus manually
+imported Amazon KDP book figures. It is separate from
 the local Clarity/Cloudflare site-analytics bridge described in
 [`ANALYTICS.md`](ANALYTICS.md).
 
@@ -12,9 +13,10 @@ the GitHub Pages artifact, but the repository is public, so that file is also
 limited to sanitised dates, app IDs, unit counts, and the Steam changed-date
 high-watermark.
 
-Amazon/KDP is intentionally not automated in this stage. The data schema leaves
-room for a future `amazon` source, but no KDP scraping, browser automation,
-cookies, or stored browser sessions are used.
+Amazon/KDP is not automated. No KDP scraping, browser automation, cookies, or
+stored browser sessions are used. A local import reads owner-downloaded KDP
+workbooks and publishes only per-book net units and Kindle Edition Normalized
+Page (KENP) reads.
 
 ## Public metrics
 
@@ -28,6 +30,8 @@ aggregate trend. Current headline values are:
   package sales only.
 - Google Play: gross paid-app purchases, fully refunded paid-app orders, and
   net paid-app purchases.
+- Amazon KDP: per-book net units and KENP pages read from manually downloaded
+  reports. Zero-price promotions are excluded from book sales.
 - Across storefronts: paid units, currently itch purchases + Steam net game
   units + Google Play net paid-app purchases.
 
@@ -39,6 +43,22 @@ The initial repository state is deliberately uninitialised until all three
 providers complete a successful collection. The homepage hides the dynamic
 section and `/stats/` shows a pending state rather than presenting placeholder
 zeroes as real figures.
+
+## Amazon KDP report import
+
+Download the KDP royalty reports locally, then pass each report explicitly:
+
+```powershell
+npm run marketplace:import-kdp -- --report "C:\path\to\KDP_Prior_Month_Royalties.xlsx" --report "C:\path\to\KDP_Dashboard.xlsx"
+```
+
+The importer reads the `eBook Royalty`, `Paperback Royalty`, `Hardcover
+Royalty`, and `KENP Read` sheets. It uses the separate sheets rather than
+`Total Earnings`, so unit and page totals are not double-counted. The raw
+workbooks stay outside the repository: review and commit only the updated
+`data/public-stats.json`. The scheduled weekly marketplace update preserves the
+sanitised KDP figures, but does not refresh them; rerun this local import when
+new reports are available.
 
 ## Local configuration and commands
 

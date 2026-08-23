@@ -19,6 +19,7 @@
     "marketplace:update": "node scripts/update-marketplace-stats.mjs",
     "marketplace:verify-providers": "node scripts/verify-marketplace-providers.mjs",
     "marketplace:import-steam-csv": "node scripts/import-steam-sales-csv.mjs",
+    "marketplace:import-kdp": "node scripts/import-kdp-reports.mjs",
     "test:marketplace": "node --test tests/marketplace-stats.test.mjs",
     "test:handoff-relay": "node --test tests/pocket-audio-handoff-relay.test.mjs",
     "setup:handoff-kv": "npx wrangler kv namespace create HANDOFFS --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config && npx wrangler kv namespace create HANDOFFS --preview --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config",

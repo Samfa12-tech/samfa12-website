@@ -9,6 +9,7 @@ import { collectItch } from "../scripts/marketplace/itch.mjs";
 import { applyGooglePlayRow, collectGooglePlay, googlePlayReportListingError, listGooglePlaySalesReports, parseGoogleReportArchive, summarizeGooglePlayOrders } from "../scripts/marketplace/google-play.mjs";
 import { parseSteamSalesCsv } from "../scripts/marketplace/steam-csv.mjs";
 import { collectSteam, describeSteamChangedDatesResponse, describeSteamDetailedSalesResponse, getDailySales, summarizeSteamState } from "../scripts/marketplace/steam.mjs";
+import { amazonProjectTitles, summarizeKdpSheets } from "../scripts/marketplace/kdp.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const fixture = (...parts) => path.join(root, "tests", "fixtures", "marketplace", ...parts);
@@ -207,7 +208,16 @@ test("public schema privacy guard and snapshots accept legitimate negative weekl
   assert.equal(assertHistory({ schemaVersion: 1, snapshots: [{ capturedAt: "2026-08-10T00:00:00.000Z", itch: { views: 1, downloads: 1, purchases: 1 }, steam: { netUnits: 2 }, googlePlay: { netPaidAppPurchases: 1 }, combined: { paidUnits: 4 } }] }).schemaVersion, 1);
   assert.throws(() => assertNoSensitivePublicData({ project: { orderNumber: "TEST-ORDER-001" } }), /prohibited/i);
   assert.throws(() => assertNoSensitivePublicData({ project: { earnings: 7 } }), /prohibited/i);
+  assert.throws(() => assertNoSensitivePublicData({ project: { royalty: 7 } }), /prohibited/i);
   assert.throws(() => assertNoSensitivePublicData({ project: { price: 7 } }), /prohibited/i);
+});
+
+test("KDP aggregation keeps only per-book net sales and KENP reads", () => {
+  const sheets = [{ name: "eBook Royalty", rows: [["Sales Period", "August 2026"], ["Title", "ASIN", "Units Sold", "Units Refunded", "Net Units Sold", "Transaction Type", "Royalty"], ["Sober: A Novel Set in the World of Drink", "B0TEST0001", "3", "1", "2", "Standard", "999"], ["Sober: A Novel Set in the World of Drink", "B0TEST0001", "4", "0", "4", "Free - Promotion", "999"]] }, { name: "Paperback Royalty", rows: [["Title", "ASIN", "Units Sold", "Units Refunded", "Royalty"], ["Sober: A novel set in the world of Drink", "B0PAPER001", "2", "1", "999"]] }, { name: "KENP Read", rows: [["Title", "ASIN", "Kindle Edition Normalized Page (KENP) Read", "Royalty"], ["Sober: A Novel Set in the World of Drink", "B0TEST0001", "450", "999"]] }];
+  const result = summarizeKdpSheets([sheets], new Map([["B0TEST0001", "Sober"]]));
+  assert.deepEqual(result, { totals: { netUnits: 3, pagesRead: 450 }, projects: [{ title: "Sober", netUnits: 3, pagesRead: 450 }] });
+  assert.doesNotMatch(JSON.stringify(result), /royalty|currency|price|marketplace|asin|author/i);
+  assert.deepEqual(amazonProjectTitles([{ title: "Sober", links: [{ url: "https://www.amazon.com.au/dp/B0TEST0001" }] }]), new Map([["B0TEST0001", "Sober"]]));
 });
 
 test("aggregation calculates positive, zero, and negative deltas without duplicate history results", () => {
