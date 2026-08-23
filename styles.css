@@ -992,6 +992,22 @@ h3 {
   gap: var(--space-4);
 }
 
+.stats-dashboard-storefront-stack {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+.stats-dashboard-storefront-stack .marketplace-stat-card {
+  min-height: 0;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.stats-dashboard-storefront-stack .marketplace-stat-primary {
+  margin-top: 0;
+}
+
 .stats-dashboard-overview .marketplace-stat-dashboard-combined {
   --marketplace-accent: var(--spark);
 }
@@ -2563,6 +2579,10 @@ body[data-page="apps"] .project-card-catalogue {
   .stats-dashboard-overview,
   .stats-project-grid {
     grid-template-columns: 1fr;
+  }
+
+  .stats-dashboard-storefront-stack {
+    gap: var(--space-3);
   }
 
   .stats-trend-panel,

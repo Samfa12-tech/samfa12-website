@@ -1333,7 +1333,10 @@
       createMarketplaceStatsCard({ id: "dashboard-steam", platform: "Steam", primaryLabel: "Net game units sold", primaryValue: data.totals.steam.netUnits, detailMetrics: [{ label: "Gross units", value: data.totals.steam.grossUnits }, { label: "Returned units", value: data.totals.steam.returnedUnits }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.steam.netUnits, "net sale") }),
       createMarketplaceStatsCard({ id: "dashboard-google-play", platform: "Google Play", primaryLabel: "Net paid-app purchases", primaryValue: data.totals.googlePlay.netPaidAppPurchases, detailMetrics: [{ label: "Gross purchases", value: data.totals.googlePlay.grossPaidAppPurchases }, { label: "Fully refunded orders", value: data.totals.googlePlay.fullyRefundedPaidAppOrders }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.googlePlay.netPaidAppPurchases, "paid-app purchase") })
     ];
-    if (data.totals.amazon) overviewCards.push(createMarketplaceStatsCard({ id: "dashboard-amazon", platform: "Amazon KDP", primaryLabel: "Net book sales", primaryValue: data.totals.amazon.netUnits, detailMetrics: [{ label: "KENP pages read", value: data.totals.amazon.pagesRead }], changeText: "KDP report snapshot" }));
+    if (data.totals.amazon) {
+      const amazonCard = createMarketplaceStatsCard({ id: "dashboard-amazon", platform: "Amazon KDP", primaryLabel: "Net book sales", primaryValue: data.totals.amazon.netUnits, detailMetrics: [{ label: "KENP pages read", value: data.totals.amazon.pagesRead }], changeText: "KDP report snapshot" });
+      overviewCards.splice(2, 1, createElement("div", { className: "stats-dashboard-storefront-stack" }, [overviewCards[2], amazonCard]));
+    }
     marketplaceDashboardOverview.replaceChildren(...overviewCards);
     marketplaceDashboardUpdated.textContent = `Last refreshed ${formatMarketplaceDate(data.generatedAt)}`;
     marketplaceTrend.replaceChildren(...createMarketplaceTrend(history));
