@@ -33,18 +33,20 @@ const [itch, googlePlay] = await Promise.all([
 // existing sanitised baseline so a Steam API outage cannot block other stores.
 const steam = { totals: previousStats.totals.steam, projects: previousStats.projects.steam };
 const generatedAt = new Date().toISOString();
+const amazon = previousStats.totals?.amazon;
 const totals = {
   itch: itch.totals,
   steam: steam.totals,
   googlePlay: googlePlay.totals,
-  combined: { paidUnits: itch.totals.purchases + steam.totals.netUnits + googlePlay.totals.netPaidAppPurchases },
+  ...(amazon ? { amazon } : {}),
+  combined: { paidUnits: itch.totals.purchases + steam.totals.netUnits + googlePlay.totals.netPaidAppPurchases + (amazon?.netUnits || 0) },
 };
 const prior = previousHistory.snapshots.at(-1);
 const snapshot = compactSnapshot(generatedAt, totals);
 const publicStats = {
   schemaVersion: 1,
   generatedAt,
-  totals: previousStats.totals?.amazon ? { ...totals, amazon: previousStats.totals.amazon } : totals,
+  totals,
   change: { sincePreviousSnapshot: marketplaceChanges(prior, totals) },
   projects: previousStats.projects?.amazon
     ? { itch: itch.projects, steam: steam.projects, googlePlay: googlePlay.projects, amazon: previousStats.projects.amazon }
@@ -72,6 +74,7 @@ function compactSnapshot(capturedAt, values) {
     itch: { ...values.itch },
     steam: { netUnits: values.steam.netUnits },
     googlePlay: { netPaidAppPurchases: values.googlePlay.netPaidAppPurchases },
+    ...(values.amazon ? { amazon: { netUnits: values.amazon.netUnits } } : {}),
     combined: { ...values.combined },
   };
 }

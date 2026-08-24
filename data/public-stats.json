@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-24T06:27:30.448Z",
+  "generatedAt": "2026-08-24T11:31:22.639Z",
   "totals": {
     "itch": {
       "views": 4096,
@@ -18,10 +18,10 @@
       "netPaidAppPurchases": 132
     },
     "combined": {
-      "paidUnits": 153
+      "paidUnits": 166
     },
     "amazon": {
-      "netUnits": 11,
+      "netUnits": 13,
       "pagesRead": 2781
     }
   },
@@ -36,10 +36,13 @@
         "netUnits": 0
       },
       "googlePlay": {
-        "netPaidAppPurchases": 1
+        "netPaidAppPurchases": 0
+      },
+      "amazon": {
+        "netUnits": 2
       },
       "combined": {
-        "paidUnits": 1
+        "paidUnits": 2
       }
     }
   },
@@ -335,7 +338,7 @@
     "amazon": [
       {
         "title": "A Place of His Own",
-        "netUnits": 0,
+        "netUnits": 1,
         "pagesRead": 593
       },
       {
@@ -350,7 +353,7 @@
       },
       {
         "title": "Free to a Good Home",
-        "netUnits": 1,
+        "netUnits": 2,
         "pagesRead": 691
       },
       {
