@@ -5,8 +5,10 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const siteRoot = process.env.WHAT_WOULD_WIN_SITE_ROOT ? path.resolve(process.env.WHAT_WOULD_WIN_SITE_ROOT) : root;
 const hosted = path.join(siteRoot, "apps", "what-would-win", "index.html");
+const privateManifest = path.join(siteRoot, "apps", "what-would-win", ".vite", "manifest.json");
 
 if (!fs.existsSync(hosted)) throw new Error(`What Would Win Pages artifact is missing: ${hosted}. Run npm run sync:what-would-win after building the source app.`);
+if (fs.existsSync(privateManifest)) throw new Error("What Would Win Pages artifact exposes the private Vite build manifest.");
 
 const html = fs.readFileSync(hosted, "utf8");
 const assets = [...html.matchAll(/(?:src|href)=["']([^"']*assets\/[^"']+)["']/gi)].map((match) => match[1]);

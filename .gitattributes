@@ -1,0 +1,3 @@
+# Preserve generated application artifacts byte-for-byte through Git checkouts.
+apps/what-would-win/** -text
+apps/what-would-win/site.webmanifest binary

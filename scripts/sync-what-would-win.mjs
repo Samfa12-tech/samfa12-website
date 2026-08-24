@@ -39,6 +39,8 @@ try {
 await fs.rm(staging, { recursive: true, force: true });
 await fs.rm(backup, { recursive: true, force: true });
 await fs.cp(source, staging, { recursive: true });
+// Vite's build manifest is deployment metadata, not a public application asset.
+await fs.rm(path.join(staging, ".vite"), { recursive: true, force: true });
 await validateBuild(staging);
 
 let movedExisting = false;
