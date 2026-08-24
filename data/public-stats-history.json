@@ -14,8 +14,11 @@
       "googlePlay": {
         "netPaidAppPurchases": 131
       },
+      "amazon": {
+        "netUnits": 11
+      },
       "combined": {
-        "paidUnits": 133
+        "paidUnits": 144
       }
     },
     {
@@ -31,8 +34,11 @@
       "googlePlay": {
         "netPaidAppPurchases": 131
       },
+      "amazon": {
+        "netUnits": 11
+      },
       "combined": {
-        "paidUnits": 152
+        "paidUnits": 163
       }
     },
     {
@@ -48,8 +54,31 @@
       "googlePlay": {
         "netPaidAppPurchases": 132
       },
+      "amazon": {
+        "netUnits": 11
+      },
       "combined": {
-        "paidUnits": 153
+        "paidUnits": 164
+      }
+    },
+    {
+      "capturedAt": "2026-08-24T11:31:22.639Z",
+      "itch": {
+        "views": 4096,
+        "downloads": 100,
+        "purchases": 2
+      },
+      "steam": {
+        "netUnits": 19
+      },
+      "googlePlay": {
+        "netPaidAppPurchases": 132
+      },
+      "amazon": {
+        "netUnits": 13
+      },
+      "combined": {
+        "paidUnits": 166
       }
     }
   ]

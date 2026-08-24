@@ -33,8 +33,8 @@ aggregate trend. Current headline values are:
   net paid-app purchases.
 - Amazon KDP: per-book net units and KENP pages read from manually downloaded
   reports. Zero-price promotions are excluded from book sales.
-- Across storefronts: paid units, currently itch purchases + Steam net game
-  units + Google Play net paid-app purchases.
+- Across storefronts: paid sales, currently itch purchases + Steam net game
+  units + Google Play net paid-app purchases + Amazon KDP net book sales.
 
 Paid units are storefront units, not unique people. Deltas may be negative when
 Steam or Google Play corrects/refunds historical data. Revenue is never a public
@@ -57,9 +57,9 @@ The importer reads the `eBook Royalty`, `Paperback Royalty`, `Hardcover
 Royalty`, and `KENP Read` sheets. It uses the separate sheets rather than
 `Total Earnings`, so unit and page totals are not double-counted. The raw
 workbooks stay outside the repository: review and commit only the updated
-`data/public-stats.json`. The scheduled weekly marketplace update preserves the
-sanitised KDP figures, but does not refresh them; rerun this local import when
-new reports are available.
+`data/public-stats.json` and `data/public-stats-history.json`. The scheduled
+weekly marketplace update preserves the sanitised KDP figures, but does not
+refresh them; rerun this local import when new reports are available.
 
 ## Local configuration and commands
 

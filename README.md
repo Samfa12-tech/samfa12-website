@@ -155,7 +155,7 @@ activity. They are not part of the private
 Clarity/Cloudflare analytics bridge: it publishes only sanitised unit counts,
 never revenue or provider payloads. Amazon/KDP figures are imported manually
 from downloaded KDP reports and retain only per-book net units and KENP pages
-read.
+read. Those net book sales are included in the aggregate paid-sales trend.
 
 For the credential setup, public-data boundaries, local commands, and GitHub
 Actions operation guide, see [`docs/MARKETPLACE_STATS.md`](docs/MARKETPLACE_STATS.md).

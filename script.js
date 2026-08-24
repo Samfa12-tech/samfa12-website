@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260820-10";
+  const DATA_VERSION = "20260824-1";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -1138,10 +1138,11 @@
       change.googlePlay?.netPaidAppPurchases,
       change.combined?.paidUnits,
     ];
+    if (totals.amazon) requiredChanges.push(change.amazon?.netUnits);
 
     if (!requiredTotals.every(([value, minimum]) => isFiniteInteger(value, { minimum }))) return null;
     if (!requiredChanges.every((value) => isFiniteInteger(value, { minimum: Number.NEGATIVE_INFINITY }))) return null;
-    if (totals.combined.paidUnits !== totals.itch.purchases + totals.steam.netUnits + totals.googlePlay.netPaidAppPurchases) return null;
+    if (totals.combined.paidUnits !== totals.itch.purchases + totals.steam.netUnits + totals.googlePlay.netPaidAppPurchases + (totals.amazon?.netUnits || 0)) return null;
     if (Boolean(totals.amazon) !== Boolean(data.projects?.amazon)) return null;
     if (totals.amazon && ![totals.amazon.netUnits, totals.amazon.pagesRead].every((value) => isFiniteInteger(value))) return null;
     if (!validateMarketplaceProjects(data.projects)) return null;
@@ -1169,7 +1170,8 @@
       seen.add(snapshot.capturedAt);
       const values = [snapshot.itch?.views, snapshot.itch?.downloads, snapshot.itch?.purchases, snapshot.steam?.netUnits, snapshot.googlePlay?.netPaidAppPurchases, snapshot.combined?.paidUnits];
       if (!values.every((value) => isFiniteInteger(value))) return null;
-      if (snapshot.combined.paidUnits !== snapshot.itch.purchases + snapshot.steam.netUnits + snapshot.googlePlay.netPaidAppPurchases) return null;
+      if (snapshot.amazon !== undefined && !isFiniteInteger(snapshot.amazon?.netUnits)) return null;
+      if (snapshot.combined.paidUnits !== snapshot.itch.purchases + snapshot.steam.netUnits + snapshot.googlePlay.netPaidAppPurchases + (snapshot.amazon?.netUnits || 0)) return null;
     }
     return data;
   }
@@ -1257,13 +1259,14 @@
       createMarketplaceStatsCard({
         id: "combined",
         platform: "Across storefronts",
-        primaryLabel: "Total paid units",
+        primaryLabel: "Total paid sales",
         primaryValue: data.totals.combined.paidUnits,
         detailMetrics: [
           { label: "itch.io purchases", value: data.totals.itch.purchases },
           { label: "Steam + Play units", value: data.totals.steam.netUnits + data.totals.googlePlay.netPaidAppPurchases },
+          ...(data.totals.amazon ? [{ label: "KDP book sales", value: data.totals.amazon.netUnits }] : []),
         ],
-        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.combined.paidUnits, "paid unit"),
+        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.combined.paidUnits, "paid sale"),
       })
     );
     marketplaceStatsUpdated.textContent = `Updated weekly · Last refreshed ${refreshedText}`;
@@ -1274,7 +1277,7 @@
   function createMarketplaceTrend(history) {
     const snapshots = history.snapshots.slice(-12);
     const maxUnits = Math.max(...snapshots.map((snapshot) => snapshot.combined.paidUnits), 1);
-    const bars = createElement("ol", { className: "stats-trend-bars", "aria-label": "Combined paid units by weekly snapshot" });
+    const bars = createElement("ol", { className: "stats-trend-bars", "aria-label": "Combined paid sales by weekly snapshot" });
     snapshots.forEach((snapshot) => {
       const units = snapshot.combined.paidUnits;
       const height = Math.max(8, Math.round((units / maxUnits) * 100));
@@ -1282,10 +1285,10 @@
         createElement("span", { className: "stats-trend-value", text: formatMarketplaceNumber(units) }),
         createElement("span", { className: "stats-trend-bar", "aria-hidden": "true" }),
         createElement("time", { className: "stats-trend-date", dateTime: snapshot.capturedAt, text: new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", timeZone: "Australia/Sydney" }).format(new Date(snapshot.capturedAt)) }),
-        createElement("span", { className: "sr-only", text: `${formatMarketplaceDate(snapshot.capturedAt)}: ${formatMarketplaceNumber(units)} combined paid units.` }),
+        createElement("span", { className: "sr-only", text: `${formatMarketplaceDate(snapshot.capturedAt)}: ${formatMarketplaceNumber(units)} combined paid sales.` }),
       ]));
     });
-    return [bars, createElement("figcaption", { text: "Combined paid units are the only cross-storefront metric shown in the trend." })];
+    return [bars, createElement("figcaption", { text: "Combined paid sales across itch.io, Steam, Google Play, and Amazon KDP." })];
   }
 
   function createMarketplaceProjectPanel({ id, platform, projects, metrics }) {
@@ -1321,20 +1324,21 @@
       createMarketplaceStatsCard({
         id: "dashboard-combined",
         platform: "Across storefronts",
-        primaryLabel: "Lifetime paid units",
+        primaryLabel: "Lifetime paid sales",
         primaryValue: data.totals.combined.paidUnits,
         detailMetrics: [
           { label: "itch.io purchases", value: data.totals.itch.purchases },
           { label: "Steam + Play units", value: data.totals.steam.netUnits + data.totals.googlePlay.netPaidAppPurchases },
+          ...(data.totals.amazon ? [{ label: "KDP book sales", value: data.totals.amazon.netUnits }] : []),
         ],
-        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.combined.paidUnits, "paid unit"),
+        changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.combined.paidUnits, "paid sale"),
       }),
       createMarketplaceStatsCard({ id: "dashboard-itch", platform: "itch.io", primaryLabel: "Lifetime downloads", primaryValue: data.totals.itch.downloads, detailMetrics: [{ label: "Views", value: data.totals.itch.views }, { label: "Purchases", value: data.totals.itch.purchases }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.itch.downloads, "download") }),
       createMarketplaceStatsCard({ id: "dashboard-steam", platform: "Steam", primaryLabel: "Net game units sold", primaryValue: data.totals.steam.netUnits, detailMetrics: [{ label: "Gross units", value: data.totals.steam.grossUnits }, { label: "Returned units", value: data.totals.steam.returnedUnits }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.steam.netUnits, "net sale") }),
       createMarketplaceStatsCard({ id: "dashboard-google-play", platform: "Google Play", primaryLabel: "Net paid-app purchases", primaryValue: data.totals.googlePlay.netPaidAppPurchases, detailMetrics: [{ label: "Gross purchases", value: data.totals.googlePlay.grossPaidAppPurchases }, { label: "Fully refunded orders", value: data.totals.googlePlay.fullyRefundedPaidAppOrders }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.googlePlay.netPaidAppPurchases, "paid-app purchase") })
     ];
     if (data.totals.amazon) {
-      const amazonCard = createMarketplaceStatsCard({ id: "dashboard-amazon", platform: "Amazon KDP", primaryLabel: "Net book sales", primaryValue: data.totals.amazon.netUnits, detailMetrics: [{ label: "KENP pages read", value: data.totals.amazon.pagesRead }], changeText: "KDP report snapshot" });
+      const amazonCard = createMarketplaceStatsCard({ id: "dashboard-amazon", platform: "Amazon KDP", primaryLabel: "Net book sales", primaryValue: data.totals.amazon.netUnits, detailMetrics: [{ label: "KENP pages read", value: data.totals.amazon.pagesRead }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.amazon.netUnits, "KDP book sale") });
       overviewCards.splice(2, 1, createElement("div", { className: "stats-dashboard-storefront-stack" }, [overviewCards[2], amazonCard]));
     }
     marketplaceDashboardOverview.replaceChildren(...overviewCards);

@@ -34,11 +34,13 @@ state.changedDatesHighwatermark = "0";
 
 const steam = summarizeSteamState(state, maps.steam);
 const generatedAt = new Date().toISOString();
+const amazon = previousStats.totals?.amazon;
 const totals = {
   itch: previousStats.totals.itch,
   steam: steam.totals,
   googlePlay: previousStats.totals.googlePlay,
-  combined: { paidUnits: previousStats.totals.itch.purchases + steam.totals.netUnits + previousStats.totals.googlePlay.netPaidAppPurchases },
+  ...(amazon ? { amazon } : {}),
+  combined: { paidUnits: previousStats.totals.itch.purchases + steam.totals.netUnits + previousStats.totals.googlePlay.netPaidAppPurchases + (amazon?.netUnits || 0) },
 };
 const prior = previousHistory.snapshots.at(-1);
 const snapshot = compactSnapshot(generatedAt, totals);
@@ -81,6 +83,7 @@ function compactSnapshot(capturedAt, values) {
     itch: { ...values.itch },
     steam: { netUnits: values.steam.netUnits },
     googlePlay: { netPaidAppPurchases: values.googlePlay.netPaidAppPurchases },
+    ...(values.amazon ? { amazon: { netUnits: values.amazon.netUnits } } : {}),
     combined: { ...values.combined },
   };
 }

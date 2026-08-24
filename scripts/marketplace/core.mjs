@@ -143,10 +143,13 @@ export function assertPublicStats(value) {
       if (!Number.isInteger(count) || count < 0) throw new Error(`Public stats ${label} must be a non-negative integer.`);
     }
   }
+  const paidUnits = value.totals.itch.purchases + value.totals.steam.netUnits + value.totals.googlePlay.netPaidAppPurchases + (value.totals.amazon?.netUnits || 0);
+  if (value.totals.combined.paidUnits !== paidUnits) throw new Error("Public stats combined paid units must equal the provider sales totals.");
   const deltaPaths = [
     ["change.sincePreviousSnapshot.itch.views", value.change?.sincePreviousSnapshot?.itch?.views], ["change.sincePreviousSnapshot.itch.downloads", value.change?.sincePreviousSnapshot?.itch?.downloads], ["change.sincePreviousSnapshot.itch.purchases", value.change?.sincePreviousSnapshot?.itch?.purchases],
     ["change.sincePreviousSnapshot.steam.netUnits", value.change?.sincePreviousSnapshot?.steam?.netUnits], ["change.sincePreviousSnapshot.googlePlay.netPaidAppPurchases", value.change?.sincePreviousSnapshot?.googlePlay?.netPaidAppPurchases], ["change.sincePreviousSnapshot.combined.paidUnits", value.change?.sincePreviousSnapshot?.combined?.paidUnits],
   ];
+  if (value.totals?.amazon) deltaPaths.push(["change.sincePreviousSnapshot.amazon.netUnits", value.change?.sincePreviousSnapshot?.amazon?.netUnits]);
   for (const [label, count] of deltaPaths) {
     if (!Number.isInteger(count)) throw new Error(`Public stats ${label} must be an integer.`);
   }
@@ -183,6 +186,11 @@ export function assertHistory(value) {
     for (const [label, count] of countPaths) {
       if (!Number.isInteger(count) || count < 0) throw new Error(`Marketplace history ${label} must be a non-negative integer.`);
     }
+    if (snapshot.amazon !== undefined && (!Number.isInteger(snapshot.amazon?.netUnits) || snapshot.amazon.netUnits < 0)) {
+      throw new Error("Marketplace history amazon.netUnits must be a non-negative integer.");
+    }
+    const paidUnits = snapshot.itch.purchases + snapshot.steam.netUnits + snapshot.googlePlay.netPaidAppPurchases + (snapshot.amazon?.netUnits || 0);
+    if (snapshot.combined.paidUnits !== paidUnits) throw new Error("Marketplace history combined paid units must equal the provider sales totals.");
   }
   return value;
 }
@@ -243,12 +251,14 @@ export function sanitizeSteamState(state) {
 export function marketplaceChanges(previous, totals) {
   const before = previous || { itch: {}, steam: {}, googlePlay: {}, combined: {} };
   const deltaGroup = (current, old = {}) => Object.fromEntries(Object.entries(current).map(([key, value]) => [key, value - (old[key] || 0)]));
-  return {
+  const changes = {
     itch: deltaGroup(totals.itch, before.itch),
     steam: { netUnits: totals.steam.netUnits - (before.steam?.netUnits || 0) },
     googlePlay: { netPaidAppPurchases: totals.googlePlay.netPaidAppPurchases - (before.googlePlay?.netPaidAppPurchases || 0) },
     combined: { paidUnits: totals.combined.paidUnits - (before.combined?.paidUnits || 0) },
   };
+  if (totals.amazon) changes.amazon = { netUnits: totals.amazon.netUnits - (before.amazon?.netUnits || 0) };
+  return changes;
 }
 
 export function equivalentMarketplaceSnapshot(previous, next) {

@@ -239,6 +239,14 @@ test("aggregation calculates positive, zero, and negative deltas without duplica
   assert.equal(equivalentMarketplaceSnapshot(previous, matching), true);
 });
 
+test("Amazon book sales contribute to the public combined total and trend deltas", () => {
+  const totals = { itch: { views: 12, downloads: 4, purchases: 2 }, steam: { grossUnits: 3, returnedUnits: 0, netUnits: 3 }, googlePlay: { grossPaidAppPurchases: 1, fullyRefundedPaidAppOrders: 0, netPaidAppPurchases: 1 }, amazon: { netUnits: 5, pagesRead: 80 }, combined: { paidUnits: 11 } };
+  const previous = { capturedAt: "2026-08-10T00:00:00.000Z", itch: { views: 7, downloads: 4, purchases: 2 }, steam: { netUnits: 3 }, googlePlay: { netPaidAppPurchases: 1 }, amazon: { netUnits: 3 }, combined: { paidUnits: 9 } };
+  assert.deepEqual(marketplaceChanges(previous, totals).amazon, { netUnits: 2 });
+  assert.equal(assertHistory({ schemaVersion: 1, snapshots: [previous] }).schemaVersion, 1);
+  assert.throws(() => assertPublicStats({ schemaVersion: 1, generatedAt: "2026-08-17T00:00:00.000Z", totals: { ...totals, combined: { paidUnits: 6 } }, change: { sincePreviousSnapshot: marketplaceChanges(previous, totals) }, projects: { itch: [], steam: [], googlePlay: [], amazon: [] }, futureProviders: [] }), /combined paid units/i);
+});
+
 test("catalogue URL mappings use current project data instead of duplicated titles", () => {
   const projects = [{ title: "Drink", links: [
     { url: "https://samfa12.itch.io/drink" },
