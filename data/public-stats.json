@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-23T04:25:52.740Z",
+  "generatedAt": "2026-08-24T06:27:30.448Z",
   "totals": {
     "itch": {
-      "views": 4041,
-      "downloads": 99,
+      "views": 4096,
+      "downloads": 100,
       "purchases": 2
     },
     "steam": {
@@ -13,12 +13,12 @@
       "netUnits": 19
     },
     "googlePlay": {
-      "grossPaidAppPurchases": 164,
-      "fullyRefundedPaidAppOrders": 33,
-      "netPaidAppPurchases": 131
+      "grossPaidAppPurchases": 166,
+      "fullyRefundedPaidAppOrders": 34,
+      "netPaidAppPurchases": 132
     },
     "combined": {
-      "paidUnits": 152
+      "paidUnits": 153
     },
     "amazon": {
       "netUnits": 11,
@@ -28,18 +28,18 @@
   "change": {
     "sincePreviousSnapshot": {
       "itch": {
-        "views": 0,
-        "downloads": 0,
+        "views": 55,
+        "downloads": 1,
         "purchases": 0
       },
       "steam": {
-        "netUnits": 19
+        "netUnits": 0
       },
       "googlePlay": {
-        "netPaidAppPurchases": 0
+        "netPaidAppPurchases": 1
       },
       "combined": {
-        "paidUnits": 19
+        "paidUnits": 1
       }
     }
   },
@@ -89,7 +89,7 @@
         "id": "4733073",
         "title": "Colossal (Amazon)",
         "url": "https://samfa12.itch.io/colossal",
-        "views": 6,
+        "views": 7,
         "downloads": 0,
         "purchases": 0
       },
@@ -113,7 +113,7 @@
         "id": "4616838",
         "title": "Dust on the River",
         "url": "https://samfa12.itch.io/dust-on-the-river",
-        "views": 184,
+        "views": 185,
         "downloads": 2,
         "purchases": 0
       },
@@ -121,7 +121,7 @@
         "id": "4541459",
         "title": "Free to a Good Home (Amazon)",
         "url": "https://samfa12.itch.io/free-to-a-good-home",
-        "views": 5,
+        "views": 6,
         "downloads": 0,
         "purchases": 0
       },
@@ -129,7 +129,7 @@
         "id": "4586971",
         "title": "Gremlin Grenade Pinball",
         "url": "https://samfa12.itch.io/gremlin-grenade-pinball",
-        "views": 56,
+        "views": 57,
         "downloads": 0,
         "purchases": 0
       },
@@ -137,7 +137,7 @@
         "id": "4469088",
         "title": "Hop Bunny",
         "url": "https://samfa12.itch.io/hop-bunny",
-        "views": 88,
+        "views": 90,
         "downloads": 4,
         "purchases": 1
       },
@@ -145,7 +145,7 @@
         "id": "4603629",
         "title": "Mandible Wars",
         "url": "https://samfa12.itch.io/mandible-wars",
-        "views": 110,
+        "views": 114,
         "downloads": 5,
         "purchases": 0
       },
@@ -161,7 +161,7 @@
         "id": "4497195",
         "title": "Night Shift at Possum's Cafe",
         "url": "https://samfa12.itch.io/possum-cafe",
-        "views": 365,
+        "views": 372,
         "downloads": 6,
         "purchases": 0
       },
@@ -169,7 +169,7 @@
         "id": "4638406",
         "title": "P.A.R.T.Y. Bus: Wasteland Run",
         "url": "https://samfa12.itch.io/party-bus",
-        "views": 77,
+        "views": 81,
         "downloads": 4,
         "purchases": 0
       },
@@ -177,7 +177,7 @@
         "id": "4632588",
         "title": "Pocket Ant Farm",
         "url": "https://samfa12.itch.io/ant-farm",
-        "views": 64,
+        "views": 66,
         "downloads": 0,
         "purchases": 0
       },
@@ -185,7 +185,7 @@
         "id": "4477883",
         "title": "Pocket Chordsmith Godot addon",
         "url": "https://samfa12.itch.io/pocket-chordsmith",
-        "views": 469,
+        "views": 470,
         "downloads": 22,
         "purchases": 0
       },
@@ -193,7 +193,7 @@
         "id": "4657904",
         "title": "Pocket DAW",
         "url": "https://samfa12.itch.io/pocket-daw",
-        "views": 166,
+        "views": 175,
         "downloads": 18,
         "purchases": 0
       },
@@ -209,7 +209,7 @@
         "id": "4617627",
         "title": "Pocket Fish Tank",
         "url": "https://samfa12.itch.io/fish-tank",
-        "views": 134,
+        "views": 137,
         "downloads": 4,
         "purchases": 0
       },
@@ -217,7 +217,7 @@
         "id": "4503097",
         "title": "Reckless Dentist",
         "url": "https://samfa12.itch.io/reckless-dentist",
-        "views": 147,
+        "views": 148,
         "downloads": 4,
         "purchases": 0
       },
@@ -241,7 +241,7 @@
         "id": "4509981",
         "title": "Spin Vector",
         "url": "https://samfa12.itch.io/spin-vector",
-        "views": 214,
+        "views": 217,
         "downloads": 0,
         "purchases": 0
       },
@@ -249,15 +249,15 @@
         "id": "4779911",
         "title": "The Horde — Ray Tracing Tech Demo",
         "url": "https://samfa12.itch.io/the-horde",
-        "views": 288,
-        "downloads": 17,
+        "views": 297,
+        "downloads": 18,
         "purchases": 0
       },
       {
         "id": "4776930",
         "title": "The Last Guard",
         "url": "https://samfa12.itch.io/the-last-guard",
-        "views": 184,
+        "views": 188,
         "downloads": 0,
         "purchases": 0
       },
@@ -281,7 +281,7 @@
         "id": "4567222",
         "title": "Wonky Vehicle Lab",
         "url": "https://samfa12.itch.io/wonky-vehicle-lab",
-        "views": 105,
+        "views": 107,
         "downloads": 0,
         "purchases": 0
       }
@@ -299,15 +299,15 @@
       {
         "packageId": "com.samsmall.drink",
         "title": "Drink",
-        "grossPaidAppPurchases": 50,
+        "grossPaidAppPurchases": 51,
         "fullyRefundedPaidAppOrders": 12,
-        "netPaidAppPurchases": 38
+        "netPaidAppPurchases": 39
       },
       {
         "packageId": "com.samsmall.possumcafe",
         "title": "Night Shift at Possum's Cafe",
-        "grossPaidAppPurchases": 10,
-        "fullyRefundedPaidAppOrders": 3,
+        "grossPaidAppPurchases": 11,
+        "fullyRefundedPaidAppOrders": 4,
         "netPaidAppPurchases": 7
       },
       {
