@@ -1,9 +1,8 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { assertHistory, assertPublicStats, equivalentMarketplaceSnapshot, loadMarketplaceConfig, marketplaceChanges, newSteamState, projectMappings, sanitizeSteamState, validateMarketplaceConfig } from "./marketplace/core.mjs";
+import { assertHistory, assertPublicStats, equivalentMarketplaceSnapshot, loadMarketplaceConfig, marketplaceChanges, projectMappings, validateMarketplaceConfig } from "./marketplace/core.mjs";
 import { collectItch } from "./marketplace/itch.mjs";
-import { collectSteam } from "./marketplace/steam.mjs";
 import { collectGooglePlay } from "./marketplace/google-play.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -13,18 +12,15 @@ if (missing.length) throw new Error(`Marketplace configuration is incomplete: ${
 
 const projects = JSON.parse(await readFile(path.join(root, "data", "projects.json"), "utf8"));
 const maps = projectMappings(projects);
-const statePath = path.join(root, "ops", "marketplace", "steam-state.json");
 const statsPath = path.join(root, "data", "public-stats.json");
 const historyPath = path.join(root, "data", "public-stats-history.json");
-const previousState = await readJsonOr(statePath, newSteamState());
 const previousStats = await readJsonOr(statsPath, { schemaVersion: 1, status: "uninitialised" });
 const previousHistory = await readJsonOr(historyPath, { schemaVersion: 1, snapshots: [] });
 assertPublicStats(previousStats);
 assertHistory(previousHistory);
 
-const [itch, steam, googlePlay] = await Promise.all([
+const [itch, googlePlay] = await Promise.all([
   collectItch({ apiKey: config.itchApiKey, projectNames: maps.itch }),
-  collectSteam({ apiKey: config.steamFinancialApiKey, state: previousState, projectNames: maps.steam }),
   collectGooglePlay({
     serviceAccountJson: config.googlePlayServiceAccountJson,
     serviceAccountJsonPath: config.googlePlayServiceAccountJsonPath,
@@ -33,6 +29,9 @@ const [itch, steam, googlePlay] = await Promise.all([
   }),
 ]);
 
+// Steam is refreshed only through the owner-exported CSV importer. Retain its
+// existing sanitised baseline so a Steam API outage cannot block other stores.
+const steam = { totals: previousStats.totals.steam, projects: previousStats.projects.steam };
 const generatedAt = new Date().toISOString();
 const totals = {
   itch: itch.totals,
@@ -62,7 +61,6 @@ const history = {
 assertHistory(history);
 
 await writeBundle([
-  [statePath, JSON.stringify(sanitizeSteamState(steam.state), null, 2) + "\n"],
   [statsPath, JSON.stringify(publicStats, null, 2) + "\n"],
   [historyPath, JSON.stringify(history, null, 2) + "\n"],
 ]);

@@ -1,8 +1,9 @@
 # Public marketplace statistics
 
-The weekly **Samfa12 by the Numbers** update publishes sanitised, lifetime
-aggregate unit counts from itch.io, Steam, and Google Play, plus manually
-imported Amazon KDP book figures. It is separate from
+The weekly **Samfa12 by the Numbers** update refreshes sanitised, lifetime
+aggregate unit counts from itch.io and Google Play. Steam stays at an
+owner-imported sanitised sales-CSV baseline, and Amazon KDP book figures are
+also manually imported. This is separate from
 the local Clarity/Cloudflare site-analytics bridge described in
 [`ANALYTICS.md`](ANALYTICS.md).
 
@@ -26,8 +27,8 @@ compact, sanitised snapshots for week-over-week changes and the dashboard's
 aggregate trend. Current headline values are:
 
 - itch.io: lifetime views, downloads, and purchases for published projects.
-- Steam: gross, returned, and authoritative net **game units sold** from Steam
-  package sales only.
+- Steam: gross, returned, and net **game units sold** from the latest
+  owner-imported Steam package-sales CSV baseline.
 - Google Play: gross paid-app purchases, fully refunded paid-app orders, and
   net paid-app purchases.
 - Amazon KDP: per-book net units and KENP pages read from manually downloaded
@@ -67,7 +68,6 @@ collector accepts a Google credential either as a local path or direct JSON:
 
 ```text
 ITCH_API_KEY=...
-STEAM_FINANCIAL_API_KEY=...
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH=/absolute/path/to/service-account.json
 # Or: GOOGLE_PLAY_SERVICE_ACCOUNT_JSON={...}
 # Copy this exact non-secret bucket URI from Play Console > Download reports > Financial.
@@ -92,21 +92,22 @@ npm run validate:site
 `marketplace:check` reports missing/invalid variable names without printing
 values, then confirms that the Google service account can enumerate the
 configured Financial sales reports before the updater calls the other providers.
-`marketplace:update` is atomic: an authentication, network, parsing, or privacy
-validation failure leaves the existing public data, history, and sanitised Steam
-state unchanged. A valid zero is not an error.
+`marketplace:update` refreshes itch.io and Google Play while retaining the
+existing sanitised Steam baseline. It is atomic: an authentication, network,
+parsing, or privacy-validation failure leaves the existing public data and
+history unchanged. A valid zero is not an error.
 `marketplace:verify-providers` checks itch.io and Steam only, reports
 sanitised aggregate counters, and never writes state or public data. It is for
-connection verification while an all-provider update is pending.
+manual connection verification only; it is not part of the scheduled update.
 The manual **Verify itch.io and Steam marketplace access** workflow also accepts
 an optional `steam_debug_date` (YYYY-MM-DD). It requests that date's Steam
 detail report read-only and logs only its sanitised gross, returned, and net
 unit totals. Use it to compare a known date from Steamworks with API access;
 it does not backfill or publish data.
 
-If Steam financial API access is unavailable but an owner has exported an
-authoritative Steam Sales CSV, the one-time, local import command below can
-publish a sanitised baseline. It reads the CSV outside the repository, retains
+Steam financial API access is not part of the scheduled update. When the owner
+exports an authoritative Steam Sales CSV, the local import command below can
+refresh the sanitised baseline. It reads the CSV outside the repository, retains
 only direct `Steam` package unit counts, excludes `Retail` activations and all
 financial/identifying fields, and resets the Steam high-watermark to `0` so a
 future working API can authoritatively refresh the full history:
@@ -116,8 +117,8 @@ npm run marketplace:import-steam-csv -- --csv "C:\path\to\SteamSales.csv" --app-
 ```
 
 Review and commit only the resulting public data, history, and sanitised Steam
-state—never the downloaded CSV. This is a baseline, not a substitute for a
-working ongoing API integration.
+state—never the downloaded CSV. This baseline remains published until the next
+owner-exported CSV import.
 
 The collectors use official server-side/provider report APIs only. itch earnings
 and Steam financial fields are discarded during normalisation. Google order
@@ -130,15 +131,14 @@ The `Update public marketplace statistics` workflow runs on Sunday 21:00 UTC,
 approximately Monday morning in Australia/Sydney, and can also be started from
 **Actions → Update public marketplace statistics → Run workflow**. It serialises
 runs, validates generated data before committing, and commits only changed
-public datasets and sanitised Steam state. The regular Pages workflow deploys
-the resulting main-branch change; this workflow does not deploy Pages itself.
+public datasets/history. The regular Pages workflow deploys the resulting
+main-branch change; this workflow does not deploy Pages itself.
 
-Create these three repository secrets in **GitHub → repository → Settings →
+Create these two repository secrets in **GitHub → repository → Settings →
 Secrets and variables → Actions**:
 
 ```text
 ITCH_API_KEY
-STEAM_FINANCIAL_API_KEY
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
 ```
 
@@ -166,7 +166,7 @@ cannot commit or publish partial statistics.
 itch API keys are powerful long-lived credentials. Treat one as a password: do
 not commit, email, share, or print it.
 
-### Steam
+### Steam (optional manual diagnostic)
 
 1. Sign in to Steamworks with the Samfa12 partner account.
 2. Open **Manage Groups** and create a **Financial API Group**.
@@ -177,8 +177,9 @@ not commit, email, share, or print it.
 5. Create the `STEAM_FINANCIAL_API_KEY` Actions secret and paste it as its
    value.
 
-This key can read financial reporting across the partner account. Never
-email/share it. Valve recommends IP whitelisting Financial API keys, but
+This key is only required when manually running **Verify itch.io and Steam
+marketplace access**. It is not used by the scheduled public-stats workflow.
+Never email/share it. Valve recommends IP whitelisting Financial API keys, but
 GitHub-hosted runners have no single permanent egress IP. Do not configure a
 pretend/static GitHub Actions IP. Revisit IP whitelisting if this workflow moves
 to a self-hosted runner or another runner with known static egress.
@@ -214,11 +215,10 @@ Financial Cloud Storage URI again, then check that the service account is
 invited in Play Console and has both Global permissions above before rerunning
 the workflow.
 
-## First successful run
+## Scheduled update
 
-No live collection is possible until the three Actions secrets exist. Once they
-are configured, manually run **Update public marketplace statistics**. Its first
-successful collection retrieves published itch projects, starts Steam at
-high-watermark `0`, reads all available Google Play `salesreport_YYYYMM.zip`
-reports, creates the first public dataset/history snapshot and sanitised Steam
-state, commits them, and allows the normal Pages workflow to publish the update.
+Once the two scheduled-workflow secrets are configured, run **Update public
+marketplace statistics**. It retrieves published itch projects and all available
+Google Play `salesreport_YYYYMM.zip` reports, retains the existing sanitised
+Steam baseline, commits changed public data/history, and lets the normal Pages
+workflow publish the update.

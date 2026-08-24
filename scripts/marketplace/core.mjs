@@ -42,7 +42,8 @@ export async function loadMarketplaceConfig({ cwd = process.cwd(), env = process
 }
 
 export function validateMarketplaceConfig(config) {
-  const missing = validateItchAndSteamConfig(config);
+  const missing = [];
+  if (!config.itchApiKey) missing.push("ITCH_API_KEY");
   if (!config.googlePlayServiceAccountJson && !config.googlePlayServiceAccountJsonPath) {
     missing.push("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON or GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH");
   }

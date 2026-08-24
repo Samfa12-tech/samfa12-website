@@ -16,8 +16,8 @@ const statePath = path.join(root, "ops", "marketplace", "steam-state.json");
 const existingState = sanitizeSteamState(await readJsonOr(statePath, newSteamState()));
 const steamProbeDate = parseSteamProbeDate(process.env.STEAM_DEBUG_DATE);
 
-// This intentionally performs no writes. The normal three-provider updater is
-// the only path that can advance the Steam high-watermark or publish totals.
+// This intentionally performs no writes. Steam refreshes are published only
+// through the owner-exported CSV importer, not this diagnostic command.
 const [itch, steam, steamProbeDaily] = await Promise.all([
   collectItch({ apiKey: config.itchApiKey, projectNames: maps.itch }),
   collectSteam({ apiKey: config.steamFinancialApiKey, state: existingState, projectNames: maps.steam }),

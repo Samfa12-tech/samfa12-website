@@ -175,6 +175,17 @@ test("Google Play configuration rejects missing, non-Play, and non-sales report 
   assert.match(validateMarketplaceConfig({ ...complete, googlePlaySalesUri: "gs://unrelated-bucket/sales/" }).join(", "), /GOOGLE_PLAY_SALES_URI/);
 });
 
+test("scheduled marketplace updates do not require Steam API access", () => {
+  const config = {
+    itchApiKey: "itch",
+    steamFinancialApiKey: "",
+    googlePlayServiceAccountJson: "{}",
+    googlePlayServiceAccountJsonPath: "",
+    googlePlaySalesUri: "gs://pubsite_prod_123456/sales/",
+  };
+  assert.deepEqual(validateMarketplaceConfig(config), []);
+});
+
 test("Google Play report enumeration returns matching reports and sanitises storage list denial", async () => {
   const report = { name: "sales/salesreport_202608.zip" };
   const storage = { bucket: (bucket) => ({ getFiles: async ({ prefix }) => {
