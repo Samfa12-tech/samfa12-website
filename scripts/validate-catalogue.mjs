@@ -79,6 +79,14 @@ function normalizeRecord(record, index) {
     }
   });
 
+  if (record.detailUrl !== undefined) {
+    if (!isSafeLocalUrl(record.detailUrl)) {
+      errors.push(`${title || `Record ${index + 1}`} detailUrl must be a safe root-relative URL.`);
+    } else if (!localUrlExists(record.detailUrl)) {
+      errors.push(`${title} detailUrl points to a missing local route: ${record.detailUrl}`);
+    }
+  }
+
   const thumbnail = record.thumbnail ?? record.image;
   if (!isSafeThumbnail(thumbnail)) {
     errors.push(`${title || `Record ${index + 1}`} has an unsafe thumbnail path: ${thumbnail}`);
@@ -170,6 +178,13 @@ if (!whatWouldWin) {
   errors.push("What Would Win is missing from data/projects.json.");
 } else if (!isInCatalogue(whatWouldWin, "Games") || !whatWouldWin.validLinks.some((link) => link.url === "/apps/what-would-win/")) {
   errors.push("What Would Win must appear in Games and link to /apps/what-would-win/.");
+}
+
+const briarhold = projects.find((project) => project.title === "Briarhold");
+if (!briarhold) {
+  errors.push("Briarhold is missing from data/projects.json.");
+} else if (!isInCatalogue(briarhold, "Games") || briarhold.detailUrl !== "/games/briarhold/") {
+  errors.push("Briarhold must appear in Games and link to /games/briarhold/.");
 }
 
 if (warnings.length) {

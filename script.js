@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260824-1";
+  const DATA_VERSION = "20260830-4";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -28,6 +28,16 @@
       links: [{ label: "Play now", url: "/games/cursed-cutter/" }],
       sortOrder: 3.5,
       thumbnail: "assets/thumbnails/cursed-cutter-icon.webp",
+    },
+    {
+      title: "Briarhold",
+      category: "Games",
+      type: "Spiritual sequel to The Last Guard",
+      status: "Coming soon",
+      description: "A first-person action-defence roguelite about holding an old fortress against the Briar Host.",
+      detailUrl: "/games/briarhold/",
+      sortOrder: 25,
+      thumbnail: "assets/thumbnails/briarhold-samfa12-icon-512.webp",
     },
     {
       title: "ToKnight",
@@ -453,6 +463,7 @@
       type: String(project.type || "Project"),
       status: String(project.status || "Available"),
       description: String(project.description || ""),
+      detailUrl: safeUrl(project.detailUrl),
       tags: Array.isArray(project.tags) ? project.tags.filter((tag) => typeof tag === "string" && tag.trim()) : [],
       catalogues,
       links,
@@ -588,13 +599,45 @@
     const isSpotlight = variant === "spotlight";
     const size = isFeatured ? getHomepageSize(project, index) : "standard";
     const primaryLink = getPrimaryLink(project);
+    const detailUrl = safeUrl(project.detailUrl);
     const article = createElement("article", {
       className: `project-card project-card-${variant} card-size-${size}`.trim(),
       dataset: {
         accent: getAccent(project, index),
         reveal: "",
+        detailUrl: detailUrl || false,
       },
+      tabIndex: detailUrl ? 0 : false,
     });
+
+    if (detailUrl) {
+      article.classList.add("project-card-linkable");
+      article.addEventListener("click", (event) => {
+        if (event.defaultPrevented || event.target.closest("a, button, input, select, textarea")) return;
+        window.location.href = detailUrl;
+      });
+      article.addEventListener("keydown", (event) => {
+        if (event.target !== article || !["Enter", " "].includes(event.key)) return;
+        event.preventDefault();
+        window.location.href = detailUrl;
+      });
+    }
+
+    const title = createElement("h3");
+    if (detailUrl) {
+      title.append(createElement("a", {
+        className: "project-card-title-link",
+        href: detailUrl,
+        text: project.title,
+        dataset: {
+          projectTitle: project.title,
+          projectCategory: project.category,
+          linkLabel: "View game page",
+        },
+      }));
+    } else {
+      title.textContent = project.title;
+    }
 
     appendChildren(article, [
       projectThumbnail(project, (isFeatured || isSpotlight) && index === 0),
@@ -602,7 +645,7 @@
         className: "project-label",
         text: `${project.type}${isFeatured || isSpotlight ? ` // ${project.category}` : ""}`,
       }),
-      createElement("h3", { text: project.title }),
+      title,
       createElement("p", { className: "card-description", text: project.description }),
     ]);
 
@@ -619,15 +662,19 @@
       article.append(labels);
     }
 
-    if (primaryLink) {
+    if (primaryLink || detailUrl) {
       const actions = createElement("div", {
         className: "project-actions",
         role: "group",
         "aria-label": `${project.title} links`,
       });
-      actions.append(projectLink(primaryLink, project, true));
+      if (primaryLink) {
+        actions.append(projectLink(primaryLink, project, true));
+      } else {
+        actions.append(projectLink({ label: "View game page", url: detailUrl }, project, true));
+      }
 
-      if (!isFeatured && !isSpotlight) {
+      if (primaryLink && !isFeatured && !isSpotlight) {
         project.links.slice(1).forEach((link) => {
           const node = projectLink(link, project, false);
           if (node) actions.append(node);
@@ -726,7 +773,7 @@
   }
 
   function selectHomeProjects(projects) {
-    const valid = projects.filter((project) => getPrimaryLink(project));
+    const valid = projects.filter((project) => getPrimaryLink(project) || safeUrl(project.detailUrl));
     const selected = valid
       .filter((project) => getHomepageRank(project) || project.featured === true)
       .sort((a, b) => homepageWeight(a) - homepageWeight(b) || byTitle(a, b));
@@ -1940,7 +1987,7 @@
   }
 
   function initializeReveals(root = document) {
-    const elements = root.querySelectorAll(".section, .page-hero, .project-card, .mini-lab-card, .nav-tile, .workflow-card, .link-group");
+    const elements = root.querySelectorAll(".section, .page-hero, .project-card, .mini-lab-card, .nav-tile, .workflow-card, .link-group, [data-reveal]");
     elements.forEach((element) => {
       if (!element.hasAttribute("data-reveal")) element.setAttribute("data-reveal", "");
       const rect = element.getBoundingClientRect();

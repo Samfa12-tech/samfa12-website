@@ -8,6 +8,7 @@ const corePages = [
   "index.html",
   "404.html",
   "games/index.html",
+  "games/briarhold/index.html",
   "books/index.html",
   "pocket-audio/index.html",
   "apps/index.html",
@@ -22,6 +23,7 @@ const requiredSitemapRoutes = [
   "/",
   "/games/",
   "/games/cursed-cutter/",
+  "/games/briarhold/",
   "/books/",
   "/pocket-audio/",
   "/apps/",
@@ -69,7 +71,11 @@ for (const relativePath of corePages) {
   }
   if ((html.match(/<h1\b/gi) || []).length !== 1) fail(`${relativePath}: expected exactly one h1`);
   if (relativePath !== "404.html" && !html.includes('href="/privacy/"')) fail(`${relativePath}: missing privacy link`);
-  if (relativePath !== "404.html" && !html.includes("og-image-v2.png")) fail(`${relativePath}: missing current social card`);
+  if (relativePath === "games/briarhold/index.html") {
+    if (!html.includes("briarhold-key-art.png")) fail(`${relativePath}: missing Briarhold social card`);
+  } else if (relativePath !== "404.html" && !html.includes("og-image-v2.png")) {
+    fail(`${relativePath}: missing current social card`);
+  }
 
   const ids = [...html.matchAll(/\bid=["']([^"']+)["']/gi)].map((match) => match[1]);
   for (const id of new Set(ids)) {

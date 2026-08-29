@@ -1256,6 +1256,32 @@ h3 {
   box-shadow: 0 28px 74px rgba(0, 0, 0, 0.34), 0 0 34px color-mix(in srgb, var(--card-accent, var(--cyan)), transparent 82%);
 }
 
+.project-card-linkable {
+  cursor: pointer;
+}
+
+.project-card-linkable:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 4px;
+}
+
+.project-card-title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-card-title-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.12em;
+}
+
+.project-card-title-link:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+  border-radius: 0.15em;
+}
+
 .project-card:hover .project-image,
 .project-card:focus-within .project-image {
   transform: scale(1.03);
@@ -1666,6 +1692,221 @@ body[data-page="apps"] .project-card-catalogue {
 
 .page-hero .hero-actions {
   margin-top: var(--space-2);
+}
+
+.game-detail-hero {
+  position: relative;
+  min-height: min(720px, 78vh);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  isolation: isolate;
+  border-bottom: 1px solid var(--line);
+  background: #07151a;
+}
+
+.game-detail-hero-art,
+.game-detail-hero-scrim {
+  position: absolute;
+  inset: 0;
+}
+
+.game-detail-hero-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.game-detail-hero-scrim {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(3, 8, 14, 0.9) 0%, rgba(3, 8, 14, 0.66) 42%, rgba(3, 8, 14, 0.2) 100%),
+    linear-gradient(0deg, rgba(3, 8, 14, 0.92) 0%, rgba(3, 8, 14, 0.1) 54%, rgba(3, 8, 14, 0.3) 100%);
+}
+
+.game-detail-hero-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-4);
+  width: min(100% - 2rem, var(--content-width));
+  padding-top: var(--space-7);
+  padding-bottom: var(--space-7);
+}
+
+.game-back-link {
+  justify-self: start;
+  color: var(--text);
+}
+
+.game-detail-hero h1 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(3.5rem, 11vw, 8rem);
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+}
+
+.game-detail-lead {
+  max-width: 700px;
+  margin: 0;
+  color: #e3f4f0;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+}
+
+.game-detail-meta,
+.game-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: stretch;
+}
+
+.game-detail-actions {
+  margin-top: var(--space-2);
+}
+
+.game-future-action {
+  display: grid;
+  justify-items: start;
+  gap: 0.18rem;
+  min-width: 190px;
+  text-align: left;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.game-future-action:disabled {
+  opacity: 1;
+  color: var(--text);
+}
+
+.game-future-action .game-action-note {
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.game-detail-section {
+  padding-top: var(--space-7);
+}
+
+.game-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.game-detail-panel {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  min-height: 100%;
+  padding: var(--space-6);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(circle at top right, rgba(85, 231, 255, 0.1), transparent 42%),
+    var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.game-detail-panel h2 {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: var(--step-2);
+  line-height: 1.04;
+}
+
+.game-detail-panel p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.game-detail-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-detail-list li {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  color: var(--muted);
+}
+
+.game-detail-list li::before {
+  content: "//";
+  color: var(--cyan);
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 700;
+}
+
+.game-detail-facts {
+  background:
+    radial-gradient(circle at 85% 12%, rgba(207, 163, 255, 0.13), transparent 42%),
+    var(--surface);
+}
+
+.game-detail-facts dl {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.game-detail-facts dt {
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.game-detail-facts dd {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+.game-screenshots-section {
+  padding-top: var(--space-7);
+}
+
+.game-screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.game-screenshot-card {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.game-screenshot-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #07151a;
+}
+
+.game-screenshot-card figcaption {
+  padding: var(--space-3) var(--space-4);
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .join-hero .hero-inner {
@@ -2261,7 +2502,7 @@ body[data-page="apps"] .project-card-catalogue {
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1080px) {
   :root {
     --header-height: 74px;
     --step-hero: 4.3rem;
@@ -2454,6 +2695,38 @@ body[data-page="apps"] .project-card-catalogue {
   .nav-tile,
   .link-group,
   .workflow-card {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  .game-detail-hero {
+    min-height: 680px;
+  }
+
+  .game-detail-hero-art img {
+    object-position: 58% center;
+  }
+
+  .game-detail-hero-inner {
+    width: min(100% - 1rem, var(--content-width));
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .game-detail-actions,
+  .game-detail-actions .button {
+    width: 100%;
+  }
+
+  .game-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-screenshot-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-detail-panel {
     padding: var(--space-4);
     border-radius: var(--radius-md);
   }
