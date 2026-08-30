@@ -40,6 +40,22 @@ const hostedAppPages = [
     canonical: "https://samfa12.com/apps/what-would-win/",
   },
 ];
+const sharePages = [
+  "index.html",
+  "games/index.html",
+  "games/briarhold/index.html",
+  "books/index.html",
+  "pocket-audio/index.html",
+  "apps/index.html",
+  "music/index.html",
+];
+const shareExcludedPages = [
+  "404.html",
+  "links/index.html",
+  "join/index.html",
+  "privacy/index.html",
+  "stats/index.html",
+];
 const failures = [];
 
 function fail(message) {
@@ -91,6 +107,45 @@ for (const relativePath of corePages) {
     const target = localTarget(filePath, tag[1]);
     if (target && !fs.existsSync(target)) fail(`${relativePath}: missing local reference ${tag[1]}`);
   }
+}
+
+for (const relativePath of sharePages) {
+  const filePath = path.join(root, relativePath);
+  if (!fs.existsSync(filePath)) {
+    fail(`${relativePath}: missing share-enabled page`);
+    continue;
+  }
+  const html = fs.readFileSync(filePath, "utf8");
+  if ((html.match(/data-share-tools\b/gi) || []).length !== 1) {
+    fail(`${relativePath}: expected exactly one share-tools group`);
+  }
+  for (const action of ["native", "x", "facebook"]) {
+    if ((html.match(new RegExp(`data-share-action=["']${action}["']`, "gi")) || []).length !== 1) {
+      fail(`${relativePath}: expected exactly one ${action} share action`);
+    }
+  }
+  if (!html.includes('data-share-status') || !html.includes('role="status"')) {
+    fail(`${relativePath}: missing share status region`);
+  }
+  if (!html.includes('data-share-icon="share"') || !html.includes('data-share-icon="x"') || !html.includes('data-share-icon="facebook"')) {
+    fail(`${relativePath}: missing one or more share icons`);
+  }
+  if (html.includes('data-share-action="copy"') || html.includes('Copy link')) {
+    fail(`${relativePath}: copy link must remain a fallback, not a visible share action`);
+  }
+  if (!html.includes('href="https://x.com/intent/tweet"')) {
+    fail(`${relativePath}: missing X share intent base URL`);
+  }
+  if (!html.includes('href="https://www.facebook.com/sharer/sharer.php"')) {
+    fail(`${relativePath}: missing Facebook share base URL`);
+  }
+}
+
+for (const relativePath of shareExcludedPages) {
+  const filePath = path.join(root, relativePath);
+  if (!fs.existsSync(filePath)) continue;
+  const html = fs.readFileSync(filePath, "utf8");
+  if (/data-share-tools\b/i.test(html)) fail(`${relativePath}: utility page must not contain share tools`);
 }
 
 for (const app of hostedAppPages) {

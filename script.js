@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260830-4";
+  const DATA_VERSION = "20260830-7";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -257,6 +257,150 @@
     } catch {
       return "";
     }
+  }
+
+  function createSvgElement(tagName, attributes = {}) {
+    const element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (value === false || value === null || value === undefined) return;
+      element.setAttribute(key === "className" ? "class" : key, value === true ? "" : String(value));
+    });
+    return element;
+  }
+
+  function createShareIcon(name) {
+    const svg = createSvgElement("svg", {
+      className: "share-icon-svg",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      "aria-hidden": "true",
+      focusable: "false",
+    });
+
+    if (name === "share") {
+      appendChildren(svg, [
+        createSvgElement("path", { d: "M8.5 12.5 15.5 8.5M8.5 11.5l7 4M18 7a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM6 15a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm12 7a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z", stroke: "currentColor", "stroke-width": "1.8", "stroke-linecap": "round", "stroke-linejoin": "round" }),
+      ]);
+    } else if (name === "x") {
+      appendChildren(svg, [
+        createSvgElement("path", { fill: "currentColor", d: "M18.9 2H22l-6.77 7.74L23.2 22h-6.25l-4.9-6.39L6.46 22H3.35l7.24-8.28L2.8 2h6.41l4.43 5.86L18.9 2Zm-1.1 17.9h1.73L8.2 4H6.34l11.46 15.9Z" }),
+      ]);
+    } else if (name === "facebook") {
+      appendChildren(svg, [
+        createSvgElement("path", { fill: "currentColor", d: "M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.87.24-1.46 1.5-1.46h1.7V4a22 22 0 0 0-2.48-.13c-2.45 0-4.12 1.5-4.12 4.27V10H7.4v3h2.7v8h3.4Z" }),
+      ]);
+    } else {
+      appendChildren(svg, [
+        createSvgElement("rect", { x: "7", y: "7", width: "11", height: "13", rx: "1.5", stroke: "currentColor", "stroke-width": "1.8" }),
+        createSvgElement("path", { d: "M16 7V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v10A1.5 1.5 0 0 0 5.5 17H7", stroke: "currentColor", "stroke-width": "1.8", "stroke-linecap": "round" }),
+      ]);
+    }
+
+    return svg;
+  }
+
+  function getMetaContent(selector) {
+    return document.querySelector(selector)?.getAttribute("content")?.trim() || "";
+  }
+
+  function getSharePageData() {
+    const canonical = safeUrl(document.querySelector('link[rel="canonical"]')?.getAttribute("href")) || window.location.href;
+    const title = getMetaContent('meta[property="og:title"]') || document.title.trim();
+    const description = getMetaContent('meta[property="og:description"]') || getMetaContent('meta[name="description"]');
+    return {
+      title,
+      description,
+      url: canonical,
+      xText: [title, description].filter(Boolean).join(" — ").slice(0, 220),
+    };
+  }
+
+  function buildShareUrl(base, parameters) {
+    const url = new URL(base);
+    Object.entries(parameters).forEach(([key, value]) => {
+      if (value) url.searchParams.set(key, value);
+    });
+    return url.href;
+  }
+
+  function setShareStatus(status, message) {
+    if (!status) return;
+    window.clearTimeout(status.shareStatusTimer);
+    status.textContent = message;
+    status.shareStatusTimer = window.setTimeout(() => {
+      status.textContent = "";
+    }, 5000);
+  }
+
+  async function copyShareUrl(url) {
+    const clipboard = typeof navigator !== "undefined" ? navigator.clipboard : null;
+    if (clipboard && typeof clipboard.writeText === "function") {
+      try {
+        await clipboard.writeText(url);
+        return true;
+      } catch {
+        // Continue to the local textarea fallback.
+      }
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = url;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, textarea.value.length);
+    let copied = false;
+    try {
+      copied = document.execCommand("copy");
+    } catch {
+      copied = false;
+    }
+    textarea.remove();
+    return copied;
+  }
+
+  async function handleNativeShare(pageData, status) {
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: pageData.title, text: pageData.description || pageData.title, url: pageData.url });
+        setShareStatus(status, "Shared.");
+        return;
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+      }
+    }
+
+    const copied = await copyShareUrl(pageData.url);
+    setShareStatus(status, copied ? "Link copied." : "Share unavailable. Copy the link from your browser.");
+  }
+
+  function initializeShareTools() {
+    const shareTools = document.querySelectorAll("[data-share-tools]");
+    if (!shareTools.length) return;
+
+    const pageData = getSharePageData();
+    const xUrl = buildShareUrl("https://x.com/intent/tweet", { text: pageData.xText, url: pageData.url });
+    const facebookUrl = buildShareUrl("https://www.facebook.com/sharer/sharer.php", { u: pageData.url });
+
+    shareTools.forEach((container) => {
+      const status = container.querySelector("[data-share-status]");
+      const xLink = container.querySelector('[data-share-action="x"]');
+      const facebookLink = container.querySelector('[data-share-action="facebook"]');
+      const nativeButton = container.querySelector('[data-share-action="native"]');
+
+      container.querySelectorAll("[data-share-icon]").forEach((icon) => {
+        icon.appendChild(createShareIcon(icon.dataset.shareIcon));
+      });
+      if (xLink) xLink.href = xUrl;
+      if (facebookLink) facebookLink.href = facebookUrl;
+      nativeButton?.addEventListener("click", () => {
+        void handleNativeShare(pageData, status);
+      });
+    });
   }
 
   function readAnalyticsConsent() {
@@ -2187,6 +2331,7 @@
     initializeNavigation();
     initializeAnalyticsPreferences();
     initializeGameOverlay();
+    initializeShareTools();
     initializeReveals();
     renderLoadingState();
 

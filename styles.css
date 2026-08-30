@@ -460,6 +460,7 @@ h3 {
 .surprise-button,
 .footer-surprise,
 .filter-btn,
+.share-action,
 .audio-pad,
 .stop-audio {
   display: inline-flex;
@@ -503,6 +504,109 @@ h3 {
 .button-subtle {
   border-color: rgba(255, 182, 110, 0.38);
   color: var(--spark);
+}
+
+.share-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+  margin-top: var(--space-2);
+}
+
+.share-tools-label,
+.share-tools-status {
+  margin: 0;
+}
+
+.share-tools-label {
+  color: rgba(217, 225, 242, 0.62);
+  font-family: "IBM Plex Mono", "Space Mono", Consolas, monospace;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.share-tools-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.share-action {
+  gap: 0.42rem;
+  border-color: rgba(217, 225, 242, 0.24);
+  background: rgba(17, 26, 45, 0.38);
+  color: rgba(217, 225, 242, 0.78);
+  padding: 0.52rem 0.72rem;
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.share-action:hover,
+.share-action:focus-visible {
+  border-color: rgba(85, 231, 255, 0.7);
+  background: rgba(85, 231, 255, 0.12);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+.share-action[data-share-action="native"] {
+  border-color: rgba(85, 231, 255, 0.34);
+  background: rgba(85, 231, 255, 0.07);
+  color: rgba(157, 240, 255, 0.9);
+}
+
+.share-action[data-share-action="x"] .share-icon {
+  color: var(--text);
+}
+
+.share-action[data-share-action="facebook"] .share-icon {
+  color: #8bc9ff;
+}
+
+.share-icon {
+  display: inline-flex;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 1.05rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-icon-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+}
+
+.share-action[data-share-action="native"] .share-icon-svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.share-action[data-share-action="x"] .share-icon-svg path,
+.share-action[data-share-action="facebook"] .share-icon-svg path {
+  fill: currentColor;
+}
+
+.share-icon-svg path,
+.share-icon-svg rect {
+  vector-effect: non-scaling-stroke;
+}
+
+.share-tools-status {
+  flex-basis: 100%;
+  min-height: 0;
+  color: var(--green);
+  font-size: var(--step--1);
+}
+
+.share-tools-status:empty {
+  display: none;
 }
 
 .button[aria-disabled="true"],
@@ -1767,6 +1871,10 @@ body[data-page="apps"] .project-card-catalogue {
   margin-top: var(--space-2);
 }
 
+.share-tools-detail {
+  max-width: 760px;
+}
+
 .game-future-action {
   display: grid;
   justify-items: start;
@@ -2718,6 +2826,10 @@ body[data-page="apps"] .project-card-catalogue {
     width: 100%;
   }
 
+  .share-action {
+    flex: 1 1 10rem;
+  }
+
   .game-detail-grid {
     grid-template-columns: 1fr;
   }
@@ -2779,6 +2891,11 @@ body[data-page="apps"] .project-card-catalogue {
     font-size: 1rem;
   }
 
+  .share-action {
+    flex-basis: 100%;
+    white-space: nowrap;
+  }
+
   .fullscreen-game-toolbar {
     align-items: flex-start;
     flex-direction: column;
@@ -2827,6 +2944,7 @@ body[data-page="apps"] .project-card-catalogue {
   .surprise-button,
   .footer-surprise,
   .project-link,
+  .share-action,
   .audio-pad,
   .stop-audio {
     border: 1px solid ButtonText;

@@ -14,6 +14,7 @@ const htmlFiles = [
   "index.html",
   "404.html",
   "games/index.html",
+  "games/briarhold/index.html",
   "books/index.html",
   "pocket-audio/index.html",
   "apps/index.html",
