@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-30T21:19:13.155Z",
+  "generatedAt": "2026-08-30T21:29:39.109Z",
   "totals": {
     "itch": {
       "views": 4206,
@@ -18,11 +18,11 @@
       "netPaidAppPurchases": 180
     },
     "amazon": {
-      "netUnits": 13,
+      "netUnits": 14,
       "pagesRead": 2781
     },
     "combined": {
-      "paidUnits": 214
+      "paidUnits": 215
     }
   },
   "change": {
@@ -39,10 +39,10 @@
         "netPaidAppPurchases": 48
       },
       "combined": {
-        "paidUnits": 48
+      "paidUnits": 49
       },
       "amazon": {
-        "netUnits": 0
+        "netUnits": 1
       }
     }
   },
@@ -353,7 +353,7 @@
       },
       {
         "title": "Free to a Good Home",
-        "netUnits": 2,
+        "netUnits": 3,
         "pagesRead": 691
       },
       {
