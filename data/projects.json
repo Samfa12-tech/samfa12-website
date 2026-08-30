@@ -1072,15 +1072,20 @@
     "title": "Briarhold",
     "category": "Games",
     "type": "Spiritual sequel to The Last Guard",
-    "status": "Coming soon",
-    "description": "A spiritual sequel to The Last Guard, Briarhold is an upcoming multiplayer co-op first-person action-defence roguelite. Explore the old stone together, prepare repairable defences between attacks, then combine weapons and tactics when the Briar Host reaches the walls.",
+    "status": "Alpha test",
+    "description": "A spiritual sequel to The Last Guard, Briarhold is a multiplayer co-op first-person action-defence roguelite in Android alpha testing. Explore the old stone together, prepare repairable defences between attacks, then combine weapons and tactics when the Briar Host reaches the walls.",
     "tags": [
       "Multiplayer Co-op",
       "Action Defence",
       "Spiritual sequel to The Last Guard"
     ],
     "featured": false,
-    "links": [],
+    "links": [
+      {
+        "label": "Download Alpha.91",
+        "url": "/games/briarhold/"
+      }
+    ],
     "detailUrl": "/games/briarhold/",
     "sortOrder": 25,
     "thumbnail": "assets/thumbnails/briarhold-samfa12-icon-512.webp",
