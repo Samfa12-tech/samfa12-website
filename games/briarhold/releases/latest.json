@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 92,
-  "versionName": "0.3.0-alpha.92",
-  "title": "Alpha.92 is available",
-  "notes": "Wicker routing and Mossguard presentation are stable, Sporewings are reachable by the knife, boons have type icons, and Android reports reach the private relay.",
+  "versionCode": 93,
+  "versionName": "0.3.0-alpha.93",
+  "title": "Alpha.93 is available",
+  "notes": "Android reports now load anti-spam verification correctly; Wicker routing, Mossguard presentation, Sporewing knife targeting, and boon type icons remain included.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
