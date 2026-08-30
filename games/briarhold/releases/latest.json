@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 90,
-  "versionName": "0.3.0-alpha.90",
-  "title": "Alpha.90 is current",
-  "notes": "Private tester build with field-gate collision, east-gate vitality, flying-enemy targeting, report UI, and update-prompt repairs.",
+  "versionCode": 91,
+  "versionName": "0.3.0-alpha.91",
+  "title": "Alpha.91 is available",
+  "notes": "Sporewings now visibly clear the outer gate, Sunfire Pots detonate when shot, and Mossguard combat animations no longer jump or disappear.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
