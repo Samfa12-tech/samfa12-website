@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 91,
-  "versionName": "0.3.0-alpha.91",
-  "title": "Alpha.91 is available",
-  "notes": "Sporewings now visibly clear the outer gate, Sunfire Pots detonate when shot, and Mossguard combat animations no longer jump or disappear.",
+  "versionCode": 92,
+  "versionName": "0.3.0-alpha.92",
+  "title": "Alpha.92 is available",
+  "notes": "Wicker routing and Mossguard presentation are stable, Sporewings are reachable by the knife, boons have type icons, and Android reports reach the private relay.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
