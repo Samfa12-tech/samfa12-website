@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260830-7";
+  const DATA_VERSION = "20260831-1";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -36,7 +36,7 @@
       status: "Alpha test",
       description: "A first-person action-defence roguelite about holding an old fortress against the Briar Host.",
       detailUrl: "/games/briarhold/",
-      links: [{ label: "Download Alpha.91", url: "/games/briarhold/" }],
+      links: [{ label: "Enter the Fortress", url: "/games/briarhold/" }],
       sortOrder: 25,
       thumbnail: "assets/thumbnails/briarhold-samfa12-icon-512.webp",
     },
