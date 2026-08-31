@@ -3,8 +3,8 @@
     "title": "Dust on the River",
     "category": "Games",
     "type": "Game",
-    "status": "Closed testing on Google Play",
-    "description": "A story-driven bushranger adventure about whether a violent past can ever really stay buried, now in closed testing on Google Play.",
+    "status": "Published",
+    "description": "A story-driven bushranger adventure about whether a violent past can ever really stay buried, available on itch.io and Google Play.",
     "tags": [
       "Game",
       "Adventure",
@@ -12,12 +12,18 @@
       "Pocket Audio"
     ],
     "featured": true,
+    "homepageRank": 1,
+    "homepageSize": "hero",
     "accent": "cyan",
     "imageFit": "contain",
     "links": [
       {
         "url": "https://samfa12.itch.io/dust-on-the-river",
         "label": "Play on itch.io"
+      },
+      {
+        "label": "View on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver"
       },
       {
         "label": "Pre-order novelisation on Amazon",
@@ -121,8 +127,8 @@
     "title": "The Horde — Ray Tracing Tech Demo",
     "category": "Games",
     "type": "Tech demo",
-    "status": "Experimental — in development",
-    "description": "An experimental ray-tracing tech demo in development for Android and Windows.",
+    "status": "Experimental — major update",
+    "description": "An experimental ray-tracing tech demo for Android and Windows, with a major update now live on itch.io.",
     "tags": [
       "Game",
       "Tech Demo",
@@ -132,7 +138,9 @@
       "Android",
       "Windows"
     ],
-    "featured": false,
+    "featured": true,
+    "homepageRank": 4,
+    "homepageSize": "standard",
     "accent": "spark",
     "imageFit": "contain",
     "links": [
@@ -163,7 +171,6 @@
       "Samfa12"
     ],
     "featured": false,
-    "homepageRank": 6,
     "homepageSize": "standard",
     "accent": "violet",
     "imageFit": "contain",
@@ -224,7 +231,6 @@
       "Open Source"
     ],
     "featured": false,
-    "homepageRank": 5,
     "homepageSize": "wide",
     "accent": "spark",
     "imageFit": "cover",
@@ -257,7 +263,7 @@
       "Source Available"
     ],
     "featured": false,
-    "homepageRank": 3,
+    "homepageRank": 5,
     "homepageSize": "standard",
     "accent": "green",
     "imageFit": "contain",
@@ -550,8 +556,7 @@
       "Jason Proud series",
       "Book 1"
     ],
-    "featured": true,
-    "homepageRank": 4,
+    "featured": false,
     "homepageSize": "standard",
     "accent": "spark",
     "imageFit": "contain",
@@ -569,8 +574,8 @@
     "title": "Dust on the River",
     "category": "Books",
     "type": "Book",
-    "status": "Coming soon — 1 Sep 2026",
-    "description": "The novelisation of Dust on the River is coming to Amazon.",
+    "status": "Releases later today",
+    "description": "The novelisation of Dust on the River, releasing on Amazon later today.",
     "tags": [
       "Adventure",
       "Mystery",
@@ -602,7 +607,7 @@
       "Book 1"
     ],
     "featured": true,
-    "homepageRank": 1,
+    "homepageRank": 6,
     "homepageSize": "wide",
     "accent": "spark",
     "imageFit": "contain",
@@ -859,7 +864,7 @@
     "category": "Games",
     "type": "Android game",
     "status": "Published",
-    "description": "A neon action arcade game from Samfa12, available through the Google Play developer page.",
+    "description": "A neon action arcade game from Samfa12, with a major update just released on Google Play.",
     "tags": [
       "Game",
       "Android",
@@ -867,7 +872,9 @@
       "Samfa12",
       "Pocket Audio"
     ],
-    "featured": false,
+    "featured": true,
+    "homepageRank": 3,
+    "homepageSize": "wide",
     "links": [
       {
         "label": "Play on itch.io",
@@ -1072,14 +1079,16 @@
     "title": "Briarhold",
     "category": "Games",
     "type": "Spiritual sequel to The Last Guard",
-    "status": "Alpha test",
-    "description": "A spiritual sequel to The Last Guard, Briarhold is a multiplayer co-op first-person action-defence roguelite in Android alpha testing. Explore the old stone together, prepare repairable defences between attacks, then combine weapons and tactics when the Briar Host reaches the walls.",
+    "status": "Android testing available",
+    "description": "A spiritual sequel to The Last Guard, Briarhold is a multiplayer co-op first-person action-defence roguelite now available for Android testing. Explore the old stone together, prepare repairable defences between attacks, then combine weapons and tactics when the Briar Host reaches the walls.",
     "tags": [
       "Multiplayer Co-op",
       "Action Defence",
       "Spiritual sequel to The Last Guard"
     ],
-    "featured": false,
+    "featured": true,
+    "homepageRank": 2,
+    "homepageSize": "tall",
     "links": [
       {
         "label": "Enter the Fortress",
@@ -1196,8 +1205,7 @@
       "Psychological",
       "Fiction"
     ],
-    "featured": true,
-    "homepageRank": 2,
+    "featured": false,
     "homepageSize": "hero",
     "accent": "spark",
     "imageFit": "contain",

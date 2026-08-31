@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260831-1";
+  const DATA_VERSION = "20260901-3";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -13,9 +13,14 @@
       category: "Games",
       type: "Game",
       status: "Published",
-      description: "A story-driven bushranger adventure about whether a violent past can ever really stay buried.",
+      description: "A story-driven bushranger adventure about whether a violent past can ever really stay buried, available on itch.io and Google Play.",
       featured: true,
-      links: [{ label: "Play on itch.io", url: "https://samfa12.itch.io/dust-on-the-river" }],
+      homepageRank: 1,
+      homepageSize: "hero",
+      links: [
+        { label: "Play on itch.io", url: "https://samfa12.itch.io/dust-on-the-river" },
+        { label: "View on Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver" },
+      ],
       sortOrder: 0,
       thumbnail: "assets/thumbnails/dust-on-the-river-b9a9e3.png",
     },
@@ -33,12 +38,71 @@
       title: "Briarhold",
       category: "Games",
       type: "Spiritual sequel to The Last Guard",
-      status: "Alpha test",
-      description: "A first-person action-defence roguelite about holding an old fortress against the Briar Host.",
-      detailUrl: "/games/briarhold/",
+      status: "Android testing available",
+      description: "A multiplayer co-op first-person action-defence roguelite now available for Android testing.",
+      featured: true,
+      homepageRank: 2,
+      homepageSize: "tall",
       links: [{ label: "Enter the Fortress", url: "/games/briarhold/" }],
+      detailUrl: "/games/briarhold/",
       sortOrder: 25,
       thumbnail: "assets/thumbnails/briarhold-samfa12-icon-512.webp",
+    },
+    {
+      title: "Spin Vector",
+      category: "Games",
+      type: "Android game",
+      status: "Published",
+      description: "A neon action arcade game from Samfa12, with a major update just released on Google Play.",
+      featured: true,
+      homepageRank: 3,
+      homepageSize: "wide",
+      links: [
+        { label: "Play on itch.io", url: "https://samfa12.itch.io/spin-vector" },
+        { label: "View on Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.spinvector" },
+        { label: "View on Wavedash", url: "https://wavedash.com/games/spin-vector" },
+      ],
+      sortOrder: 16,
+      thumbnail: "assets/thumbnails/spin-vector-7f51f8.png",
+    },
+    {
+      title: "The Horde — Ray Tracing Tech Demo",
+      category: "Games",
+      type: "Tech demo",
+      status: "Experimental — major update",
+      description: "An experimental ray-tracing tech demo for Android and Windows, with a major update now live on itch.io.",
+      featured: true,
+      homepageRank: 4,
+      homepageSize: "standard",
+      links: [
+        { label: "Download on itch.io", url: "https://samfa12.itch.io/the-horde" },
+        { label: "Source on GitHub", url: "https://github.com/Samfa12-tech/The-Horde-RT-demo" },
+      ],
+      sortOrder: 2.2,
+      thumbnail: "assets/thumbnails/the-horde-ray-tracing-tech-demo.webp",
+    },
+    {
+      title: "The Wall that Lied",
+      category: "Books",
+      type: "The Broken Road Trilogy — Book 1",
+      status: "Coming soon — 1 Oct 2026",
+      description: "The Broken Road Trilogy begins. A fractured road, a city behind stone, and a truth that was never meant to survive.",
+      featured: true,
+      homepageRank: 6,
+      homepageSize: "wide",
+      links: [{ label: "Pre-order on Amazon", url: "https://www.amazon.com.au/dp/B0H6VJ4VG1" }],
+      sortOrder: 13.6,
+      thumbnail: "assets/thumbnails/the-wall-that-lied-amazon-cover.jpg",
+    },
+    {
+      title: "Dust on the River",
+      category: "Books",
+      type: "Book",
+      status: "Releases later today",
+      description: "The novelisation of Dust on the River, releasing on Amazon later today.",
+      links: [{ label: "Pre-order on Amazon", url: "https://www.amazon.com.au/dp/B0H7QQQXBN" }],
+      sortOrder: 13.5,
+      thumbnail: "assets/thumbnails/dust-on-the-river-novelisation-cover.webp",
     },
     {
       title: "ToKnight",
@@ -46,7 +110,7 @@
       type: "Book",
       status: "Published",
       description: "A middle-grade fantasy adventure about Jason Proud and the first step into the ToKnight world.",
-      featured: true,
+      featured: false,
       links: [{ label: "Amazon Kindle", url: "https://www.amazon.com.au/dp/B0GX2NG31Z" }],
       sortOrder: 12,
       thumbnail: "assets/thumbnails/toknight-47d9be.png",
@@ -58,6 +122,7 @@
       status: "Published",
       description: "The Pocket Audio songwriting hub for sketching progressions, MIDI ideas, exports, and game-audio handoff workflows.",
       featured: true,
+      homepageRank: 5,
       links: [{ label: "Use on Samfa12.com", url: "/apps/pocket-chordsmith/" }],
       sortOrder: 3,
       thumbnail: "assets/thumbnails/pocket-chordsmith-0f81a2.png",
@@ -78,7 +143,7 @@
       type: "Album",
       status: "Published",
       description: "The Drink original soundtrack album.",
-      featured: true,
+      featured: false,
       links: [{ label: "Listen on Spotify", url: "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg" }],
       sortOrder: 31,
       thumbnail: "assets/thumbnails/drink-ost-6d4b8e.webp",
@@ -89,7 +154,7 @@
       type: "Publisher page",
       status: "Published",
       description: "Samfa12's central storefront for playable builds and releases.",
-      featured: true,
+      featured: false,
       links: [{ label: "Visit page", url: "https://samfa12.itch.io/" }],
     },
     {
@@ -741,7 +806,6 @@
   function createProjectCard(project, options = {}) {
     const { variant = "catalogue", index = 0 } = options;
     const isFeatured = variant === "featured";
-    const isSpotlight = variant === "spotlight";
     const size = isFeatured ? getHomepageSize(project, index) : "standard";
     const primaryLink = getPrimaryLink(project);
     const detailUrl = safeUrl(project.detailUrl);
@@ -785,10 +849,10 @@
     }
 
     appendChildren(article, [
-      projectThumbnail(project, (isFeatured || isSpotlight) && index === 0),
+      projectThumbnail(project, isFeatured && index === 0),
       createElement("p", {
         className: "project-label",
-        text: `${project.type}${isFeatured || isSpotlight ? ` // ${project.category}` : ""}`,
+        text: `${project.type}${isFeatured ? ` // ${project.category}` : ""}`,
       }),
       title,
       createElement("p", { className: "card-description", text: project.description }),
@@ -799,7 +863,7 @@
     ]);
     article.append(meta);
 
-    if (!isFeatured && !isSpotlight && project.catalogueLabels.length) {
+    if (!isFeatured && project.catalogueLabels.length) {
       const labels = createElement("p", { className: "project-meta project-meta-catalogue-labels" });
       project.catalogueLabels.forEach((label) => {
         labels.append(createElement("span", { className: "pill pill-catalogue-label", text: label }));
@@ -819,8 +883,9 @@
         actions.append(projectLink({ label: "View game page", url: detailUrl }, project, true));
       }
 
-      if (primaryLink && !isFeatured && !isSpotlight) {
-        project.links.slice(1).forEach((link) => {
+      const additionalLinks = !isFeatured ? project.links.slice(1) : [];
+      if (primaryLink && additionalLinks.length) {
+        additionalLinks.forEach((link) => {
           const node = projectLink(link, project, false);
           if (node) actions.append(node);
         });
@@ -829,7 +894,7 @@
       article.append(actions);
     }
 
-    if (!isFeatured && !isSpotlight && project.tags.length) {
+    if (!isFeatured && project.tags.length) {
       const tags = createElement("p", { className: "project-meta" });
       project.tags.slice(0, 5).forEach((tag) => tags.append(createElement("span", { className: "pill", text: tag })));
       article.append(tags);
@@ -1094,7 +1159,6 @@
 
   function renderCatalogue(projects, context = {}) {
     const grid = document.getElementById("project-grid");
-    const spotlightGrid = document.getElementById("spotlight-grid");
     const category = document.body.dataset.category;
     const predicate = (project) => isInCatalogue(project, category);
     const list = usePageFallbackIfEmpty(
@@ -1104,16 +1168,6 @@
       `${category || "This catalogue"} data is incomplete. Showing saved fallback cards instead.`
     );
     const config = getCatalogueConfig(category);
-
-    if (spotlightGrid) {
-      const spotlight = list.filter((project) => project.featured === true).slice(0, 4);
-      renderGrid(spotlightGrid, spotlight, {
-        variant: "spotlight",
-        emptyMessage: "",
-        preserveExistingOnEmpty: false,
-      });
-      spotlightGrid.closest("[data-spotlight-section]")?.toggleAttribute("hidden", spotlight.length === 0);
-    }
 
     if (!config) {
       if (catalogueControls) {
