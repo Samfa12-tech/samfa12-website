@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 93,
-  "versionName": "0.3.0-alpha.93",
-  "title": "Alpha.93 is available",
-  "notes": "Android reports now load anti-spam verification correctly; Wicker routing, Mossguard presentation, Sporewing knife targeting, and boon type icons remain included.",
+  "versionCode": 95,
+  "versionName": "0.3.0-alpha.95",
+  "title": "Alpha.95 is available",
+  "notes": "The Night 2 Matron can now release, animate, and receive touch-assisted fire correctly; all authored bosses have verified live clips, attack reactions, and facing corrections.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
