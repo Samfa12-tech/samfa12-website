@@ -574,8 +574,8 @@
     "title": "Dust on the River",
     "category": "Books",
     "type": "Book",
-    "status": "Releases later today",
-    "description": "The novelisation of Dust on the River, releasing on Amazon later today.",
+    "status": "Published",
+    "description": "The novelisation of Dust on the River, available now on Amazon.",
     "tags": [
       "Adventure",
       "Mystery",
@@ -585,7 +585,7 @@
     "featured": false,
     "links": [
       {
-        "label": "Pre-order on Amazon",
+        "label": "Buy on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
       }
     ],
