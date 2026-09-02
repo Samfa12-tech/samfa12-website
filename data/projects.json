@@ -26,7 +26,7 @@
         "url": "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver"
       },
       {
-        "label": "Pre-order novelisation on Amazon",
+        "label": "View or purchase novelisation on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
       }
     ],
@@ -428,7 +428,7 @@
       }
     ],
     "sortOrder": 6,
-    "thumbnail": "assets/thumbnails/ship-blockade-59ef6d.jpg",
+    "thumbnail": "assets/thumbnails/ship-blockade-59ef6f.jpg",
     "thumbnailAlt": "Cover image for Ship Blockade"
   },
   {
