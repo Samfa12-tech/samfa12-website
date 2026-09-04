@@ -75,6 +75,27 @@ in a browser. For data changes, confirm the homepage and relevant section page
 both render without console errors. For thumbnail refreshes or hosted app syncs,
 inspect the generated diff before committing.
 
+## Briarhold Android releases
+
+The current public tester release (2026-09-04) is Alpha.96 at
+`/games/briarhold/`, with prerelease tag `briarhold-alpha.96` and updater
+manifest `games/briarhold/releases/latest.json` at versionCode 96. Recheck the
+live page, release, and repository history before treating those values as
+current in a later task.
+
+Publish future Briarhold Android versions in this order:
+
+1. Create the immutable GitHub prerelease and verify the exact APK size and
+   SHA-256.
+2. Update, deploy, and cache-busted verify the human-readable download page.
+3. Update and deploy the updater manifest last, then verify its live version and
+   trusted page URL.
+
+Keep the page, `data/projects.json`, release tag, and updater manifest aligned.
+Use a clean worktree when the saved website checkout contains unrelated work.
+The website release flow does not authorize Gmail rules or mailbox deletion;
+Briarhold reports remain in the inbox until deliberately reviewed and removed.
+
 ## Git Hygiene
 
 The `.codex-remote-attachments/` folder is local working material and should not
