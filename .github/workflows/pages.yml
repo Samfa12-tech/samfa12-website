@@ -53,6 +53,8 @@ jobs:
             ./ _site/
       - name: Verify What Would Win artifact
         run: WHAT_WOULD_WIN_SITE_ROOT=_site node scripts/verify-what-would-win-pages.mjs
+      - name: Verify Briarhold artifact
+        run: BRIARHOLD_SITE_ROOT=_site node scripts/verify-briarhold-pages.mjs games/briarhold/play
       - name: Upload site
         uses: actions/upload-pages-artifact@v5
         with:

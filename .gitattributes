@@ -1,3 +1,2 @@
-# Preserve generated application artifacts byte-for-byte through Git checkouts.
-apps/what-would-win/** -text
-apps/what-would-win/site.webmanifest binary
+# Preserve the verified browser package byte for byte on every checkout.
+games/briarhold/play/** -text

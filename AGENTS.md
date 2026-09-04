@@ -35,6 +35,8 @@ npm run fetch:thumbnails
 npm run sync:pocket-apps
 npm run sync:what-would-win
 npm run verify:what-would-win-pages
+npm run sync:briarhold -- <verified-game-dist>
+npm run verify:briarhold-pages -- <verified-game-dist>
 ```
 
 `fetch:thumbnails` updates local thumbnail files and may edit
@@ -75,7 +77,14 @@ in a browser. For data changes, confirm the homepage and relevant section page
 both render without console errors. For thumbnail refreshes or hosted app syncs,
 inspect the generated diff before committing.
 
-## Briarhold Android releases
+## Briarhold browser and Android releases
+
+`games/briarhold/play/` is an exact generated Briarhold release copy. Use
+`sync:briarhold` with the verified game `dist` directory, then run
+`verify:briarhold-pages` against that same directory. The sync validates the
+manifest, file hashes and complete inventory before replacing this route.
+Keep relative assets and content-addressed directories intact; do not edit
+the hosted game by hand. The Pages workflow verifies the staged artifact too.
 
 The current public tester release (2026-09-04) is Alpha.96 at
 `/games/briarhold/`, with prerelease tag `briarhold-alpha.96` and updater

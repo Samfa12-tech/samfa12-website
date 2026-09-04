@@ -1,0 +1,1079 @@
+{
+  "schemaVersion": 2,
+  "package": "briarhold",
+  "version": "0.3.0-alpha.97",
+  "entrypoint": "index.html",
+  "cacheKey": "d8c969227303151aad8f",
+  "files": [
+    {
+      "path": "CREDITS.md",
+      "bytes": 3556,
+      "sha256": "7358d178cb5d087a09edc084f159906c0debd6ab38cf296fa6ca6336919e8914"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 1207,
+      "sha256": "98a330d829d44a184782330460f151fe46cdc35878b662f4f290263e383c5846"
+    },
+    {
+      "path": "assets/art/briarhold-key-art.webp",
+      "bytes": 417664,
+      "sha256": "1ffe0ee91e8d599853ea73135b2024057142fb669e2d02a29e27d466188af968"
+    },
+    {
+      "path": "assets/audio/filmcow/LICENSE-NOTICE.md",
+      "bytes": 634,
+      "sha256": "3f728c12acf92871a52a9dca0f18901fe9411f43c542c076a1087a77aecf83df"
+    },
+    {
+      "path": "assets/audio/filmcow/provenance.json",
+      "bytes": 6161,
+      "sha256": "fd5b6aa6ad34904e58eb45c203154e9a73f96887809c4ade86cd6f8430e1a086"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/arbalest-armour.webm",
+      "bytes": 2896,
+      "sha256": "ece3f2ca440cd6e090acbe984d6244a847d9977b5b05a9fc2d1bcf41e3882ec4"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/arbalest-mechanism.webm",
+      "bytes": 5642,
+      "sha256": "84464b5d041788b8612da666e15128619201d7011097fee8ff9bbc6b1962ed95"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/arbalest-release.webm",
+      "bytes": 4670,
+      "sha256": "cb8c4fdc264c3a659e94d299f828f2e66f21ca660eb6c38531a4c697c8366912"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/bolt-impact-wood.webm",
+      "bytes": 2726,
+      "sha256": "ddf9759c18afe02c7984b73fa6c200a802767a297d6e3e509771dba50c8291b1"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/footstep-dirt-a.webm",
+      "bytes": 6128,
+      "sha256": "821f0063239b59be8bb351fe4b4dec5ad8571f1b31c7d935be0ed4d7014db31d"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/footstep-dirt-b.webm",
+      "bytes": 2726,
+      "sha256": "efd08d42efbc4b0e0f453c986adc5719ecf02f71c00d60a4f6b590a6ad51a24d"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/gate-wood-break.webm",
+      "bytes": 5156,
+      "sha256": "a95eefa8ed78cc337cee99c64c0ffcbddad8dd4f4dcbb6ff75413fbf4c676935"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/runebolt-impact.webm",
+      "bytes": 4542,
+      "sha256": "23ec13f8a3c22a723f415a8b5f6864dbe57dbdb875b01bc84cfcd76437292476"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/sunfire-sustain.webm",
+      "bytes": 5296,
+      "sha256": "8137f06d91fdb77d4c187400715adde9a64666a55eceb9d300e22522e16985fb"
+    },
+    {
+      "path": "assets/audio/filmcow/runtime/ui-click.webm",
+      "bytes": 2240,
+      "sha256": "30b730a4f97d9770136ad04ba363b45b47a44a91351d0c8a9786411798cc7728"
+    },
+    {
+      "path": "assets/meshy/runtime/boss-ashwing-matriarch.glb",
+      "bytes": 2544940,
+      "sha256": "9c2bc9379d13235e8fb572afb86ee56991f409775564ff7ef49b72951c88001e"
+    },
+    {
+      "path": "assets/meshy/runtime/boss-caravan-eater.glb",
+      "bytes": 5206404,
+      "sha256": "c9831b4a024c14dce6ca7401f46879741a6fad8bb18565f3101c849751ce2aa2"
+    },
+    {
+      "path": "assets/meshy/runtime/boss-cinderwing.glb",
+      "bytes": 4987052,
+      "sha256": "0f472c9c739d97848479a654fbf631c6dbada20f7dad2e5446da5cabd7a2dfc5"
+    },
+    {
+      "path": "assets/meshy/runtime/boss-hollow-hart.glb",
+      "bytes": 5518972,
+      "sha256": "a2f85bb9edc3a15bfcaaf22b0b9b61ae471f398efe158796261a74eaa900d86b"
+    },
+    {
+      "path": "assets/meshy/runtime/boss-moonless-herald.glb",
+      "bytes": 2468984,
+      "sha256": "a94f38acc0d7f21f9012874c458ab166e0c280e235e6250988bc42b13ad56bd6"
+    },
+    {
+      "path": "assets/meshy/runtime/boss-moss-crowned-matron.glb",
+      "bytes": 5366104,
+      "sha256": "e709e8dcc96676237b8ec222b3097f17e7fe780dd11cb2f4b39c5e9872708342"
+    },
+    {
+      "path": "assets/meshy/runtime/boss-root-sapper-prime.glb",
+      "bytes": 5563280,
+      "sha256": "e226f373f48a97756d8be3502fab01743179c27e11206e0e909ca629c70f69e5"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-ballista-256.glb",
+      "bytes": 885324,
+      "sha256": "1d0578086b6289541607428b2693402b69b43febf64ea8b1d0b4af85f815ed61"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-ballista-512.glb",
+      "bytes": 2242160,
+      "sha256": "9a7ff75a931ff4f166b0a5ac55e41928c64881100c83c3ffe951d42b2f10f891"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-barricade-256.glb",
+      "bytes": 550144,
+      "sha256": "02d4bbed4f3a503c52d83242cb7ce340b2d932d6fdb91218764bece4180dc0fa"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-barricade-512.glb",
+      "bytes": 1644948,
+      "sha256": "09ddbae4be39e5b4cfccd809435ecda1622d3ce9004f6f903e3e080a229ef6bc"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-battlefield-verge-256.glb",
+      "bytes": 333476,
+      "sha256": "7130eb5416156398ec9da0e718d1a30cf741d41f8db06b7a6faa0a92f5915aa6"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-battlefield-verge-512.glb",
+      "bytes": 382744,
+      "sha256": "8519a53ee36e1087f748757e297a193b544d13f5e4d47831abc8fc7561939166"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-brazier-256.glb",
+      "bytes": 662060,
+      "sha256": "71bcb7497c15c52685982f66ee806ace96680f5b486d9f7003b84a0c55283e70"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-brazier-512.glb",
+      "bytes": 2132156,
+      "sha256": "b345fb1133d3dac34fa23ebda70d41a9ffcc318aa036d434d667723cc10cc86a"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-courtyard-service-arcade-256.glb",
+      "bytes": 421788,
+      "sha256": "1a32e206da59bf77c62495b111048f17f6870bbdf08686ec515aa96b35bb3f08"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-courtyard-service-arcade-512.glb",
+      "bytes": 484244,
+      "sha256": "4362c4c0126037981c3945139fd062f73ee06c5e092045e3cc438e1844f66b2b"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-defender-cache-256.glb",
+      "bytes": 962960,
+      "sha256": "be85ede3e026367fa28e2f3863188ed8cb847f4adf24e2daf9cd01b431e939df"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-defender-cache-512.glb",
+      "bytes": 2441672,
+      "sha256": "d5b9ca11f96aa0415a62e1a37e244fefd026daf201c68dfdf4b1d2c5617d0ebc"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-fire-pot-256.glb",
+      "bytes": 438148,
+      "sha256": "2e8075f513daeff0377d3c062c13e7b364f15262efa9a5c5902d763eaa3d0d33"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-fire-pot-512.glb",
+      "bytes": 1783356,
+      "sha256": "b9beaac59da00fed1712f43fe4e35ddc148662491f42186aa4a375ebef9648eb"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-forest-tree-256.glb",
+      "bytes": 517480,
+      "sha256": "bbfe7489dd743bf1745784ea03c6cba1ea1834dfa82a3abcf474e682cffb1974"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-forest-tree-512.glb",
+      "bytes": 1774316,
+      "sha256": "1130e20bdcd69150212027c96cabc21c7a9c442ec38e612af12e4153fadccead"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-thorn-snare-256.glb",
+      "bytes": 552068,
+      "sha256": "b1304147f2573aa4babfb39e9f058076f8dcc677309b47f2465d158451d7113f"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-thorn-snare-512.glb",
+      "bytes": 1462388,
+      "sha256": "b76ecb9ea86a87aaabea439f4d6cdd64beac8d5f526e158abfe45ac9058ef21c"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-wall-bay-256.glb",
+      "bytes": 639584,
+      "sha256": "bbdd51499f7e51fd87d4d9c6299d8e609a7a80dcc9f3adc5917da036a802dfbb"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-wall-bay-512.glb",
+      "bytes": 1906744,
+      "sha256": "2c93eccf276d772a6b67dcd516ba255c2b53943e1aa7ffde5938d73094e632c4"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-ward-lantern-256.glb",
+      "bytes": 528116,
+      "sha256": "309265efaf24af82a3632da2c848db25a178a7c06df6c1f78817d9d3664bde67"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-ward-lantern-512.glb",
+      "bytes": 1630216,
+      "sha256": "beb6fb8d218e4ef220842cbbf6713fd90051028e038d7aba0eb6b79d4b1d072e"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-warden-1k.glb",
+      "bytes": 7034964,
+      "sha256": "47e249840ed9dd438da386137257050a5bd463e7fe54bf94873e1fd21715835e"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-watchtower-256.glb",
+      "bytes": 852248,
+      "sha256": "67346b286099a051a038cb145121848f8b311f22e2b927b72d4bb05259f195d9"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-watchtower-512.glb",
+      "bytes": 2142300,
+      "sha256": "63149b19592dae50b1bb6333a2d9dad4102a5752cea9b900ade1e23d9f85c3f8"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-wave-bell-256.glb",
+      "bytes": 364100,
+      "sha256": "c9004ae9c6799e265f77acb76ff70f14502b3bb45a95d06be2a46a6b15f81ae6"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-wave-bell-512.glb",
+      "bytes": 1433124,
+      "sha256": "ffa7447357e44573b26b5f46e6e4a6a83dc277d7a6fdcf90d7dee8d54f9f6560"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-west-gatehouse-256.glb",
+      "bytes": 965804,
+      "sha256": "3a87055f6c5ec76636b4a26420f6c63b1f9c527f795c022217bfb5a1e8fb39c8"
+    },
+    {
+      "path": "assets/meshy/runtime/briarhold-west-gatehouse-512.glb",
+      "bytes": 2223568,
+      "sha256": "b65356ab6f32ee408863177d15a19e835575c641205192eee1d64da20ac02018"
+    },
+    {
+      "path": "assets/meshy/runtime/enemy-barkhide-3d-512.glb",
+      "bytes": 1201072,
+      "sha256": "af721dc08d83b75a2d07abdc350e8ae061632a6dd4b7c21c446e78b6c779c8a3"
+    },
+    {
+      "path": "assets/meshy/runtime/enemy-briarbound-3d-512.glb",
+      "bytes": 999908,
+      "sha256": "3154814ad88da3e8dce413e920fa36fd79cc11b1945eaf485fc55ff5bc205860"
+    },
+    {
+      "path": "assets/meshy/runtime/enemy-mossguard-3d-512.glb",
+      "bytes": 1181036,
+      "sha256": "b95ec3a5e4e15cd0aa84b1c5d960865fb5cb46e2eb9fd5554a1971111838236a"
+    },
+    {
+      "path": "assets/meshy/runtime/enemy-sporewing-3d-512.glb",
+      "bytes": 1110392,
+      "sha256": "b92ffe3eb2fc3dded2152a486254d87ebeaca3e0c1334ec44937e6be59871f1e"
+    },
+    {
+      "path": "assets/meshy/runtime/enemy-wicker-3d-512.glb",
+      "bytes": 1579720,
+      "sha256": "6ff67922684d90be33af857959443bcfb22c0ce5fe6c2c779bc4e864fb6c6c92"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-bellkeeper-256.glb",
+      "bytes": 409748,
+      "sha256": "d5f13e0b715e28eeaee45cf50923d0f5c32c6c3b41c46b3bc28f8dba20b2d535"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-bellkeeper-512.glb",
+      "bytes": 863956,
+      "sha256": "c48b26ea3d6f650acd12d707c7535571063083dda47501bf8cb68f19d01c8d0c"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-greenwarden-256.glb",
+      "bytes": 455728,
+      "sha256": "c38a31426c279fac2bfb2e05ce70ba595d0537290253894bf3be3853c4648ad6"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-greenwarden-512.glb",
+      "bytes": 973632,
+      "sha256": "75d33d2c1b4ae5553947a884867c19a3f289299c3b7ad279a30fbcb4eaa96a0f"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-mason-256.glb",
+      "bytes": 415280,
+      "sha256": "91d77ca22bd782050169b628615e74f6ef653ea3e2df41a77a0d8fc666d50490"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-mason-512.glb",
+      "bytes": 881428,
+      "sha256": "16b93ea0a47b4bade305a3dbce483167b0be61ca14df9feb48b9f0c51e55510e"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-quartermaster-256.glb",
+      "bytes": 446568,
+      "sha256": "7c767fb81f962092ba9b523dacaf3c5d7a42dc5f3c858dd7fe0db56461e1377e"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-quartermaster-512.glb",
+      "bytes": 907832,
+      "sha256": "626b340d0bf610eee297ae2696b6c53e25ee80fc2da6579c2445161c4a83495b"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-trapper-256.glb",
+      "bytes": 408904,
+      "sha256": "3f690e2cc21d999e9f0b0d92a58a85f43a9c0f34424f9110c4abff49ad1f8a5a"
+    },
+    {
+      "path": "assets/meshy/runtime/hub-npc-trapper-512.glb",
+      "bytes": 874608,
+      "sha256": "3a12782ea2521c3ac9ae5f79c6b3a76ce8878c603025ace8ab1796dda5a2a72e"
+    },
+    {
+      "path": "assets/sprites/barkhide-brute-meshy-combat.json",
+      "bytes": 72966,
+      "sha256": "26593553c202c6169066be7be2a808a97ee0d777250675e5a3a159af7f4cfa66"
+    },
+    {
+      "path": "assets/sprites/barkhide-brute-meshy-combat.webp",
+      "bytes": 515428,
+      "sha256": "856e49f0eb7f7974d7fbdcd9350f98be3264a88ee8d5dfea601cb72fcd80ad74"
+    },
+    {
+      "path": "assets/sprites/barkhide-brute-meshy-run.json",
+      "bytes": 41607,
+      "sha256": "79486f6e9bb65d3952b072e98d8b26e0742e4f18b09e430b59a5fb8528e696a9"
+    },
+    {
+      "path": "assets/sprites/barkhide-brute-meshy-run.webp",
+      "bytes": 401164,
+      "sha256": "a6f7c85bbe3235a391d03aafde5b1fdc39b441d275e0b7103ea7d0f8daa0ba42"
+    },
+    {
+      "path": "assets/sprites/briarbound-meshy-combat.json",
+      "bytes": 79811,
+      "sha256": "50cefba0ca0f6c6cd6aa63fb191336735f8ab6a2b2f646120533a48e3c6fbaa4"
+    },
+    {
+      "path": "assets/sprites/briarbound-meshy-combat.webp",
+      "bytes": 456204,
+      "sha256": "8535117366bca0626fb6b487763c5ab0283ac0fb446a578c1a37edf102ab85c5"
+    },
+    {
+      "path": "assets/sprites/briarbound-meshy-run.json",
+      "bytes": 72437,
+      "sha256": "2dcf7792e28b13ba4f56d9b1e1a784d715b17bf66ca63ede8f93b841c5a0e1ea"
+    },
+    {
+      "path": "assets/sprites/briarbound-meshy-run.webp",
+      "bytes": 628756,
+      "sha256": "42e1a1e3a78a27fad4e9888ba27985ebb0e1fc4b0e297e04292a4d5e1cd5be9d"
+    },
+    {
+      "path": "assets/sprites/mossguard-shield-meshy-combat.json",
+      "bytes": 73013,
+      "sha256": "cf95aa753428f49afba8480c5059ddc4a17c8632f423ef5e0fcc5af84afdc4dc"
+    },
+    {
+      "path": "assets/sprites/mossguard-shield-meshy-combat.webp",
+      "bytes": 509604,
+      "sha256": "381d090fb31fbb8c4eb3428339b6bfee4524963d4d3ea0d6268238e45e6b6cd2"
+    },
+    {
+      "path": "assets/sprites/mossguard-shield-meshy-run.json",
+      "bytes": 41609,
+      "sha256": "8384e9603594cf45d08c390916edeb95425e0a33b9e37130e2954edfd88e0538"
+    },
+    {
+      "path": "assets/sprites/mossguard-shield-meshy-run.webp",
+      "bytes": 383496,
+      "sha256": "ecc9be843c82cd1ef9b630a3f8f8a8cb86fec77532f4b6686374bc9d58437202"
+    },
+    {
+      "path": "assets/sprites/sporewing-hunter-meshy-combat.json",
+      "bytes": 70685,
+      "sha256": "dd2648676e497e2f882dc668d0bde5dae571bf74b36d58614102596cdf760ff7"
+    },
+    {
+      "path": "assets/sprites/sporewing-hunter-meshy-combat.webp",
+      "bytes": 407518,
+      "sha256": "6f63a4bb5b6db711e34adddec336dd0822b29a02079fd440e7b53bbf8e6dfdc7"
+    },
+    {
+      "path": "assets/sprites/sporewing-hunter-meshy-flight.json",
+      "bytes": 64948,
+      "sha256": "a76cdb736c064fd107b100b49a2478247eb9e125aa014743c4422b0f0cf83697"
+    },
+    {
+      "path": "assets/sprites/sporewing-hunter-meshy-flight.webp",
+      "bytes": 748994,
+      "sha256": "1f3334e694f36577fc9a82e1a7a872df294124d83b6a09bf1c873ed9a505f87a"
+    },
+    {
+      "path": "assets/sprites/wicker-colossus-meshy-combat.json",
+      "bytes": 69466,
+      "sha256": "f746301884c36b02045c88561ba88a9ad5495c5d26ac5c5ada560254b7868935"
+    },
+    {
+      "path": "assets/sprites/wicker-colossus-meshy-combat.webp",
+      "bytes": 650242,
+      "sha256": "ef6688a64f55efcd3049976de1d6f5c953cf3d983399ea3a39a628882e3c2f26"
+    },
+    {
+      "path": "assets/sprites/wicker-colossus-meshy-run.json",
+      "bytes": 32365,
+      "sha256": "48e92b5d6338683ad043567fa2f586a2365dcecaa87543abe8d33bd58f1cec0c"
+    },
+    {
+      "path": "assets/sprites/wicker-colossus-meshy-run.webp",
+      "bytes": 422050,
+      "sha256": "a20d52e175550d081639ad561f647fa116611fe1e57f1dc9ae73d6ac0959e5e4"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/castle_brick_01_diff_256.webp",
+      "bytes": 26692,
+      "sha256": "d19fb333d13ee372f68f134ae07e436c06ab4878c68494bbcf091d90dc379d8d"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/castle_brick_01_diff_512.webp",
+      "bytes": 102168,
+      "sha256": "e403d54dee49be08159d5d3c6fb36a8d1261c71bc42817988c0f42b29348e2a9"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/castle_brick_01_nor_gl_256.webp",
+      "bytes": 29586,
+      "sha256": "30054b0921a364475f05addb301fd3400d1a8dd951fafb01bec1565db960e03b"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/castle_brick_01_nor_gl_512.webp",
+      "bytes": 118564,
+      "sha256": "8f56fd4e88d7e8559bb07784ef5e5ad3ceefa5cada5400299ef9b26c9aa4b7ed"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/castle_brick_01_orm_256.webp",
+      "bytes": 5556,
+      "sha256": "1cd6965223dd7baaefac33fe1aab878669fa619c1cbfe660ed2622e8f2eb9e84"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/castle_brick_01_orm_512.webp",
+      "bytes": 19716,
+      "sha256": "59ace3e4c0ca43f72ff2e115fabfa0211a406fcea4c0c964b358455dbe9cb6dc"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/forrest_ground_01_diff_256.webp",
+      "bytes": 26682,
+      "sha256": "4977f6b20805c419da0ef8b18c3aaeae21151d28f7f9a3e23e3431eb70d04ebb"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/forrest_ground_01_diff_512.webp",
+      "bytes": 114700,
+      "sha256": "bfc73e2f0959a507262819687d7af1dd5c5b15dff2c7c6bb4fc24e3cedc23f07"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/forrest_ground_01_nor_gl_256.webp",
+      "bytes": 28170,
+      "sha256": "4761f556d5da7cb5ba3de1a44de7ba0378203e133d57c5f747b871524a41ad27"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/forrest_ground_01_nor_gl_512.webp",
+      "bytes": 134326,
+      "sha256": "075b668dfb227e205e72fe8a53a30a2edd268c6e7c54ed0063deebce76bbb36f"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/forrest_ground_01_orm_256.webp",
+      "bytes": 6176,
+      "sha256": "764c900c8273855c748055dd905ba1a8c0fe3c6e51f64a8f3fbc6091c7ebd6fc"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/forrest_ground_01_orm_512.webp",
+      "bytes": 22266,
+      "sha256": "9016eb7c9e0f5c6a1fc14f9f1e71205ecbfaadc5962103c0295eeacea3b12486"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/wooden_planks_diff_256.webp",
+      "bytes": 6346,
+      "sha256": "5106ba18a4bdd7fd89d39205322db469be8a2cabbc6d95acd9d84a6dcad6ea7a"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/wooden_planks_diff_512.webp",
+      "bytes": 23020,
+      "sha256": "9cea3289c50cd743054b8ba46ef6c4575c381e8a12dc208f8d0767338fb9cf8a"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/wooden_planks_nor_gl_256.webp",
+      "bytes": 6074,
+      "sha256": "9360f917902ff2e6094ecaf74454b0429808ba6087aaea9df6919c7c47819d12"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/wooden_planks_nor_gl_512.webp",
+      "bytes": 27158,
+      "sha256": "613dad4e05a6f60c8edbdf026ef81021063a525874aec8def41e1c804e95bf6c"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/wooden_planks_orm_256.webp",
+      "bytes": 584,
+      "sha256": "ef266d93797e5d98ead2ea51bc38d525f5612a16c3301dc3a9975395ebb64530"
+    },
+    {
+      "path": "assets/textures/polyhaven/runtime/wooden_planks_orm_512.webp",
+      "bytes": 1962,
+      "sha256": "ad8a9277baccdf7b0342ab163e63e3bcdba311afb45d6ea698bd47a562b89657"
+    },
+    {
+      "path": "assets/ui/bolt-icon.png",
+      "bytes": 14402,
+      "sha256": "defa46e04285433af915f1213a1cab3e9c0df9ac1ad9fcd4a1d666eb838ad57d"
+    },
+    {
+      "path": "assets/ui/briarhold-icon-atlas.webp",
+      "bytes": 311290,
+      "sha256": "ac3b187622604705590481958f40160926bfaf58460f3a52bbde96dc86e1781b"
+    },
+    {
+      "path": "assets/ui/context-icon.png",
+      "bytes": 32733,
+      "sha256": "d77d0392f9c9b9ab741b0cc84d23897f5c9af54c0d7b98fb598a32e245bdb2af"
+    },
+    {
+      "path": "assets/ui/fire-icon.png",
+      "bytes": 37950,
+      "sha256": "c8b38aaf41fd5437fb4ae8263dda55522d3dd1e8b2f0b98641bd891e205caf8d"
+    },
+    {
+      "path": "assets/ui/pause-icon.png",
+      "bytes": 22325,
+      "sha256": "a96b2ce7da3153185d677d27a59fec2b3d43502071298a3a4c3f945a1f13035e"
+    },
+    {
+      "path": "assets/ui/portraits/bellkeeper.webp",
+      "bytes": 29284,
+      "sha256": "bad7935fff7adc044a1690ee5bbf0a6671022189ac0f8efa7212a0f898b04bbb"
+    },
+    {
+      "path": "assets/ui/portraits/greenwarden.webp",
+      "bytes": 45662,
+      "sha256": "d71d6e0f427aaaaedeb07b4160869f79fb4af550a31368513be401483d5e10b6"
+    },
+    {
+      "path": "assets/ui/portraits/mason.webp",
+      "bytes": 26588,
+      "sha256": "ae05134a3105d96c1e717934dcfc42f30dc9d5e2e3f80c3dc81edc0a20ef50d2"
+    },
+    {
+      "path": "assets/ui/portraits/quartermaster.webp",
+      "bytes": 30074,
+      "sha256": "745e86be66c327e76313d986ef83200db69dd235830457303aaa812c29be3628"
+    },
+    {
+      "path": "assets/ui/portraits/trapper.webp",
+      "bytes": 26964,
+      "sha256": "7a299dfd296f56e645b68faa7dd760d90c0453118fb550e2d13fe3af80432894"
+    },
+    {
+      "path": "assets/viewmodels/arbalest.webp",
+      "bytes": 101790,
+      "sha256": "eb14e4c68377276cac177312aee4f752530c7618af9f4bdb3fc9fb9715f3024f"
+    },
+    {
+      "path": "assets/viewmodels/runebolt.webp",
+      "bytes": 116510,
+      "sha256": "c3f848efae2cd97fc123db31f47e513c3af50ecccba7a181469c2c6a45fd1f42"
+    },
+    {
+      "path": "assets/viewmodels/sunfire.webp",
+      "bytes": 106080,
+      "sha256": "a63ba65fe6dd48ce19baa8be1060abf4d8d899470d1710bceb1ee705131eebff"
+    },
+    {
+      "path": "assets/world/briarhold-banner-256.webp",
+      "bytes": 22290,
+      "sha256": "4c9276f54043c3a95e8f6889969fea958c8c5a0ec60da805b58210a2e24c1545"
+    },
+    {
+      "path": "assets/world/briarhold-banner-512.webp",
+      "bytes": 84548,
+      "sha256": "515d996521e9799f9afc4b991be92b30e4211d95f4a53abdd58253e2b1d8b55c"
+    },
+    {
+      "path": "assets/world/briarhold-moon-256.webp",
+      "bytes": 17214,
+      "sha256": "61d8aa94f3c5dd91135d45c52abca61988b890a3a020f3cfcc9899dafb2e627a"
+    },
+    {
+      "path": "assets/world/briarhold-moon-512.webp",
+      "bytes": 54462,
+      "sha256": "bc97997d722f5212904001f01334b5d63384a38abc5934b5a7a9a38d92998732"
+    },
+    {
+      "path": "assets/world/briarhold-storm-sky-1k.webp",
+      "bytes": 19338,
+      "sha256": "58dc7c09547d7ed560c75d97038556b908b50ffecd12873601b5ca9bfc814824"
+    },
+    {
+      "path": "assets/world/briarhold-storm-sky-mobile-512.webp",
+      "bytes": 6824,
+      "sha256": "2abfd0360517166dc6872685c05196b5f172cd76573340e233be940230f4cc45"
+    },
+    {
+      "path": "assets/world/briarhold-torch-flame-256.webp",
+      "bytes": 14754,
+      "sha256": "cde074b6025e82a213931a760ec562e8dd2f65c50278b35152f59c2acef8aa36"
+    },
+    {
+      "path": "index.html",
+      "bytes": 33304,
+      "sha256": "51df18a34c5b8767cc91da5360afaaa9dbda85a517a30cf63c5936be120c1e47"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/aim-assist.js",
+      "bytes": 10541,
+      "sha256": "8a58ba1bba3d52e5f35ee94f2f1952f0192c060df44ac231d24724de8b058f69"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/android-update-check.js",
+      "bytes": 4612,
+      "sha256": "e93cb211041cdf6a87c1d790e50b498a98241a40128fc0aecd13f55bfb1a4537"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/animated-enemy-renderer.js",
+      "bytes": 16441,
+      "sha256": "d0d4144cb678a218371130c117be9a3f1be08b62224743eaa02c9b42be8289e9"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/audio.js",
+      "bytes": 47117,
+      "sha256": "cb7be01ab3842cc43863f23a5c8d415b42fbb06ac0bcf50820013d6849081c3d"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/authoritative-combat.js",
+      "bytes": 21761,
+      "sha256": "4a52858981f36f045595c55ad71b764f08b11487683bb931a7d35b8917a7e9e4"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/authoritative-delayed-effects.js",
+      "bytes": 11900,
+      "sha256": "efa39c232a9497af9538f4b6fcc08ccbfb4be4a8d3eb50737f7e46b42b9672db"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/battlefield-checkpoint.js",
+      "bytes": 19765,
+      "sha256": "fcc038497f7ff40236dbea604bd8d925cf9b0bed9a7ea517684fb83b3d4665b3"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/battlefield.js",
+      "bytes": 114009,
+      "sha256": "d9854b2fc3fd55026e70da5234cde2f8ec21b8a819c831cc12afe57ec5b25dfd"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/boons.js",
+      "bytes": 9937,
+      "sha256": "59de8448f7841366274956dbe2378b61b9073cb3bd8d1a7de817873d2772487f"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/boss-assets.js",
+      "bytes": 11409,
+      "sha256": "43e118b97767ec8ad74564869b1c7733c682c147c1ec4aa00232ca9237133c51"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/boss-director.js",
+      "bytes": 76335,
+      "sha256": "1bb9d3f82f638dbd93d3f17e8519c08ba659eca0fa90874771a71bd693452168"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/boss-hud.js",
+      "bytes": 713,
+      "sha256": "8db38a3ec4ec718e3b2e0c90cf1309453ce1fd413302ca1d27c4e6d0dbe4345c"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/boss-presentation.js",
+      "bytes": 24072,
+      "sha256": "12bbe9c1467dd3851877671252e920ddaf17746073b880785957d2497fd6a861"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/breach-solver.js",
+      "bytes": 19082,
+      "sha256": "bd0ef3056df79111d478cd89b7c57f42b068f037d23bcf9b6bbdcecd0dff7a4e"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/camera-motion.js",
+      "bytes": 2443,
+      "sha256": "5ad0c6c9bf1f44448776ddee63bc416cd29648224c3d4591bf04cc336e1caa50"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/campaign-content.js",
+      "bytes": 18237,
+      "sha256": "df5365cd7bd90c5bc5dc3653e2446db314a12e3ec1aa21974ed8d4df5ef86326"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/campaign-runtime.js",
+      "bytes": 22476,
+      "sha256": "84c70dec3ad1e0d827d67e55f06c361bd363697d35f6c38cd161441af10dc5df"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/campaign.js",
+      "bytes": 16178,
+      "sha256": "2f411eee1a36656066050bd0f5616e0dc6b21b9dceb71cd037d88ef4aedc9eae"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/combat-attribution.js",
+      "bytes": 1273,
+      "sha256": "a9992ae199bc877acf6a95361cdaaa47751ff8de341057f8f4e72f0e5cff0986"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/combat-feedback.js",
+      "bytes": 4230,
+      "sha256": "54b5e420e03cc1eeee69a8216b5376ea8f656ca64f2e2b0c7b44f9d56e32cb94"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/contracts.js",
+      "bytes": 4135,
+      "sha256": "c9842f3896f80d6f722a92451ad00d67a09e2f035bd3e6dd4d7a9d920232ab7f"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/controller-mapping.js",
+      "bytes": 21978,
+      "sha256": "93c21a3f32d169e3d7a9c9318c9fdb450615bc8adfe407a7a8aca82627cd3033"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/controller-profile-capture.js",
+      "bytes": 1212,
+      "sha256": "da132140ee3949c6ac36e11d7d93549462a3d9b9da3cc2b2265a83e8a2cc0a69"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/controller-ui.js",
+      "bytes": 4580,
+      "sha256": "77a15d880f646ebfdfe5d9e429630692d037ef555a27aa71403a5fa3c061e64a"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/coop-boundary-pause.js",
+      "bytes": 1206,
+      "sha256": "d68e3d1bfaea9bb22e730a096fb10be97a26ccc70ed5e62c9931805b2cb59d67"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/coop-campaign-authority.js",
+      "bytes": 89332,
+      "sha256": "1a706ae1479b2d568af1607100c79190497cd86a6e3ab008062169fb094e3849"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/coop-preview.js",
+      "bytes": 40851,
+      "sha256": "961be7954d40b6a10cb47b89f0ea5980071d979c89a5d0c8b5cce056243b54f6"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/coop-session.js",
+      "bytes": 7831,
+      "sha256": "99bdeea2648d426ea1c1610d621bb1a6c6751f01182bb449f7fcdb552f802c95"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/coop-world-wire.js",
+      "bytes": 56754,
+      "sha256": "13ab849f7d042c5d6da9c7ee9d601e208f437ec43184912c45deec475e108150"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/core/gpu-atlas-capabilities.js",
+      "bytes": 3911,
+      "sha256": "b297d45021db12147e4209048a7231d5ab0aafbe8d84d16c209a1ff5f40df918"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/core/gpu-atlas-sprite-state.js",
+      "bytes": 47940,
+      "sha256": "2f9cb38b68e4299e191fba2002f3af75c49fdc732dcdf07641ad757ed7f5be3a"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/core/render-pixel-budget.js",
+      "bytes": 3479,
+      "sha256": "44f9831fdd3ff83f2ec2261c515d59fa1da109ce670cfeddb4624a7204bad68f"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/core/sprite-update-cohorts.js",
+      "bytes": 3365,
+      "sha256": "6c0715bffbe788e23d78599ab81ca74abbba9b290aa102f1b258aad1570c50fa"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/core/stable-atlas-slots.js",
+      "bytes": 2607,
+      "sha256": "c14892eb13aacdf7ce0eb90f276d26b3274fe68cc3fb937d0e404d351cf4cd69"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/cutscene-presentation.js",
+      "bytes": 11899,
+      "sha256": "60d46f612a1597ffcd234df0c68a2b4a9b8e312c42411aafd05f99442187fab4"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/daywork.js",
+      "bytes": 20644,
+      "sha256": "2b29bdc393ac2951ed72e6e411c5e8acfa5876588aa9811a389b32155c9b91ac"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/debug-diagnostics.js",
+      "bytes": 1649,
+      "sha256": "7b9691c91a60266124582352cd164a5475d0a7c85f6b6d062de96572a3b85d0e"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/density-profile.js",
+      "bytes": 6184,
+      "sha256": "10502164c217f70494e69d8648f7dcf3d59f20634811452b17c05beb78326317"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/economy.js",
+      "bytes": 7730,
+      "sha256": "530bfd2c8c7b55e75d571e1673090fbf6a56b6bb786ec139f79dfcf8924f3c85"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/enemies.js",
+      "bytes": 3613,
+      "sha256": "0ece0a7516929af3f85640d614eaeae2149b2e0ce92d4f6e2f1510c1a56c5dc8"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/enemy-presentation.js",
+      "bytes": 5281,
+      "sha256": "8b9fc22e5ff880d1dd020d79556f47122cb151142ab1e6537421185c2ed25c4a"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/enemy-visuals.js",
+      "bytes": 16553,
+      "sha256": "fee24e0a655d8add4f8df3adfd852d7e78f58169b71f11b95ee00084a449c90b"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/fortifications.js",
+      "bytes": 9362,
+      "sha256": "290aeacbef482662ce69f1452596c70f6753a1739b31f2fc0034defbd43af605"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/game.js",
+      "bytes": 344022,
+      "sha256": "045c4dc5a981c770accf9b2bb12d450fbcb58ce0358567421df6ecc0a1b06818"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/gamepad-input.js",
+      "bytes": 10853,
+      "sha256": "d97b163225360bcac135969fbe732b094736fc34c5a6c5bf70cd47a508584a28"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/graphics-quality.js",
+      "bytes": 2275,
+      "sha256": "f3c6d08edb4d741bacad54b62abb4f3ba11710354b453df3f89912ae82e90437"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/hub-combat.js",
+      "bytes": 11366,
+      "sha256": "51c8fb63060e17ccf9da3a257fb0b9cd2e6a22b39d0765fd2eb603a3fa43de88"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/hub-npc-presentation.js",
+      "bytes": 22854,
+      "sha256": "f814e9547790c822c5bf9c74e8b182bfec9ccf689e0acd1b52610ab21300d472"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/hub.js",
+      "bytes": 14034,
+      "sha256": "7738f72e822615756c4e78540547f624f8f330b99b73e9c1dc62a1451a1af276"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/input-frame.js",
+      "bytes": 4320,
+      "sha256": "5924fa56edda00cf95f539297a61efd94ed2afb66079c994599bfe919e8954fc"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/layout.js",
+      "bytes": 5375,
+      "sha256": "b5dcbb5315901a631902156c95632c3704de3458d5af48bdd8d0773ba577a664"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/lighting.js",
+      "bytes": 7314,
+      "sha256": "2ac950aedc87bebf25f6260f369e02d8077c04686e5156c131952ce2fc32814d"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/look-settings.js",
+      "bytes": 832,
+      "sha256": "8e0939761d3a07e5764d17463c0f657f5559206b1b948baf98571d5bc38e356c"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/map-definition.js",
+      "bytes": 47094,
+      "sha256": "9809c37cf26b1a4687a7330e2453370ead09d790b3bebd2e4cb95192fe31b3e3"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/map-raycast.js",
+      "bytes": 2491,
+      "sha256": "24f128dc2ed854335120c9e1f30f113aa9980e8594a2ad0930dac391d3c2de37"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/mouse-capture.js",
+      "bytes": 2296,
+      "sha256": "a2c06b70ff132490d85ac85e072cfc0a588c8fe065ca59d8763a18401ec8d3c0"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/multiplayer-contracts.js",
+      "bytes": 24039,
+      "sha256": "c5758dc12204a167854ab284e6080767973c329f0de898678638eca5d60a26e9"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/multiplayer-session-checkpoint.js",
+      "bytes": 9407,
+      "sha256": "e6af493a32c845a9610739ec6b67af8c0cf88f972ca3ee041850d0ab2ee6078e"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/multiplayer-session-core.js",
+      "bytes": 29178,
+      "sha256": "4400f16993a641797c88e37c37c768f68a831f7a553114d1f999796e281d10de"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/music-score.js",
+      "bytes": 14525,
+      "sha256": "d880a324a914abdceb6c86d7e31add6acdc6aa80737dcfdacee5755529d3b4a2"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/narrative-content.js",
+      "bytes": 68446,
+      "sha256": "65ec5ff6a3aeb7a79456f0f4256e5f8cdd3453c5d6747de8e28db9be1d13615c"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/narrative-director.js",
+      "bytes": 21707,
+      "sha256": "626bb5df1df8a8392b2f824fb503708a90c0dd69e3db01d2ec3dd6fc976f2e3e"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/narrative-state.js",
+      "bytes": 11213,
+      "sha256": "93b819e0e919cb7d0682e512b11ed916e4bbb321afbe182d3201430daa1aeafd"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/native-lifecycle.js",
+      "bytes": 4548,
+      "sha256": "5367a63de74bca3752b4275277fca89b6a6800bb0488bf96b36c2a808563f518"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/new-game.js",
+      "bytes": 264,
+      "sha256": "5accb3f7c3e8605d079e1ecdb06abb8d998ce44eaaa75d7e9f533f5f52869a82"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/night-one.js",
+      "bytes": 754,
+      "sha256": "3f5baa2dac139c198e8e2ae9cc5e214c920a5ac0ccc2d0a728e5b5f417c0f459"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/oath-hall.js",
+      "bytes": 11606,
+      "sha256": "b24a84c9b6e690d430c78b310d78dbc2fc5197d2f086da3086911e498d959e78"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/peer-transport.js",
+      "bytes": 20771,
+      "sha256": "3ae61cfa7c1b6f853bcb4fe3a940e6c781f2e441ff20604d5f91da18d82dcc0d"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/player-controller.js",
+      "bytes": 24243,
+      "sha256": "b945c91492844b95362e800cb56332f7b6a9196589741d88a94a2aa55e00da2d"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/playtest-reporter.js",
+      "bytes": 20356,
+      "sha256": "36edd18f08424e68e0567a30bc55be7379bc90c73b4dfbc34610b14bd213be65"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/progression-atlas.js",
+      "bytes": 6007,
+      "sha256": "0873e1170996c4cc732f55090f964c96c1a7cf49f5ac69cdf70a20ff4b5eacc1"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/progression.js",
+      "bytes": 70486,
+      "sha256": "7acd1935c433137f16d50e3c07cc393a842d466fde0216f20355dad07b09873d"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/relationship-goals.js",
+      "bytes": 29051,
+      "sha256": "c7c0f1255a9771e707e768d73453e81cb225d17714869d0ef93b489a33f5b69d"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/remote-warden.js",
+      "bytes": 14037,
+      "sha256": "f8860711a0691cf73b951a9a01439584ac94ae47ea7d9b286f6644088dcb7347"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/render-governor.js",
+      "bytes": 5417,
+      "sha256": "fb185dadc155aab9412f7ae29427f00a830a7f9c0b816777eb4891b98a62b470"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/renderer.js",
+      "bytes": 66507,
+      "sha256": "2e86d8eebb9376d9af0d899adb76ecc7c8c5935e11dcc0f71882e25251ae0636"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/runtime-progression.js",
+      "bytes": 13246,
+      "sha256": "c1eb57824f5ed62a12b113f2ac2656f7467da1de1697ba7f8dee2e62210e855f"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/save.js",
+      "bytes": 18982,
+      "sha256": "2754b1107e9c0d4d91d2f297667dea4043c2707a1882e0873c0f6a2a2df45ac4"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/signaling-client.js",
+      "bytes": 7518,
+      "sha256": "bdaf2365f29b24019bea24d3ab0211d5f2023679ac8cacaf97000f345f416a81"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/touch-scroll.js",
+      "bytes": 4635,
+      "sha256": "2dc1c2c013a886a3f934eee726e41e44696633a8027464e878069f6f4d679075"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/ui-art.js",
+      "bytes": 2049,
+      "sha256": "d50a72fc51f6b629f76d66ad2ce7c240bd30813b25e044fdbb561cb4c34b6227"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/weapons.js",
+      "bytes": 11253,
+      "sha256": "69044dcb95f44365615c19710eee94b91e24537bea8aeaeb37411dd742e9d683"
+    },
+    {
+      "path": "src.d8c969227303151aad8f/world.js",
+      "bytes": 205121,
+      "sha256": "77445e18f49f2eb1134392b5663064434d8885582fd274c2c5aeea5d9c0ec511"
+    },
+    {
+      "path": "styles.d8c969227303151aad8f/game.css",
+      "bytes": 63813,
+      "sha256": "a805cea19c6296a4d3bbe69242c70dd4609df08f063929023b27b52572a7abd7"
+    },
+    {
+      "path": "vendor.d8c969227303151aad8f/babylon/babylon-9.16.1.min.js",
+      "bytes": 8167011,
+      "sha256": "a5243ae871f5128d8a6201ee43af8e2fdff03ed4d9d7b9c20d8905b539dac705"
+    },
+    {
+      "path": "vendor.d8c969227303151aad8f/babylon/babylonjs.loaders-9.16.1.min.js",
+      "bytes": 522254,
+      "sha256": "87c3ab0191671d86d7f1ade099492f8ced1f49f972baab6b19563f453c9a9c34"
+    },
+    {
+      "path": "vendor.d8c969227303151aad8f/pocket-audio-core/pocket-audio-core-0.2.0.iife.js",
+      "bytes": 5816,
+      "sha256": "712c1dc552f0dd883b10cbde3f36b305316fb7dda6df9a2ddb8cc8398a0d9883"
+    },
+    {
+      "path": "vendor/babylon/LICENSE-BABYLONJS-9.16.1.md",
+      "bytes": 9155,
+      "sha256": "3a1160f88f3ffdafee129832f8bf5806073f77a43962f15a13ab63f1a5047372"
+    },
+    {
+      "path": "vendor/babylon/NOTICE-BABYLONJS-9.16.1.md",
+      "bytes": 46,
+      "sha256": "225463efd81558f120a6e0cdd7f4c1007ed486006d1228c4849fee0c49715823"
+    }
+  ]
+}

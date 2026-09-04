@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260901-3";
+  const DATA_VERSION = "20260905-1";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -38,12 +38,15 @@
       title: "Briarhold",
       category: "Games",
       type: "Spiritual sequel to The Last Guard",
-      status: "Android testing available",
-      description: "A multiplayer co-op first-person action-defence roguelite now available for Android testing.",
+      status: "Browser and Android testing available",
+      description: "A first-person action-defence roguelite available for Alpha.97 browser and Android testing, with experimental multiplayer co-op.",
       featured: true,
       homepageRank: 2,
       homepageSize: "tall",
-      links: [{ label: "Enter the Fortress", url: "/games/briarhold/" }],
+      links: [
+        { label: "Play in browser", url: "/games/briarhold/play/" },
+        { label: "Enter the Fortress", url: "/games/briarhold/" },
+      ],
       detailUrl: "/games/briarhold/",
       sortOrder: 25,
       thumbnail: "assets/thumbnails/briarhold-samfa12-icon-512.webp",

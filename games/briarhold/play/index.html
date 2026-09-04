@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en" data-layout="landscape">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+    <meta name="theme-color" content="#0b100c">
+    <meta name="description" content="Play Briarhold, a free first-person fortress defence alpha. Hold seven nights with your wardens, fortifications and experimental player-hosted co-op.">
+    <link rel="canonical" href="https://samfa12.com/games/briarhold/play/">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="briarhold-release-channel" content="production-alpha">
+    <meta name="briarhold-turnstile-site-key" content="0x4AAAAAAEhf76L7CP5yrpYp">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.d8c969227303151aad8f/game.css">
+    <title>Briarhold · First-Person Defender</title>
+  </head>
+  <body data-phase="menu" data-input="mouse" data-controller="disconnected">
+    <canvas id="renderCanvas" tabindex="0" aria-label="Briarhold first-person battlefield"></canvas>
+
+    <div id="gameUi">
+      <p id="persistenceWarning" class="persistence-warning" role="status" hidden>Saving is unavailable. Progress is kept only for this session.</p>
+      <div id="loading" class="loading-screen" role="status" aria-live="polite">
+        <div class="loading-rune" aria-hidden="true"><span></span></div>
+        <p>Lighting the ward lanterns</p>
+      </div>
+
+      <section id="rotateDevice" class="rotate-screen" role="alert" hidden>
+        <img src="assets/ui/bolt-icon.png" alt="">
+        <h2>Turn the shield sideways</h2>
+        <p>Briarhold is played in landscape.</p>
+      </section>
+
+      <div id="combatHud" class="combat-hud" hidden>
+        <section class="vital-stack hud-panel" aria-label="Defender and fortress vitality">
+          <div class="identity-line"><span class="crest-dot" aria-hidden="true"></span><strong>Warden</strong><b id="playerHealthText">100</b></div>
+          <div id="playerHealthBar" class="meter player-meter" role="progressbar" aria-label="Player health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
+          <div class="identity-line gate-line"><span>Heart Gate</span><b id="heartHealthText">100%</b></div>
+          <div id="heartHealthBar" class="meter gate-meter" role="progressbar" aria-label="Heart Gate health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
+          <div class="outer-gate-line"><span>West Outer Gate</span><b id="outerHealthText">100%</b></div>
+          <div id="outerHealthBar" class="meter gate-meter outer-gate-meter" role="progressbar" aria-label="West Outer Gate health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
+          <div class="outer-gate-line"><span>East Outer Gate</span><b id="eastOuterHealthText">100%</b></div>
+          <div id="eastOuterHealthBar" class="meter gate-meter outer-gate-meter" role="progressbar" aria-label="East Outer Gate health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
+        </section>
+
+        <section class="wave-status hud-panel" aria-label="Night and wave status" aria-live="polite">
+          <span id="nightText" class="eyebrow">Night 1 of 7</span>
+          <strong id="waveText">Prepare the hold</strong>
+          <span id="objectiveText" class="wave-objective">Speak with Nell at the bell</span>
+          <div class="host-count"><img src="assets/ui/bolt-icon.png" alt=""><b id="enemyCountText">0</b><span>host remaining</span></div>
+        </section>
+        <section id="bossStatus" class="boss-status hud-panel" aria-label="Boss health" hidden>
+          <span id="bossName">Wicker Colossus</span><b id="bossHealthText">3600</b>
+          <div id="bossHealthBar" class="meter" role="progressbar" aria-label="Wicker Colossus health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
+          <span id="bossIndividuals" class="boss-individuals"></span>
+          <span id="bossCounterText" class="boss-counter"></span>
+        </section>
+
+        <button id="pauseButton" class="pause-button hud-panel" type="button" aria-label="Pause" aria-keyshortcuts="Escape">
+          <img src="assets/ui/pause-icon.png" alt="">
+        </button>
+        <button id="playtestReportButton" class="playtest-report-button hud-panel" type="button" aria-label="Report a playtest issue" aria-keyshortcuts="F8" hidden>
+          <span>Report issue</span><kbd>F8</kbd>
+        </button>
+        <button id="leaveCoopButton" class="leave-coop-button hud-panel" type="button" hidden>Leave co-op</button>
+
+        <div id="reticle" aria-hidden="true"><span></span></div>
+        <div id="hitMarker" aria-hidden="true"></div>
+        <div id="damageFlash" aria-hidden="true"></div>
+        <div id="announcement" class="announcement" role="status" aria-live="assertive"></div>
+        <div id="contextPrompt" class="context-prompt hud-panel" role="status" hidden><kbd>E</kbd><span id="contextPromptText">Interact</span></div>
+        <section id="recoveryBark" class="recovery-bark hud-panel" role="status" aria-live="assertive" aria-atomic="true" hidden>
+          <span id="recoveryWarning">The next wave begins automatically</span>
+          <b id="recoveryCountdown">12</b>
+        </section>
+
+        <section class="weapon-dock hud-panel" aria-label="Weapons">
+          <div class="weapon-current">
+            <img src="assets/ui/bolt-icon.png" alt="">
+            <span><small id="weaponCue">IRON</small><strong id="weaponName">Arbalest</strong></span>
+            <b id="heatText">Cool</b>
+          </div>
+          <div id="heatBar" class="meter heat-meter" role="progressbar" aria-label="Weapon heat" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <div class="weapon-tabs" role="group" aria-label="Select weapon">
+            <button type="button" data-weapon="arbalest" class="is-selected" aria-pressed="true"><kbd>1</kbd><span class="weapon-label">Arbalest</span></button>
+            <button type="button" data-weapon="sunfire" aria-pressed="false"><kbd>2</kbd><span class="weapon-label">Sunfire</span></button>
+            <button type="button" data-weapon="runebolt" aria-pressed="false"><kbd>3</kbd><span class="weapon-label">Runebolt</span></button>
+          </div>
+        </section>
+
+        <div id="viewmodel" class="viewmodel" aria-hidden="true">
+          <div id="viewmodelArt" class="viewmodel-art"></div>
+          <div class="viewmodel-vent"><i></i><i></i><i></i></div>
+        </div>
+        <div id="knifeViewmodel" class="knife-viewmodel" aria-hidden="true"><span class="knife-blade"></span><span class="knife-grip"></span></div>
+
+        <div id="movePad" class="move-pad touch-control" aria-label="Move">
+          <div id="moveKnob" class="move-knob"></div>
+          <span>Sprint at edge</span>
+        </div>
+        <div id="lookSurface" class="look-surface touch-control" aria-label="Look"></div>
+        <button id="fireButton" class="round-action fire-action touch-control" type="button" aria-label="Fire">
+          <img src="assets/ui/fire-icon.png" alt=""><span>Fire</span>
+        </button>
+        <button id="aimButton" class="round-action aim-action touch-control" type="button" aria-label="Hold to aim down sights; drag to look" aria-pressed="false"><span>Aim</span></button>
+        <button id="contextButton" class="round-action context-action touch-control" type="button" aria-label="Context action">
+          <img src="assets/ui/context-icon.png" alt=""><span>Use</span>
+        </button>
+        <button id="jumpButton" class="round-action traversal-action jump-action touch-control" type="button" aria-label="Jump or mantle"><span>Jump</span></button>
+        <button id="slideButton" class="round-action traversal-action slide-action touch-control" type="button" aria-label="Slide"><span>Slide</span></button>
+        <button id="meleeButton" class="round-action melee-action touch-control" type="button" aria-label="Knife swipe"><span>Knife</span></button>
+
+        <p id="controlsHelp" class="controls-help">Click battlefield to capture aim/fire · WASD move · Shift sprint · Space jump/mantle · C slide · E use · F knife · 1–3 weapons</p>
+      </div>
+
+      <section id="mainMenu" class="screen menu-screen" role="dialog" aria-modal="true" aria-labelledby="gameTitle">
+        <div class="menu-scrim"></div>
+        <div class="menu-panel framed-panel">
+          <div class="menu-primary">
+            <p class="eyebrow">The Last Guard II</p>
+            <h1 id="gameTitle">Briarhold</h1>
+            <p class="menu-tagline">Stand within the walls. Walk the old stone. Meet the forest face to face.</p>
+            <p class="menu-premise">Complete seven-night solo campaign · 21 waves · deterministic boundary saves.</p>
+            <div id="oathLedgerSummary" class="oath-ledger-summary" aria-label="Permanent progression">
+              <span><small>Oathmarks</small><b id="ledgerOathmarks">0</b></span>
+              <span><small>Runs ended</small><b id="ledgerRuns">0</b></span>
+              <span><small>Holdfolk</small><b id="ledgerRoster">1 / 5</b></span>
+              <p id="ledgerNext">Next arrival: Mason after this run ends.</p>
+            </div>
+            <div id="continueSummary" class="continue-summary" hidden>
+              <span>Run in progress</span><strong id="continueRunText">Night 1 · Wave 1</strong>
+            </div>
+            <div class="menu-actions">
+              <button id="continueButton" class="primary-button" type="button" hidden>Continue the defence</button>
+              <button id="newRunButton" class="primary-button" type="button">Take the Warden's oath</button>
+              <p id="newRunWarning" class="new-run-warning" role="status" hidden>Starting over replaces the current wave.</p>
+              <button id="oathHallButton" class="secondary-button" type="button" aria-expanded="false">Oath Hall</button>
+                <button id="coopButton" class="secondary-button" type="button" aria-expanded="false">Two-Warden co-op</button>
+              <button id="howToPlayButton" class="secondary-button" type="button" aria-expanded="false">How to play</button>
+              <button id="settingsButton" class="secondary-button" type="button" aria-expanded="false">Settings</button>
+            </div>
+          </div>
+          <div id="menuSecondary" class="menu-secondary">
+            <section id="coopPanel" class="menu-drawer coop-drawer" aria-labelledby="coopTitle" hidden>
+              <h2 id="coopTitle">Peer-hosted co-op</h2>
+              <p>Experimental two-player seven-night campaign with shared enemies, combat, bosses, objectives, gates, fortifications, Supplies, NPCs, waves and boons. The host owns the world and save. Cloudflare introduces the Wardens; gameplay travels directly between their devices.</p>
+              <label for="coopRoomCode">Room code</label>
+              <div class="coop-room-actions">
+                <input id="coopRoomCode" type="text" inputmode="text" maxlength="22" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCDE-FGHIJ · guest pastes it">
+                <button id="coopRoomCopyButton" class="secondary-button" type="button" disabled>Copy code</button>
+              </div>
+              <div class="coop-role-actions" role="group" aria-label="Choose co-op role">
+                <button id="coopHostButton" class="primary-button" type="button">Host online</button>
+                <button id="coopJoinButton" class="secondary-button" type="button">Join room</button>
+              </div>
+              <p id="coopStatus" class="coop-status" role="status" aria-live="polite">No connection started.</p>
+              <details class="coop-manual">
+                <summary>Manual fallback</summary>
+                <p>Use this if the room service is unavailable. Exchange one invite and one reply directly.</p>
+                <div class="coop-role-actions" role="group" aria-label="Choose manual co-op role">
+                  <button id="coopManualHostButton" class="secondary-button" type="button">Manual host</button>
+                  <button id="coopManualJoinButton" class="secondary-button" type="button">Manual join</button>
+                </div>
+                <label for="coopSignalText">Invite or reply</label>
+                <textarea id="coopSignalText" rows="5" spellcheck="false" autocomplete="off" placeholder="Choose Manual host, or paste an invite"></textarea>
+                <div class="coop-signal-actions">
+                  <button id="coopSignalButton" class="primary-button" type="button" disabled>Continue</button>
+                  <button id="coopCopyButton" class="secondary-button" type="button" disabled>Copy</button>
+                </div>
+              </details>
+              <button id="coopCloseButton" class="secondary-button drawer-close" type="button">Close co-op</button>
+            </section>
+            <section id="howToPlayPanel" class="menu-drawer" hidden>
+              <h2>Hold the Heart Gate</h2>
+              <p>Explore in daylight, install defences at glowing sockets, then speak with Nell at the bell and confirm her warning. If the outer gate falls, surviving holdfolk join the courtyard defence—and anyone they lose stays dead for that run.</p>
+              <dl><div><dt>Move</dt><dd>WASD or left stick</dd></div><div><dt>Fight</dt><dd>Mouse/right stick to aim; click/right trigger fires; permanently unlock Warden Focus from the Quartermaster for 4 Oathmarks, then use right mouse/LT/Q or the touch Aim control to aim down sights; F/R3 uses the knife</dd></div><div><dt>Maintain</dt><dd>E or X/A near a glowing socket builds the selected defence</dd></div><div><dt>Controller</dt><dd>Stick or D-pad navigates; left/right adjusts; A confirms or cycles choices; B backs out; Menu pauses</dd></div></dl>
+              <button id="howToPlayCloseButton" class="secondary-button drawer-close" type="button">Close how to play</button>
+            </section>
+            <section id="settingsPanel" class="menu-drawer settings-grid" aria-label="Settings" tabindex="0" hidden>
+              <header class="settings-drawer-header">
+                <h2>Settings</h2>
+                <small class="settings-scroll-hint">
+                  <span data-scroll-hint="touch">Swipe up or down for every option</span>
+                  <span data-scroll-hint="mouse">Scroll for every option</span>
+                  <span data-scroll-hint="gamepad">Use the stick or D-pad for every option</span>
+                </small>
+              </header>
+              <label><span>Master volume</span><input id="volumeControl" type="range" min="0" max="100" value="70"></label>
+              <label><span>Look sensitivity</span><input id="lookSensitivityControl" type="range" min="50" max="200" step="5" value="100"></label>
+              <label class="toggle-row"><input id="invertVerticalLookToggle" type="checkbox"><span>Invert vertical look</span></label>
+              <label><span>Touch aim assist</span><input id="aimAssistControl" type="range" min="0" max="100" value="100"></label>
+              <label><span>Graphics quality</span><select id="graphicsQualityControl"><option value="auto">Auto (recommended)</option><option value="high">High · native resolution</option><option value="balanced">Balanced</option><option value="performance">Performance</option></select></label>
+              <label><span>Enemy presentation</span><select id="enemyPresentationControl"><option value="auto">Auto (recommended)</option><option value="animated3d">Animated 3D nearby (fast devices)</option><option value="sprites">Sprites (fastest)</option></select></label>
+              <small id="enemyPresentationStatus" class="settings-inline-status" role="status" hidden></small>
+              <label><span>Frame rate</span><select id="frameRateLimitControl"><option value="60">60 FPS · phone default</option><option value="uncapped">Uncapped</option></select></label>
+              <small id="graphicsResolutionStatus" class="graphics-resolution-status" role="status">Detecting renderer…</small>
+              <label class="toggle-row"><input id="reducedMotionToggle" type="checkbox"><span>Reduce motion and flashes</span></label>
+              <label class="toggle-row"><input id="autoMeleeToggle" type="checkbox" checked><span>Automatic knife defence</span></label>
+              <label class="toggle-row"><input id="autoFireToggle" type="checkbox"><span>Touch auto-fire when reticle is on target</span></label>
+              <div class="controller-mapping-settings">
+                <span>Controller</span><strong id="controllerMappingStatus">No controller connected</strong>
+                <div><button id="controllerMappingStartButton" class="secondary-button" type="button">Map controller</button><button id="controllerMappingResetButton" class="secondary-button" type="button">Reset mapping</button></div>
+              </div>
+              <div class="danger-settings-zone">
+                <div><strong>Save data</strong><small>Delete progression and begin again. Device settings and controller mappings stay.</small></div>
+                <button id="deleteSaveButton" class="secondary-button danger-settings-action" type="button">Delete save / New game</button>
+              </div>
+              <button id="settingsCloseButton" class="secondary-button drawer-close" type="button">Close settings</button>
+            </section>
+          </div>
+          <footer><span>Solo seven-night campaign · 21 waves</span><b>Seven-night peer-hosted co-op preview · No account</b></footer>
+        </div>
+      </section>
+
+      <section id="oathHallPanel" class="screen oath-hall-screen" role="dialog" aria-modal="true" aria-labelledby="oathHallTitle" hidden>
+        <div class="oath-hall-panel framed-panel">
+          <header><div><p class="eyebrow">Permanent progression</p><h2 id="oathHallTitle">Oath Hall</h2></div><button id="oathHallCloseButton" class="secondary-button" type="button">Close</button></header>
+          <p id="oathHallStatus" role="status" aria-live="polite">Spend banked Oathmarks between battles.</p>
+          <nav id="oathHallTabs" class="oath-hall-tabs" aria-label="Oath Hall branches" role="tablist"></nav>
+          <div id="oathHallSections" class="oath-hall-sections"></div>
+        </div>
+      </section>
+
+      <section id="buildPanel" class="build-panel framed-panel" aria-labelledby="buildTitle" data-collapsed="false" hidden>
+        <header>
+          <div><p class="eyebrow">Daytime</p><h2 id="buildTitle">Prepare Night 1</h2></div>
+          <div class="build-panel-header-actions">
+            <div class="supplies"><span>Supplies</span><b id="suppliesText">120</b></div>
+            <button id="goalsOpenButton" class="secondary-button" type="button">Goals</button>
+            <button id="buildPanelToggle" class="build-panel-toggle secondary-button" type="button" aria-expanded="true" aria-controls="buildPanelDetails" aria-label="Collapse wave preparation details">Hide</button>
+          </div>
+        </header>
+        <div id="buildPanelDetails" class="build-panel-details">
+          <p id="buildBriefing">Walk to an authored socket and use Context to install a defence.</p>
+          <p id="wardenOrder" class="warden-order" aria-live="polite">Speak with Nell at the bell</p>
+          <div id="buildChoices" class="build-choices" hidden>
+            <p id="socketName">Defence socket</p>
+            <div>
+              <button type="button" data-fortification="barricade"><strong>Briar barricade</strong><small class="build-choice-description" data-fortification-description>Redirects and compresses the approach stream.</small><span class="build-choice-price">32</span></button>
+              <button type="button" data-fortification="thornSnare"><strong>Thorn snare</strong><small class="build-choice-description" data-fortification-description>Slows the first packed ranks that cross it.</small><span class="build-choice-price">24</span></button>
+              <button type="button" data-fortification="firePot"><strong>Sunfire pot</strong><small class="build-choice-description" data-fortification-description>Shoot the vessel to detonate it across the surrounding Host.</small><span class="build-choice-price">38</span></button>
+              <button type="button" data-fortification="ballista"><strong>Ballista</strong><small class="build-choice-description" data-fortification-description>Automatically strikes one priority target at a measured cadence.</small><span class="build-choice-price">70</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="hubServicePanel" class="hub-service-panel framed-panel" role="dialog" aria-modal="false" aria-labelledby="hubServiceTitle" aria-describedby="hubServiceLine hubServiceStatus" hidden>
+        <header class="hub-service-header">
+          <div>
+            <p class="eyebrow">Hub service</p>
+            <h2 id="hubServiceTitle">Quartermaster's Bench</h2>
+          </div>
+          <button id="hubServiceCloseButton" class="hub-service-close secondary-button" type="button" aria-label="Close station services" disabled>Back</button>
+        </header>
+        <p id="hubServiceLine" class="hub-service-line" aria-live="polite">Choose a service before the horn sounds.</p>
+        <div class="hub-service-meta">
+          <span id="hubServiceStatus">Station ready</span>
+          <strong id="hubServiceCost">Costs shown in Supplies</strong>
+        </div>
+        <div id="hubServiceActions" class="hub-service-actions" role="group" aria-label="Station services">
+          <button class="hub-service-action secondary-button" type="button" data-hub-action="restock" disabled>Restock</button>
+          <button class="hub-service-action secondary-button" type="button" data-hub-action="repair" disabled>Repair</button>
+          <button class="hub-service-action secondary-button" type="button" data-hub-action="improve" disabled>Improve</button>
+          <button class="hub-service-action secondary-button" type="button" data-hub-action="daywork" disabled>Daywork</button>
+          <button class="hub-service-action secondary-button" type="button" data-hub-action="goal" disabled>Goal</button>
+          <button class="hub-service-action secondary-button" type="button" data-hub-action="more" disabled>More</button>
+        </div>
+      </section>
+
+      <section id="narrativeDialog" class="screen narrative-dialog" role="dialog" aria-modal="true" aria-labelledby="narrativeSpeaker" aria-describedby="narrativeRole narrativeText" data-pointer-lock-block hidden>
+        <div class="narrative-letterbox" aria-hidden="true"></div>
+        <article class="narrative-panel framed-panel">
+          <header class="narrative-heading">
+            <div class="narrative-identity"><img id="narrativePortrait" class="narrative-portrait" alt=""><div><h2 id="narrativeSpeaker">Nell Vey</h2><p id="narrativeRole">Bellkeeper</p></div></div>
+            <button id="narrativeSkip" class="secondary-button" type="button" disabled>Skip</button>
+          </header>
+          <p id="narrativeText" class="narrative-text" aria-live="polite"></p>
+          <div id="narrativeResponses" class="narrative-responses" role="group" aria-label="Dialogue responses" hidden>
+            <button id="narrativeResponsePrimary" class="secondary-button" type="button" hidden></button>
+            <button id="narrativeResponseSecondary" class="secondary-button" type="button" hidden></button>
+          </div>
+          <footer class="narrative-actions"><button id="narrativeContinue" class="primary-button" type="button">Continue</button></footer>
+        </article>
+      </section>
+
+      <section id="goalsPanel" class="screen goals-screen" role="dialog" aria-modal="true" aria-labelledby="goalsTitle" data-pointer-lock-block hidden>
+        <article class="goals-panel framed-panel">
+          <header><div><p class="eyebrow">Holdfolk</p><h2 id="goalsTitle">Goals</h2></div><button id="goalsClose" class="goals-close secondary-button" type="button" aria-label="Close Goals">Close</button></header>
+          <p>Active and ready goals are shown here. Speak with the named holdfolk to accept or report them.</p>
+          <div id="goalsList" class="goals-list" aria-live="polite"></div>
+        </article>
+      </section>
+
+      <section id="boonOverlay" class="screen boon-screen" role="dialog" aria-modal="true" aria-labelledby="boonTitle" hidden>
+        <div class="boon-panel framed-panel">
+          <p class="eyebrow">The Green remembers</p>
+          <h2 id="boonTitle">Choose one night boon</h2>
+          <p>It lasts only for this run.</p>
+          <div id="boonChoices" class="boon-choices"></div>
+        </div>
+      </section>
+
+      <section id="pauseOverlay" class="screen pause-screen" role="dialog" aria-modal="true" aria-labelledby="pauseTitle" hidden>
+        <div class="compact-panel framed-panel">
+          <p class="eyebrow">The siege waits</p><h2 id="pauseTitle">Paused</h2>
+          <button id="resumeButton" class="primary-button" type="button">Return to Briarhold</button>
+          <button id="pauseSettingsButton" class="secondary-button" type="button" aria-expanded="false">Settings</button>
+          <div id="pauseSettingsMount"></div>
+          <button id="quitToMenuButton" class="secondary-button" type="button">Save and return to title</button>
+        </div>
+      </section>
+
+      <section id="playtestReportOverlay" class="screen playtest-report-screen" role="dialog" aria-modal="true" aria-labelledby="playtestReportTitle" data-pointer-lock-block hidden>
+        <div class="playtest-report-panel framed-panel">
+          <header>
+            <div><p class="eyebrow">Capture the moment</p><h2 id="playtestReportTitle">Report an issue</h2></div>
+            <p class="playtest-report-shortcut"><kbd>F8</kbd> anywhere while playing</p>
+          </header>
+          <div class="playtest-report-content">
+            <figure class="playtest-report-evidence">
+              <img id="playtestReportPreview" alt="Automatic screenshot of the reported game view" hidden>
+              <figcaption id="playtestReportStatus" role="status" aria-live="polite">Freezing the moment…</figcaption>
+            </figure>
+            <div class="playtest-report-fields">
+              <label for="playtestReportNote">What felt wrong?</label>
+              <textarea id="playtestReportNote" maxlength="2400" rows="6" placeholder="Example: I cannot pass through the small doorway beside the iron portcullis."></textarea>
+              <div class="playtest-report-options">
+                <label>Type
+                  <select id="playtestReportCategory">
+                    <option value="collision">Collision</option>
+                    <option value="layout">Layout</option>
+                    <option value="stairs">Stairs</option>
+                    <option value="npc">NPC</option>
+                    <option value="animation">Animation</option>
+                    <option value="lighting">Lighting / torch</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+                <label>Impact
+                  <select id="playtestReportImpact">
+                    <option value="blocks-run">Blocks progress</option>
+                    <option value="major-friction" selected>Major frustration</option>
+                    <option value="minor-friction">Minor frustration</option>
+                    <option value="polish">Looks wrong</option>
+                  </select>
+                </label>
+              </div>
+              <div id="playtestReportRemoteOptions" class="playtest-report-remote-options" hidden>
+                <p>Your note, category, and impact are emailed to the Briarhold developer. The screenshot and technical diagnostics are optional and are never included unless you select them.</p>
+                <label class="playtest-report-consent"><input id="playtestReportScreenshotConsent" type="checkbox"> Include this screenshot</label>
+                <label class="playtest-report-consent"><input id="playtestReportDiagnosticsConsent" type="checkbox"> Include anonymous technical diagnostics</label>
+                <div id="playtestReportTurnstile" class="playtest-report-turnstile" aria-label="Anti-spam verification"></div>
+                <p class="playtest-report-privacy">Cloudflare Turnstile verifies submissions when you press Send report.</p>
+              </div>
+            </div>
+          </div>
+          <footer>
+            <button id="playtestReportCancel" class="secondary-button" type="button">Cancel</button>
+            <button id="playtestReportRetake" class="secondary-button" type="button">Retake screenshot</button>
+            <button id="playtestReportSave" class="primary-button" type="button">Save report</button>
+          </footer>
+        </div>
+      </section>
+
+      <section id="updateOverlay" class="screen confirm-screen update-screen" role="dialog" aria-modal="true" aria-labelledby="updateTitle" hidden>
+        <div class="compact-panel framed-panel">
+          <p class="eyebrow">A new watch begins</p><h2 id="updateTitle">Briarhold update available</h2>
+          <p id="updateVersion" class="update-version"></p>
+          <p id="updateNotes" class="update-notes" aria-live="polite"></p>
+          <button id="updateNowButton" class="primary-button" type="button">View update</button>
+          <button id="updateLaterButton" class="secondary-button" type="button">Later</button>
+        </div>
+      </section>
+
+      <section id="quitConfirmOverlay" class="screen confirm-screen" role="dialog" aria-modal="true" aria-labelledby="quitConfirmTitle" hidden>
+        <div class="compact-panel framed-panel">
+          <p class="eyebrow">Leave Briarhold?</p><h2 id="quitConfirmTitle">Quit game?</h2>
+          <button id="quitCancelButton" class="primary-button" type="button">Keep playing</button>
+          <button id="quitConfirmButton" class="secondary-button" type="button">Quit</button>
+        </div>
+      </section>
+
+      <section id="deleteSaveConfirmOverlay" class="screen confirm-screen" role="dialog" aria-modal="true" aria-labelledby="deleteSaveConfirmTitle" aria-describedby="deleteSaveWarning deleteSaveStatus" hidden>
+        <div class="compact-panel framed-panel">
+          <p class="eyebrow">Permanent action</p><h2 id="deleteSaveConfirmTitle">Delete this save?</h2>
+          <p id="deleteSaveWarning">This deletes the current run, Oathmarks, ranks, unlocks, roster, relationships and story history. Device settings and controller mappings stay.</p>
+          <p id="deleteSaveStatus" role="status" aria-live="polite">This cannot be undone.</p>
+          <button id="deleteSaveCancelButton" class="primary-button" type="button">Keep my save</button>
+          <button id="deleteSaveConfirmButton" class="secondary-button danger-settings-action" type="button">Delete save and start over</button>
+        </div>
+      </section>
+
+      <section id="controllerMappingOverlay" class="screen controller-mapping-screen" role="dialog" aria-modal="true" aria-labelledby="controllerMappingTitle" hidden>
+        <div class="compact-panel framed-panel">
+          <p class="eyebrow">Input calibration</p><h2 id="controllerMappingTitle">Map controller</h2>
+          <p id="controllerMappingPrompt">Release both sticks and all buttons</p>
+          <progress id="controllerMappingProgress" max="18" value="1" aria-label="Controller mapping progress" aria-valuemin="1" aria-valuemax="18" aria-valuenow="1"></progress>
+          <small>Follow each prompt once. Hold Back / B for one second to cancel.</small>
+          <button id="controllerMappingCancelButton" class="secondary-button" type="button">Cancel mapping</button>
+        </div>
+      </section>
+
+      <section id="resultOverlay" class="screen result-screen" role="dialog" aria-modal="true" aria-labelledby="resultTitle" hidden>
+        <div class="result-panel framed-panel">
+          <p id="resultKicker" class="eyebrow">The eastern sky pales</p><h2 id="resultTitle">Night held</h2>
+          <p id="resultMessage">The host withdraws beneath the trees. For now.</p>
+          <dl class="result-stats"><div><dt>Host defeated</dt><dd id="resultKillsText">0</dd></div><div><dt>Oathmarks earned</dt><dd id="resultOathmarksText">0</dd></div><div><dt>Heart Gate</dt><dd id="resultHeartText">100%</dd></div></dl>
+          <button id="resultContinueButton" class="primary-button" type="button">Return to the oath hall</button>
+        </div>
+      </section>
+    </div>
+
+    <noscript>Briarhold requires JavaScript to run.</noscript>
+    <script src="vendor.d8c969227303151aad8f/babylon/babylon-9.16.1.min.js"></script>
+    <script src="vendor.d8c969227303151aad8f/babylon/babylonjs.loaders-9.16.1.min.js"></script>
+    <script src="vendor.d8c969227303151aad8f/pocket-audio-core/pocket-audio-core-0.2.0.iife.js"></script>
+    <script type="module" src="src.d8c969227303151aad8f/game.js"></script>
+  </body>
+</html>
