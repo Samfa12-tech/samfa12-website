@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 95,
-  "versionName": "0.3.0-alpha.95",
-  "title": "Alpha.95 is available",
-  "notes": "The Night 2 Matron can now release, animate, and receive touch-assisted fire correctly; all authored bosses have verified live clips, attack reactions, and facing corrections.",
+  "versionCode": 96,
+  "versionName": "0.3.0-alpha.96",
+  "title": "Alpha.96 is available",
+  "notes": "Playtest reports now queue quickly with durable email retries; Settings can securely delete all progress and begin a fresh oath; daylight, muzzle tracers, Sporewing targeting, and gate formations are repaired.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
