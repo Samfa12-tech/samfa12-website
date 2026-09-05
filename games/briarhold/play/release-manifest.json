@@ -3,7 +3,7 @@
   "package": "briarhold",
   "version": "0.3.0-alpha.97",
   "entrypoint": "index.html",
-  "cacheKey": "d8c969227303151aad8f",
+  "cacheKey": "782b2ccb06ab5d8c43e1",
   "files": [
     {
       "path": "CREDITS.md",
@@ -628,440 +628,440 @@
     {
       "path": "index.html",
       "bytes": 33304,
-      "sha256": "51df18a34c5b8767cc91da5360afaaa9dbda85a517a30cf63c5936be120c1e47"
+      "sha256": "28cf00711f8fee37491380c3795980279fe95efc9ca68f97111123860c767439"
     },
     {
-      "path": "src.d8c969227303151aad8f/aim-assist.js",
+      "path": "src.782b2ccb06ab5d8c43e1/aim-assist.js",
       "bytes": 10541,
       "sha256": "8a58ba1bba3d52e5f35ee94f2f1952f0192c060df44ac231d24724de8b058f69"
     },
     {
-      "path": "src.d8c969227303151aad8f/android-update-check.js",
+      "path": "src.782b2ccb06ab5d8c43e1/android-update-check.js",
       "bytes": 4612,
       "sha256": "e93cb211041cdf6a87c1d790e50b498a98241a40128fc0aecd13f55bfb1a4537"
     },
     {
-      "path": "src.d8c969227303151aad8f/animated-enemy-renderer.js",
+      "path": "src.782b2ccb06ab5d8c43e1/animated-enemy-renderer.js",
       "bytes": 16441,
       "sha256": "d0d4144cb678a218371130c117be9a3f1be08b62224743eaa02c9b42be8289e9"
     },
     {
-      "path": "src.d8c969227303151aad8f/audio.js",
+      "path": "src.782b2ccb06ab5d8c43e1/audio.js",
       "bytes": 47117,
       "sha256": "cb7be01ab3842cc43863f23a5c8d415b42fbb06ac0bcf50820013d6849081c3d"
     },
     {
-      "path": "src.d8c969227303151aad8f/authoritative-combat.js",
+      "path": "src.782b2ccb06ab5d8c43e1/authoritative-combat.js",
       "bytes": 21761,
       "sha256": "4a52858981f36f045595c55ad71b764f08b11487683bb931a7d35b8917a7e9e4"
     },
     {
-      "path": "src.d8c969227303151aad8f/authoritative-delayed-effects.js",
+      "path": "src.782b2ccb06ab5d8c43e1/authoritative-delayed-effects.js",
       "bytes": 11900,
       "sha256": "efa39c232a9497af9538f4b6fcc08ccbfb4be4a8d3eb50737f7e46b42b9672db"
     },
     {
-      "path": "src.d8c969227303151aad8f/battlefield-checkpoint.js",
+      "path": "src.782b2ccb06ab5d8c43e1/battlefield-checkpoint.js",
       "bytes": 19765,
       "sha256": "fcc038497f7ff40236dbea604bd8d925cf9b0bed9a7ea517684fb83b3d4665b3"
     },
     {
-      "path": "src.d8c969227303151aad8f/battlefield.js",
+      "path": "src.782b2ccb06ab5d8c43e1/battlefield.js",
       "bytes": 114009,
       "sha256": "d9854b2fc3fd55026e70da5234cde2f8ec21b8a819c831cc12afe57ec5b25dfd"
     },
     {
-      "path": "src.d8c969227303151aad8f/boons.js",
+      "path": "src.782b2ccb06ab5d8c43e1/boons.js",
       "bytes": 9937,
       "sha256": "59de8448f7841366274956dbe2378b61b9073cb3bd8d1a7de817873d2772487f"
     },
     {
-      "path": "src.d8c969227303151aad8f/boss-assets.js",
+      "path": "src.782b2ccb06ab5d8c43e1/boss-assets.js",
       "bytes": 11409,
       "sha256": "43e118b97767ec8ad74564869b1c7733c682c147c1ec4aa00232ca9237133c51"
     },
     {
-      "path": "src.d8c969227303151aad8f/boss-director.js",
+      "path": "src.782b2ccb06ab5d8c43e1/boss-director.js",
       "bytes": 76335,
       "sha256": "1bb9d3f82f638dbd93d3f17e8519c08ba659eca0fa90874771a71bd693452168"
     },
     {
-      "path": "src.d8c969227303151aad8f/boss-hud.js",
+      "path": "src.782b2ccb06ab5d8c43e1/boss-hud.js",
       "bytes": 713,
       "sha256": "8db38a3ec4ec718e3b2e0c90cf1309453ce1fd413302ca1d27c4e6d0dbe4345c"
     },
     {
-      "path": "src.d8c969227303151aad8f/boss-presentation.js",
+      "path": "src.782b2ccb06ab5d8c43e1/boss-presentation.js",
       "bytes": 24072,
       "sha256": "12bbe9c1467dd3851877671252e920ddaf17746073b880785957d2497fd6a861"
     },
     {
-      "path": "src.d8c969227303151aad8f/breach-solver.js",
+      "path": "src.782b2ccb06ab5d8c43e1/breach-solver.js",
       "bytes": 19082,
       "sha256": "bd0ef3056df79111d478cd89b7c57f42b068f037d23bcf9b6bbdcecd0dff7a4e"
     },
     {
-      "path": "src.d8c969227303151aad8f/camera-motion.js",
+      "path": "src.782b2ccb06ab5d8c43e1/camera-motion.js",
       "bytes": 2443,
       "sha256": "5ad0c6c9bf1f44448776ddee63bc416cd29648224c3d4591bf04cc336e1caa50"
     },
     {
-      "path": "src.d8c969227303151aad8f/campaign-content.js",
+      "path": "src.782b2ccb06ab5d8c43e1/campaign-content.js",
       "bytes": 18237,
       "sha256": "df5365cd7bd90c5bc5dc3653e2446db314a12e3ec1aa21974ed8d4df5ef86326"
     },
     {
-      "path": "src.d8c969227303151aad8f/campaign-runtime.js",
+      "path": "src.782b2ccb06ab5d8c43e1/campaign-runtime.js",
       "bytes": 22476,
       "sha256": "84c70dec3ad1e0d827d67e55f06c361bd363697d35f6c38cd161441af10dc5df"
     },
     {
-      "path": "src.d8c969227303151aad8f/campaign.js",
+      "path": "src.782b2ccb06ab5d8c43e1/campaign.js",
       "bytes": 16178,
       "sha256": "2f411eee1a36656066050bd0f5616e0dc6b21b9dceb71cd037d88ef4aedc9eae"
     },
     {
-      "path": "src.d8c969227303151aad8f/combat-attribution.js",
+      "path": "src.782b2ccb06ab5d8c43e1/combat-attribution.js",
       "bytes": 1273,
       "sha256": "a9992ae199bc877acf6a95361cdaaa47751ff8de341057f8f4e72f0e5cff0986"
     },
     {
-      "path": "src.d8c969227303151aad8f/combat-feedback.js",
+      "path": "src.782b2ccb06ab5d8c43e1/combat-feedback.js",
       "bytes": 4230,
       "sha256": "54b5e420e03cc1eeee69a8216b5376ea8f656ca64f2e2b0c7b44f9d56e32cb94"
     },
     {
-      "path": "src.d8c969227303151aad8f/contracts.js",
+      "path": "src.782b2ccb06ab5d8c43e1/contracts.js",
       "bytes": 4135,
       "sha256": "c9842f3896f80d6f722a92451ad00d67a09e2f035bd3e6dd4d7a9d920232ab7f"
     },
     {
-      "path": "src.d8c969227303151aad8f/controller-mapping.js",
+      "path": "src.782b2ccb06ab5d8c43e1/controller-mapping.js",
       "bytes": 21978,
       "sha256": "93c21a3f32d169e3d7a9c9318c9fdb450615bc8adfe407a7a8aca82627cd3033"
     },
     {
-      "path": "src.d8c969227303151aad8f/controller-profile-capture.js",
+      "path": "src.782b2ccb06ab5d8c43e1/controller-profile-capture.js",
       "bytes": 1212,
       "sha256": "da132140ee3949c6ac36e11d7d93549462a3d9b9da3cc2b2265a83e8a2cc0a69"
     },
     {
-      "path": "src.d8c969227303151aad8f/controller-ui.js",
+      "path": "src.782b2ccb06ab5d8c43e1/controller-ui.js",
       "bytes": 4580,
       "sha256": "77a15d880f646ebfdfe5d9e429630692d037ef555a27aa71403a5fa3c061e64a"
     },
     {
-      "path": "src.d8c969227303151aad8f/coop-boundary-pause.js",
+      "path": "src.782b2ccb06ab5d8c43e1/coop-boundary-pause.js",
       "bytes": 1206,
       "sha256": "d68e3d1bfaea9bb22e730a096fb10be97a26ccc70ed5e62c9931805b2cb59d67"
     },
     {
-      "path": "src.d8c969227303151aad8f/coop-campaign-authority.js",
+      "path": "src.782b2ccb06ab5d8c43e1/coop-campaign-authority.js",
       "bytes": 89332,
       "sha256": "1a706ae1479b2d568af1607100c79190497cd86a6e3ab008062169fb094e3849"
     },
     {
-      "path": "src.d8c969227303151aad8f/coop-preview.js",
+      "path": "src.782b2ccb06ab5d8c43e1/coop-preview.js",
       "bytes": 40851,
       "sha256": "961be7954d40b6a10cb47b89f0ea5980071d979c89a5d0c8b5cce056243b54f6"
     },
     {
-      "path": "src.d8c969227303151aad8f/coop-session.js",
+      "path": "src.782b2ccb06ab5d8c43e1/coop-session.js",
       "bytes": 7831,
       "sha256": "99bdeea2648d426ea1c1610d621bb1a6c6751f01182bb449f7fcdb552f802c95"
     },
     {
-      "path": "src.d8c969227303151aad8f/coop-world-wire.js",
+      "path": "src.782b2ccb06ab5d8c43e1/coop-world-wire.js",
       "bytes": 56754,
       "sha256": "13ab849f7d042c5d6da9c7ee9d601e208f437ec43184912c45deec475e108150"
     },
     {
-      "path": "src.d8c969227303151aad8f/core/gpu-atlas-capabilities.js",
+      "path": "src.782b2ccb06ab5d8c43e1/core/gpu-atlas-capabilities.js",
       "bytes": 3911,
       "sha256": "b297d45021db12147e4209048a7231d5ab0aafbe8d84d16c209a1ff5f40df918"
     },
     {
-      "path": "src.d8c969227303151aad8f/core/gpu-atlas-sprite-state.js",
+      "path": "src.782b2ccb06ab5d8c43e1/core/gpu-atlas-sprite-state.js",
       "bytes": 47940,
       "sha256": "2f9cb38b68e4299e191fba2002f3af75c49fdc732dcdf07641ad757ed7f5be3a"
     },
     {
-      "path": "src.d8c969227303151aad8f/core/render-pixel-budget.js",
+      "path": "src.782b2ccb06ab5d8c43e1/core/render-pixel-budget.js",
       "bytes": 3479,
       "sha256": "44f9831fdd3ff83f2ec2261c515d59fa1da109ce670cfeddb4624a7204bad68f"
     },
     {
-      "path": "src.d8c969227303151aad8f/core/sprite-update-cohorts.js",
+      "path": "src.782b2ccb06ab5d8c43e1/core/sprite-update-cohorts.js",
       "bytes": 3365,
       "sha256": "6c0715bffbe788e23d78599ab81ca74abbba9b290aa102f1b258aad1570c50fa"
     },
     {
-      "path": "src.d8c969227303151aad8f/core/stable-atlas-slots.js",
+      "path": "src.782b2ccb06ab5d8c43e1/core/stable-atlas-slots.js",
       "bytes": 2607,
       "sha256": "c14892eb13aacdf7ce0eb90f276d26b3274fe68cc3fb937d0e404d351cf4cd69"
     },
     {
-      "path": "src.d8c969227303151aad8f/cutscene-presentation.js",
+      "path": "src.782b2ccb06ab5d8c43e1/cutscene-presentation.js",
       "bytes": 11899,
       "sha256": "60d46f612a1597ffcd234df0c68a2b4a9b8e312c42411aafd05f99442187fab4"
     },
     {
-      "path": "src.d8c969227303151aad8f/daywork.js",
+      "path": "src.782b2ccb06ab5d8c43e1/daywork.js",
       "bytes": 20644,
       "sha256": "2b29bdc393ac2951ed72e6e411c5e8acfa5876588aa9811a389b32155c9b91ac"
     },
     {
-      "path": "src.d8c969227303151aad8f/debug-diagnostics.js",
+      "path": "src.782b2ccb06ab5d8c43e1/debug-diagnostics.js",
       "bytes": 1649,
       "sha256": "7b9691c91a60266124582352cd164a5475d0a7c85f6b6d062de96572a3b85d0e"
     },
     {
-      "path": "src.d8c969227303151aad8f/density-profile.js",
+      "path": "src.782b2ccb06ab5d8c43e1/density-profile.js",
       "bytes": 6184,
       "sha256": "10502164c217f70494e69d8648f7dcf3d59f20634811452b17c05beb78326317"
     },
     {
-      "path": "src.d8c969227303151aad8f/economy.js",
+      "path": "src.782b2ccb06ab5d8c43e1/economy.js",
       "bytes": 7730,
       "sha256": "530bfd2c8c7b55e75d571e1673090fbf6a56b6bb786ec139f79dfcf8924f3c85"
     },
     {
-      "path": "src.d8c969227303151aad8f/enemies.js",
+      "path": "src.782b2ccb06ab5d8c43e1/enemies.js",
       "bytes": 3613,
       "sha256": "0ece0a7516929af3f85640d614eaeae2149b2e0ce92d4f6e2f1510c1a56c5dc8"
     },
     {
-      "path": "src.d8c969227303151aad8f/enemy-presentation.js",
+      "path": "src.782b2ccb06ab5d8c43e1/enemy-presentation.js",
       "bytes": 5281,
       "sha256": "8b9fc22e5ff880d1dd020d79556f47122cb151142ab1e6537421185c2ed25c4a"
     },
     {
-      "path": "src.d8c969227303151aad8f/enemy-visuals.js",
+      "path": "src.782b2ccb06ab5d8c43e1/enemy-visuals.js",
       "bytes": 16553,
       "sha256": "fee24e0a655d8add4f8df3adfd852d7e78f58169b71f11b95ee00084a449c90b"
     },
     {
-      "path": "src.d8c969227303151aad8f/fortifications.js",
+      "path": "src.782b2ccb06ab5d8c43e1/fortifications.js",
       "bytes": 9362,
       "sha256": "290aeacbef482662ce69f1452596c70f6753a1739b31f2fc0034defbd43af605"
     },
     {
-      "path": "src.d8c969227303151aad8f/game.js",
+      "path": "src.782b2ccb06ab5d8c43e1/game.js",
       "bytes": 344022,
       "sha256": "045c4dc5a981c770accf9b2bb12d450fbcb58ce0358567421df6ecc0a1b06818"
     },
     {
-      "path": "src.d8c969227303151aad8f/gamepad-input.js",
+      "path": "src.782b2ccb06ab5d8c43e1/gamepad-input.js",
       "bytes": 10853,
       "sha256": "d97b163225360bcac135969fbe732b094736fc34c5a6c5bf70cd47a508584a28"
     },
     {
-      "path": "src.d8c969227303151aad8f/graphics-quality.js",
+      "path": "src.782b2ccb06ab5d8c43e1/graphics-quality.js",
       "bytes": 2275,
       "sha256": "f3c6d08edb4d741bacad54b62abb4f3ba11710354b453df3f89912ae82e90437"
     },
     {
-      "path": "src.d8c969227303151aad8f/hub-combat.js",
+      "path": "src.782b2ccb06ab5d8c43e1/hub-combat.js",
       "bytes": 11366,
       "sha256": "51c8fb63060e17ccf9da3a257fb0b9cd2e6a22b39d0765fd2eb603a3fa43de88"
     },
     {
-      "path": "src.d8c969227303151aad8f/hub-npc-presentation.js",
+      "path": "src.782b2ccb06ab5d8c43e1/hub-npc-presentation.js",
       "bytes": 22854,
       "sha256": "f814e9547790c822c5bf9c74e8b182bfec9ccf689e0acd1b52610ab21300d472"
     },
     {
-      "path": "src.d8c969227303151aad8f/hub.js",
+      "path": "src.782b2ccb06ab5d8c43e1/hub.js",
       "bytes": 14034,
       "sha256": "7738f72e822615756c4e78540547f624f8f330b99b73e9c1dc62a1451a1af276"
     },
     {
-      "path": "src.d8c969227303151aad8f/input-frame.js",
+      "path": "src.782b2ccb06ab5d8c43e1/input-frame.js",
       "bytes": 4320,
       "sha256": "5924fa56edda00cf95f539297a61efd94ed2afb66079c994599bfe919e8954fc"
     },
     {
-      "path": "src.d8c969227303151aad8f/layout.js",
+      "path": "src.782b2ccb06ab5d8c43e1/layout.js",
       "bytes": 5375,
       "sha256": "b5dcbb5315901a631902156c95632c3704de3458d5af48bdd8d0773ba577a664"
     },
     {
-      "path": "src.d8c969227303151aad8f/lighting.js",
+      "path": "src.782b2ccb06ab5d8c43e1/lighting.js",
       "bytes": 7314,
       "sha256": "2ac950aedc87bebf25f6260f369e02d8077c04686e5156c131952ce2fc32814d"
     },
     {
-      "path": "src.d8c969227303151aad8f/look-settings.js",
+      "path": "src.782b2ccb06ab5d8c43e1/look-settings.js",
       "bytes": 832,
       "sha256": "8e0939761d3a07e5764d17463c0f657f5559206b1b948baf98571d5bc38e356c"
     },
     {
-      "path": "src.d8c969227303151aad8f/map-definition.js",
+      "path": "src.782b2ccb06ab5d8c43e1/map-definition.js",
       "bytes": 47094,
       "sha256": "9809c37cf26b1a4687a7330e2453370ead09d790b3bebd2e4cb95192fe31b3e3"
     },
     {
-      "path": "src.d8c969227303151aad8f/map-raycast.js",
+      "path": "src.782b2ccb06ab5d8c43e1/map-raycast.js",
       "bytes": 2491,
       "sha256": "24f128dc2ed854335120c9e1f30f113aa9980e8594a2ad0930dac391d3c2de37"
     },
     {
-      "path": "src.d8c969227303151aad8f/mouse-capture.js",
+      "path": "src.782b2ccb06ab5d8c43e1/mouse-capture.js",
       "bytes": 2296,
       "sha256": "a2c06b70ff132490d85ac85e072cfc0a588c8fe065ca59d8763a18401ec8d3c0"
     },
     {
-      "path": "src.d8c969227303151aad8f/multiplayer-contracts.js",
+      "path": "src.782b2ccb06ab5d8c43e1/multiplayer-contracts.js",
       "bytes": 24039,
       "sha256": "c5758dc12204a167854ab284e6080767973c329f0de898678638eca5d60a26e9"
     },
     {
-      "path": "src.d8c969227303151aad8f/multiplayer-session-checkpoint.js",
+      "path": "src.782b2ccb06ab5d8c43e1/multiplayer-session-checkpoint.js",
       "bytes": 9407,
       "sha256": "e6af493a32c845a9610739ec6b67af8c0cf88f972ca3ee041850d0ab2ee6078e"
     },
     {
-      "path": "src.d8c969227303151aad8f/multiplayer-session-core.js",
+      "path": "src.782b2ccb06ab5d8c43e1/multiplayer-session-core.js",
       "bytes": 29178,
       "sha256": "4400f16993a641797c88e37c37c768f68a831f7a553114d1f999796e281d10de"
     },
     {
-      "path": "src.d8c969227303151aad8f/music-score.js",
+      "path": "src.782b2ccb06ab5d8c43e1/music-score.js",
       "bytes": 14525,
       "sha256": "d880a324a914abdceb6c86d7e31add6acdc6aa80737dcfdacee5755529d3b4a2"
     },
     {
-      "path": "src.d8c969227303151aad8f/narrative-content.js",
+      "path": "src.782b2ccb06ab5d8c43e1/narrative-content.js",
       "bytes": 68446,
       "sha256": "65ec5ff6a3aeb7a79456f0f4256e5f8cdd3453c5d6747de8e28db9be1d13615c"
     },
     {
-      "path": "src.d8c969227303151aad8f/narrative-director.js",
+      "path": "src.782b2ccb06ab5d8c43e1/narrative-director.js",
       "bytes": 21707,
       "sha256": "626bb5df1df8a8392b2f824fb503708a90c0dd69e3db01d2ec3dd6fc976f2e3e"
     },
     {
-      "path": "src.d8c969227303151aad8f/narrative-state.js",
+      "path": "src.782b2ccb06ab5d8c43e1/narrative-state.js",
       "bytes": 11213,
       "sha256": "93b819e0e919cb7d0682e512b11ed916e4bbb321afbe182d3201430daa1aeafd"
     },
     {
-      "path": "src.d8c969227303151aad8f/native-lifecycle.js",
+      "path": "src.782b2ccb06ab5d8c43e1/native-lifecycle.js",
       "bytes": 4548,
       "sha256": "5367a63de74bca3752b4275277fca89b6a6800bb0488bf96b36c2a808563f518"
     },
     {
-      "path": "src.d8c969227303151aad8f/new-game.js",
+      "path": "src.782b2ccb06ab5d8c43e1/new-game.js",
       "bytes": 264,
       "sha256": "5accb3f7c3e8605d079e1ecdb06abb8d998ce44eaaa75d7e9f533f5f52869a82"
     },
     {
-      "path": "src.d8c969227303151aad8f/night-one.js",
+      "path": "src.782b2ccb06ab5d8c43e1/night-one.js",
       "bytes": 754,
       "sha256": "3f5baa2dac139c198e8e2ae9cc5e214c920a5ac0ccc2d0a728e5b5f417c0f459"
     },
     {
-      "path": "src.d8c969227303151aad8f/oath-hall.js",
+      "path": "src.782b2ccb06ab5d8c43e1/oath-hall.js",
       "bytes": 11606,
       "sha256": "b24a84c9b6e690d430c78b310d78dbc2fc5197d2f086da3086911e498d959e78"
     },
     {
-      "path": "src.d8c969227303151aad8f/peer-transport.js",
+      "path": "src.782b2ccb06ab5d8c43e1/peer-transport.js",
       "bytes": 20771,
       "sha256": "3ae61cfa7c1b6f853bcb4fe3a940e6c781f2e441ff20604d5f91da18d82dcc0d"
     },
     {
-      "path": "src.d8c969227303151aad8f/player-controller.js",
+      "path": "src.782b2ccb06ab5d8c43e1/player-controller.js",
       "bytes": 24243,
       "sha256": "b945c91492844b95362e800cb56332f7b6a9196589741d88a94a2aa55e00da2d"
     },
     {
-      "path": "src.d8c969227303151aad8f/playtest-reporter.js",
+      "path": "src.782b2ccb06ab5d8c43e1/playtest-reporter.js",
       "bytes": 20356,
       "sha256": "36edd18f08424e68e0567a30bc55be7379bc90c73b4dfbc34610b14bd213be65"
     },
     {
-      "path": "src.d8c969227303151aad8f/progression-atlas.js",
+      "path": "src.782b2ccb06ab5d8c43e1/progression-atlas.js",
       "bytes": 6007,
       "sha256": "0873e1170996c4cc732f55090f964c96c1a7cf49f5ac69cdf70a20ff4b5eacc1"
     },
     {
-      "path": "src.d8c969227303151aad8f/progression.js",
+      "path": "src.782b2ccb06ab5d8c43e1/progression.js",
       "bytes": 70486,
       "sha256": "7acd1935c433137f16d50e3c07cc393a842d466fde0216f20355dad07b09873d"
     },
     {
-      "path": "src.d8c969227303151aad8f/relationship-goals.js",
+      "path": "src.782b2ccb06ab5d8c43e1/relationship-goals.js",
       "bytes": 29051,
       "sha256": "c7c0f1255a9771e707e768d73453e81cb225d17714869d0ef93b489a33f5b69d"
     },
     {
-      "path": "src.d8c969227303151aad8f/remote-warden.js",
+      "path": "src.782b2ccb06ab5d8c43e1/remote-warden.js",
       "bytes": 14037,
       "sha256": "f8860711a0691cf73b951a9a01439584ac94ae47ea7d9b286f6644088dcb7347"
     },
     {
-      "path": "src.d8c969227303151aad8f/render-governor.js",
+      "path": "src.782b2ccb06ab5d8c43e1/render-governor.js",
       "bytes": 5417,
       "sha256": "fb185dadc155aab9412f7ae29427f00a830a7f9c0b816777eb4891b98a62b470"
     },
     {
-      "path": "src.d8c969227303151aad8f/renderer.js",
+      "path": "src.782b2ccb06ab5d8c43e1/renderer.js",
       "bytes": 66507,
       "sha256": "2e86d8eebb9376d9af0d899adb76ecc7c8c5935e11dcc0f71882e25251ae0636"
     },
     {
-      "path": "src.d8c969227303151aad8f/runtime-progression.js",
+      "path": "src.782b2ccb06ab5d8c43e1/runtime-progression.js",
       "bytes": 13246,
       "sha256": "c1eb57824f5ed62a12b113f2ac2656f7467da1de1697ba7f8dee2e62210e855f"
     },
     {
-      "path": "src.d8c969227303151aad8f/save.js",
+      "path": "src.782b2ccb06ab5d8c43e1/save.js",
       "bytes": 18982,
       "sha256": "2754b1107e9c0d4d91d2f297667dea4043c2707a1882e0873c0f6a2a2df45ac4"
     },
     {
-      "path": "src.d8c969227303151aad8f/signaling-client.js",
+      "path": "src.782b2ccb06ab5d8c43e1/signaling-client.js",
       "bytes": 7518,
       "sha256": "bdaf2365f29b24019bea24d3ab0211d5f2023679ac8cacaf97000f345f416a81"
     },
     {
-      "path": "src.d8c969227303151aad8f/touch-scroll.js",
+      "path": "src.782b2ccb06ab5d8c43e1/touch-scroll.js",
       "bytes": 4635,
       "sha256": "2dc1c2c013a886a3f934eee726e41e44696633a8027464e878069f6f4d679075"
     },
     {
-      "path": "src.d8c969227303151aad8f/ui-art.js",
+      "path": "src.782b2ccb06ab5d8c43e1/ui-art.js",
       "bytes": 2049,
       "sha256": "d50a72fc51f6b629f76d66ad2ce7c240bd30813b25e044fdbb561cb4c34b6227"
     },
     {
-      "path": "src.d8c969227303151aad8f/weapons.js",
+      "path": "src.782b2ccb06ab5d8c43e1/weapons.js",
       "bytes": 11253,
       "sha256": "69044dcb95f44365615c19710eee94b91e24537bea8aeaeb37411dd742e9d683"
     },
     {
-      "path": "src.d8c969227303151aad8f/world.js",
+      "path": "src.782b2ccb06ab5d8c43e1/world.js",
       "bytes": 205121,
       "sha256": "77445e18f49f2eb1134392b5663064434d8885582fd274c2c5aeea5d9c0ec511"
     },
     {
-      "path": "styles.d8c969227303151aad8f/game.css",
-      "bytes": 63813,
-      "sha256": "a805cea19c6296a4d3bbe69242c70dd4609df08f063929023b27b52572a7abd7"
+      "path": "styles.782b2ccb06ab5d8c43e1/game.css",
+      "bytes": 64251,
+      "sha256": "aca4b60f530e3efe9da9caf8659edee083d9a5bd0521c2afe36e0047241d9fde"
     },
     {
-      "path": "vendor.d8c969227303151aad8f/babylon/babylon-9.16.1.min.js",
+      "path": "vendor.782b2ccb06ab5d8c43e1/babylon/babylon-9.16.1.min.js",
       "bytes": 8167011,
       "sha256": "a5243ae871f5128d8a6201ee43af8e2fdff03ed4d9d7b9c20d8905b539dac705"
     },
     {
-      "path": "vendor.d8c969227303151aad8f/babylon/babylonjs.loaders-9.16.1.min.js",
+      "path": "vendor.782b2ccb06ab5d8c43e1/babylon/babylonjs.loaders-9.16.1.min.js",
       "bytes": 522254,
       "sha256": "87c3ab0191671d86d7f1ade099492f8ced1f49f972baab6b19563f453c9a9c34"
     },
     {
-      "path": "vendor.d8c969227303151aad8f/pocket-audio-core/pocket-audio-core-0.2.0.iife.js",
+      "path": "vendor.782b2ccb06ab5d8c43e1/pocket-audio-core/pocket-audio-core-0.2.0.iife.js",
       "bytes": 5816,
       "sha256": "712c1dc552f0dd883b10cbde3f36b305316fb7dda6df9a2ddb8cc8398a0d9883"
     },
