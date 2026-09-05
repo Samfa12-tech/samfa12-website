@@ -69,6 +69,7 @@ import {
   ACTIVE,
   DEAD,
   DYING,
+  ENGAGEMENT_MARCHING,
   EAST,
   WEST,
   createBattlefield,
@@ -222,7 +223,7 @@ import {
 } from "./map-definition.js";
 import {buildCampaignWaveRoster, getCampaignWave} from "./campaign-content.js";
 import {CAMPAIGN_COOP_MODIFIERS} from "./campaign-content.js";
-import {WEAPON_HEAT_SCALE, createNetworkPlayerState} from "./multiplayer-contracts.js";
+import {AUTHORITATIVE_TICK_RATE, WEAPON_HEAT_SCALE, createNetworkPlayerState} from "./multiplayer-contracts.js";
 import {
   GAME_BACK_ACTIONS,
   installNativeLifecycle,
@@ -569,8 +570,8 @@ const pendingCoopIceCandidates = new Map();
 let coopSignalStep = null;
 let coopPersistenceBoundary = null;
 let coopIssueCaptureOpen = false;
-let coopPresentationEnemyIds = new Map();
 let coopPresentationRendererPromise = null;
+let coopPresentation = null;
 let lastCoopCombatResolution = null;
 let coopSemanticEventSequence = 0;
 let coopSemanticEvents = [];
@@ -2766,6 +2767,7 @@ function enterDaytime(restored = false, {queueNarrative = true} = {}) {
   setBuildPanelExpanded(!compactBuildPanelMedia.matches);
   currentRoster = null;
   if (enemyRenderer) { enemyRenderer.dispose(); enemyRenderer = null; }
+  coopPresentation = null;
   battlefield = null;
   selectedSocket = null;
   touchBuildSheetSocketId = null;
@@ -2797,6 +2799,7 @@ function enterRecovery(restored = false) {
   enemyRenderer?.dispose();
   enemyRenderer = null;
   battlefield = null;
+  coopPresentation = null;
   ui.waveText.textContent = `Recovery · Wave ${run.wave + 1} incoming`;
   ui.objectiveText.textContent = "Move, reload and cool weapons";
   recoveryPresentation.show({warning: "The next wave begins automatically", remainingMs: run.recovery.remainingMs});
@@ -2969,6 +2972,7 @@ async function prepareBattlefield(waveIndex) {
   battlefield = nextBattlefield;
   syncCoopMovementGateState();
   enemyRenderer = nextRenderer;
+  coopPresentation = null;
   currentRoster = roster;
   knife = createKnifeMeleeState();
   applyFortificationsToBattlefield();
@@ -4788,24 +4792,78 @@ function presentCoopRunFailed() {
 
 async function ensureCoopPresentationBattlefield(frame) {
   const cohort = frame.crowd?.cohort ?? [];
-  if (coopPreview?.role !== 'guest' || phase !== GAME_PHASES.COMBAT || !cohort.length) return;
-  if (battlefield && battlefield.slotCount >= cohort.length) return;
+  if (coopPreview?.role !== 'guest') return null;
+  if (phase !== GAME_PHASES.COMBAT || !cohort.length) return coopPresentation?.battlefield ?? null;
+  if (enemyRenderer && enemyRenderer === coopPresentation?.renderer
+    && battlefield === coopPresentation.sourceBattlefield
+    && coopPresentation.battlefield.slotCount >= cohort.length) return coopPresentation.battlefield;
   if (coopPresentationRendererPromise) return coopPresentationRendererPromise;
+  const session = coopPreview;
+  const sourceBattlefield = battlefield;
   coopPresentationRendererPromise = (async () => {
-    const roster = cohort.map(tuple => ({type: tuple[1], x: tuple[2], z: tuple[3]}));
+    const roster = cohort.map(tuple => ({type: tuple[1], x: tuple[2], z: tuple[3], releaseAt: 0}));
     const next = createBattlefield({capacity: Math.max(1, roster.length)}).initialize(roster);
+    const ids = new Array(next.capacity).fill(null);
+    next.presentationIds = ids;
     const presentation = refreshEnemyPresentationResolution();
     const renderer = await createEnemyRenderer({
       BABYLON, scene: world.scene, camera: world.camera, battlefield: next,
       profile: rendererProfile, forceLegacy: search.has('legacySprites'),
       animated3dLimit: presentation.maxAnimatedEnemies,
+      dynamicTypes: true,
     });
+    // A checkpoint or session transition can replace authority while assets
+    // load. Never install the obsolete renderer over the new guest state.
+    if (coopPreview !== session || session.role !== 'guest'
+      || phase !== GAME_PHASES.COMBAT || battlefield !== sourceBattlefield) {
+      renderer.dispose();
+      return null;
+    }
     enemyRenderer?.dispose();
-    battlefield = next;
     enemyRenderer = renderer;
-    coopPresentationEnemyIds = new Map(cohort.map((tuple, index) => [tuple[0], index]));
+    // Checkpoint hydration owns the full battlefield. Realtime presentation
+    // owns only the bounded cohort, and must not mutate that checkpoint data.
+    coopPresentation = {battlefield: next, renderer, sourceBattlefield, ids};
+    return next;
   })().finally(() => { coopPresentationRendererPromise = null; });
   return coopPresentationRendererPromise;
+}
+
+function applyCoopCrowdPresentation(frame, presentationBattlefield) {
+  if (!presentationBattlefield || coopPreview?.role !== 'guest'
+    || coopPresentation?.battlefield !== presentationBattlefield
+    || enemyRenderer !== coopPresentation.renderer) return;
+  const cohort = frame.phase === GAME_PHASES.COMBAT ? frame.crowd.cohort : [];
+  if (cohort.length && (phase !== GAME_PHASES.COMBAT
+    || battlefield !== coopPresentation.sourceBattlefield)) return;
+  for (let slot = 0; slot < presentationBattlefield.slotCount; slot += 1) {
+    presentationBattlefield.status[slot] = DEAD;
+    if (slot >= cohort.length) coopPresentation.ids[slot] = null;
+  }
+  presentationBattlefield.activeCount = 0;
+  const elapsed = Number.isFinite(frame.authorityTick)
+    ? Math.max(presentationBattlefield.elapsed, frame.authorityTick / AUTHORITATIVE_TICK_RATE)
+    : presentationBattlefield.elapsed;
+  const dt = elapsed - presentationBattlefield.elapsed;
+  for (let slot = 0; slot < cohort.length; slot += 1) {
+    const tuple = cohort[slot];
+    if (slot >= presentationBattlefield.slotCount) continue;
+    const sameEnemy = coopPresentation.ids[slot] === tuple[0];
+    presentationBattlefield.vx[slot] = sameEnemy && dt > 0 ? (tuple[2] - presentationBattlefield.x[slot]) / dt : 0;
+    presentationBattlefield.vz[slot] = sameEnemy && dt > 0 ? (tuple[3] - presentationBattlefield.z[slot]) / dt : 0;
+    coopPresentation.ids[slot] = tuple[0];
+    presentationBattlefield.type[slot] = enemyTypeFrom(tuple[1]);
+    presentationBattlefield.x[slot] = tuple[2]; presentationBattlefield.z[slot] = tuple[3]; presentationBattlefield.hp[slot] = tuple[6];
+    presentationBattlefield.desiredVx[slot] = Math.sin(tuple[4]);
+    presentationBattlefield.desiredVz[slot] = Math.cos(tuple[4]);
+    // The wire supplies heading and life state, not attack/reserve intent.
+    // Observed motion plus the renderer's settling hysteresis owns this pose.
+    presentationBattlefield.engagementRole[slot] = ENGAGEMENT_MARCHING;
+    presentationBattlefield.waitingRank[slot] = 0;
+    presentationBattlefield.status[slot] = tuple[5] === 'dying' ? DYING : tuple[5] === 'active' ? ACTIVE : DEAD;
+    if (presentationBattlefield.status[slot] === ACTIVE) presentationBattlefield.activeCount += 1;
+  }
+  presentationBattlefield.elapsed = elapsed;
 }
 
 function applyCoopSemanticPresentationEvent(event) {
@@ -4977,23 +5035,9 @@ function applyCoopWorldFrame(frame) {
   writeHudText("enemy:count", ui.enemyCountText, frame.crowd.active.toLocaleString());
   for (const gate of frame.gates) world.updateGateVisual(gate.id === 'outer' ? 'west' : gate.id === 'east' ? 'east' : 'heart', gate.integrity / gate.maxIntegrity, gate.destroyed);
   if (fortificationsChanged) restoreFortificationVisuals();
-  void ensureCoopPresentationBattlefield(frame).then(() => {
-    if (!battlefield || coopPreview?.role !== 'guest') return;
-    for (let slot = 0; slot < battlefield.slotCount; slot += 1) battlefield.status[slot] = DEAD;
-    const cohort = frame.crowd.cohort;
-    coopPresentationEnemyIds = new Map(cohort.map((tuple, index) => [tuple[0], index]));
-    for (let slot = 0; slot < cohort.length; slot += 1) {
-      const tuple = cohort[slot];
-      if (slot >= battlefield.slotCount) continue;
-      battlefield.type[slot] = enemyTypeFrom(tuple[1]);
-      battlefield.x[slot] = tuple[2]; battlefield.z[slot] = tuple[3]; battlefield.hp[slot] = tuple[6];
-      battlefield.desiredVx[slot] = Math.sin(tuple[4]);
-      battlefield.desiredVz[slot] = Math.cos(tuple[4]);
-      battlefield.vx[slot] = battlefield.desiredVx[slot];
-      battlefield.vz[slot] = battlefield.desiredVz[slot];
-      battlefield.status[slot] = tuple[5] === 'dying' ? DYING : tuple[5] === 'active' ? ACTIVE : DEAD;
-    }
-  }).catch(error => console.warn('[Briarhold] Co-op enemy presentation could not be prepared', error));
+  void ensureCoopPresentationBattlefield(frame)
+    .then(presentationBattlefield => applyCoopCrowdPresentation(frame, presentationBattlefield))
+    .catch(error => console.warn('[Briarhold] Co-op enemy presentation could not be prepared', error));
 }
 
 function resolveCoopAuthorityEvents(events) {
@@ -5240,6 +5284,7 @@ function activateCoopWorld({checkpointReason = null} = {}) {
   battlefield = null;
   enemyRenderer?.dispose();
   enemyRenderer = null;
+  coopPresentation = null;
   enterDaytime(true, {queueNarrative: coopPreview.role === "host"});
   canvas.focus({preventScroll: true});
   show(ui.leaveCoopButton, true);
@@ -5576,6 +5621,7 @@ async function confirmDeleteSave() {
   enemyRenderer = null;
   battlefield = null;
   currentRoster = null;
+  coopPresentation = null;
   hubCombatState = null;
   paused = false;
   show(ui.pauseOverlay, false);
@@ -5747,6 +5793,7 @@ function returnToMenu() {
   if (document.pointerLockElement === canvas) document.exitPointerLock?.();
   enemyRenderer?.dispose(); enemyRenderer = null;
   battlefield = null; currentRoster = null;
+  coopPresentation = null;
   paused = false;
   closeSettingsPanel();
   show(ui.coopPanel, false);
@@ -6270,15 +6317,16 @@ function updateHud(now = performance.now() / 1000) {
   const playerRatio = ratio(player.hp, player.maxHp);
   writeHudText("player:health", ui.playerHealthText, `${Math.ceil(player.hp)} / ${player.maxHp}`);
   setMeter(ui.playerHealthBar, player.hp, player.maxHp);
-  const heart = battlefield ? battlefield.heartGateHp : run?.gates?.heart?.integrity || 0;
-  const heartMax = battlefield ? battlefield.heartGateMaxHp : run?.gates?.heart?.maxIntegrity || 1;
-  const outer = battlefield ? battlefield.outerGateHp[WEST] : run?.gates?.outer?.integrity || 0;
-  const outerMax = battlefield ? battlefield.outerGateMaxHp : run?.gates?.outer?.maxIntegrity || 1;
-  const eastOuter = battlefield ? battlefield.outerGateHp[EAST] : run?.gates?.east?.integrity ?? run?.gates?.outer?.integrity ?? 0;
-  const eastOuterMax = battlefield ? battlefield.outerGateMaxHp : run?.gates?.east?.maxIntegrity ?? run?.gates?.outer?.maxIntegrity ?? 1;
+  const hudBattlefield = coopPreview?.role === 'guest' ? null : battlefield;
+  const heart = hudBattlefield ? hudBattlefield.heartGateHp : run?.gates?.heart?.integrity || 0;
+  const heartMax = hudBattlefield ? hudBattlefield.heartGateMaxHp : run?.gates?.heart?.maxIntegrity || 1;
+  const outer = hudBattlefield ? hudBattlefield.outerGateHp[WEST] : run?.gates?.outer?.integrity || 0;
+  const outerMax = hudBattlefield ? hudBattlefield.outerGateMaxHp : run?.gates?.outer?.maxIntegrity || 1;
+  const eastOuter = hudBattlefield ? hudBattlefield.outerGateHp[EAST] : run?.gates?.east?.integrity ?? run?.gates?.outer?.integrity ?? 0;
+  const eastOuterMax = hudBattlefield ? hudBattlefield.outerGateMaxHp : run?.gates?.east?.maxIntegrity ?? run?.gates?.outer?.maxIntegrity ?? 1;
   writeHudText("gate:heart", ui.heartHealthText, `${Math.round(ratio(heart, heartMax) * 100)}%`);
-  writeHudText("gate:outer", ui.outerHealthText, battlefield?.outerGateBreached[WEST] ? "Breached" : `${Math.round(ratio(outer, outerMax) * 100)}%`);
-  writeHudText("gate:east", ui.eastOuterHealthText, battlefield?.outerGateBreached[EAST] ? "Breached" : `${Math.round(ratio(eastOuter, eastOuterMax) * 100)}%`);
+  writeHudText("gate:outer", ui.outerHealthText, (hudBattlefield?.outerGateBreached[WEST] ?? run?.gates?.outer?.destroyed) ? "Breached" : `${Math.round(ratio(outer, outerMax) * 100)}%`);
+  writeHudText("gate:east", ui.eastOuterHealthText, (hudBattlefield?.outerGateBreached[EAST] ?? run?.gates?.east?.destroyed) ? "Breached" : `${Math.round(ratio(eastOuter, eastOuterMax) * 100)}%`);
   setMeter(ui.heartHealthBar, heart, heartMax);
   setMeter(ui.outerHealthBar, outer, outerMax);
   setMeter(ui.eastOuterHealthBar, eastOuter, eastOuterMax);
@@ -6289,7 +6337,8 @@ function updateHud(now = performance.now() / 1000) {
       ? `Night ${run?.night ?? 1}/7 · Wave ${Math.min(3, (run?.wave ?? 0) + 1)}/3`
       : `Night ${run?.night ?? 1} of 7`,
   );
-  writeHudText("enemy-count", ui.enemyCountText, battlefield?.activeCount?.toLocaleString() || "0");
+  const activeEnemies = coopPreview?.role === 'guest' ? coopPreview.latestFrame?.crowd?.active : battlefield?.activeCount;
+  writeHudText("enemy-count", ui.enemyCountText, activeEnemies?.toLocaleString() || "0");
   writeHudText("supplies", ui.supplies, run?.supplies ?? 0);
   const definition = WEAPON_DEFINITIONS[weapon.selected];
   writeHudText("weapon:cue", ui.weaponCue, definition.cue);

@@ -695,6 +695,7 @@ async function createGpuRenderer({
   profile,
   typeFilter = null,
   excludeType = null,
+  dynamicTypes = false,
   name = 'briar-host',
   displayWidth = DEFAULT_ENEMY_DISPLAY.width,
   displayHeight = DEFAULT_ENEMY_DISPLAY.height,
@@ -712,7 +713,10 @@ async function createGpuRenderer({
   };
   try {
   installGpuShaders(BABYLON);
-  const slotIds = rendererSlotIds(battlefield, {typeFilter, excludeType});
+  const slotIds = rendererSlotIds(battlefield, dynamicTypes ? {} : {typeFilter, excludeType});
+  const includedTypes = typeFilterSet(typeFilter), excludedTypes = typeFilterSet(excludeType);
+  const matchesType = id => !dynamicTypes || ((!includedTypes || includedTypes.has(battlefield.type[id]))
+    && (!excludedTypes || !excludedTypes.has(battlefield.type[id])));
   const capacity = slotIds.length;
   const plane = trackPartial(BABYLON.MeshBuilder.CreatePlane(
     `${name}-gpu-sprites`,
@@ -887,10 +891,11 @@ async function createGpuRenderer({
   lastZ.fill(OFFSCREEN);
   const locomotionTracker = createRendererLocomotionTracker(battlefield.capacity);
   const facingLatch = createRendererFacingLatch(capacity);
+  const priorPresentationIds = dynamicTypes ? new Array(capacity).fill(null) : null;
 
   for (let slot = 0; slot < capacity; slot += 1) {
     const id = slotIds[slot];
-    const visible = isRenderableEnemy(battlefield, id) && !suppressedIds?.has(id);
+    const visible = matchesType(id) && isRenderableEnemy(battlefield, id) && !suppressedIds?.has(id);
     const initial = rendererInitialPosition(battlefield, id, visible);
     lastX[slot] = initial.x;
     lastZ[slot] = initial.z;
@@ -969,10 +974,16 @@ async function createGpuRenderer({
       let actionDirty = false;
       for (let slot = 0; slot < capacity; slot += 1) {
         const id = slotIds[slot];
-        const visible = isRenderableEnemy(battlefield, id) && !suppressedIds?.has(id);
+        const visible = matchesType(id) && isRenderableEnemy(battlefield, id) && !suppressedIds?.has(id);
         const alive = battlefield.status?.[id] === (battlefield.ACTIVE ?? 1);
         const targetX = visible ? battlefield.x[id] : OFFSCREEN;
         const targetZ = visible ? battlefield.z[id] : OFFSCREEN;
+        if (priorPresentationIds && battlefield.presentationIds
+          && priorPresentationIds[id] !== battlefield.presentationIds[id]) {
+          priorPresentationIds[id] = battlefield.presentationIds[id];
+          lastX[slot] = lastZ[slot] = OFFSCREEN;
+          locomotionTracker.reset(id, targetX, targetZ, battlefield.elapsed || 0, false);
+        }
         const motionPlanted = locomotionTracker.sample({
           id,
           x: targetX,
@@ -1107,14 +1118,16 @@ function createLegacyRenderer({
   metadata,
   typeFilter = null,
   excludeType = null,
+  dynamicTypes = false,
   name = 'briar-host',
   displayWidth = null,
   displayHeight = null,
   suppressedIds = null,
 }) {
   const includedTypes = typeFilterSet(typeFilter);
+  const excludedTypes = typeFilterSet(excludeType);
   const preservesAuthoredColor = includedTypes !== null && includedTypes.size === 1;
-  const slotIds = rendererSlotIds(battlefield, {typeFilter, excludeType});
+  const slotIds = rendererSlotIds(battlefield, dynamicTypes ? {} : {typeFilter, excludeType});
   const capacity = slotIds.length;
   const manager = new BABYLON.SpriteManager(
     `${name}-legacy-manager`,
@@ -1147,6 +1160,7 @@ function createLegacyRenderer({
   };
   const idleAnimation = metadata.animations?.find(animation => animation?.name === 'idle') || null;
   const locomotionTracker = createRendererLocomotionTracker(battlefield.capacity);
+  const priorPresentationIds = dynamicTypes ? new Array(capacity).fill(null) : null;
   let lastUpdateAt = Number.NEGATIVE_INFINITY;
   return {
     mode: 'legacy-individual-sprites',
@@ -1158,10 +1172,17 @@ function createLegacyRenderer({
       for (let slot = 0; slot < capacity; slot += 1) {
         const id = slotIds[slot];
         const type = battlefield.type?.[id] || 0;
-        const alive = isRenderableEnemy(battlefield, id) && !suppressedIds?.has(id);
+        const matchesType = !dynamicTypes || ((!includedTypes || includedTypes.has(type))
+          && (!excludedTypes || !excludedTypes.has(type)));
+        const alive = matchesType && isRenderableEnemy(battlefield, id) && !suppressedIds?.has(id);
         const sprite = sprites[slot];
         sprite.isVisible = alive;
         if (!alive) continue;
+        if (priorPresentationIds && battlefield.presentationIds
+          && priorPresentationIds[id] !== battlefield.presentationIds[id]) {
+          priorPresentationIds[id] = battlefield.presentationIds[id];
+          locomotionTracker.reset(id, battlefield.x[id], battlefield.z[id], battlefield.elapsed || 0, false);
+        }
         sprite.position.x = battlefield.x[id];
         sprite.position.z = battlefield.z[id];
         const layout = legacySpriteLayoutForType(type, {
@@ -1277,8 +1298,8 @@ function createLegacyRenderer({
   };
 }
 
-function createCompositeRenderer(renderers, mode) {
-  const selectedSprites = renderers.reduce((sum, renderer) => sum + renderer.diagnostics.selectedSprites, 0);
+function createCompositeRenderer(renderers, mode, logicalCapacity = null) {
+  const selectedSprites = logicalCapacity ?? renderers.reduce((sum, renderer) => sum + renderer.diagnostics.selectedSprites, 0);
   const diagnostics = createRendererDiagnostics(selectedSprites, mode);
   diagnostics.partitions = renderers.map(renderer => renderer.diagnostics);
   return {
@@ -1371,6 +1392,9 @@ export async function createEnemyRenderer({
   wickerStateMetadataUrl = 'assets/sprites/wicker-colossus-meshy-combat.json',
   forceLegacy = false,
   animated3dLimit = 0,
+  // Guest wire slots may change archetype. Reserve a bounded cohort-sized pool
+  // per atlas and filter visibility, avoiding async rebuilds as membership moves.
+  dynamicTypes = false,
 }) {
   const suppressedIds = new Set();
   const disposedResources = new WeakSet();
@@ -1390,6 +1414,7 @@ export async function createEnemyRenderer({
         battlefield,
         limit: animated3dLimit,
         suppressedIds,
+        dynamicTypes,
       });
       return createHybridEnemyRenderer(spriteRenderer, animatedRenderer);
     } catch (error) {
@@ -1400,7 +1425,7 @@ export async function createEnemyRenderer({
   };
   const optionalAtlas = (metadataUrl, textureUrl) =>
     loadOptionalAtlas(BABYLON, scene, metadataUrl, textureUrl);
-  const activeTypes = new Set(Array.from(
+  const activeTypes = new Set(dynamicTypes ? [0, 1, 2, 3, 4, 5, 6] : Array.from(
     battlefield.type.slice(0, Math.min(battlefield.slotCount, battlefield.capacity))
   ));
   const [
@@ -1452,6 +1477,7 @@ export async function createEnemyRenderer({
           excludeType: excludedPrimaryTypes,
           name: 'briar-host',
           suppressedIds,
+          dynamicTypes,
           disposeResource,
         });
         const renderers = [primary];
@@ -1472,6 +1498,7 @@ export async function createEnemyRenderer({
             bruteVisualScale: 0.82,
             tintStrength: 0.12,
             suppressedIds,
+            dynamicTypes,
             disposeResource,
           }));
         if (renderers.length > constructedGpuRenderers.length) constructedGpuRenderers.push(renderers.at(-1));
@@ -1490,6 +1517,7 @@ export async function createEnemyRenderer({
             displayHeight: 2.65,
             tintStrength: 0.08,
             suppressedIds,
+            dynamicTypes,
             disposeResource,
           }));
         if (renderers.length > constructedGpuRenderers.length) constructedGpuRenderers.push(renderers.at(-1));
@@ -1508,6 +1536,7 @@ export async function createEnemyRenderer({
             displayHeight: 3.6,
             tintStrength: 0.08,
             suppressedIds,
+            dynamicTypes,
             disposeResource,
           }));
         if (renderers.length > constructedGpuRenderers.length) constructedGpuRenderers.push(renderers.at(-1));
@@ -1526,10 +1555,11 @@ export async function createEnemyRenderer({
             displayHeight: DEFAULT_ENEMY_DISPLAY.height,
             tintStrength: 0.05,
             suppressedIds,
+            dynamicTypes,
             disposeResource,
           }));
         if (renderers.length > constructedGpuRenderers.length) constructedGpuRenderers.push(renderers.at(-1));
-        return await attachAnimatedLayer(createCompositeRenderer(renderers, 'gpu-atlas-multi'));
+        return await attachAnimatedLayer(createCompositeRenderer(renderers, 'gpu-atlas-multi', dynamicTypes ? battlefield.slotCount : null));
       }
       const gpuRenderer = await createGpuRenderer({
         BABYLON,
@@ -1541,6 +1571,7 @@ export async function createEnemyRenderer({
         stateAsset,
         profile,
         suppressedIds,
+        dynamicTypes,
         disposeResource,
       });
       return await attachAnimatedLayer(gpuRenderer);
@@ -1573,6 +1604,7 @@ export async function createEnemyRenderer({
       ...(wickerAsset ? [5] : []),
     ],
     suppressedIds,
+    dynamicTypes,
   });
   const renderers = [primary];
   if (bruteAsset) renderers.push(createLegacyRenderer({
@@ -1587,6 +1619,7 @@ export async function createEnemyRenderer({
       displayWidth: 2.15,
       displayHeight: 2.9,
       suppressedIds,
+      dynamicTypes,
     }));
   if (mossguardAsset) renderers.push(createLegacyRenderer({
       BABYLON,
@@ -1600,6 +1633,7 @@ export async function createEnemyRenderer({
       displayWidth: 2.35,
       displayHeight: 2.65,
       suppressedIds,
+      dynamicTypes,
     }));
   if (sporewingAsset) renderers.push(createLegacyRenderer({
       BABYLON,
@@ -1613,6 +1647,7 @@ export async function createEnemyRenderer({
       displayWidth: 3.45,
       displayHeight: 3.6,
       suppressedIds,
+      dynamicTypes,
     }));
   if (wickerAsset) renderers.push(createLegacyRenderer({
       BABYLON,
@@ -1626,9 +1661,10 @@ export async function createEnemyRenderer({
       displayWidth: 3.4,
       displayHeight: 4.6,
       suppressedIds,
+      dynamicTypes,
     }));
   const spriteRenderer = renderers.length === 1
     ? primary
-    : createCompositeRenderer(renderers, 'legacy-multi-atlas');
+    : createCompositeRenderer(renderers, 'legacy-multi-atlas', dynamicTypes ? battlefield.slotCount : null);
   return await attachAnimatedLayer(spriteRenderer);
 }

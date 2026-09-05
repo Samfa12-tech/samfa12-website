@@ -300,12 +300,13 @@ export async function createAnimatedEnemyRenderer({
   limit = 24,
   suppressedIds = new Set(),
   models = ANIMATED_ENEMY_MODELS,
+  dynamicTypes = false,
 } = {}) {
   if (!BABYLON?.SceneLoader?.ImportMeshAsync || !scene || !battlefield) {
     throw new TypeError('Animated enemies require Babylon SceneLoader, a scene, and a battlefield');
   }
   const typeLimits = animatedEnemyTypeLimits(limit, models);
-  const activeTypes = new Set(Array.from(
+  const activeTypes = new Set(dynamicTypes ? Object.keys(models).map(Number) : Array.from(
     battlefield.type.slice(0, Math.min(battlefield.slotCount, battlefield.capacity)),
   ));
   const records = [];
@@ -339,6 +340,8 @@ export async function createAnimatedEnemyRenderer({
   };
   let nextSelectionAt = Number.NEGATIVE_INFINITY;
   let paused = false;
+  const priorTypes = dynamicTypes ? new Uint8Array(battlefield.capacity).fill(255) : null;
+  const priorPresentationIds = dynamicTypes ? new Array(battlefield.capacity).fill(null) : null;
 
   function refreshSelection(time) {
     if (time < nextSelectionAt) return;
@@ -362,6 +365,14 @@ export async function createAnimatedEnemyRenderer({
     diagnostics,
     update(time) {
       const started = performance.now();
+      if (priorTypes) {
+        for (let id = 0; id < battlefield.slotCount; id += 1) {
+          if (priorTypes[id] !== battlefield.type[id]
+            || priorPresentationIds[id] !== battlefield.presentationIds?.[id]) nextSelectionAt = Number.NEGATIVE_INFINITY;
+          priorTypes[id] = battlefield.type[id];
+          priorPresentationIds[id] = battlefield.presentationIds?.[id];
+        }
+      }
       refreshSelection(time);
       let activeBodies = 0;
       let trianglesPerFrame = 0;
@@ -375,10 +386,12 @@ export async function createAnimatedEnemyRenderer({
             slot.id = -1;
             continue;
           }
-          if (slot.id !== id) {
+          const presentationId = dynamicTypes ? battlefield.presentationIds?.[id] : null;
+          if (slot.id !== id || slot.presentationId !== presentationId) {
             if (slot.role) slot.clips[slot.role]?.stop?.();
             slot.role = null;
             slot.id = id;
+            slot.presentationId = presentationId;
           }
           const x = finite(battlefield.x?.[id], OFFSCREEN);
           const z = finite(battlefield.z?.[id], OFFSCREEN);
