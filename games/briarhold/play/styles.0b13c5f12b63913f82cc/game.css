@@ -418,8 +418,16 @@ body.hub-service-open .touch-control { visibility: hidden; pointer-events: none;
   overflow-x: hidden; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
 }
 .result-panel #resultContinueButton { position: sticky; bottom: 0; z-index: 1; width: 100%; }
-.pause-screen .compact-panel:has(#settingsPanel:not([hidden])) { width: min(720px,92vw); max-height: calc(100dvh - 24px); overflow: hidden; }
-.pause-screen #settingsPanel { text-align: left; }
+.pause-screen .compact-panel:has(#settingsPanel:not([hidden])) {
+  width: min(720px,92vw);
+  max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 4px);
+  grid-template-rows: repeat(4,auto) minmax(0,1fr) auto;
+  overflow: hidden;
+}
+/* The settings row must shrink around the pause heading and actions. A
+   viewport-sized drawer otherwise extends below the clipped pause card. */
+.pause-screen #pauseSettingsMount { min-height: 0; display: grid; grid-template-rows: minmax(0,1fr); }
+.pause-screen #settingsPanel { max-height: 100%; margin-top: 0; text-align: left; }
 .playtest-report-screen { z-index: 180; padding: max(10px,var(--safe-top)) max(10px,var(--safe-right)) max(10px,var(--safe-bottom)) max(10px,var(--safe-left)); background: rgba(3,6,4,.82); backdrop-filter: blur(8px); }
 .playtest-report-panel { width: min(980px,96vw); max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 20px); overflow-y: auto; padding: clamp(16px,2.5vw,28px); touch-action: pan-y; overscroll-behavior: contain; }
 .playtest-report-panel > header { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 14px; }
@@ -582,7 +590,7 @@ body[data-input="mouse"] .touch-control { display: none; }
     padding-bottom: max(14px, var(--safe-bottom));
   }
   .pause-screen .compact-panel:has(#settingsPanel:not([hidden])) {
-    display: block;
+    grid-template-rows: minmax(0,1fr);
     width: min(680px,94vw);
     padding: 8px;
   }
@@ -590,8 +598,7 @@ body[data-input="mouse"] .touch-control { display: none; }
   .pause-screen #pauseSettingsMount { width: 100%; min-height: 0; }
   .pause-screen #settingsPanel {
     width: 100%;
-    height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 18px);
-    max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 18px);
+    max-height: 100%;
     padding-bottom: max(14px, var(--safe-bottom));
   }
   body[data-phase="daytime"] .build-panel {

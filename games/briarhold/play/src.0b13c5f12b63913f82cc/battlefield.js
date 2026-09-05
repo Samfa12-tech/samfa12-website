@@ -9,6 +9,7 @@ import {
 } from "./enemies.js";
 import {createBreachSolver} from "./breach-solver.js";
 import {HOST_EMERGENCE_PROFILE} from "./map-definition.js";
+import {CrowdPressureFlow} from "./crowd-pressure-flow.js";
 
 export const DORMANT = 0;
 export const ACTIVE = 1;
@@ -380,6 +381,7 @@ class Battlefield {
     this.outerGatePressureScale = Math.max(0, finite(options.outerGatePressureScale, 1));
     this.outerGateContactPressureScale = Math.max(0, finite(options.outerGateContactPressureScale, 1));
     this.continuousGatePressure = false;
+    this.crowdPressureFlow = new CrowdPressureFlow(this.capacity, this.world);
 
     this.ids = new Uint32Array(this.capacity);
     this.x = new Float32Array(this.capacity);
@@ -1755,6 +1757,14 @@ class Battlefield {
 
   _holdOuterOverflow(id, dt, solver) {
     this._setEngagementRole(id, ENGAGEMENT_GATE_QUEUE);
+    if (!this.continuousGatePressure) {
+      if (this.outerOverflowRank[id] < 0) this.outerOverflowRank[id] = this.outerFormationRank[id] >= 0
+        ? this.outerFormationRank[id] : this.outerOverflowNext++;
+      // Keep stable IDs/diagnostic ownership, but never turn that ownership
+      // into a permanent stopping row. Local contact determines available space.
+      this.crowdPressureFlow.advance(this, id, dt);
+      return;
+    }
     const archetype = enemyArchetype(this.type[id]);
     const grid = this.outerOverflowGrids[this.approach[id]];
     const {halfWidth, spacing, edgeMargin, columns} = grid;
@@ -1858,6 +1868,11 @@ class Battlefield {
 
   _holdHeartOverflow(id, dt, solver) {
     this._setEngagementRole(id, ENGAGEMENT_GATE_QUEUE);
+    if (!this.continuousGatePressure) {
+      if (this.heartOverflowRank[id] < 0) this.heartOverflowRank[id] = this.heartOverflowNext++;
+      this.crowdPressureFlow.advance(this, id, dt);
+      return;
+    }
     const archetype = enemyArchetype(this.type[id]);
     const grid = this.heartOverflowGrid;
     const {spacing} = grid;
@@ -2184,6 +2199,8 @@ class Battlefield {
       settleAtCapacity: this.heartBreachSolver.capacity >= 8,
     });
 
+    if (!this.continuousGatePressure) this.crowdPressureFlow.build(this);
+
     for (let id = 0; id < this.slotCount; id++) {
       if (this.status[id] !== ACTIVE) continue;
       const pursuingPlayer = Boolean(this.huntingPlayer[id]);
@@ -2230,10 +2247,12 @@ class Battlefield {
           const radius = enemyArchetype(this.type[id]).radius;
           if (!pursuingPlayer
             && !eligibleSolver
-            && !waitingForOuterPacking
+            && (!waitingForOuterPacking || !this.continuousGatePressure)
             && this.z[id] < this.world.gateZ + radius) {
             this.z[id] = this.world.gateZ + radius;
-            this.x[id] += (gateX - this.x[id]) * 0.08;
+            // Pressure-flow bodies already steer along the wall. A second
+            // positional pull toward its centre would jump them through peers.
+            if (!waitingForOuterPacking || this.continuousGatePressure) this.x[id] += (gateX - this.x[id]) * 0.08;
             this.vz[id] = 0;
           }
         } else if (this.z[id] <= this.world.courtyardEntryZ) {
@@ -2245,6 +2264,11 @@ class Battlefield {
         this._attackHeartGate(id, dt, true);
       } else if (waitingForHeartPacking) {
         this._holdHeartOverflow(id, dt, this.heartBreachSolver);
+        if (!this.continuousGatePressure) {
+          const wallZ = this.world.heartGateZ + enemyArchetype(this.type[id]).radius;
+          if (this.z[id] < wallZ) {this.z[id] = wallZ; this.vz[id] = Math.max(0, this.vz[id]);}
+          this._attackHeartGate(id, dt, true);
+        }
       } else if (!contactingPlayer && !this._attackHeartGate(id, dt)) {
         this.vx[id] += (this.desiredVx[id] - this.vx[id]) * 0.35;
         this.vz[id] += (this.desiredVz[id] - this.vz[id]) * 0.35;

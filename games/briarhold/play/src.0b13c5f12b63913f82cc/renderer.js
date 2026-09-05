@@ -110,8 +110,9 @@ export function createRendererLocomotionTracker(capacity, options = {}) {
 /**
  * Converts authoritative engagement intent into presentation semantics.
  * Unreleased reserve bodies are planted. Campaign queue bodies retain their
- * forward press while the bounded solver meters them into the strike front;
- * stress-scale rear reservoirs remain planted to keep 2K/6K hosts readable.
+ * forward press while the bounded solver meters them into the strike front.
+ * Large-host overflow also advances now, so its queue role must retain the
+ * walking/pushing pose rather than sliding a planted reserve sprite.
  * Older fixtures retain the waitingRank compatibility path.
  */
 export function rendererEngagementPresentation(battlefield, id, motionPlanted = false) {
@@ -122,7 +123,6 @@ export function rendererEngagementPresentation(battlefield, id, motionPlanted = 
   return {
     role,
     planted: role === ENGAGEMENT_RESERVE
-      || (role === ENGAGEMENT_GATE_QUEUE && !battlefield.continuousGatePressure)
       || role === ENGAGEMENT_GATE_ATTACK
       || (role === ENGAGEMENT_MARCHING && motionPlanted),
     attacks: role === ENGAGEMENT_GATE_ATTACK

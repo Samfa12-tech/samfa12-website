@@ -1,6 +1,11 @@
 import { BRIARHOLD_FIRST_PERSON_MAP, HOST_EMERGENCE_PROFILE } from './map-definition.js';
 import { HUB_FEATURE_IDS, HUB_NPC_IDS } from './hub.js';
 import {advanceWalkBob, createWalkBobState} from './camera-motion.js';
+import {createDaySky} from './world-day-sky.js';
+import {createWorldLandscape} from './world-landscape.js';
+import {createAnimatedFireMaterial} from './world-fire.js';
+import {TORCH_MOUNTS, TORCH_PLACEMENTS, TORCH_STANDOFF, torchHardwareTransforms} from './world-torch-mounts.js';
+export {TORCH_MOUNTS, TORCH_PLACEMENTS} from './world-torch-mounts.js';
 import {
   lightingPresentationProfile,
   lightingProfileForQuality,
@@ -1564,17 +1569,18 @@ function buildForest(BABYLON, scene, mats, treeCount = 190) {
   return {trunk: trunkBatch, crown: crownBatch, transforms, count: transforms.length};
 }
 
-function buildPortcullisGate(BABYLON, scene, mats, x) {
-  const root = new BABYLON.Mesh('west-gate', scene);
+export function buildPortcullisGate(BABYLON, scene, mats, x, gateId = 'west') {
+  const root = new BABYLON.Mesh(`${gateId}-gate`, scene);
+  const gateMetal = mats.metal.clone(`${gateId}-portcullis-metal`);
   root.position.set(x, 3.5, -1.35);
   for (let index = -3; index <= 3; index += 1) {
     const bar = addBox(
       BABYLON,
       scene,
-      `west-gate-portcullis-bar-${index + 3}`,
+      `${gateId}-gate-portcullis-bar-${index + 3}`,
       {width: 0.38, height: 7, depth: 0.42},
       {x: index * 1.3, y: 0, z: 0},
-      mats.metal,
+      gateMetal,
     );
     bar.parent = root;
   }
@@ -1582,10 +1588,10 @@ function buildPortcullisGate(BABYLON, scene, mats, x) {
     const brace = addBox(
       BABYLON,
       scene,
-      `west-gate-portcullis-brace-${y}`,
+      `${gateId}-gate-portcullis-brace-${y}`,
       {width: 8.3, height: 0.34, depth: 0.48},
       {x: 0, y, z: 0},
-      mats.metal,
+      gateMetal,
     );
     brace.parent = root;
   }
@@ -2688,7 +2694,7 @@ function buildCastle(BABYLON, scene, mats) {
   }
   const gates = {
     west: buildPortcullisGate(BABYLON, scene, mats, -16),
-    east: addBox(BABYLON, scene, 'east-gate', { width: 9, height: 7, depth: 1.3 }, { x: 16, y: 3.5, z: -1.35 }, mats.gate),
+    east: buildPortcullisGate(BABYLON, scene, mats, 16, 'east'),
     heart: buildHeartGate(BABYLON, scene, mats),
   };
   return { gates, wallParts };
@@ -2941,43 +2947,6 @@ function buildFireflies(BABYLON, scene, mats, moteCount = 84) {
   return mote;
 }
 
-export const TORCH_PLACEMENTS = Object.freeze([
-  Object.freeze([-21.25, 5.45, -4.72]),
-  Object.freeze([-10.75, 5.45, -4.72]),
-  Object.freeze([-21.25, 5.45, 0.42]),
-  Object.freeze([-10.75, 5.45, 0.42]),
-  Object.freeze([-30.8, 9.25, 1.25]),
-  // East return rail: the old x=8.2 placement sat in the open stair void.
-  Object.freeze([10.25, 9.25, 0.5]),
-  Object.freeze([-8, 11.2, -7.78]),
-  // East gate pier: the old high sconce was above the ramp with no wall
-  // behind it.  This lower mount shares the east gate's authored pier.
-  Object.freeze([11.8, 5.45, -1.35]),
-  Object.freeze([0, 9, -18.86]),
-  // Warm silhouettes on the inward faces of the new overlook towers make the
-  // opening legible without spending additional point lights.
-  Object.freeze([-21.82, 5.35, 19.4]),
-  Object.freeze([-10.18, 5.35, 19.4]),
-  // Emissive-only flames pull the new outer threshold into the same warm
-  // visual language without increasing the four-light runtime budget.
-  Object.freeze([-26.95, 6.05, 43.62]),
-  Object.freeze([-5.05, 6.05, 43.62]),
-  Object.freeze([-23.5, 4.35, 43.62]),
-  Object.freeze([-8.5, 4.35, 43.62]),
-  // The outer tower pair are emissive skyline anchors only; they reuse the
-  // existing bracket/flame thin-instance batches and spend no extra lights.
-  Object.freeze([-38.72, 8.15, 43.38]),
-  Object.freeze([6.72, 8.15, 43.38]),
-  // Emissive-only courtyard anchors break up the broad inner keep facade and
-  // reveal the service route without spending another point light.
-  Object.freeze([-7.8, 4.4, -18.86]),
-  Object.freeze([7.8, 4.4, -18.86]),
-  // Paired emissive sconces identify the ground-level Warden's Postern beneath
-  // the west stair. They reuse the existing bracket/flame batches and spend
-  // no additional point lights.
-  Object.freeze([-28.95, 2.25, 0.22]),
-  Object.freeze([-24.25, 2.25, 0.22]),
-]);
 export const TORCH_FLAME_TEXTURE_ASSET = 'assets/world/briarhold-torch-flame-256.webp';
 export const TORCH_FLAME_SIZE = Object.freeze({width: 1.02, height: 1.58});
 export const TORCH_FLAME_MATERIAL_TUNING = Object.freeze({
@@ -2987,8 +2956,12 @@ export const TORCH_FLAME_MATERIAL_TUNING = Object.freeze({
   alphaCutOff: 0.24,
   diffuseContribution: false,
 });
-export const BRAZIER_FLAME_Y_OFFSET = 1.18;
-export const FIELD_BRAZIER_FLAME_SCALE = Object.freeze({x: 1.55, y: 1.85, z: 1.55});
+// Measured against the loaded GLB's fuel bed (1.426–1.479m), below its
+// 1.55m rim. This is the flame BASE, never the centre of its scaled plane.
+export const BRAZIER_FLAME_Y_OFFSET = 1.46;
+// The existing WebP has 34 transparent rows below the visible fuel base.
+export const BRAZIER_FLAME_BASE_FRACTION = 34 / 384;
+export const FIELD_BRAZIER_FLAME_SCALE = Object.freeze({x: 1.4, y: 1.15, z: 1.4});
 export const WARDEN_LIGHT_PROFILE = Object.freeze({
   color: '#ffd19a',
   intensity: 760,
@@ -3003,28 +2976,32 @@ export const FIRE_LIGHT_SELECTION_INTERVAL = 0.24;
 export const FIRE_LIGHT_FADE_SPEED = 6.5;
 export const FIRE_HALO_SIZE = Object.freeze({width: 2.45, height: 2.45});
 export const FIELD_BONFIRE_EXTRA_FLAMES = Object.freeze([
-  Object.freeze({dx: -0.38, dy: -0.16, dz: 0.16, sx: 0.62, sy: 0.72, sz: 0.62, ry: 0.37}),
-  Object.freeze({dx: 0.36, dy: -0.22, dz: -0.14, sx: 0.56, sy: 0.66, sz: 0.56, ry: -0.41}),
+  Object.freeze({dx: -0.24, dz: 0.1, sx: 0.62, sy: 0.72, sz: 0.62, ry: 0.37}),
+  Object.freeze({dx: 0.23, dz: -0.09, sx: 0.56, sy: 0.66, sz: 0.56, ry: -0.41}),
 ]);
 export function defensiveFlameTransforms() {
   const brazierFlames = BRAZIER_PLACEMENTS.flatMap(({role, x, y, z, scale}) => {
+    const fuelY = y + BRAZIER_FLAME_Y_OFFSET * scale;
+    const heightScale = (role.startsWith('field-') ? FIELD_BRAZIER_FLAME_SCALE.y : 0.9) * scale;
     const primary = {
       x,
-      y: y + BRAZIER_FLAME_Y_OFFSET * scale,
+      y: fuelY + TORCH_FLAME_SIZE.height * heightScale * (0.5 - BRAZIER_FLAME_BASE_FRACTION),
       z,
       sx: role.startsWith('field-') ? FIELD_BRAZIER_FLAME_SCALE.x * scale : 1.08 * scale,
-      sy: role.startsWith('field-') ? FIELD_BRAZIER_FLAME_SCALE.y * scale : 1.08 * scale,
+      sy: heightScale,
+      baseFraction: BRAZIER_FLAME_BASE_FRACTION,
       sz: role.startsWith('field-') ? FIELD_BRAZIER_FLAME_SCALE.z * scale : 1.08 * scale,
     };
     if (role !== 'field-east') return [primary];
     return [
       primary,
       ...FIELD_BONFIRE_EXTRA_FLAMES.map(tongue => ({
-        x: x + tongue.dx,
-        y: primary.y + tongue.dy,
-        z: z + tongue.dz,
+        x: x + tongue.dx * scale,
+        y: fuelY + TORCH_FLAME_SIZE.height * primary.sy * tongue.sy * (0.5 - BRAZIER_FLAME_BASE_FRACTION),
+        z: z + tongue.dz * scale,
         sx: primary.sx * tongue.sx,
         sy: primary.sy * tongue.sy,
+        baseFraction: BRAZIER_FLAME_BASE_FRACTION,
         sz: primary.sz * tongue.sz,
         ry: tongue.ry,
       })),
@@ -3064,14 +3041,13 @@ export function defensiveFireLightSources() {
   return Object.freeze([...sconces, ...braziers]);
 }
 
-function defensiveFireHaloTransforms() {
-  const sconces = TORCH_PLACEMENTS.map(([x, y, z]) => {
-    const sideWall = z === 1.25;
+function defensiveFireHaloTransforms(mounts = TORCH_MOUNTS) {
+  const sconces = mounts.map(({anchor, normal}) => {
     return {
-      x: x + (sideWall ? 0.025 : 0),
-      y: y - 0.12,
-      z: z + (sideWall ? 0 : 0.025),
-      ry: sideWall ? Math.PI * 0.5 : 0,
+      x: anchor.x + normal.x * 0.065,
+      y: anchor.y + 0.5,
+      z: anchor.z + normal.z * 0.065,
+      ry: Math.atan2(normal.x, normal.z),
       sx: 1.35,
       sy: 1.15,
       sz: 1,
@@ -3091,7 +3067,7 @@ function defensiveFireHaloTransforms() {
 
 function buildStormSky(BABYLON, scene, mats) {
   const sky = BABYLON.MeshBuilder.CreateSphere('briar-storm-sky', {
-    diameter: 500,
+    diameter: 1000,
     segments: 32,
     sideOrientation: BABYLON.Mesh.BACKSIDE,
   }, scene);
@@ -3126,7 +3102,7 @@ export function hostKillzoneWarmthAt(x, z) {
   return 1 - smooth;
 }
 function buildTorches(BABYLON, scene, mats) {
-  const sources = defensiveFireLightSources();
+  const sources = defensiveFireLightSources().map(source => ({...source}));
   const brazierSources = sources.filter(source => source.kind === 'brazier');
   const selectableSources = sources.map(source => ({...source, visible: true}));
   const sourcePoints = selectableSources.map(source => new BABYLON.Vector3(source.x, source.y, source.z));
@@ -3134,7 +3110,7 @@ function buildTorches(BABYLON, scene, mats) {
   const lights = [];
   const slots = [];
   const bracket = BABYLON.MeshBuilder.CreateCylinder('torch-bracket-source', {
-    height: 1.1,
+    height: 0.75,
     diameter: 0.18,
     tessellation: 7
   }, scene);
@@ -3142,10 +3118,15 @@ function buildTorches(BABYLON, scene, mats) {
   bracket.isPickable = false;
   bracket.thinInstanceSetBuffer('matrix', composeMatrices(BABYLON, TORCH_PLACEMENTS.map(([x, y, z]) => ({
     x,
-    y: y - 0.48,
+    y: y - 1.05,
     z,
   }))), 16, true);
   bracket.thinInstanceRefreshBoundingInfo?.(true);
+  const hardware = BABYLON.MeshBuilder.CreateBox('torch-wall-hardware-source', {size: 1}, scene);
+  hardware.material = mats.metal;
+  hardware.isPickable = false;
+  hardware.thinInstanceSetBuffer('matrix', composeMatrices(BABYLON, torchHardwareTransforms()), 16, true);
+  hardware.thinInstanceRefreshBoundingInfo?.(true);
 
   const flameFront = BABYLON.MeshBuilder.CreatePlane('defensive-flame-front-source', {
     width: TORCH_FLAME_SIZE.width,
@@ -3161,14 +3142,12 @@ function buildTorches(BABYLON, scene, mats) {
   const flame = BABYLON.Mesh.MergeMeshes([flameFront, flameSide], true, true, undefined, false, true);
   if (!flame) throw new Error('defensive flame cross could not be merged');
   flame.name = 'defensive-flame-source';
-  flame.material = mats.flame;
+  const animatedFire = createAnimatedFireMaterial(BABYLON, scene, mats.flame.emissiveTexture);
+  flame.material = animatedFire.material;
   flame.isPickable = false;
   const flameTransforms = defensiveFlameTransforms();
   const flameMatrices = composeMatrices(BABYLON, flameTransforms);
-  const flameColors = new Float32Array(flameTransforms.length * 4);
-  flameColors.fill(1);
   flame.thinInstanceSetBuffer('matrix', flameMatrices, 16, true);
-  flame.thinInstanceSetBuffer('instanceColor', flameColors, 4, true);
   flame.thinInstanceRefreshBoundingInfo?.(true);
 
   const haloTexture = new BABYLON.DynamicTexture('fire-halo-texture', {width: 64, height: 64}, scene, false);
@@ -3231,6 +3210,7 @@ function buildTorches(BABYLON, scene, mats) {
   }
   let profile = lightingProfileForQuality('balanced');
   let presentation = lightingPresentationProfile('night');
+  let fireEnabled = true;
   let reducedMotion = false;
   let lastSelectionAt = -Infinity;
   let activeSources = [];
@@ -3240,6 +3220,52 @@ function buildTorches(BABYLON, scene, mats) {
   const matrixRotation = BABYLON.Quaternion.Identity();
   const matrixTranslation = BABYLON.Vector3.Zero();
   const matrix = BABYLON.Matrix.Identity();
+  let resolvedMounts = [];
+
+  function alignMountsToGeometry() {
+    // Imported masonry tapers inside its conservative collision box. Project
+    // the backplate onto the loaded triangles once, then move the complete
+    // sconce to its fixed standoff. Collision proximity cannot prove contact.
+    const candidates = scene.meshes.filter(mesh => mesh.isEnabled()
+      && /wall|gate.*arch|tower|keep|pier|lintel|parapet|postern|stair|ramp|abutment/iu.test(mesh.name)
+      && !/torch|flame|sky|landscape/iu.test(mesh.name));
+    const priorPicking = candidates.map(mesh => mesh.thinInstanceEnablePicking);
+    const candidateSet = new Set(candidates);
+    candidates.forEach(mesh => { mesh.computeWorldMatrix(true); mesh.thinInstanceEnablePicking = true; });
+    try {
+      resolvedMounts = TORCH_MOUNTS.map(mount => {
+        const ray = new BABYLON.Ray(
+          new BABYLON.Vector3(mount.x + mount.normal.x * 0.15, mount.anchor.y, mount.z + mount.normal.z * 0.15),
+          new BABYLON.Vector3(-mount.normal.x, 0, -mount.normal.z), 4,
+        );
+        const hit = scene.pickWithRay(ray, mesh => candidateSet.has(mesh), false);
+        if (!hit?.hit || !hit.pickedPoint) return {...mount, resolved: false};
+        const anchor = {
+          x: hit.pickedPoint.x - mount.normal.x * 0.025,
+          y: mount.anchor.y,
+          z: hit.pickedPoint.z - mount.normal.z * 0.025,
+        };
+        return {...mount, resolved: true, anchor,
+          x: anchor.x + mount.normal.x * TORCH_STANDOFF,
+          z: anchor.z + mount.normal.z * TORCH_STANDOFF,
+        };
+      });
+    } finally { candidates.forEach((mesh, index) => { mesh.thinInstanceEnablePicking = priorPicking[index]; }); }
+    resolvedMounts.forEach((mount, index) => {
+      flameTransforms[index].x = sources[index].x = selectableSources[index].x = mount.x;
+      flameTransforms[index].z = sources[index].z = selectableSources[index].z = mount.z;
+      sourcePoints[index].set(mount.x, mount.y, mount.z);
+    });
+    bracket.thinInstanceSetBuffer('matrix', composeMatrices(BABYLON, resolvedMounts.map(({x, y, z}) => ({x, y: y - 1.05, z}))), 16, true);
+    bracket.thinInstanceRefreshBoundingInfo?.(true);
+    updateFlames(0);
+    flame.thinInstanceRefreshBoundingInfo?.(true);
+    hardware.thinInstanceSetBuffer('matrix', composeMatrices(BABYLON, torchHardwareTransforms(resolvedMounts)), 16, true);
+    hardware.thinInstanceRefreshBoundingInfo?.(true);
+    halo.thinInstanceSetBuffer('matrix', composeMatrices(BABYLON, defensiveFireHaloTransforms(resolvedMounts)), 16, true);
+    halo.thinInstanceRefreshBoundingInfo?.(true);
+    return resolvedMounts.filter(mount => mount.resolved).length;
+  }
 
   function writeMatrix(target, offset, item) {
     matrixScale.set(item.sx ?? 1, item.sy ?? 1, item.sz ?? 1);
@@ -3266,7 +3292,7 @@ function buildTorches(BABYLON, scene, mats) {
     flameTransforms.forEach((base, index) => {
       const flicker = sampleFlameFlicker(now, index, {reducedMotion, target: flameSamples[index]});
       animatedFlame.x = base.x + Math.sin(now * 4.3 + index * 1.17) * flicker.sway * 0.11;
-      animatedFlame.y = base.y + flicker.lift;
+      animatedFlame.y = base.y + (flicker.stretchY - 1) * TORCH_FLAME_SIZE.height * (0.5 - (base.baseFraction ?? 0)) * (base.sy ?? 1);
       animatedFlame.z = base.z;
       animatedFlame.sx = (base.sx ?? 1) * flicker.stretchX;
       animatedFlame.sy = (base.sy ?? 1) * flicker.stretchY;
@@ -3275,14 +3301,8 @@ function buildTorches(BABYLON, scene, mats) {
       animatedFlame.ry = (base.ry ?? 0) + flicker.sway;
       animatedFlame.rz = base.rz ?? 0;
       writeMatrix(flameMatrices, index * 16, animatedFlame);
-      const colorOffset = index * 4;
-      flameColors[colorOffset] = flicker.brightness * (0.96 + flicker.warmth * 0.08);
-      flameColors[colorOffset + 1] = flicker.brightness * (0.83 + flicker.warmth * 0.17);
-      flameColors[colorOffset + 2] = flicker.brightness * (0.68 + flicker.warmth * 0.24);
-      flameColors[colorOffset + 3] = 1;
     });
     flame.thinInstanceBufferUpdated?.('matrix');
-    flame.thinInstanceBufferUpdated?.('instanceColor');
   }
 
   function updateEmbers(now) {
@@ -3377,12 +3397,14 @@ function buildTorches(BABYLON, scene, mats) {
     profile = nextProfile;
     lastSelectionAt = -Infinity;
     slots.forEach((slot, index) => {
-      slot.light.setEnabled(index < profile.fireLightCount);
+      slot.light.setEnabled(fireEnabled && index < profile.fireLightCount);
       if (index >= profile.fireLightCount) slot.light.intensity = 0;
     });
   }
 
   function update(now, dt, camera, threat = 0) {
+    if (!fireEnabled) return;
+    animatedFire.update(now, camera, reducedMotion);
     updateFlames(now);
     updateEmbers(now);
     updateLights(now, dt, camera, threat);
@@ -3400,23 +3422,42 @@ function buildTorches(BABYLON, scene, mats) {
     flameCount: flameTransforms.length,
     bracketCount: TORCH_PLACEMENTS.length,
     setProfile,
-    setPresentationProfile(nextProfile) { presentation = nextProfile; },
+    alignMountsToGeometry,
+    setPresentationProfile(nextProfile) {
+      presentation = nextProfile;
+      fireEnabled = !presentation.key.startsWith('day');
+      flame.setEnabled(fireEnabled);
+      halo.setEnabled(fireEnabled);
+      ember.setEnabled(fireEnabled && !reducedMotion && profile.emberCount > 0);
+      slots.forEach((slot, index) => {
+        slot.light.setEnabled(fireEnabled && index < profile.fireLightCount);
+        slot.light.intensity = 0;
+        slot.source = null;
+        slot.pendingSource = null;
+      });
+      activeSources = [];
+      lastSelectionAt = -Infinity;
+    },
     setReducedMotion(value) { reducedMotion = value === true; },
     update,
     diagnostics() {
       return {
+        enabled: fireEnabled,
+        animatedTexture: true,
+        wallMountedSconces: TORCH_MOUNTS.length,
+        resolvedWallMounts: resolvedMounts.filter(mount => mount.resolved).length,
+        unresolvedWallMounts: resolvedMounts.filter(mount => !mount.resolved).map(mount => ({collisionId: mount.collisionId, face: mount.face, anchor: mount.anchor})),
         activeSources: activeSources.map(source => source.id),
         sourceCount: sources.length,
         surfaceHaloCount: sources.length,
-        fireLightCount: profile.fireLightCount,
-        emberCount: reducedMotion ? 0 : profile.emberCount,
+        fireLightCount: fireEnabled ? profile.fireLightCount : 0,
+        emberCount: !fireEnabled || reducedMotion ? 0 : profile.emberCount,
         flicker: slots
           .filter(slot => slot.source)
           .map(slot => ({id: slot.source.id, brightness: slot.flicker.brightness})),
         visualFlicker: flameSamples.slice(0, 4).map((sample, index) => ({
           index,
           ...sample,
-          color: Array.from(flameColors.slice(index * 4, index * 4 + 3)),
         })),
       };
     },
@@ -3813,21 +3854,28 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
     return mesh;
   });
   const forest = buildForest(BABYLON, scene, mats, lowSpec ? 72 : 190);
+  const landscape = createWorldLandscape(BABYLON, scene, mats, {lowSpec});
   const meshyForest = buildMeshyForest(BABYLON, scene, forest, mobileTextures);
+  const landscapeReady = meshyForest.ready.then(batches => landscape.setForestSource(batches?.[0]?.source));
   const meshyBattlefieldVerge = buildMeshyBattlefieldVerge(BABYLON, scene, mobileTextures);
   const meshyBraziers = buildMeshyBraziers(BABYLON, scene, mobileTextures);
   const meshyBraziersReady = meshyBraziers.ready.then(mesh => {
     suppressLoadedBrazierFallbacks(traversal, mesh);
+    setWorldPresentationProfile(presentationProfile.key.startsWith('day') ? 'day' : 'night');
     return mesh;
   });
   const roadStones = buildRoadStones(BABYLON, scene, mats, lowSpec ? 24 : 58);
   const briars = buildBriars(BABYLON, scene, lowSpec ? 8 : 18);
   const sky = buildStormSky(BABYLON, scene, mats);
   const moon = buildMoon(BABYLON, scene, mats);
+  const daySky = createDaySky(BABYLON, scene);
   const motes = buildFireflies(BABYLON, scene, mats, lowSpec ? 24 : 84);
   // Every authored fire animates; a bounded physical light pool follows the
   // nearest visible sources so mobile materials never see an unbounded list.
   const torches = buildTorches(BABYLON, scene, mats);
+  const torchMountsReady = Promise.all([
+    meshyFortressWallReady, meshyFortressWatchtowersReady, meshyFortressGateArchReady,
+  ]).then(() => torches.alignMountsToGeometry());
   torches.setProfile(lightingProfile);
   const banners = buildBanners(BABYLON, scene, mats);
   const sockets = buildFortificationSockets(BABYLON, scene, mats);
@@ -3912,6 +3960,7 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
 
   function eligibleShadowCaster(mesh) {
     if (!mesh?.isEnabled?.()) return false;
+    if (mesh.metadata?.shadowCaster === false || mesh.metadata?.decorativeLandscape) return false;
     if (!(mesh.getTotalVertices?.() > 0) && !(mesh.thinInstanceCount > 0)) return false;
     if (/(?:sky|moon|flame|halo|ember|mote|banner|socket|impact|tracer|preview|pick|killing-field|west-killzone-apron|west-forest-road|east-forest-road|host-road)/iu.test(mesh.name || '')) return false;
     const materialInstance = mesh.material;
@@ -4041,6 +4090,11 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
   function setWorldPresentationProfile(profileId) {
     presentationProfile = worldPresentationProfile(profileId, {shadowsEnabled: lightingProfile.moonShadowMapSize > 0});
     torches.setPresentationProfile(presentationProfile);
+    for (const mesh of scene.meshes) {
+      if (!mesh.name.startsWith('meshy-brazier-source')) continue;
+      const emission = presentationProfile.key.startsWith('day') ? [0, 0, 0] : MESHY_BRAZIER_MATERIAL_TUNING.emissiveLift;
+      mesh.material?.emissiveColor?.set?.(...emission);
+    }
     scene.clearColor = BABYLON.Color4.FromHexString(`${presentationProfile.skyColor}ff`);
     scene.fogColor = BABYLON.Color3.FromHexString(presentationProfile.fogColor);
     scene.fogDensity = presentationProfile.fogDensity;
@@ -4057,6 +4111,8 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
     mats.sky.emissiveTexture = celestial.stormTextureVisible ? skyTexture : null;
     mats.sky.emissiveColor = BABYLON.Color3.FromHexString(celestial.skyEmissiveColor);
     moon.setEnabled(celestial.moonVisible);
+    sky.setEnabled(celestial.stormTextureVisible);
+    daySky.setPresentationProfile(presentationProfile);
     return presentationProfile;
   }
 
@@ -4690,6 +4746,7 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
     const dt = Math.max(0, Math.min(0.1, now - lastEffectsAt));
     lastEffectsAt = now;
     skyTexture.uOffset = stormSkyTextureOffset(now, reducedMotion);
+    daySky.update(now, {reducedMotion});
     displayedThreat += (targetThreat - displayedThreat) * Math.min(1, dt * 2.8);
     const celestial = worldCelestialPresentation(presentationProfile);
     moonLight.intensity = Math.max(0, celestial.keyLightIntensity - displayedThreat * 0.18);
@@ -4748,6 +4805,7 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
     ground,
     hostRoad,
     environmentReady: Promise.all([
+      torchMountsReady,
       meshyFortressWallReady,
       meshyFortressWatchtowersReady,
       meshyFortressGateArchReady,
@@ -4755,6 +4813,7 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
       meshyFieldDefencesReady,
       meshyDefenderCachesReady,
       meshyForest.ready,
+      landscapeReady,
       meshyBattlefieldVerge.ready,
       meshyBraziersReady,
       meshyHubWaveBell.ready,
@@ -4819,6 +4878,8 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
       }, aspectRatio);
       return {
         trees: forest.count,
+        landscape: landscape.diagnostics(),
+        daySky: daySky.diagnostics(),
         meshyForest: {...meshyForest.state},
         meshyBattlefieldVerge: {...meshyBattlefieldVerge.state},
         meshyBraziers: {...meshyBraziers.state},

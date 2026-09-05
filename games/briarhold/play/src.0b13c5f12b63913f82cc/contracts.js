@@ -5,7 +5,7 @@
  * renderer, input, save and test code can agree on a stable wire shape.
  */
 
-export const BRIARHOLD_VERSION = "0.3.0-alpha.97";
+export const BRIARHOLD_VERSION = "0.3.0-alpha.98";
 
 export const GAME_PHASES = Object.freeze({
   MENU: "menu",

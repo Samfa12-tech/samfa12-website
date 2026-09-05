@@ -28,15 +28,15 @@ function safeRelative(value) {
     && !/^[a-z]:/i.test(value);
 }
 
-export async function validateBriarholdPackage(packageRoot, {requireAlpha97 = true} = {}) {
+export async function validateBriarholdPackage(packageRoot) {
   const root = path.resolve(packageRoot);
   const manifestBuffer = await fs.readFile(path.join(root, "release-manifest.json"));
   const manifest = JSON.parse(manifestBuffer.toString("utf8"));
   if (manifest.schemaVersion !== 2 || manifest.package !== "briarhold" || manifest.entrypoint !== "index.html") {
     throw new Error("Briarhold release manifest metadata is invalid.");
   }
-  if (requireAlpha97 && manifest.version !== "0.3.0-alpha.97") {
-    throw new Error(`Expected Briarhold 0.3.0-alpha.97, received ${manifest.version ?? "unknown"}.`);
+  if (manifest.version !== "0.3.0-alpha.98") {
+    throw new Error(`Expected Briarhold 0.3.0-alpha.98, received ${manifest.version ?? "unknown"}.`);
   }
   if (!/^[a-f0-9]{20}$/.test(manifest.cacheKey) || !Array.isArray(manifest.files) || !manifest.files.length) {
     throw new Error("Briarhold release manifest cache key or files are invalid.");

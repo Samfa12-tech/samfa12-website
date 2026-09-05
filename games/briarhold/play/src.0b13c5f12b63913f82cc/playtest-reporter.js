@@ -1,6 +1,10 @@
 export const PLAYTEST_REPORT_ENDPOINT = "/__briarhold/playtest-report";
 export const PLAYTEST_REMOTE_REPORT_ENDPOINT = "https://briarhold-signal.samfa12.com/api/playtest-reports";
 export const PLAYTEST_REMOTE_TIMEOUT_MS = 10000;
+// The relay limits the complete UTF-8 JSON body, including base64 and consented
+// diagnostics. Leave 256 KiB for those fields and the verification token.
+export const PLAYTEST_REMOTE_MAX_BYTES = 2 * 1024 * 1024;
+export const PLAYTEST_SCREENSHOT_MAX_BYTES = PLAYTEST_REMOTE_MAX_BYTES - 256 * 1024;
 export const PLAYTEST_TURNSTILE_SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 export const DEBUG_DIAGNOSTICS_PLUGIN = "DebugDiagnostics";
 
@@ -179,6 +183,34 @@ function canvasPngDataUrl(canvas) {
   });
 }
 
+export async function encodePlaytestScreenshot({
+  source,
+  documentTarget = globalThis.document,
+  encodePng = canvasPngDataUrl,
+}) {
+  let size = reportScreenshotSize(source.width, source.height);
+  for (;;) {
+    let canvas = source;
+    if (size.width !== source.width || size.height !== source.height) {
+      canvas = documentTarget.createElement("canvas");
+      canvas.width = size.width;
+      canvas.height = size.height;
+      const context = canvas.getContext("2d");
+      if (!context) throw new Error("2D screenshot scaling is unavailable");
+      context.drawImage(source, 0, 0, size.width, size.height);
+    }
+    const dataUrl = await encodePng(canvas);
+    // PNG data URLs are ASCII, so their length is their encoded request size.
+    if (dataUrl.length <= PLAYTEST_SCREENSHOT_MAX_BYTES) return {dataUrl, ...size};
+    if (size.width === 1 && size.height === 1) throw new Error("Could not fit the screenshot in a report");
+    const scale = Math.min(0.85, Math.sqrt(PLAYTEST_SCREENSHOT_MAX_BYTES / dataUrl.length) * 0.95);
+    size = {
+      width: Math.max(1, Math.floor(size.width * scale)),
+      height: Math.max(1, Math.floor(size.height * scale)),
+    };
+  }
+}
+
 export async function capturePlaytestScreenshot({engine, scene, documentTarget = globalThis.document}) {
   const width = Math.max(1, Math.round(finite(engine?.getRenderWidth?.(), 1)));
   const height = Math.max(1, Math.round(finite(engine?.getRenderHeight?.(), 1)));
@@ -206,18 +238,7 @@ export async function capturePlaytestScreenshot({engine, scene, documentTarget =
   }
   sourceContext.putImageData(image, 0, 0);
 
-  const size = reportScreenshotSize(width, height);
-  let encodedCanvas = source;
-  if (size.width !== width || size.height !== height) {
-    encodedCanvas = documentTarget.createElement("canvas");
-    encodedCanvas.width = size.width;
-    encodedCanvas.height = size.height;
-    const scaledContext = encodedCanvas.getContext("2d");
-    if (!scaledContext) throw new Error("2D screenshot scaling is unavailable");
-    scaledContext.drawImage(source, 0, 0, size.width, size.height);
-  }
-  const dataUrl = await canvasPngDataUrl(encodedCanvas);
-  return {dataUrl, ...size};
+  return encodePlaytestScreenshot({source, documentTarget});
 }
 
 export async function detectPlaytestReportReceiver(
@@ -285,6 +306,11 @@ export async function submitPlaytestReport(payload, fetchImpl = globalThis.fetch
     if (!token || typeof token !== "string") throw new Error("Turnstile verification is required");
     requestPayload = {...payload, turnstileToken: token};
   }
+  const body = JSON.stringify(requestPayload);
+  const sizeError = "Report is too large. Retake the screenshot or turn off optional screenshot/diagnostics sharing, then try again. Your note is still here.";
+  if (remote && new TextEncoder().encode(body).byteLength > PLAYTEST_REMOTE_MAX_BYTES) {
+    throw new Error(sizeError);
+  }
   const controller = typeof AbortController === "function" ? new AbortController() : null;
   let timeout;
   const timeoutError = new Promise((_, reject) => {
@@ -298,7 +324,7 @@ export async function submitPlaytestReport(payload, fetchImpl = globalThis.fetch
     response = await Promise.race([fetchImpl(endpoint, {
     method: "POST",
     headers: {"Content-Type": "application/json", Accept: "application/json"},
-    body: JSON.stringify(requestPayload),
+    body,
     ...(controller ? {signal: controller.signal} : {}),
     }), timeoutError]);
   } catch (error) {
@@ -308,6 +334,9 @@ export async function submitPlaytestReport(payload, fetchImpl = globalThis.fetch
     clearTimeout(timeout);
   }
   const result = await response.json().catch(() => ({}));
+  if (remote && (response.status === 413 || ["request-too-large", "screenshot-too-large"].includes(result.error))) {
+    throw new Error(sizeError);
+  }
   if (!response.ok) throw new Error(result.error || `Report receiver returned ${response.status}`);
   return result;
 }
@@ -473,8 +502,11 @@ export function createPlaytestReporter({
         close();
       }
       if (event.key === "Tab") {
-        const focusables = [elements.note, elements.category, elements.impact, elements.retake, elements.save, elements.cancel]
-          .filter((element) => element && !element.disabled && !element.hidden);
+        const consentControls = receiver?.remote === true && remoteOptions?.hidden !== true
+          ? [screenshotConsent, diagnosticsConsent] : [];
+        const focusables = [elements.note, elements.category, elements.impact,
+          ...consentControls, elements.retake, elements.save, elements.cancel]
+          .filter((element) => element && !element.disabled && !element.hidden && !element.closest?.("[hidden]"));
         if (focusables.length) {
           const current = focusables.indexOf(windowTarget.document?.activeElement);
           const next = (current + (event.shiftKey ? -1 : 1) + focusables.length) % focusables.length;

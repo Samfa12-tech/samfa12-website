@@ -64,12 +64,12 @@ const PROFILE_DEFINITIONS = Object.freeze({
 const PRESENTATION_LIGHTING_PROFILES = Object.freeze({
   day: Object.freeze({
     key: 'day', shadowEnabled: true, fogDensity: 0.0032, fogColor: '#708b82', skyColor: '#86a9aa',
-    hemiIntensity: 1.08, moonIntensity: 0.12, sunIntensity: 1.38, torchProminence: 0.34,
+    hemiIntensity: 1.08, moonIntensity: 0.12, sunIntensity: 1.38, torchProminence: 0,
     minimumMaterialAmbient: 0.58,
   }),
   dayShadowless: Object.freeze({
     key: 'day-shadowless', shadowEnabled: false, fogDensity: 0.0032, fogColor: '#708b82', skyColor: '#86a9aa',
-    hemiIntensity: 1.16, moonIntensity: 0.1, sunIntensity: 1.2, torchProminence: 0.3,
+    hemiIntensity: 1.16, moonIntensity: 0.1, sunIntensity: 1.2, torchProminence: 0,
     minimumMaterialAmbient: 0.66,
   }),
   night: Object.freeze({

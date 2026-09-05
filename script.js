@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260905-1";
+  const DATA_VERSION = "20260905-2";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -39,7 +39,7 @@
       category: "Games",
       type: "Spiritual sequel to The Last Guard",
       status: "Browser and Android testing available",
-      description: "A first-person action-defence roguelite available for Alpha.97 browser and Android testing, with experimental multiplayer co-op.",
+      description: "A first-person action-defence roguelite available for Alpha.98 browser and Android testing, with experimental multiplayer co-op.",
       featured: true,
       homepageRank: 2,
       homepageSize: "tall",
