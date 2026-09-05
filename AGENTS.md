@@ -86,9 +86,10 @@ manifest, file hashes and complete inventory before replacing this route.
 Keep relative assets and content-addressed directories intact; do not edit
 the hosted game by hand. The Pages workflow verifies the staged artifact too.
 
-The current public tester release (2026-09-04) is Alpha.96 at
-`/games/briarhold/`, with prerelease tag `briarhold-alpha.96` and updater
-manifest `games/briarhold/releases/latest.json` at versionCode 96. Recheck the
+The current public tester release (2026-09-05) is Alpha.97 at
+`/games/briarhold/`, with browser play at `/games/briarhold/play/`, immutable
+prerelease tag `briarhold-alpha.97` and updater
+manifest `games/briarhold/releases/latest.json` at versionCode 97. Recheck the
 live page, release, and repository history before treating those values as
 current in a later task.
 

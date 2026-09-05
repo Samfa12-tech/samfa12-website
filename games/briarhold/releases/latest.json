@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 96,
-  "versionName": "0.3.0-alpha.96",
-  "title": "Alpha.96 is available",
-  "notes": "Playtest reports now queue quickly with durable email retries; Settings can securely delete all progress and begin a fresh oath; daylight, muzzle tracers, Sporewing targeting, and gate formations are repaired.",
+  "versionCode": 97,
+  "versionName": "0.3.0-alpha.97",
+  "title": "Alpha.97 is available",
+  "notes": "Illustrated conversations, themed boons and a new Oath Hall atlas; smarter courtyard pursuit; moonlit materials and improved save and dialog handling. Browser play is now available alongside Android.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
