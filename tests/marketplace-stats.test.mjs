@@ -186,6 +186,15 @@ test("scheduled marketplace updates do not require Steam API access", () => {
   assert.deepEqual(validateMarketplaceConfig(config), []);
 });
 
+test("Pages deploys after a successful marketplace update", async () => {
+  const workflow = await readFile(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
+  assert.match(workflow, /workflow_run:\s+workflows:/);
+  assert.match(workflow, /- Update public marketplace statistics/);
+  assert.match(workflow, /types:\s+- completed/);
+  assert.match(workflow, /github\.event\.workflow_run\.conclusion == 'success'/);
+  assert.match(workflow, /ref: main/);
+});
+
 test("Google Play report enumeration returns matching reports and sanitises storage list denial", async () => {
   const report = { name: "sales/salesreport_202608.zip" };
   const storage = { bucket: (bucket) => ({ getFiles: async ({ prefix }) => {
