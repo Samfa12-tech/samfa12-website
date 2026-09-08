@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 98,
-  "versionName": "0.3.0-alpha.98",
-  "title": "Alpha.98 is available",
-  "notes": "Swarming crowds press into available space. A daylight sky, surrounding hills and woodland, mounted torches and dish-aligned animated brazier flames bring the fortress to life. Also fixes report screenshot size, controller-settings scrolling and guest enemy visibility in co-op, with matching outer portcullises.",
+  "versionCode": 99,
+  "versionName": "0.3.0-alpha.99",
+  "title": "Alpha.99 is available",
+  "notes": "Collect glowing Supply drops, shared in co-op, and follow clearer NPC missions. Improves save-reset recovery, Sporewing targeting and wings, Wicker movement, enemy scale, text editing, southern terrain and day/night transitions. Kill heat refunds now have a limit per attack; base boss health and Oathmarks are unchanged. Both co-op players should update to Alpha.99.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
