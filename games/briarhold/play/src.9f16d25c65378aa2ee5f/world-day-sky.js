@@ -75,6 +75,7 @@ uniform sampler2D cloudTexture;
 uniform vec3 sunDirection;
 uniform vec3 horizonColor;
 uniform float cloudOffset;
+uniform float presentationAlpha;
 void main(void) {
   vec3 direction = normalize(vSkyDirection);
   float altitude = max(0.0, direction.y);
@@ -98,7 +99,7 @@ void main(void) {
   float sunVisibility = 1.0 - cloudCover * 0.78;
   sky += vec3(1.0, 0.73, 0.33) * halo * sunVisibility;
   sky = mix(sky, vec3(1.0, 0.96, 0.76), disc * sunVisibility);
-  gl_FragColor = vec4(sky, 1.0);
+  gl_FragColor = vec4(sky, presentationAlpha);
 }`;
 
 export function createDaySky(BABYLON, scene, {sunDirection = DAY_SKY.sunDirection} = {}) {
@@ -113,13 +114,15 @@ export function createDaySky(BABYLON, scene, {sunDirection = DAY_SKY.sunDirectio
   const material = new BABYLON.ShaderMaterial('briar-day-sky-material', scene,
     {vertexSource: VERTEX_SHADER, fragmentSource: FRAGMENT_SHADER}, {
       attributes: ['position'],
-      uniforms: ['worldViewProjection', 'sunDirection', 'horizonColor', 'cloudOffset'],
+      uniforms: ['worldViewProjection', 'sunDirection', 'horizonColor', 'cloudOffset', 'presentationAlpha'],
+      needAlphaBlending: true,
       samplers: ['cloudTexture'],
     });
   const direction = daySkySunDirection(sunDirection);
   material.setVector3('sunDirection', new BABYLON.Vector3(...direction));
   material.setColor3('horizonColor', BABYLON.Color3.FromHexString('#708b82'));
   material.setFloat('cloudOffset', 0);
+  material.setFloat('presentationAlpha', 0);
   material.setTexture('cloudTexture', texture);
   material.backFaceCulling = false;
   material.disableDepthWrite = true;
@@ -136,8 +139,9 @@ export function createDaySky(BABYLON, scene, {sunDirection = DAY_SKY.sunDirectio
   let enabled = false;
   let cloudOffset = 0;
   return {
-    setPresentationProfile(profile) {
-      enabled = String(typeof profile === 'string' ? profile : profile?.key ?? '').startsWith('day');
+    setPresentationProfile(profile, alpha = String(typeof profile === 'string' ? profile : profile?.key ?? '').startsWith('day') ? 1 : 0) {
+      enabled = alpha > 0;
+      material.setFloat('presentationAlpha', alpha);
       mesh.setEnabled(enabled);
       if (profile?.fogColor) material.setColor3('horizonColor', BABYLON.Color3.FromHexString(profile.fogColor));
     },

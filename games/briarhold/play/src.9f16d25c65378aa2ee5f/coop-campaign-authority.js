@@ -1,3 +1,5 @@
+import {normalizeSupplyOrbState} from './supply-orbs.js';
+import {normalizeAttackHeat} from './attack-heat.js';
 import {
   createBattlefieldCheckpoint,
   restoreBattlefieldCheckpoint,
@@ -45,7 +47,7 @@ import {
   snapshotAuthoritativeDelayedEffects,
 } from "./authoritative-delayed-effects.js";
 
-export const COOP_CAMPAIGN_CHECKPOINT_VERSION = 4;
+export const COOP_CAMPAIGN_CHECKPOINT_VERSION = 5;
 export const COOP_CROWD_COHORT_CAP = 192;
 export const COOP_SEMANTIC_EVENT_CAP = 256;
 export const COOP_ACTION_LEDGER_SNAPSHOT_VERSION = 1;
@@ -488,6 +490,7 @@ const RUN_REQUIRED_KEYS = new Set([
 ]);
 const RUN_OPTIONAL_KEYS = new Set([
   "objectiveState", "nightRuntime", "hubCombat", "recovery", "bellConfirmation", "nightStartingNpcIds",
+  "supplyOrbs", "attackHeat",
 ]);
 const RUN_PLAYER_KEYS = new Set(["hp", "maxHp"]);
 const RUN_DAYWORK_BENEFIT_KEYS = new Set(["gateRepairDiscountAvailable", "consumeReceipt"]);
@@ -1549,13 +1552,13 @@ function hashText(text) {
 export function hashCoopCampaignCheckpoint(checkpoint) {
   const value = clone(checkpoint);
   delete value.hash;
-  return `cc4-${hashText(encodeCheckpoint(value))}`;
+  return `cc5-${hashText(encodeCheckpoint(value))}`;
 }
 
 function normaliseCheckpoint(value, {requireHash = false} = {}) {
   const input = record(value, "co-op campaign checkpoint");
   exactKeys(input, CHECKPOINT_KEYS, "co-op campaign checkpoint");
-  if (input.version !== COOP_CAMPAIGN_CHECKPOINT_VERSION || input.protocolVersion !== 4) {
+  if (input.version !== COOP_CAMPAIGN_CHECKPOINT_VERSION || input.protocolVersion !== 5) {
     throw new RangeError("co-op campaign checkpoint version is unsupported");
   }
   validateCheckpointProfileShape(input.profile);
@@ -1592,7 +1595,7 @@ function normaliseCheckpoint(value, {requireHash = false} = {}) {
   if (semanticEvents.some(event => event.sequence > eventCursor)) throw new RangeError("co-op semantic events exceed the applied cursor");
   const normalized = {
     version: COOP_CAMPAIGN_CHECKPOINT_VERSION,
-    protocolVersion: 4,
+    protocolVersion: 5,
     authorityTick: integer(input.authorityTick, "co-op campaign authorityTick"),
     eventCursor,
     profile,
@@ -1634,7 +1637,7 @@ export function createCoopCampaignCheckpoint({
 } = {}) {
   const checkpoint = normaliseCheckpoint({
     version: COOP_CAMPAIGN_CHECKPOINT_VERSION,
-    protocolVersion: 4,
+    protocolVersion: 5,
     authorityTick,
     eventCursor,
     profile,
@@ -1740,4 +1743,15 @@ export function resolveCoopWardenDownState({run, players, targetPlayerId = null}
     revivedPlayerId,
     failed: currentPlayers.every(player => player.hp <= 0),
   });
+}
+
+/** Adopt validated immutable authority without copying campaign-length XP/snapshot history.
+ * Gameplay mutates top-level fields and these bounded ledgers; other nested state
+ * keeps its immutable ownership and is replaced by existing domain transitions.
+ */
+export function adoptCoopLiveRun(run) {
+  return {...run,
+    supplyOrbs: normalizeSupplyOrbState(run.supplyOrbs),
+    attackHeat: normalizeAttackHeat(run.attackHeat),
+  };
 }

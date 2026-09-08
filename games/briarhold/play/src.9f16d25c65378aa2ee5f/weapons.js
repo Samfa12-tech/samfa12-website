@@ -253,6 +253,7 @@ export function tryFireWeapon(state, nowSeconds, tuning = {}) {
   if (state.overheated || now + 1e-9 < state.nextShotAt) return null;
   const previousDeadline = Math.max(0, Number(state.nextShotAt) || 0);
   const overheatThreshold = Math.max(1, Number(tuning.overheatThreshold) || 1);
+  const heatBefore = state.heat;
   state.heat = Math.min(overheatThreshold, state.heat + weapon.heat * Math.max(0, Number(tuning.heatGainMultiplier) || 1));
   // Keep fractional lateness from normal frame sampling, but never emit a
   // catch-up burst after a real hitch. One call can still produce one shot.
@@ -272,7 +273,7 @@ export function tryFireWeapon(state, nowSeconds, tuning = {}) {
   state.shots += 1;
   const overheatWindow = weapon.id === "sunfire" && overheatThreshold > 1 && state.heat >= 1;
   if (state.heat >= overheatThreshold) state.overheated = true;
-  return { ...weapon, firedAt: now, shot: state.shots, overheatWindow };
+  return { ...weapon, firedAt: now, shot: state.shots, overheatWindow, chargedHeat: state.heat - heatBefore };
 }
 
 export function weaponDamageAgainst(weaponId, enemyArmour = 'infantry') {

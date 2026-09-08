@@ -562,7 +562,7 @@ export function evaluateGpuAtlasSpriteReference(input = {}, out = {}) {
         ? Math.max(0.001, finite(input.attackProjectionScale, 1))
         : 1;
   const groundedMotion = clamp(speed / 0.6, 0, 1);
-  const plantedMotion = waiting ? 0 : 1;
+  const plantedMotion = waiting || input.authoredPose === true ? 0 : 1;
   const bob = Math.sin(time * (
     isJetpack ? 7.5
       : isPowder ? 11
@@ -610,6 +610,7 @@ export function evaluateGpuAtlasSpriteReference(input = {}, out = {}) {
       * (1 + Math.min(0.08, speed * 0.01));
   }
   const logicalScaleX = logicalType >= 5 ? 3.4 / 1.5 : 1;
+  if (input.authoredPose === true) visualScale = 1;
   const logicalScaleY = logicalType >= 5 ? 4.6 / 2.25 : 1;
   const fixedScale = isBrute || isPowder || isShield || isJetpack || isMech;
   const baseScaleY = Math.max(0.001,
@@ -625,7 +626,7 @@ export function evaluateGpuAtlasSpriteReference(input = {}, out = {}) {
   const farReadability = mobile
     ? GROUNDED_ENEMY_MOTION.farReadabilityMobile
     : GROUNDED_ENEMY_MOTION.farReadabilityDesktop;
-  const distanceReadability = lerp(1, farReadability, clamp((cameraDistance - 55) / 60, 0, 1));
+  const distanceReadability = input.authoredPose === true ? 1 : lerp(1, farReadability, clamp((cameraDistance - 55) / 60, 0, 1));
   const proceduralDeathProgress = authoredDeath ? 0 : deathProgress;
   let scaleX = Math.max(0.001,
     finite(input.displayWidth, 1) * finite(input.frameScale, 1) * visualScale * logicalScaleX * distanceReadability
@@ -643,7 +644,7 @@ export function evaluateGpuAtlasSpriteReference(input = {}, out = {}) {
   const lifeMotion = 1 - proceduralDeathProgress;
   const flightY = (isJetpack
     ? sporewingFlightOffsetAtGate(logicalZ, finite(input.gateZ))
-      + Math.sin(time * 1.9 + seed) * 0.38
+      + Math.sin(time * 1.9 + seed) * 0.38 * (input.authoredPose === true ? 0 : 1)
     : 0) * lifeMotion;
   const deathDrop = proceduralDeathProgress * 0.38;
   const facingVelocityX = finite(input.facingVelocityX, velocityX);
@@ -740,6 +741,7 @@ uniform float displayWidth;
 uniform float displayHeight;
 uniform float frameScale;
 uniform float bruteVisualScale;
+uniform float authoredPose;
 uniform sampler2D frameMetaSampler;
 uniform sampler2D idleFrameMetaSampler;
 uniform sampler2D attackFrameMetaSampler;
@@ -851,7 +853,7 @@ void main(void) {
   float isMech = step(4.5, typeCode);
   float isHeavy = min(1.0, isBrute + isMech);
   float groundedMotion = clamp(speed / 0.6, 0.0, 1.0);
-  float plantedMotion = 1.0 - waiting;
+  float plantedMotion = (1.0 - waiting) * (1.0 - authoredPose);
   float bobRate = isJetpack > 0.5 ? 7.5 : isPowder > 0.5 ? 11.0
     : isHeavy > 0.5 ? ${GROUNDED_ENEMY_MOTION.heavyBobRate.toFixed(1)} : ${GROUNDED_ENEMY_MOTION.normalBobRate.toFixed(2)};
   float bobAmount = isJetpack > 0.5 ? 0.18 : isPowder > 0.5 ? 0.075
@@ -880,11 +882,12 @@ void main(void) {
   else if (isShield > 0.5) visualScale = mix(1.04, 0.9, mobileMode);
   else if (isJetpack > 0.5) visualScale = mix(1.02, 0.92, mobileMode);
   else if (isMech > 0.5) visualScale = 1.0;
+  visualScale = mix(visualScale, 1.0, authoredPose);
   float fixedScale = min(1.0, isBrute + isPowder + isShield + isJetpack + isMech);
   float scaleX = displayWidth * frameScale * visualScale;
   float scaleY = displayHeight * frameScale * visualScale;
   float flightY = isJetpack > 0.5
-    ? sporewingFlightOffset(logicalXZ.y) + sin(visualTime * 1.9 + seed) * 0.38
+    ? sporewingFlightOffset(logicalXZ.y) + sin(visualTime * 1.9 + seed) * 0.38 * (1.0 - authoredPose)
     : 0.0;
   vec2 facingVelocity = length(spriteFeedback.zw) >= 0.06 ? spriteFeedback.zw : velocity;
   vec2 attackDirection = length(facingVelocity) > 0.001 ? normalize(facingVelocity) : vec2(0.0, -1.0);
@@ -912,7 +915,7 @@ void main(void) {
     ${GROUNDED_ENEMY_MOTION.farReadabilityMobile.toFixed(2)},
     mobileMode
   );
-  float distanceReadability = mix(1.0, farReadability, smoothstep(55.0, 115.0, cameraDistance));
+  float distanceReadability = mix(mix(1.0, farReadability, smoothstep(55.0, 115.0, cameraDistance)), 1.0, authoredPose);
   if (logicalType > 4.5) {
     scaleX *= 2.2666667;
     scaleY *= 2.0444444;
@@ -1026,7 +1029,7 @@ void main(void) {
       'hasStateAnimations', 'attackFramesPerDirection', 'hitFramesPerDirection', 'deathFramesPerDirection',
       'attackFrameMetaWidth', 'hitFrameMetaWidth', 'deathFrameMetaWidth',
       'attackProjectionScale', 'hitProjectionScale', 'deathProjectionScale',
-      'mobileMode', 'displayWidth', 'displayHeight', 'frameScale', 'bruteVisualScale',
+      'mobileMode', 'displayWidth', 'displayHeight', 'frameScale', 'bruteVisualScale', 'authoredPose',
       'alphaCutoff', 'brightness', 'tintStrength'
     ],
     samplers: [

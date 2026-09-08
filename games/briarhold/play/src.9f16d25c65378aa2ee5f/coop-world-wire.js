@@ -1,7 +1,8 @@
 import {createNetworkPlayerState, createPlayerCommand, isSessionPhase} from './multiplayer-contracts.js';
+import {normalizeSupplyOrbPresentation} from './supply-orbs.js';
 import {BOSS_ENCOUNTER_DEFINITIONS} from './boss-director.js';
 
-export const COOP_WIRE_PROTOCOL_VERSION = 4;
+export const COOP_WIRE_PROTOCOL_VERSION = 5;
 export const COOP_MAX_MESSAGE_BYTES = 64 * 1024;
 export const COOP_MAX_CHECKPOINT_BYTES = 2 * 1024 * 1024;
 // Control-channel chunks leave room for the JSON envelope and base64 overhead.
@@ -609,7 +610,7 @@ function normalizeNarrative(value) {
 
 export function createCoopWorldFrame(value = {}) {
   const input = record(value, 'Co-op world frame');
-  exactKeys(input, new Set(['version', 'kind', 'authorityTick', 'night', 'wave', 'phase', 'subphase', 'players', 'crowd', 'boss', 'objective', 'resources', 'gates', 'fortifications', 'hub', 'narrative', 'events', 'eventCursor', 'stateHash']), 'Co-op world frame');
+  exactKeys(input, new Set(['version', 'kind', 'authorityTick', 'night', 'wave', 'phase', 'subphase', 'players', 'crowd', 'boss', 'objective', 'resources', 'gates', 'fortifications', 'hub', 'narrative', 'events', 'eventCursor', 'stateHash', 'supplyOrbs']), 'Co-op world frame');
   if (input.kind !== undefined && input.kind !== COOP_WIRE_MESSAGE_KINDS.WORLD_FRAME) throw new RangeError('Co-op world frame kind is unsupported');
   if (!isSessionPhase(input.phase)) throw new RangeError('Co-op world frame phase is unsupported');
   if (!Array.isArray(input.players) || input.players.length !== 2) throw new RangeError('Co-op world frame requires exactly two Wardens');
@@ -631,6 +632,7 @@ export function createCoopWorldFrame(value = {}) {
     authorityTick: integer(input.authorityTick, 'world frame authorityTick'), night: integer(input.night, 'world frame night', 1, 7),
     wave: integer(input.wave, 'world frame wave', 0, 3), phase: input.phase, subphase: stableId(input.subphase, 'world frame subphase'),
     players, crowd: normalizeCrowd(input.crowd), boss: normalizeBoss(input.boss), objective: normalizeObjective(input.objective), resources: normalizeResources(input.resources),
+    supplyOrbs: normalizeSupplyOrbPresentation(input.supplyOrbs),
     gates: input.gates.map(normalizeGate), fortifications: input.fortifications.map(normalizeFortification), hub: normalizeHub(input.hub), narrative,
     events, eventCursor, stateHash: shortString(input.stateHash, 'world frame stateHash', 256)};
   return boundedMessage(output, 'Co-op realtime world frame');

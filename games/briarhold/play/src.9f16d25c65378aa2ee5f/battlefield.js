@@ -10,6 +10,7 @@ import {
 import {createBreachSolver} from "./breach-solver.js";
 import {HOST_EMERGENCE_PROFILE} from "./map-definition.js";
 import {CrowdPressureFlow} from "./crowd-pressure-flow.js";
+import {sporewingTargetProfileAtGate} from "./enemy-presentation.js";
 
 export const DORMANT = 0;
 export const ACTIVE = 1;
@@ -87,10 +88,11 @@ export function sporewingGateAttackTarget(id, gateX, gateZ = 0) {
 // straight assault lane.
 export const WICKER_LOW_PASSAGE_ROUTE = Object.freeze({
   minX: -22.4,
-  maxX: -13.6,
+  maxX: -10,
   minZ: 3.2,
-  maxZ: 10.4,
-  bypassX: -24.6,
+  maxZ: 22,
+  // Clear the low deck AND the ground cache at x=-27.9..-23.3,z=18.9..22.1.
+  bypassX: -30.4,
   rejoinZ: 2.2,
 });
 
@@ -98,7 +100,7 @@ export function wickerLowPassageWaypoint({x = 0, z = 0} = {}) {
   const route = WICKER_LOW_PASSAGE_ROUTE;
   const currentX = finite(x, 0);
   const currentZ = finite(z, 0);
-  const lookAhead = 2.4;
+  const lookAhead = 2.6;
   if (currentZ <= route.rejoinZ || currentZ > route.maxZ + lookAhead) return null;
   // Keep returning the bypass waypoint while crossing the narrow band between
   // the passage envelope and the cleared threshold. Without this overlap, the
@@ -109,7 +111,30 @@ export function wickerLowPassageWaypoint({x = 0, z = 0} = {}) {
   if (!insidePassage && !clearedWest) return null;
   return clearedWest
     ? {x: route.bypassX, z: route.rejoinZ}
-    : {x: route.bypassX, z: route.maxZ + 1};
+    : {x: route.bypassX, z: route.maxZ + lookAhead};
+}
+
+function wickerPursuitCrossesLowDeck(x, z, target) {
+  // The Wicker cannot pursue a Warden through the 3.5 m gallery. Use its
+  // horizontal animation envelope, not the player's much smaller capsule.
+  const clearance = 2.6;
+  let near = 0;
+  let far = 1;
+  for (const [origin, delta, min, max] of [
+    [x, target.x - x, WICKER_LOW_PASSAGE_ROUTE.minX - clearance, WICKER_LOW_PASSAGE_ROUTE.maxX + clearance],
+    [z, target.z - z, WICKER_LOW_PASSAGE_ROUTE.minZ - clearance, WICKER_LOW_PASSAGE_ROUTE.maxZ + clearance],
+  ]) {
+    if (Math.abs(delta) < 1e-9) {
+      if (origin < min || origin > max) return false;
+      continue;
+    }
+    const first = (min - origin) / delta;
+    const second = (max - origin) / delta;
+    near = Math.max(near, Math.min(first, second));
+    far = Math.min(far, Math.max(first, second));
+    if (near > far) return false;
+  }
+  return true;
 }
 
 export const DEFAULT_WORLD = Object.freeze({
@@ -1487,7 +1512,8 @@ class Battlefield {
           && (this.zone[id] === APPROACH_ZONE || this.zone[id] === COURTYARD_ZONE)
           && this._playerTargetDistance(id, assigned)
             <= assigned.retainRadius + archetype.radius;
-      if (retained) return assignedIndex;
+      if (retained && !(this.type[id] === WICKER_COLOSSUS
+        && wickerPursuitCrossesLowDeck(this.x[id], this.z[id], assigned))) return assignedIndex;
       this.playerTargetIndexById[id] = -1;
       this._releasePlayerSwarmSlot(id);
     }
@@ -1495,6 +1521,8 @@ class Battlefield {
     let bestDistance = Number.POSITIVE_INFINITY;
     for (let index = 0; index < this.playerTargets.length; index++) {
       const target = this.playerTargets[index];
+      if (this.type[id] === WICKER_COLOSSUS
+        && wickerPursuitCrossesLowDeck(this.x[id], this.z[id], target)) continue;
       if (this.type[id] !== SPOREWING
         && (!target.exposed || (this.zone[id] !== APPROACH_ZONE && this.zone[id] !== COURTYARD_ZONE))) continue;
       const distance = this._playerTargetDistance(id, target);
@@ -1518,6 +1546,9 @@ class Battlefield {
     const targetIndex = this._selectPlayerTarget(id);
     const target = targetIndex >= 0 ? this.playerTargets[targetIndex] : null;
     if (!target) return false;
+    if (this.type[id] === WICKER_COLOSSUS && wickerPursuitCrossesLowDeck(
+      this.x[id], this.z[id], this._playerSwarmTarget(id) || target,
+    )) return false;
     // Dedicated hunters are authored into the same staggered companies as the
     // lane host. They must not begin steering or attacking before their
     // company has actually entered the encounter.
@@ -1666,7 +1697,7 @@ class Battlefield {
       && !this.outerGateBreached[lane]
       ? sporewingGateAttackTarget(id, gateX, this.world.gateZ)
       : null;
-    const wickerWaypoint = this.type[id] === WICKER_COLOSSUS && lane === WEST && !this.outerGateBreached[lane]
+    const wickerWaypoint = this.type[id] === WICKER_COLOSSUS && lane === WEST
       ? wickerLowPassageWaypoint({x: this.x[id], z: this.z[id]})
       : null;
     const targetX = sporewingGateTarget
@@ -2404,8 +2435,10 @@ class Battlefield {
     for (let id = 0; id < this.slotCount; id++) {
       if (this.status[id] !== ACTIVE) continue;
       const archetype = enemyArchetype(this.type[id]);
-      const height = this.type[id] === SPOREWING
-        ? 3.6
+      const flight = this.type[id] === SPOREWING
+        ? sporewingTargetProfileAtGate(this.z[id], this.world.gateZ) : null;
+      const height = flight
+        ? flight.centerY
         : this.type[id] >= WICKER_COLOSSUS ? 3.1 : this.type[id] === 1 ? 1.75 : 1.25;
       const ex = this.x[id];
       const ey = height;
@@ -2413,6 +2446,23 @@ class Battlefield {
       const vx = ex - ox;
       const vy = ey - oy;
       const vz = ez - oz;
+      if (flight) {
+        // Intersect the same vertical flight envelope used by both renderers
+        // and reticle-clamped touch acquisition. A fixed y=3.6 sphere leaves
+        // visible gate-crossing bodies impossible to shoot.
+        const radius = archetype.radius + padding;
+        const halfHeight = flight.halfHeight + padding;
+        const a = (dx * dx + dz * dz) / (radius * radius) + dy * dy / (halfHeight * halfHeight);
+        const b = -2 * ((vx * dx + vz * dz) / (radius * radius) + vy * dy / (halfHeight * halfHeight));
+        const c = (vx * vx + vz * vz) / (radius * radius) + vy * vy / (halfHeight * halfHeight) - 1;
+        const discriminant = b * b - 4 * a * c;
+        if (discriminant < 0) continue;
+        const near = (-b - Math.sqrt(discriminant)) / (2 * a);
+        const far = (-b + Math.sqrt(discriminant)) / (2 * a);
+        const distance = Math.max(0, near);
+        if (far >= 0 && distance <= maxDistance) matches.push({id, distance, missDistance: 0});
+        continue;
+      }
       const distance = vx * dx + vy * dy + vz * dz;
       if (distance < 0 || distance > maxDistance) continue;
       const closestX = ox + dx * distance;

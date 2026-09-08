@@ -173,7 +173,7 @@ function resolveHorizontalMove(state, candidate, mapDefinition, options) {
   return {x, z};
 }
 
-function positionIsClear(position, mapDefinition, radius, capsuleHeight, disabledCollisionIds) {
+export function positionIsClear(position, mapDefinition, radius = PLAYER_DEFAULTS.capsuleRadius, capsuleHeight = PLAYER_DEFAULTS.capsuleHeight, disabledCollisionIds = null) {
   if (sampleSolidRampFill(mapDefinition, position.x, position.z, {feetY: position.y, radius})) return false;
   return !(mapDefinition.collisionVolumes ?? []).some((volume) => {
     if (!blocksPlayer(volume) || disabledCollisionIds?.has(volume.id)) return false;

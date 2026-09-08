@@ -496,6 +496,9 @@ export function createPlaytestReporter({
 
   const handleKeydown = (event) => {
     if (open) {
+      // Keep native editing/default button behaviour, but no underlying modal
+      // (or gameplay listener) may consume keys from this topmost dialog.
+      event.stopImmediatePropagation();
       if (event.code === "Escape") {
         event.preventDefault();
         event.stopImmediatePropagation();

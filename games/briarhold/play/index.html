@@ -11,7 +11,7 @@
     <meta name="briarhold-release-channel" content="production-alpha">
     <meta name="briarhold-turnstile-site-key" content="0x4AAAAAAEhf76L7CP5yrpYp">
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="styles.03daadf602f1e7fe080f/game.css">
+    <link rel="stylesheet" href="styles.9f16d25c65378aa2ee5f/game.css">
     <title>Briarhold · First-Person Defender</title>
   </head>
   <body data-phase="menu" data-input="mouse" data-controller="disconnected">
@@ -30,6 +30,7 @@
         <p>Briarhold is played in landscape.</p>
       </section>
 
+      <div id="announcement" class="announcement" role="status" aria-live="assertive"></div>
       <div id="combatHud" class="combat-hud" hidden>
         <section class="vital-stack hud-panel" aria-label="Defender and fortress vitality">
           <div class="identity-line"><span class="crest-dot" aria-hidden="true"></span><strong>Warden</strong><b id="playerHealthText">100</b></div>
@@ -66,7 +67,6 @@
         <div id="reticle" aria-hidden="true"><span></span></div>
         <div id="hitMarker" aria-hidden="true"></div>
         <div id="damageFlash" aria-hidden="true"></div>
-        <div id="announcement" class="announcement" role="status" aria-live="assertive"></div>
         <div id="contextPrompt" class="context-prompt hud-panel" role="status" hidden><kbd>E</kbd><span id="contextPromptText">Interact</span></div>
         <section id="recoveryBark" class="recovery-bark hud-panel" role="status" aria-live="assertive" aria-atomic="true" hidden>
           <span id="recoveryWarning">The next wave begins automatically</span>
@@ -286,7 +286,7 @@
       <section id="goalsPanel" class="screen goals-screen" role="dialog" aria-modal="true" aria-labelledby="goalsTitle" data-pointer-lock-block hidden>
         <article class="goals-panel framed-panel">
           <header><div><p class="eyebrow">Holdfolk</p><h2 id="goalsTitle">Goals</h2></div><button id="goalsClose" class="goals-close secondary-button" type="button" aria-label="Close Goals">Close</button></header>
-          <p>Active and ready goals are shown here. Speak with the named holdfolk to accept or report them.</p>
+          <p>See each holdfolk’s next goal, progress and completed work. Speak with them to accept or report a goal.</p>
           <div id="goalsList" class="goals-list" aria-live="polite"></div>
         </article>
       </section>
@@ -411,9 +411,9 @@
     </div>
 
     <noscript>Briarhold requires JavaScript to run.</noscript>
-    <script src="vendor.03daadf602f1e7fe080f/babylon/babylon-9.16.1.min.js"></script>
-    <script src="vendor.03daadf602f1e7fe080f/babylon/babylonjs.loaders-9.16.1.min.js"></script>
-    <script src="vendor.03daadf602f1e7fe080f/pocket-audio-core/pocket-audio-core-0.2.0.iife.js"></script>
-    <script type="module" src="src.03daadf602f1e7fe080f/game.js"></script>
+    <script src="vendor.9f16d25c65378aa2ee5f/babylon/babylon-9.16.1.min.js"></script>
+    <script src="vendor.9f16d25c65378aa2ee5f/babylon/babylonjs.loaders-9.16.1.min.js"></script>
+    <script src="vendor.9f16d25c65378aa2ee5f/pocket-audio-core/pocket-audio-core-0.2.0.iife.js"></script>
+    <script type="module" src="src.9f16d25c65378aa2ee5f/game.js"></script>
   </body>
 </html>

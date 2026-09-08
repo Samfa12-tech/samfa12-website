@@ -383,13 +383,14 @@ export function createAuthoritativeEvent(value = {}) {
   let mode = null;
   if (!isMelee) {
     const modeInput = record(input.mode ?? {ads: false, overheatWindow: false, charged: false, manualVent: false, heatUnits: 0}, 'AuthoritativeEvent.mode');
-    exactKeys(modeInput, new Set(['ads', 'overheatWindow', 'charged', 'manualVent', 'heatUnits']), 'AuthoritativeEvent.mode');
+    exactKeys(modeInput, new Set(['ads', 'overheatWindow', 'charged', 'manualVent', 'heatUnits', 'chargedHeatUnits']), 'AuthoritativeEvent.mode');
     mode = Object.freeze({
       ads: exactBoolean(modeInput.ads, 'AuthoritativeEvent.mode.ads'),
       overheatWindow: exactBoolean(modeInput.overheatWindow, 'AuthoritativeEvent.mode.overheatWindow'),
       charged: exactBoolean(modeInput.charged, 'AuthoritativeEvent.mode.charged'),
       manualVent: exactBoolean(modeInput.manualVent, 'AuthoritativeEvent.mode.manualVent'),
       heatUnits: integer(modeInput.heatUnits, 'AuthoritativeEvent.mode.heatUnits', 0, Math.round(WEAPON_HEAT_SCALE * 1.2)),
+      chargedHeatUnits: integer(modeInput.chargedHeatUnits ?? 0, 'AuthoritativeEvent.mode.chargedHeatUnits', 0, Math.round(WEAPON_HEAT_SCALE * 1.2)),
     });
   } else if (input.mode !== null && input.mode !== undefined) throw new TypeError('Melee AuthoritativeEvent.mode must be null');
   return Object.freeze({

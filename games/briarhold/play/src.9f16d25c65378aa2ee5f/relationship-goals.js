@@ -6,6 +6,7 @@
  */
 
 import {HUB_NPC_IDS, HUB_NPC_UNLOCK_ORDER} from "./hub.js";
+import {GOAL_OWNERS, GOAL_REQUIREMENTS, GOAL_NEXT_ACTIONS} from './relationship-goal-copy.js';
 import {
   normaliseNarrativeProfileState,
   normaliseNarrativeRunState,
@@ -202,6 +203,8 @@ export function createRelationshipGoalModel(state, npcId, options = {}) {
     active: active ? presentGoal(active, record, progressForGoal(current, active.id), options) : null,
     ready: ready ? presentGoal(ready, record, progressForGoal(current, ready.id), options) : null,
     offer: offer ? presentGoal(offer, record, progressForGoal(current, offer.id), options) : null,
+    completed: record.completedGoalIds.map(id => GOAL_BY_ID.get(id)).filter(Boolean)
+      .map(definition => presentGoal(definition, record, progressForGoal(current, definition.id), options)),
     completedGoalIds: [...record.completedGoalIds],
     completedRewards: record.completedGoalIds
       .map((goalId) => GOAL_BY_ID.get(goalId)?.reward)
@@ -398,10 +401,31 @@ function isFortificationKill(event) {
 }
 
 function presentGoal(definition, record, goalProgress, options) {
+  const completed = record.completedGoalIds.includes(definition.id);
+  const locked = !requirementsMet(definition, options);
+  const state = completed ? 'completed' : record.readyGoalId === definition.id ? 'ready'
+    : record.activeGoalId === definition.id ? 'active' : locked ? 'locked' : 'offered';
+  const [owner, reportLocation] = GOAL_OWNERS[definition.npcId];
+  const requirement = GOAL_REQUIREMENTS[definition.id];
+  const owned = new Set(options.ownedUnlockIds ?? options.profile?.unlocks ?? []);
+  const missing = (definition.requiresUnlockIds ?? []).filter(id => !owned.has(id))
+    .map(id => id === 'sunfire-prism' ? 'Sunfire' : 'Runebolt');
+  const nextAction = state === 'completed' ? 'Completed; reward recorded.'
+    : state === 'ready' ? (!(options.run || options.livingNpcIds || typeof options.npcAlive === 'boolean') || isLivingNpc(definition.npcId, options))
+      ? `Return to ${owner} at ${reportLocation} during daytime and Report.`
+      : `${owner} has fallen. This completed goal stays ready; report during daytime on your next oath when ${owner} is alive.`
+    : state === 'locked' ? `Commission ${missing.join(' and ')} from Tamsin, then accept this goal from ${owner}.`
+    : state === 'offered' ? `Accept this goal from ${owner} at ${reportLocation}.` : GOAL_NEXT_ACTIONS[definition.id];
   return {
     id: definition.id,
     npcId: definition.npcId,
     title: definition.title,
+    owner, reportLocation, requirement, nextAction, state,
+    progressBreakdown: definition.id === 'tamsin-full-rack'
+      ? [['Arbalest', 'arbalest-kills', 15], ['Sunfire', 'sunfire-kills', 15],
+        ['Runebolt', 'runebolt-kills', 15], ['Knife', 'knife-kills', 1]].map(([label, key, target]) => ({
+          label, target, current: state === 'ready' || completed ? target : Math.min(target, counter(goalProgress, key)),
+        })) : [],
     resetRule: definition.resetRule,
     reward: clone(definition.reward),
     locked: !requirementsMet(definition, options),
@@ -605,7 +629,9 @@ function uniqueIds(values) {
 }
 
 function goal(id, npcId, title, kind, target, resetRule, goalReward, extra = {}) {
-  return {id, npcId, title, kind, target, resetRule, reward: goalReward, ...extra};
+  return {id, npcId, title, kind, target, resetRule, reward: goalReward,
+    owner: GOAL_OWNERS[npcId][0], reportLocation: GOAL_OWNERS[npcId][1],
+    requirement: GOAL_REQUIREMENTS[id], nextAction: GOAL_NEXT_ACTIONS[id], ...extra};
 }
 
 function reward(rankCeilings, extra = {}) {

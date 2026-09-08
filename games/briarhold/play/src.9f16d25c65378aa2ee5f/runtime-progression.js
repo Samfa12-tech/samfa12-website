@@ -1,4 +1,5 @@
 import {calculateRunBoonEffects} from "./boons.js";
+import {consumeAttackHeat} from './attack-heat.js';
 import {BOSS_ENCOUNTERS} from "./campaign-content.js";
 import {
   WEAPON_IDS,
@@ -32,7 +33,7 @@ export function applyCampaignWeaponKillEffects(
   roster,
   enemyIndex,
   weaponId,
-  {killed = false, heat = 0, killHeatRefund = 0} = {},
+  {killed = false, heat = 0, killHeatRefund = 0, attackId = null} = {},
 ) {
   const currentProfile = normaliseProfileState(profile);
   const currentRun = normaliseRunState(run);
@@ -41,11 +42,12 @@ export function applyCampaignWeaponKillEffects(
     return {profile: currentProfile, run: currentRun, granted: false, heat: currentHeat, refunded: false};
   }
   const xp = applyCampaignWeaponKillXp(currentProfile, currentRun, roster, enemyIndex, weaponId);
-  const refund = Math.max(0, Number(killHeatRefund) || 0);
+  const refund = consumeAttackHeat(xp.run, attackId, killHeatRefund);
   return {
     ...xp,
     heat: Math.max(0, currentHeat - refund),
     refunded: refund > 0,
+    refundAmount: refund,
   };
 }
 
@@ -66,7 +68,7 @@ export function applyCampaignBossWeaponKillEffects(
   run,
   actorId,
   weaponId,
-  {killed = false, heat = 0, killHeatRefund = 0} = {},
+  {killed = false, heat = 0, killHeatRefund = 0, attackId = null} = {},
 ) {
   const currentProfile = normaliseProfileState(profile);
   const currentRun = normaliseRunState(run);
@@ -77,8 +79,8 @@ export function applyCampaignBossWeaponKillEffects(
     weaponId,
     enemyKind: "boss",
   });
-  const refund = Math.max(0, Number(killHeatRefund) || 0);
-  return {...xp, heat: Math.max(0, currentHeat - refund), refunded: refund > 0};
+  const refund = consumeAttackHeat(xp.run, attackId, killHeatRefund);
+  return {...xp, heat: Math.max(0, currentHeat - refund), refunded: refund > 0, refundAmount: refund};
 }
 
 /** Refresh all once-per-night runtime tokens without touching reward ledgers. */

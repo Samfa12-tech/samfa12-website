@@ -23,6 +23,7 @@ precision highp float;
 uniform sampler2D flameSampler;
 uniform float fireTime;
 uniform float motionAmount;
+uniform float presentationAlpha;
 uniform float fogDensity;
 uniform vec3 fogColor;
 uniform vec3 cameraPosition;
@@ -48,7 +49,7 @@ void main(void) {
   float distanceToEye = length(vWorld - cameraPosition);
   float fog = clamp(exp(-fogDensity * fogDensity * distanceToEye * distanceToEye), 0.0, 1.0);
   vec3 color = fire.rgb * pulse * vec3(1.08, 0.98, 0.89);
-  gl_FragColor = vec4(mix(fogColor, color, fog), alpha * 0.98);
+  gl_FragColor = vec4(mix(fogColor, color, fog), alpha * 0.98 * presentationAlpha);
 }`;
 
 export function createAnimatedFireMaterial(BABYLON, scene, texture) {
@@ -56,7 +57,7 @@ export function createAnimatedFireMaterial(BABYLON, scene, texture) {
     vertexSource: FIRE_VERTEX_SHADER, fragmentSource: FIRE_FRAGMENT_SHADER,
   }, {
     attributes: ['position', 'uv'],
-    uniforms: ['world', 'viewProjection', 'fireTime', 'motionAmount', 'fogDensity', 'fogColor', 'cameraPosition'],
+    uniforms: ['world', 'viewProjection', 'fireTime', 'motionAmount', 'presentationAlpha', 'fogDensity', 'fogColor', 'cameraPosition'],
     samplers: ['flameSampler'],
     needAlphaBlending: true,
   });
@@ -65,9 +66,10 @@ export function createAnimatedFireMaterial(BABYLON, scene, texture) {
   material.setTexture('flameSampler', texture);
   material.setFloat('fireTime', 0);
   material.setFloat('motionAmount', 1);
+  material.setFloat('presentationAlpha', 1);
   const update = (now, camera, reducedMotion = false) => {
-    material.setFloat('fireTime', now);
-    material.setFloat('motionAmount', reducedMotion ? 0.24 : 1);
+    material.setFloat('fireTime', reducedMotion ? 0 : now);
+    material.setFloat('motionAmount', reducedMotion ? 0 : 1);
     material.setFloat('fogDensity', scene.fogDensity);
     material.setColor3('fogColor', scene.fogColor);
     material.setVector3('cameraPosition', camera.position);

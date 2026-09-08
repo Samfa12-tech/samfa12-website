@@ -465,7 +465,7 @@ function applyWeaponTick(session, playerId, command, nextTick) {
         direction: pose.direction,
         mode: {ads: mode.ads, overheatWindow: priorHeat >= WEAPON_HEAT_SCALE && priorHeat < thresholdUnits,
           charged: selectedWeapon === 0 && mode.ads && Number(tuning.adsDamageMultiplier) > 1,
-          manualVent: false, heatUnits},
+          manualVent: false, heatUnits, chargedHeatUnits: heatUnits - priorHeat},
       });
       let cadence = Math.max(0.05, Number(tuning.shotIntervalMultiplier) || 1);
       if (selectedWeapon === 0) cadence *= mode.ads

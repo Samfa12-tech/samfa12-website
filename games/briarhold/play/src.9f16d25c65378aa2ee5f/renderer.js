@@ -159,6 +159,16 @@ export const DEFAULT_ENEMY_DISPLAY = Object.freeze({
   height: 2.55,
 });
 
+// Brute's immutable runtime GLB scales its source rig by 0.0134195229 / 0.01.
+// Sprite frame spans include transparent projection padding; a 2.9m frame is
+// not a 2.9m silhouette. Use the same source units as the actual runtime rig.
+export const BARKHIDE_ATLAS_WORLD_SCALE = 1.341952320381299;
+export function authoredAtlasDimensions(metadata, sourceToRuntimeScale = 1) {
+  const projection = metadata.animations.find(animation => animation.name === 'run').projectionHeight;
+  return {displayHeight: projection * sourceToRuntimeScale,
+    displayWidth: projection * sourceToRuntimeScale * metadata.frameWidth / metadata.frameHeight};
+}
+
 // Cut-out horde atlases are deliberately sampled without mipmaps. Mip-chain
 // minification averages the narrow transparent limbs into the empty cell
 // background, then alpha testing removes them entirely at rampart distance.
@@ -700,6 +710,8 @@ async function createGpuRenderer({
   displayWidth = DEFAULT_ENEMY_DISPLAY.width,
   displayHeight = DEFAULT_ENEMY_DISPLAY.height,
   bruteVisualScale = 1.32,
+  frameScale = 1,
+  authoredPose = false,
   // Give the pale source atlas a stronger moss-and-bark grade while retaining
   // enough authored shading for thousands of bodies to remain individually legible.
   tintStrength = PRIMARY_HOST_TINT_STRENGTH,
@@ -871,7 +883,8 @@ async function createGpuRenderer({
   material.setFloat('mobileMode', profile.mobile ? 1 : 0);
   material.setFloat('displayWidth', displayWidth);
   material.setFloat('displayHeight', displayHeight);
-  material.setFloat('frameScale', 1);
+  material.setFloat('frameScale', frameScale);
+  material.setFloat('authoredPose', authoredPose ? 1 : 0);
   material.setFloat('bruteVisualScale', bruteVisualScale);
   material.backFaceCulling = false;
   material.transparencyMode = BABYLON.Material.MATERIAL_OPAQUE;
@@ -1123,10 +1136,15 @@ function createLegacyRenderer({
   displayWidth = null,
   displayHeight = null,
   suppressedIds = null,
+  authoredPose = false,
 }) {
   const includedTypes = typeFilterSet(typeFilter);
   const excludedTypes = typeFilterSet(excludeType);
   const preservesAuthoredColor = includedTypes !== null && includedTypes.size === 1;
+  const authoredPivots = new Map(authoredPose ? (metadata.alphaBounds ?? []).map(record => {
+    const animation = metadata.animations.find(a => a.name === (record.animation ?? 'run'));
+    return [(animation.frameStartRow + record.frameIndex) * metadata.atlasColumns + record.direction, record];
+  }) : []);
   const slotIds = rendererSlotIds(battlefield, dynamicTypes ? {} : {typeFilter, excludeType});
   const capacity = slotIds.length;
   const manager = new BABYLON.SpriteManager(
@@ -1285,6 +1303,15 @@ function createLegacyRenderer({
           directionCount: metadata.directionCount,
         });
         sprite.cellIndex = (animation.frameStartRow + frame) * metadata.directionCount + direction;
+        const pivot = authoredPivots.get(sprite.cellIndex);
+        if (pivot) {
+          sprite.position.y += Number(pivot.anchorYPx ?? 0) / metadata.frameHeight * sprite.height;
+          const right = scene.activeCamera?.getDirection?.(BABYLON.Axis.X);
+          if (right) {
+            const offset = Number(pivot.anchorXPx ?? 0) / metadata.frameWidth * sprite.width;
+            sprite.position.x += right.x * offset; sprite.position.z += right.z * offset;
+          }
+        }
         active += 1;
       }
       diagnostics.activeSprites = active;
@@ -1493,9 +1520,9 @@ export async function createEnemyRenderer({
             profile,
             typeFilter: 1,
             name: 'barkhide-host',
-            displayWidth: 2.15,
-            displayHeight: 2.9,
-            bruteVisualScale: 0.82,
+            ...authoredAtlasDimensions(bruteAsset.metadata, BARKHIDE_ATLAS_WORLD_SCALE),
+            authoredPose: true,
+            bruteVisualScale: 1,
             tintStrength: 0.12,
             suppressedIds,
             dynamicTypes,
@@ -1532,8 +1559,8 @@ export async function createEnemyRenderer({
             profile,
             typeFilter: 3,
             name: 'sporewing-host',
-            displayWidth: 3.45,
-            displayHeight: 3.6,
+            ...authoredAtlasDimensions(sporewingAsset.metadata),
+            authoredPose: true,
             tintStrength: 0.08,
             suppressedIds,
             dynamicTypes,
@@ -1616,8 +1643,8 @@ export async function createEnemyRenderer({
       metadata: bruteAsset.metadata,
       typeFilter: 1,
       name: 'barkhide-host',
-      displayWidth: 2.15,
-      displayHeight: 2.9,
+      ...authoredAtlasDimensions(bruteAsset.metadata, BARKHIDE_ATLAS_WORLD_SCALE),
+      authoredPose: true,
       suppressedIds,
       dynamicTypes,
     }));
@@ -1644,8 +1671,8 @@ export async function createEnemyRenderer({
       metadata: sporewingAsset.metadata,
       typeFilter: 3,
       name: 'sporewing-host',
-      displayWidth: 3.45,
-      displayHeight: 3.6,
+      ...authoredAtlasDimensions(sporewingAsset.metadata),
+      authoredPose: true,
       suppressedIds,
       dynamicTypes,
     }));

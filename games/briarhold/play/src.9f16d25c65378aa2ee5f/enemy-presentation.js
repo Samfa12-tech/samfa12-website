@@ -18,9 +18,9 @@ export const SPOREWING_GATE_CLEARANCE_Y = 9;
 export const SPOREWING_GATE_CLIMB_DISTANCE = 12;
 
 /**
- * Presentation-only flight path across the outer gate. Sporewings remain
- * authoritative flying hunters, but rise far enough that every renderer shows
- * them clearing the seven-metre gate instead of intersecting its geometry.
+ * Shared flight path across the outer gate. Renderers, aim acquisition and
+ * projectile authority use this height so gate clearance never separates the
+ * visible body from the body a shot can hit.
  */
 export function sporewingFlightOffsetAtGate(z, gateZ = 0) {
   if (!Number.isFinite(z) || !Number.isFinite(gateZ)) return SPOREWING_BASE_FLIGHT_Y;
@@ -34,9 +34,10 @@ export function sporewingFlightOffsetAtGate(z, gateZ = 0) {
 
 /** Keep combat targeting attached to the body players actually see. */
 export function sporewingTargetProfileAtGate(z, gateZ = 0) {
+  const halfHeight = 1.8;
   return Object.freeze({
-    centerY: sporewingFlightOffsetAtGate(z, gateZ),
-    halfHeight: 1.8,
+    centerY: sporewingFlightOffsetAtGate(z, gateZ) + halfHeight,
+    halfHeight,
   });
 }
 

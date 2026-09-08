@@ -5,6 +5,8 @@
  * Callers can therefore exercise every economy and failure rule deterministically.
  */
 
+import {normalizeSupplyOrbState} from './supply-orbs.js';
+import {normalizeAttackHeat} from './attack-heat.js';
 import {
   HUB_NPC_IDS,
   HUB_NPC_UNLOCK_ORDER,
@@ -530,6 +532,8 @@ function normaliseRunStateInternal(input, {captureBoundary = false, waveSnapshot
     nightStartingNpcIds: normaliseFallenNpcs(input.nightStartingNpcIds),
     rewardLedger: normaliseLedger(input.rewardLedger),
     pendingWeaponXp: normalisePendingWeaponXp(input.pendingWeaponXp),
+    supplyOrbs: normalizeSupplyOrbState(input.supplyOrbs),
+    attackHeat: normalizeAttackHeat(input.attackHeat),
     narrative: normaliseNarrativeRunState(input.narrative),
     hub: input.hub === undefined || input.hub === null
       ? createHubStateForRun({hubUnlocks: [HUB_NPC_IDS.BELLKEEPER]}, input)
@@ -1118,6 +1122,11 @@ export function restoreWaveStartSnapshot(run) {
     throw new Error("combat run is missing its wave-start snapshot");
   }
   const restored = clone(current.waveStartSnapshot);
+  restored.supplyOrbs = clone(current.supplyOrbs);
+  restored.attackHeat = clone(current.attackHeat);
+  restored.supplies += 2 * ((current.supplyOrbs?.consumed.length ?? 0)
+    - (current.waveStartSnapshot.supplyOrbs?.rosterKey === current.supplyOrbs?.rosterKey
+      ? current.waveStartSnapshot.supplyOrbs?.consumed.length ?? 0 : 0));
   restored.fallenNpcs = normaliseFallenNpcs([
     ...restored.fallenNpcs,
     ...current.fallenNpcs,
@@ -1137,6 +1146,9 @@ export function restoreWaveStartSnapshot(run) {
   ]));
   if (current.nightRuntime) restored.nightRuntime = clone(current.nightRuntime);
   restored.waveStartSnapshot = clone(current.waveStartSnapshot);
+  restored.waveStartSnapshot.supplyOrbs = clone(restored.supplyOrbs);
+  restored.waveStartSnapshot.attackHeat = clone(restored.attackHeat);
+  restored.waveStartSnapshot.supplies = restored.supplies;
   restored.waveStartSnapshot.fallenNpcs = clone(restored.fallenNpcs);
   restored.waveStartSnapshot.hub = clone(restored.hub);
   restored.waveStartSnapshot.rewardLedger = clone(restored.rewardLedger);

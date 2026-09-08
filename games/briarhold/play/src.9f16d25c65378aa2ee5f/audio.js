@@ -15,6 +15,13 @@ import {
   sectionPlaybackPosition
 } from './music-score.js';
 import {NARRATIVE_AUDIO_CUE_IDS} from './narrative-content.js';
+import {PRESENTATION_BLEND_SECONDS} from './presentation-transition.js';
+
+export function rampPresentationParam(param, target, now) {
+  if (param.cancelAndHoldAtTime) param.cancelAndHoldAtTime(now);
+  else { param.cancelScheduledValues(now); param.setValueAtTime(param.value, now); }
+  param.linearRampToValueAtTime(target, now + PRESENTATION_BLEND_SECONDS);
+}
 
 const NARRATIVE_AUDIO_CUE_PROFILES = Object.freeze(Object.fromEntries(NARRATIVE_AUDIO_CUE_IDS.map(id => [
   id,
@@ -89,6 +96,7 @@ export function createAudioSystem(windowRef = globalThis.window) {
   let master = null;
   let compressor = null;
   let musicFilter = null;
+  let worldAmbienceGain = null;
   let musicBus = null;
   let sfxBus = null;
   let noiseBuffer = null;
@@ -247,12 +255,15 @@ export function createAudioSystem(windowRef = globalThis.window) {
       compressor.attack.value = 0.006;
       compressor.release.value = 0.24;
       musicFilter.type = 'lowpass';
-      musicFilter.frequency.value = 6800;
+      musicFilter.frequency.value = audioWorldPresentationProfile(worldPresentationKey).musicFilterHz;
       musicFilter.Q.value = 0.5;
       musicBus.gain.value = 0.24;
       sfxBus.gain.value = 0.64;
       musicBus.connect(musicFilter);
-      musicFilter.connect(master);
+      worldAmbienceGain = context.createGain();
+      worldAmbienceGain.gain.value = audioWorldPresentationProfile(worldPresentationKey).ambienceGain;
+      musicFilter.connect(worldAmbienceGain);
+      worldAmbienceGain.connect(master);
       sfxBus.connect(master);
       master.connect(compressor);
       compressor.connect(context.destination);
@@ -847,7 +858,8 @@ export function createAudioSystem(windowRef = globalThis.window) {
       const profile = audioWorldPresentationProfile(profileId);
       worldPresentationKey = profile.key;
       if (context && musicFilter && !paused) {
-        musicFilter.frequency.setTargetAtTime(profile.musicFilterHz, context.currentTime, 0.12);
+        rampPresentationParam(musicFilter.frequency, profile.musicFilterHz, context.currentTime);
+        rampPresentationParam(worldAmbienceGain.gain, profile.ambienceGain, context.currentTime);
       }
       return profile;
     },
@@ -880,7 +892,12 @@ export function createAudioSystem(windowRef = globalThis.window) {
       paused = Boolean(next);
       if (paused) stopSunfireSustain();
       if (!context || !musicFilter || !musicBus) return;
-      musicFilter.frequency.setTargetAtTime(paused ? 720 : 6800, context.currentTime, 0.08);
+      if (paused) musicFilter.frequency.setTargetAtTime(720, context.currentTime, 0.08);
+      else {
+        const profile = audioWorldPresentationProfile(worldPresentationKey);
+        rampPresentationParam(musicFilter.frequency, profile.musicFilterHz, context.currentTime);
+        rampPresentationParam(worldAmbienceGain.gain, profile.ambienceGain, context.currentTime);
+      }
       const target = paused ? 0.075 : 0.24 * (ducked ? 1 - duckAmount : 1);
       musicBus.gain.setTargetAtTime(target, context.currentTime, 0.08);
       if (core) core.lowpass(paused ? 0.22 : 1);
@@ -1193,7 +1210,7 @@ export function createAudioSystem(windowRef = globalThis.window) {
       sampleBuffers.clear();
       windowRef?.document?.removeEventListener?.('click', handleUiClick);
       context?.close?.();
-      context = master = compressor = musicFilter = musicBus = sfxBus = noiseBuffer = null;
+      context = master = compressor = musicFilter = musicBus = sfxBus = noiseBuffer = worldAmbienceGain = null;
       for (const tokens of roleTokens.values()) tokens.clear();
     }
   };

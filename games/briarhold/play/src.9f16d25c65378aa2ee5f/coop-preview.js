@@ -7,6 +7,7 @@ import {
 } from './coop-session.js';
 import {
   COOP_WIRE_MESSAGE_KINDS,
+  COOP_WIRE_PROTOCOL_VERSION,
   CheckpointAssembler,
   CoopActionRequestLedger,
   createCoopActionAck,
@@ -37,7 +38,7 @@ import {createPlayerState} from './player-controller.js';
 import {createRemoteWardenAvatar, loadRemoteWardenTemplate} from './remote-warden.js';
 
 export const COOP_PREVIEW_BUILD_HASH = BRIARHOLD_VERSION;
-export const COOP_PREVIEW_CONTENT_HASH = 'seven-night-campaign-v4-narrative-1';
+export const COOP_PREVIEW_CONTENT_HASH = 'seven-night-campaign-v5-supplies-1';
 export const COOP_INVITE_VERSION = 1;
 
 const HOST_ID = 'warden-host';
@@ -347,7 +348,7 @@ export class CoopMovementPreview {
     catch (error) {
       this.dropCounts.invalid += 1;
       if (envelope?.payload?.kind === COOP_WIRE_MESSAGE_KINDS.HELLO
-        && envelope?.payload?.version !== 4) {
+        && envelope?.payload?.version !== COOP_WIRE_PROTOCOL_VERSION) {
         this.onStatus('Connection rejected: the other co-op protocol is incompatible.');
         this.end('Connection rejected: incompatible co-op protocol');
       } else this.end(`Connection closed after invalid co-op data: ${error.message}`);

@@ -2,6 +2,7 @@ import { BRIARHOLD_FIRST_PERSON_MAP, HOST_EMERGENCE_PROFILE } from './map-defini
 import { HUB_FEATURE_IDS, HUB_NPC_IDS } from './hub.js';
 import {advanceWalkBob, createWalkBobState} from './camera-motion.js';
 import {createDaySky} from './world-day-sky.js';
+import {advancePresentationElapsed, blendPresentation, PRESENTATION_BLEND_SECONDS} from './presentation-transition.js';
 import {createWorldLandscape} from './world-landscape.js';
 import {createAnimatedFireMaterial} from './world-fire.js';
 import {TORCH_MOUNTS, TORCH_PLACEMENTS, TORCH_STANDOFF, torchHardwareTransforms} from './world-torch-mounts.js';
@@ -3377,7 +3378,7 @@ function buildTorches(BABYLON, scene, mats) {
       }
       const source = slot.source;
       if (!source) return;
-      const flicker = sampleFlameFlicker(now, source.flameIndex, {
+      const flicker = sampleFlameFlicker(reducedMotion ? 0 : now, source.flameIndex, {
         reducedMotion,
         target: slot.flicker,
       });
@@ -3405,7 +3406,7 @@ function buildTorches(BABYLON, scene, mats) {
   function update(now, dt, camera, threat = 0) {
     if (!fireEnabled) return;
     animatedFire.update(now, camera, reducedMotion);
-    updateFlames(now);
+    updateFlames(reducedMotion ? 0 : now);
     updateEmbers(now);
     updateLights(now, dt, camera, threat);
   }
@@ -3423,20 +3424,25 @@ function buildTorches(BABYLON, scene, mats) {
     bracketCount: TORCH_PLACEMENTS.length,
     setProfile,
     alignMountsToGeometry,
-    setPresentationProfile(nextProfile) {
+    setPresentationProfile(nextProfile, fireMix = nextProfile.key.startsWith('day') ? 0 : 1) {
       presentation = nextProfile;
-      fireEnabled = !presentation.key.startsWith('day');
+      const changed = fireEnabled !== (fireMix > 0);
+      fireEnabled = fireMix > 0;
+      animatedFire.material.setFloat('presentationAlpha', fireMix);
+      halo.visibility = fireMix;
+      ember.visibility = fireMix;
       flame.setEnabled(fireEnabled);
       halo.setEnabled(fireEnabled);
       ember.setEnabled(fireEnabled && !reducedMotion && profile.emberCount > 0);
       slots.forEach((slot, index) => {
         slot.light.setEnabled(fireEnabled && index < profile.fireLightCount);
-        slot.light.intensity = 0;
-        slot.source = null;
-        slot.pendingSource = null;
+        if (!fireEnabled || changed) {
+          slot.light.intensity = 0;
+          slot.source = null;
+          slot.pendingSource = null;
+        }
       });
-      activeSources = [];
-      lastSelectionAt = -Infinity;
+      if (changed) { activeSources = []; lastSelectionAt = -Infinity; }
     },
     setReducedMotion(value) { reducedMotion = value === true; },
     update,
@@ -3543,6 +3549,9 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
   const scene = new BABYLON.Scene(engine);
   let lightingProfile = lightingProfileForQuality(lowSpec ? 'performance' : 'balanced');
   let presentationProfile = worldPresentationProfile('night', {shadowsEnabled: lightingProfile.moonShadowMapSize > 0});
+  const presentationState = profile => ({...profile, ...worldCelestialPresentation(profile), dayMix: profile.key.startsWith('day') ? 1 : 0});
+  let presented = presentationState(presentationProfile);
+  let presentationBlend = null;
   scene.skipPointerMovePicking = true;
   scene.clearColor = BABYLON.Color4.FromHexString('#0c1a18ff');
   scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
@@ -4088,18 +4097,28 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
   }
 
   function setWorldPresentationProfile(profileId) {
-    presentationProfile = worldPresentationProfile(profileId, {shadowsEnabled: lightingProfile.moonShadowMapSize > 0});
-    torches.setPresentationProfile(presentationProfile);
+    const target = worldPresentationProfile(profileId, {shadowsEnabled: lightingProfile.moonShadowMapSize > 0});
+    if (presentationProfile.key !== target.key) {
+      presentationBlend = {from: {...presented}, to: presentationState(target), elapsed: 0};
+    }
+    presentationProfile = target;
+    applyWorldPresentation();
+    return presentationProfile;
+  }
+
+  function applyWorldPresentation() {
+    const fireMix = 1 - presented.dayMix;
+    torches.setPresentationProfile(presented, fireMix);
     for (const mesh of scene.meshes) {
       if (!mesh.name.startsWith('meshy-brazier-source')) continue;
-      const emission = presentationProfile.key.startsWith('day') ? [0, 0, 0] : MESHY_BRAZIER_MATERIAL_TUNING.emissiveLift;
+      const emission = MESHY_BRAZIER_MATERIAL_TUNING.emissiveLift.map(value => value * fireMix);
       mesh.material?.emissiveColor?.set?.(...emission);
     }
-    scene.clearColor = BABYLON.Color4.FromHexString(`${presentationProfile.skyColor}ff`);
-    scene.fogColor = BABYLON.Color3.FromHexString(presentationProfile.fogColor);
-    scene.fogDensity = presentationProfile.fogDensity;
-    hemi.intensity = presentationProfile.hemiIntensity;
-    const celestial = worldCelestialPresentation(presentationProfile);
+    scene.clearColor = BABYLON.Color4.FromHexString(`${presented.skyColor}ff`);
+    scene.fogColor = BABYLON.Color3.FromHexString(presented.fogColor);
+    scene.fogDensity = presented.fogDensity;
+    hemi.intensity = presented.hemiIntensity;
+    const celestial = presented;
     // A neutral daylight fill preserves moss and leather. At night a blue
     // hemisphere separates stone from the existing amber torch pools without
     // adding lights, shadow maps, or a post-processing dependency.
@@ -4107,13 +4126,14 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
     hemi.groundColor = BABYLON.Color3.FromHexString(celestial.groundLightColor);
     moonLight.intensity = celestial.keyLightIntensity;
     moonLight.diffuse = BABYLON.Color3.FromHexString(celestial.keyLightColor);
-    mats.sky.diffuseTexture = celestial.stormTextureVisible ? skyTexture : null;
-    mats.sky.emissiveTexture = celestial.stormTextureVisible ? skyTexture : null;
+    mats.sky.diffuseTexture = fireMix > 0 ? skyTexture : null;
+    mats.sky.emissiveTexture = fireMix > 0 ? skyTexture : null;
     mats.sky.emissiveColor = BABYLON.Color3.FromHexString(celestial.skyEmissiveColor);
-    moon.setEnabled(celestial.moonVisible);
-    sky.setEnabled(celestial.stormTextureVisible);
-    daySky.setPresentationProfile(presentationProfile);
-    return presentationProfile;
+    moon.setEnabled(fireMix > 0);
+    moon.visibility = fireMix;
+    sky.setEnabled(fireMix > 0);
+    // Night is the opaque backdrop; the day dome fades over it.
+    daySky.setPresentationProfile(presented, presented.dayMix);
   }
 
   function setReducedMotion(value) {
@@ -4743,31 +4763,38 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
   }
 
   function updateEffects(now) {
-    const dt = Math.max(0, Math.min(0.1, now - lastEffectsAt));
+    const presentationDelta = Math.max(0, now - lastEffectsAt);
+    const dt = Math.min(0.1, presentationDelta);
     lastEffectsAt = now;
+    if (presentationBlend) {
+      presentationBlend.elapsed = advancePresentationElapsed(presentationBlend.elapsed, presentationDelta);
+      presented = blendPresentation(presentationBlend.from, presentationBlend.to, presentationBlend.elapsed);
+      applyWorldPresentation();
+      if (presentationBlend.elapsed === PRESENTATION_BLEND_SECONDS) presentationBlend = null;
+    }
     skyTexture.uOffset = stormSkyTextureOffset(now, reducedMotion);
     daySky.update(now, {reducedMotion});
     displayedThreat += (targetThreat - displayedThreat) * Math.min(1, dt * 2.8);
-    const celestial = worldCelestialPresentation(presentationProfile);
+    const celestial = presented;
     moonLight.intensity = Math.max(0, celestial.keyLightIntensity - displayedThreat * 0.18);
-    hemi.intensity = Math.max(0, presentationProfile.hemiIntensity - displayedThreat * 0.05);
+    hemi.intensity = Math.max(0, presented.hemiIntensity - displayedThreat * 0.05);
     torches.update(now, dt, camera, displayedThreat);
     refreshShadowCasters(now);
-    scene.fogDensity = presentationProfile.fogDensity + displayedThreat * WORLD_ATMOSPHERE.threatFogGain;
-    mats.spore.alpha = 0.62 + Math.sin(now * 1.7) * 0.13 + displayedThreat * 0.12;
+    scene.fogDensity = presented.fogDensity + displayedThreat * WORLD_ATMOSPHERE.threatFogGain;
+    mats.spore.alpha = 0.62 + (reducedMotion ? 0 : Math.sin(now * 1.7) * 0.13) + displayedThreat * 0.12;
     mats.flame.alpha = 0.98;
     banners.forEach((banner, index) => {
-      banner.rotation.y = Math.sin(now * 0.62 + index) * 0.055;
+      banner.rotation.y = reducedMotion ? 0 : Math.sin(now * 0.62 + index) * 0.055;
     });
     if (planningEnabled) {
       sockets.forEach((socket, index) => {
         const selected = socket.id === selectedSocketId;
         const base = selected ? 1.16 : 0.9;
-        const pulse = 1 + Math.sin(now * 3.2 + index * 0.7) * (selected ? 0.09 : 0.055);
+        const pulse = reducedMotion ? 1 : 1 + Math.sin(now * 3.2 + index * 0.7) * (selected ? 0.09 : 0.055);
         socket.mesh.scaling.setAll(base * pulse);
       });
       if (fortificationPreview) {
-        const previewPulse = 0.78 + Math.sin(now * 4.6) * 0.12;
+        const previewPulse = reducedMotion ? 0.78 : 0.78 + Math.sin(now * 4.6) * 0.12;
         fortificationPreview.meshes.forEach(mesh => { mesh.visibility = previewPulse; });
       }
     }
@@ -4932,6 +4959,9 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
           fire: torches.diagnostics(),
         },
         targetThreat,
+        presentation: {target: presentationProfile.key, ...presented,
+          elapsed: presentationBlend?.elapsed ?? PRESENTATION_BLEND_SECONDS,
+          transitioning: Boolean(presentationBlend)},
         displayedThreat,
         effects: effects.reduce((count, effect) => count + Number(effect.active), 0),
         effectPoolSize: effects.length,

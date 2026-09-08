@@ -20,6 +20,10 @@ export const LANDSCAPE_PROFILE = Object.freeze({
   lowRocks: 12,
 });
 
+// Presentation only: joins the authored field at z=-20 to the terrain skirt.
+// This must never become a walkable surface or a gameplay collider.
+export const SOUTH_GROUND_UNDERLAY = Object.freeze({minX: -52, maxX: 52, minZ: -30, maxZ: -20, y: -0.16});
+
 const smoothstep = (low, high, value) => {
   const t = Math.max(0, Math.min(1, (value - low) / (high - low)));
   return t * t * (3 - 2 * t);
@@ -149,6 +153,14 @@ export function createWorldLandscape(BABYLON, scene, mats, {lowSpec = false} = {
   terrain.material = mats.ground;
   terrain.freezeWorldMatrix();
 
+  const skirt = SOUTH_GROUND_UNDERLAY;
+  const underlay = decorateMesh(BABYLON.MeshBuilder.CreateGround('landscape-south-underlay', {
+    width: skirt.maxX - skirt.minX, height: skirt.maxZ - skirt.minZ,
+  }, scene));
+  underlay.material = mats.ground;
+  underlay.position.set((skirt.minX + skirt.maxX) / 2, skirt.y, (skirt.minZ + skirt.maxZ) / 2);
+  underlay.freezeWorldMatrix();
+
   // Smooth weathered stones add a nearer layer behind the existing trees.
   // Hardware instances reuse one tiny sphere and the fortress's mossy stone.
   const rock = decorateMesh(BABYLON.MeshBuilder.CreateSphere('landscape-mossy-stone', {
@@ -180,6 +192,7 @@ export function createWorldLandscape(BABYLON, scene, mats, {lowSpec = false} = {
   };
   return {
     terrain,
+    underlay,
     // Call after the existing Meshy forest resolves. No second GLB request,
     // cloned geometry, or fallback tree swap is introduced here.
     setForestSource(source) {
@@ -206,7 +219,8 @@ export function createWorldLandscape(BABYLON, scene, mats, {lowSpec = false} = {
         treeInstances: trees.length, treeTriangles: treeTriangleCount,
         // Terrain, one shared stone batch, and an optional forest batch with
         // its existing geometry/material. Visibility can reduce actual draws.
-        addedMaterialBatches: treeSource ? 3 : 2, addedTextures: 0, addedLights: 0,
+        addedMaterialBatches: treeSource ? 4 : 3, addedTextures: 0, addedLights: 0,
+        southUnderlayTriangles: 2,
         castsShadows: false, decorativeOnly: true};
     },
     dispose() {
@@ -216,6 +230,7 @@ export function createWorldLandscape(BABYLON, scene, mats, {lowSpec = false} = {
       for (const stone of rocks.slice(1)) stone.dispose();
       rock.dispose(false, false);
       terrain.dispose(false, false);
+      underlay.dispose(false, false);
     },
   };
 }

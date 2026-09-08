@@ -3,13 +3,14 @@ import {applyCampaignBossWeaponKillEffects, applyCampaignWeaponKillEffects} from
 import {applySessionWeaponHeatRefund} from "./multiplayer-session-core.js";
 import {WEAPON_HEAT_SCALE} from "./multiplayer-contracts.js";
 
-export const AUTHORITATIVE_DELAYED_EFFECT_VERSION = 3;
+export const AUTHORITATIVE_DELAYED_EFFECT_VERSION = 4;
 const MAX_PENDING = 128;
 const MAX_STREAMS = 16;
 const EFFECT_KEYS = new Set([
   "id", "sourceEventId", "streamId", "sequence", "actorId", "weaponId", "weaponSlot", "dueAt", "point",
   "damage", "radius", "armourMultiplier", "stagger", "killHeatRefund",
   "directTargetId", "directTargetArmourMultiplier",
+  "attackId",
 ]);
 
 function record(value, label) {
@@ -59,6 +60,7 @@ function normalizeEffect(value) {
     armourMultiplier: finite(input.armourMultiplier, "delayed effect armourMultiplier", 0, 100),
     stagger: finite(input.stagger, "delayed effect stagger", 0, 10_000),
     killHeatRefund: finite(input.killHeatRefund, "delayed effect killHeatRefund", 0, 1.2),
+    attackId: input.attackId == null ? null : positiveSequence(input.attackId, 'delayed effect attackId'),
     directTargetId: input.directTargetId === null ? null : stableId(input.directTargetId, "delayed effect directTargetId"),
     directTargetArmourMultiplier: finite(input.directTargetArmourMultiplier,
       "delayed effect directTargetArmourMultiplier", 0, 100),
@@ -174,11 +176,11 @@ export function applyAuthoritativeDelayedKillProgression({profile, run, roster, 
     const weaponState = session?.weaponStates?.get(authoritativeEffect.actorId);
     const heat = (weaponState?.heatByWeapon?.[authoritativeEffect.weaponSlot] ?? 0) / WEAPON_HEAT_SCALE;
     const progression = applyCampaignWeaponKillEffects(nextProfile, nextRun, roster, hit.enemyId,
-      authoritativeEffect.weaponId, {killed: true, heat, killHeatRefund: authoritativeEffect.killHeatRefund});
+      authoritativeEffect.weaponId, {killed: true, heat, killHeatRefund: authoritativeEffect.killHeatRefund, attackId: authoritativeEffect.attackId});
     nextProfile = progression.profile;
     nextRun = progression.run;
     if (progression.refunded && applySessionWeaponHeatRefund(session, authoritativeEffect.actorId,
-      authoritativeEffect.weaponSlot, authoritativeEffect.killHeatRefund)) refundedKills += 1;
+      authoritativeEffect.weaponSlot, progression.refundAmount)) refundedKills += 1;
   }
   return {profile: nextProfile, run: nextRun, refundedKills};
 }
@@ -197,11 +199,11 @@ export function applyAuthoritativeDelayedBossKillProgression({profile, run, sess
   const heat = (weaponState?.heatByWeapon?.[authoritativeEffect.weaponSlot] ?? 0) / WEAPON_HEAT_SCALE;
   const progression = applyCampaignBossWeaponKillEffects(profile, run, stableActorId,
     authoritativeEffect.weaponId, {killed: killed === true, heat,
-      killHeatRefund: authoritativeEffect.killHeatRefund});
+      killHeatRefund: authoritativeEffect.killHeatRefund, attackId: authoritativeEffect.attackId});
   let refunded = false;
   if (progression.refunded) {
     refunded = applySessionWeaponHeatRefund(session, authoritativeEffect.actorId,
-      authoritativeEffect.weaponSlot, authoritativeEffect.killHeatRefund);
+      authoritativeEffect.weaponSlot, progression.refundAmount);
   }
   return {profile: progression.profile, run: progression.run, heat: progression.heat,
     granted: progression.granted, refunded, killCountDelta: 0};

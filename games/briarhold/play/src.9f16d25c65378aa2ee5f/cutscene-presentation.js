@@ -103,6 +103,7 @@ export function createCutscenePresentation({
 
   function onKeyDown(event) {
     if (!session) return;
+    if (event.target?.closest?.('input,textarea,select,[contenteditable="true"]')) return;
     if (event?.key === "Escape") {
       event.preventDefault?.();
       event.stopImmediatePropagation?.();
@@ -240,6 +241,7 @@ export function createGoalsPresentation({documentTarget = globalThis.document} =
     if (panel.hidden) return;
     if (event?.key === "Escape") {
       event.preventDefault?.();
+      event.stopImmediatePropagation?.();
       close();
     } else if (event?.key === "Tab") {
       event.preventDefault?.();
@@ -266,6 +268,11 @@ export function createGoalsPresentation({documentTarget = globalThis.document} =
           npcId: String(goal?.npcId ?? ""),
           npcName: String(goal?.npcName ?? ""),
           title: String(goal?.title ?? ""),
+          requirement: String(goal?.requirement ?? ""),
+          nextAction: String(goal?.nextAction ?? ""),
+          state: String(goal?.state ?? (goal?.ready ? 'ready' : 'active')),
+          progressText: String(goal?.progressText ?? `${boundedInteger(goal?.current, 0, target)} / ${target}`),
+          completedText: String(goal?.completedText ?? ''),
           current: boundedInteger(goal?.current, 0, target),
           target,
           reset: String(goal?.reset ?? ""),
@@ -273,9 +280,19 @@ export function createGoalsPresentation({documentTarget = globalThis.document} =
           ready: goal?.ready === true,
         });
       }));
-      list.textContent = model.map(goal => (
-        `${goal.npcName} — ${goal.title}: ${goal.current} / ${goal.target}. ${goal.reset} Reward: ${goal.reward}${goal.ready ? " Ready to report." : ""}`
-      )).join("\n");
+      list.replaceChildren(...model.map(goal => {
+        const card = documentTarget.createElement('article');
+        card.className = 'goal-card';
+        const heading = documentTarget.createElement('h3');
+        heading.textContent = `${goal.npcName} — ${goal.title} · ${goal.state}`;
+        card.append(heading);
+        for (const text of [goal.requirement, `Progress: ${goal.progressText}`,
+          `Next: ${goal.nextAction}`, `${goal.reset} Reward: ${goal.reward}`, goal.completedText]) {
+          if (!text) continue;
+          const line = documentTarget.createElement('p'); line.textContent = text; card.append(line);
+        }
+        return card;
+      }));
       panel.hidden = false;
       documentTarget?.addEventListener?.("keydown", onKeyDown);
       closeButton.focus?.();
