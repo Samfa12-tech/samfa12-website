@@ -36,6 +36,17 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css?v=20260905-2" />
+    <style id="briarhold-stats-styles">
+      .briarhold-stats { width: 100%; max-width: 42rem; margin: 1.5rem 0; }
+      .briarhold-stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 0; }
+      .briarhold-stat { min-width: 0; padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface); }
+      .briarhold-stat dt { color: var(--text-soft); font-size: 0.85rem; font-weight: 700; }
+      .briarhold-stat dd { margin: 0; }
+      .briarhold-stat .briarhold-stat-value { margin: 0.35rem 0 0.65rem; color: var(--cyan); font-family: "Space Grotesk", system-ui, sans-serif; font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.15; overflow-wrap: anywhere; }
+      .briarhold-stat .briarhold-stat-note { color: var(--muted); font-size: 0.82rem; line-height: 1.5; }
+      .briarhold-stat .briarhold-stat-status { margin-top: 0.75rem; color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
+      @media (max-width: 520px) { .briarhold-stats-grid { grid-template-columns: minmax(0, 1fr); } }
+    </style>
   </head>
   <body data-page="game-detail">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -99,6 +110,22 @@
           <p class="game-action-note">
             Early tester build. Android may ask you to allow installs from your browser. Existing testers can update in place while preserving their saves.
           </p>
+          <div class="briarhold-stats" role="group" aria-label="Briarhold activity">
+            <dl class="briarhold-stats-grid">
+              <div class="briarhold-stat">
+                <dt>Android downloads</dt>
+                <dd class="briarhold-stat-value" data-briarhold-android-count>31</dd>
+                <dd class="briarhold-stat-note">GitHub APK downloads across published releases. Includes updates and repeat downloads, not unique players.</dd>
+                <dd class="briarhold-stat-status" data-briarhold-android-status role="status" aria-live="polite">Last checked 11 Sep 2026.</dd>
+              </div>
+              <div class="briarhold-stat">
+                <dt>Browser plays</dt>
+                <dd class="briarhold-stat-value"><span aria-hidden="true">&mdash;</span><span class="sr-only">Not available</span></dd>
+                <dd class="briarhold-stat-note">Play totals are not available yet. Page views are not counted as plays.</dd>
+                <dd class="briarhold-stat-status">Play counter not connected.</dd>
+              </div>
+            </dl>
+          </div>
           <div class="share-tools share-tools-detail" data-share-tools role="group" aria-labelledby="share-tools-title">
             <p class="share-tools-label" id="share-tools-title">Share this page</p>
             <div class="share-tools-actions">
@@ -129,7 +156,7 @@
               <li>Original adaptive score: <em>The Green Remembers</em>.</li>
             </ul>
             <p>
-              New in Alpha.99: collect glowing Supply drops during each wave, follow clearer NPC mission goals, and face Sporewings with improved targeting and wing animation. This update also improves recovery after starting a new oath, enemy scale and movement, text input, southern terrain, and the transition between day and night. Kill-based heat refunds now share a limit per attack. Both co-op players should update to Alpha.99.
+              New in Alpha.99: collect glowing Supply drops during each wave, follow clearer NPC mission goals, and face Sporewings with improved targeting and wing animation. This update also improves recovery after starting a new oath, enemy scale and movement, text input, southern terrain, and the transition between day and night. Kill-based heat refunds now share a limit per attack. Base boss health is unchanged. Both co-op players should update to Alpha.99.
             </p>
           </article>
 
@@ -245,5 +272,67 @@
       </div>
     </footer>
     <script src="/script.js?v=20260905-2" defer></script>
+    <script id="briarhold-stats-script">
+      (async () => {
+        // Read-only public totals, not visitor tracking. Never add credentials here.
+        // Dated fallback verified 2026-09-11: Alpha.99/.98/.97/.96/.95/.93/.92/.91
+        // APK download_count values: 5 + 4 + 6 + 2 + 5 + 5 + 2 + 2 = 31.
+        // Browser plays need a genuine game-start source; do not substitute page views.
+        const countNode = document.querySelector('[data-briarhold-android-count]');
+        const statusNode = document.querySelector('[data-briarhold-android-status]');
+        if (!countNode || !statusNode) return;
+        const fallbackStatus = statusNode.textContent;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
+        const seenAssets = new Set();
+        let total = 0;
+        try {
+          // Include prereleases and older APKs, not just the latest release.
+          // Publish only after every page succeeds; never show a partial total.
+          for (let page = 1; ; page += 1) {
+            if (page > 10) throw new Error('Release pagination limit reached');
+            const response = await fetch(
+              `https://api.github.com/repos/Samfa12-tech/samfa12-website/releases?per_page=100&page=${page}`,
+              {
+                headers: { Accept: 'application/vnd.github+json' },
+                credentials: 'omit',
+                referrerPolicy: 'no-referrer',
+                cache: 'no-cache',
+                signal: controller.signal,
+              }
+            );
+            if (!response.ok) throw new Error('Release totals unavailable');
+            const releases = await response.json();
+            if (!Array.isArray(releases)) throw new Error('Invalid release data');
+            for (const release of releases) {
+              if (!release || release.draft || !String(release.tag_name).startsWith('briarhold-')) continue;
+              if (!Array.isArray(release.assets)) throw new Error('Invalid release assets');
+              for (const asset of release.assets) {
+                if (!asset || asset.state !== 'uploaded' || !/\.apk$/i.test(String(asset.name))) continue;
+                if (!Number.isSafeInteger(asset.id) || !Number.isSafeInteger(asset.download_count) || asset.download_count < 0) {
+                  throw new Error('Invalid APK download total');
+                }
+                if (seenAssets.has(asset.id)) continue;
+                seenAssets.add(asset.id);
+                total += asset.download_count;
+                if (!Number.isSafeInteger(total)) throw new Error('Invalid combined total');
+              }
+            }
+            if (releases.length < 100) break;
+          }
+          if (!seenAssets.size) throw new Error('No published APK totals available');
+          const checkedAt = new Intl.DateTimeFormat('en-AU', {
+            day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Australia/Sydney',
+          }).format(new Date());
+          countNode.textContent = new Intl.NumberFormat('en-AU').format(total);
+          statusNode.textContent = `Updated from GitHub · ${checkedAt}.`;
+        } catch {
+          // Keep the dated snapshot on timeout, offline, rate limit or invalid data.
+          statusNode.textContent = `${fallbackStatus} Live refresh unavailable.`;
+        } finally {
+          clearTimeout(timeout);
+        }
+      })();
+    </script>
   </body>
 </html>
