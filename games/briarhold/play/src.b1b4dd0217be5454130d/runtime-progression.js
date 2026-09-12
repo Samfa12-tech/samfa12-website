@@ -187,12 +187,16 @@ export function runtimeProgressionTuning(profile, run, weaponId, context = {}) {
   const activeRally = (run?.nightRuntime?.bellkeeperRally?.remaining ?? 0) > 0
     || (run?.nightRuntime?.courtyardRally?.remaining ?? 0) > 0;
   const lowHealthSurge = (run?.nightRuntime?.lastOath?.remaining ?? 0) > 0;
+  const adsAutoFire = Boolean(context.ads) && effects.warden.ads === true;
+  const steadyBreath = adsAutoFire && effects.warden.adsVisualRecoilMultiplier < 1;
   return Object.freeze({
     appliedMasteryIds: Object.freeze(appliedMasteryIds),
     ...masteryTuning,
     adsActive: Boolean(context.ads),
     adsEnabled: effects.warden.ads === true,
     adsLookMultiplier: context.ads && effects.warden.look === "slower" ? 0.72 : 1,
+    autoFireRangeMultiplier: adsAutoFire ? 1.25 * (steadyBreath ? 1.10 : 1) : 1,
+    autoFireSpreadMultiplier: adsAutoFire ? 0.75 : 1,
     movementRecoveryMultiplier: effects.warden.slideMantleRecoveryMultiplier ?? 1,
     adsRecoilMultiplier: context.ads ? effects.warden.adsVisualRecoilMultiplier ?? 1 : 1,
     weaponSwapMultiplier: effects.warden.weaponSwapMultiplier ?? 1,

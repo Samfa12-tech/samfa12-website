@@ -4,6 +4,7 @@ import {
   SPOREWING,
   WICKER_COLOSSUS,
   enemyArchetype,
+  enemyNavigationRadius,
   enemyTypeFrom,
   isBreachEligible
 } from "./enemies.js";
@@ -62,9 +63,10 @@ export const CAMPAIGN_GATE_PRESSURE_MAX_BODIES = 256;
 // lets a hunter's visible wings cross the first-person near plane even while
 // its centre remains outside the Warden capsule. Keep the physical centre far
 // enough away for the complete billboard, plus a small combat-readability gap.
-export const HUNTER_CAMERA_CLEARANCE = 4.4;
-export const HUNTER_ORBIT_PADDING = 3.95;
+export const HUNTER_CAMERA_CLEARANCE = 1.55;
+export const HUNTER_ORBIT_PADDING = 0.72;
 export const MAX_PLAYER_TARGETS = 8;
+export const GROUND_PLAYER_PURSUIT_CATCH_UP_MULTIPLIER = 1.2;
 
 /**
  * Stable ranged-assault slots for lane Sporewings. Their attack is an airborne
@@ -90,10 +92,17 @@ export const WICKER_LOW_PASSAGE_ROUTE = Object.freeze({
   minX: -22.4,
   maxX: -10,
   minZ: 3.2,
-  maxZ: 22,
+  maxZ: 24.4,
   // Clear the low deck AND the ground cache at x=-27.9..-23.3,z=18.9..22.1.
-  bypassX: -30.4,
-  rejoinZ: 2.2,
+  bypassX: -31.5,
+  rejoinZ: 3.0,
+  // The large navigation envelope cannot cut diagonally through the near
+  // brazier/cache pair. Stage above the cache, clear its west edge, then enter
+  // the narrow authored gap between the mantle wall and flank tower.
+  cacheStagingZ: 39,
+  fieldGateX: -16,
+  cacheBypassX: -33,
+  corridorEntryZ: 26.8,
 });
 
 export function wickerLowPassageWaypoint({x = 0, z = 0} = {}) {
@@ -101,13 +110,38 @@ export function wickerLowPassageWaypoint({x = 0, z = 0} = {}) {
   const currentX = finite(x, 0);
   const currentZ = finite(z, 0);
   const lookAhead = 2.6;
+  // Cross the field gate through its authored opening before beginning the
+  // west-side detour. Targeting cacheBypassX from the forest cuts through the
+  // west shoulder once Wicker's larger navigation radius is applied.
+  if (currentZ > route.cacheStagingZ + 0.1) {
+    return {x: route.fieldGateX, z: route.cacheStagingZ};
+  }
+  if (currentZ > route.maxZ + lookAhead
+    && currentZ < route.cacheStagingZ - 0.5
+    && currentX > route.cacheBypassX + 0.1
+    && currentX <= route.bypassX + 0.2) {
+    return {x: route.bypassX, z: route.corridorEntryZ};
+  }
+  if (currentZ > route.maxZ + lookAhead) {
+    if (currentZ < route.cacheStagingZ - 0.1 && currentX > route.cacheBypassX + 0.1) {
+      return {x: currentX, z: route.cacheStagingZ};
+    }
+    if (currentX > route.cacheBypassX + 0.1) return {x: route.cacheBypassX, z: route.cacheStagingZ};
+    if (currentZ > route.corridorEntryZ + 0.1) return {x: route.cacheBypassX, z: route.corridorEntryZ};
+    return {x: route.bypassX, z: route.corridorEntryZ};
+  }
+  if (currentZ > route.maxZ && currentX < route.bypassX - 0.03) {
+    return {x: route.bypassX, z: route.corridorEntryZ};
+  }
+  // Cross in front of the gate pier's expanded footprint before turning in.
+  if (currentZ < route.minZ && currentX < route.minX) return {x: -16, z: route.rejoinZ};
   if (currentZ <= route.rejoinZ || currentZ > route.maxZ + lookAhead) return null;
   // Keep returning the bypass waypoint while crossing the narrow band between
   // the passage envelope and the cleared threshold. Without this overlap, the
   // ordinary gate target pulls the Colossus back into the passage for one tick
   // and the two targets make it oscillate forever.
-  const insidePassage = currentX >= route.bypassX + 0.6 && currentX <= route.maxX + 1.5;
-  const clearedWest = currentX <= route.bypassX + 0.6;
+  const insidePassage = currentX >= route.bypassX + 0.03 && currentX <= route.maxX + 1.5;
+  const clearedWest = currentX <= route.bypassX + 0.03;
   if (!insidePassage && !clearedWest) return null;
   return clearedWest
     ? {x: route.bypassX, z: route.rejoinZ}
@@ -1200,12 +1234,13 @@ class Battlefield {
     const desiredZ = this.desiredVz[id];
     const speed = Math.hypot(desiredX, desiredZ);
     if (speed < 0.05) return false;
-    const radius = enemyArchetype(this.type[id]).radius;
+    const radius = enemyNavigationRadius(this.type[id]);
     let bestDistance = Infinity;
     let bestX = 0;
     let bestZ = 0;
     for (const obstacle of this.enemyObstacles) {
       if (!obstacle.enabled || !obstacle.solid) continue;
+      if (obstacle.id.startsWith('map:wicker:') && this.type[id] !== WICKER_COLOSSUS) continue;
       const cosine = obstacle.cosine;
       const sine = obstacle.sine;
       const dx = this.x[id] - obstacle.x;
@@ -1271,11 +1306,12 @@ class Battlefield {
     let desiredZ = this.desiredVz[id];
     const speed = Math.hypot(desiredX, desiredZ);
     if (speed < 0.05) return false;
-    const radius = enemyArchetype(this.type[id]).radius;
+    const radius = enemyNavigationRadius(this.type[id]);
     const blockers = [];
     for (let obstacleIndex = 0; obstacleIndex < this.enemyObstacles.length; obstacleIndex++) {
       const obstacle = this.enemyObstacles[obstacleIndex];
       if (!obstacle.enabled || !obstacle.solid) continue;
+      if (obstacle.id.startsWith('map:wicker:') && this.type[id] !== WICKER_COLOSSUS) continue;
       const cosine = obstacle.cosine;
       const sine = obstacle.sine;
       const dx = this.x[id] - obstacle.x;
@@ -1439,10 +1475,11 @@ class Battlefield {
 
   _resolveEnemyObstacles(id, dt) {
     if (this.type[id] === SPOREWING || !this.enemyObstacles.length) return false;
-    const radius = enemyArchetype(this.type[id]).radius;
+    const radius = enemyNavigationRadius(this.type[id]);
     let collided = false;
     for (const obstacle of this.enemyObstacles) {
       if (!obstacle.enabled || !obstacle.solid) continue;
+      if (obstacle.id.startsWith('map:wicker:') && this.type[id] !== WICKER_COLOSSUS) continue;
       const local = this._obstacleLocal(obstacle, this.x[id], this.z[id]);
       const halfWidth = obstacle.halfWidth + radius;
       const halfDepth = obstacle.halfDepth + radius;
@@ -1494,6 +1531,10 @@ class Battlefield {
 
   _playerTargetDistance(id, target) {
     return Math.hypot(this.x[id] - target.x, this.z[id] - target.z);
+  }
+
+  _groundPlayerContactRange(id, target) {
+    return enemyArchetype(this.type[id]).radius + target.radius + 0.45;
   }
 
   _selectPlayerTarget(id) {
@@ -1560,7 +1601,7 @@ class Battlefield {
     const range = (assigned ? target.retainRadius : target.aggroRadius)
       + enemyArchetype(this.type[id]).radius;
     if (this._playerTargetDistance(id, target) > range) return false;
-    return assigned
+    return this.playerSwarmSlotById[id] >= 0
       || this.playerSwarmFreeCount > 0
       || this.playerSwarmNextSlot < this.playerSwarmCap;
   }
@@ -1653,8 +1694,11 @@ class Battlefield {
   _setApproachVelocity(id) {
     const archetype = enemyArchetype(this.type[id]);
     let pursuingPlayer = this._shouldPursuePlayer(id);
-    if (pursuingPlayer && this.type[id] !== SPOREWING && this._claimPlayerSwarmSlot(id) < 0) {
-      pursuingPlayer = false;
+    if (pursuingPlayer && this.type[id] !== SPOREWING) {
+      const target = this._playerTargetForEnemy(id) ?? this.playerTarget;
+      if (this.playerSwarmSlotById[id] < 0
+        && this._playerTargetDistance(id, target) <= this._groundPlayerContactRange(id, target)
+        && this._claimPlayerSwarmSlot(id) < 0) pursuingPlayer = false;
     }
     this.huntingPlayer[id] = pursuingPlayer ? 1 : 0;
     if (pursuingPlayer) {
@@ -1669,7 +1713,11 @@ class Battlefield {
       const dx = target.x - this.x[id];
       const dz = target.z - this.z[id];
       const length = Math.hypot(dx, dz) || 1;
-      const speed = archetype.speed * this._enemySpeedScaleAt(id);
+      const closingOnCentre = this.type[id] !== SPOREWING
+        && this.playerSwarmSlotById[id] < 0
+        && this._playerTargetDistance(id, target) > this._groundPlayerContactRange(id, target);
+      const speed = archetype.speed * this._enemySpeedScaleAt(id)
+        * (closingOnCentre ? GROUND_PLAYER_PURSUIT_CATCH_UP_MULTIPLIER : 1);
       if (length < 0.12) {
         this.desiredVx[id] = 0;
         this.desiredVz[id] = 0;
@@ -1734,8 +1782,11 @@ class Battlefield {
   _setCourtyardVelocity(id) {
     const archetype = enemyArchetype(this.type[id]);
     let pursuingPlayer = this._shouldPursuePlayer(id);
-    if (pursuingPlayer && this.type[id] !== SPOREWING && this._claimPlayerSwarmSlot(id) < 0) {
-      pursuingPlayer = false;
+    if (pursuingPlayer && this.type[id] !== SPOREWING) {
+      const target = this._playerTargetForEnemy(id) ?? this.playerTarget;
+      if (this.playerSwarmSlotById[id] < 0
+        && this._playerTargetDistance(id, target) <= this._groundPlayerContactRange(id, target)
+        && this._claimPlayerSwarmSlot(id) < 0) pursuingPlayer = false;
     }
     this.huntingPlayer[id] = pursuingPlayer ? 1 : 0;
     if (pursuingPlayer) {
@@ -1751,8 +1802,12 @@ class Battlefield {
       const dx = target.x - this.x[id];
       const dz = target.z - this.z[id];
       const length = Math.hypot(dx, dz) || 1;
-      this.desiredVx[id] = dx / length * archetype.speed;
-      this.desiredVz[id] = dz / length * archetype.speed;
+      const closingOnCentre = this.type[id] !== SPOREWING
+        && this.playerSwarmSlotById[id] < 0
+        && this._playerTargetDistance(id, target) > this._groundPlayerContactRange(id, target);
+      const speed = archetype.speed * (closingOnCentre ? GROUND_PLAYER_PURSUIT_CATCH_UP_MULTIPLIER : 1);
+      this.desiredVx[id] = dx / length * speed;
+      this.desiredVz[id] = dz / length * speed;
       this._steerAroundSolidObstacles(id, true, target);
       return;
     }
@@ -2125,6 +2180,81 @@ class Battlefield {
     }
   }
 
+  _stepWickerSiege(id, dt) {
+    if (this.elapsed < this.companyReleaseAt[id]) return;
+    // Existing checkpoint/wire action fields carry the entire siege cycle:
+    // lastAttackTime starts the telegraph; negative cooldown is impact recovery.
+    if (this.attackCooldown[id] < 0) {
+      this.attackCooldown[id] = Math.min(0, this.attackCooldown[id] + dt);
+      this.lastHitTime[id] = this.elapsed;
+      this.vx[id] = this.vz[id] = 0;
+      if (this.attackCooldown[id] === 0) this.attackCooldown[id] = 6;
+      return;
+    }
+    this.attackCooldown[id] = Math.max(0, this.attackCooldown[id] - dt);
+    const player = this.huntingPlayer[id] ? this._playerTargetForEnemy(id) : null;
+    const lane = this.approach[id];
+    const outer = this.zone[id] === APPROACH_ZONE && !this.outerGateBreached[lane];
+    const target = player?.enabled ? player : {
+      x: outer ? (lane === WEST ? this.world.westGateX : this.world.eastGateX) : this.world.heartGateX,
+      z: outer ? this.world.gateZ : this.world.heartGateZ,
+    };
+    const age = this.elapsed - this.lastAttackTime[id];
+    const charging = age >= 0 && age < 2.4;
+    if (charging) {
+      this._setEngagementRole(id, player?.enabled ? ENGAGEMENT_PLAYER_ATTACK : ENGAGEMENT_GATE_ATTACK);
+      if (age < 1.2) return;
+      this.x[id] += this.vx[id] * dt;
+      this.z[id] += this.vz[id] * dt;
+      if (this._resolveEnemyObstacles(id, dt)) {
+        this.attackCooldown[id] = -1.5;
+        this.lastHitTime[id] = this.elapsed;
+        this.lastAttackTime[id] = this.elapsed - 2.4;
+        this.vx[id] = this.vz[id] = 0;
+        return;
+      }
+      if (Math.hypot(this.x[id] - target.x, this.z[id] - target.z) <= 2.8) {
+        const archetype = enemyArchetype(WICKER_COLOSSUS);
+        const damage = archetype.attackDamage;
+        if (player?.enabled) {
+          const targetPlayerId = player.playerId ?? 'player-0';
+          this.pendingPlayerDamage += damage;
+          this.pendingPlayerDamageByPlayer[targetPlayerId] = (this.pendingPlayerDamageByPlayer[targetPlayerId] ?? 0) + damage;
+          this.diagnostics.playerDamage += damage;
+          this.playerDamageEvents.push({id, type: WICKER_COLOSSUS, damage, dedicatedHunter: false, targetPlayerId});
+        } else {
+          // Preserve the authored siege DPS while consolidating repeated
+          // contact strikes into one readable six-second charge impact.
+          const siegeDamage = damage * 6 / archetype.attackInterval;
+          if (outer) this.outerGateHp[lane] = Math.max(0, this.outerGateHp[lane] - siegeDamage);
+          else this.heartGateHp = Math.max(0, this.heartGateHp - siegeDamage);
+        }
+        this.lastAttackTime[id] = this.elapsed - 2.4;
+        this.vx[id] = this.vz[id] = 0;
+      }
+      return;
+    }
+    const distance = Math.hypot(target.x - this.x[id], target.z - this.z[id]);
+    if (this.attackCooldown[id] === 0 && distance <= 18 && distance > 0.01) {
+      this.lastAttackTime[id] = this.elapsed;
+      this.attackCooldown[id] = 6;
+      this.vx[id] = (target.x - this.x[id]) / distance * 11;
+      this.vz[id] = (target.z - this.z[id]) / distance * 11;
+      this._setEngagementRole(id, player?.enabled ? ENGAGEMENT_PLAYER_ATTACK : ENGAGEMENT_GATE_ATTACK);
+      return;
+    }
+    this.vx[id] += (this.desiredVx[id] - this.vx[id]) * .3;
+    this.vz[id] += (this.desiredVz[id] - this.vz[id]) * .3;
+    this.x[id] += this.vx[id] * dt;
+    this.z[id] += this.vz[id] * dt;
+    this._resolveEnemyObstacles(id, dt);
+    if (outer) this.z[id] = Math.max(this.z[id], this.world.gateZ + enemyNavigationRadius(WICKER_COLOSSUS));
+    else if (this.zone[id] === APPROACH_ZONE && this.z[id] <= this.world.courtyardEntryZ) {
+      this.zone[id] = COURTYARD_ZONE;
+      this.diagnostics.transferredToCourtyard++;
+    }
+  }
+
   _step(dt) {
     for (let id = 0; id < this.slotCount; id++) {
       if (this.status[id] !== DYING) continue;
@@ -2235,6 +2365,10 @@ class Battlefield {
     for (let id = 0; id < this.slotCount; id++) {
       if (this.status[id] !== ACTIVE) continue;
       const pursuingPlayer = Boolean(this.huntingPlayer[id]);
+      if (this.type[id] === WICKER_COLOSSUS) {
+        this._stepWickerSiege(id, dt);
+        continue;
+      }
       const contactingPlayer = this._attackPlayer(id, dt);
       const eligibleSolver = this.zone[id] === APPROACH_ZONE
         && isBreachEligible(this.type[id])

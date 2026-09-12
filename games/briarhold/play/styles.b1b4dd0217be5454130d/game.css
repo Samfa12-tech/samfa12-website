@@ -66,6 +66,22 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .meter { height: 7px; margin-top: 5px; overflow: hidden; background: #0c100d; border: 1px solid rgba(228,206,143,.25); box-shadow: inset 0 1px 4px #000; }
 .meter span { display: block; width: 100%; height: 100%; transform-origin: left; background: linear-gradient(90deg, #7f2c28, #b05535 58%, #d28b42); transition: transform .18s ease; }
 .gate-meter span { background: linear-gradient(90deg, #4d603e, #96a66b); }
+#eastOuterGateLine[data-pressure-level="watch"] { color: #d9b86c; }
+#eastOuterGateLine[data-pressure-level="urgent"],
+#eastOuterGateLine[data-pressure-level="critical"],
+#eastOuterGateLine[data-pressure-level="breached"] { color: #ffd080; text-shadow: 0 0 8px rgba(255,96,32,.72); }
+#eastOuterGateLine[data-pressure-level]:not([data-pressure-level="none"])::after {
+  content: "Gate 2 pressure"; grid-column: 1 / -1; margin-top: 2px; color: #f0c36d;
+  font-size: 7px; font-weight: 900; letter-spacing: .12em;
+}
+#eastOuterGateLine[data-pressure-level="critical"]::after { content: "Gate 2 critical"; color: #ff9c64; }
+#eastOuterGateLine[data-pressure-level="breached"]::after { content: "Gate 2 breached"; color: #ff775e; }
+#eastOuterGateLine[data-pressure-level="urgent"] + #eastOuterHealthBar,
+#eastOuterGateLine[data-pressure-level="critical"] + #eastOuterHealthBar {
+  border-color: rgba(255,126,58,.85); box-shadow: 0 0 12px rgba(255,75,28,.62), inset 0 1px 4px #000;
+  animation: gate2-pressure-pulse 1.1s ease-in-out infinite alternate;
+}
+@keyframes gate2-pressure-pulse { to { filter: brightness(1.45); } }
 
 .wave-status {
   position: absolute; z-index: 4; left: 50%; top: var(--safe-top); transform: translateX(-50%);
@@ -475,11 +491,11 @@ body.hub-service-open .touch-control { visibility: hidden; pointer-events: none;
 @media (pointer: coarse), (max-width: 900px) {
   body[data-input="touch"] .touch-control { display: flex; }
   body[data-input="touch"] .controls-help { display: none; }
-  .move-pad { position: absolute; left: calc(var(--safe-left) + 10px); bottom: calc(var(--safe-bottom) + 10px); width: clamp(105px,18vw,150px); height: clamp(105px,18vw,150px); align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(226,203,139,.34); background: radial-gradient(circle,rgba(68,82,58,.26),rgba(5,8,6,.2)); }
+  .move-pad { position: absolute; z-index: 3; left: calc(var(--safe-left) + 10px); bottom: calc(var(--safe-bottom) + 10px); width: clamp(105px,18vw,150px); height: clamp(105px,18vw,150px); align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(226,203,139,.34); background: radial-gradient(circle,rgba(68,82,58,.26),rgba(5,8,6,.2)); }
   .move-pad::before { content:""; width: 46%; height: 46%; border-radius:50%; border:1px solid rgba(220,199,136,.24); }
   .move-pad > span { position: absolute; bottom: 8px; font-size: 7px; text-transform: uppercase; color: #827a62; }
   .move-knob { position: absolute; width: 43%; height: 43%; border-radius: 50%; background: radial-gradient(circle at 38% 32%,rgba(222,205,150,.4),rgba(51,65,44,.58)); border: 1px solid rgba(221,198,133,.48); box-shadow: 0 4px 13px #000; }
-  .look-surface { position: absolute; right: 0; top: 13%; bottom: 0; width: 53%; pointer-events: auto; }
+  .look-surface { position: absolute; inset: 0; z-index: 1; pointer-events: auto; }
   .round-action { position: absolute; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(230,204,132,.45); background: radial-gradient(circle,rgba(86,78,46,.54),rgba(8,11,8,.8)); box-shadow: 0 5px 20px rgba(0,0,0,.48); text-transform: uppercase; color: #dbc99d; }
   .round-action img { width: 58%; height: 58%; object-fit: contain; }
   .round-action span { margin-top: -5px; font-size: 8px; font-weight: 900; letter-spacing: .08em; }
@@ -554,20 +570,23 @@ body[data-input="mouse"] .touch-control { display: none; }
   .atlas-detail h3 { font-size: 19px; }
   .atlas-detail-copy { min-height: 0; font-size: 11px; line-height: 1.35; }
   .atlas-detail-action { min-height: 38px; margin-top: 8px; padding: 7px; }
-  .vital-stack { width: 178px; padding: 6px 8px 7px; }
+  .combat-hud { --hud-left-rail: calc(var(--safe-left) + 186px); --hud-right-rail: calc(var(--safe-right) + 156px); }
+  .vital-stack { width: 170px; padding: 6px 8px 7px; }
   .identity-line, .outer-gate-line { gap: 3px; font-size: 8px; }
   .identity-line strong { letter-spacing: .04em; }
   .crest-dot { width: 9px; height: 9px; }
   .gate-line { margin-top: 5px; font-size: 10px; }
   .outer-gate-line { margin-top: 3px; font-size: 8px; }
   .meter { height: 5px; margin-top: 3px; }
-  .wave-status { width: min(470px,54vw); padding-inline: 7px; column-gap: 6px; }
+  .wave-status { left: var(--hud-left-rail); right: var(--hud-right-rail); width: auto; min-width: 0; transform: none; padding-inline: 7px; column-gap: 6px; }
   .wave-status > .eyebrow { font-size: 7px; letter-spacing: .13em; }
   .wave-status > strong { font-size: 12px; }
   .host-count { gap: 2px; font-size: 7px; }
   .host-count b { font-size: 9px; }
   .host-count img { width: 11px; height: 11px; }
   .wave-status .host-count > span { display: none; }
+  .playtest-report-button { max-width: 96px; justify-content: center; }
+  .playtest-report-button kbd { display: none; }
   body[data-input="touch"] .weapon-dock { width: min(310px,36vw); min-height: 70px; }
   body[data-input="touch"] .weapon-current strong {
     overflow: visible; text-overflow: clip; white-space: normal; overflow-wrap: anywhere;

@@ -276,6 +276,7 @@ export class PeerTransport {
     const connection = new this.PeerConnection({
       iceServers: this.iceConfiguration.iceServers.map(server => ({...server})),
     });
+    const createdAt = this.now();
     const peer = {
       id,
       connection,
@@ -283,9 +284,11 @@ export class PeerTransport {
       channels: {control: null, realtime: null},
       nextSequence: {control: 0, realtime: 0},
       receivedRealtimeSequence: -1,
+      lastReceivedAt: createdAt,
+      lastSentAt: createdAt,
       ingress: {
-        control: {startedAt: this.now(), messages: 0, codeUnits: 0},
-        realtime: {startedAt: this.now(), messages: 0, codeUnits: 0},
+        control: {startedAt: createdAt, messages: 0, codeUnits: 0},
+        realtime: {startedAt: createdAt, messages: 0, codeUnits: 0},
       },
     };
     this.peers.set(id, peer);
@@ -356,6 +359,7 @@ export class PeerTransport {
     try {
       const maxBytes = channelName === 'control' ? CONTROL_MESSAGE_MAX_BYTES : REALTIME_MESSAGE_MAX_BYTES;
       const envelope = decodePeerEnvelope(data, {maxBytes});
+      peer.lastReceivedAt = now;
       if (channelName === 'realtime') {
         if (envelope.sequence <= peer.receivedRealtimeSequence) {
           this.emit('drop', {
@@ -460,6 +464,8 @@ export class PeerTransport {
       connectionState: peer.state,
       controlState: peer.channels.control?.readyState ?? 'missing',
       realtimeState: peer.channels.realtime?.readyState ?? 'missing',
+      lastReceivedAt: peer.lastReceivedAt,
+      lastSentAt: peer.lastSentAt,
     });
   }
 
@@ -481,6 +487,7 @@ export class PeerTransport {
       maxBytes: CONTROL_MESSAGE_MAX_BYTES,
     });
     channel.send(encoded);
+    peer.lastSentAt = this.now();
     return true;
   }
 
@@ -503,6 +510,7 @@ export class PeerTransport {
       return false;
     }
     channel.send(encoded);
+    peer.lastSentAt = this.now();
     return true;
   }
 

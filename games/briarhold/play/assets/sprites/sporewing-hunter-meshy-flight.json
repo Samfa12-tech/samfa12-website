@@ -3281,6 +3281,7 @@
   "modelScale": {
     "sourceModel": "assets/meshy/derived/sporewing-flap-run.glb",
     "runtimeHeight": 3.6,
+    "displayHeight": 4.490253689,
     "sourceBounds": {
       "min": [
         -1.6221465535839457,

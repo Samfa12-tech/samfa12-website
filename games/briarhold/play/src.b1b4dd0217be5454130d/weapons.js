@@ -11,7 +11,8 @@ export const WEAPON_DEFINITIONS = Object.freeze({
     heat: 0.045,
     radius: 0.45,
     impulse: 2.2,
-    armour: 'infantry'
+    armour: 'infantry',
+    autoFire: Object.freeze({range: 55, spreadDegrees: 0.9})
   }),
   sunfire: Object.freeze({
     id: 'sunfire',
@@ -22,7 +23,8 @@ export const WEAPON_DEFINITIONS = Object.freeze({
     heat: 0.07,
     radius: 2.7,
     impulse: 0.8,
-    armour: 'swarm'
+    armour: 'swarm',
+    autoFire: Object.freeze({range: 10, spreadDegrees: 1.8})
   }),
   runebolt: Object.freeze({
     id: 'runebolt',
@@ -33,7 +35,8 @@ export const WEAPON_DEFINITIONS = Object.freeze({
     heat: 0.34,
     radius: 4.2,
     impulse: 8,
-    armour: 'siege'
+    armour: 'siege',
+    autoFire: Object.freeze({range: 70, spreadDegrees: 1.2})
   })
 });
 

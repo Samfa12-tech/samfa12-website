@@ -27,6 +27,7 @@ import {
   normalizeCoopWireMessage,
 } from './coop-world-wire.js';
 import {
+  PLAYER_COMMAND_ACTIONS,
   createNetworkPlayerState,
   createSessionWeaponState,
   createSessionConfig,
@@ -38,7 +39,7 @@ import {createPlayerState} from './player-controller.js';
 import {createRemoteWardenAvatar, loadRemoteWardenTemplate} from './remote-warden.js';
 
 export const COOP_PREVIEW_BUILD_HASH = BRIARHOLD_VERSION;
-export const COOP_PREVIEW_CONTENT_HASH = 'seven-night-campaign-v5-supplies-1';
+export const COOP_PREVIEW_CONTENT_HASH = 'seven-night-campaign-v6-alpha100';
 export const COOP_INVITE_VERSION = 1;
 
 const HOST_ID = 'warden-host';
@@ -47,6 +48,8 @@ const AUTHORITY_STEP = 1 / 30;
 const HANDSHAKE_TIMEOUT_MS = 15000;
 const AVATAR_STARTUP_TIMEOUT_MS = 90000;
 export const CHECKPOINT_ACK_TIMEOUT_MS = 30000;
+export const CONNECTION_INTERRUPTION_GRACE_MS = 5000;
+export const PEER_SILENCE_TIMEOUT_MS = 30000;
 const MAX_PENDING_GUEST_COMMANDS = 64;
 const MAX_CONFIRMED_CHECKPOINT_TRANSFERS = 16;
 const NEUTRAL_INPUT_FRAME = Object.freeze({
@@ -64,6 +67,27 @@ function actionStream(action) {
   if (['goal_accept', 'goal_report', 'daywork', 'medicine_prepare'].includes(action)) return 'progression';
   if (['npc_action', 'npc_interaction', 'goals_panel', 'service_request'].includes(action)) return 'hub';
   return 'build';
+}
+
+function actionMaskForAuthorityEvent(event) {
+  if (event?.kind === 'melee_strike') return PLAYER_COMMAND_ACTIONS.MELEE;
+  if (event?.kind === 'weapon_vented') return null;
+  return PLAYER_COMMAND_ACTIONS.FIRE;
+}
+
+function commandEventSourceSequences(command, prior = null) {
+  return Object.freeze({
+    fire: (command.actions & PLAYER_COMMAND_ACTIONS.FIRE) !== 0 ? command.sequence : prior?.fire ?? null,
+    melee: (command.actions & PLAYER_COMMAND_ACTIONS.MELEE) !== 0 ? command.sequence : prior?.melee ?? null,
+    manualVent: command.manualVent === true ? command.sequence : prior?.manualVent ?? null,
+  });
+}
+
+function eventSourceSequence(event, source) {
+  if (!source) return null;
+  const key = event?.kind === 'melee_strike' ? 'melee'
+    : event?.kind === 'weapon_vented' ? 'manualVent' : 'fire';
+  return source.eventSources?.[key] ?? source.command?.sequence ?? null;
 }
 
 function emptyNarrativeFrameState() {
@@ -141,6 +165,7 @@ export class CoopMovementPreview {
     onConnected = () => {},
     onEnded = () => {},
     onAuthorityEvents = () => {},
+    onLocalCommand = () => {},
     onActionRequest = null,
     onActionAck = () => {},
     createWorldFrame = null,
@@ -155,6 +180,10 @@ export class CoopMovementPreview {
     resolveWeaponTuning = null,
     now = () => (globalThis.performance?.now?.() ?? Date.now()),
     checkpointAckTimeoutMs = CHECKPOINT_ACK_TIMEOUT_MS,
+    connectionInterruptionGraceMs = CONNECTION_INTERRUPTION_GRACE_MS,
+    peerSilenceTimeoutMs = PEER_SILENCE_TIMEOUT_MS,
+    setTimer = (callback, delay) => setTimeout(callback, delay),
+    clearTimer = timer => clearTimeout(timer),
   } = {}) {
     if (!Object.values(PEER_ROLES).includes(role)) throw new TypeError('Co-op role must be host or guest');
     this.role = role;
@@ -168,6 +197,7 @@ export class CoopMovementPreview {
     this.onConnected = onConnected;
     this.onEnded = onEnded;
     this.onAuthorityEvents = onAuthorityEvents;
+    this.onLocalCommand = onLocalCommand;
     this.onActionRequest = onActionRequest;
     this.onActionAck = onActionAck;
     this.createWorldFrame = createWorldFrame;
@@ -177,18 +207,28 @@ export class CoopMovementPreview {
     this.onAuthorityPaused = onAuthorityPaused;
     this.onAuthorityResumed = onAuthorityResumed;
     this.onIceCandidate = onIceCandidate;
-    this.transport = transport ?? createPeerTransport({role, turnServers});
     this.now = typeof now === 'function' ? now : (() => Date.now());
+    this.transport = transport ?? createPeerTransport({role, turnServers, now: this.now});
     if (!Number.isFinite(checkpointAckTimeoutMs) || checkpointAckTimeoutMs < 10 || checkpointAckTimeoutMs > 120000) {
       throw new RangeError('checkpoint acknowledgement timeout must be bounded');
     }
     this.checkpointAckTimeoutMs = checkpointAckTimeoutMs;
+    if (!Number.isFinite(connectionInterruptionGraceMs) || connectionInterruptionGraceMs < 100
+      || connectionInterruptionGraceMs > 30000) throw new RangeError('connection interruption grace must be bounded');
+    if (!Number.isFinite(peerSilenceTimeoutMs) || peerSilenceTimeoutMs < 1000
+      || peerSilenceTimeoutMs > 120000) throw new RangeError('peer silence timeout must be bounded');
+    if (typeof setTimer !== 'function' || typeof clearTimer !== 'function') throw new TypeError('connection timers must be functions');
+    this.connectionInterruptionGraceMs = connectionInterruptionGraceMs;
+    this.peerSilenceTimeoutMs = peerSilenceTimeoutMs;
+    this.setTimer = setTimer;
+    this.clearTimer = clearTimer;
     this.authority = role === PEER_ROLES.HOST ? createAuthority(resolveWeaponTuning) : null;
     this.remoteAvatar = null;
     this.accumulator = 0;
     this.sequence = 0;
     this.latestFrame = null;
     this.pendingFrames = [];
+    this.pendingFrameEventSources = new Map();
     this.connected = false;
     this.closed = false;
     this.pendingInput = null;
@@ -198,6 +238,15 @@ export class CoopMovementPreview {
     this.helloSent = false;
     this.handshakeStarting = false;
     this.handshakeTimer = null;
+    this.interruptionTimer = null;
+    this.transportInterrupted = false;
+    this.interruptionCause = null;
+    this.healthState = 'negotiating';
+    this.healthFailure = null;
+    this.healthInterruptions = 0;
+    this.healthRecoveries = 0;
+    this.lastReceivedAt = this.now();
+    this.lastSentAt = this.lastReceivedAt;
     this.authorityPaused = false;
     this.actionSequence = 0;
     this.actionSequences = new Map();
@@ -288,6 +337,13 @@ export class CoopMovementPreview {
     }
     if (event.channel === 'control') this.controlOpen = event.state === 'open';
     if (event.channel === 'realtime') this.realtimeOpen = event.state === 'open';
+    if (event.state === 'closed' && this.connected) {
+      this.beginTransportInterruption(`${event.channel}_channel`);
+      return;
+    }
+    if (event.state === 'open' && this.transportInterrupted && this.controlOpen && this.realtimeOpen) {
+      this.recoverTransportInterruption();
+    }
     if (event.state !== 'open' || this.connected || this.closed) return;
     this.armHandshakeTimeout();
     try {
@@ -321,6 +377,7 @@ export class CoopMovementPreview {
       ]);
       if (this.closed) return false;
       this.connected = true;
+      this.markConnectionHealthy();
       this.onStatus('Connected. Two-Warden seven-night authority active.');
       this.onConnected(this);
       if (this.authority && this.createCheckpoint) this.sendCheckpoint('initial');
@@ -373,11 +430,25 @@ export class CoopMovementPreview {
     } else if (channel === 'realtime' && message.kind === COOP_WIRE_MESSAGE_KINDS.COMMAND && this.authority) {
       const previous = this.pendingFrames.at(-1);
       if (previous?.intendedTick === message.command.intendedTick) {
-        this.pendingFrames[this.pendingFrames.length - 1] = {
+        const merged = {
           ...message.command,
           actions: previous.actions | message.command.actions,
+          manualVent: previous.manualVent || message.command.manualVent,
         };
-      } else this.pendingFrames.push(message.command);
+        const previousSources = this.pendingFrameEventSources.get(previous.sequence);
+        this.pendingFrameEventSources.delete(previous.sequence);
+        this.pendingFrameEventSources.set(
+          merged.sequence,
+          commandEventSourceSequences(message.command, previousSources),
+        );
+        this.pendingFrames[this.pendingFrames.length - 1] = merged;
+      } else {
+        this.pendingFrames.push(message.command);
+        this.pendingFrameEventSources.set(
+          message.command.sequence,
+          commandEventSourceSequences(message.command),
+        );
+      }
       if (this.pendingFrames.length > MAX_PENDING_GUEST_COMMANDS) {
         this.end('Connection closed after guest input overflow');
       }
@@ -482,6 +553,7 @@ export class CoopMovementPreview {
         this.resumeDeferred = false;
         this.resumeDeferredReason = null;
         this.authorityPaused = false;
+        this.markConnectionHealthy();
         this.transport.sendControl(this.remotePeerId, COOP_WIRE_MESSAGE_KINDS.AUTHORITY_RESUMED,
           createCoopAuthorityResumed({tick: this.authority.tick, stateHash: pending.stateHash}));
       }
@@ -503,6 +575,7 @@ export class CoopMovementPreview {
       this.onAuthorityPaused(message, this);
     } else if (channel === 'control' && message.kind === COOP_WIRE_MESSAGE_KINDS.AUTHORITY_RESUMED && !this.authority) {
       this.authorityPaused = false;
+      this.markConnectionHealthy();
       this.onAuthorityResumed(message, this);
     } else if (channel === 'control' && message.kind === COOP_WIRE_MESSAGE_KINDS.SESSION_ENDED) {
       this.end(`Co-op session ended: ${message.reason}`);
@@ -515,16 +588,90 @@ export class CoopMovementPreview {
 
   connectionState(event) {
     if (event?.state === 'disconnected') {
-      this.end('Connection interrupted');
+      this.beginTransportInterruption('connection');
       return;
     }
     if (event?.state === 'connected') {
+      if (this.transportInterrupted && this.controlOpen && this.realtimeOpen) this.recoverTransportInterruption();
       if (this.helloReceived && this.controlOpen && this.realtimeOpen && !this.closed) {
         this.connected = true;
       }
       return;
     }
-    if (['failed', 'closed'].includes(event?.state)) this.end(`Connection ${event.state}`);
+    if (['failed', 'closed'].includes(event?.state)) {
+      this.healthFailure = event.state === 'failed' ? 'transport_failed' : 'transport_closed';
+      this.end(`Connection ${event.state}`);
+    }
+  }
+
+  beginTransportInterruption(cause = 'connection') {
+    if (this.closed || this.transportInterrupted) return false;
+    this.transportInterrupted = true;
+    this.interruptionCause = cause;
+    this.authorityPaused = true;
+    this.healthState = 'interrupted';
+    this.healthInterruptions += 1;
+    this.onStatus('Connection interrupted · attempting to recover');
+    this.interruptionTimer = this.setTimer(() => {
+      this.interruptionTimer = null;
+      if (!this.transportInterrupted || this.closed) return;
+      const channel = this.interruptionCause?.endsWith('_channel')
+        ? this.interruptionCause.slice(0, -'_channel'.length)
+        : null;
+      this.healthFailure = channel ? `${channel}_channel_timeout` : 'interruption_timeout';
+      this.end(channel
+        ? `Connection failed after the ${channel} channel closed`
+        : 'Connection failed after a temporary interruption');
+    }, this.connectionInterruptionGraceMs);
+    return true;
+  }
+
+  recoverTransportInterruption() {
+    if (!this.transportInterrupted || this.closed) return false;
+    this.transportInterrupted = false;
+    this.interruptionCause = null;
+    if (this.interruptionTimer !== null) this.clearTimer(this.interruptionTimer);
+    this.healthState = 'recovering';
+    this.healthRecoveries += 1;
+    this.onStatus('Connection restored · synchronizing with the co-op peer');
+    this.interruptionTimer = this.setTimer(() => {
+      this.interruptionTimer = null;
+      if (this.closed || this.healthState !== 'recovering') return;
+      this.healthFailure = 'recovery_timeout';
+      this.end('Connection failed while synchronizing after recovery');
+    }, this.checkpointAckTimeoutMs);
+    if (!this.authority) this.requestResume();
+    return true;
+  }
+
+  markConnectionHealthy() {
+    if (this.closed) return false;
+    if (this.interruptionTimer !== null && this.healthState === 'recovering') {
+      this.clearTimer(this.interruptionTimer);
+      this.interruptionTimer = null;
+    }
+    this.healthState = 'healthy';
+    this.healthFailure = null;
+    return true;
+  }
+
+  pollConnectionHealth(now = this.now()) {
+    if (this.closed) return false;
+    let peer = null;
+    try { peer = this.transport.getPeerState?.(this.remotePeerId) ?? null; }
+    catch { return true; }
+    if (!peer) return true;
+    if (Number.isFinite(peer?.lastReceivedAt)) this.lastReceivedAt = peer.lastReceivedAt;
+    if (Number.isFinite(peer?.lastSentAt)) this.lastSentAt = peer.lastSentAt;
+    if (!this.connected || this.transportInterrupted || this.healthState === 'recovering'
+      || this.authorityPaused || peer.controlState !== 'open' || peer.realtimeState !== 'open') return true;
+    if (Math.max(0, now - this.lastReceivedAt) <= this.peerSilenceTimeoutMs) {
+      this.markConnectionHealthy();
+      return true;
+    }
+    this.healthFailure = 'peer_silent';
+    this.end('Connection failed: no data received from the co-op peer');
+    return false;
   }
 
   dropped(event) {
@@ -682,6 +829,8 @@ export class CoopMovementPreview {
     const players = this.authority
       ? [...this.authority.players.values()]
       : this.latestFrame?.players ?? [];
+    if (Number.isFinite(peer?.lastReceivedAt)) this.lastReceivedAt = peer.lastReceivedAt;
+    if (Number.isFinite(peer?.lastSentAt)) this.lastSentAt = peer.lastSentAt;
     return Object.freeze({
       role: this.role,
       connected: this.connected,
@@ -706,6 +855,15 @@ export class CoopMovementPreview {
       drops: Object.freeze({...this.dropCounts}),
       lastDropBudget: this.lastDropBudget,
       authorityEvents: Object.freeze({...this.authorityEventCounts}),
+      health: Object.freeze({
+        state: this.healthState,
+        failure: this.healthFailure,
+        interruptions: this.healthInterruptions,
+        recoveries: this.healthRecoveries,
+        lastReceivedAt: this.lastReceivedAt,
+        lastSentAt: this.lastSentAt,
+        silenceMs: Math.max(0, this.now() - this.lastReceivedAt),
+      }),
       players: Object.freeze(players.map(player => Object.freeze({
         playerId: player.playerId,
         position: Object.freeze({...player.position}),
@@ -781,6 +939,7 @@ export class CoopMovementPreview {
 
   end(reason) {
     if (this.closed) return;
+    this.healthState = 'terminal';
     this.connected = false;
     this.onStatus(reason);
     this.onEnded(reason, this);
@@ -788,6 +947,7 @@ export class CoopMovementPreview {
   }
 
   update(dt, inputFrame) {
+    if (!this.pollConnectionHealth()) return false;
     if (this.authority && this.pendingCheckpoint) this.pollCheckpointTransfer();
     if (!this.connected || this.closed || this.authorityPaused) return false;
     inputFrame = inputFrame ?? NEUTRAL_INPUT_FRAME;
@@ -820,28 +980,49 @@ export class CoopMovementPreview {
       this.pendingInput = {...this.pendingInput, look: {yaw: 0, pitch: 0}, fire: false, interact: false, jump: false, slide: false, melee: false, manualVent: false, selectedWeapon: null};
       if (this.authority) {
         const commands = {[this.localId]: command};
+        const commandSources = new Map([[this.localId, [{
+          command,
+          eventSources: commandEventSourceSequences(command),
+        }]]]);
         let result;
         try {
           const pendingFrames = this.pendingFrames.splice(0);
           if (pendingFrames.length > 0) {
             const rebasedFrames = pendingFrames
-              .map(frame => rebasePlayerCommandForAuthority(frame, this.authority.tick))
-              .sort((left, right) => left.sequence - right.sequence);
-            const newestFrame = rebasedFrames.at(-1);
+              .map(frame => ({
+                command: rebasePlayerCommandForAuthority(frame, this.authority.tick),
+                eventSources: this.pendingFrameEventSources.get(frame.sequence)
+                  ?? commandEventSourceSequences(frame),
+              }))
+              .sort((left, right) => left.command.sequence - right.command.sequence);
+            for (const frame of pendingFrames) this.pendingFrameEventSources.delete(frame.sequence);
+            const newestFrame = rebasedFrames.at(-1).command;
             commands[this.remoteId] = {
               ...newestFrame,
               // Several realtime packets can arrive between authority ticks.
               // Movement is latest-wins, but input edges must survive a later
               // neutral packet or attacks/jumps disappear nondeterministically.
-              actions: rebasedFrames.reduce((mask, frame) => mask | frame.actions, 0),
+              actions: rebasedFrames.reduce((mask, frame) => mask | frame.command.actions, 0),
+              manualVent: rebasedFrames.some(frame => frame.command.manualVent),
             };
+            commandSources.set(this.remoteId, rebasedFrames);
           }
           result = stepSession(this.authority, commands);
         } catch {
           this.end('Connection closed after invalid guest input');
           return false;
         }
-        this.onAuthorityEvents(result.events, this);
+        const eventCommandSequences = Object.fromEntries(result.events.map(event => {
+          const mask = actionMaskForAuthorityEvent(event);
+          const sources = commandSources.get(event.actorId) ?? [];
+          const source = [...sources].reverse().find(frame => mask === null
+            ? frame.command.manualVent === true
+            : (frame.command.actions & mask) !== 0) ?? sources.at(-1);
+          return [event.sequence, eventSourceSequence(event, source)];
+        }));
+        this.onAuthorityEvents(result.events, this, Object.freeze({
+          eventCommandSequences: Object.freeze(eventCommandSequences),
+        }));
         for (const event of result.events) {
           if (event.kind in this.authorityEventCounts) this.authorityEventCounts[event.kind] += 1;
         }
@@ -873,6 +1054,7 @@ export class CoopMovementPreview {
         this.applyFrame(frame);
         this.transport.broadcastRealtime(COOP_WIRE_MESSAGE_KINDS.WORLD_FRAME, frame);
       } else {
+        this.onLocalCommand(command, this);
         this.transport.sendRealtime(this.remotePeerId, COOP_WIRE_MESSAGE_KINDS.COMMAND, createCoopCommandV2(command));
       }
     }
@@ -884,7 +1066,10 @@ export class CoopMovementPreview {
   close() {
     if (this.closed) return;
     this.clearHandshakeTimeout();
+    if (this.interruptionTimer !== null) this.clearTimer(this.interruptionTimer);
+    this.interruptionTimer = null;
     this.pendingCheckpoint = null;
+    this.pendingFrameEventSources.clear();
     this.queuedCheckpointReason = null;
     this.confirmedCheckpointTransfers.clear();
     this.resumeDeferred = false;

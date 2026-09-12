@@ -445,6 +445,7 @@ function announcementText(event, label) {
   if (event.type === "dragon_breath") return "Cinderwing breathes fire across the marked lane.";
   if (event.type === "boss_stagger") return `${title(event.actorId)} staggered.`;
   if (event.type === "hit_blocked" && event.reason === "rotating_shield_arc") return "Shield arc blocked the shot — circle to the exposed core.";
+  if (event.type === "hit_blocked" && event.reason === "phase_transition") return "The Matron's core is reforming — reposition for the next phase.";
   if (event.type === "shield_feed_broken") return `Mossguard shield feed broken · ${event.livingMossguards} remain.`;
   if (event.type === "socket_disabled") return `${event.socketId} visibly disabled for this wave.`;
   if (event.type === "objective_damage") return `${title(event.actorId)} damages ${event.targetId}.`;
@@ -456,6 +457,7 @@ function announcementText(event, label) {
 function matronPresentation(actor, timeMs, newEvents) {
   const mechanics = BOSS_ENCOUNTER_DEFINITIONS["moss-crowned-matron"].mechanics;
   const regenerationInterruptRemainingMs = Math.max(0, actor.regenerationInterruptedUntilMs - timeMs);
+  const phaseTransitionRemainingMs = Math.max(0, actor.telegraphUntilMs - timeMs);
   return {
     shieldArcs: Array.from({length: mechanics.mossguardFeeds}, (_, index) => ({
       id: `${actor.id}:shield:${index}`,
@@ -464,17 +466,23 @@ function matronPresentation(actor, timeMs, newEvents) {
       active: index < actor.livingMossguards,
     })),
     core: {
-      exposed: actor.livingMossguards === 0,
-      exposedBetweenArcs: actor.livingMossguards > 0,
+      exposed: actor.livingMossguards === 0 && phaseTransitionRemainingMs === 0,
+      exposedBetweenArcs: actor.livingMossguards > 0 && phaseTransitionRemainingMs === 0,
+      phaseTransitioning: phaseTransitionRemainingMs > 0,
+      phaseTransitionRemainingMs,
       regenerationInterrupted: regenerationInterruptRemainingMs > 0,
       regenerationInterruptRemainingMs,
     },
-    blockedHit: newEvents.some(event => event.type === "hit_blocked" && event.actorId === actor.id && event.reason === "rotating_shield_arc"),
+    blockedHit: newEvents.some(event => event.type === "hit_blocked" && event.actorId === actor.id
+      && ["rotating_shield_arc", "phase_transition"].includes(event.reason)),
   };
 }
 
 function counterText(actor) {
   if (!actor.matron) return PRESENTATION[actor.id].counter;
+  if (actor.matron.core.phaseTransitioning) {
+    return `Matron core reforming · ${(actor.matron.core.phaseTransitionRemainingMs / 1000).toFixed(1)}s — reposition for the next phase.`;
+  }
   if (actor.matron.core.exposed) return "Mossguards broken — core fully exposed; Runebolt prevents regeneration.";
   if (actor.matron.core.regenerationInterrupted) return `Runebolt struck the exposed core — regeneration interrupted for ${(actor.matron.core.regenerationInterruptRemainingMs / 1000).toFixed(1)}s.`;
   return "Runebolt the bright core between rotating shield arcs to interrupt regeneration.";

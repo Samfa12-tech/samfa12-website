@@ -3644,6 +3644,7 @@
   "modelScale": {
     "sourceModel": "assets/meshy/source/briarbound-running.glb",
     "runtimeHeight": 2.15,
+    "displayHeight": 3.21369726,
     "sourceBounds": {
       "min": [
         -0.5749666848413639,

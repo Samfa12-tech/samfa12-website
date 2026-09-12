@@ -473,6 +473,19 @@ const EVENT_PAYLOAD_KEYS = new Set([
   "wave",
   "state",
   "cue",
+  "weaponId",
+  "shotSequence",
+  "meleeSequence",
+  "commandSequence",
+  "originX",
+  "originY",
+  "originZ",
+  "directionX",
+  "directionY",
+  "directionZ",
+  "impactX",
+  "impactY",
+  "impactZ",
 ]);
 const SETTLEMENT_KEYS = new Set(["status", "runOrdinal", "outcome"]);
 const ACTION_LEDGER_KEYS = new Set(["version", "streams"]);
@@ -876,6 +889,11 @@ export function normalizeCoopSemanticEvent(value) {
   for (const [key, item] of Object.entries(payloadInput)) {
     if (key === "night") payload[key] = integer(item, "co-op semantic event payload night", 1, 7);
     else if (key === "wave") payload[key] = integer(item, "co-op semantic event payload wave", 1, 3);
+    else if (["shotSequence", "meleeSequence", "commandSequence"].includes(key)) payload[key] = integer(item, `co-op semantic event payload ${key}`, 0, 0xffffffff);
+    else if (["originX", "originY", "originZ", "impactX", "impactY", "impactZ"].includes(key)) {
+      payload[key] = finite(item, `co-op semantic event payload ${key}`, -10000, 10000);
+    }
+    else if (["directionX", "directionY", "directionZ"].includes(key)) payload[key] = finite(item, `co-op semantic event payload ${key}`, -1, 1);
     else if (["phase", "amount"].includes(key)) payload[key] = finite(item, `co-op semantic event payload ${key}`, 0, 10_000_000);
     else payload[key] = stableId(item, `co-op semantic event payload ${key}`);
   }

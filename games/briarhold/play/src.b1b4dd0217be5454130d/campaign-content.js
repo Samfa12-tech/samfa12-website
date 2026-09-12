@@ -15,7 +15,9 @@ export const CAMPAIGN_CONTENT_VERSION = 1;
 export const CAMPAIGN_COOP_MODIFIERS = deepFreeze({
   ordinaryHpMultiplier: 1.18,
   gatePressureMultiplier: 1.10,
-  bossHpMultiplier: 1.25,
+  // Two Wardens roughly double real damage opportunities. Preserve about
+  // ninety percent of the solo active-fight curve without changing authority.
+  bossHpMultiplier: 1.8,
   sharedStartingSupplies: 180,
   extraHunterCap: 2,
   rewardMultiplier: 1,
@@ -43,6 +45,19 @@ export const BOSS_ENCOUNTERS = deepFreeze({
   "hollow-hart": {id: "hollow-hart", title: "Hollow Hart", night: 7, fixedActor: true},
   cinderwing: {id: "cinderwing", title: "Cinderwing", night: 7, fixedActor: true, flying: true},
 });
+
+// Owner-acceptance profiles use post-heat, post-accuracy solo throughput,
+// rather than theoretical trigger DPS. Existing encounter mechanics add
+// repositioning and vulnerability time on top of these active-damage seconds.
+export const BOSS_PROGRESSION_PROFILES = deepFreeze([
+  {night: 1, encounterId: "wicker-colossus", targetActiveSeconds: [10, 20], expectedSoloDps: 240},
+  {night: 2, encounterId: "moss-crowned-matron", targetActiveSeconds: [18, 28], expectedSoloDps: 180},
+  {night: 3, encounterId: "root-sapper-prime", targetActiveSeconds: [24, 34], expectedSoloDps: 210},
+  {night: 4, encounterId: "ashwing-matriarch", targetActiveSeconds: [28, 40], expectedSoloDps: 230},
+  {night: 5, encounterId: "moonless-herald", targetActiveSeconds: [32, 48], expectedSoloDps: 190},
+  {night: 6, encounterId: "caravan-eater", targetActiveSeconds: [38, 55], expectedSoloDps: 230},
+  {night: 7, encounterId: "hollow-hart+cinderwing", targetActiveSeconds: [60, 90], expectedSoloDps: 360},
+]);
 
 function deepFreeze(value) {
   if (!value || typeof value !== "object" || Object.isFrozen(value)) return value;
@@ -233,11 +248,18 @@ export function buildCampaignWaveRoster(night, waveIndex, densityProfile = "desk
     };
   });
   const enemies = [];
+  let nextMatronShieldFeed = 0;
   for (const splitGroup of balancedGroups) {
     const authored = authoredById.get(splitGroup.id);
     for (let bodyIndex = 0; bodyIndex < splitGroup.bodyCount; bodyIndex += 1) {
       const rosterIndex = enemies.length;
       const companyIndex = authored.boss ? definition.companySchedule.companyCount - 1 : rosterIndex % definition.companySchedule.companyCount;
+      const shieldFeedId = definition.bossEncounterIds.includes("moss-crowned-matron")
+        && authored.type === MOSSGUARD_SHIELD
+        && companyIndex === definition.companySchedule.companyCount - 1
+        && nextMatronShieldFeed < 3
+        ? `mossguard-feed:${nextMatronShieldFeed++}`
+        : null;
       enemies.push(Object.freeze({
         rosterIndex,
         groupId: splitGroup.id,
@@ -259,6 +281,7 @@ export function buildCampaignWaveRoster(night, waveIndex, densityProfile = "desk
         companyIndex,
         companyCount: definition.companySchedule.companyCount,
         releaseAt: companyIndex * definition.companySchedule.releaseSpacingSeconds,
+        ...(shieldFeedId ? {shieldFeedId} : {}),
         ...(authored.id === "wave-3-wicker-colossus" ? NIGHT_ONE_WICKER_EMERGENCE : {}),
       }));
     }

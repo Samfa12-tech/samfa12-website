@@ -92,19 +92,19 @@ const rawDefinitions = {
     title: "Moss-Crowned Matron",
     fixedActor: true,
     mechanics: {shieldArcDegrees: 80, shieldRotationMs: 1300, mossguardFeeds: 3, regenerationPerSecond: 8, runeboltDamageMultiplier: 1.25, runeboltStaggerMultiplier: 1.5, regenerationInterruptMs: 4000},
-    actors: [{id: "moss-crowned-matron", maxHp: 1200, phaseThresholds: [0.7, 0.45], position: {x: -18, y: 0, z: 78}, radius: 3.4}],
+    actors: [{id: "moss-crowned-matron", maxHp: 3600, phaseThresholds: [0.7, 0.45], position: {x: -18, y: 0, z: 78}, radius: 3.4}],
   },
   "root-sapper-prime": {
     title: "Root-Sapper Prime",
     fixedActor: true,
     mechanics: {plantCooldownMs: 2500, plantTelegraphMs: 1000, interruptStagger: 80, socketDamage: "disabled_for_wave"},
-    actors: [{id: "root-sapper-prime", maxHp: 1400, phaseThresholds: [0.66, 0.33], position: {x: 18, y: 0, z: 82}, radius: 3}],
+    actors: [{id: "root-sapper-prime", maxHp: 5600, phaseThresholds: [0.66, 0.33], position: {x: 18, y: 0, z: 82}, radius: 3}],
   },
   "ashwing-matriarch": {
     title: "Ashwing Matriarch",
     fixedActor: true,
     mechanics: {diveCooldownMs: 2200, diveTelegraphMs: 800, ashTelegraphMs: 800, ashActiveMs: 4000, ashRadius: 4.5, maxAshZones: 3},
-    actors: [{id: "ashwing-matriarch", maxHp: 1300, phaseThresholds: [0.67, 0.34], position: {x: -8, y: 8, z: 86}, radius: 3.2}],
+    actors: [{id: "ashwing-matriarch", maxHp: 7200, phaseThresholds: [0.67, 0.34], position: {x: -8, y: 8, z: 86}, radius: 3.2}],
   },
   "moonless-herald": {
     title: "Moonless Herald",
@@ -113,21 +113,21 @@ const rawDefinitions = {
     // The western overlook is the no-build Ward-light fallback. This position
     // is inside the 24 m semantic pulse range with a clear authored-map ray;
     // Ward Lanterns remain an optional safer reveal source.
-    actors: [{id: "moonless-herald", maxHp: 1100, phaseThresholds: [0.7, 0.35], position: {x: -8, y: 1, z: 40}, radius: 2.5}],
+    actors: [{id: "moonless-herald", maxHp: 6800, phaseThresholds: [0.7, 0.35], position: {x: -8, y: 1, z: 40}, radius: 2.5}],
   },
   "caravan-eater": {
     title: "Caravan Eater",
     fixedActor: true,
     mechanics: {objectiveCooldownMs: 2200, objectiveTelegraphMs: 1000, objectiveDamage: 12, objectiveAttackRange: 6, staggerCancel: 100},
-    actors: [{id: "caravan-eater", maxHp: 1500, phaseThresholds: [0.67, 0.34], position: {x: 22, y: 0, z: 84}, radius: 3.6}],
+    actors: [{id: "caravan-eater", maxHp: 10000, phaseThresholds: [0.67, 0.34], position: {x: 22, y: 0, z: 84}, radius: 3.6}],
   },
   "hollow-hart+cinderwing": {
     title: "Hollow Hart and Cinderwing",
     fixedActor: true,
     mechanics: {rootCooldownMs: 3000, rootTelegraphMs: 1000, breathCooldownMs: 3000, breathTelegraphMs: 1000, breathActiveMs: 1800, maxBreathZones: 1},
     actors: [
-      {id: "hollow-hart", maxHp: 1800, phaseThresholds: [0.7, 0.4], position: {x: -14, y: 0, z: 94}, radius: 4},
-      {id: "cinderwing", maxHp: 1600, phaseThresholds: [0.68, 0.36], position: {x: 14, y: 14, z: 96}, radius: 4.5},
+      {id: "hollow-hart", maxHp: 14000, phaseThresholds: [0.7, 0.4], position: {x: -14, y: 0, z: 94}, radius: 4},
+      {id: "cinderwing", maxHp: 12000, phaseThresholds: [0.68, 0.36], position: {x: 14, y: 14, z: 96}, radius: 4.5},
     ],
   },
 };
@@ -364,12 +364,19 @@ function applyHit(state, actor, command) {
     return;
   }
   if (actor.id === "moss-crowned-matron"
-    && withinShieldArc(actor, command.heading, BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].mechanics.shieldArcDegrees)) {
-    emit(state, "hit_blocked", {actorId: actor.id, commandId: command.id, reason: "rotating_shield_arc"});
+    && (state.timeMs < actor.telegraphUntilMs
+      || withinShieldArc(actor, command.heading, BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].mechanics.shieldArcDegrees))) {
+    emit(state, "hit_blocked", {actorId: actor.id, commandId: command.id,
+      reason: state.timeMs < actor.telegraphUntilMs ? "phase_transition" : "rotating_shield_arc"});
     return;
   }
   const isMatronRunebolt = actor.id === "moss-crowned-matron" && command.weaponId === "runebolt";
-  const damage = baseDamage * armourMultiplier * (isMatronRunebolt ? 1.25 : 1);
+  const actorDefinition = BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].actors.find(item => item.id === actor.id);
+  const phaseFloor = actor.id === "moss-crowned-matron"
+    ? actor.maxHp * (actorDefinition.phaseThresholds[actor.phase - 1] ?? 0) : 0;
+  const requestedDamage = baseDamage * armourMultiplier * (isMatronRunebolt ? 1.25 : 1);
+  const damage = actor.id === "moss-crowned-matron"
+    ? Math.min(Math.max(0, actor.hp - phaseFloor), requestedDamage) : requestedDamage;
   const boonStaggerMultiplier = state.boons.includes("hunters-patience") ? 1.25 : 1;
   const stagger = baseStagger * staggerMultiplier * boonStaggerMultiplier * (isMatronRunebolt ? 1.5 : 1);
   actor.hp = Math.max(0, actor.hp - damage);
@@ -432,8 +439,10 @@ function updateMatron(state, actor) {
   const mechanics = BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].mechanics;
   actor.heading = ((state.timeMs / mechanics.shieldRotationMs) * (Math.PI * 2 / 3)) % (Math.PI * 2);
   if (state.timeMs >= actor.hitUntilMs) actor.animationState = "shield_rotate";
+  if (state.timeMs < actor.telegraphUntilMs) return;
   if (actor.livingMossguards > 0 && state.timeMs >= actor.regenerationInterruptedUntilMs && actor.hp < actor.maxHp && actor.phase < 3) {
-    actor.hp = Math.min(actor.maxHp, actor.hp + 8 * FIXED_STEP_MS / 1000);
+    const phaseCeiling = actor.phase === 1 ? actor.maxHp : actor.maxHp * 0.7;
+    actor.hp = Math.min(phaseCeiling, actor.hp + 8 * FIXED_STEP_MS / 1000);
   }
 }
 
@@ -646,6 +655,7 @@ function updatePhases(state, actor) {
   const definition = BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].actors.find(item => item.id === actor.id);
   while (actor.phase <= definition.phaseThresholds.length && actor.hp / actor.maxHp <= definition.phaseThresholds[actor.phase - 1]) {
     actor.phase += 1;
+    if (actor.id === "moss-crowned-matron") actor.telegraphUntilMs = state.timeMs + 900;
     emit(state, "boss_phase", {actorId: actor.id, phase: actor.phase});
   }
 }
@@ -1024,7 +1034,7 @@ function validateEvent(event, fail, director) {
   if (Object.hasOwn(event, "encounterId") && event.encounterId !== director.encounterId) fail("event encounterId is inconsistent");
   if (Object.hasOwn(event, "attack") && !ATTACK_IDS.has(event.attack)) fail("event attack is invalid");
   if (Object.hasOwn(event, "weaponId") && !WEAPON_IDS.has(event.weaponId)) fail("event weaponId is invalid");
-  if (Object.hasOwn(event, "reason") && !["phased", "flight_guard", "rotating_shield_arc"].includes(event.reason)) {
+  if (Object.hasOwn(event, "reason") && !["phased", "flight_guard", "rotating_shield_arc", "phase_transition"].includes(event.reason)) {
     fail("event reason is invalid");
   }
   if (Object.hasOwn(event, "state") && event.state !== "phased") fail("event state is invalid");
@@ -1064,7 +1074,7 @@ function validateEvent(event, fail, director) {
   if (event.type === "hit_ignored" && !((event.actorId === "moonless-herald" && event.reason === "phased")
     || (event.actorId === "cinderwing" && event.reason === "flight_guard"))) fail("ignored-hit event is inconsistent");
   if (event.type === "hit_blocked" && (event.actorId !== "moss-crowned-matron"
-    || event.reason !== "rotating_shield_arc")) fail("blocked-hit event is inconsistent");
+    || !["rotating_shield_arc", "phase_transition"].includes(event.reason))) fail("blocked-hit event is inconsistent");
   if (event.type === "socket_disabled" && (event.actorId !== "root-sapper-prime"
     || !director.options.occupiedSocketIds.includes(event.socketId)
     || !director.disabledSocketIds.includes(event.socketId))) fail("socket event is inconsistent");

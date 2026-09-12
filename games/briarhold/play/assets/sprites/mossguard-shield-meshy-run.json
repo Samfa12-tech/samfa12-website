@@ -2051,6 +2051,7 @@
   "modelScale": {
     "sourceModel": "assets/meshy/source/mossguard-shield-running.glb",
     "runtimeHeight": 2.65,
+    "displayHeight": 3.656161908,
     "sourceBounds": {
       "min": [
         -0.5978373584634653,

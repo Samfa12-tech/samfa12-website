@@ -1,10 +1,12 @@
 import {
   atlasStateProjectionScale,
+  atlasGroundAnchor,
   buildAtlasFrameMetadata,
   buildGpuAtlasSpriteShaderSources,
   createGpuAtlasSpriteBuffers,
   ENEMY_ATTACK_ANIMATION_SECONDS,
   ENEMY_HIT_ANIMATION_SECONDS,
+  WICKER_SIEGE_TELEGRAPH_SECONDS,
   GROUNDED_ENEMY_MOTION,
   attackReadabilityForPresentation,
   proceduralAttackPresentation,
@@ -159,14 +161,30 @@ export const DEFAULT_ENEMY_DISPLAY = Object.freeze({
   height: 2.55,
 });
 
-// Brute's immutable runtime GLB scales its source rig by 0.0134195229 / 0.01.
-// Sprite frame spans include transparent projection padding; a 2.9m frame is
-// not a 2.9m silhouette. Use the same source units as the actual runtime rig.
-export const BARKHIDE_ATLAS_WORLD_SCALE = 1.341952320381299;
-export function authoredAtlasDimensions(metadata, sourceToRuntimeScale = 1) {
-  const projection = metadata.animations.find(animation => animation.name === 'run').projectionHeight;
-  return {displayHeight: projection * sourceToRuntimeScale,
-    displayWidth: projection * sourceToRuntimeScale * metadata.frameWidth / metadata.frameHeight};
+// Sprite frame spans include transparent projection padding, so authored
+// metadata records the calibrated world-space plane height separately from the
+// visible silhouette. Older atlases fall back to their projection metadata.
+export function authoredAtlasDimensions(metadata) {
+  const animation = metadata.animations?.find(item => item.name === 'run');
+  const runtimeHeight = Number(metadata.modelScale?.runtimeHeight);
+  const recordedDisplayHeight = Number(metadata.modelScale?.displayHeight);
+  const sourceHeight = Number(metadata.modelScale?.sourceBounds?.size?.[1]);
+  const projectionHeight = Number(animation?.projectionHeight);
+  const records = (metadata.alphaBounds ?? []).filter(record => (record.animation ?? 'run') === 'run');
+  const coverages = records.map(record => Number(record.heightPx) / Number(metadata.frameHeight))
+    .filter(value => Number.isFinite(value) && value > 0).sort((left, right) => left - right);
+  const medianCoverage = coverages[Math.floor(coverages.length / 2)] || 1;
+  const displayHeight = Number.isFinite(recordedDisplayHeight) && recordedDisplayHeight > 0
+    ? recordedDisplayHeight
+    : Number.isFinite(runtimeHeight) && runtimeHeight > 0
+      ? Number.isFinite(projectionHeight) && projectionHeight > 0 && Number.isFinite(sourceHeight) && sourceHeight > 0
+        ? projectionHeight * runtimeHeight / sourceHeight
+        : runtimeHeight / medianCoverage
+      : Number.isFinite(projectionHeight) && projectionHeight > 0
+        ? projectionHeight
+        : DEFAULT_ENEMY_DISPLAY.height;
+  return {displayHeight,
+    displayWidth: displayHeight * Number(metadata.frameWidth) / Number(metadata.frameHeight)};
 }
 
 // Cut-out horde atlases are deliberately sampled without mipmaps. Mip-chain
@@ -350,8 +368,8 @@ export function legacySpriteLayoutForType(type = 0, {
   gateZ = 0,
 } = {}) {
   const enemyType = Math.max(0, Math.min(6, Math.floor(Number(type) || 0)));
-  const resolvedWidth = width ?? (enemyType >= 5 ? 3.4 : enemyType === 3 ? 3.45 : enemyType === 2 ? 2.35 : enemyType === 1 ? 2.15 : DEFAULT_ENEMY_DISPLAY.width);
-  const resolvedHeight = height ?? (enemyType >= 5 ? 4.6 : enemyType === 3 ? 3.6 : enemyType === 2 ? 2.65 : enemyType === 1 ? 2.9 : DEFAULT_ENEMY_DISPLAY.height);
+  const resolvedWidth = width ?? DEFAULT_ENEMY_DISPLAY.width;
+  const resolvedHeight = height ?? DEFAULT_ENEMY_DISPLAY.height;
   const flightOffset = enemyType === 3 ? sporewingFlightOffsetAtGate(z, gateZ) : 0;
   return {
     width: resolvedWidth,
@@ -385,15 +403,17 @@ export function legacyAttackPresentation({
   lastAttackTime = -1000,
   active = true,
   framesPerDirection = 1,
+  durationSeconds = ENEMY_ATTACK_ANIMATION_SECONDS,
 } = {}) {
   const now = Number.isFinite(elapsed) ? elapsed : 0;
   const started = Number.isFinite(lastAttackTime) ? lastAttackTime : -1000;
   const age = Math.max(0, now - started);
+  const duration = Math.max(0.01, Number(durationSeconds) || ENEMY_ATTACK_ANIMATION_SECONDS);
   const attacking = active === true
     && started > -999
-    && age < ENEMY_ATTACK_ANIMATION_SECONDS;
+    && age < duration;
   const progress = attacking
-    ? Math.max(0, Math.min(1, age / ENEMY_ATTACK_ANIMATION_SECONDS))
+    ? Math.max(0, Math.min(1, age / duration))
     : 0;
   const presentation = proceduralAttackPresentation(progress, framesPerDirection);
   return {
@@ -1143,7 +1163,8 @@ function createLegacyRenderer({
   const preservesAuthoredColor = includedTypes !== null && includedTypes.size === 1;
   const authoredPivots = new Map(authoredPose ? (metadata.alphaBounds ?? []).map(record => {
     const animation = metadata.animations.find(a => a.name === (record.animation ?? 'run'));
-    return [(animation.frameStartRow + record.frameIndex) * metadata.atlasColumns + record.direction, record];
+    return [(animation.frameStartRow + record.frameIndex) * metadata.atlasColumns + record.direction,
+      {...record, ...atlasGroundAnchor(metadata, record)}];
   }) : []);
   const slotIds = rendererSlotIds(battlefield, dynamicTypes ? {} : {typeFilter, excludeType});
   const capacity = slotIds.length;
@@ -1273,6 +1294,7 @@ function createLegacyRenderer({
           lastAttackTime: engagement.attacks ? battlefield.lastAttackTime?.[id] ?? -1000 : -1000,
           active: battlefield.status?.[id] === (battlefield.ACTIVE ?? 1),
           framesPerDirection: animation.framesPerDirection,
+          durationSeconds: battlefield.type?.[id] === 5 ? WICKER_SIEGE_TELEGRAPH_SECONDS : ENEMY_ATTACK_ANIMATION_SECONDS,
         });
         if (attack.attacking) {
           frame = attack.frame;
@@ -1505,6 +1527,8 @@ export async function createEnemyRenderer({
           name: 'briar-host',
           suppressedIds,
           dynamicTypes,
+          ...authoredAtlasDimensions(metadata),
+          authoredPose: true,
           disposeResource,
         });
         const renderers = [primary];
@@ -1520,7 +1544,7 @@ export async function createEnemyRenderer({
             profile,
             typeFilter: 1,
             name: 'barkhide-host',
-            ...authoredAtlasDimensions(bruteAsset.metadata, BARKHIDE_ATLAS_WORLD_SCALE),
+            ...authoredAtlasDimensions(bruteAsset.metadata),
             authoredPose: true,
             bruteVisualScale: 1,
             tintStrength: 0.12,
@@ -1540,8 +1564,8 @@ export async function createEnemyRenderer({
             profile,
             typeFilter: 2,
             name: 'mossguard-host',
-            displayWidth: 2.35,
-            displayHeight: 2.65,
+            ...authoredAtlasDimensions(mossguardAsset.metadata),
+            authoredPose: true,
             tintStrength: 0.08,
             suppressedIds,
             dynamicTypes,
@@ -1578,8 +1602,8 @@ export async function createEnemyRenderer({
             profile,
             typeFilter: 5,
             name: 'wicker-colossus',
-            displayWidth: DEFAULT_ENEMY_DISPLAY.width,
-            displayHeight: DEFAULT_ENEMY_DISPLAY.height,
+            ...authoredAtlasDimensions(wickerAsset.metadata),
+            authoredPose: true,
             tintStrength: 0.05,
             suppressedIds,
             dynamicTypes,
@@ -1597,6 +1621,8 @@ export async function createEnemyRenderer({
         metadata,
         stateAsset,
         profile,
+        ...authoredAtlasDimensions(metadata),
+        authoredPose: true,
         suppressedIds,
         dynamicTypes,
         disposeResource,
@@ -1632,6 +1658,8 @@ export async function createEnemyRenderer({
     ],
     suppressedIds,
     dynamicTypes,
+    ...authoredAtlasDimensions(metadata),
+    authoredPose: true,
   });
   const renderers = [primary];
   if (bruteAsset) renderers.push(createLegacyRenderer({
@@ -1643,7 +1671,7 @@ export async function createEnemyRenderer({
       metadata: bruteAsset.metadata,
       typeFilter: 1,
       name: 'barkhide-host',
-      ...authoredAtlasDimensions(bruteAsset.metadata, BARKHIDE_ATLAS_WORLD_SCALE),
+      ...authoredAtlasDimensions(bruteAsset.metadata),
       authoredPose: true,
       suppressedIds,
       dynamicTypes,
@@ -1657,8 +1685,8 @@ export async function createEnemyRenderer({
       metadata: mossguardAsset.metadata,
       typeFilter: 2,
       name: 'mossguard-host',
-      displayWidth: 2.35,
-      displayHeight: 2.65,
+      ...authoredAtlasDimensions(mossguardAsset.metadata),
+      authoredPose: true,
       suppressedIds,
       dynamicTypes,
     }));
@@ -1685,8 +1713,8 @@ export async function createEnemyRenderer({
       metadata: wickerAsset.metadata,
       typeFilter: 5,
       name: 'wicker-colossus',
-      displayWidth: 3.4,
-      displayHeight: 4.6,
+      ...authoredAtlasDimensions(wickerAsset.metadata),
+      authoredPose: true,
       suppressedIds,
       dynamicTypes,
     }));

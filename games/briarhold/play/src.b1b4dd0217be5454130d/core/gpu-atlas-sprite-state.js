@@ -17,6 +17,7 @@ export const ATLAS_SPRITE_TYPE = Object.freeze({
 export const ENEMY_HIT_FLASH_SECONDS = 0.12;
 export const ENEMY_HIT_ANIMATION_SECONDS = 0.24;
 export const ENEMY_ATTACK_ANIMATION_SECONDS = 0.52;
+export const WICKER_SIEGE_TELEGRAPH_SECONDS = 1.2;
 export const PROCEDURAL_ATTACK_PRESENTATION = Object.freeze({
   windupEnd: 0.32,
   strikeStart: 0.22,
@@ -280,7 +281,25 @@ export function atlasStateProjectionScale(runMeta, stateMeta, animation) {
   return stateHeight / referenceHeight;
 }
 
-function normalizedBounds(record, frameWidth, frameHeight) {
+export function atlasGroundAnchor(metadata, record) {
+  const frameWidth = Math.max(1, finite(metadata?.frameWidth, 1));
+  const frameHeight = Math.max(1, finite(metadata?.frameHeight, 1));
+  if (metadata?.anchorConvention === 'projected-world-origin-ground-v1'
+    && Number.isFinite(Number(record?.anchorXPx))
+    && Number.isFinite(Number(record?.anchorYPx))) {
+    return {anchorXPx: Number(record.anchorXPx), anchorYPx: Number(record.anchorYPx)};
+  }
+  const x = finite(record?.xPx);
+  const y = finite(record?.yPx);
+  const width = Math.max(0, finite(record?.widthPx));
+  const height = Math.max(0, finite(record?.heightPx));
+  return {
+    anchorXPx: frameWidth * 0.5 - (x + width * 0.5),
+    anchorYPx: y + height - frameHeight,
+  };
+}
+
+function normalizedBounds(record, frameWidth, frameHeight, metadata) {
   if (!record) return { minX: 0, minY: 0, maxX: 1, maxY: 1, anchorX: 0, anchorY: 0 };
   const pixelBounds = Number.isFinite(Number(record.xPx))
     || Number.isFinite(Number(record.yPx))
@@ -294,12 +313,9 @@ function normalizedBounds(record, frameWidth, frameHeight) {
   const maxY = pixelBounds
     ? (finite(record.yPx) + finite(record.heightPx, frameHeight)) / frameHeight
     : finite(record.maxY, 1);
-  const anchorX = Number.isFinite(Number(record.anchorXPx))
-    ? Number(record.anchorXPx) / frameWidth
-    : finite(record.anchorX);
-  const anchorY = Number.isFinite(Number(record.anchorYPx))
-    ? Number(record.anchorYPx) / frameHeight
-    : finite(record.anchorY);
+  const anchor = atlasGroundAnchor(metadata, record);
+  const anchorX = anchor.anchorXPx / frameWidth;
+  const anchorY = anchor.anchorYPx / frameHeight;
   return {
     minX: clamp(minX, 0, 1),
     minY: clamp(minY, 0, 1),
@@ -360,7 +376,7 @@ export function buildAtlasFrameMetadata(meta, options = {}) {
       data[uvOffset + 1] = clamp(finite(frameRecord.v), 0, 1);
       data[uvOffset + 2] = clamp(finite(frameRecord.w), 0, 1);
       data[uvOffset + 3] = clamp(finite(frameRecord.h), 0, 1);
-      const trim = normalizedBounds(boundsByCell[cell], frameWidth, frameHeight);
+      const trim = normalizedBounds(boundsByCell[cell], frameWidth, frameHeight, meta);
       const trimOffset = (cellCount + cell) * 4;
       data[trimOffset] = trim.minX;
       data[trimOffset + 1] = trim.minY;
@@ -535,16 +551,17 @@ export function evaluateGpuAtlasSpriteReference(input = {}, out = {}) {
   const hitFlash = lastHitTime > -999 ? 1 - hitT * hitT * (3 - 2 * hitT) : 0;
   const lastAttackTime = finite(input.lastAttackTime, -1000);
   const attackAge = Math.max(0, feedbackTime - lastAttackTime);
+  const attackDuration = logicalType === 5 ? WICKER_SIEGE_TELEGRAPH_SECONDS : ENEMY_ATTACK_ANIMATION_SECONDS;
   const hasStateAnimations = input.hasStateAnimations === true;
   const hasIdleAnimation = input.hasIdleAnimation === true;
   const authoredDeath = hasStateAnimations && dying;
   const authoredHit = hasStateAnimations && !dying
     && lastHitTime > -999 && hitAge < ENEMY_HIT_ANIMATION_SECONDS;
   const authoredAttack = hasStateAnimations && !dying && !authoredHit
-    && lastAttackTime > -999 && attackAge < ENEMY_ATTACK_ANIMATION_SECONDS;
+    && lastAttackTime > -999 && attackAge < attackDuration;
   const proceduralAttack = !hasStateAnimations && !dying
-    && lastAttackTime > -999 && attackAge < ENEMY_ATTACK_ANIMATION_SECONDS;
-  const attackProgress = clamp(attackAge / ENEMY_ATTACK_ANIMATION_SECONDS, 0, 1);
+    && lastAttackTime > -999 && attackAge < attackDuration;
+  const attackProgress = clamp(attackAge / attackDuration, 0, 1);
   const attackPresentation = proceduralAttackPresentation(
     attackProgress,
     finite(input.framesPerDirection, 1),
@@ -609,9 +626,7 @@ export function evaluateGpuAtlasSpriteReference(input = {}, out = {}) {
       * stableStature
       * (1 + Math.min(0.08, speed * 0.01));
   }
-  const logicalScaleX = logicalType >= 5 ? 3.4 / 1.5 : 1;
   if (input.authoredPose === true) visualScale = 1;
-  const logicalScaleY = logicalType >= 5 ? 4.6 / 2.25 : 1;
   const fixedScale = isBrute || isPowder || isShield || isJetpack || isMech;
   const baseScaleY = Math.max(0.001,
     finite(input.displayHeight, 1)
@@ -629,11 +644,11 @@ export function evaluateGpuAtlasSpriteReference(input = {}, out = {}) {
   const distanceReadability = input.authoredPose === true ? 1 : lerp(1, farReadability, clamp((cameraDistance - 55) / 60, 0, 1));
   const proceduralDeathProgress = authoredDeath ? 0 : deathProgress;
   let scaleX = Math.max(0.001,
-    finite(input.displayWidth, 1) * finite(input.frameScale, 1) * visualScale * logicalScaleX * distanceReadability
+    finite(input.displayWidth, 1) * finite(input.frameScale, 1) * visualScale * distanceReadability
       * (1 + proceduralDeathProgress * 0.18)
   );
   let scaleY = Math.max(0.001,
-    baseScaleY * logicalScaleY * distanceReadability * (1 - proceduralDeathProgress * 0.72)
+    baseScaleY * distanceReadability * (1 - proceduralDeathProgress * 0.72)
   );
   if (proceduralAttack) {
     scaleX *= attackPresentation.scaleX;
@@ -688,7 +703,7 @@ export function evaluateGpuAtlasSpriteReference(input = {}, out = {}) {
 
   Object.assign(out, {
     motionAlpha, logicalX, logicalZ, speed, bob, wriggleX, wriggleZ, visualScale,
-    logicalType, logicalScaleX, logicalScaleY, distanceReadability,
+    logicalType, distanceReadability,
     waiting, dying, deathProgress, proceduralDeathProgress, deathDrop, hitAge, hitFlash,
     attackAge, attackProgress, attackReadability, authoredState, authoredProjectionScale, proceduralAttack, attackLunge,
     attackWindup: attackPresentation.windup, attackStrike: attackPresentation.strike,
@@ -830,17 +845,19 @@ void main(void) {
     ? 1.0 - smoothstep(0.0, ${ENEMY_HIT_FLASH_SECONDS.toFixed(2)}, hitAge)
     : 0.0;
   float attackAge = max(0.0, feedbackTime - spriteAction.x);
+  float isWickerSiege = step(4.5, logicalType) * (1.0 - step(5.5, logicalType));
+  float attackDuration = mix(${ENEMY_ATTACK_ANIMATION_SECONDS.toFixed(2)}, ${WICKER_SIEGE_TELEGRAPH_SECONDS.toFixed(2)}, isWickerSiege);
   float useDeathState = hasStateAnimations * step(0.0, encodedStateProgress);
   float useHitState = hasStateAnimations * (1.0 - useDeathState)
     * step(-999.0, spriteFeedback.x)
     * (1.0 - step(${ENEMY_HIT_ANIMATION_SECONDS.toFixed(2)}, hitAge));
   float useAttackState = hasStateAnimations * (1.0 - useDeathState) * (1.0 - useHitState)
     * step(-999.0, spriteAction.x)
-    * (1.0 - step(${ENEMY_ATTACK_ANIMATION_SECONDS.toFixed(2)}, attackAge));
+    * (1.0 - step(attackDuration, attackAge));
   float proceduralAttack = (1.0 - hasStateAnimations) * (1.0 - step(0.0, encodedStateProgress))
     * step(-999.0, spriteAction.x)
-    * (1.0 - step(${ENEMY_ATTACK_ANIMATION_SECONDS.toFixed(2)}, attackAge));
-  float attackProgress = saturate(attackAge / ${ENEMY_ATTACK_ANIMATION_SECONDS.toFixed(2)});
+    * (1.0 - step(attackDuration, attackAge));
+  float attackProgress = saturate(attackAge / attackDuration);
   float useStateAtlas = min(1.0, useDeathState + useHitState + useAttackState);
   float stateProjectionScale = mix(attackProjectionScale, hitProjectionScale, useHitState);
   stateProjectionScale = mix(stateProjectionScale, deathProjectionScale, useDeathState);
@@ -916,10 +933,6 @@ void main(void) {
     mobileMode
   );
   float distanceReadability = mix(mix(1.0, farReadability, smoothstep(55.0, 115.0, cameraDistance)), 1.0, authoredPose);
-  if (logicalType > 4.5) {
-    scaleX *= 2.2666667;
-    scaleY *= 2.0444444;
-  }
   scaleX *= distanceReadability;
   scaleY *= distanceReadability;
   scaleX *= stateProjectionScale;

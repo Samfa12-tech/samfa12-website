@@ -19,6 +19,7 @@ import {
 } from "./progression.js";
 import {prepareNightRuntimeState} from "./runtime-progression.js";
 import {HUB_NPC_IDS, isHubNpcAlive} from "./hub.js";
+import {clearLiveSupplyOrbs} from "./supply-orbs.js";
 
 export const INTERWAVE_RECOVERY_DURATION_MS = 12_000;
 export {BELLKEEPER_BRIEFING_SCENE_IDS, bellkeeperBriefingSceneId};
@@ -201,8 +202,9 @@ export function beginSoloCampaignWave(run, {confirmation = null, ...waveOptions}
 function startSoloCampaignWave(current, options = {}) {
   const definition = getCampaignWave(current.night, current.wave);
   const bossEncounter = createBossEncounterState(definition, current, options);
+  const withoutExpiredOrbs = clearLiveSupplyOrbs(current);
   return captureWaveStartSnapshot({
-    ...current,
+    ...withoutExpiredOrbs,
     phase: GAME_PHASES.COMBAT,
     recovery: null,
     bossEncounter,
@@ -239,6 +241,19 @@ export function advanceInterwaveRecovery(run, elapsedMs, {
 /** Return whether one semantic action remains legal during interwave recovery. */
 export function isActionAllowedDuringRecovery(actionId) {
   return RECOVERY_ACTIONS.has(actionId);
+}
+
+/** Release the Matron alongside her three final-company shield feeds. */
+export function shouldReleaseMatronWithShieldCompany(run, roster, elapsedSeconds) {
+  const encounter = run?.bossEncounter;
+  if (run?.phase !== GAME_PHASES.COMBAT
+    || encounter?.mode !== "authored-director"
+    || encounter.encounterId !== "moss-crowned-matron"
+    || encounter.status !== "waiting") return false;
+  const releaseAt = roster?.bossActors?.find(actor => actor.id === "moss-crowned-matron")?.releaseAt;
+  return Number.isFinite(releaseAt)
+    && Number.isFinite(elapsedSeconds)
+    && elapsedSeconds + 1e-9 >= releaseAt;
 }
 
 /** Step one fixed encounter and fold semantic boss outcomes into run authority. */
@@ -362,6 +377,8 @@ export function completeSoloCampaignWave(profile, run, options = {}) {
       warning: recoveryWarningModel(currentRun),
     };
   }
+
+  currentRun = clearLiveSupplyOrbs(currentRun);
 
   const stableActorId = definition.bossEncounterIds.join("+");
   ({profile: currentProfile, run: currentRun} = applyProgressionEvent(currentProfile, currentRun, {

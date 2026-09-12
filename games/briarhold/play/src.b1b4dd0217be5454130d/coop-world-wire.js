@@ -478,13 +478,24 @@ function normalizeResources(value) {
 
 function normalizeEventPayload(value, index) {
   const input = record(value, `world frame event ${index} payload`);
-  exactKeys(input, new Set(['encounterId', 'phase', 'attack', 'zoneId', 'targetId', 'amount', 'night', 'wave', 'state', 'cue']), `world frame event ${index} payload`);
+  exactKeys(input, new Set([
+    'encounterId', 'phase', 'attack', 'zoneId', 'targetId', 'amount', 'night', 'wave', 'state', 'cue',
+    'weaponId', 'shotSequence', 'meleeSequence', 'commandSequence',
+    'originX', 'originY', 'originZ', 'directionX', 'directionY', 'directionZ',
+    'impactX', 'impactY', 'impactZ',
+  ]), `world frame event ${index} payload`);
   const output = {};
   for (const [key, item] of Object.entries(input)) {
     output[key] = key === 'night'
       ? integer(item, `world frame event ${index} payload night`, 1, 7)
       : key === 'wave'
         ? integer(item, `world frame event ${index} payload wave`, 1, 3)
+        : ['shotSequence', 'meleeSequence', 'commandSequence'].includes(key)
+          ? integer(item, `world frame event ${index} payload ${key}`, 0, 0xffffffff)
+          : ['originX', 'originY', 'originZ', 'impactX', 'impactY', 'impactZ'].includes(key)
+            ? finite(item, `world frame event ${index} payload ${key}`, -10000, 10000)
+            : ['directionX', 'directionY', 'directionZ'].includes(key)
+              ? finite(item, `world frame event ${index} payload ${key}`, -1, 1)
         : ['phase', 'amount'].includes(key)
           ? finite(item, `world frame event ${index} payload ${key}`, 0, 10_000_000)
           : stableId(item, `world frame event ${index} payload ${key}`);

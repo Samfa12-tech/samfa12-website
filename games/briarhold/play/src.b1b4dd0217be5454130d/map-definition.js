@@ -755,4 +755,9 @@ export const BRIARHOLD_ENEMY_GROUND_OBSTACLES = Object.freeze([
   ...FIELD_GATEHOUSE_ENEMY_OBSTACLES,
   ...FIELD_GATE_ENEMY_SHOULDERS,
   ...FIELD_DRESSING_ENEMY_OBSTACLES,
+  // Large Wicker bodies cannot use the ordinary horde's low-detail route
+  // envelope. Preserve ordinary pursuit by identifying these Wicker-only
+  // blockers in the existing obstacle id shape.
+  ...['west-overlook-flank-tower', 'east-overlook-flank-tower', 'western-field-mantle-wall']
+    .map(id => Object.freeze({...enemyGroundObstacle(id, [id]), id: `map:wicker:${id}`})),
 ]);

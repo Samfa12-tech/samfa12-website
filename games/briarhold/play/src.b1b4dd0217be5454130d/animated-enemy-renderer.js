@@ -4,6 +4,7 @@ import {
   ENGAGEMENT_HUNTER,
 } from './battlefield.js';
 import {sporewingFlightOffsetAtGate} from './enemy-presentation.js';
+import {WICKER_SIEGE_TELEGRAPH_SECONDS} from './core/gpu-atlas-sprite-state.js';
 
 const ACTIVE = 1;
 const DYING = 3;
@@ -177,7 +178,8 @@ export function animatedEnemyClipRole(battlefield, id, simulationTime = battlefi
   const attacks = role === ENGAGEMENT_GATE_ATTACK
     || role === ENGAGEMENT_PLAYER_ATTACK
     || role === ENGAGEMENT_HUNTER;
-  if (attacks && time - finite(battlefield.lastAttackTime?.[id], -1000) <= 0.72) return 'attack';
+  const attackDuration = battlefield.type?.[id] === 5 ? WICKER_SIEGE_TELEGRAPH_SECONDS : 0.72;
+  if (attacks && time - finite(battlefield.lastAttackTime?.[id], -1000) <= attackDuration) return 'attack';
   return 'run';
 }
 

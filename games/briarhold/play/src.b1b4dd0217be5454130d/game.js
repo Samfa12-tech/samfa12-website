@@ -1,4 +1,4 @@
-import {prepareSupplyOrbs, recordSupplyDeath, projectSupplyOrb, collectSupplyOrbs, createSupplyOrbRenderer, supplyRecoveryRoster} from './supply-orbs.js';
+import {prepareSupplyOrbs, recordSupplyDeath, projectSupplyOrb, collectSupplyOrbs, createSupplyOrbRenderer, supplyRecoveryRoster, supplyOrbPresentationForRun, clearLiveSupplyOrbs} from './supply-orbs.js';
 import {beginAttackHeat, consumeAttackHeat} from './attack-heat.js';
 import {
   TOUCH_AIM_ASSIST_OCCLUSION_BUDGET,
@@ -16,6 +16,7 @@ import {
 import {installTouchDragScroll} from "./touch-scroll.js";
 import {createAudioSystem} from "./audio.js";
 import {CoopMovementPreview} from "./coop-preview.js";
+import {createCoopAttackPresentationLedger} from "./coop-attack-presentation.js";
 import {createCoopBoundaryPauseScopes, startWithCoopBoundaryPause} from "./coop-boundary-pause.js";
 import {coerceCoopActionRejectionCode} from "./coop-world-wire.js";
 import {
@@ -92,6 +93,7 @@ import {
   describeBuildSocketContext,
   prepareSoloCampaignDaytime,
   resolveGuestBuildContextIntent,
+  shouldReleaseMatronWithShieldCompany,
   updateSoloBossEncounter,
 } from "./campaign-runtime.js";
 import {
@@ -170,6 +172,7 @@ import {
   sporewingTargetProfileAtGate,
 } from "./enemy-presentation.js";
 import {MOSSGUARD_SHIELD, SPOREWING, WICKER_COLOSSUS, enemyArchetype, enemyArmour, enemyTypeFrom} from "./enemies.js";
+import {resolveGatePressureCue} from './gate-pressure-cue.js';
 import {
   FORTIFICATION_DEFINITIONS,
   createFortificationGoalEvents,
@@ -227,7 +230,7 @@ import {
 } from "./map-definition.js";
 import {buildCampaignWaveRoster, getCampaignWave} from "./campaign-content.js";
 import {CAMPAIGN_COOP_MODIFIERS} from "./campaign-content.js";
-import {AUTHORITATIVE_TICK_RATE, WEAPON_HEAT_SCALE, createNetworkPlayerState} from "./multiplayer-contracts.js";
+import {AUTHORITATIVE_TICK_RATE, PLAYER_COMMAND_ACTIONS, WEAPON_HEAT_SCALE, createNetworkPlayerState} from "./multiplayer-contracts.js";
 import {
   GAME_BACK_ACTIONS,
   installNativeLifecycle,
@@ -437,7 +440,7 @@ const ui = {
   hubServiceCost: byId("hubServiceCost"), hubServiceClose: byId("hubServiceCloseButton"),
   hubServiceActions: [...document.querySelectorAll("#hubServiceActions [data-hub-action]")],
   playerHealthText: byId("playerHealthText"), playerHealthBar: byId("playerHealthBar"),
-  heartHealthText: byId("heartHealthText"), heartHealthBar: byId("heartHealthBar"), outerHealthText: byId("outerHealthText"), outerHealthBar: byId("outerHealthBar"), eastOuterHealthText: byId("eastOuterHealthText"), eastOuterHealthBar: byId("eastOuterHealthBar"),
+  heartHealthText: byId("heartHealthText"), heartHealthBar: byId("heartHealthBar"), outerHealthText: byId("outerHealthText"), outerHealthBar: byId("outerHealthBar"), eastOuterGateLine: byId("eastOuterGateLine"), eastOuterHealthText: byId("eastOuterHealthText"), eastOuterHealthBar: byId("eastOuterHealthBar"),
   nightText: byId("nightText"), waveText: byId("waveText"), objectiveText: byId("objectiveText"), enemyCountText: byId("enemyCountText"),
   bossStatus: byId("bossStatus"), bossName: byId("bossName"), bossHealthText: byId("bossHealthText"), bossHealthBar: byId("bossHealthBar"),
   bossIndividuals: byId("bossIndividuals"), bossCounterText: byId("bossCounterText"),
@@ -558,6 +561,7 @@ let currentRoster = null;
 const supplyOrbRenderer = createSupplyOrbRenderer(BABYLON, world.scene);
 let currentAttackId = null;
 let task3CombatEvidence = null;
+let combatAimEvidence = null;
 let supplyDeathDirty = false;
 let supplyExplanationPending = false;
 let guestSupplyExplainedRun = null;
@@ -573,7 +577,7 @@ function recordOrbDeath(index, point) {
   if (spawned && !run.supplyOrbs.explained) {
     run.supplyOrbs.explained = true;
     supplyExplanationPending = true;
-    announce('Supply lights · walk within 2 metres to collect 2 shared Supplies. Uncollected lights fade at wave end.');
+    announce('Supply lights · walk within 2 metres to collect 2 shared Supplies. Uncollected lights remain through recovery and expire when the next wave begins.');
   }
 }
 function observeSupplyDeaths(target) {
@@ -590,7 +594,7 @@ function updateSupplyPickups() {
   const actors = coopPreview?.role === 'host' && coopPreview.connected
     ? [...coopPreview.authority.players.values()] : [player];
   const picked = collectSupplyOrbs(run, actors, (a, b) => world.isWorldOccluded(a, b));
-  if (picked.length) announce(`+${picked.length * 2} shared Supplies${supplyExplanationPending ? ' · Walk within 2 metres of supply orbs; uncollected orbs fade at wave end.' : ''}`);
+  if (picked.length) announce(`+${picked.length * 2} shared Supplies${supplyExplanationPending ? ' · Uncollected supply lights remain through recovery and expire when the next wave begins.' : ''}`);
   supplyExplanationPending = false;
   if (picked.length || supplyDeathDirty) {
     supplyDeathDirty = false;
@@ -609,6 +613,9 @@ let multiplayerPreviewError = null;
 let coopPreview = null;
 let lastCoopEndedReason = null;
 let lastCoopDropBudget = null;
+let lastCoopConnectionHealth = null;
+let coopAttackPresentation = null;
+let coopAttackEffectCounts = {localPrediction: 0, authorityOwner: 0, authorityRemote: 0, tracers: 0, melee: 0};
 const coopAuthorityPauseScopes = createCoopBoundaryPauseScopes();
 let lifecycleCoopPauseToken = null;
 let coopSignaling = null;
@@ -1328,6 +1335,7 @@ let bossEventCursor = 0;
 let bossFrameRemainderMs = 0;
 let testBossHpMultiplier = 1;
 const bossZoneDamageAt = new Map();
+let gate2PressureCue = resolveGatePressureCue();
 
 const keys = new Set();
 const touch = {
@@ -1993,9 +2001,21 @@ function applyLoadedPlayer() {
   audio.setWeapon(weapon.selected);
 }
 
+function applyGate2PressureCue(nextCue) {
+  const previous = gate2PressureCue;
+  gate2PressureCue = nextCue;
+  ui.eastOuterGateLine.dataset.pressureLevel = nextCue.level;
+  document.body.dataset.gate2Pressure = nextCue.level;
+  if (phase === GAME_PHASES.COMBAT && nextCue.rank > previous.rank && nextCue.rank >= 2) {
+    announce(`${nextCue.label} — east approach`);
+  }
+  return nextCue;
+}
+
 function setPhase(next) {
   if (!Object.values(GAME_PHASES).includes(next)) throw new RangeError(`Unknown phase ${next}`);
   const previousPhase = phase;
+  if (previousPhase !== next) resetTouchInput();
   if (next !== GAME_PHASES.DAYTIME && narrativePresentation.isOpen) narrativePresentation.interrupt("phase-transition");
   if (next !== GAME_PHASES.DAYTIME && goalsPresentation.isOpen) goalsPresentation.close();
   if (phase === GAME_PHASES.DAYTIME && next !== GAME_PHASES.DAYTIME && next !== GAME_PHASES.COMBAT) releaseHubNpcPresentation();
@@ -2003,6 +2023,7 @@ function setPhase(next) {
   if (next !== GAME_PHASES.COMBAT) audio.stopSunfire();
   if (next !== GAME_PHASES.DAYTIME) closeHubService();
   phase = next;
+  if (next !== GAME_PHASES.COMBAT) applyGate2PressureCue(resolveGatePressureCue());
   coopPreview?.setAuthorityPhase(next);
   syncEnemyPresentationControl();
   if (next !== GAME_PHASES.COMBAT) {
@@ -3165,7 +3186,7 @@ function touchEnemyAimHeight(type, id, ray) {
   });
 }
 
-function touchAimAssistTarget(frame, ray, {coneDegrees, requireAimAssist = true} = {}) {
+function touchAimAssistTarget(frame, ray, {coneDegrees, maxDistance, requireAimAssist = true} = {}) {
   if (frame.source !== INPUT_SOURCES.TOUCH || !battlefield) return null;
   const strength = Number(ui.aimAssist.value) / 100;
   if (requireAimAssist && (!Number.isFinite(strength) || strength <= 0)) return null;
@@ -3181,6 +3202,7 @@ function touchAimAssistTarget(frame, ray, {coneDegrees, requireAimAssist = true}
     activeStatus: ACTIVE,
     aimHeight: targetHeight,
     coneDegrees,
+    maxDistance,
     maxCandidates: TOUCH_AIM_ASSIST_OCCLUSION_BUDGET,
   });
   const crowdTarget = selectFirstVisibleTouchAimAssistTarget({
@@ -3197,17 +3219,38 @@ function touchAimAssistTarget(frame, ray, {coneDegrees, requireAimAssist = true}
     origin: ray.origin,
     aimDirection: ray.direction,
     coneDegrees,
+    maxDistance,
     isOccluded: (_target, aimPoint) => world.isWorldOccluded(ray.origin, aimPoint),
   });
 }
 
-function aimDirectionForFrame(frame, ray, knownTarget = undefined, {automatic = false} = {}) {
+function automaticFireProfile(weaponId, tuning = {}) {
+  const definition = WEAPON_DEFINITIONS[weaponId] ?? WEAPON_DEFINITIONS.arbalest;
+  const hitRange = weaponId === "runebolt"
+    ? 130
+    : weaponId === "sunfire" ? 16 * (tuning.beamRangeMultiplier ?? 1) : 160;
+  const masteredRange = definition.autoFire.range
+    * (tuning.autoFireRangeMultiplier ?? 1)
+    * (weaponId === "sunfire" ? tuning.beamRangeMultiplier ?? 1 : 1);
+  return Object.freeze({
+    range: Math.max(0, Math.min(masteredRange, Math.max(0, hitRange - 0.01))),
+    spreadDegrees: Math.max(0, definition.autoFire.spreadDegrees * (tuning.autoFireSpreadMultiplier ?? 1)),
+  });
+}
+
+function aimDirectionForFrame(frame, ray, knownTarget = undefined, {
+  automatic = false,
+  automaticSpreadDegrees = 0,
+  automaticShotIndex = 0,
+} = {}) {
   if (frame.source !== INPUT_SOURCES.TOUCH || !battlefield) return ray.direction;
   if (automatic) return touchAutomaticFireDirection({
     inputFrame: frame,
     origin: ray.origin,
     aimDirection: ray.direction,
     target: knownTarget,
+    spreadDegrees: automaticSpreadDegrees,
+    shotIndex: automaticShotIndex,
   });
   const strength = Number(ui.aimAssist.value) / 100;
   if (!Number.isFinite(strength) || strength <= 0) return ray.direction;
@@ -3275,13 +3318,13 @@ function damageEnemy(id, baseDamage, feedbackSummary = null, explicitArmourMulti
       && run?.bossEncounter?.encounterId === "moss-crowned-matron"
       && run.bossEncounter.status === "active") {
       const matron = run.bossEncounter.actors.find(actor => actor.id === "moss-crowned-matron" && !actor.defeated);
-      if (matron?.livingMossguards > 0) {
-        const rosterEnemy = currentRoster?.enemies?.[id];
+      const rosterEnemy = currentRoster?.enemies?.[id];
+      if (matron?.livingMossguards > 0 && rosterEnemy?.shieldFeedId) {
         applyBossDirectorUpdate({commands: [{
-          id: `mossguard-feed:${rosterEnemy?.groupId ?? "crowd"}:${rosterEnemy?.groupBodyIndex ?? id}`,
+          id: `shield-feed-defeat:${rosterEnemy.shieldFeedId}`,
           type: "objective_interaction",
           actorId: matron.id,
-          targetId: `mossguard-feed:${3 - matron.livingMossguards}`,
+          targetId: rosterEnemy.shieldFeedId,
         }]});
       }
     }
@@ -3655,7 +3698,18 @@ function resolveSoloWeaponAttack(frame, now, {ray: knownRay = null, touchTarget 
   viewmodelRecoil.fire(currentCombatTuning?.adsRecoilMultiplier ?? 1);
   const feedbackSummary = createShotFeedbackSummary(shot.id);
   const ray = knownRay || world.firstPersonRay(160);
-  const direction = aimDirectionForFrame(frame, ray, touchTarget, {automatic: automaticTouchAim});
+  const automaticProfile = automaticTouchAim ? automaticFireProfile(shot.id, currentCombatTuning ?? {}) : null;
+  const direction = aimDirectionForFrame(frame, ray, touchTarget, {
+    automatic: automaticTouchAim,
+    automaticSpreadDegrees: automaticProfile?.spreadDegrees,
+    automaticShotIndex: shot.shot,
+  });
+  if (TEST_MODE && combatAimEvidence) combatAimEvidence.push({
+    weapon: shot.id, shotIndex: shot.shot, automatic: automaticTouchAim,
+    source: frame.source, origin: {...ray.origin}, aimDirection: {...ray.direction},
+    direction: {...direction}, target: touchTarget ? structuredClone(touchTarget) : null,
+    profile: automaticProfile,
+  });
   const originVector = new BABYLON.Vector3(ray.origin.x, ray.origin.y, ray.origin.z);
   const muzzle = resolveRenderedViewmodelMuzzle(ui.viewmodelArt.getBoundingClientRect(), VIEWMODEL_MUZZLES[shot.id], {
     viewportWidth: canvas.clientWidth || innerWidth,
@@ -4259,8 +4313,7 @@ function completeWave() {
   if (phase !== GAME_PHASES.COMBAT || !run) return;
   syncRunState();
   if (run.bossEncounter?.mode === "authored-director" && run.bossEncounter.status !== "defeated") return;
-  updateSupplyPickups(); // Allow only nearby final-death pickups before despawning.
-  if (run.supplyOrbs) run.supplyOrbs.live = [];
+  updateSupplyPickups();
   const completedNight = run.night;
   const clearedWave = run.wave;
   const completedCombatRun = structuredClone(run);
@@ -4470,7 +4523,7 @@ function showCampaignComplete(victoryRun, settlement) {
 
 function failCurrentRun(reason) {
   if (!run || phase === GAME_PHASES.RUN_FAILED) return;
-  if (run.supplyOrbs) run.supplyOrbs.live = [];
+  run = clearLiveSupplyOrbs(run);
   syncRunState();
   const reasonCode = reason === "bellkeeper_fallen"
     ? reason
@@ -4547,6 +4600,8 @@ function disposeCoopPreview({restoreSolo = true, discardPersistence = false} = {
   coopSemanticEventSequence = 0;
   coopSemanticEvents = [];
   coopGuestEventCursor = new CoopSemanticEventCursor();
+  coopAttackPresentation?.reset?.();
+  coopAttackPresentation = null;
   coopSettlementState = null;
   coopTerminalRun = null;
   coopSignalStep = null;
@@ -4580,7 +4635,10 @@ function appendCoopSemanticEvent(category, kind, actorId = null, payload = {}, a
   if (coopPreview?.role !== "host") return null;
   coopSemanticEventSequence += 1;
   const allowedPayload = Object.fromEntries(Object.entries(payload).filter(([key, value]) => (
-    ["encounterId", "phase", "attack", "zoneId", "targetId", "amount", "night", "wave", "state", "cue"].includes(key)
+    ["encounterId", "phase", "attack", "zoneId", "targetId", "amount", "night", "wave", "state", "cue",
+      "weaponId", "shotSequence", "meleeSequence", "commandSequence",
+      "originX", "originY", "originZ", "directionX", "directionY", "directionZ",
+      "impactX", "impactY", "impactZ"].includes(key)
       && (typeof value === "string" || Number.isFinite(value))
   )));
   const event = {
@@ -4735,7 +4793,7 @@ function createCoopWorldFrameState({tick, players, events}) {
     wave: sharedRun?.wave ?? 0,
     players,
     crowd,
-    supplyOrbs: authorityPhase === GAME_PHASES.COMBAT ? (sharedRun?.supplyOrbs?.live ?? []) : [],
+    supplyOrbs: supplyOrbPresentationForRun(sharedRun),
     boss: sharedRun?.bossEncounter?.mode === "authored-director" ? createCoopBossSnapshot(sharedRun.bossEncounter) : null,
     objective: coopObjectiveFrame(),
     resources: {
@@ -4979,7 +5037,121 @@ function applyCoopCrowdPresentation(frame, presentationBattlefield) {
   presentationBattlefield.elapsed = elapsed;
 }
 
+function coopAttackPoint(payload, prefix) {
+  const x = payload?.[`${prefix}X`];
+  const y = payload?.[`${prefix}Y`];
+  const z = payload?.[`${prefix}Z`];
+  return [x, y, z].every(Number.isFinite) ? {x, y, z} : null;
+}
+
+function coopWeaponPresentationRange(weaponId) {
+  if (weaponId === "sunfire") return 16 * (currentCombatTuning?.beamRangeMultiplier ?? 1);
+  return weaponId === "runebolt" ? 130 : 160;
+}
+
+function presentCoopAttackEffect({weaponId, shotSequence = 0, origin, direction, impact = null, localOwner = false,
+  source = localOwner ? "authority-owner" : "authority-remote"} = {}) {
+  const recordSource = () => {
+    if (source === "local-prediction") coopAttackEffectCounts.localPrediction += 1;
+    else if (localOwner) coopAttackEffectCounts.authorityOwner += 1;
+    else coopAttackEffectCounts.authorityRemote += 1;
+  };
+  if (weaponId === "knife") {
+    recordSource();
+    coopAttackEffectCounts.melee += 1;
+    audio.melee();
+    if (localOwner) {
+      viewmodelRecoil.cancel();
+      pulse(ui.knifeViewmodel, "is-swinging");
+    }
+    return true;
+  }
+  if (!WEAPON_DEFINITIONS[weaponId] || !origin || !direction) return false;
+  recordSource();
+  audio.shot(weaponId, {shot: shotSequence});
+  if (localOwner) viewmodelRecoil.fire(currentCombatTuning?.adsRecoilMultiplier ?? 1);
+  const range = coopWeaponPresentationRange(weaponId);
+  const endpoint = impact ?? {
+    x: origin.x + direction.x * range,
+    y: origin.y + direction.y * range,
+    z: origin.z + direction.z * range,
+  };
+  const start = new BABYLON.Vector3(origin.x, origin.y, origin.z);
+  const end = new BABYLON.Vector3(endpoint.x, endpoint.y, endpoint.z);
+  const muzzle = localOwner ? resolveRenderedViewmodelMuzzle(
+    ui.viewmodelArt.getBoundingClientRect(), VIEWMODEL_MUZZLES[weaponId], {
+      viewportWidth: canvas.clientWidth || innerWidth,
+      viewportHeight: canvas.clientHeight || innerHeight,
+    },
+  ) : null;
+  world.tracer(start, end, weaponId === "runebolt" ? "#91d8b3" : weaponId === "sunfire" ? "#f39a45" : "#efdca8", {
+    ...(localOwner ? {muzzle} : {cameraRelative: false}),
+    radius: weaponId === "runebolt" ? 0.026 : weaponId === "sunfire" ? 0.02 : 0.016,
+  });
+  coopAttackEffectCounts.tracers += 1;
+  if (impact) world.impact(end, weaponId === "runebolt" ? "#92d4a5" : weaponId === "sunfire" ? "#f39a45" : "#e8d29a",
+    weaponId === "runebolt" ? 2.4 : weaponId === "sunfire" ? 1.6 : 0.65);
+  return true;
+}
+
+function presentCoopGuestCommand(command) {
+  if (coopPreview?.role !== "guest" || !coopPreview.connected || coopPreview.authorityPaused
+    || phase !== GAME_PHASES.COMBAT) return false;
+  const now = performance.now() / 1000;
+  if (command.selectedWeapon !== null) {
+    const requestedWeapon = WEAPON_IDS[command.selectedWeapon];
+    if (requestedWeapon && currentRunLoadout().weapons.includes(requestedWeapon)) {
+      player.activeWeapon = command.selectedWeapon;
+      selectWeapon(weapon, requestedWeapon);
+    }
+  }
+  currentCombatTuning = runtimeProgressionTuning(profile, run, weapon.selected, {ads: adsActive});
+  if ((command.actions & PLAYER_COMMAND_ACTIONS.MELEE) !== 0 && now + 1e-9 >= knife.nextReadyAt) {
+    knife.nextReadyAt = now + KNIFE_MELEE.cooldownSeconds;
+    knife.strikes += 1;
+    coopAttackPresentation?.predict({kind: "melee_strike", weaponId: "knife",
+      commandSequence: command.sequence}, performance.now());
+    presentCoopAttackEffect({weaponId: "knife", localOwner: true, source: "local-prediction"});
+  }
+  ui.viewmodel.classList.toggle("is-holstered", now + 1e-9 < knife.nextReadyAt);
+  let presented = false;
+  if ((command.actions & PLAYER_COMMAND_ACTIONS.FIRE) !== 0) {
+    const shot = tryFireWeapon(weapon, now, currentCombatTuning ?? {});
+    if (shot) {
+      const ray = world.firstPersonRay(coopWeaponPresentationRange(shot.id));
+      const direction = ray.direction;
+      const worldHit = world.firstWorldRayHit(ray.origin, direction, coopWeaponPresentationRange(shot.id));
+      coopAttackPresentation?.predict({kind: "weapon_fired", weaponId: shot.id,
+        commandSequence: command.sequence}, performance.now());
+      presentCoopAttackEffect({
+        weaponId: shot.id,
+        shotSequence: shot.shot,
+        origin: ray.origin,
+        direction,
+        impact: worldHit?.point ?? null,
+        localOwner: true,
+        source: "local-prediction",
+      });
+      presented = true;
+    }
+  }
+  if ((command.actions & PLAYER_COMMAND_ACTIONS.FIRE) === 0 || weapon.selected !== "sunfire" || weapon.overheated) audio.stopSunfire();
+  return presented;
+}
+
 function applyCoopSemanticPresentationEvent(event) {
+  if (event.category === "combat" && ["weapon_fired", "melee_strike"].includes(event.kind)) {
+    const decision = coopAttackPresentation?.reconcile(event, performance.now()) ?? {present: true};
+    if (decision.present) presentCoopAttackEffect({
+      weaponId: event.kind === "melee_strike" ? "knife" : event.payload.weaponId,
+      shotSequence: event.payload.shotSequence ?? event.payload.meleeSequence ?? event.sequence,
+      origin: coopAttackPoint(event.payload, "origin"),
+      direction: coopAttackPoint(event.payload, "direction"),
+      impact: coopAttackPoint(event.payload, "impact"),
+      localOwner: event.actorId === coopPreview?.localId,
+      source: decision.source,
+    });
+  }
   if (event.category === "music") {
     audio.applyMusicEvent(event);
   }
@@ -5076,6 +5248,14 @@ function syncGuestNarrativePresentation(activeScene, {forceOpen = false} = {}) {
 
 function applyCoopWorldFrame(frame) {
   if (coopPreview?.role !== 'guest') return;
+  const localWeaponState = frame.players.find(item => item.playerId === coopPreview.localId);
+  if (localWeaponState) {
+    const weaponId = WEAPON_IDS[localWeaponState.activeWeapon] ?? "arbalest";
+    player.activeWeapon = localWeaponState.activeWeapon;
+    selectWeapon(weapon, weaponId);
+    weapon.heat = localWeaponState.heat[localWeaponState.activeWeapon] ?? weapon.heat;
+    weapon.overheated = weapon.heat >= 0.999;
+  }
   const previousPhase = phase;
   if (!run) run = newRunState();
   const crossedRunBoundary = run.runOrdinal !== frame.narrative.runOrdinal || run.night !== frame.night;
@@ -5084,7 +5264,7 @@ function applyCoopWorldFrame(frame) {
     && frame.resources.supplies > priorRun.supplies) announce(`+${frame.resources.supplies - priorRun.supplies} shared Supplies`);
   if (frame.supplyOrbs.length && guestSupplyExplainedRun !== frame.narrative.runOrdinal) {
     guestSupplyExplainedRun = frame.narrative.runOrdinal;
-    announce('Supply orbs · walk within 2 metres to collect 2 shared Supplies. Uncollected orbs fade at wave end.');
+    announce('Supply orbs · walk within 2 metres to collect 2 shared Supplies. Uncollected orbs remain through recovery and expire when the next wave begins.');
   }
   if (crossedRunBoundary) {
     delete priorRun.recovery;
@@ -5160,11 +5340,10 @@ function applyCoopWorldFrame(frame) {
     .catch(error => console.warn('[Briarhold] Co-op enemy presentation could not be prepared', error));
 }
 
-function resolveCoopAuthorityEvents(events) {
+function resolveCoopAuthorityEvents(events, _session, metadata = {}) {
   if (coopPreview?.role !== 'host' || phase !== GAME_PHASES.COMBAT || !battlefield) return;
   const disabledCollisionIds = playerGateCollisionOptions(battlefield).disabledCollisionIds ?? null;
   for (const event of events) {
-    appendCoopSemanticEvent('combat', event.kind, event.actorId, {}, event.tick);
     const weaponId = event.kind === 'melee_strike' ? 'knife' : WEAPON_IDS[event.weaponSlot];
     const tuning = weaponId === 'knife' ? {} : runtimeProgressionTuning(profile, run, weaponId, {ads: event.mode?.ads === true});
     const bossKills = [];
@@ -5193,6 +5372,16 @@ function resolveCoopAuthorityEvents(events) {
       },
     });
     lastCoopCombatResolution = structuredClone(result);
+    const impact = result.impact?.point ?? null;
+    appendCoopSemanticEvent('combat', event.kind, event.actorId, {
+      weaponId,
+      shotSequence: event.shotSequence,
+      meleeSequence: event.meleeSequence,
+      commandSequence: metadata.eventCommandSequences?.[event.sequence],
+      originX: event.origin?.x, originY: event.origin?.y, originZ: event.origin?.z,
+      directionX: event.direction?.x, directionY: event.direction?.y, directionZ: event.direction?.z,
+      impactX: impact?.x, impactY: impact?.y, impactZ: impact?.z,
+    }, event.tick);
     for (const fact of createCombatGoalEvents(result, {
       eventId: `run-${run.runOrdinal}-night-${run.night}-wave-${run.wave}-combat-${event.actorId}-${event.sequence}`,
     })) applyGoalFact(fact);
@@ -5260,13 +5449,15 @@ function resolveCoopAuthorityEvents(events) {
         event.weaponSlot, killEffects.refundAmount);
       if (event.actorId === coopPreview.localId) weapon.heat = killEffects.heat;
     }
-    if (result.weaponId === 'knife') audio.melee();
-    else audio.shot(result.weaponId, {shot: event.shotSequence});
-    if (event.actorId === coopPreview.localId && result.weaponId !== 'knife') viewmodelRecoil.fire();
-    if (result.impact?.point) {
-      const colour = result.weaponId === 'sunfire' ? '#f39a45' : result.weaponId === 'runebolt' ? '#92d4a5' : '#e8d29a';
-      world.impact(new BABYLON.Vector3(result.impact.point.x, result.impact.point.y, result.impact.point.z), colour, result.weaponId === 'runebolt' ? 2.4 : .65);
-    }
+    presentCoopAttackEffect({
+      weaponId: result.weaponId,
+      shotSequence: event.shotSequence ?? event.meleeSequence ?? event.sequence,
+      origin: event.origin,
+      direction: event.direction,
+      impact,
+      localOwner: event.actorId === coopPreview.localId,
+      source: event.actorId === coopPreview.localId ? "authority-owner" : "authority-remote",
+    });
   }
 }
 
@@ -5438,6 +5629,11 @@ function coopActionRejectionCopy(reason) {
 async function createCoopForRole(role, {turnServers = []} = {}) {
   disposeCoopPreview();
   lastCoopEndedReason = null;
+  lastCoopConnectionHealth = null;
+  coopAttackPresentation = createCoopAttackPresentationLedger({
+    localActorId: role === "host" ? "warden-host" : "warden-guest",
+  });
+  coopAttackEffectCounts = {localPrediction: 0, authorityOwner: 0, authorityRemote: 0, tracers: 0, melee: 0};
   coopPersistenceBoundary = createCoopPersistenceBoundary({
     role,
     profile,
@@ -5457,6 +5653,7 @@ async function createCoopForRole(role, {turnServers = []} = {}) {
     ),
     onStatus: setCoopStatus,
     onAuthorityEvents: resolveCoopAuthorityEvents,
+    onLocalCommand: presentCoopGuestCommand,
     onActionRequest: handleCoopActionRequest,
     onActionAck: message => announce(message.status === 'accepted'
       ? 'Host accepted the shared action'
@@ -5476,7 +5673,9 @@ async function createCoopForRole(role, {turnServers = []} = {}) {
       activateCoopWorld();
     },
     onEnded: reason => {
-      lastCoopDropBudget = coopPreview?.diagnostics?.().lastDropBudget ?? null;
+      const diagnostics = coopPreview?.diagnostics?.() ?? null;
+      lastCoopDropBudget = diagnostics?.lastDropBudget ?? null;
+      lastCoopConnectionHealth = diagnostics?.health ? {...diagnostics.health} : null;
       lastCoopEndedReason = reason;
       returnToMenu();
       announce(`Co-op ended · ${reason}`);
@@ -5941,6 +6140,7 @@ function togglePause(force) {
   if (next === paused) return;
   paused = next;
   if (paused) {
+    resetTouchInput();
     closeHubService();
     resumePhase = phase;
     show(ui.pauseOverlay, true);
@@ -5957,6 +6157,7 @@ function togglePause(force) {
 }
 
 function pauseForLifecycle(reason) {
+  resetTouchInput();
   if (!coopPreview?.connected) {
     togglePause(true);
     return;
@@ -6070,6 +6271,8 @@ function capturePlaytestContext() {
       realtimeState: coopDiagnostics.realtimeState,
       relayConfigured: coopDiagnostics.relayConfigured,
       drops: {...coopDiagnostics.drops},
+      health: {...coopDiagnostics.health},
+      attackPresentation: coopAttackPresentation?.diagnostics?.() ?? null,
     } : null,
   };
 }
@@ -6619,6 +6822,7 @@ function updateCombat(frame, dt, now, {coopAuthority = false} = {}) {
     && !frame.fire
     && !weapon.overheated;
   let automaticFireRay = null;
+  const autoFire = automaticFireProfile(weapon.selected, currentCombatTuning ?? {});
   if (!automaticFireEligible) {
     cachedTouchAutoFireTarget = null;
     nextTouchAutoFireScanAt = now;
@@ -6626,6 +6830,7 @@ function updateCombat(frame, dt, now, {coopAuthority = false} = {}) {
     automaticFireRay = world.firstPersonRay(160);
     cachedTouchAutoFireTarget = touchAimAssistTarget(automaticTouchFrame, automaticFireRay, {
       coneDegrees: TOUCH_AUTO_FIRE_CONE_DEGREES,
+      maxDistance: autoFire.range,
       requireAimAssist: false,
     });
     nextTouchAutoFireScanAt = now + TOUCH_AUTO_FIRE_SCAN_INTERVAL;
@@ -6657,6 +6862,7 @@ function updateCombat(frame, dt, now, {coopAuthority = false} = {}) {
         aimDirection: automaticFireRay.direction,
         targets: [cachedTouchAutoFireTarget],
         coneDegrees: TOUCH_AUTO_FIRE_CONE_DEGREES,
+        maxDistance: autoFire.range,
       }) || world.isWorldOccluded(automaticFireRay.origin, cachedTouchAutoFireTarget.aimPoint)) {
         cachedTouchAutoFireTarget = null;
       }
@@ -6766,6 +6972,12 @@ function updateCombat(frame, dt, now, {coopAuthority = false} = {}) {
     }
   }
   const stats = battlefield.stats();
+  const nextGate2Cue = resolveGatePressureCue({
+    pressure: stats.breach?.[EAST]?.pressure,
+    integrityRatio: ratio(stats.outerGateHp[EAST], battlefield.outerGateMaxHp),
+    breached: stats.outerGateBreached[EAST],
+  });
+  applyGate2PressureCue(nextGate2Cue);
   const weakestOuterGateIntegrity = Math.min(
     ratio(stats.outerGateHp[WEST], battlefield.outerGateMaxHp),
     ratio(stats.outerGateHp[EAST], battlefield.outerGateMaxHp),
@@ -6786,7 +6998,7 @@ function updateCombat(frame, dt, now, {coopAuthority = false} = {}) {
     syncHubNpcPresentation();
   }
   world.updateGateVisual("west", ratio(stats.outerGateHp[WEST], battlefield.outerGateMaxHp), stats.outerGateBreached[WEST]);
-  world.updateGateVisual("east", ratio(stats.outerGateHp[EAST], battlefield.outerGateMaxHp), stats.outerGateBreached[EAST]);
+  world.updateGateVisual("east", ratio(stats.outerGateHp[EAST], battlefield.outerGateMaxHp), stats.outerGateBreached[EAST], nextGate2Cue.level);
   world.updateGateVisual("heart", ratio(stats.heartGateHp, battlefield.heartGateMaxHp), stats.heartGateDestroyed);
   const allWardensDown = coopAuthority
     ? coopDownState?.failed === true
@@ -6794,16 +7006,22 @@ function updateCombat(frame, dt, now, {coopAuthority = false} = {}) {
   updateSupplyPickups();
   if (allWardensDown) failCurrentRun(coopAuthority ? "Both Wardens fell" : "The Warden fell");
   else if (stats.heartGateDestroyed) failCurrentRun("The Heart Gate was destroyed");
-  else if (stats.activeCount === 0) {
-    if (run?.bossEncounter?.mode === "authored-director") {
-      if (run.bossEncounter.status === "waiting") {
-        applyBossDirectorUpdate({
-          crowdCleared: true,
-          commands: [{id: nextBossCommandId("release"), type: "encounter_release"}],
-        });
-        persistRun();
-      } else if (run.bossEncounter.status === "defeated" && !authoredBossNeedsPresentationStep()) completeWave();
-    } else completeWave();
+  else {
+    if (shouldReleaseMatronWithShieldCompany(run, currentRoster, battlefield.elapsed)) {
+      applyBossDirectorUpdate({commands: [{id: nextBossCommandId("release"), type: "encounter_release"}]});
+      persistRun();
+    }
+    if (stats.activeCount === 0) {
+      if (run?.bossEncounter?.mode === "authored-director") {
+        if (run.bossEncounter.status === "waiting") {
+          applyBossDirectorUpdate({
+            crowdCleared: true,
+            commands: [{id: nextBossCommandId("release"), type: "encounter_release"}],
+          });
+          persistRun();
+        } else if (run.bossEncounter.status === "defeated" && !authoredBossNeedsPresentationStep()) completeWave();
+      } else completeWave();
+    }
   }
 }
 
@@ -6814,6 +7032,7 @@ function updateRecovery(dt) {
   })) return;
   const coopAuthority = coopPreview?.role === "host" && coopPreview.connected;
   if (phase !== GAME_PHASES.INTERWAVE_RECOVERY || !run || (coopAuthority ? coopPreview.authorityPaused : paused) || wavePreparationPending) return;
+  updateSupplyPickups();
   const waveOptions = {
       hpMultiplier: TEST_MODE ? testBossHpMultiplier : 1,
       occupiedSockets: world.sockets.map(socket => ({id: socket.id, x: socket.x, z: socket.z})),
@@ -6836,6 +7055,11 @@ function updateRecovery(dt) {
 
 function tick(nowMs) {
   const now = nowMs / 1000;
+  const healthSession = coopPreview;
+  if (healthSession && !healthSession.pollConnectionHealth?.(nowMs) && coopPreview !== healthSession) {
+    requestAnimationFrame(tick);
+    return;
+  }
   // Embedded browser panes do not always share normal tab visibility
   // semantics. Never suppress canvas presentation solely because the host
   // reports this document as hidden; native lifecycle handling still pauses
@@ -6866,7 +7090,8 @@ function tick(nowMs) {
       || battlefield?.outerGateBreached?.[WEST]
       || battlefield?.outerGateBreached?.[EAST],
     );
-    if (coopPreview?.connected) coopPreview.update(dt, coopIssueCaptureOpen ? {
+    if (coopPreview?.connected) {
+      const coopInput = coopIssueCaptureOpen ? {
       ...frame,
       move: {x: 0, y: 0},
       look: {yaw: 0, pitch: 0},
@@ -6878,7 +7103,10 @@ function tick(nowMs) {
       selectedWeapon: null,
       aiming: false,
       manualVent: false,
-    } : {...frame, aiming: adsActive, manualVent: false});
+      } : {...frame, aiming: adsActive, manualVent: false};
+      const session = coopPreview;
+      session.update(dt, coopInput);
+    }
     else {
       const collisionOptions = outerBreached ? playerGateCollisionOptions(battlefield) : CLOSED_PLAYER_COLLISION_OPTIONS;
       const recovery = currentCombatTuning?.movementRecoveryMultiplier ?? 1;
@@ -6942,7 +7170,7 @@ function tick(nowMs) {
   updateHud(now);
   frameMonitor.rendererUpdateMs = performance.now() - rendererStartedAt;
   const sceneStartedAt = performance.now();
-  if (coopPreview?.role !== 'guest') supplyOrbRenderer.update(phase === GAME_PHASES.COMBAT ? run?.supplyOrbs?.live ?? [] : []);
+  if (coopPreview?.role !== 'guest') supplyOrbRenderer.update(supplyOrbPresentationForRun(run));
   world.scene.render();
   presentedFrame++;
   frameMonitor.sceneRenderMs = performance.now() - sceneStartedAt;
@@ -7524,6 +7752,15 @@ globalThis.__BRIARHOLD__ = {
   get diagnostics() {
     return {
       phase, inputSource: currentInputSource, paused, testMode: TEST_MODE, lastCoopEndedReason, lastCoopDropBudget,
+      lastCoopConnectionHealth,
+      touchPointers: {
+        move: touch.movePointer,
+        look: touch.lookPointer,
+        fire: touch.firePointers.size,
+        aim: touch.aimLookLast.size,
+        melee: touch.meleeLookLast.size,
+      },
+      gate2Pressure: {...gate2PressureCue},
       mouseCapture: {...mouseCaptureDiagnostics, locked: document.pointerLockElement === canvas},
       playtestReporter: {
         available: Boolean(playtestReporter?.receiver),
@@ -7543,6 +7780,8 @@ globalThis.__BRIARHOLD__ = {
         serverTick: multiplayerPreview?.serverTick ?? 0,
       } : null,
       coop: coopPreview?.diagnostics?.() ?? null,
+      coopAttackPresentation: coopAttackPresentation?.diagnostics?.() ?? null,
+      coopAttackEffects: {...coopAttackEffectCounts},
       coopWorld: coopPreview ? {
         stateHash: coopPreview.latestFrame?.stateHash ?? null,
         worldFrameEnemies: coopPreview.latestFrame?.crowd?.total ?? 0,
@@ -7586,7 +7825,8 @@ globalThis.__BRIARHOLD__ = {
         status: run.bossEncounter.status,
         hash: run.bossEncounter.hash,
         eventSequence: run.bossEncounter.eventSequence,
-        actors: run.bossEncounter.actors.map(actor => ({id: actor.id, hp: actor.hp, maxHp: actor.maxHp, phase: actor.phase, state: actor.state, x: actor.position.x, y: actor.position.y, z: actor.position.z, animationState: actor.animationState, defeated: actor.defeated})),
+        actors: run.bossEncounter.actors.map(actor => ({id: actor.id, hp: actor.hp, maxHp: actor.maxHp, phase: actor.phase, state: actor.state, x: actor.position.x, y: actor.position.y, z: actor.position.z, animationState: actor.animationState, defeated: actor.defeated,
+          ...(actor.id === "moss-crowned-matron" ? {livingMossguards: actor.livingMossguards} : {})})),
         zones: run.bossEncounter.zones.map(zone => ({id: zone.id, kind: zone.kind, visible: zone.visible, activeAtMs: zone.activeAtMs, expiresAtMs: zone.expiresAtMs})),
         recentEvents: run.bossEncounter.events.slice(-12).map(event => ({sequence: event.sequence, type: event.type, actorId: event.actorId ?? null, attack: event.attack ?? null})),
       } : null,
@@ -7614,6 +7854,17 @@ globalThis.__BRIARHOLD__ = {
     };
   },
   actions: {
+    beginCombatAimCaptureForTest() {
+      if (!TEST_MODE) return false;
+      combatAimEvidence = [];
+      return true;
+    },
+    combatAimCaptureForTest() {
+      if (!TEST_MODE) return null;
+      return structuredClone({shots: combatAimEvidence, weapon: weapon.selected,
+        profile: automaticFireProfile(weapon.selected, currentCombatTuning ?? {}),
+        tuning: currentCombatTuning, target: cachedTouchAutoFireTarget});
+    },
     configureBalanceForTest(unlocked = false) {
       if (!TEST_MODE || coopPreview?.role === 'guest') return false;
       const choice = 'arbalest-kill-confirm-heat-refund';
@@ -7885,6 +8136,14 @@ globalThis.__BRIARHOLD__ = {
         const commands = [];
         if (run.bossEncounter.status === "waiting") commands.push({id: `test-release:${run.night}`, type: "encounter_release"});
         for (const actor of run.bossEncounter.actors) {
+          if (actor.id === "moss-crowned-matron" && actor.livingMossguards > 0) {
+            commands.push(...Array.from({length: actor.livingMossguards}, (_, index) => ({
+              id: `test-feed:${run.night}:${step}:${index}`,
+              type: "objective_interaction",
+              actorId: actor.id,
+              targetId: `mossguard-feed:${index}`,
+            })));
+          }
           if (actor.id === "moonless-herald" && !actor.defeated && actor.state === "phased") commands.push({
             id: `test-ward:${run.night}:${step}`,
             type: "ward_light",
@@ -7910,7 +8169,24 @@ globalThis.__BRIARHOLD__ = {
       }
       return false;
     },
-    clearWave() { if (!TEST_MODE || !battlefield || coopPreview?.role === 'guest') return false; for (let id = 0; id < battlefield.slotCount; id++) if (battlefield.status[id] === ACTIVE) battlefield.damageEnemy(id, battlefield.maxHp[id] * 2); return true; },
+    clearWave() { if (!TEST_MODE || !battlefield || coopPreview?.role === 'guest') return false; for (let id = 0; id < battlefield.slotCount; id++) if (battlefield.status[id] === ACTIVE) damageEnemy(id, battlefield.maxHp[id] * 2, null, 1); return true; },
+    clearWaveExceptMatronFeedsForTest() {
+      if (!TEST_MODE || !battlefield || coopPreview?.role === 'guest'
+        || run?.bossEncounter?.encounterId !== 'moss-crowned-matron') return false;
+      for (let id = 0; id < battlefield.slotCount; id++) {
+        if (battlefield.status[id] !== ACTIVE || currentRoster?.enemies?.[id]?.shieldFeedId) continue;
+        damageEnemy(id, battlefield.maxHp[id] * 2, null, 1);
+      }
+      return true;
+    },
+    clearWaveExceptWickerForTest() {
+      if (!TEST_MODE || !battlefield || coopPreview?.role === 'guest') return false;
+      for (let id = 0; id < battlefield.slotCount; id++) {
+        if (battlefield.status[id] !== ACTIVE || battlefield.type[id] === WICKER_COLOSSUS) continue;
+        damageEnemy(id, battlefield.maxHp[id] * 2, null, 1);
+      }
+      return true;
+    },
     setCoopPlayerPoseForTest(playerId, position, facing = {yaw: 0, pitch: 0}) {
       if (!TEST_MODE || !coopPreview) return false;
       if (coopPreview.role === 'guest') {

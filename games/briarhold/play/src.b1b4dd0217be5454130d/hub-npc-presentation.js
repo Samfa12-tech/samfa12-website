@@ -10,9 +10,58 @@ export const HUB_NPC_SERVICE_ICON = Object.freeze({
 export const HUB_NPC_LIGHTING = Object.freeze({
   directIntensity: 1.15,
   environmentIntensity: 0.8,
-  emissiveIntensity: 0.22,
+  emissiveIntensity: 0.12,
+  nonGlowEmissiveMaximum: 0.12,
   maxSimultaneousLights: 4,
 });
+
+export const HUB_NPC_MATERIAL_CLASSES = Object.freeze({
+  bellkeeper: 'cloth',
+  mason: 'cloth',
+  quartermaster: 'leather',
+  trapper: 'leather',
+  greenwarden: 'bark',
+});
+
+const HUB_NPC_MATERIAL_TUNING = Object.freeze({
+  cloth: Object.freeze({metallic: 0, roughness: 0.85}),
+  bark: Object.freeze({metallic: 0, roughness: 0.85}),
+  organic: Object.freeze({metallic: 0, roughness: 0.85}),
+  leather: Object.freeze({metallic: 0, roughness: 0.72}),
+});
+const METAL_MATERIAL_PATTERN = /(?:metal|iron|steel|brass|bronze|buckle|blade|bell)/iu;
+const GLOW_MATERIAL_PATTERN = /(?:glow|flame|ember|lantern-light|emissive-detail)/iu;
+
+/** Correct Meshy defaults without flattening authored metal or real glow. */
+export function applyHubNpcSurface(material, {npcId = null} = {}) {
+  if (!material) return null;
+  const name = String(material.name ?? '');
+  const kind = GLOW_MATERIAL_PATTERN.test(name)
+    ? 'glow'
+    : METAL_MATERIAL_PATTERN.test(name)
+      ? 'metal'
+      : HUB_NPC_MATERIAL_CLASSES[npcId] ?? 'organic';
+  const tuning = HUB_NPC_MATERIAL_TUNING[kind];
+  if (tuning) {
+    if ('metallic' in material) material.metallic = tuning.metallic;
+    if ('roughness' in material) material.roughness = tuning.roughness;
+  }
+  material.directIntensity = HUB_NPC_LIGHTING.directIntensity;
+  material.environmentIntensity = HUB_NPC_LIGHTING.environmentIntensity;
+  material.maxSimultaneousLights = HUB_NPC_LIGHTING.maxSimultaneousLights;
+  if (kind !== 'glow') {
+    material.emissiveIntensity = Math.min(
+      HUB_NPC_LIGHTING.nonGlowEmissiveMaximum,
+      Math.max(0, Number(material.emissiveIntensity) || HUB_NPC_LIGHTING.nonGlowEmissiveMaximum),
+    );
+    // The current single-material NPC exports contain no separately authored
+    // glowing region. Name-classified glow materials take the branch above;
+    // all other emissive bindings are the duplicated colour-map bake.
+    if (material.emissiveTexture) material.emissiveTexture = null;
+    material.emissiveColor?.set?.(0, 0, 0);
+  }
+  return kind;
+}
 
 export const HUB_NPC_LOOK = Object.freeze({
   headHeight: 1.58,
@@ -367,10 +416,7 @@ async function loadHubNpcCharacter({BABYLON, scene, station, mobileTextures = fa
   }
   const materials = new Set((imported.meshes ?? []).map(mesh => mesh.material).filter(Boolean));
   for (const material of materials) {
-    material.directIntensity = HUB_NPC_LIGHTING.directIntensity;
-    material.environmentIntensity = HUB_NPC_LIGHTING.environmentIntensity;
-    material.emissiveIntensity = HUB_NPC_LIGHTING.emissiveIntensity;
-    material.maxSimultaneousLights = HUB_NPC_LIGHTING.maxSimultaneousLights;
+    applyHubNpcSurface(material, {npcId: state.npcId});
   }
   for (const group of imported.animationGroups ?? []) group.stop?.();
   root.setEnabled?.(false);

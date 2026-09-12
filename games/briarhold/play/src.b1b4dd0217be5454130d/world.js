@@ -1435,12 +1435,17 @@ function buildHubRepairPresentation(BABYLON, scene, mats) {
 }
 
 export const MESHY_FOREST_TREE_ASSET = 'assets/meshy/runtime/briarhold-forest-tree-512.glb';
+export const FOREST_IMPOSTOR_ASSET = 'assets/world/briarhold-forest-impostor-512.webp';
 export const FOREST_TREE_SIZE = Object.freeze({width: 5.2, height: 9, depth: 5.2});
 export const FOREST_TREE_TRUNK_RADIUS = 0.48;
 export const FOREST_TREE_BANDS = Object.freeze({
   west: Object.freeze({x: -51.72, minZ: 23, maxZ: 115}),
   east: Object.freeze({x: 51.72, minZ: 23, maxZ: 115}),
   north: Object.freeze({z: HOST_EMERGENCE_PROFILE.treeLineZ, minX: -49, maxX: 49}),
+});
+export const FOREST_LAYER_COUNTS = Object.freeze({
+  desktop: Object.freeze({near: 190, mid: 48, far: 96}),
+  lowSpec: Object.freeze({near: 72, mid: 24, far: 48}),
 });
 
 function forestBandCounts(treeCount) {
@@ -1493,6 +1498,72 @@ export function forestTreeTransforms(treeCount = 190) {
   appendBand('east', counts.east);
   appendBand('north', counts.north);
   return transforms;
+}
+
+function forestDepthBandCounts(count) {
+  const west = Math.floor(count * 3 / 8);
+  const east = Math.floor(count * 3 / 8);
+  return {west, east, north: Math.max(0, count - west - east)};
+}
+
+export function forestDepthTransforms(layer = 'mid', requestedCount = 0) {
+  if (layer !== 'mid' && layer !== 'far') throw new TypeError(`Unknown forest depth layer ${layer}`);
+  const count = Math.max(0, Math.floor(Number(requestedCount) || 0));
+  const counts = forestDepthBandCounts(count);
+  const transforms = [];
+  const appendSide = (band, bandCount) => {
+    for (let index = 0; index < bandCount; index += 1) {
+      const globalIndex = transforms.length;
+      const amount = bandCount <= 1 ? 0.5 : index / (bandCount - 1);
+      const depth = layer === 'mid' ? 60 + (index % 3) * 3.8 : 80 + (index % 4) * 6.5;
+      const sign = band === 'west' ? -1 : 1;
+      transforms.push({
+        layer,
+        band,
+        x: sign * depth,
+        y: layer === 'mid' ? -0.08 : -0.14,
+        z: -22 + amount * (layer === 'mid' ? 164 : 210),
+        ry: (globalIndex * 2.399963229728653) % (Math.PI * 2),
+        sx: (layer === 'mid' ? 0.82 : 0.74) + ((globalIndex * 31) % 29) / 100,
+        sy: (layer === 'mid' ? 0.84 : 0.9) + ((globalIndex * 23) % 37) / 100,
+        sz: (layer === 'mid' ? 0.82 : 1),
+      });
+    }
+  };
+  appendSide('west', counts.west);
+  appendSide('east', counts.east);
+  for (let index = 0; index < counts.north; index += 1) {
+    const globalIndex = transforms.length;
+    const side = index % 2 === 0 ? -1 : 1;
+    const rank = Math.floor(index / 2);
+    const ranksPerSide = Math.max(1, Math.ceil(counts.north / 2));
+    transforms.push({
+      layer,
+      band: 'north',
+      x: side * (28 + rank / ranksPerSide * (layer === 'mid' ? 48 : 82)),
+      y: layer === 'mid' ? -0.08 : -0.14,
+      z: (layer === 'mid' ? 132 : 166) + (index % 4) * (layer === 'mid' ? 3.6 : 7.2),
+      ry: (globalIndex * 2.399963229728653) % (Math.PI * 2),
+      sx: (layer === 'mid' ? 0.82 : 0.74) + ((globalIndex * 31) % 29) / 100,
+      sy: (layer === 'mid' ? 0.84 : 0.9) + ((globalIndex * 23) % 37) / 100,
+      sz: layer === 'mid' ? 0.82 : 1,
+    });
+  }
+  return transforms;
+}
+
+export function configureDecorativeForestMesh(mesh, {layer = 'mid'} = {}) {
+  if (!mesh) return mesh;
+  mesh.isPickable = false;
+  mesh.checkCollisions = false;
+  mesh.receiveShadows = false;
+  mesh.metadata = {
+    ...(mesh.metadata ?? {}),
+    decorativeLandscape: true,
+    forestLayer: layer,
+    shadowCaster: false,
+  };
+  return mesh;
 }
 
 function applyRegularInstanceTransform(mesh, transform) {
@@ -2293,8 +2364,76 @@ function buildMeshyCourtyardServiceArcades(BABYLON, scene, mobileTextures = fals
   );
 }
 
-function buildMeshyForest(BABYLON, scene, proceduralForest, mobileTextures = false) {
-  const state = {status: 'loading', instances: 0, meshes: 0, batches: 0, error: null};
+function buildForestImpostors(BABYLON, scene, transforms) {
+  const state = {
+    status: 'loading', instances: transforms.length, cards: transforms.length * 2,
+    meshes: 2, batches: 2, lights: 0, error: null,
+  };
+  let resolveReady;
+  let batches = [];
+  const ready = new Promise(resolve => { resolveReady = resolve; });
+  const material = new BABYLON.StandardMaterial('forest-far-impostor-material', scene);
+  const texture = new BABYLON.Texture(
+    new URL(`../${FOREST_IMPOSTOR_ASSET}`, import.meta.url).href,
+    scene,
+    true,
+    false,
+    BABYLON.Texture.BILINEAR_SAMPLINGMODE,
+    () => {
+      state.status = 'ready';
+      resolveReady(batches);
+    },
+    message => {
+      state.status = 'fallback';
+      state.error = String(message || 'Forest impostor texture failed to load');
+      batches.forEach(batch => batch.setEnabled(false));
+      resolveReady([]);
+    },
+  );
+  texture.hasAlpha = true;
+  texture.gammaSpace = true;
+  texture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
+  texture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+  material.diffuseTexture = texture;
+  material.opacityTexture = texture;
+  material.useAlphaFromDiffuseTexture = true;
+  material.disableLighting = true;
+  material.fogEnabled = true;
+  material.backFaceCulling = false;
+  material.transparencyMode = BABYLON.Material.MATERIAL_ALPHATEST;
+  material.alphaCutOff = 0.38;
+  material.specularColor = BABYLON.Color3.Black();
+  const cardTransforms = yawOffset => transforms.map(transform => ({
+    ...transform,
+    y: transform.y + 4.9 * transform.sy,
+    ry: transform.ry + yawOffset,
+  }));
+  const makeBatch = (name, yawOffset) => {
+    const source = BABYLON.MeshBuilder.CreatePlane(name, {
+      width: 8.6,
+      height: 9.8,
+      sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+    }, scene);
+    source.material = material;
+    configureDecorativeForestMesh(source, {layer: 'far'});
+    const batch = createForestInstanceBatch(source, cardTransforms(yawOffset), {name});
+    for (const member of [batch.source, ...batch.instances]) {
+      configureDecorativeForestMesh(member, {layer: 'far'});
+    }
+    return batch;
+  };
+  batches = [
+    makeBatch('forest-far-impostor-a', 0),
+    makeBatch('forest-far-impostor-b', Math.PI * 0.5),
+  ];
+  return {ready, state, batches, material, texture};
+}
+
+function buildMeshyForest(BABYLON, scene, proceduralForest, midTransforms = [], mobileTextures = false) {
+  const state = {
+    status: 'loading', instances: 0, nearInstances: 0, midInstances: 0,
+    meshes: 0, batches: 0, lights: 0, error: null,
+  };
   const assetUrl = new URL(`../${runtimeWorldAsset(MESHY_FOREST_TREE_ASSET, mobileTextures)}`, import.meta.url);
   const slash = assetUrl.href.lastIndexOf('/') + 1;
   const rootUrl = assetUrl.href.slice(0, slash);
@@ -2325,19 +2464,27 @@ function buildMeshyForest(BABYLON, scene, proceduralForest, mobileTextures = fal
         source.material.backFaceCulling = true;
       }
 
-      const bands = ['west', 'east', 'north'];
-      const batchSources = bands.map((band, index) => {
-        const batchSource = index === 0 ? source : source.clone(`meshy-forest-tree-${band}-source`, null, true);
-        if (!batchSource) throw new Error(`Meshy forest ${band} batch could not be cloned`);
-        batchSource.name = `meshy-forest-tree-${band}-source`;
+      const specs = ['near', 'mid'].flatMap(layer => ['west', 'east', 'north'].map(band => ({layer, band})));
+      const batchSources = specs.map(({layer, band}, index) => {
+        const batchSource = index === 0 ? source : source.clone(`meshy-forest-${layer}-${band}-source`, null, true);
+        if (!batchSource) throw new Error(`Meshy forest ${layer} ${band} batch could not be cloned`);
+        batchSource.name = `meshy-forest-${layer}-${band}-source`;
+        if (layer === 'mid') configureDecorativeForestMesh(batchSource, {layer});
         return batchSource;
       });
-      const batches = bands.map((band, index) => {
-        const transforms = proceduralForest.transforms.filter(transform => transform.band === band);
-        return createForestInstanceBatch(batchSources[index], transforms, {
-          name: `meshy-forest-tree-${band}`,
+      const batches = specs.map(({layer, band}, index) => {
+        const transforms = (layer === 'near' ? proceduralForest.transforms : midTransforms)
+          .filter(transform => transform.band === band);
+        const batch = createForestInstanceBatch(batchSources[index], transforms, {
+          name: `meshy-forest-${layer}-${band}`,
           enabled: false,
         });
+        if (layer === 'mid') {
+          for (const member of [batch.source, ...batch.instances]) {
+            configureDecorativeForestMesh(member, {layer});
+          }
+        }
+        return batch;
       });
 
       for (const mesh of result.meshes) {
@@ -2352,7 +2499,9 @@ function buildMeshyForest(BABYLON, scene, proceduralForest, mobileTextures = fal
       proceduralForest.trunk.dispose();
       proceduralForest.crown.dispose();
       state.status = 'ready';
-      state.instances = proceduralForest.transforms.length;
+      state.instances = proceduralForest.transforms.length + midTransforms.length;
+      state.nearInstances = proceduralForest.transforms.length;
+      state.midInstances = midTransforms.length;
       state.meshes = batches.length;
       state.batches = batches.length;
       return batches;
@@ -3862,9 +4011,13 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
     suppressLoadedServiceArcadeFallbacks(traversal, mesh);
     return mesh;
   });
-  const forest = buildForest(BABYLON, scene, mats, lowSpec ? 72 : 190);
+  const forestCounts = lowSpec ? FOREST_LAYER_COUNTS.lowSpec : FOREST_LAYER_COUNTS.desktop;
+  const forest = buildForest(BABYLON, scene, mats, forestCounts.near);
+  const midForestTransforms = forestDepthTransforms('mid', forestCounts.mid);
+  const farForestTransforms = forestDepthTransforms('far', forestCounts.far);
   const landscape = createWorldLandscape(BABYLON, scene, mats, {lowSpec});
-  const meshyForest = buildMeshyForest(BABYLON, scene, forest, mobileTextures);
+  const meshyForest = buildMeshyForest(BABYLON, scene, forest, midForestTransforms, mobileTextures);
+  const forestImpostors = buildForestImpostors(BABYLON, scene, farForestTransforms);
   const landscapeReady = meshyForest.ready.then(batches => landscape.setForestSource(batches?.[0]?.source));
   const meshyBattlefieldVerge = buildMeshyBattlefieldVerge(BABYLON, scene, mobileTextures);
   const meshyBraziers = buildMeshyBraziers(BABYLON, scene, mobileTextures);
@@ -4498,14 +4651,21 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
     return socketSnapshot(socket);
   }
 
-  function updateGateVisual(id, ratio, breached = false) {
+  function updateGateVisual(id, ratio, breached = false, pressureLevel = 'none') {
     const mesh = castle.gates[id];
     if (!mesh) return;
     mesh.scaling.y = breached ? 0.12 : Math.max(0.2, Math.min(1, ratio));
     mesh.position.y = breached ? 0.42 : (id === 'heart' ? 4 : 3.5) * mesh.scaling.y;
+    const pressureColour = pressureLevel === 'critical' || pressureLevel === 'breached'
+      ? '#7a2417'
+      : pressureLevel === 'urgent'
+        ? '#4f2b16'
+        : pressureLevel === 'watch'
+          ? '#202516'
+          : null;
     const emissive = breached
       ? BABYLON.Color3.FromHexString('#5e160f')
-      : BABYLON.Color3.FromHexString(ratio < 0.3 ? '#402016' : id === 'heart' ? '#010604' : '#000000');
+      : BABYLON.Color3.FromHexString(pressureColour ?? (ratio < 0.3 ? '#402016' : id === 'heart' ? '#010604' : '#000000'));
     const materials = [mesh.material, ...mesh.getChildMeshes(false).map(child => child.material)];
     for (const gateMaterial of new Set(materials.filter(Boolean))) {
       if ('emissiveColor' in gateMaterial) gateMaterial.emissiveColor = emissive;
@@ -4840,6 +5000,7 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
       meshyFieldDefencesReady,
       meshyDefenderCachesReady,
       meshyForest.ready,
+      forestImpostors.ready,
       landscapeReady,
       meshyBattlefieldVerge.ready,
       meshyBraziersReady,
@@ -4849,6 +5010,7 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
     ]),
     assetState: {
       meshyForest: meshyForest.state,
+      forestImpostors: forestImpostors.state,
       meshyBattlefieldVerge: meshyBattlefieldVerge.state,
       meshyBraziers: meshyBraziers.state,
       meshyFieldDefences: meshyFieldDefences.state,
@@ -4908,6 +5070,7 @@ export function createWorld(BABYLON, engine, canvas, {lowSpec = false, mobileTex
         landscape: landscape.diagnostics(),
         daySky: daySky.diagnostics(),
         meshyForest: {...meshyForest.state},
+        forestImpostors: {...forestImpostors.state},
         meshyBattlefieldVerge: {...meshyBattlefieldVerge.state},
         meshyBraziers: {...meshyBraziers.state},
         meshyFortressWall: {...meshyFortressWall.state},

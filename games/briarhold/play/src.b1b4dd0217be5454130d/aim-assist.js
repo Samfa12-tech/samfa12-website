@@ -38,6 +38,12 @@ function dot(a, b) {
   return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+function deterministicUnit(shotIndex, salt) {
+  const shot = Math.max(0, Math.floor(finite(shotIndex)));
+  const value = Math.sin((shot + 1) * 12.9898 + salt * 78.233) * 43758.5453123;
+  return value - Math.floor(value);
+}
+
 function targetPoint(target) {
   return target.aimPoint ?? target.position;
 }
@@ -252,6 +258,9 @@ export function touchAutomaticFireDirection({
   aimDirection,
   target,
   coneDegrees = TOUCH_AUTO_FIRE_CONE_DEGREES,
+  spreadDegrees = 0,
+  spreadMultiplier = 1,
+  shotIndex = 0,
 } = {}) {
   const originalDirection = normalized(aimDirection) ?? {x: 0, y: 0, z: 1};
   const point = target ? targetPoint(target) : null;
@@ -272,7 +281,29 @@ export function touchAutomaticFireDirection({
   if (dot(originalDirection, targetDirection) < Math.cos(Math.min(Math.PI, cone)) - 1e-12) {
     return Object.freeze(originalDirection);
   }
-  return Object.freeze(targetDirection);
+  const spread = Math.max(0, finite(spreadDegrees)) * Math.max(0, finite(spreadMultiplier, 1));
+  if (spread <= 1e-12) return Object.freeze(targetDirection);
+  const radians = spread * Math.PI / 180;
+  // A polar sample covers the whole authored cone without independently
+  // spending its full angular budget on yaw and pitch.
+  const radius = radians * Math.sqrt(deterministicUnit(shotIndex, 17));
+  const angle = deterministicUnit(shotIndex, 29) * Math.PI * 2;
+  const horizontal = Math.hypot(targetDirection.x, targetDirection.z);
+  const right = horizontal > 1e-9
+    ? {x: targetDirection.z / horizontal, y: 0, z: -targetDirection.x / horizontal}
+    : {x: 1, y: 0, z: 0};
+  const up = {
+    x: targetDirection.y * right.z - targetDirection.z * right.y,
+    y: targetDirection.z * right.x - targetDirection.x * right.z,
+    z: targetDirection.x * right.y - targetDirection.y * right.x,
+  };
+  const sin = Math.sin(radius);
+  const cos = Math.cos(radius);
+  return Object.freeze({
+    x: targetDirection.x * cos + (right.x * Math.cos(angle) + up.x * Math.sin(angle)) * sin,
+    y: targetDirection.y * cos + (right.y * Math.cos(angle) + up.y * Math.sin(angle)) * sin,
+    z: targetDirection.z * cos + (right.z * Math.cos(angle) + up.z * Math.sin(angle)) * sin,
+  });
 }
 
 /**

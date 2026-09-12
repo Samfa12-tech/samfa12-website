@@ -1633,6 +1633,7 @@
   "modelScale": {
     "sourceModel": "assets/meshy/source/wicker-colossus-running.glb",
     "runtimeHeight": 4.6,
+    "displayHeight": 5.777513002,
     "sourceBounds": {
       "min": [
         -1.5952219797248688,

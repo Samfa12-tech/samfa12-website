@@ -54,6 +54,19 @@ export function normalizeSupplyOrbPresentation(input = []) {
     return {...orb};
   });
 }
+export function supplyOrbPresentationForRun(run) {
+  const state = run?.supplyOrbs;
+  const activeWave = run?.phase === 'combat'
+    ? run.wave
+    : run?.phase === 'interwave_recovery'
+      ? run.wave - 1
+      : null;
+  return state && state.night === run.night && state.wave === activeWave ? state.live : [];
+}
+export function clearLiveSupplyOrbs(run) {
+  if (!run?.supplyOrbs || run.supplyOrbs.live.length === 0) return run;
+  return {...run, supplyOrbs: {...run.supplyOrbs, live: []}};
+}
 export function prepareSupplyOrbs(run, roster) {
   const identity = supplyRosterIdentity(roster);
   const prior = normalizeSupplyOrbState(run.supplyOrbs);
@@ -99,7 +112,7 @@ export function projectSupplyOrb(point, map, blocked = () => false) {
 /** Host positions use feet; no vertical or through-wall pickup and no sweep. */
 export function collectSupplyOrbs(run, actors, obstructed) {
   const state = run?.supplyOrbs;
-  if (!state || run.phase !== 'combat' || state.night !== run.night || state.wave !== run.wave) return [];
+  if (!state || supplyOrbPresentationForRun(run) !== state.live) return [];
   const picked = [];
   state.live = state.live.filter(orb => {
     const actor = actors.find(a => a.hp > 0 && Math.abs(a.position.y - orb.y) <= .6

@@ -2051,6 +2051,7 @@
   "modelScale": {
     "sourceModel": "assets/meshy/source/barkhide-brute-running.glb",
     "runtimeHeight": 2.9,
+    "displayHeight": 4.877552108,
     "sourceBounds": {
       "min": [
         -0.8036818515431463,

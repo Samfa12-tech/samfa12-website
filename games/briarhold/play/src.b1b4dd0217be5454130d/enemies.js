@@ -90,6 +90,9 @@ const ARCHETYPES = Object.freeze([
     maxHp: 700,
     speed: 2.8,
     radius: 1.8,
+    // Runtime rig horizontal bounds: 3.105134 x 3.227707m, covering rotation,
+    // plus .2m clearance. Combat retains the authored 1.8m hit radius.
+    navigationRadius: Math.hypot(3.105134 / 2, 3.227707 / 2) + 0.2,
     mass: 14,
     attackDamage: 38,
     attackInterval: 1.8,
@@ -147,6 +150,11 @@ export function enemyArchetype(type) {
 
 export function enemyArmour(type) {
   return enemyArchetype(type).armour;
+}
+
+export function enemyNavigationRadius(type) {
+  const archetype = enemyArchetype(type);
+  return archetype.navigationRadius ?? archetype.radius;
 }
 
 export function isBreachEligible(type) {

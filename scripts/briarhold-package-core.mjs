@@ -35,8 +35,8 @@ export async function validateBriarholdPackage(packageRoot) {
   if (manifest.schemaVersion !== 2 || manifest.package !== "briarhold" || manifest.entrypoint !== "index.html") {
     throw new Error("Briarhold release manifest metadata is invalid.");
   }
-  if (manifest.version !== "0.3.0-alpha.99") {
-    throw new Error(`Expected Briarhold 0.3.0-alpha.99, received ${manifest.version ?? "unknown"}.`);
+  if (manifest.version !== "0.3.0-alpha.100") {
+    throw new Error(`Expected Briarhold 0.3.0-alpha.100, received ${manifest.version ?? "unknown"}.`);
   }
   if (!/^[a-f0-9]{20}$/.test(manifest.cacheKey) || !Array.isArray(manifest.files) || !manifest.files.length) {
     throw new Error("Briarhold release manifest cache key or files are invalid.");

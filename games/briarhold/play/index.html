@@ -11,7 +11,7 @@
     <meta name="briarhold-release-channel" content="production-alpha">
     <meta name="briarhold-turnstile-site-key" content="0x4AAAAAAEhf76L7CP5yrpYp">
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="styles.9f16d25c65378aa2ee5f/game.css">
+    <link rel="stylesheet" href="styles.b1b4dd0217be5454130d/game.css">
     <title>Briarhold · First-Person Defender</title>
   </head>
   <body data-phase="menu" data-input="mouse" data-controller="disconnected">
@@ -39,7 +39,7 @@
           <div id="heartHealthBar" class="meter gate-meter" role="progressbar" aria-label="Heart Gate health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
           <div class="outer-gate-line"><span>West Outer Gate</span><b id="outerHealthText">100%</b></div>
           <div id="outerHealthBar" class="meter gate-meter outer-gate-meter" role="progressbar" aria-label="West Outer Gate health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
-          <div class="outer-gate-line"><span>East Outer Gate</span><b id="eastOuterHealthText">100%</b></div>
+          <div id="eastOuterGateLine" class="outer-gate-line" data-pressure-level="none"><span>East Outer Gate</span><b id="eastOuterHealthText">100%</b></div>
           <div id="eastOuterHealthBar" class="meter gate-meter outer-gate-meter" role="progressbar" aria-label="East Outer Gate health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
         </section>
 
@@ -411,9 +411,9 @@
     </div>
 
     <noscript>Briarhold requires JavaScript to run.</noscript>
-    <script src="vendor.9f16d25c65378aa2ee5f/babylon/babylon-9.16.1.min.js"></script>
-    <script src="vendor.9f16d25c65378aa2ee5f/babylon/babylonjs.loaders-9.16.1.min.js"></script>
-    <script src="vendor.9f16d25c65378aa2ee5f/pocket-audio-core/pocket-audio-core-0.2.0.iife.js"></script>
-    <script type="module" src="src.9f16d25c65378aa2ee5f/game.js"></script>
+    <script src="vendor.b1b4dd0217be5454130d/babylon/babylon-9.16.1.min.js"></script>
+    <script src="vendor.b1b4dd0217be5454130d/babylon/babylonjs.loaders-9.16.1.min.js"></script>
+    <script src="vendor.b1b4dd0217be5454130d/pocket-audio-core/pocket-audio-core-0.2.0.iife.js"></script>
+    <script type="module" src="src.b1b4dd0217be5454130d/game.js"></script>
   </body>
 </html>
