@@ -120,9 +120,9 @@
               </div>
               <div class="briarhold-stat">
                 <dt>Browser plays</dt>
-                <dd class="briarhold-stat-value"><span aria-hidden="true">&mdash;</span><span class="sr-only">Not available</span></dd>
-                <dd class="briarhold-stat-note">Play totals are not available yet. Page views are not counted as plays.</dd>
-                <dd class="briarhold-stat-status">Play counter not connected.</dd>
+                <dd class="briarhold-stat-value" data-briarhold-browser-count><span aria-hidden="true">&mdash;</span><span class="sr-only">Not available</span></dd>
+                <dd class="briarhold-stat-note">Estimated from browser-game page loads. Includes repeat visits and refreshes, not unique players. May include automated requests.</dd>
+                <dd class="briarhold-stat-status" data-briarhold-browser-status role="status" aria-live="polite">Awaiting first analytics update.</dd>
               </div>
             </dl>
           </div>
@@ -272,12 +272,13 @@
       </div>
     </footer>
     <script src="/script.js?v=20260905-2" defer></script>
+    <script src="/briarhold-browser-stats.js?v=20260914-1" defer></script>
     <script id="briarhold-stats-script">
       (async () => {
         // Read-only public totals, not visitor tracking. Never add credentials here.
         // Dated fallback verified 2026-09-13: Alpha.100/.99/.98/.97/.96/.95/.93/.92/.91
         // APK download_count values at publication: 0 + 5 + 4 + 6 + 2 + 5 + 5 + 2 + 2 = 31.
-        // Browser plays need a genuine game-start source; do not substitute page views.
+        // Browser page-load estimates are supplied separately by briarhold-browser-stats.js.
         const countNode = document.querySelector('[data-briarhold-android-count]');
         const statusNode = document.querySelector('[data-briarhold-android-status]');
         if (!countNode || !statusNode) return;

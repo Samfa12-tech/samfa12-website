@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { updateBriarholdBrowserStats } from "./briarhold-browser-stats.mjs";
 import {
   collectClarity,
   collectCloudflare,
@@ -43,4 +44,9 @@ if (missing.length) {
   const outputPath = path.join(snapshotDirectory, filename);
   await writeFile(outputPath, `${JSON.stringify(snapshot, null, 2)}\n`, { encoding: "utf8", flag: "wx" });
   console.log(`Saved aggregate analytics snapshot: ${outputPath}`);
+  await updateBriarholdBrowserStats({
+    cwd, apiToken: config.cloudflareApiToken, zoneId: cloudflare.zoneId,
+    hostname: config.hostname, now: capturedAt,
+  });
+  console.log("Updated public Briarhold browser-play snapshot.");
 }

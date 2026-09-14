@@ -28,11 +28,13 @@ async function render(responses) {
   return { count: count.textContent, status: status.textContent, calls };
 }
 
-test('shows a dated download snapshot and an honest unavailable browser-play state', () => {
+test('keeps the download snapshot and connects the estimated browser-page counter', () => {
   assert.match(html, /data-briarhold-android-count[^>]*>31<\/dd>/);
   assert.match(html, /Browser plays/);
-  assert.match(html, /Play totals are not available yet/);
-  assert.match(html, /Page views are not counted as plays/);
+  assert.match(html, /data-briarhold-browser-count/);
+  assert.match(html, /Estimated from browser-game page loads/);
+  assert.match(html, /briarhold-browser-stats\.js/);
+  assert.match(html, /data-briarhold-browser-status/);
   assert.match(html, /Last checked 11 Sep 2026/);
 });
 

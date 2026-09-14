@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "status": "pending",
+  "source": "Cloudflare",
+  "hostname": "samfa12.com",
+  "path": "/games/briarhold/play/",
+  "metric": "game-page-requests",
+  "count": null,
+  "period": null,
+  "updatedAt": null
+}
