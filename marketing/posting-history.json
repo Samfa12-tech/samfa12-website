@@ -8,6 +8,83 @@
       "publishedAt": "2026-09-17T08:54:40.691Z",
       "bufferPostId": "6aabaacf1fe00965df8bb663",
       "textSha256": "26010c19e105405811264114357c1beea031333f2e314d6e0af332cdbb592940"
+    },
+    {
+      "id": "site-static-1",
+      "project": "Samfa12.com",
+      "category": "Web development",
+      "date": "2026-09-18",
+      "status": "scheduled",
+      "bufferPostId": "6aabae4944f4601614c4eae4",
+      "textSha256": "ac426ef3e1bef3f8336af911705f9c7acede65e24ab9f4d78f8049d9939475e1",
+      "scheduledAt": "2026-09-17T09:09:29.875Z",
+      "dueAt": "2026-09-17T22:15:00.000Z"
+    },
+    {
+      "id": "cutter-1",
+      "project": "Cursed Cutter",
+      "category": "Games",
+      "date": "2026-09-19",
+      "status": "scheduled",
+      "bufferPostId": "6aabae4a9d60d4fa4cf2135d",
+      "textSha256": "c847ca4aff3cdadc6fb89b6d3f344dc7614dce361fe7537232332a2c7b1c217d",
+      "scheduledAt": "2026-09-17T09:09:30.254Z",
+      "dueAt": "2026-09-18T22:15:00.000Z"
+    },
+    {
+      "id": "www-model-1",
+      "project": "What Would Win",
+      "category": "Web development",
+      "date": "2026-09-20",
+      "status": "scheduled",
+      "bufferPostId": "6aabae4aff5ba5e3dc5257d3",
+      "textSha256": "504f9b29f703f5bf9961ffc947e1aa102fcbf8ef1c2f5a00bc7f0cff1ee9b274",
+      "scheduledAt": "2026-09-17T09:09:30.569Z",
+      "dueAt": "2026-09-19T22:15:00.000Z"
+    },
+    {
+      "id": "dust-bushranger-1",
+      "project": "Dust on the River",
+      "category": "Games",
+      "date": "2026-09-21",
+      "status": "scheduled",
+      "bufferPostId": "6aabae4a44f4601614c4eb2c",
+      "textSha256": "a0467a3853737e92091794c36a7d517e874b9fe89c42ad797a3176f28ce07672",
+      "scheduledAt": "2026-09-17T09:09:30.859Z",
+      "dueAt": "2026-09-20T22:15:00.000Z"
+    },
+    {
+      "id": "creator-mix-1",
+      "project": "Samfa12",
+      "category": "Creator",
+      "date": "2026-09-22",
+      "status": "scheduled",
+      "bufferPostId": "6aabae4b4765522652a3e1a3",
+      "textSha256": "193ee0bca844443ce8d91685af82c6947ae5ae9d8ddac9df7e0f7ac5ea9058da",
+      "scheduledAt": "2026-09-17T09:09:31.184Z",
+      "dueAt": "2026-09-21T22:15:00.000Z"
+    },
+    {
+      "id": "brokenroad-pre-1",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-09-23",
+      "status": "scheduled",
+      "bufferPostId": "6aabae4b44f4601614c4eb5b",
+      "textSha256": "d7361d995626b5b8a966c77451f763c309a6332c5c96f0aaa593000fe35e0b3e",
+      "scheduledAt": "2026-09-17T09:09:31.459Z",
+      "dueAt": "2026-09-22T22:15:00.000Z"
+    },
+    {
+      "id": "bugswarm-1",
+      "project": "Bug Swarm",
+      "category": "Games",
+      "date": "2026-09-24",
+      "status": "scheduled",
+      "bufferPostId": "6aabae4b80958f78726439a2",
+      "textSha256": "1739015546f5ee3dbef3b5672752e2acb257e05b029f85f6fedf15c3ca008390",
+      "scheduledAt": "2026-09-17T09:09:31.738Z",
+      "dueAt": "2026-09-23T22:15:00.000Z"
     }
   ]
 }
