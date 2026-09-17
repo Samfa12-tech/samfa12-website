@@ -1,23 +1,23 @@
-# Samfa12 daily social automation
+# Samfa12 weekly social automation
 
-This workflow publishes one curated Samfa12 post per day to the connected X/Twitter channel through Buffer.
+This workflow prepares a week of curated Samfa12 X/Twitter posts in one GitHub Actions run, then lets Buffer publish them automatically at their scheduled times.
 
-It does **not** call Codex, ChatGPT Work, or an OpenAI API model during daily runs. The copy lives in `marketing/content-bank.json` and is selected by a small deterministic Node script.
+It does **not** call Codex, ChatGPT Work, or an OpenAI API model during the weekly GitHub run. The copy lives in `marketing/content-bank.json` and is selected by a deterministic Node script.
 
 ## Safety model
 
-Scheduled publishing is disabled by default. The daily workflow only publishes when the repository variable `SOCIAL_AUTOMATION_ENABLED` is exactly `true`.
+Automatic weekly scheduling is disabled until the repository variable `SOCIAL_AUTOMATION_ENABLED` is exactly `true`.
 
-The API key is read only from the GitHub Actions secret `BUFFER_API_KEY`. Never commit the key to the repository.
+The Buffer API key is read only from the GitHub Actions secret `BUFFER_API_KEY`. Never commit the key to the repository.
 
-The initial automation targets X only. Facebook can be added later after the X workflow is proven.
+The automation targets X only. Facebook can be added later after the X workflow is established.
 
 ## Files
 
 - `marketing/content-bank.json` — curated public-safe posts, project/category metadata, and optional date windows.
-- `marketing/posting-history.json` — records successful automated publishes so posts/projects can cool down.
-- `scripts/social-post.mjs` — chooses content, discovers the X channel, and calls Buffer's GraphQL API.
-- `.github/workflows/daily-social-post.yml` — daily and manual GitHub Actions workflow.
+- `marketing/posting-history.json` — records published and future scheduled items so posts/projects can cool down.
+- `scripts/social-post.mjs` — chooses content, discovers the X channel, checks the Buffer queue, and creates posts through Buffer's GraphQL API.
+- `.github/workflows/daily-social-post.yml` — despite the legacy filename, this is now the **Weekly Samfa12 social schedule** workflow.
 
 ## GitHub setup
 
@@ -25,54 +25,72 @@ In the repository, open **Settings → Secrets and variables → Actions**.
 
 ### Secret
 
-Create:
-
-- `BUFFER_API_KEY` — the Buffer API key. The key should never be stored as a normal repository variable.
+- `BUFFER_API_KEY` — Buffer personal API key.
 
 ### Optional variables
 
-- `BUFFER_X_CHANNEL_ID` — preferred once the correct X channel ID has been confirmed.
+- `BUFFER_X_CHANNEL_ID` — locks the workflow to one specific X channel. The tested Samfa12 Buffer channel can also be auto-discovered by name.
 - `BUFFER_X_CHANNEL_NAME` — name hint used when auto-discovering the channel. Defaults to `Samfa12`.
+- `SOCIAL_AUTOMATION_ENABLED` — set to `true` only after manual weekly scheduling is tested.
 
-Do **not** create `SOCIAL_AUTOMATION_ENABLED` yet.
+## Manual actions
 
-## Test sequence
+The workflow exposes these manual modes:
 
-1. Merge the feature only after reviewing the content bank.
-2. Add `BUFFER_API_KEY` as a GitHub Actions secret.
-3. Run **Daily Samfa12 social post** manually with `dry-run`. It should print the selected post and make no Buffer call.
-4. Run it manually with `list-channels`. Confirm the X/Twitter channel is the expected Samfa12 account and copy its channel ID into the repository variable `BUFFER_X_CHANNEL_ID`.
-5. Run it manually with `draft`. Confirm an unscheduled draft appears in Buffer. Nothing should publish.
-6. If the draft is correct, manually run `publish` once when ready. This shares immediately through Buffer and records the post in `marketing/posting-history.json`.
-7. Only after the live test succeeds, add repository variable `SOCIAL_AUTOMATION_ENABLED=true`.
+- `preview-week` — prints the next seven candidate posts and dates without contacting Buffer.
+- `schedule-week` — schedules the following seven daily slots in Buffer.
+- `dry-run` — previews one post only.
+- `list-channels` — lists connected Buffer channels.
+- `draft` — creates one unscheduled Buffer draft.
+- `publish` — immediately publishes one post and records it in history.
 
-## Schedule
+## Weekly schedule
 
-The workflow runs at `22:15 UTC`, which is approximately:
+The GitHub workflow runs at **09:00 UTC every Sunday**, which is:
 
-- 08:15 AEST
-- 09:15 AEDT
+- 19:00 Sunday AEST
+- 20:00 Sunday AEDT
 
-GitHub Actions cron schedules use UTC, so the local clock time shifts by one hour with daylight saving.
+It then schedules one X post per day for the following seven days, normally Monday through Sunday, at **08:15 Australia/Sydney local time**. The script converts each local slot to UTC individually, so the publishing time stays at 08:15 across daylight-saving changes.
+
+Buffer scheduled posts use `mode: customScheduled` with a future `dueAt` value.
+
+## Existing Buffer posts
+
+Before creating the weekly batch, the script reads future scheduled posts for the Samfa12 X channel. If Buffer already has a scheduled post on one of the target dates, the automation skips that date instead of adding a second automated post.
+
+A manually saved **draft** does not block a date because it is not scheduled.
+
+Re-running `schedule-week` is therefore designed to be reasonably safe: dates already occupied in Buffer are skipped.
 
 ## Content selection
 
-The selector:
+For each target date the selector:
 
 - respects `notBefore` and `notAfter` date windows;
 - avoids reusing an exact post for 90 days by default;
 - avoids the same project for 3 days by default;
-- prefers changing content category from the previous post;
+- prefers changing content category from the previous selected/published item;
+- applies those cooldowns across the seven posts being planned in the same batch;
 - validates that curated X copy is no more than 280 characters;
-- uses a stable daily hash to choose among eligible posts, so a failed retry selects the same item that day.
+- uses a stable hash of date + post ID so the same date produces a reproducible choice while the history is unchanged.
 
 A post can override defaults with `reuseDays` or `projectCooldownDays`.
 
-## Buffer behavior
+## Posting history
 
-Manual `draft` runs create a Buffer draft using `saveToDraft: true`.
+Immediate manual `publish` entries are recorded as `published`.
 
-Manual `publish` runs and enabled scheduled runs use Buffer's `shareNow` mode. The script marks the post as AI-assisted because the initial copy bank was prepared with AI assistance.
+Weekly batch entries are recorded as `scheduled` as soon as Buffer accepts each post, including their Buffer post ID and `dueAt` timestamp. The workflow commits this history back to the repository after the run. The history-commit step uses `always()` for weekly scheduling so successfully created posts are still recorded if a later item in the same batch fails.
+
+## Recommended weekly operating loop
+
+1. During the week, keep working normally on Samfa12 games, books, web tools, releases and development.
+2. Before the Sunday GitHub run, refresh `marketing/content-bank.json` with any worthwhile new public-safe material.
+3. Sunday evening Sydney time, GitHub schedules the next seven daily posts into Buffer.
+4. Buffer publishes them during the week without GitHub, Codex, Work or ChatGPT needing to run each day.
+
+This makes a weekly ChatGPT content-bank refresh a good companion workflow: ChatGPT can review recent Samfa12 work, propose or add new evergreen/current entries, while GitHub + Buffer handle publication.
 
 ## Updating the content bank
 
@@ -80,7 +98,7 @@ Add new items with a unique `id`, `project`, `category`, and `text`. Optional da
 
 Keep claims public, current, and verifiable. Do not add private school, family, health, legal, or other non-Samfa12 context. Proposed game features should not be written as shipped features until verified.
 
-The current bank is intentionally curated rather than generated daily. This keeps the daily automation free of OpenAI/Codex usage. It can later be replenished periodically from approved Samfa12 project material.
+The content bank should be larger than a single week so the weekly job remains resilient if a replenishment is missed.
 
 ## API-key rotation
 

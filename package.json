@@ -25,7 +25,9 @@
     "test:marketplace": "node --test tests/marketplace-stats.test.mjs",
     "test:handoff-relay": "node --test tests/pocket-audio-handoff-relay.test.mjs",
     "social:dry-run": "SOCIAL_ACTION=dry-run node scripts/social-post.mjs",
+    "social:preview-week": "SOCIAL_ACTION=preview-week node scripts/social-post.mjs",
     "social:list-channels": "SOCIAL_ACTION=list-channels node scripts/social-post.mjs",
+    "social:schedule-week": "SOCIAL_ACTION=schedule-week node scripts/social-post.mjs",
     "setup:handoff-kv": "npx wrangler kv namespace create HANDOFFS --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config && npx wrangler kv namespace create HANDOFFS --preview --config workers/pocket-audio-handoff/wrangler.toml --binding HANDOFFS --update-config",
     "deploy:handoff-relay": "npx wrangler deploy --config workers/pocket-audio-handoff/wrangler.toml",
     "verify:handoff-live": "node scripts/verify-pocket-handoff-live.mjs"
