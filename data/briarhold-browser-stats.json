@@ -1,11 +1,15 @@
 {
   "schemaVersion": 1,
-  "status": "pending",
+  "status": "ok",
   "source": "Cloudflare",
   "hostname": "samfa12.com",
   "path": "/games/briarhold/play/",
   "metric": "game-page-requests",
-  "count": null,
-  "period": null,
-  "updatedAt": null
+  "count": 7,
+  "updatedAt": "2026-09-20T01:43:07.678Z",
+  "period": {
+    "start": "2026-09-13T00:00:00.000Z",
+    "end": "2026-09-20T00:00:00.000Z",
+    "timeZone": "UTC"
+  }
 }
