@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 100,
-  "versionName": "0.3.0-alpha.100",
-  "title": "Alpha.100 is available",
-  "notes": "Adds bounded weapon-specific auto-fire, clearer boss mechanics, reliable enemy closing, recovery-window Supply pickups, improved fallback sprites and NPC materials, denser woodland, clearer fortress routes, compact-phone controls and co-op fire feedback. Both co-op players should update to Alpha.100.",
+  "versionCode": 101,
+  "versionName": "0.3.0-alpha.101",
+  "title": "Alpha.101 is available",
+  "notes": "Fixes the recurring Mason repair/Strengthen and New Run freeze, improves close-body auto-fire, Wicker routing, sprite heading and lighting, woodland appearance and co-op recovery/input/firing. Optional report diagnostics now include bounded game progress and recent errors. Both co-op players should update. The intermittent Night 5 freeze remains under investigation.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
