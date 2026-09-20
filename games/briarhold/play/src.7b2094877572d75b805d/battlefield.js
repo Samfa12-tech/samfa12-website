@@ -1725,7 +1725,17 @@ class Battlefield {
         this.desiredVx[id] = dx / length * speed;
         this.desiredVz[id] = dz / length * speed;
       }
-      this._steerAroundSolidObstacles(id);
+      // A Wicker pursuing an exposed Warden still needs the same held route
+      // state as a courtyard pursuer. The old one-tick steering path chose a
+      // fresh gate-facing side on every update, so the large body could settle
+      // against the west field cache/tower and chatter without ever closing.
+      // Retain only this boss route; ordinary approach attackers preserve the
+      // established lane steering semantics and ranges.
+      this._steerAroundSolidObstacles(
+        id,
+        this.type[id] === WICKER_COLOSSUS,
+        this.type[id] === WICKER_COLOSSUS ? target : null,
+      );
       return;
     }
     this._releasePlayerSwarmSlot(id);

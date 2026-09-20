@@ -1,3 +1,5 @@
+import {boundPlaytestContext} from './playtest-diagnostics.js';
+
 export const PLAYTEST_REPORT_ENDPOINT = "/__briarhold/playtest-report";
 export const PLAYTEST_REMOTE_REPORT_ENDPOINT = "https://briarhold-signal.samfa12.com/api/playtest-reports";
 export const PLAYTEST_REMOTE_TIMEOUT_MS = 10000;
@@ -426,7 +428,7 @@ export function createPlaytestReporter({
     if (open || !receiver) return false;
     if (!canOpen()) return false;
     restoreFocus = windowTarget.document?.activeElement ?? null;
-    context = captureContext();
+    context = boundPlaytestContext(captureContext());
     restoreGame = suspendGame();
     open = true;
     screenshot = null;

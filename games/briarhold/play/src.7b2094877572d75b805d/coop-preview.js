@@ -27,6 +27,7 @@ import {
   normalizeCoopWireMessage,
 } from './coop-world-wire.js';
 import {
+  PLAYER_COMMAND_LOOK_QUANTIZATION,
   PLAYER_COMMAND_ACTIONS,
   createNetworkPlayerState,
   createSessionWeaponState,
@@ -36,7 +37,11 @@ import {
 import {createSessionState, stepSession} from './multiplayer-session-core.js';
 import {PEER_ROLES, createPeerTransport} from './peer-transport.js';
 import {createPlayerState} from './player-controller.js';
-import {createRemoteWardenAvatar, loadRemoteWardenTemplate} from './remote-warden.js';
+import {
+  createRemoteWardenAvatar,
+  disposeRemoteWardenTemplate,
+  loadRemoteWardenTemplate,
+} from './remote-warden.js';
 
 export const COOP_PREVIEW_BUILD_HASH = BRIARHOLD_VERSION;
 export const COOP_PREVIEW_CONTENT_HASH = 'seven-night-campaign-v6-alpha100';
@@ -51,7 +56,13 @@ export const CHECKPOINT_ACK_TIMEOUT_MS = 30000;
 export const CONNECTION_INTERRUPTION_GRACE_MS = 5000;
 export const PEER_SILENCE_TIMEOUT_MS = 30000;
 const MAX_PENDING_GUEST_COMMANDS = 64;
+const MAX_PRE_HELLO_MESSAGES = 32;
 const MAX_CONFIRMED_CHECKPOINT_TRANSFERS = 16;
+const MAX_CHECKPOINT_TRANSFER_IDENTITIES = 16;
+const PLAYER_COMMAND_HELD_ACTIONS = PLAYER_COMMAND_ACTIONS.SPRINT;
+const PLAYER_COMMAND_EDGE_ACTIONS = Object.values(PLAYER_COMMAND_ACTIONS)
+  .filter(action => (action & PLAYER_COMMAND_HELD_ACTIONS) === 0)
+  .reduce((mask, action) => mask | action, 0);
 const NEUTRAL_INPUT_FRAME = Object.freeze({
   move: Object.freeze({x: 0, y: 0}),
   look: Object.freeze({yaw: 0, pitch: 0}),
@@ -88,6 +99,43 @@ function eventSourceSequence(event, source) {
   const key = event?.kind === 'melee_strike' ? 'melee'
     : event?.kind === 'weapon_vented' ? 'manualVent' : 'fire';
   return source.eventSources?.[key] ?? source.command?.sequence ?? null;
+}
+
+function boundedLookDelta(value) {
+  return Math.max(-PLAYER_COMMAND_LOOK_QUANTIZATION,
+    Math.min(PLAYER_COMMAND_LOOK_QUANTIZATION, value));
+}
+
+function mergeCommands(previous, next) {
+  const newest = next.sequence >= previous.sequence ? next : previous;
+  const latestWeapon = [previous, next]
+    .filter(command => command.selectedWeapon !== null && command.selectedWeapon !== undefined)
+    .sort((left, right) => left.sequence - right.sequence)
+    .at(-1)?.selectedWeapon ?? null;
+  return {
+    ...newest,
+    look: {
+      yaw: boundedLookDelta(previous.look.yaw + next.look.yaw),
+      pitch: boundedLookDelta(previous.look.pitch + next.look.pitch),
+    },
+    actions: ((previous.actions | next.actions) & PLAYER_COMMAND_EDGE_ACTIONS)
+      | (newest.actions & PLAYER_COMMAND_HELD_ACTIONS),
+    selectedWeapon: latestWeapon,
+    manualVent: previous.manualVent || next.manualVent,
+  };
+}
+
+function checkpointTransferRank(transferId) {
+  const match = /^cp-(\d+)-(\d+)$/u.exec(String(transferId));
+  return match ? [Number(match[1]), Number(match[2])] : null;
+}
+
+function checkpointTransferIsOlder(left, right) {
+  const leftRank = checkpointTransferRank(left?.transferId ?? left);
+  const rightRank = checkpointTransferRank(right?.transferId ?? right);
+  if (!leftRank || !rightRank) return false;
+  return leftRank[0] < rightRank[0]
+    || (leftRank[0] === rightRank[0] && leftRank[1] <= rightRank[1]);
 }
 
 function emptyNarrativeFrameState() {
@@ -224,11 +272,14 @@ export class CoopMovementPreview {
     this.clearTimer = clearTimer;
     this.authority = role === PEER_ROLES.HOST ? createAuthority(resolveWeaponTuning) : null;
     this.remoteAvatar = null;
+    this.avatarLoadPromise = null;
+    this.lifecycleGeneration = 0;
     this.accumulator = 0;
     this.sequence = 0;
     this.latestFrame = null;
     this.pendingFrames = [];
     this.pendingFrameEventSources = new Map();
+    this.lastGuestCommandSequence = -1;
     this.connected = false;
     this.closed = false;
     this.pendingInput = null;
@@ -236,6 +287,7 @@ export class CoopMovementPreview {
     this.realtimeOpen = false;
     this.helloReceived = false;
     this.helloSent = false;
+    this.pendingPreHelloMessages = [];
     this.handshakeStarting = false;
     this.handshakeTimer = null;
     this.interruptionTimer = null;
@@ -255,6 +307,7 @@ export class CoopMovementPreview {
       ? new CoopActionRequestLedger({peerId: this.remoteId})
       : null;
     this.checkpointAssembler = null;
+    this.checkpointTransferIdentities = new Map();
     this.lastCheckpointTransferId = null;
     this.lastAppliedCheckpoint = null;
     this.pendingCheckpoint = null;
@@ -390,9 +443,32 @@ export class CoopMovementPreview {
 
   async ensureAvatar() {
     if (this.remoteAvatar) return this.remoteAvatar;
-    const template = await loadRemoteWardenTemplate({BABYLON: this.BABYLON, scene: this.scene});
-    this.remoteAvatar = createRemoteWardenAvatar({template, playerId: this.remoteId, useTemplateInstance: true});
-    return this.remoteAvatar;
+    if (this.avatarLoadPromise) return this.avatarLoadPromise;
+    const generation = this.lifecycleGeneration;
+    const loading = (async () => {
+      let template = null;
+      try {
+        template = await loadRemoteWardenTemplate({BABYLON: this.BABYLON, scene: this.scene});
+        if (this.closed || generation !== this.lifecycleGeneration) {
+          disposeRemoteWardenTemplate(template);
+          return null;
+        }
+        this.remoteAvatar = createRemoteWardenAvatar({
+          template,
+          playerId: this.remoteId,
+          useTemplateInstance: true,
+          ownsTemplate: true,
+        });
+        return this.remoteAvatar;
+      } catch (error) {
+        if (template) disposeRemoteWardenTemplate(template);
+        throw error;
+      } finally {
+        if (this.avatarLoadPromise === loading) this.avatarLoadPromise = null;
+      }
+    })();
+    this.avatarLoadPromise = loading;
+    return loading;
   }
 
   message({peerId, channel, envelope}) {
@@ -412,6 +488,14 @@ export class CoopMovementPreview {
       return;
     }
     try {
+    if (message.kind !== COOP_WIRE_MESSAGE_KINDS.HELLO && !this.helloReceived) {
+      if (this.pendingPreHelloMessages.length >= MAX_PRE_HELLO_MESSAGES) {
+        this.end('Connection closed after pre-compatibility data overflow');
+        return;
+      }
+      this.pendingPreHelloMessages.push({peerId, channel, envelope});
+      return;
+    }
     if (message.kind === COOP_WIRE_MESSAGE_KINDS.HELLO) {
       this.armHandshakeTimeout();
       const expectedRole = this.role === PEER_ROLES.HOST ? PEER_ROLES.GUEST : PEER_ROLES.HOST;
@@ -424,17 +508,23 @@ export class CoopMovementPreview {
         return;
       }
       this.helloReceived = true;
+      const pending = this.pendingPreHelloMessages.splice(0);
+      for (const queued of pending) {
+        if (this.closed) break;
+        this.message(queued);
+      }
       void this.finishHandshake().catch(error => this.end(`Connection closed during co-op startup: ${error.message}`));
     } else if (!this.helloReceived) {
       this.end('Connection closed: co-op data arrived before compatibility was verified');
     } else if (channel === 'realtime' && message.kind === COOP_WIRE_MESSAGE_KINDS.COMMAND && this.authority) {
+      if (message.command.sequence <= this.lastGuestCommandSequence) {
+        this.dropCounts.stale += 1;
+        return;
+      }
+      this.lastGuestCommandSequence = message.command.sequence;
       const previous = this.pendingFrames.at(-1);
       if (previous?.intendedTick === message.command.intendedTick) {
-        const merged = {
-          ...message.command,
-          actions: previous.actions | message.command.actions,
-          manualVent: previous.manualVent || message.command.manualVent,
-        };
+        const merged = mergeCommands(previous, message.command);
         const previousSources = this.pendingFrameEventSources.get(previous.sequence);
         this.pendingFrameEventSources.delete(previous.sequence);
         this.pendingFrameEventSources.set(
@@ -480,9 +570,31 @@ export class CoopMovementPreview {
       this.lastActionAck = message;
       this.onActionAck(message, this);
     } else if (channel === 'control' && message.kind === COOP_WIRE_MESSAGE_KINDS.CHECKPOINT_OFFER && !this.authority) {
+      const current = this.checkpointAssembler?.offer;
+      if (current?.transferId === message.transferId && current.checkpointHash === message.checkpointHash) return;
+      if ((this.checkpointTransferIdentities.has(message.transferId) && current?.transferId !== message.transferId)
+        || checkpointTransferIsOlder(message, current)
+        || checkpointTransferIsOlder(message, this.lastCheckpointTransferId)) {
+        this.dropCounts.stale += 1;
+        return;
+      }
+      this.checkpointTransferIdentities.delete(message.transferId);
+      this.checkpointTransferIdentities.set(message.transferId, message.checkpointHash);
+      while (this.checkpointTransferIdentities.size > MAX_CHECKPOINT_TRANSFER_IDENTITIES) {
+        this.checkpointTransferIdentities.delete(this.checkpointTransferIdentities.keys().next().value);
+      }
       this.checkpointAssembler = new CheckpointAssembler(message);
     } else if (channel === 'control' && message.kind === COOP_WIRE_MESSAGE_KINDS.CHECKPOINT_CHUNK && !this.authority) {
-      if (!this.checkpointAssembler) throw new RangeError('checkpoint chunk arrived before its offer');
+      if (!this.checkpointAssembler) {
+        this.dropCounts.stale += 1;
+        return;
+      }
+      if (message.transferId !== this.checkpointAssembler.offer.transferId
+        || message.stateHash !== this.checkpointAssembler.offer.stateHash
+        || message.checkpointHash !== this.checkpointAssembler.offer.checkpointHash) {
+        this.dropCounts.stale += 1;
+        return;
+      }
       this.checkpointAssembler.add(message);
       if (this.checkpointAssembler.parts.length === this.checkpointAssembler.offer.totalChunks) {
         const checkpoint = this.checkpointAssembler.assemble();
@@ -498,6 +610,8 @@ export class CoopMovementPreview {
           });
         }
         this.lastCheckpointTransferId = offer.transferId;
+        this.checkpointTransferIdentities.delete(offer.transferId);
+        this.checkpointTransferIdentities.set(offer.transferId, offer.checkpointHash);
         this.transport.sendControl(this.remotePeerId, COOP_WIRE_MESSAGE_KINDS.CHECKPOINT_APPLIED,
           createCoopCheckpointApplied({transferId: offer.transferId, stateHash: offer.stateHash}));
         this.checkpointAssembler = null;
@@ -640,16 +754,29 @@ export class CoopMovementPreview {
       this.healthFailure = 'recovery_timeout';
       this.end('Connection failed while synchronizing after recovery');
     }, this.checkpointAckTimeoutMs);
-    if (!this.authority) this.requestResume();
+    if (!this.authority) {
+      this.requestResume();
+    } else if (typeof this.createCheckpoint === 'function') {
+      if (this.pendingCheckpoint) {
+        if (!['resume', 'authority_resumed'].includes(this.pendingCheckpoint.reason)) {
+          this.resumeDeferred = true;
+          this.resumeDeferredReason = 'resume';
+        }
+      } else if (!this.sendCheckpoint('resume')) {
+        this.end('Connection closed: could not create resume checkpoint');
+      }
+    }
     return true;
   }
 
   markConnectionHealthy() {
     if (this.closed) return false;
-    if (this.interruptionTimer !== null && this.healthState === 'recovering') {
+    if (this.interruptionTimer !== null) {
       this.clearTimer(this.interruptionTimer);
       this.interruptionTimer = null;
     }
+    this.transportInterrupted = false;
+    this.interruptionCause = null;
     this.healthState = 'healthy';
     this.healthFailure = null;
     return true;
@@ -950,6 +1077,14 @@ export class CoopMovementPreview {
     if (!this.pollConnectionHealth()) return false;
     if (this.authority && this.pendingCheckpoint) this.pollCheckpointTransfer();
     if (!this.connected || this.closed || this.authorityPaused) return false;
+    // Both roles must finish the initial checkpoint exchange before gameplay
+    // can emit realtime input. Control and realtime data channels are
+    // independent, so a peer may have seen our HELLO while our HELLO or the
+    // initial checkpoint acknowledgement is still in flight on control.
+    const checkpointReady = this.authority
+      ? (typeof this.createCheckpoint !== 'function' || Boolean(this.lastConfirmedCheckpoint))
+      : (typeof this.applyCheckpoint !== 'function' || Boolean(this.lastAppliedCheckpoint));
+    if (!checkpointReady) return false;
     inputFrame = inputFrame ?? NEUTRAL_INPUT_FRAME;
     this.pendingInput = {
       ...inputFrame,
@@ -977,7 +1112,9 @@ export class CoopMovementPreview {
         intendedTick: tick + 1,
         acknowledgedServerTick: tick,
       });
-      this.pendingInput = {...this.pendingInput, look: {yaw: 0, pitch: 0}, fire: false, interact: false, jump: false, slide: false, melee: false, manualVent: false, selectedWeapon: null};
+      // Fire is held across catch-up ticks; a queued tap already released in
+      // this frame is consumed once, like the other action edges.
+      this.pendingInput = {...this.pendingInput, look: {yaw: 0, pitch: 0}, fire: inputFrame.fire === true, interact: false, jump: false, slide: false, melee: false, manualVent: false, selectedWeapon: null};
       if (this.authority) {
         const commands = {[this.localId]: command};
         const commandSources = new Map([[this.localId, [{
@@ -997,12 +1134,23 @@ export class CoopMovementPreview {
               .sort((left, right) => left.command.sequence - right.command.sequence);
             for (const frame of pendingFrames) this.pendingFrameEventSources.delete(frame.sequence);
             const newestFrame = rebasedFrames.at(-1).command;
+            const mergedLook = rebasedFrames.reduce((look, frame) => ({
+              yaw: boundedLookDelta(look.yaw + frame.command.look.yaw),
+              pitch: boundedLookDelta(look.pitch + frame.command.look.pitch),
+            }), {yaw: 0, pitch: 0});
+            const latestWeapon = [...rebasedFrames].reverse()
+              .find(frame => frame.command.selectedWeapon !== null && frame.command.selectedWeapon !== undefined)
+              ?.command.selectedWeapon ?? null;
             commands[this.remoteId] = {
               ...newestFrame,
+              look: mergedLook,
               // Several realtime packets can arrive between authority ticks.
               // Movement is latest-wins, but input edges must survive a later
               // neutral packet or attacks/jumps disappear nondeterministically.
-              actions: rebasedFrames.reduce((mask, frame) => mask | frame.command.actions, 0),
+              actions: (rebasedFrames.reduce((mask, frame) => mask | frame.command.actions, 0)
+                & PLAYER_COMMAND_EDGE_ACTIONS)
+                | (newestFrame.actions & PLAYER_COMMAND_HELD_ACTIONS),
+              selectedWeapon: latestWeapon,
               manualVent: rebasedFrames.some(frame => frame.command.manualVent),
             };
             commandSources.set(this.remoteId, rebasedFrames);
@@ -1065,13 +1213,16 @@ export class CoopMovementPreview {
 
   close() {
     if (this.closed) return;
+    this.lifecycleGeneration += 1;
     this.clearHandshakeTimeout();
     if (this.interruptionTimer !== null) this.clearTimer(this.interruptionTimer);
     this.interruptionTimer = null;
     this.pendingCheckpoint = null;
     this.pendingFrameEventSources.clear();
+    this.pendingPreHelloMessages.length = 0;
     this.queuedCheckpointReason = null;
     this.confirmedCheckpointTransfers.clear();
+    this.checkpointTransferIdentities.clear();
     this.resumeDeferred = false;
     this.resumeDeferredReason = null;
     if (this.authority && this.controlOpen) {
@@ -1083,6 +1234,7 @@ export class CoopMovementPreview {
     this.closed = true;
     this.connected = false;
     this.remoteAvatar?.dispose();
+    this.remoteAvatar = null;
     this.transport.close();
   }
 }

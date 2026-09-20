@@ -462,33 +462,17 @@ export function evaluateTrimmedFrameVertex(frameValues, uValue, vValue, out = {}
 
 export function atlasDirectionReference(input = {}) {
   const directionCount = Math.max(1, Math.floor(finite(input.directionCount, 8)));
-  const type = atlasSpriteTypeCode(input.type);
   const x = finite(input.x);
   const z = finite(input.z);
   let velocityX = finite(input.facingVelocityX, finite(input.velocityX));
   let velocityZ = finite(input.facingVelocityZ, finite(input.velocityZ));
-  const travel = Math.hypot(velocityX, velocityZ);
-
-  if (type === ATLAS_SPRITE_TYPE.mech) {
-    const corridorCenterX = finite(input.corridorCenterX);
-    const intentX = clamp((corridorCenterX - x) * 0.16, -0.42, 0.42);
-    const travelX = travel > 0.05 ? velocityX / travel : 0;
-    const travelZ = travel > 0.05 ? velocityZ / travel : -1;
-    const angle = Math.atan2(intentX * 0.78 + travelX * 0.22, -0.78 + travelZ * 0.22);
-    return positiveModulo(Math.floor(positiveModulo(angle, Math.PI * 2) / (Math.PI * 2) * directionCount), directionCount);
-  }
-  if (z < finite(input.gateZ) + 14) return Math.floor(directionCount * 0.5) % directionCount;
-  if (Math.abs(velocityX) + Math.abs(velocityZ) < 0.06) velocityZ = -1;
-  if (directionCount === 8) {
-    const absX = Math.abs(velocityX);
-    const absZ = Math.abs(velocityZ);
-    if (absX < absZ * 0.4142) return velocityZ >= 0 ? 0 : 4;
-    if (absZ < absX * 0.4142) return velocityX >= 0 ? 2 : 6;
-    if (velocityX >= 0) return velocityZ >= 0 ? 1 : 3;
-    return velocityZ >= 0 ? 7 : 5;
-  }
-  const angle = Math.atan2(velocityX, velocityZ);
-  return positiveModulo(Math.floor(positiveModulo(angle, Math.PI * 2) / (Math.PI * 2) * directionCount), directionCount);
+  if (Math.hypot(velocityX, velocityZ) < 0.06) { velocityX = 0; velocityZ = -1; }
+  // The shipped atlas' front is direction 4 (verified against the rendered rig).
+  // Select the heading relative to the camera's bearing in world space;
+  // a billboard still faces the camera, but its artwork need not face the player.
+  const view = Math.atan2(x - finite(input.cameraX, x), z - finite(input.cameraZ, z - 1));
+  const angle = Math.atan2(velocityX, velocityZ) - view;
+  return positiveModulo(Math.floor(angle / (Math.PI * 2) * directionCount + 0.5), directionCount);
 }
 
 export function atlasAnimationFrameReference(input = {}) {
@@ -786,25 +770,11 @@ vec4 deathFrameMeta(float cell, float row) {
   return texture2D(deathFrameMetaSampler, vec2((cell + 0.5) / deathFrameMetaWidth, (row + 0.5) / 3.0));
 }
 float directionFor(vec2 worldXZ, vec2 velocity, float typeCode) {
-  float travel = length(velocity);
-  if (typeCode > 4.5) {
-    float intentX = clamp((corridorCenterAt(worldXZ.y) - worldXZ.x) * 0.16, -0.42, 0.42);
-    vec2 travelDirection = travel > 0.05 ? velocity / travel : vec2(0.0, -1.0);
-    float angle = atan(intentX * 0.78 + travelDirection.x * 0.22, -0.78 + travelDirection.y * 0.22);
-    return mod(floor(mod(angle + 6.28318530718, 6.28318530718) / 6.28318530718 * directionCount), directionCount);
-  }
-  if (worldXZ.y < gateZ + 14.0) return mod(floor(directionCount * 0.5), directionCount);
-  if (abs(velocity.x) + abs(velocity.y) < 0.06) velocity = vec2(0.0, -1.0);
-  if (abs(directionCount - 8.0) < 0.5) {
-    float absX = abs(velocity.x);
-    float absZ = abs(velocity.y);
-    if (absX < absZ * 0.4142) return velocity.y >= 0.0 ? 0.0 : 4.0;
-    if (absZ < absX * 0.4142) return velocity.x >= 0.0 ? 2.0 : 6.0;
-    if (velocity.x >= 0.0) return velocity.y >= 0.0 ? 1.0 : 3.0;
-    return velocity.y >= 0.0 ? 7.0 : 5.0;
-  }
-  float angle = atan(velocity.x, velocity.y);
-  return mod(floor(mod(angle + 6.28318530718, 6.28318530718) / 6.28318530718 * directionCount), directionCount);
+  if (length(velocity) < 0.06) velocity = vec2(0.0, -1.0);
+  vec2 view = worldXZ - cameraPosition.xz;
+  float viewAngle = length(view) > 0.001 ? atan(view.x, view.y) : 0.0;
+  float angle = atan(velocity.x, velocity.y) - viewAngle;
+  return mod(floor(angle / 6.28318530718 * directionCount + 0.5) + directionCount * 2.0, directionCount);
 }
 float frameFor(vec2 worldXZ, vec2 velocity, float seed, float typeCode) {
   float rate = 1.0;

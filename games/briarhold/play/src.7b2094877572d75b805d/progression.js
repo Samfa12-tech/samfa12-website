@@ -688,7 +688,10 @@ function normaliseCumulative(value) {
   if (!isPlainObject(value)) throw new TypeError("relationship cumulative must be an object");
   return Object.fromEntries(Object.entries(value).map(([key, count]) => [
     key,
-    toNonNegativeInteger(count, `relationship cumulative ${key}`),
+    (key === "repairedIntegrity" ? toNonNegativeNumber : toNonNegativeInteger)(
+      count,
+      `relationship cumulative ${key}`,
+    ),
   ]));
 }
 
@@ -1619,6 +1622,14 @@ function toNonNegativeInteger(value, name) {
   const normalised = value ?? 0;
   if (!Number.isInteger(normalised) || normalised < 0) {
     throw new RangeError(`${name} must be a non-negative integer`);
+  }
+  return normalised;
+}
+
+function toNonNegativeNumber(value, name) {
+  const normalised = value ?? 0;
+  if (!Number.isFinite(normalised) || normalised < 0) {
+    throw new RangeError(`${name} must be a non-negative number`);
   }
   return normalised;
 }

@@ -42,6 +42,27 @@ export const REMOTE_WARDEN_MODEL_YAW_OFFSET = Math.PI;
 
 const DIRECT_TEMPLATE_INSTANCES = new WeakSet();
 
+function disposeImportedWarden(imported) {
+  if (!imported || typeof imported !== 'object') return;
+  for (const clip of imported.animationGroups ?? []) {
+    clip?.stop?.();
+    clip?.dispose?.();
+  }
+  for (const skeleton of imported.skeletons ?? []) skeleton?.dispose?.();
+  const root = imported.meshes?.[0];
+  if (root?.dispose) root.dispose(false, true);
+  else for (const mesh of imported.meshes ?? []) mesh?.dispose?.(false, true);
+}
+
+export function disposeRemoteWardenTemplate(template) {
+  if (!template || typeof template !== 'object') return;
+  disposeImportedWarden({
+    meshes: template.meshes ?? (template.root ? [template.root] : []),
+    skeletons: template.skeleton ? [template.skeleton] : [],
+    animationGroups: Object.values(template.clips ?? {}),
+  });
+}
+
 function finite(value, fallback = 0) {
   const number = Number(value);
   return Number.isFinite(number) ? number : fallback;
@@ -199,48 +220,53 @@ export async function loadRemoteWardenTemplate({BABYLON, scene, asset = REMOTE_W
   }
   const {rootUrl, fileName} = splitRemoteWardenAssetPath(asset);
   const imported = await BABYLON.SceneLoader.ImportMeshAsync('', rootUrl, fileName, scene);
-  const animationByName = new Map((imported.animationGroups ?? []).map((group) => [group.name, group]));
-  const nodeByName = new Map([
-    ...(imported.meshes ?? []),
-    ...(imported.transformNodes ?? []),
-  ].map((node) => [node.name, node]));
+  try {
+    const animationByName = new Map((imported.animationGroups ?? []).map((group) => [group.name, group]));
+    const nodeByName = new Map([
+      ...(imported.meshes ?? []),
+      ...(imported.transformNodes ?? []),
+    ].map((node) => [node.name, node]));
 
-  for (const clip of Object.values(REMOTE_WARDEN_CLIPS)) {
-    if (!animationByName.has(clip)) throw new Error(`Remote Warden is missing animation ${clip}`);
-  }
-  for (const socket of REMOTE_WARDEN_SOCKETS) {
-    if (!nodeByName.has(socket)) throw new Error(`Remote Warden is missing socket ${socket}`);
-  }
+    for (const clip of Object.values(REMOTE_WARDEN_CLIPS)) {
+      if (!animationByName.has(clip)) throw new Error(`Remote Warden is missing animation ${clip}`);
+    }
+    for (const socket of REMOTE_WARDEN_SOCKETS) {
+      if (!nodeByName.has(socket)) throw new Error(`Remote Warden is missing socket ${socket}`);
+    }
 
-  const materials = new Set((imported.meshes ?? []).map(mesh => mesh.material).filter(Boolean));
-  for (const mesh of imported.meshes ?? []) mesh.receiveShadows = true;
-  for (const material of materials) {
-    material.directIntensity = Math.max(finite(material.directIntensity, 1), REMOTE_WARDEN_LIGHTING.directIntensity);
-    material.environmentIntensity = Math.max(
-      finite(material.environmentIntensity, 1),
-      REMOTE_WARDEN_LIGHTING.environmentIntensity,
-    );
-    material.emissiveIntensity = Math.max(
-      finite(material.emissiveIntensity, 1),
-      REMOTE_WARDEN_LIGHTING.emissiveIntensity,
-    );
-    material.maxSimultaneousLights = REMOTE_WARDEN_LIGHTING.maxSimultaneousLights;
-  }
-  for (const group of animationByName.values()) group.stop?.();
-  imported.meshes?.[0]?.setEnabled?.(false);
+    const materials = new Set((imported.meshes ?? []).map(mesh => mesh.material).filter(Boolean));
+    for (const mesh of imported.meshes ?? []) mesh.receiveShadows = true;
+    for (const material of materials) {
+      material.directIntensity = Math.max(finite(material.directIntensity, 1), REMOTE_WARDEN_LIGHTING.directIntensity);
+      material.environmentIntensity = Math.max(
+        finite(material.environmentIntensity, 1),
+        REMOTE_WARDEN_LIGHTING.environmentIntensity,
+      );
+      material.emissiveIntensity = Math.max(
+        finite(material.emissiveIntensity, 1),
+        REMOTE_WARDEN_LIGHTING.emissiveIntensity,
+      );
+      material.maxSimultaneousLights = REMOTE_WARDEN_LIGHTING.maxSimultaneousLights;
+    }
+    for (const group of animationByName.values()) group.stop?.();
+    imported.meshes?.[0]?.setEnabled?.(false);
 
-  return Object.freeze({
-    asset,
-    root: imported.meshes?.[0] ?? null,
-    meshes: Object.freeze([...(imported.meshes ?? [])]),
-    skeleton: imported.skeletons?.[0] ?? null,
-    clips: Object.freeze(Object.fromEntries(
-      Object.entries(REMOTE_WARDEN_CLIPS).map(([role, name]) => [role, animationByName.get(name)]),
-    )),
-    sockets: Object.freeze(Object.fromEntries(
-      REMOTE_WARDEN_SOCKETS.map((name) => [name, nodeByName.get(name)]),
-    )),
-  });
+    return Object.freeze({
+      asset,
+      root: imported.meshes?.[0] ?? null,
+      meshes: Object.freeze([...(imported.meshes ?? [])]),
+      skeleton: imported.skeletons?.[0] ?? null,
+      clips: Object.freeze(Object.fromEntries(
+        Object.entries(REMOTE_WARDEN_CLIPS).map(([role, name]) => [role, animationByName.get(name)]),
+      )),
+      sockets: Object.freeze(Object.fromEntries(
+        REMOTE_WARDEN_SOCKETS.map((name) => [name, nodeByName.get(name)]),
+      )),
+    });
+  } catch (error) {
+    disposeImportedWarden(imported);
+    throw error;
+  }
 }
 
 function clonedNodeMap(sourceRoot) {
@@ -271,10 +297,11 @@ export function remoteWardenClipRoleForState(state) {
  * Instantiate and drive one remote third-person Warden. It is deliberately
  * client-presentational and consumes only replicated NetworkPlayerState data.
  */
-export function createRemoteWardenAvatar({template, playerId, tickRate = 30, useTemplateInstance = false} = {}) {
+export function createRemoteWardenAvatar({template, playerId, tickRate = 30, useTemplateInstance = false, ownsTemplate = false} = {}) {
   if (!template?.root?.instantiateHierarchy) throw new TypeError('A loaded Remote Warden template is required');
   if (!playerId) throw new TypeError('Remote Warden playerId is required');
   const direct = useTemplateInstance === true;
+  const templateOwned = direct && ownsTemplate === true;
   if (direct && DIRECT_TEMPLATE_INSTANCES.has(template)) {
     throw new Error('Remote Warden template instance is already in use');
   }
@@ -304,6 +331,7 @@ export function createRemoteWardenAvatar({template, playerId, tickRate = 30, use
   const interpolation = createRemoteWardenInterpolationBuffer({tickRate});
   let activeRole = null;
   let visible = false;
+  let disposed = false;
 
   function play(role, {restart = false} = {}) {
     if (role === activeRole && !restart) return;
@@ -352,6 +380,8 @@ export function createRemoteWardenAvatar({template, playerId, tickRate = 30, use
       return sample;
     },
     dispose() {
+      if (disposed) return;
+      disposed = true;
       interpolation.clear();
       for (const clip of Object.values(clips)) {
         clip.stop?.();
@@ -359,6 +389,7 @@ export function createRemoteWardenAvatar({template, playerId, tickRate = 30, use
       }
       if (direct) {
         root.setEnabled?.(false);
+        if (templateOwned) disposeRemoteWardenTemplate(template);
         DIRECT_TEMPLATE_INSTANCES.delete(template);
       } else {
         // Clones share the lazily loaded template material/texture payload; one

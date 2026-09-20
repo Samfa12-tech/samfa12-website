@@ -32,6 +32,8 @@ export function createCoopAttackPresentationLedger({
   const pending = [];
   const authorityKeys = new Set();
   const authorityOrder = [];
+  let fireWindow = null;
+  let lastObservedCommand = -1;
   const counts = {predicted: 0, reconciled: 0, expiredPredictions: 0, authorityPresented: 0, duplicateAuthority: 0};
 
   function purge(now) {
@@ -43,14 +45,28 @@ export function createCoopAttackPresentationLedger({
   }
 
   return Object.freeze({
+    observeCommand({commandSequence, fire, weaponId}) {
+      if (!Number.isInteger(commandSequence) || commandSequence <= lastObservedCommand) return false;
+      lastObservedCommand = commandSequence;
+      if (fireWindow && (!fire || fireWindow.weaponId !== weaponId)) {
+        fireWindow.last = commandSequence - 1;
+        fireWindow = null;
+      }
+      if (fire && !fireWindow) fireWindow = {first: commandSequence, last: null, weaponId};
+      return true;
+    },
     predict(attack, nowMs) {
       const now = Number(nowMs);
       if (!Number.isFinite(now)) throw new TypeError('prediction time must be finite');
       const type = attackType(attack);
       const commandSequence = Number.isInteger(attack?.commandSequence) && attack.commandSequence >= 0
         ? attack.commandSequence : null;
+      const attackSequence = Number.isInteger(attack?.attackSequence) && attack.attackSequence >= 1
+        ? attack.attackSequence : null;
       purge(now);
-      pending.push({...type, commandSequence, at: now});
+      pending.push({...type, commandSequence, attackSequence,
+        fireWindow: type.kind === 'weapon_fired' && fireWindow?.weaponId === type.weaponId ? fireWindow : null,
+        at: now});
       while (pending.length > MAX_PENDING_PREDICTIONS) {
         pending.shift();
         counts.expiredPredictions += 1;
@@ -73,10 +89,24 @@ export function createCoopAttackPresentationLedger({
       if (event.actorId === localActorId) {
         const type = attackType(event);
         const commandSequence = event.payload?.commandSequence;
-        const match = pending.findIndex(item => item.kind === type.kind && item.weaponId === type.weaponId
-          && (Number.isInteger(commandSequence)
-            ? item.commandSequence === commandSequence
-            : item.commandSequence === null));
+        const attackSequence = type.kind === 'melee_strike'
+          ? event.payload?.meleeSequence : event.payload?.shotSequence;
+        const exactCommand = Number.isInteger(commandSequence)
+          ? pending.findIndex(item => item.kind === type.kind && item.weaponId === type.weaponId
+            && item.commandSequence === commandSequence)
+          : -1;
+        const match = exactCommand >= 0 ? exactCommand : pending.findIndex(item => {
+          if (item.kind !== type.kind || item.weaponId !== type.weaponId) return false;
+          if (!Number.isInteger(commandSequence)) return item.commandSequence === null;
+          // Host/client cooldowns can select adjacent input frames for the
+          // same numbered shot. Match its ordinal only inside the actual
+          // continuous fire interval, never across release or weapon change.
+          if (type.kind !== 'weapon_fired' || !Number.isInteger(attackSequence)
+            || item.attackSequence !== attackSequence || !item.fireWindow) return false;
+          return commandSequence >= item.fireWindow.first
+            && (item.fireWindow.last === null || commandSequence <= item.fireWindow.last)
+            && now >= item.at && now - item.at <= predictionWindowMs;
+        });
         if (match >= 0) {
           pending.splice(match, 1);
           counts.reconciled += 1;
@@ -90,6 +120,8 @@ export function createCoopAttackPresentationLedger({
       pending.length = 0;
       authorityKeys.clear();
       authorityOrder.length = 0;
+      fireWindow = null;
+      lastObservedCommand = -1;
     },
     diagnostics() {
       return Object.freeze({...counts, pendingPredictions: pending.length, authoritativeEvents: authorityKeys.size});

@@ -1352,6 +1352,10 @@ export function isForestScatterAllowed(xValue, zValue) {
     && z >= FOREST_FORTRESS_CLEARING.minZ
     && z <= FOREST_FORTRESS_CLEARING.maxZ;
   if (insideFortressClearing) return false;
+  // Beyond the authored spawn approach, decorative canopy may close the old
+  // three-lane gaps. Keep the actual western emergence road open at every depth.
+  if (z >= 160) return Math.abs(x - HOST_EMERGENCE_PROFILE.laneCenterX)
+    >= HOST_EMERGENCE_PROFILE.treeLaneHalfWidth + 5;
   const westLane = Math.abs(x + 16) < 8.8;
   const eastLane = Math.abs(x - 16) < 8.8;
   return !westLane && !eastLane && !(Math.abs(x) < 8 && z > 0);
@@ -1444,8 +1448,8 @@ export const FOREST_TREE_BANDS = Object.freeze({
   north: Object.freeze({z: HOST_EMERGENCE_PROFILE.treeLineZ, minX: -49, maxX: 49}),
 });
 export const FOREST_LAYER_COUNTS = Object.freeze({
-  desktop: Object.freeze({near: 190, mid: 48, far: 96}),
-  lowSpec: Object.freeze({near: 72, mid: 24, far: 48}),
+  desktop: Object.freeze({near: 190, mid: 48, far: 288}),
+  lowSpec: Object.freeze({near: 72, mid: 24, far: 144}),
 });
 
 function forestBandCounts(treeCount) {
@@ -1524,8 +1528,8 @@ export function forestDepthTransforms(layer = 'mid', requestedCount = 0) {
         y: layer === 'mid' ? -0.08 : -0.14,
         z: -22 + amount * (layer === 'mid' ? 164 : 210),
         ry: (globalIndex * 2.399963229728653) % (Math.PI * 2),
-        sx: (layer === 'mid' ? 0.82 : 0.74) + ((globalIndex * 31) % 29) / 100,
-        sy: (layer === 'mid' ? 0.84 : 0.9) + ((globalIndex * 23) % 37) / 100,
+        sx: (layer === 'mid' ? 0.82 : 1.25) + ((globalIndex * 31) % 29) / 100,
+        sy: (layer === 'mid' ? 0.84 : 1.6) + ((globalIndex * 23) % 37) / 100,
         sz: (layer === 'mid' ? 0.82 : 1),
       });
     }
@@ -1540,12 +1544,14 @@ export function forestDepthTransforms(layer = 'mid', requestedCount = 0) {
     transforms.push({
       layer,
       band: 'north',
-      x: side * (28 + rank / ranksPerSide * (layer === 'mid' ? 48 : 82)),
+      x: layer === 'far'
+        ? HOST_EMERGENCE_PROFILE.laneCenterX + side * (HOST_EMERGENCE_PROFILE.treeLaneHalfWidth + 5 + rank / ranksPerSide * 96)
+        : side * (28 + rank / ranksPerSide * 48),
       y: layer === 'mid' ? -0.08 : -0.14,
       z: (layer === 'mid' ? 132 : 166) + (index % 4) * (layer === 'mid' ? 3.6 : 7.2),
       ry: (globalIndex * 2.399963229728653) % (Math.PI * 2),
-      sx: (layer === 'mid' ? 0.82 : 0.74) + ((globalIndex * 31) % 29) / 100,
-      sy: (layer === 'mid' ? 0.84 : 0.9) + ((globalIndex * 23) % 37) / 100,
+      sx: (layer === 'mid' ? 0.82 : 1.25) + ((globalIndex * 31) % 29) / 100,
+      sy: (layer === 'mid' ? 0.84 : 1.6) + ((globalIndex * 23) % 37) / 100,
       sz: layer === 'mid' ? 0.82 : 1,
     });
   }
@@ -2377,7 +2383,7 @@ function buildForestImpostors(BABYLON, scene, transforms) {
     new URL(`../${FOREST_IMPOSTOR_ASSET}`, import.meta.url).href,
     scene,
     true,
-    false,
+    true,
     BABYLON.Texture.BILINEAR_SAMPLINGMODE,
     () => {
       state.status = 'ready';
@@ -2396,6 +2402,10 @@ function buildForestImpostors(BABYLON, scene, transforms) {
   texture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
   material.diffuseTexture = texture;
   material.opacityTexture = texture;
+  // This photograph already contains light. A StandardMaterial with lighting
+  // disabled needs an emissive channel; diffuse alone renders black silhouettes.
+  material.emissiveTexture = texture;
+  material.emissiveColor = BABYLON.Color3.White();
   material.useAlphaFromDiffuseTexture = true;
   material.disableLighting = true;
   material.fogEnabled = true;

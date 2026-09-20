@@ -278,6 +278,7 @@ import {
   nearestCollisionVolumes,
   nearestHubPoints,
 } from "./playtest-reporter.js";
+import {captureReproSave, createReportErrorHistory} from './playtest-diagnostics.js';
 import {
   GAME_PHASES as PROGRESSION_PHASES,
   PERMANENT_RANK_TRACKS,
@@ -314,7 +315,7 @@ import {
   updateRenderGovernor,
 } from "./render-governor.js";
 import {createEnemyRenderer, resolveRendererProfile} from "./renderer.js";
-import {createSaveAdapter} from "./save.js";
+import {createSaveAdapter, DEFAULT_SAVE_KEY} from "./save.js";
 import {installDebugDiagnostics} from "./debug-diagnostics.js";
 import {
   KNIFE_MELEE,
@@ -616,6 +617,22 @@ let lastCoopDropBudget = null;
 let lastCoopConnectionHealth = null;
 let coopAttackPresentation = null;
 let coopAttackEffectCounts = {localPrediction: 0, authorityOwner: 0, authorityRemote: 0, tracers: 0, melee: 0};
+let coopAttackDecisionTrace = [];
+let coopAttackEpoch = null;
+let coopPredictedWeaponShots = {};
+function syncCoopAttackEpoch() {
+  const epoch = run?.runOrdinal ?? null;
+  if (epoch === coopAttackEpoch) return;
+  coopAttackEpoch = epoch;
+  coopPredictedWeaponShots = {};
+  coopAttackPresentation?.reset();
+}
+const COOP_ATTACK_TRACE_LIMIT = 96;
+function recordCoopAttackDecision(entry) {
+  if (!TEST_MODE) return;
+  coopAttackDecisionTrace.push(Object.freeze({...entry}));
+  if (coopAttackDecisionTrace.length > COOP_ATTACK_TRACE_LIMIT) coopAttackDecisionTrace.shift();
+}
 const coopAuthorityPauseScopes = createCoopBoundaryPauseScopes();
 let lifecycleCoopPauseToken = null;
 let coopSignaling = null;
@@ -657,6 +674,7 @@ const CAMPAIGN_ENDING_SCENE_IDS = new Set([
 ]);
 let pendingTerminalTransition = null;
 let lastFrameAt = performance.now() / 1000;
+const reportErrorHistory = createReportErrorHistory();
 const framePacer = createFramePacer({targetFps: coarsePointer ? 60 : 0, startAt: lastFrameAt});
 let presentedFrame = 0;
 let currentInputSource = coarsePointer ? INPUT_SOURCES.TOUCH : INPUT_SOURCES.MOUSE;
@@ -3175,14 +3193,13 @@ function enemyTargetHalfHeight(type, id = null) {
 }
 
 function touchEnemyAimHeight(type, id, ray) {
-  if (type !== SPOREWING) return enemyAimHeight(type);
   return reticleClampedTargetHeight({
     origin: ray.origin,
     aimDirection: ray.direction,
     targetX: battlefield.x[id],
     targetZ: battlefield.z[id],
-    centerY: sporewingTargetProfile(id).centerY,
-    halfHeight: sporewingTargetProfile(id).halfHeight,
+    centerY: enemyAimHeight(type, id),
+    halfHeight: enemyTargetHalfHeight(type, id),
   });
 }
 
@@ -5097,6 +5114,7 @@ function presentCoopAttackEffect({weaponId, shotSequence = 0, origin, direction,
 function presentCoopGuestCommand(command) {
   if (coopPreview?.role !== "guest" || !coopPreview.connected || coopPreview.authorityPaused
     || phase !== GAME_PHASES.COMBAT) return false;
+  syncCoopAttackEpoch();
   const now = performance.now() / 1000;
   if (command.selectedWeapon !== null) {
     const requestedWeapon = WEAPON_IDS[command.selectedWeapon];
@@ -5105,12 +5123,18 @@ function presentCoopGuestCommand(command) {
       selectWeapon(weapon, requestedWeapon);
     }
   }
+  const firing = (command.actions & PLAYER_COMMAND_ACTIONS.FIRE) !== 0;
+  coopAttackPresentation?.observeCommand({commandSequence: command.sequence, fire: firing, weaponId: weapon.selected});
   currentCombatTuning = runtimeProgressionTuning(profile, run, weapon.selected, {ads: adsActive});
   if ((command.actions & PLAYER_COMMAND_ACTIONS.MELEE) !== 0 && now + 1e-9 >= knife.nextReadyAt) {
     knife.nextReadyAt = now + KNIFE_MELEE.cooldownSeconds;
     knife.strikes += 1;
     coopAttackPresentation?.predict({kind: "melee_strike", weaponId: "knife",
       commandSequence: command.sequence}, performance.now());
+    recordCoopAttackDecision({
+      phase: "prediction", kind: "melee_strike", actorId: coopPreview.localId,
+      weaponId: "knife", commandSequence: command.sequence, shotSequence: null,
+    });
     presentCoopAttackEffect({weaponId: "knife", localOwner: true, source: "local-prediction"});
   }
   ui.viewmodel.classList.toggle("is-holstered", now + 1e-9 < knife.nextReadyAt);
@@ -5121,8 +5145,14 @@ function presentCoopGuestCommand(command) {
       const ray = world.firstPersonRay(coopWeaponPresentationRange(shot.id));
       const direction = ray.direction;
       const worldHit = world.firstWorldRayHit(ray.origin, direction, coopWeaponPresentationRange(shot.id));
+      const predictedOrdinal = (coopPredictedWeaponShots[shot.id] ?? 0) + 1;
+      coopPredictedWeaponShots[shot.id] = predictedOrdinal;
       coopAttackPresentation?.predict({kind: "weapon_fired", weaponId: shot.id,
-        commandSequence: command.sequence}, performance.now());
+        commandSequence: command.sequence, attackSequence: predictedOrdinal}, performance.now());
+      recordCoopAttackDecision({
+        phase: "prediction", kind: "weapon_fired", actorId: coopPreview.localId,
+        weaponId: shot.id, commandSequence: command.sequence, shotSequence: predictedOrdinal,
+      });
       presentCoopAttackEffect({
         weaponId: shot.id,
         shotSequence: shot.shot,
@@ -5141,7 +5171,22 @@ function presentCoopGuestCommand(command) {
 
 function applyCoopSemanticPresentationEvent(event) {
   if (event.category === "combat" && ["weapon_fired", "melee_strike"].includes(event.kind)) {
+    syncCoopAttackEpoch();
+    if (event.actorId === coopPreview?.localId && event.kind === 'weapon_fired') {
+      const id = event.payload?.weaponId;
+      coopPredictedWeaponShots[id] = Math.max(coopPredictedWeaponShots[id] ?? 0, event.payload?.shotSequence ?? 0);
+    }
+    const before = TEST_MODE ? coopAttackPresentation?.diagnostics?.() ?? null : null;
     const decision = coopAttackPresentation?.reconcile(event, performance.now()) ?? {present: true};
+    const after = TEST_MODE ? coopAttackPresentation?.diagnostics?.() ?? null : null;
+    recordCoopAttackDecision({
+      phase: "reconcile", kind: event.kind, actorId: event.actorId,
+      weaponId: event.payload?.weaponId ?? (event.kind === "melee_strike" ? "knife" : null),
+      commandSequence: event.payload?.commandSequence ?? null,
+      shotSequence: event.payload?.shotSequence ?? event.payload?.meleeSequence ?? event.sequence,
+      decision: decision.source, present: decision.present,
+      pendingBefore: before?.pendingPredictions ?? null, pendingAfter: after?.pendingPredictions ?? null,
+    });
     if (decision.present) presentCoopAttackEffect({
       weaponId: event.kind === "melee_strike" ? "knife" : event.payload.weaponId,
       shotSequence: event.payload.shotSequence ?? event.payload.meleeSequence ?? event.sequence,
@@ -5634,6 +5679,9 @@ async function createCoopForRole(role, {turnServers = []} = {}) {
     localActorId: role === "host" ? "warden-host" : "warden-guest",
   });
   coopAttackEffectCounts = {localPrediction: 0, authorityOwner: 0, authorityRemote: 0, tracers: 0, melee: 0};
+  coopAttackDecisionTrace = [];
+  coopAttackEpoch = null;
+  coopPredictedWeaponShots = {};
   coopPersistenceBoundary = createCoopPersistenceBoundary({
     role,
     profile,
@@ -6203,8 +6251,44 @@ function capturePlaytestContext() {
     {currentY: player.position.y, maxStepHeight: Infinity, maxDropHeight: Infinity},
   );
   const coopDiagnostics = coopPreview?.diagnostics?.() ?? null;
+  const nearbyEnemies = [];
+  for (let id = 0; id < (battlefield?.slotCount ?? 0); id += 1) {
+    if (battlefield.status[id] !== ACTIVE) continue;
+    nearbyEnemies.push({id, distance: reportNumber(Math.hypot(battlefield.x[id] - position.x, battlefield.z[id] - position.z)),
+      type: battlefield.type[id], hp: reportNumber(battlefield.hp[id]),
+      x: reportNumber(battlefield.x[id]), z: reportNumber(battlefield.z[id]),
+      targetPlayerIndex: battlefield.playerTargetIndexById[id],
+      obstacleRoute: battlefield.obstacleRouteIndex[id],
+      routeTargetX: Number.isFinite(battlefield.obstacleRouteTargetX[id]) ? reportNumber(battlefield.obstacleRouteTargetX[id]) : null,
+      routeTargetZ: Number.isFinite(battlefield.obstacleRouteTargetZ[id]) ? reportNumber(battlefield.obstacleRouteTargetZ[id]) : null,
+      attackCooldown: reportNumber(battlefield.attackCooldown[id])});
+    nearbyEnemies.sort((a, b) => a.distance - b.distance);
+    if (nearbyEnemies.length > 8) nearbyEnemies.pop();
+  }
   return {
     build: {version: BRIARHOLD_VERSION, cacheKey: playtestRuntimeCacheKey()},
+    reproduction: captureReproSave({profile, run, player: serializePlayer(),
+      persistedSave: () => localStorage.getItem(DEFAULT_SAVE_KEY), role: coopDiagnostics?.role ?? 'solo'}),
+    runtime: {
+      capturedBeforeReportPause: true,
+      documentVisibility: document.visibilityState,
+      documentFocused: document.hasFocus(),
+      presentedFrame, frameAgeMs: reportNumber(performance.now() - lastFrameAt * 1000),
+      frameLoopFaultCount, lastFrameLoopFaultAt,
+      errors: reportErrorHistory.snapshot(),
+      controls: {
+        pointerLocked: document.pointerLockElement === canvas,
+        touchMoveActive: touch.movePointer !== null, touchLookActive: touch.lookPointer !== null,
+        touchFirePointers: touch.firePointers.size, touchMove: {...touch.move},
+        mouseFire, touchFire, mouseAim, touchAim, adsActive,
+        fallbackLookActive: fallbackLookPointer !== null,
+        reportControllerReleaseGate, controllerMappingReleaseGate,
+        pendingTerminalTransition: Boolean(pendingTerminalTransition),
+        dialogueOpen: narrativePresentation.isOpen, serviceOpen: !ui.hubServicePanel.hidden,
+        oathHallOpen: !ui.oathHallPanel.hidden, goalsOpen: goalsPresentation.isOpen,
+        pauseOpen: !ui.pauseOverlay.hidden, coopIssueCaptureOpen,
+      },
+    },
     game: {
       phase,
       paused,
@@ -6255,6 +6339,9 @@ function capturePlaytestContext() {
       lastAction: lastControllerAction,
     },
     combat: {
+      weapon: {selected: weapon.selected, heat: weapon.heat, shots: weapon.shots,
+        autoFire: profile.settings.autoFire, autoMelee: profile.settings.autoMelee},
+      nearbyEnemies,
       outerGateBreached: Boolean(battlefield?.outerGateBreached?.[WEST]),
       recent: recentCombatAttribution(
         combatAttribution,
@@ -7053,11 +7140,27 @@ function updateRecovery(dt) {
   void startPreparedWaveAtCoopBoundary(run.wave, {reason: "wave_boundary"});
 }
 
+let frameLoopFaultCount = 0;
+let lastFrameLoopFaultAt = null;
+
 function tick(nowMs) {
+  // Keep exactly one successor even if simulation or presentation throws.
+  // Otherwise a transient exception kills gameplay for this document's entire
+  // lifetime, including after Start New Run replaces the failed run state.
+  requestAnimationFrame(tick);
+  try {
+    presentFrame(nowMs);
+  } catch (error) {
+    frameLoopFaultCount += 1;
+    lastFrameLoopFaultAt = nowMs;
+    throw error; // Preserve browser error reporting; do not conceal the trigger.
+  }
+}
+
+function presentFrame(nowMs) {
   const now = nowMs / 1000;
   const healthSession = coopPreview;
   if (healthSession && !healthSession.pollConnectionHealth?.(nowMs) && coopPreview !== healthSession) {
-    requestAnimationFrame(tick);
     return;
   }
   // Embedded browser panes do not always share normal tab visibility
@@ -7065,7 +7168,6 @@ function tick(nowMs) {
   // reports this document as hidden; native lifecycle handling still pauses
   // combat and audio when the app genuinely backgrounds.
   if (!shouldPresentFrame(framePacer, now)) {
-    requestAnimationFrame(tick);
     return;
   }
   const rawDt = Math.max(0, now - lastFrameAt);
@@ -7186,7 +7288,6 @@ function tick(nowMs) {
     refreshGraphicsResolutionStatus();
     saveProfileSettings({autoHardwareScale: renderAdjustment.scale});
   }
-  requestAnimationFrame(tick);
 }
 
 function updateMovePointer(event) {
@@ -7752,6 +7853,7 @@ globalThis.__BRIARHOLD__ = {
   get diagnostics() {
     return {
       phase, inputSource: currentInputSource, paused, testMode: TEST_MODE, lastCoopEndedReason, lastCoopDropBudget,
+      frameLoop: {faultCount: frameLoopFaultCount, lastFaultAt: lastFrameLoopFaultAt, presentedFrame},
       lastCoopConnectionHealth,
       touchPointers: {
         move: touch.movePointer,
@@ -7782,6 +7884,7 @@ globalThis.__BRIARHOLD__ = {
       coop: coopPreview?.diagnostics?.() ?? null,
       coopAttackPresentation: coopAttackPresentation?.diagnostics?.() ?? null,
       coopAttackEffects: {...coopAttackEffectCounts},
+      coopAttackDecisionTrace: TEST_MODE ? coopAttackDecisionTrace.map(entry => ({...entry})) : null,
       coopWorld: coopPreview ? {
         stateHash: coopPreview.latestFrame?.stateHash ?? null,
         worldFrameEnemies: coopPreview.latestFrame?.crowd?.total ?? 0,
@@ -7864,6 +7967,14 @@ globalThis.__BRIARHOLD__ = {
       return structuredClone({shots: combatAimEvidence, weapon: weapon.selected,
         profile: automaticFireProfile(weapon.selected, currentCombatTuning ?? {}),
         tuning: currentCombatTuning, target: cachedTouchAutoFireTarget});
+    },
+    inspectTouchTargetForTest(id) {
+      if (!TEST_MODE || !battlefield || !Number.isInteger(id)) return null;
+      const ray = world.firstPersonRay(160);
+      const point = {x: battlefield.x[id], y: touchEnemyAimHeight(battlefield.type[id], id, ray), z: battlefield.z[id]};
+      return {origin: ray.origin, direction: ray.direction, point, status: battlefield.status[id],
+        occluded: world.isWorldOccluded(ray.origin, point),
+        target: touchAimAssistTarget(createInputFrame({source: INPUT_SOURCES.TOUCH}), ray, {requireAimAssist: false, coneDegrees: TOUCH_AUTO_FIRE_CONE_DEGREES, maxDistance: automaticFireProfile(weapon.selected, currentCombatTuning ?? {}).range})};
     },
     configureBalanceForTest(unlocked = false) {
       if (!TEST_MODE || coopPreview?.role === 'guest') return false;
@@ -8215,6 +8326,10 @@ globalThis.__BRIARHOLD__ = {
     sendCoopFireForTest(selectedWeapon = null) {
       if (!TEST_MODE || coopPreview?.role !== 'guest' || phase !== GAME_PHASES.COMBAT) return false;
       return coopPreview.update(1 / 30, createInputFrame({...EMPTY_INPUT_FRAME, fire: true, selectedWeapon}));
+    },
+    sendCoopInputForTest(frame) {
+      if (!TEST_MODE || coopPreview?.role !== 'guest' || phase !== GAME_PHASES.COMBAT) return false;
+      return coopPreview.update(1 / 30, createInputFrame({...EMPTY_INPUT_FRAME, ...frame}));
     },
     damageCoopPlayerForTest(playerId, amount) {
       if (!TEST_MODE || coopPreview?.role !== 'host') return 0;

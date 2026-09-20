@@ -1,4 +1,5 @@
 import {
+  atlasDirectionReference,
   atlasStateProjectionScale,
   atlasGroundAnchor,
   buildAtlasFrameMetadata,
@@ -210,6 +211,14 @@ export const HOST_SPRITE_READABILITY = Object.freeze({
   fogFar: 145,
   fogMix: 0.28,
 });
+
+// Baked atlas lighting is fixed. Follow the world's live fill (including its
+// day/night blend) without adding lights, per-enemy raycasts or geometry.
+export function spriteEnvironmentBrightness(scene) {
+  const fill = scene?.lights?.find(light => light.name === 'moon-fill');
+  if (!fill) return 1;
+  return Math.max(0.7, Math.min(1, 0.56 + 0.32 * (Number(fill.intensity) || 0)));
+}
 export const HOST_SAP_READABILITY_GRADE = Object.freeze({
   signalStart: 0.08,
   signalFull: 0.24,
@@ -378,24 +387,8 @@ export function legacySpriteLayoutForType(type = 0, {
   };
 }
 
-export function legacyAtlasDirection({velocityX = 0, velocityZ = 0, z = 0, gateZ = 0, directionCount = 8} = {}) {
-  const count = Math.max(1, Math.floor(Number(directionCount) || 8));
-  let vx = Number.isFinite(velocityX) ? velocityX : 0;
-  let vz = Number.isFinite(velocityZ) ? velocityZ : 0;
-  if (Math.abs(vx) + Math.abs(vz) < 0.06) {
-    vx = 0;
-    vz = -1;
-  }
-  if (count === 8) {
-    const absX = Math.abs(vx);
-    const absZ = Math.abs(vz);
-    if (absX < absZ * 0.4142) return vz >= 0 ? 0 : 4;
-    if (absZ < absX * 0.4142) return vx >= 0 ? 2 : 6;
-    if (vx >= 0) return vz >= 0 ? 1 : 3;
-    return vz >= 0 ? 7 : 5;
-  }
-  const angle = Math.atan2(vx, vz);
-  return ((Math.floor(((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / (Math.PI * 2) * count) % count) + count) % count;
+export function legacyAtlasDirection(input = {}) {
+  return atlasDirectionReference(input);
 }
 
 export function legacyAttackPresentation({
@@ -549,6 +542,7 @@ uniform sampler2D atlasSampler;
 uniform sampler2D stateAtlasSampler;
 uniform float alphaCutoff;
 uniform float brightness;
+uniform float environmentFogDensity;
 uniform float tintStrength;
 uniform vec3 hostFogColor;
 uniform float hostFogNear;
@@ -589,7 +583,9 @@ void main(void) {
     : texture2D(atlasSampler, vUV);
   if (color.a < alphaCutoff) discard;
   float tone = mix(0.70, 1.00, vSeedTone);
-  float fog = smoothstep(hostFogNear, hostFogFar, vCameraDistance);
+  float fog = environmentFogDensity >= 0.0
+    ? 1.0 - exp(-pow(vCameraDistance * environmentFogDensity, 2.0))
+    : smoothstep(hostFogNear, hostFogFar, vCameraDistance) * ${HOST_SPRITE_READABILITY.fogMix.toFixed(2)};
   vec3 straightAtlasColor = clamp(color.rgb / max(color.a, 0.0039215686), 0.0, 1.0);
   vec3 atlasColor = pow(straightAtlasColor, vec3(${HOST_SPRITE_READABILITY.atlasGamma.toFixed(2)}));
   vec3 graded = mix(atlasColor, atlasColor * hostVariantTint(vType, vSeedTone), tintStrength) * brightness * tone;
@@ -597,7 +593,7 @@ void main(void) {
   // A broad tint on the pale source art made thousands of bodies merge into a
   // uniform green-orange carpet at phone resolution.
   graded = max(vec3(0.0), (graded - vec3(0.43)) * 1.10 + vec3(0.43));
-  graded = mix(graded, hostFogColor, fog * ${HOST_SPRITE_READABILITY.fogMix.toFixed(2)});
+  graded = mix(graded, hostFogColor, fog);
   float luminance = dot(graded, vec3(0.2126, 0.7152, 0.0722));
   float engagementAmount = clamp(vEngagementReadability, 0.0, 1.0);
   graded *= 1.0 + engagementAmount * ${ENGAGEMENT_READABILITY.luminanceLift.toFixed(2)};
@@ -853,7 +849,7 @@ async function createGpuRenderer({
       attributes: shader.attributes,
       uniforms: [
         ...shader.uniforms,
-        'hostFogColor', 'hostFogNear', 'hostFogFar',
+        'hostFogColor', 'hostFogNear', 'hostFogFar', 'environmentFogDensity',
         'hostKillzoneXZ', 'hostKillzoneRadiusSq', 'hostKillzoneWarmTint',
       ],
       samplers: shader.samplers
@@ -867,7 +863,8 @@ async function createGpuRenderer({
   material.setTexture('hitFrameMetaSampler', hitFrameTexture);
   material.setTexture('deathFrameMetaSampler', deathFrameTexture);
   material.setFloat('alphaCutoff', HOST_SPRITE_COVERAGE.alphaCutoff);
-  material.setFloat('brightness', HOST_SPRITE_READABILITY.brightness);
+  material.setFloat('brightness', HOST_SPRITE_READABILITY.brightness * spriteEnvironmentBrightness(scene));
+  material.setFloat('environmentFogDensity', scene.fogMode === 2 ? scene.fogDensity : -1);
   material.setFloat('tintStrength', tintStrength);
   material.setColor3('hostFogColor', BABYLON.Color3.FromHexString(WORLD_ATMOSPHERE.fogColor));
   material.setFloat('hostFogNear', HOST_SPRITE_READABILITY.fogNear);
@@ -993,6 +990,9 @@ async function createGpuRenderer({
     mode: 'gpu-atlas',
     diagnostics,
     update(time, force = false) {
+      material.setFloat('brightness', HOST_SPRITE_READABILITY.brightness * spriteEnvironmentBrightness(scene));
+      material.setFloat('environmentFogDensity', scene.fogMode === 2 ? scene.fogDensity : -1);
+      if (scene.fogColor) material.setColor3('hostFogColor', scene.fogColor);
       if (!force && time - lastUpdateAt < 1 / profile.updateHz) {
         material.setFloat('visualTime', time);
         material.setFloat('feedbackTime', battlefield.elapsed || 0);
@@ -1207,6 +1207,7 @@ function createLegacyRenderer({
     update(time, force = false) {
       if (!force && time - lastUpdateAt < 1 / profile.updateHz) return;
       const started = performance.now();
+      const environmentBrightness = spriteEnvironmentBrightness(scene);
       let active = 0;
       for (let slot = 0; slot < capacity; slot += 1) {
         const id = slotIds[slot];
@@ -1247,7 +1248,7 @@ function createLegacyRenderer({
           : 0;
         const engagementReadability = approachReadabilityAtZ(battlefield.z[id]);
         const base = gradeHostSpriteColor(
-          tint.map(channel => Math.min(1, channel * tone * HOST_SPRITE_READABILITY.brightness)),
+          tint.map(channel => Math.min(1, channel * tone * HOST_SPRITE_READABILITY.brightness * environmentBrightness)),
           {
             engagement: engagementReadability,
             rearRank: 1 - engagementReadability,
@@ -1318,6 +1319,9 @@ function createLegacyRenderer({
         sprite.position.z = battlefield.z[id]
           + (facingLength > 0.001 ? facing.z / facingLength : -1) * attack.lunge;
         const direction = legacyAtlasDirection({
+          x: battlefield.x[id],
+          cameraX: scene.activeCamera?.position?.x,
+          cameraZ: scene.activeCamera?.position?.z,
           velocityX: facing.x,
           velocityZ: facing.z,
           z: battlefield.z[id],
