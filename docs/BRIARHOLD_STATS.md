@@ -47,9 +47,11 @@ Required repository Actions secret:
 Optional repository variable or secret:
 
 `CLOUDFLARE_ZONE_ID` — with this configured, no zone lookup is needed. Otherwise
-the existing zone lookup uses the token's Zone Read permission. The documented
-permissions are Account Analytics Read, Zone Analytics Read and Zone Read,
-restricted to the relevant account/zone. No Clarity token is required here.
+the existing zone lookup uses the token's Zone Read permission. The minimum
+read-only permissions for the GraphQL aggregate query are **Account > Account
+Analytics > Read** and **Zone > Analytics > Read**, restricted to the
+`samfa12.com` zone; add **Zone > Zone > Read** only when the zone ID is omitted.
+No Clarity token is required here.
 
 Set the secret under the repository's **Settings → Secrets and variables →
 Actions**, then run **Actions → Update Briarhold browser statistics → Run workflow**.

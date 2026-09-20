@@ -80,6 +80,30 @@ test('retries transient failures but not authentication failures', async () => {
   assert.equal(calls, 1);
 });
 
+test('distinguishes missing configuration and Cloudflare access failures', async () => {
+  const { collectBriarholdBrowserStats } = await load();
+  await assert.rejects(
+    collectBriarholdBrowserStats({ ...base, apiToken: '' }),
+    /Missing CLOUDFLARE_API_TOKEN/
+  );
+  await assert.rejects(
+    collectBriarholdBrowserStats({ ...base, zoneId: '' }),
+    /Missing CLOUDFLARE_ZONE_ID/
+  );
+  await assert.rejects(
+    collectBriarholdBrowserStats({ ...base, fetchImpl: async () => ({ ok: false, status: 401 }) }),
+    /authentication failure.*401/i
+  );
+  await assert.rejects(
+    collectBriarholdBrowserStats({ ...base, fetchImpl: async () => ({ ok: false, status: 403 }) }),
+    /permission failure.*403/i
+  );
+  await assert.rejects(
+    collectBriarholdBrowserStats({ ...base, fetchImpl: async () => ({ ok: true, json: async () => ({ errors: [{ message: 'field not available' }] }) }) }),
+    /GraphQL response failure: field not available/
+  );
+});
+
 test('does not overwrite the last good file when any daily query fails', async () => {
   const { updateBriarholdBrowserStats } = await load();
   const cwd = await mkdtemp(path.join(tmpdir(), 'briarhold-stats-'));

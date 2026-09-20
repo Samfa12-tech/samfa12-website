@@ -32,14 +32,22 @@ async function dailyCount({ apiToken, zoneId, filter, fetchImpl, sleep }) {
         await sleep(1000 * 2 ** attempt);
         continue;
       }
-      throw new Error(`Cloudflare analytics HTTP ${response.status}; check the read-only token and zone access.`);
+      throw new Error(describeCloudflareHttpFailure(response.status));
     }
-    const payload = await response.json();
-    if (payload?.errors?.length) throw new Error('Cloudflare analytics query failed; check permissions, query fields and retention limits.');
+    let payload;
+    try {
+      payload = await response.json();
+    } catch {
+      throw new Error(`Cloudflare API response failure: expected JSON (HTTP ${response.status}).`);
+    }
+    if (payload?.errors?.length) throw new Error(describeCloudflareGraphqlFailure(payload.errors));
     const zones = payload?.data?.viewer?.zones;
     const rows = zones?.[0]?.pageLoads;
-    if (!Array.isArray(zones) || zones.length !== 1 || !Array.isArray(rows) || rows.length > 1) {
-      throw new Error('Cloudflare did not return a complete game-page dataset.');
+    if (!Array.isArray(zones) || zones.length !== 1) {
+      throw new Error('Cloudflare API response failure: expected exactly one accessible analytics zone.');
+    }
+    if (!Array.isArray(rows) || rows.length > 1) {
+      throw new Error('Cloudflare API response failure: game-page dataset was incomplete.');
     }
     const count = rows.length ? rows[0]?.count : 0;
     if (!Number.isSafeInteger(count) || count < 0) throw new Error('Invalid Cloudflare game-page count.');
@@ -51,7 +59,8 @@ async function dailyCount({ apiToken, zoneId, filter, fetchImpl, sleep }) {
 export async function collectBriarholdBrowserStats({
   apiToken, zoneId, hostname = 'samfa12.com', now = new Date(), fetchImpl = fetch, sleep = delay,
 }) {
-  if (!apiToken || !zoneId) throw new Error('Cloudflare read-only token and zone ID are required.');
+  if (!apiToken) throw new Error('Missing CLOUDFLARE_API_TOKEN. Set the GitHub Actions secret or the ignored local .env.analytics value.');
+  if (!zoneId) throw new Error('Missing CLOUDFLARE_ZONE_ID. Set the GitHub Actions variable or secret, or allow automatic lookup with Zone > Zone > Read.');
   if (hostname !== 'samfa12.com') throw new Error('Briarhold statistics must use samfa12.com.');
   const capturedAt = new Date(now);
   if (!Number.isFinite(+capturedAt)) throw new Error('Invalid collection date.');
@@ -101,11 +110,51 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     const { loadAnalyticsConfig, resolveCloudflareZoneId } = await import('./analytics-core.mjs');
     const config = await loadAnalyticsConfig();
     if (!config.cloudflareApiToken) throw new Error('Missing CLOUDFLARE_API_TOKEN. Set the GitHub Actions secret or the ignored local .env.analytics value.');
-    const zoneId = config.cloudflareZoneId || await resolveCloudflareZoneId({ apiToken: config.cloudflareApiToken, hostname: config.hostname });
+    let zoneId = config.cloudflareZoneId;
+    if (!zoneId) {
+      try {
+        zoneId = await resolveCloudflareZoneId({ apiToken: config.cloudflareApiToken, hostname: config.hostname });
+      } catch (error) {
+        throw new Error(describeZoneLookupFailure(error));
+      }
+    }
     const snapshot = await updateBriarholdBrowserStats({ apiToken: config.cloudflareApiToken, zoneId, hostname: config.hostname });
     console.log(`Published ${snapshot.count} estimated browser plays for ${snapshot.period.start} to ${snapshot.period.end} (end exclusive).`);
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;
   }
+}
+
+function describeCloudflareHttpFailure(status) {
+  if (status === 401) return 'Cloudflare authentication failure (HTTP 401). Verify CLOUDFLARE_API_TOKEN is valid and unexpired.';
+  if (status === 403) return 'Cloudflare permission failure (HTTP 403). The token cannot read the requested analytics resource; check the documented read-only permissions and samfa12.com zone scope.';
+  return `Cloudflare API response failure (HTTP ${status}). Check the provider response, query limits and retention window.`;
+}
+
+function describeCloudflareGraphqlFailure(errors) {
+  const messages = errors.map((error) => String(error?.message || '')).join('; ');
+  if (/401|unauthor|invalid token|authentication/i.test(messages)) {
+    return 'Cloudflare authentication failure in the GraphQL response. Verify CLOUDFLARE_API_TOKEN is valid and unexpired.';
+  }
+  if (/403|forbidden|permission|not authorized|access denied|cannot access/i.test(messages)) {
+    return 'Cloudflare permission failure in the GraphQL response. Check the documented read-only permissions and samfa12.com zone scope.';
+  }
+  return messages
+    ? `Cloudflare GraphQL response failure: ${messages}`
+    : 'Cloudflare GraphQL response failure: the provider returned an error without details.';
+}
+
+function describeZoneLookupFailure(error) {
+  const message = String(error?.message || '');
+  if (/401|unauthor|invalid token|authentication/i.test(message)) {
+    return 'Cloudflare authentication failure while resolving CLOUDFLARE_ZONE_ID. Verify CLOUDFLARE_API_TOKEN is valid and unexpired.';
+  }
+  if (/403|forbidden|permission|not authorized|access denied/i.test(message)) {
+    return 'Cloudflare permission failure while resolving CLOUDFLARE_ZONE_ID. Set the ID explicitly or grant Zone > Zone > Read to the read-only token.';
+  }
+  if (/could not find an active/i.test(message)) {
+    return 'Missing or inaccessible CLOUDFLARE_ZONE_ID. Set the GitHub Actions variable or secret to the active samfa12.com zone ID.';
+  }
+  return `Cloudflare zone lookup failure while resolving CLOUDFLARE_ZONE_ID: ${message || 'provider returned no details.'}`;
 }

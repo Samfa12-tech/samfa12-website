@@ -31,10 +31,11 @@ Required values:
   with these read-only permissions:
   - **Account > Account Analytics > Read**
   - **Zone > Analytics > Read**
-  - **Zone > Zone > Read**
+  - **Zone > Zone > Read** only when `CLOUDFLARE_ZONE_ID` is omitted and the
+    collector must resolve the zone by hostname.
 - `ANALYTICS_HOSTNAME`: normally `samfa12.com`.
-- `CLOUDFLARE_ZONE_ID`: optional; the collector resolves it using Zone Read
-  when omitted.
+- `CLOUDFLARE_ZONE_ID`: optional; set it to the active `samfa12.com` zone ID
+  to avoid the zone-lookup call and its additional Zone Read permission.
 - `CLOUDFLARE_LOOKBACK_DAYS`: defaults to and is capped at `8` for the current
   zone plan.
 
@@ -107,8 +108,16 @@ manually if an automation is paused or unavailable.
 
 - `Analytics configuration is incomplete`: add the named values to the ignored
   `.env.analytics` file.
-- `does not have permission ... zone.analytics.read`: add
-  **Zone > Analytics > Read** to the Cloudflare token.
+- `Cloudflare authentication failure` or HTTP 401: replace the expired,
+  revoked, malformed or missing token in the configured secret/file.
+- `Cloudflare permission failure` or HTTP 403: add **Account > Account
+  Analytics > Read** and **Zone > Analytics > Read**, scoped to the
+  `samfa12.com` zone. Add **Zone > Zone > Read** only when the zone ID is not
+  configured and hostname lookup is required.
+- `Missing CLOUDFLARE_ZONE_ID`: set the ID or allow automatic lookup with
+  **Zone > Zone > Read**.
+- `Cloudflare GraphQL response failure`: check query fields, provider schema,
+  plan retention limits, and rate limits; no snapshot is published.
 - A Cloudflare range or retention error means the plan boundary changed. Update
   the capped lookback and tests; do not silently discard failed slices.
 - A transient `ECONNRESET`, HTTP 429, or retryable 5xx is retried automatically.
