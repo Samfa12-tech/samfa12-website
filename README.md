@@ -29,7 +29,7 @@ Pocket Audio, music, and links for **Samfa12**.
 - `assets/og-image-v2.png` – current 1200×630 social preview image
 - `assets/thumbnails/` – local project card thumbnails
 - `CNAME` – `samfa12.com` domain file
-- `.github/workflows/pages.yml` – optional GitHub Pages deploy workflow
+- `.github/workflows/pages.yml` – active GitHub Pages deploy workflow
 
 ## How to edit projects
 
