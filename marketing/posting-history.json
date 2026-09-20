@@ -85,6 +85,39 @@
       "textSha256": "1739015546f5ee3dbef3b5672752e2acb257e05b029f85f6fedf15c3ca008390",
       "scheduledAt": "2026-09-17T09:09:31.738Z",
       "dueAt": "2026-09-23T22:15:00.000Z"
+    },
+    {
+      "id": "creator-social-pipeline-1",
+      "project": "Samfa12",
+      "category": "Creator",
+      "date": "2026-09-25",
+      "status": "scheduled",
+      "bufferPostId": "6aafdeae8d048c06b4065ce5",
+      "textSha256": "4bcaaf394048d2c6c069dc54aba74098d55dc8a6bf4b50df8919bf282efbe83e",
+      "scheduledAt": "2026-09-20T13:25:03.059Z",
+      "dueAt": "2026-09-24T22:15:00.000Z"
+    },
+    {
+      "id": "brokenroad-structure-1",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-09-26",
+      "status": "scheduled",
+      "bufferPostId": "6aafdeaf13d908add21b83c1",
+      "textSha256": "f64af87bcd472cdbb2ddafde0057c4a9bff0a38fc87200e38195ce3cee3edf6e",
+      "scheduledAt": "2026-09-20T13:25:03.415Z",
+      "dueAt": "2026-09-25T22:15:00.000Z"
+    },
+    {
+      "id": "briarhold-analytics-1",
+      "project": "Briarhold",
+      "category": "Web development",
+      "date": "2026-09-27",
+      "status": "scheduled",
+      "bufferPostId": "6aafdeaf566e1a89bc303239",
+      "textSha256": "eefcff7466d5ba59a0092f5eeeb569504520da8330e79fbd7da3aa59e00267ca",
+      "scheduledAt": "2026-09-20T13:25:04.014Z",
+      "dueAt": "2026-09-26T22:15:00.000Z"
     }
   ]
 }
