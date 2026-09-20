@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-13T22:49:19.504Z",
+  "generatedAt": "2026-09-20T22:55:05.642Z",
   "totals": {
     "itch": {
-      "views": 4525,
-      "downloads": 113,
+      "views": 4674,
+      "downloads": 116,
       "purchases": 2
     },
     "steam": {
@@ -13,33 +13,33 @@
       "netUnits": 19
     },
     "googlePlay": {
-      "grossPaidAppPurchases": 252,
-      "fullyRefundedPaidAppOrders": 48,
-      "netPaidAppPurchases": 204
+      "grossPaidAppPurchases": 260,
+      "fullyRefundedPaidAppOrders": 50,
+      "netPaidAppPurchases": 210
     },
     "amazon": {
       "netUnits": 14,
       "pagesRead": 2781
     },
     "combined": {
-      "paidUnits": 239
+      "paidUnits": 245
     }
   },
   "change": {
     "sincePreviousSnapshot": {
       "itch": {
-        "views": 167,
-        "downloads": 6,
+        "views": 149,
+        "downloads": 3,
         "purchases": 0
       },
       "steam": {
         "netUnits": 0
       },
       "googlePlay": {
-        "netPaidAppPurchases": 8
+        "netPaidAppPurchases": 6
       },
       "combined": {
-        "paidUnits": 8
+        "paidUnits": 6
       },
       "amazon": {
         "netUnits": 0
@@ -84,7 +84,7 @@
         "id": "4484691",
         "title": "Bug Maze TD",
         "url": "https://samfa12.itch.io/bug-maze-td",
-        "views": 110,
+        "views": 113,
         "downloads": 0,
         "purchases": 0
       },
@@ -92,7 +92,7 @@
         "id": "4733073",
         "title": "Colossal (Amazon)",
         "url": "https://samfa12.itch.io/colossal",
-        "views": 11,
+        "views": 12,
         "downloads": 0,
         "purchases": 0
       },
@@ -100,7 +100,7 @@
         "id": "4560111",
         "title": "Concubine (Amazon)",
         "url": "https://samfa12.itch.io/concubine",
-        "views": 36,
+        "views": 38,
         "downloads": 0,
         "purchases": 0
       },
@@ -108,7 +108,7 @@
         "id": "4230275",
         "title": "Drink",
         "url": "https://samfa12.itch.io/drink",
-        "views": 806,
+        "views": 827,
         "downloads": 7,
         "purchases": 0
       },
@@ -116,7 +116,7 @@
         "id": "4616838",
         "title": "Dust on the River",
         "url": "https://samfa12.itch.io/dust-on-the-river",
-        "views": 216,
+        "views": 219,
         "downloads": 2,
         "purchases": 0
       },
@@ -124,7 +124,7 @@
         "id": "4541459",
         "title": "Free to a Good Home (Amazon)",
         "url": "https://samfa12.itch.io/free-to-a-good-home",
-        "views": 9,
+        "views": 10,
         "downloads": 0,
         "purchases": 0
       },
@@ -140,7 +140,7 @@
         "id": "4469088",
         "title": "Hop Bunny",
         "url": "https://samfa12.itch.io/hop-bunny",
-        "views": 94,
+        "views": 97,
         "downloads": 4,
         "purchases": 1
       },
@@ -148,7 +148,7 @@
         "id": "4603629",
         "title": "Mandible Wars",
         "url": "https://samfa12.itch.io/mandible-wars",
-        "views": 128,
+        "views": 133,
         "downloads": 5,
         "purchases": 0
       },
@@ -156,7 +156,7 @@
         "id": "4636769",
         "title": "Moon Mower",
         "url": "https://samfa12.itch.io/moon-mower",
-        "views": 112,
+        "views": 113,
         "downloads": 2,
         "purchases": 0
       },
@@ -164,7 +164,7 @@
         "id": "4497195",
         "title": "Night Shift at Possum's Cafe",
         "url": "https://samfa12.itch.io/possum-cafe",
-        "views": 414,
+        "views": 420,
         "downloads": 6,
         "purchases": 0
       },
@@ -172,7 +172,7 @@
         "id": "4638406",
         "title": "P.A.R.T.Y. Bus: Wasteland Run",
         "url": "https://samfa12.itch.io/party-bus",
-        "views": 93,
+        "views": 97,
         "downloads": 4,
         "purchases": 0
       },
@@ -180,7 +180,7 @@
         "id": "4632588",
         "title": "Pocket Ant Farm",
         "url": "https://samfa12.itch.io/ant-farm",
-        "views": 81,
+        "views": 93,
         "downloads": 0,
         "purchases": 0
       },
@@ -188,7 +188,7 @@
         "id": "4477883",
         "title": "Pocket Chordsmith Godot addon",
         "url": "https://samfa12.itch.io/pocket-chordsmith",
-        "views": 507,
+        "views": 525,
         "downloads": 22,
         "purchases": 0
       },
@@ -196,15 +196,15 @@
         "id": "4657904",
         "title": "Pocket DAW",
         "url": "https://samfa12.itch.io/pocket-daw",
-        "views": 207,
-        "downloads": 21,
+        "views": 218,
+        "downloads": 22,
         "purchases": 0
       },
       {
         "id": "4625733",
         "title": "Pocket DJ",
         "url": "https://samfa12.itch.io/pocket-dj",
-        "views": 45,
+        "views": 46,
         "downloads": 0,
         "purchases": 0
       },
@@ -212,7 +212,7 @@
         "id": "4617627",
         "title": "Pocket Fish Tank",
         "url": "https://samfa12.itch.io/fish-tank",
-        "views": 153,
+        "views": 161,
         "downloads": 6,
         "purchases": 0
       },
@@ -220,7 +220,7 @@
         "id": "4503097",
         "title": "Reckless Dentist",
         "url": "https://samfa12.itch.io/reckless-dentist",
-        "views": 164,
+        "views": 170,
         "downloads": 4,
         "purchases": 0
       },
@@ -228,7 +228,7 @@
         "id": "4463386",
         "title": "Ship Blockade",
         "url": "https://samfa12.itch.io/ship-blockade",
-        "views": 112,
+        "views": 113,
         "downloads": 0,
         "purchases": 0
       },
@@ -236,7 +236,7 @@
         "id": "4378168",
         "title": "Sober: A novel set in the world of Drink (Amazon)",
         "url": "https://samfa12.itch.io/sober",
-        "views": 30,
+        "views": 31,
         "downloads": 0,
         "purchases": 0
       },
@@ -244,7 +244,7 @@
         "id": "4509981",
         "title": "Spin Vector",
         "url": "https://samfa12.itch.io/spin-vector",
-        "views": 249,
+        "views": 252,
         "downloads": 0,
         "purchases": 0
       },
@@ -252,15 +252,15 @@
         "id": "4779911",
         "title": "The Horde — Ray Tracing Tech Demo",
         "url": "https://samfa12.itch.io/the-horde",
-        "views": 342,
-        "downloads": 26,
+        "views": 358,
+        "downloads": 28,
         "purchases": 0
       },
       {
         "id": "4776930",
         "title": "The Last Guard",
         "url": "https://samfa12.itch.io/the-last-guard",
-        "views": 226,
+        "views": 243,
         "downloads": 0,
         "purchases": 0
       },
@@ -276,7 +276,7 @@
         "id": "4636079",
         "title": "ToKnight 2: The Fire Beneath (Amazon)",
         "url": "https://samfa12.itch.io/toknight-2-the-fire-beneath",
-        "views": 12,
+        "views": 13,
         "downloads": 0,
         "purchases": 0
       },
@@ -284,7 +284,7 @@
         "id": "4567222",
         "title": "Wonky Vehicle Lab",
         "url": "https://samfa12.itch.io/wonky-vehicle-lab",
-        "views": 126,
+        "views": 130,
         "downloads": 0,
         "purchases": 0
       }
@@ -302,23 +302,23 @@
       {
         "packageId": "com.samsmall.drink",
         "title": "Drink",
-        "grossPaidAppPurchases": 66,
-        "fullyRefundedPaidAppOrders": 16,
-        "netPaidAppPurchases": 50
+        "grossPaidAppPurchases": 69,
+        "fullyRefundedPaidAppOrders": 17,
+        "netPaidAppPurchases": 52
       },
       {
         "packageId": "com.samsmall.dustontheriver",
         "title": "Dust on the River",
-        "grossPaidAppPurchases": 13,
-        "fullyRefundedPaidAppOrders": 2,
-        "netPaidAppPurchases": 11
+        "grossPaidAppPurchases": 16,
+        "fullyRefundedPaidAppOrders": 3,
+        "netPaidAppPurchases": 13
       },
       {
         "packageId": "com.samsmall.possumcafe",
         "title": "Night Shift at Possum's Cafe",
-        "grossPaidAppPurchases": 21,
+        "grossPaidAppPurchases": 23,
         "fullyRefundedPaidAppOrders": 7,
-        "netPaidAppPurchases": 14
+        "netPaidAppPurchases": 16
       },
       {
         "packageId": "com.samfa12.lofiandchillpack",
