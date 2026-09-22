@@ -1,0 +1,652 @@
+{
+  "version": 1,
+  "reviewDate": "2026-09-23",
+  "sourceAuditHead": "b6e1047316ff2ec1dd2cd507962ad4d50aa3b99c",
+  "products": [
+    {
+      "id": "game-dust-on-the-river",
+      "category": "Games",
+      "title": "Dust on the River",
+      "path": "/games/dust-on-the-river/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/dust-on-the-river",
+        "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver"
+      ],
+      "notes": "Separate VideoGame entity from the book. Cross-link the adaptation; do not use the Amazon book as the game sameAs.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-drink",
+      "category": "Games",
+      "title": "Drink",
+      "path": "/games/drink/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/drink",
+        "https://play.google.com/store/apps/details?id=com.samsmall.drink",
+        "https://store.steampowered.com/app/4419290/Drink/"
+      ],
+      "notes": "Separate from the sequel novel Sober and the Drink OST. Verify which features belong to each platform.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-possum-cafe",
+      "category": "Games",
+      "title": "Night Shift at Possum's Cafe",
+      "path": "/games/possum-cafe/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/possum-cafe",
+        "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
+      ],
+      "notes": "Resolve current display name against the same Google Play package and itch product; retain verified former/platform titles as aliases, not duplicate pages.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-the-last-guard",
+      "category": "Games",
+      "title": "The Last Guard",
+      "path": "/games/the-last-guard/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/the-last-guard"
+      ],
+      "notes": "Cross-link Briarhold as the catalogue describes a spiritual-sequel relationship; verify public wording.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-the-horde",
+      "category": "Games",
+      "title": "The Horde — Ray Tracing Tech Demo",
+      "path": "/games/the-horde/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/the-horde",
+        "https://github.com/Samfa12-tech/The-Horde-RT-demo"
+      ],
+      "notes": "Preserve experimental/tech-demo limitations and platform requirements. Do not market unverified hardware compatibility.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-bug-swarm",
+      "category": "Games",
+      "title": "Bug Swarm",
+      "path": "/games/bug-swarm-guide/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.com/games/bug-swarm/"
+      ],
+      "notes": "Existing full-screen canvas runtime must stay intact. Proposed sibling marketing route avoids changing play URL. Use website/project source and verified documentation where no storefront exists.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-cursed-cutter",
+      "category": "Games",
+      "title": "Cursed Cutter",
+      "path": "/games/cursed-cutter-guide/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.com/games/cursed-cutter/"
+      ],
+      "notes": "Keep current play URL and fullscreen behaviour. Inspect the existing wrapper before choosing the safest separate marketing route.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "app-what-would-win",
+      "category": "Apps & Tools",
+      "title": "What Would Win",
+      "path": "/tools/what-would-win/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.com/apps/what-would-win/",
+        "https://github.com/Samfa12-tech/What-Would-Win"
+      ],
+      "notes": "Cross-listed in Games but one entity and one marketing page. Leave the generated app, manifest, service worker, legal notices, assets and share URLs unchanged. Explain simulation assumptions, not scientific predictive accuracy.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "app-pocket-chordsmith",
+      "category": "Apps & Tools",
+      "title": "Pocket Chordsmith",
+      "path": "/pocket-audio/pocket-chordsmith/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/pocket-chordsmith",
+        "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+        "https://samfa12.com/apps/pocket-chordsmith/"
+      ],
+      "notes": "Separate marketing page outside protected release-copy directory. Verify actual export formats, browser behaviour and licensing.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "asset-pocket-chordsmith-godot",
+      "category": "Assets",
+      "title": "Pocket Chordsmith Godot addon",
+      "path": "/pocket-audio/godot-addon/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/pocket-chordsmith",
+        "https://godotengine.org/asset-library/asset/5174",
+        "https://store.godotengine.org/asset/samfa12/pocket-chordsmith/",
+        "https://github.com/Samfa12-tech/Pocket-Chordsmith/tree/main/addons/pocket_chordsmith"
+      ],
+      "notes": "Distinct add-on. MIT applies only where the source license supports it; do not extend this to all apps, music or artwork.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "app-pocket-audio-handoff",
+      "category": "Apps & Tools",
+      "title": "Pocket Audio Handoff",
+      "path": "/apps/pocket-audio-handoff/",
+      "action": "enhance-existing-hybrid",
+      "officialSources": [
+        "https://samfa12.com/apps/pocket-audio-handoff/",
+        "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+      ],
+      "notes": "Enrich the existing explanatory helper when safe instead of creating a duplicate page. Preserve transfer URLs, local app handoff, relay behaviour and privacy distinctions.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-bug-maze-td",
+      "category": "Games",
+      "title": "Bug Maze TD",
+      "path": "/games/bug-maze-td/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/bug-maze-td",
+        "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+      ],
+      "notes": "Google Play link is a bundle containing this game, not the standalone game identity.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-breakfast-beat",
+      "category": "Games",
+      "title": "Breakfast Beat",
+      "path": "/games/breakfast-beat/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/breakfast-beat",
+        "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+      ],
+      "notes": "Verify mechanics from itch; the current catalogue description is generic. Google Play destination is the TD Pack, not a standalone app.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-ship-blockade",
+      "category": "Games",
+      "title": "Ship Blockade",
+      "path": "/games/ship-blockade/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/ship-blockade",
+        "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+      ],
+      "notes": "Google Play destination is a collection. Verify inclusion and label the bundle CTA clearly.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-hop-bunny",
+      "category": "Games",
+      "title": "Hop Bunny",
+      "path": "/games/hop-bunny/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/hop-bunny"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-backwater",
+      "category": "Books",
+      "title": "Backwater",
+      "path": "/books/backwater/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0GX2XQR3D"
+      ],
+      "notes": "Do not conflate the novel with any separate Backwater game or development concept.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-reckless-dentist",
+      "category": "Games",
+      "title": "Reckless Dentist",
+      "path": "/games/reckless-dentist/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/reckless-dentist"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-gremlin-grenade-pinball",
+      "category": "Games",
+      "title": "Gremlin Grenade Pinball",
+      "path": "/games/gremlin-grenade-pinball/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/gremlin-grenade-pinball"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-wonky-vehicle-lab",
+      "category": "Games",
+      "title": "Wonky Vehicle Lab",
+      "path": "/games/wonky-vehicle-lab/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/wonky-vehicle-lab"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-toknight",
+      "category": "Books",
+      "title": "ToKnight",
+      "path": "/books/toknight/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0GX2NG31Z"
+      ],
+      "notes": "Verify Jason Proud series naming and Book 1 position from public listing.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-dust-on-the-river",
+      "category": "Books",
+      "title": "Dust on the River",
+      "path": "/books/dust-on-the-river/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0H7QQQXBN"
+      ],
+      "notes": "Novelisation, not the game. Different stable ID, title metadata and Book schema; no copied game controls or system requirements.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-the-wall-that-lied",
+      "category": "Books",
+      "title": "The Wall that Lied",
+      "path": "/books/the-wall-that-lied/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0H6VJ4VG1"
+      ],
+      "notes": "Repository says Book 1, planned 1 October 2026. Reverify store/edition status; do not auto-publish merely because a date passes.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-no-wall-to-hold",
+      "category": "Books",
+      "title": "No Wall to Hold",
+      "path": "/books/no-wall-to-hold/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0H233JY8P"
+      ],
+      "notes": "Repository says Book 2, planned 1 November 2026. Preserve spoiler-free public synopsis and verify availability.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-what-we-save",
+      "category": "Books",
+      "title": "What We Save",
+      "path": "/books/what-we-save/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0HC46KFJP"
+      ],
+      "notes": "Repository says Book 3, planned 1 December 2026. No manuscript spoilers or invented release confirmation.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-article-18",
+      "category": "Books",
+      "title": "Article 18",
+      "path": "/books/article-18/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/article-18",
+        "https://play.google.com/store/books/details/Samfa12_Article_18?id=WVXaEQAAQBAJ",
+        "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?id=AQAAAEDaH2pfoM"
+      ],
+      "notes": "Use verified comic-noir description from itch rather than extrapolating from generic catalogue tags. Distinguish ebook/PDF and audiobook editions.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-td-pack",
+      "category": "Games",
+      "title": "Samfa12's TD Pack",
+      "path": "/games/td-pack/",
+      "action": "create",
+      "officialSources": [
+        "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+      ],
+      "notes": "Collection page with verified constituent games and links. Do not duplicate a bundle listing as standalone sameAs for every component.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-lofi-and-chill-pack",
+      "category": "Games",
+      "title": "Samfa12's Lofi and Chill Pack",
+      "path": "/games/lofi-and-chill-pack/",
+      "action": "create",
+      "officialSources": [
+        "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+      ],
+      "notes": "Verify exact current name and contents. Do not invent individual listings for all six scenes from a count.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-spin-vector",
+      "category": "Games",
+      "title": "Spin Vector",
+      "path": "/games/spin-vector/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/spin-vector",
+        "https://play.google.com/store/apps/details?id=com.samsmall.spinvector",
+        "https://wavedash.com/games/spin-vector"
+      ],
+      "notes": "Itch sampled text has an old closed-testing line despite a live Google Play listing and a launch devlog. Resolve by source date and platform, not blind copying.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "app-pocket-dj",
+      "category": "Apps & Tools",
+      "title": "Pocket DJ",
+      "path": "/pocket-audio/pocket-dj/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/pocket-dj",
+        "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+        "https://samfa12.com/apps/pocket-dj/"
+      ],
+      "notes": "Keep generated app URL and directory unchanged. Do not infer standalone native Android availability from the catalogue type Mobile app.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "app-pocket-daw",
+      "category": "Apps & Tools",
+      "title": "Pocket DAW",
+      "path": "/pocket-audio/pocket-daw/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/pocket-daw"
+      ],
+      "notes": "Windows desktop download; do not invent a browser DAW or market it as the Pocket Chordsmith app.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-mandible-wars",
+      "category": "Games",
+      "title": "Mandible Wars",
+      "path": "/games/mandible-wars/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/mandible-wars"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-moon-mower",
+      "category": "Games",
+      "title": "Moon Mower",
+      "path": "/games/moon-mower/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/moon-mower",
+        "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+      ],
+      "notes": "Google Play is the Lofi and Chill Pack collection; identify the relationship rather than equating them.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-pocket-fish-tank",
+      "category": "Games",
+      "title": "Pocket Fish Tank",
+      "path": "/games/pocket-fish-tank/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/fish-tank",
+        "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+      ],
+      "notes": "Verify Voxel Fish Tank/Pocket Fish Tank names and platform distinctions; the Google Play destination is a bundle.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-party-bus",
+      "category": "Games",
+      "title": "P.A.R.T.Y. Bus: Wasteland Run",
+      "path": "/games/party-bus/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/party-bus"
+      ],
+      "notes": "Verify actual published/prototype status; do not promise roadmap concepts as shipped mechanics.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-pocket-ant-farm",
+      "category": "Games",
+      "title": "Pocket Ant Farm",
+      "path": "/games/pocket-ant-farm/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/ant-farm",
+        "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+      ],
+      "notes": "Google Play destination is the Lofi and Chill Pack collection.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-briarhold",
+      "category": "Games",
+      "title": "Briarhold",
+      "path": "/games/briarhold/",
+      "action": "enhance-existing",
+      "officialSources": [
+        "https://samfa12.com/games/briarhold/",
+        "https://github.com/Samfa12-tech/samfa12-website/releases",
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/games/briarhold/releases/latest.json"
+      ],
+      "notes": "Preserve existing detailed page, statistics definitions, Android release/update trust chain and protected browser assets. Alpha.101 observed at audit; verify at execution. Co-op remains experimental unless current verified sources say otherwise.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-toknight-2",
+      "category": "Books",
+      "title": "ToKnight 2: The Fire Beneath",
+      "path": "/books/toknight-2-the-fire-beneath/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0H3MW9LGP"
+      ],
+      "notes": "Verify Jason Proud series Book 2; link back to Book 1.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-free-to-a-good-home",
+      "category": "Books",
+      "title": "Free to a Good Home",
+      "path": "/books/free-to-a-good-home/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0GZDH57ZC"
+      ],
+      "notes": "Verify The Good Home novels series position before schema or reading-order claims.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-a-place-of-his-own",
+      "category": "Books",
+      "title": "A Place of His Own",
+      "path": "/books/a-place-of-his-own/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0H1Q3TGS7"
+      ],
+      "notes": "Verify The Good Home novels Book 2; use public blurb only, no private manuscript context.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-colossal",
+      "category": "Books",
+      "title": "Colossal",
+      "path": "/books/colossal/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0H738LPJ5"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-concubine",
+      "category": "Books",
+      "title": "Concubine",
+      "path": "/books/concubine/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0H1LG55MZ"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "book-sober",
+      "category": "Books",
+      "title": "Sober",
+      "path": "/books/sober/",
+      "action": "create",
+      "officialSources": [
+        "https://www.amazon.com.au/dp/B0GSQQMS4M"
+      ],
+      "notes": "Catalogue describes sequel novel to Drink. Verify and make that relationship explicit, not sameAs.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "music-drink-ost",
+      "category": "Music",
+      "title": "Drink OST",
+      "path": "/music/drink-ost/",
+      "action": "create",
+      "officialSources": [
+        "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
+      ],
+      "notes": "Album product, separate from the game. Only use verified track/release/credit details.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "music-billions-of-years",
+      "category": "Music",
+      "title": "Billions of Years",
+      "path": "/music/billions-of-years/",
+      "action": "create",
+      "officialSources": [
+        "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
+      ],
+      "notes": "Only enrich beyond the current minimal catalogue description when public album metadata supports it.",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "music-tower-defense-pack-ost",
+      "category": "Music",
+      "title": "Samfa12's Tower Defense Pack OST",
+      "path": "/music/tower-defense-pack-ost/",
+      "action": "create",
+      "officialSources": [
+        "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    },
+    {
+      "id": "music-lofi-and-chill-pack-ost",
+      "category": "Music",
+      "title": "Samfa12's Lofi and Chill Pack Original Soundtrack",
+      "path": "/music/lofi-and-chill-pack-ost/",
+      "action": "create",
+      "officialSources": [
+        "https://open.spotify.com/album/0VxBtatSWXbnCt5oPW1t3F"
+      ],
+      "notes": "",
+      "pageModified": "2026-09-23"
+    }
+  ],
+  "directories": [
+    {
+      "id": "directory-storefronts-google-play-apps",
+      "category": "Storefronts",
+      "title": "Google Play apps"
+    },
+    {
+      "id": "directory-storefronts-amazon-author",
+      "category": "Storefronts",
+      "title": "Amazon author"
+    },
+    {
+      "id": "directory-storefronts-godot-asset-library",
+      "category": "Storefronts",
+      "title": "Godot Asset Library"
+    },
+    {
+      "id": "directory-storefronts-spotify",
+      "category": "Storefronts",
+      "title": "Spotify"
+    },
+    {
+      "id": "directory-storefronts-steam",
+      "category": "Storefronts",
+      "title": "Steam"
+    },
+    {
+      "id": "directory-music-samfa12-on-spotify",
+      "category": "Music",
+      "title": "Samfa12 on Spotify"
+    },
+    {
+      "id": "directory-music-youtube-music",
+      "category": "Music",
+      "title": "YouTube Music"
+    },
+    {
+      "id": "directory-social-github",
+      "category": "Social",
+      "title": "GitHub"
+    },
+    {
+      "id": "directory-social-x-twitter",
+      "category": "Social",
+      "title": "X / Twitter"
+    },
+    {
+      "id": "directory-social-facebook",
+      "category": "Social",
+      "title": "Facebook"
+    },
+    {
+      "id": "directory-social-reddit",
+      "category": "Social",
+      "title": "Reddit"
+    },
+    {
+      "id": "directory-social-youtube",
+      "category": "Social",
+      "title": "YouTube"
+    },
+    {
+      "id": "directory-storefronts-itch-io",
+      "category": "Storefronts",
+      "title": "itch.io"
+    }
+  ]
+}

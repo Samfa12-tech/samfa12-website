@@ -362,3 +362,52 @@ Notes:
 - Keyboard focus styles are included for all interactive controls.
 - External links open in a new tab with `rel="noopener noreferrer"`.
 - The layout is mobile-first with responsive grids and readable typography.
+
+## Product pages and discoverability
+
+The 59 catalogue records in `data/projects.json` have stable IDs. The 46
+products have first-party pages; profile and storefront records remain in the
+directories. `content/manifest.json` records the route and disposition for
+each product. Separate IDs keep the Dust on the River game and novel, Android
+packs and their component games, and albums distinct.
+
+To update a product, verify its exact official store or repository page first.
+Edit its card fields in `data/projects.json` and its sourced introduction,
+details, FAQs, related links and genuine dated entries in
+`content/game-app-copy.json` or `content/book-music-copy.json`. Record the
+verification outcome and unresolved conflicts in `content/source-review.json`
+and `content/SOURCE_GAPS.md`. A store's planned publication date, a source
+review date and a shipped update date have different meanings. Only add a
+dated `/updates/` item when the official source supports that event and date.
+Update the explicit `pageModified` field in the product manifest, hub record
+or `content/site-routes.json` when visible page content meaningfully changes;
+the sitemap never derives dates from build time.
+
+Run:
+
+```bash
+npm run build:content
+npm run check:content
+npm run validate:catalogue
+npm run validate:site
+npm run validate:seo
+npm run test:content
+```
+
+The deterministic generator checks in ordinary static HTML pages, cards,
+JSON-LD, reading hubs, the updates index and `sitemap.xml`. Its `--check`
+mode fails if an output is stale. The GitHub Pages workflow checks content
+and release artifacts before upload, excludes editorial source files and
+dependencies from the public artifact, then validates the staged routes.
+Runtime copies under `apps/pocket-chordsmith/`, `apps/pocket-dj/`,
+`apps/what-would-win/` and `games/briarhold/play/` remain separate.
+
+For measurement after an authorised deployment, inspect Search Console's
+indexed URLs, sitemap coverage and search impressions/clicks over time. Its
+[Generative AI performance report](https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports)
+has dedicated Search and Discover views for AI-feature impressions and pages;
+these are also included in overall Performance totals. Use the existing
+aggregate analytics and consent-gated outbound-link events for referral and
+action trends. Neither source establishes a sale, a completed game session
+or an AI citation on its own. No private Search Console report was used for
+this change.

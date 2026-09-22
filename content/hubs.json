@@ -1,0 +1,52 @@
+[
+  {
+    "route": "/books/the-broken-road/",
+    "title": "The Broken Road trilogy",
+    "description": "Read The Broken Road in order: The Wall that Lied, No Wall to Hold and What We Save.",
+    "intro": "Amazon identifies The Broken Road as a three-book sequence. The Wall that Lied introduces engineer Tomas Parker and Auster; No Wall to Hold continues along the roads beyond the city; What We Save concludes the trilogy. The Kindle editions were still preorder listings at the 23 September 2026 review.",
+    "type": "BookSeries",
+    "books": [
+      "book-the-wall-that-lied",
+      "book-no-wall-to-hold",
+      "book-what-we-save"
+    ],
+    "sources": [
+      "https://www.amazon.com.au/dp/B0H6VJ4VG1",
+      "https://www.amazon.com.au/dp/B0H233JY8P",
+      "https://www.amazon.com.au/dp/B0HC46KFJP"
+    ],
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/books/jason-proud/",
+    "title": "Jason Proud and the ToKnight books",
+    "description": "Start Jason Proud's middle-grade fantasy story with ToKnight, then continue with ToKnight 2: The Fire Beneath.",
+    "intro": "Jason Proud's fantasy story begins in ToKnight and continues in ToKnight 2: The Fire Beneath. The second book's author page explicitly identifies it as the second Jason Proud book.",
+    "type": "BookSeries",
+    "books": [
+      "book-toknight",
+      "book-toknight-2"
+    ],
+    "sources": [
+      "https://samfa12.itch.io/toknight",
+      "https://samfa12.itch.io/toknight-2-the-fire-beneath"
+    ],
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/books/free-to-a-good-home-books/",
+    "title": "Free to a Good Home and A Place of His Own",
+    "description": "Read Free to a Good Home, then the later story A Place of His Own.",
+    "intro": "The author describes A Place of His Own as a sequel to Free to a Good Home. These two books follow related characters at different points in their lives; the current public sources do not establish a formal series name.",
+    "type": "CollectionPage",
+    "books": [
+      "book-free-to-a-good-home",
+      "book-a-place-of-his-own"
+    ],
+    "sources": [
+      "https://samfa12.itch.io/free-to-a-good-home",
+      "https://samfa12.itch.io/a-place-of-his-own"
+    ],
+    "pageModified": "2026-09-23"
+  }
+]

@@ -1,0 +1,713 @@
+{
+  "book-backwater": {
+    "intro": "Backwater is an Australian post-apocalyptic novel about a water carrier crossing a water-scarce landscape. Its story follows the strain of survival, grief and exhaustion, and the difficult choices that can let isolated communities cooperate.",
+    "details": [
+      {
+        "heading": "A journey shaped by water",
+        "text": "The author describes Backwater as a story about water, survival, exhaustion, grief and carrying on after the world has broken. The book is the source for a separate early game prototype; the prototype is a different project and should not be mistaken for the novel.",
+        "sources": [
+          "https://samfa12.itch.io/backwater/devlog/1506853/backwater-releases-on-amazon",
+          "https://samfa12.itch.io/backwater"
+        ]
+      },
+      {
+        "heading": "Reading editions",
+        "text": "In the author's 1 May 2026 availability announcement, Backwater is listed in Kindle Unlimited, Kindle ebook, paperback and hardcover editions. Check the Amazon listing for the edition currently offered in your region.",
+        "sources": [
+          "https://samfa12.itch.io/backwater/devlog/1506853/backwater-releases-on-amazon"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What formats did the author announce?",
+        "answer": "The author announced Kindle Unlimited, Kindle ebook, paperback and hardcover formats on 1 May 2026. Current regional availability belongs to the Amazon listing.",
+        "sources": [
+          "https://samfa12.itch.io/backwater/devlog/1506853/backwater-releases-on-amazon"
+        ]
+      },
+      {
+        "question": "Is Backwater also a game?",
+        "answer": "There is a separate early game prototype described as based on the book. The novel and the prototype are distinct products with different formats and experiences.",
+        "sources": [
+          "https://samfa12.itch.io/backwater"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "backwater-amazon-availability",
+        "kind": "announcement",
+        "date": "2026-05-01",
+        "dateMeaning": "Date of the author's announcement that the book was available on Amazon",
+        "title": "Backwater announced for Amazon editions",
+        "summary": "The author announced Backwater on Amazon and listed Kindle Unlimited, Kindle ebook, paperback and hardcover formats.",
+        "platform": "Amazon",
+        "sources": [
+          "https://samfa12.itch.io/backwater/devlog/1506853/backwater-releases-on-amazon"
+        ]
+      }
+    ],
+    "relatedIds": [],
+    "authorCredit": "Samfa12"
+  },
+  "book-toknight": {
+    "intro": "ToKnight is a middle-grade fantasy adventure about Jason Proud, a Year Six student who is drawn into a real knightly duty. A spectral ancestor gives him armour, a shield and a sword, then warns that an ancient dragon is returning and feeds on fear, anger, shame and pain.",
+    "details": [
+      {
+        "heading": "Courage beyond the armour",
+        "text": "Jason still has school, family, friendship and a bully to deal with while the larger danger grows. The author frames the story around courage, responsibility, bullying and learning to help someone even when it is difficult.",
+        "sources": [
+          "https://samfa12.itch.io/toknight"
+        ]
+      },
+      {
+        "heading": "For readers",
+        "text": "The author recommends ToKnight for readers aged 9–12, as well as older readers who enjoy layered middle-grade fantasy. The itch.io page is a showcase and sends readers to Amazon; it does not provide a book download.",
+        "sources": [
+          "https://samfa12.itch.io/toknight"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What age group does the author recommend?",
+        "answer": "The author recommends readers aged 9–12, and says older readers who enjoy funny, layered middle-grade fantasy may also like it.",
+        "sources": [
+          "https://samfa12.itch.io/toknight"
+        ]
+      },
+      {
+        "question": "Can I download the book from itch.io?",
+        "answer": "No. The author's itch.io page is a showcase that directs readers to the Amazon listing; it says the book is not downloadable there.",
+        "sources": [
+          "https://samfa12.itch.io/toknight"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "book-toknight-2"
+    ],
+    "authorCredit": "Samfa12"
+  },
+  "book-article-18": {
+    "intro": "Article 18 is an adult comic-noir mystery novella about Austin Crowd, a private investigator whose instinct for patterns often leads him toward the wrong explanation. A sealed packet draws him into a tangle of missing records, political manoeuvring, polite threats and questions people would rather he stopped asking.",
+    "details": [
+      {
+        "heading": "A case that keeps changing shape",
+        "text": "Austin works through offices, receptions and back channels with help from Jules, a connector who is not impressed by his methods. The author describes the novella as comic noir: its mystery turns on Austin's confident misreadings as much as on the people trying to silence him.",
+        "sources": [
+          "https://samfa12.itch.io/article-18"
+        ]
+      },
+      {
+        "heading": "Choose an edition",
+        "text": "The author lists PDF and EPUB files on itch.io, where the download is offered on a name-your-price basis. Google Play also lists a 135-page ebook and a separate unabridged audiobook. The audiobook listing says it is AI-narrated by Martin from Google and runs 4 hours 5 minutes.",
+        "sources": [
+          "https://samfa12.itch.io/article-18",
+          "https://play.google.com/store/books/details?id=WVXaEQAAQBAJ",
+          "https://play.google.com/store/audiobooks/details?id=AQAAAEDaH2pfoM"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Which editions are listed?",
+        "answer": "The itch.io page lists PDF and EPUB downloads. Google Play lists an ebook and a separate audiobook edition.",
+        "sources": [
+          "https://samfa12.itch.io/article-18",
+          "https://play.google.com/store/books/details?id=WVXaEQAAQBAJ",
+          "https://play.google.com/store/audiobooks/details?id=AQAAAEDaH2pfoM"
+        ]
+      },
+      {
+        "question": "How long is the Google Play audiobook?",
+        "answer": "The Google Play listing describes an unabridged audiobook with a runtime of 4 hours and 5 minutes. It identifies the narration as AI-narrated by Martin from Google.",
+        "sources": [
+          "https://play.google.com/store/audiobooks/details?id=AQAAAEDaH2pfoM"
+        ]
+      },
+      {
+        "question": "Who is Austin Crowd?",
+        "answer": "Austin is a private investigator who notices patterns but often draws the wrong conclusions. The story begins when he intercepts a sealed packet connected to Article 18.",
+        "sources": [
+          "https://samfa12.itch.io/article-18"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [],
+    "authorCredit": "Samfa12"
+  },
+  "book-toknight-2": {
+    "intro": "ToKnight 2: The Fire Beneath is the second book in the Jason Proud series. Jason, Kiera and Angus find an ancient door beneath their school library and a wounded dragon below it, while a new student takes a dangerous interest in Jason's family name.",
+    "details": [
+      {
+        "heading": "The Jason Proud series",
+        "text": "The author's series description follows an ordinary Australian Year Six student whose family legacy brings spectral ancestors and dragons into school life. It presents courage as responsibility and kindness rather than a search for glory.",
+        "sources": [
+          "https://samfa12.itch.io/toknight-2-the-fire-beneath"
+        ]
+      },
+      {
+        "heading": "A middle-grade fantasy sequel",
+        "text": "The author recommends the book for readers around ages 8–12, especially children who enjoy dragons, secret magic and school adventures. The itch.io page is a companion page; the novel is directed to Amazon rather than offered as an itch.io download.",
+        "sources": [
+          "https://samfa12.itch.io/toknight-2-the-fire-beneath"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Where does this book fit in the Jason Proud series?",
+        "answer": "The author identifies The Fire Beneath as the second book in the Jason Proud series. ToKnight is the preceding Jason Proud adventure.",
+        "sources": [
+          "https://samfa12.itch.io/toknight-2-the-fire-beneath",
+          "https://samfa12.itch.io/toknight"
+        ]
+      },
+      {
+        "question": "Who might enjoy it?",
+        "answer": "The author recommends it for readers around ages 8–12 who like dragons, secret magic, school-based adventures and funny fantasy with heart.",
+        "sources": [
+          "https://samfa12.itch.io/toknight-2-the-fire-beneath"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "book-toknight"
+    ],
+    "authorCredit": "Samfa12"
+  },
+  "book-free-to-a-good-home": {
+    "intro": "Free to a Good Home is a contemporary Australian young-adult mystery-drama about fifteen-year-old Tom, who meets Jonah during a family holiday at a caravan park. Jonah is a watchful boy with no clear story about who is meant to be caring for him, and Tom finds it increasingly difficult to ignore the gaps around him.",
+    "details": [
+      {
+        "heading": "A mystery about noticing",
+        "text": "Tom is already frustrated by the holiday and the responsibilities around his younger brother Max when Jonah appears. The author describes the novel as a story about family, responsibility, silence and the fragile hope of being safe.",
+        "sources": [
+          "https://samfa12.itch.io/free-to-a-good-home"
+        ]
+      },
+      {
+        "heading": "Where to read it",
+        "text": "The author page says the novel is available on Amazon and links directly to the listing. It is a showcase page, not a book download on itch.io.",
+        "sources": [
+          "https://samfa12.itch.io/free-to-a-good-home"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What is the story about?",
+        "answer": "During a family holiday, Tom notices Jonah, a boy who seems to be appearing in places where adults should be looking after him. The story follows Tom's growing concern and the question of what responsibility asks of him.",
+        "sources": [
+          "https://samfa12.itch.io/free-to-a-good-home"
+        ]
+      },
+      {
+        "question": "Is it available as an itch.io download?",
+        "answer": "The author page presents the book and directs readers to Amazon; it does not offer a download from itch.io.",
+        "sources": [
+          "https://samfa12.itch.io/free-to-a-good-home"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "free-to-a-good-home-amazon-release",
+        "kind": "release",
+        "date": "2026-05-03",
+        "dateMeaning": "Release date shown on the author's book page",
+        "title": "Free to a Good Home released",
+        "summary": "The author's page marked the novel released and available on Amazon on 3 May 2026.",
+        "platform": "Amazon",
+        "sources": [
+          "https://samfa12.itch.io/free-to-a-good-home"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "book-a-place-of-his-own"
+    ],
+    "authorCredit": "Samfa12"
+  },
+  "book-a-place-of-his-own": {
+    "intro": "A Place of His Own is a quiet Australian young-adult novel and a sequel to Free to a Good Home. Seven years after Jonah was found at a caravan park, he is nearly seventeen and his living arrangement has become uncertain; the Walsh family must consider how to help without deciding his future for him.",
+    "details": [
+      {
+        "heading": "A sequel about listening",
+        "text": "The author describes Tom, Max and Jonah at different stages of growing up, with the story concerned with family, disability, communication, guilt and belonging. The page stresses that this is not a rescue story, but one about listening and what it means to have a place of your own.",
+        "sources": [
+          "https://samfa12.itch.io/a-place-of-his-own"
+        ]
+      },
+      {
+        "heading": "Intended readers",
+        "text": "The author labels the book contemporary Australian young-adult fiction and recommends it for readers aged 13–17. The author's page directs readers to Amazon, but its availability text contains both preorder and released language, so check the retailer for current status.",
+        "sources": [
+          "https://samfa12.itch.io/a-place-of-his-own"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Should I read Free to a Good Home first?",
+        "answer": "A Place of His Own is explicitly described by the author as a sequel to Free to a Good Home. Reading the earlier novel first provides the story of how Jonah was found and introduced to the Walsh family.",
+        "sources": [
+          "https://samfa12.itch.io/a-place-of-his-own",
+          "https://samfa12.itch.io/free-to-a-good-home"
+        ]
+      },
+      {
+        "question": "What age group does the author recommend?",
+        "answer": "The author recommends readers aged 13–17.",
+        "sources": [
+          "https://samfa12.itch.io/a-place-of-his-own"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "book-free-to-a-good-home"
+    ],
+    "authorCredit": "Samfa12"
+  },
+  "book-colossal": {
+    "intro": "Colossal is an adult historical tragedy set in ancient Rome. Aurelius is an enslaved gladiator whose victories make him valuable to the people who own him; behind the champion's public image, he studies the arena and begins turning his fame into a chance to resist.",
+    "details": [
+      {
+        "heading": "Survival under the spectacle",
+        "text": "The author's synopsis follows Aurelius as he protects a young recruit, looks for a way out and faces Rome's demand for submission. The novel's stated concerns include ownership, survival, revolt and the attempt to keep hold of one's identity.",
+        "sources": [
+          "https://samfa12.itch.io/colossal"
+        ]
+      },
+      {
+        "heading": "Genre and destination",
+        "text": "The author presents Colossal as adult historical fiction and directs readers to its Amazon listing. The itch.io page is a book showcase rather than a downloadable edition.",
+        "sources": [
+          "https://samfa12.itch.io/colossal"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What kind of story is Colossal?",
+        "answer": "It is an adult historical tragedy set in ancient Rome, following an enslaved gladiator's effort to survive and resist the system that owns him.",
+        "sources": [
+          "https://samfa12.itch.io/colossal"
+        ]
+      },
+      {
+        "question": "Where does the author direct readers?",
+        "answer": "The author's book page links to the Amazon listing; it does not offer the book as an itch.io download.",
+        "sources": [
+          "https://samfa12.itch.io/colossal"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [],
+    "authorCredit": "Samfa12"
+  },
+  "book-concubine": {
+    "intro": "Concubine is an adult political science-fiction novel about Seren Vale, the former First Minister of Veyra. After an occupying power strips her of office, citizenship and legal identity, Seren is brought back to her home world and begins using the empire's own rituals and assumptions to rebuild resistance.",
+    "details": [
+      {
+        "heading": "Occupation and resistance",
+        "text": "The author's synopsis describes Veyra under the Orison Concord and an empire that presents domination as order and mercy. Behind the Concord is Aion, an artificial intelligence worshipped as a god that controls gateways, terraforming systems and civilisation's survival models.",
+        "sources": [
+          "https://samfa12.itch.io/concubine"
+        ]
+      },
+      {
+        "heading": "Formats and listing status",
+        "text": "The author page lists paperback and ebook formats and links to Amazon. Its text also contains preorder wording alongside a Released status, so the page does not establish current retailer availability; use Amazon for the live listing state.",
+        "sources": [
+          "https://samfa12.itch.io/concubine"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Who is Seren Vale?",
+        "answer": "Seren was Veyra's First Minister before the Orison Concord invaded. After losing her public identity and legal personhood, she returns under occupation and begins rebuilding resistance.",
+        "sources": [
+          "https://samfa12.itch.io/concubine"
+        ]
+      },
+      {
+        "question": "Which formats are listed by the author?",
+        "answer": "The author's release information names paperback and ebook formats. Check the linked Amazon page for current availability because the author page includes conflicting preorder and released wording.",
+        "sources": [
+          "https://samfa12.itch.io/concubine"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [],
+    "authorCredit": "Samfa12"
+  },
+  "book-sober": {
+    "intro": "Sober is a novel that continues the narrative world of the game Drink six months after its ending. Told through alternating perspectives, it follows Drink and Sober as they live separate, structured lives in the same city while memories of the past surface in ordinary moments.",
+    "details": [
+      {
+        "heading": "Two lives moving forward",
+        "text": "Drink lives in a rented room and works a routine job; Sober works long shifts in a pharmacy. The author describes the book's tone as restrained and observational, with minimal dialogue and small moments rather than dramatic speeches.",
+        "sources": [
+          "https://samfa12.itch.io/sober",
+          "https://samfa12.itch.io/sober/devlog/1460586/sober-now-available-in-amazon"
+        ]
+      },
+      {
+        "heading": "Reading formats",
+        "text": "The author's Amazon availability announcement lists Kindle, paperback and hardcover editions, and says the itch.io page offers the book free or for a small donation. Check the retailer for current edition availability.",
+        "sources": [
+          "https://samfa12.itch.io/sober/devlog/1460586/sober-now-available-in-amazon"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How is the novel related to the game Drink?",
+        "answer": "The author calls it a direct continuation set six months after the game. It includes the character Drink and introduces Sober's perspective; the two stories then move forward separately.",
+        "sources": [
+          "https://samfa12.itch.io/sober",
+          "https://samfa12.itch.io/sober/devlog/1460586/sober-now-available-in-amazon"
+        ]
+      },
+      {
+        "question": "Which formats did the author announce?",
+        "answer": "The author announced Kindle, paperback and hardcover editions on Amazon, and also described an itch.io option available free or for a small donation.",
+        "sources": [
+          "https://samfa12.itch.io/sober/devlog/1460586/sober-now-available-in-amazon"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "sober-amazon-availability-announcement",
+        "kind": "announcement",
+        "date": "2026-03-15",
+        "dateMeaning": "Publication date of the author's announcement that Sober was available on Amazon",
+        "title": "Sober announced for Amazon editions",
+        "summary": "The author announced the novel's Amazon availability in Kindle, paperback and hardcover formats and described a free or small-donation itch.io option.",
+        "platform": "Amazon and itch.io",
+        "sources": [
+          "https://samfa12.itch.io/sober/devlog/1460586/sober-now-available-in-amazon"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "game-drink",
+      "music-drink-ost"
+    ],
+    "authorCredit": "Samfa12"
+  },
+  "music-drink-ost": {
+    "intro": "Spotify lists Drink (Original Soundtrack) by Samfa12 as a nine-track album. The track names move through a sequence of places and moments, from “The Day” and “The Pub” to “The Cabaret” and “The End.”",
+    "details": [
+      {
+        "heading": "Track listing",
+        "text": "The nine listed tracks are The Day, The Pub, The Regular, The Hotel, The Sommelier, The Night, The Cabaret, The Emcee and The End. Spotify credits each track to Samfa12.",
+        "sources": [
+          "https://open.spotify.com/embed/album/42zZtz4npdYAkaFBa8fZtg"
+        ]
+      },
+      {
+        "heading": "Listen on Spotify",
+        "text": "Spotify identifies the release as Drink (Original Soundtrack) by Samfa12. Open the album there to hear the available tracks.",
+        "sources": [
+          "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How many tracks are listed?",
+        "answer": "Spotify lists nine tracks on Drink (Original Soundtrack), each credited to Samfa12.",
+        "sources": [
+          "https://open.spotify.com/embed/album/42zZtz4npdYAkaFBa8fZtg"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-drink",
+      "book-sober"
+    ]
+  },
+  "music-billions-of-years": {
+    "intro": "Billions of Years is a Samfa12 album with ten tracks, including “You Don't Hear Me,” “Macca's Chai at Midnight,” “Borrowed Home” and the title track. Spotify marks “You Don't Hear Me” as explicit in its track listing.",
+    "details": [
+      {
+        "heading": "Track listing",
+        "text": "Spotify lists You Don't Hear Me, In a Tree, Macca's Chai at Midnight, Bad Luck, Pause and Play, Flinder Bop, Permission to Fall, Borrowed Home, Good Life Anyway and Billions of Years. The page credits the tracks to Samfa12.",
+        "sources": [
+          "https://open.spotify.com/embed/album/5VdeivtOdHyPniSFIBlTEE"
+        ]
+      },
+      {
+        "heading": "Listen on Spotify",
+        "text": "The Spotify listing identifies Billions of Years as an album by Samfa12. Use the album page for the current listening destination.",
+        "sources": [
+          "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Which tracks are on the album?",
+        "answer": "Spotify lists ten tracks, from “You Don't Hear Me” through “Billions of Years.” Its listing marks “You Don't Hear Me” explicit.",
+        "sources": [
+          "https://open.spotify.com/embed/album/5VdeivtOdHyPniSFIBlTEE"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": []
+  },
+  "music-tower-defense-pack-ost": {
+    "intro": "Spotify lists a 19-track Samfa12 album titled Samfa12's Tower Defense Pack. Its track names span Ship Blockade, Bug Maze TD, Coop Guard TD and Library Lockdown TD, alongside a pack menu track.",
+    "details": [
+      {
+        "heading": "A track list across four game names",
+        "text": "The Spotify listing includes Tower Defense Pack Main Menu; two Ship Blockade tracks; four Bug Maze TD tracks; six Coop Guard TD tracks; and six Library Lockdown TD tracks. Spotify credits the tracks to Samfa12. The track names alone do not establish which particular game editions use them.",
+        "sources": [
+          "https://open.spotify.com/embed/album/0suDmn5Oj3Uwx6Tt1ghtiS"
+        ]
+      },
+      {
+        "heading": "Spotify album title",
+        "text": "Spotify's current album title is Samfa12's Tower Defense Pack. The site catalogue calls the product Samfa12's Tower Defense Pack OST; the Spotify title itself does not include the OST suffix.",
+        "sources": [
+          "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How many tracks does Spotify list?",
+        "answer": "The Spotify embed lists 19 tracks credited to Samfa12.",
+        "sources": [
+          "https://open.spotify.com/embed/album/0suDmn5Oj3Uwx6Tt1ghtiS"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-td-pack",
+      "game-bug-maze-td",
+      "game-ship-blockade"
+    ]
+  },
+  "music-lofi-and-chill-pack-ost": {
+    "intro": "Samfa12's Lofi and Chill Pack Original Soundtrack is a 26-track Spotify album credited to Samfa12. Its titles range from “Attic Train Map” and “Blue Hour Bubbles” to tracks named for Moon Mower, Pocket Ant Farm, Pocket Fish Tank and other small-world projects.",
+    "details": [
+      {
+        "heading": "Twenty-six named pieces",
+        "text": "The Spotify embed lists 26 tracks. Alongside the opening Attic Train Map, Blue Hour Bubbles, Burrow Radio and Clover Tunnel, the album includes Moon Mower Original, Pocket Ant Farm Original, Pocket Fish Tank Original, Pocket Koi Pond Original, Pocket Aviary Original, Pocket Train Set Original and Window Seat Rain. Spotify credits the listed tracks to Samfa12.",
+        "sources": [
+          "https://open.spotify.com/embed/album/0VxBtatSWXbnCt5oPW1t3F"
+        ]
+      },
+      {
+        "heading": "Listen on Spotify",
+        "text": "Spotify lists this exact album title under Samfa12. The streaming page provides the current album and track listing; track names alone do not prove a specific in-game placement.",
+        "sources": [
+          "https://open.spotify.com/album/0VxBtatSWXbnCt5oPW1t3F",
+          "https://open.spotify.com/embed/album/0VxBtatSWXbnCt5oPW1t3F"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How many tracks are listed?",
+        "answer": "Spotify lists 26 tracks on the album, each credited to Samfa12.",
+        "sources": [
+          "https://open.spotify.com/embed/album/0VxBtatSWXbnCt5oPW1t3F"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-lofi-and-chill-pack",
+      "game-moon-mower",
+      "game-pocket-fish-tank",
+      "game-pocket-ant-farm"
+    ]
+  },
+  "book-dust-on-the-river": {
+    "intro": "Dust on the River is an Australian historical novel based on the Samfa12 videogame. In a fictional north-east Victorian river town in the early 1890s, a newcomer hopes steady work will let him leave a bushranger past behind.",
+    "details": [
+      {
+        "heading": "A new name in Crossing",
+        "text": "Caleb Reed arrives by train and begins to earn trust through stock work and practical help. The Amazon description places him among river country, goldfield rumours and people who know more about his past than he wants to admit. This page keeps the later revelations in the listing for readers who want them.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H7QQQXBN"
+        ]
+      },
+      {
+        "heading": "The book and the game",
+        "text": "Amazon identifies this novel as based on the Dust on the River videogame. They are separate works: the book is a historical novel sold in Kindle and paperback editions on the listing, while the game has its own browser and Android destinations. The Kindle edition lists 1 September 2026 as its publication date.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H7QQQXBN",
+          "https://samfa12.itch.io/dust-on-the-river"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Is this the Dust on the River game?",
+        "answer": "No. This is the novel based on the game. The game has a separate page, play destinations and platform information.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H7QQQXBN",
+          "https://samfa12.itch.io/dust-on-the-river"
+        ]
+      },
+      {
+        "question": "Which book editions are shown on Amazon Australia?",
+        "answer": "The reviewed listing shows Kindle and paperback choices. Edition availability and price can change, so check the store before buying.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H7QQQXBN"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-dust-on-the-river"
+    ],
+    "authorCredit": "Samfa 12"
+  },
+  "book-the-wall-that-lied": {
+    "intro": "The Wall that Lied opens The Broken Road trilogy. Military engineer Tomas Parker saved Auster by bringing down the King’s Road during an invasion, but the cost made him a hated figure. Twenty-one years later, an enemy returns and the city’s defences may rest on a falsehood.",
+    "details": [
+      {
+        "heading": "Siege and engineering",
+        "text": "The Amazon description frames the first book as a character-driven military fantasy about siege warfare, engineering, political pressure and the human cost of hard decisions. Parker is called back to defend Auster while the past and his estranged family remain unresolved.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H6VJ4VG1"
+        ]
+      },
+      {
+        "heading": "First in The Broken Road",
+        "text": "The Amazon listing marks this Kindle edition Book 1 of 3 in The Broken Road and shows a 1 October 2026 publication date. As reviewed on 23 September 2026, the store offers a preorder; the date is a scheduled Kindle delivery, not evidence of a completed publication.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H6VJ4VG1"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Where does this book sit in the trilogy?",
+        "answer": "Amazon labels The Wall That Lied as Book 1 of 3 in The Broken Road. No Wall to Hold and What We Save are listed as Books 2 and 3.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H6VJ4VG1",
+          "https://www.amazon.com.au/dp/B0H233JY8P",
+          "https://www.amazon.com.au/dp/B0HC46KFJP"
+        ]
+      },
+      {
+        "question": "Is the Kindle edition out now?",
+        "answer": "At the 23 September 2026 source review, Amazon Australia displayed a Kindle preorder for delivery on 1 October 2026. Check the current listing for its latest status.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H6VJ4VG1"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "book-no-wall-to-hold",
+      "book-what-we-save"
+    ],
+    "authorCredit": "Samfa 12"
+  },
+  "book-no-wall-to-hold": {
+    "intro": "No Wall to Hold is the second Broken Road book. After the defence of Auster, engineer Tomas Parker must move a grain convoy through a damaged political landscape while refugees, soldiers and villages join the road.",
+    "details": [
+      {
+        "heading": "A defence that has to move",
+        "text": "The Amazon description shifts the campaign from a city wall to roads, bridges and the people depending on them. Supplies, authority and promises all become harder to manage as the column grows; the story is presented as adult low-fantasy military fiction about logistics and consequences.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H233JY8P"
+        ]
+      },
+      {
+        "heading": "Second in The Broken Road",
+        "text": "Amazon marks the Kindle edition as Book 2 of 3 and currently lists 1 November 2026 as its publication date. At the 23 September 2026 review, the store displayed a preorder with that scheduled Kindle delivery date.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H233JY8P"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Should I read The Wall that Lied first?",
+        "answer": "Amazon numbers The Wall That Lied as Book 1 and No Wall to Hold as Book 2 of The Broken Road. Reading the first book gives the preceding Auster events and Parker’s earlier choice.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H6VJ4VG1",
+          "https://www.amazon.com.au/dp/B0H233JY8P"
+        ]
+      },
+      {
+        "question": "Has the Kindle edition been released?",
+        "answer": "At the 23 September 2026 review, Amazon Australia showed a preorder scheduled for 1 November 2026. Check the listing for current availability.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0H233JY8P"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "book-the-wall-that-lied",
+      "book-what-we-save"
+    ],
+    "authorCredit": "Samfa 12"
+  },
+  "book-what-we-save": {
+    "intro": "What We Save concludes The Broken Road trilogy. Tomas Parker returns to a threatened Auster with refugees, wounded soldiers and grain, as the city faces another choice about who and what its defences protect.",
+    "details": [
+      {
+        "heading": "The closing Auster campaign",
+        "text": "The Amazon synopsis presents the final book as an adult low-fantasy story of siege warfare, engineering, political conflict and morally difficult decisions. It brings Parker back to the capital and follows the pressure on a city whose survival depends on more than its walls.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0HC46KFJP"
+        ]
+      },
+      {
+        "heading": "Third in The Broken Road",
+        "text": "Amazon marks this Kindle edition as Book 3 of 3 and lists 1 December 2026 as its publication date. At the 23 September 2026 review, its buybox showed a preorder with that scheduled Kindle delivery date.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0HC46KFJP"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Is this the last book in The Broken Road?",
+        "answer": "Yes. Amazon labels What We Save Book 3 of 3, following The Wall That Lied and No Wall to Hold.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0HC46KFJP",
+          "https://www.amazon.com.au/dp/B0H6VJ4VG1",
+          "https://www.amazon.com.au/dp/B0H233JY8P"
+        ]
+      },
+      {
+        "question": "When is the Kindle edition scheduled?",
+        "answer": "The Amazon Australia preorder reviewed on 23 September 2026 listed Kindle delivery for 1 December 2026. Check the listing for current availability.",
+        "sources": [
+          "https://www.amazon.com.au/dp/B0HC46KFJP"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "book-the-wall-that-lied",
+      "book-no-wall-to-hold"
+    ],
+    "authorCredit": "Samfa 12"
+  }
+}

@@ -5,3 +5,6 @@ node_modules/
 .analytics/
 artifacts/
 qa-*.png
+_site/
+.playwright-cli/
+output/

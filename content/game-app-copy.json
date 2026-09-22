@@ -1,0 +1,1226 @@
+{
+  "game-dust-on-the-river": {
+    "intro": "Dust on the River is an Australian historical life game set in a fictional north-east Victorian river town in the 1890s. You arrive under a new name, take station work, ride, fish and pan for gold while a past tied to bushranger Red Jack starts to catch up.",
+    "details": [
+      {
+        "heading": "A frontier story in Victoria",
+        "text": "The story is set in Crossing, a fictional town inspired by Victorian goldfields, railway towns and high-country settlements. It follows a former bushranger trying to make a new life through ordinary work and relationships with townspeople.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
+          "https://samfa12.itch.io/dust-on-the-river"
+        ]
+      },
+      {
+        "heading": "Work, ride and explore",
+        "text": "The Android listing describes station jobs, moving livestock, riding between Crossing and nearby stations, fishing, gold panning, eating, resting and saving progress. The itch page describes its HTML5 browser build as unfinished and still in development, so platform status differs by build.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
+          "https://samfa12.itch.io/dust-on-the-river"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Which platforms are listed?",
+        "answer": "The itch listing describes the unfinished HTML5 browser build. Google Play is a separate Android listing; check each store page for current platform details.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
+          "https://samfa12.itch.io/dust-on-the-river"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "android-crossing-polish-september-2026",
+        "kind": "listing",
+        "date": "2026-09-08",
+        "dateMeaning": "Google Play listing's displayed update date",
+        "title": "Android listing notes new work and Crossing polish",
+        "summary": "The Android What's New text mentions Station Agent work, a golden trail to Redgum, softer roads, rain puddles, wet footsteps, dust trails, lighting changes, horse naming and clearer first-ride guidance.",
+        "platform": "Android",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver"
+        ]
+      },
+      {
+        "id": "browser-v27-wip-july-2026",
+        "kind": "release",
+        "date": "2026-07-01",
+        "dateMeaning": "itch.io development log publication date",
+        "title": "v2.7 WIP update",
+        "summary": "The itch page links a WIP update about foliage, riverbanks, gold dust and Crossing polish.",
+        "platform": "HTML5 browser build",
+        "sources": [
+          "https://samfa12.itch.io/dust-on-the-river"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "book-dust-on-the-river"
+    ]
+  },
+  "game-drink": {
+    "intro": "Drink is a short, top-down narrative game about alcohol dependence, avoidance and the beginning of accountability. Its fixed story follows a person through a small town where drinking brings short-term relief and consequences accumulate.",
+    "details": [
+      {
+        "heading": "A contained story with one ending",
+        "text": "The itch page describes a finite game with sparse dialogue, constrained money and morally weighted choices. It says the ending is fixed and focused on accountability, not recovery; the subject matter includes alcohol dependence, denial, avoidance and shame.",
+        "sources": [
+          "https://samfa12.itch.io/drink"
+        ]
+      },
+      {
+        "heading": "The game and its related works",
+        "text": "Drink is the game. Sober is described as a novel set after the game, and Drink (Original Soundtrack) is a separate album. These are related works, not alternate editions of the game.",
+        "sources": [
+          "https://samfa12.itch.io/drink",
+          "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What should players know about the subject matter?",
+        "answer": "The game depicts alcohol use and deals with dependence, denial, avoidance, shame and accountability. The itch page says the subject matter may be uncomfortable for some players; Google Play labels its rating for use of alcohol.",
+        "sources": [
+          "https://samfa12.itch.io/drink",
+          "https://play.google.com/store/apps/details?id=com.samsmall.drink"
+        ]
+      },
+      {
+        "question": "What platforms are available?",
+        "answer": "The itch listing offers HTML5 and Windows builds. Google Play lists the Android game, and the listing says the mobile and Steam versions are fully featured with controller support. These platform statements describe their respective store listings.",
+        "sources": [
+          "https://samfa12.itch.io/drink",
+          "https://play.google.com/store/apps/details?id=com.samsmall.drink"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "android-sdk-update-july-2026",
+        "kind": "listing",
+        "date": "2026-07-25",
+        "dateMeaning": "Google Play listing's displayed update date",
+        "title": "Android SDK update",
+        "summary": "The Android What's New note says the app was updated to the latest Android SDK.",
+        "platform": "Android",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.drink"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "book-sober",
+      "music-drink-ost"
+    ]
+  },
+  "game-possum-cafe": {
+    "intro": "Night Shift at Possum's Café is a cosy pixel-art café game about serving animal customers as a possum barista. Prepare simple drinks and treats, keep orders moving through quiet moments and rushes, and gradually make the neighbourhood café busier and more inviting.",
+    "details": [
+      {
+        "heading": "A small café and short shifts",
+        "text": "The game focuses on one Australian-inspired night café, simple order-making and replayable sessions. Its listed menu includes flat whites, tea, hot chocolate, croissants and cake; the tone favours a gentle atmosphere over complex management systems.",
+        "sources": [
+          "https://samfa12.itch.io/possum-cafe",
+          "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
+        ]
+      },
+      {
+        "heading": "One game across two store names",
+        "text": "The itch page and Google Play description identify the same possum-barista café game. Google Play's store title is “Possum Café: Cosy Barista Game,” while the product description calls it “Night Shift at Possum's Café.” The Play listing says it contains ads.",
+        "sources": [
+          "https://samfa12.itch.io/possum-cafe",
+          "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What do you do in the game?",
+        "answer": "You serve animal customers by preparing drinks and treats, including flat whites, tea, hot chocolate, pastries and cake. Google Play also describes small upgrades and timed service as part of play.",
+        "sources": [
+          "https://samfa12.itch.io/possum-cafe",
+          "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
+        ]
+      },
+      {
+        "question": "Is the Android listing ad-free?",
+        "answer": "No. The Google Play listing currently labels the app “Contains ads.” Store details can change, so check Google Play for current information.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "possums-first-shift-august-2026",
+        "kind": "listing",
+        "date": "2026-08-28",
+        "dateMeaning": "Google Play listing's displayed update date",
+        "title": "A gentler first night",
+        "summary": "The Android What's New note describes a guided two-order opening, a longer and more forgiving first shift, a clearer mobile café layout and a small after-close story teaser.",
+        "platform": "Android",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
+        ]
+      }
+    ]
+  },
+  "game-the-last-guard": {
+    "intro": "The Last Guard is a first-person browser wall-defence survival game. Aim a mounted gun against a fantasy horde, manage heat, call support and bank scrap to improve your chances between stands.",
+    "details": [
+      {
+        "heading": "Hold the wall",
+        "text": "The itch page describes mounted-gun combat with overheating and emergency cooling, purchasable weapons, explosive ammunition, defensive structures, artillery support and persistent upgrades between runs.",
+        "sources": [
+          "https://samfa12.itch.io/the-last-guard"
+        ]
+      },
+      {
+        "heading": "Browser controls and local progress",
+        "text": "The listing describes mouse, keyboard and touch controls, with controller support marked experimental. It says saves are stored locally in the browser and do not require an account.",
+        "sources": [
+          "https://samfa12.itch.io/the-last-guard"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Does the game save progress?",
+        "answer": "The itch listing says it uses local browser saves and does not require an account.",
+        "sources": [
+          "https://samfa12.itch.io/the-last-guard"
+        ]
+      },
+      {
+        "question": "Are all army sizes ordinary play profiles?",
+        "answer": "No. The page lists 2k, 6k and 14k as playable army profiles, and labels 28k and 40k as stress profiles.",
+        "sources": [
+          "https://samfa12.itch.io/the-last-guard"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-briarhold"
+    ]
+  },
+  "game-the-horde": {
+    "intro": "The Horde is a focused native Vulkan hardware ray-tracing technology demo for compatible Windows RT GPUs and Android phones. Its current itch description follows a lantern-bearing character through a wet gothic ruin, with sword combat, reflective water and a lich encounter.",
+    "details": [
+      {
+        "heading": "A technology showcase, not a complete game",
+        "text": "The publisher describes The Horde as a focused tech demo. It says the demo uses Vulkan acceleration structures and ray-tracing commands, and has no raster, browser, baked, screen-space or simulated ray-tracing fallback.",
+        "sources": [
+          "https://samfa12.itch.io/the-horde",
+          "https://github.com/Samfa12-tech/The-Horde-RT-demo"
+        ]
+      },
+      {
+        "heading": "Compatibility is hardware-dependent",
+        "text": "The page names compatible Android phones and Windows RT GPUs as target platforms, but it does not provide a verified device compatibility list. Do not infer support for a particular phone or GPU from the general platform label.",
+        "sources": [
+          "https://samfa12.itch.io/the-horde"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can I play this in a browser?",
+        "answer": "No browser version is listed. The publisher explicitly says this demo has no browser or simulated ray-tracing fallback.",
+        "sources": [
+          "https://samfa12.itch.io/the-horde"
+        ]
+      },
+      {
+        "question": "Will it run on my Android phone?",
+        "answer": "Only if the phone supports the required Vulkan hardware ray-tracing features. The listing does not confirm compatibility for every model; check the project source and device support before installing.",
+        "sources": [
+          "https://samfa12.itch.io/the-horde",
+          "https://github.com/Samfa12-tech/The-Horde-RT-demo"
+        ]
+      }
+    ],
+    "updates": []
+  },
+  "game-bug-swarm": {
+    "intro": "Bug Swarm is a phone-oriented tower-defence prototype about placing towers beside a curved dirt-tray path and responding as waves of bugs flood through it. Its local game menu shows a Leaf 1k flood and additional prototype levels that begin locked.",
+    "details": [
+      {
+        "text": "The current browser runtime describes a curved dirt-tray maze, DIY towers and player tools including Poke and Burn. It lists ants, roaches and beetles as enemy mixes, with a workbench upgrade tree and Bug Bucks and Rare Parts as progression resources.",
+        "heading": "Build beside the bug path",
+        "sources": [
+          "https://samfa12.com/games/bug-swarm/"
+        ]
+      },
+      {
+        "text": "The menu labels its flood levels as prototypes: Leaf 1k is available in the default menu while Biscuit 2.5k, Crayon 5k, Button 7.5k and Toybox 10k appear locked. A separate Lab mode is labelled for browser stress testing. These labels do not establish supported performance on phones at those swarm sizes.",
+        "heading": "A phone prototype with larger tests still marked as prototype",
+        "sources": [
+          "https://samfa12.com/games/bug-swarm/"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "sources": [
+          "https://samfa12.com/games/bug-swarm/"
+        ],
+        "question": "How do I place towers and use tools?",
+        "answer": "The runtime instructions say to select a tower and tap beside the path to place it. During a flood, select a tool such as Poke or Burn and use it on the bugs."
+      },
+      {
+        "sources": [
+          "https://samfa12.com/games/bug-swarm/"
+        ],
+        "question": "Are all five flood levels unlocked?",
+        "answer": "No. The current menu calls them prototype flood levels; Leaf 1k is available by default and the higher named levels show as locked. Lab mode is separately labelled for browser stress testing."
+      }
+    ],
+    "updates": []
+  },
+  "game-cursed-cutter": {
+    "intro": "Cursed Cutter is a pocket roguelite garden-horror game whose runtime title reads “Curse Cutter: Last Garden.” Play as an armoured groundskeeper, cut five cursed beds before they regrow, survive rootlings and seal the Rootgate before midnight.",
+    "details": [
+      {
+        "text": "The runtime describes third-person garden combat: clear five beds, fight rootlings and reach the centre to seal the exposed Rootgate. A countdown warns that midnight is approaching, while armour and spool charge track the player condition and cutting capacity.",
+        "heading": "Clear the garden and close the Rootgate",
+        "sources": [
+          "https://samfa12.com/games/cursed-cutter/"
+        ]
+      },
+      {
+        "text": "The page lists touch joystick, CUT and DODGE controls, with WASD, Space, Shift and mouse orbit hints for desktop. Root shards and persistent workshop upgrades carry between shifts; graphics, music, sound and camera-follow settings are saved on the device. The runtime uses Babylon.js with WebGPU and WebGL support.",
+        "heading": "Runs, upgrades and controls",
+        "sources": [
+          "https://samfa12.com/games/cursed-cutter/"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "sources": [
+          "https://samfa12.com/games/cursed-cutter/"
+        ],
+        "question": "Why does the game appear under two names?",
+        "answer": "The catalogue calls it Cursed Cutter, while the current runtime document title says “Curse Cutter: Last Garden” and its in-game logo says “Curse Cutter.” These names refer to the game at the same browser route."
+      },
+      {
+        "sources": [
+          "https://samfa12.com/games/cursed-cutter/"
+        ],
+        "question": "How do I finish a shift?",
+        "answer": "Clear the five beds, survive the rootlings and stand in the exposed Rootgate ring while holding CUT to seal it before midnight."
+      }
+    ],
+    "updates": []
+  },
+  "app-what-would-win": {
+    "intro": "What Would Win is a mock-serious text simulator for one creature against another or a group. Its public project description says a numerical engine determines the result using a deterministic model with seeded Monte Carlo variation; generated narration does not choose the winner.",
+    "details": [
+      {
+        "heading": "A simulator, not a prediction authority",
+        "text": "The repository describes structured creature profiles, abilities and counters, and says the numerical engine is authoritative for each simulated matchup. Results are produced by the model and random variation, not by the generated text. The project does not claim scientific predictive accuracy for real-world fights.",
+        "sources": [
+          "https://github.com/Samfa12-tech/What-Would-Win"
+        ]
+      },
+      {
+        "heading": "Custom profiles and reproducible shares",
+        "text": "The public README describes saveable private custom profiles and versioned reproducible shares. It also documents simulation and data specifications; use the app's own current explanation for how a particular matchup is modelled.",
+        "sources": [
+          "https://github.com/Samfa12-tech/What-Would-Win"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Does AI text decide who wins?",
+        "answer": "No. The repository says the numerical engine determines the outcome; generated text does not choose or alter the winner.",
+        "sources": [
+          "https://github.com/Samfa12-tech/What-Would-Win"
+        ]
+      },
+      {
+        "question": "Should I treat a result as a scientific prediction?",
+        "answer": "No. The public project describes a creature matchup simulator and its model, not a validated scientific predictor of real-world outcomes.",
+        "sources": [
+          "https://github.com/Samfa12-tech/What-Would-Win"
+        ]
+      }
+    ],
+    "updates": []
+  },
+  "app-pocket-chordsmith": {
+    "intro": "Pocket Chordsmith is a browser music sketchpad for building chord progressions, beats, bass, melodies, guitar parts, loops and longer song ideas. It offers a quick mode and a deeper arrangement mode, with exports for continuing work elsewhere.",
+    "details": [
+      {
+        "heading": "Sketch and arrange",
+        "text": "The itch listing describes chord progressions, drums, bass, melody and guitar, plus song sections that can be sequenced into longer ideas. Advanced tools include MIDI import and export, WAV export, JSON projects and PCS1 share codes.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-chordsmith",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+        ]
+      },
+      {
+        "heading": "Browser audio and licensing",
+        "text": "The product page says Pocket Chordsmith runs in the browser using lightweight Web Audio instruments and that performance can vary by device and browser. The public repository describes the app as source-available and unlicensed; do not describe the application as open source or imply that MIT covers it.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-chordsmith",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What can I export?",
+        "answer": "The product page lists compact JSON, PCS1 share codes, MIDI and WAV export. It also lists MIDI import in Advanced mode.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-chordsmith"
+        ]
+      },
+      {
+        "question": "Does it run in a browser?",
+        "answer": "Yes. The listing describes it as a browser tool using Web Audio instruments and notes that audio behaviour can vary by device and browser. It recommends tapping Play once to unlock audio.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-chordsmith"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "chordsmith-v63-may-2026",
+        "kind": "release",
+        "date": "2026-05-27",
+        "dateMeaning": "itch.io development log publication date",
+        "title": "Pocket Chordsmith v63",
+        "summary": "The linked development log title lists MIDI import, rock guitar, song sections and random ideas among the update topics.",
+        "platform": "Browser",
+        "sources": [
+          "https://samfa12.itch.io/pocket-chordsmith"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "app-pocket-dj",
+      "app-pocket-daw",
+      "asset-pocket-chordsmith-godot",
+      "app-pocket-audio-handoff"
+    ]
+  },
+  "asset-pocket-chordsmith-godot": {
+    "intro": "The Pocket Chordsmith Godot addon imports Pocket Chordsmith JSON or PCS1 share codes into Godot chart resources. The Godot Asset Library lists it as a community tool for Godot 4.4 under the MIT license; that license applies to the addon listing, not the whole Pocket Audio family.",
+    "details": [
+      {
+        "heading": "Bring song structure into a Godot project",
+        "text": "The Asset Library description says the addon compiles Pocket Chordsmith data into chart resources and provides beat, bar and section timing, adaptive music states, markers, cues and Godot-native sample or stem playback at runtime.",
+        "sources": [
+          "https://godotengine.org/asset-library/asset/5174",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/blob/main/README.md"
+        ]
+      },
+      {
+        "heading": "Addon licensing is distinct",
+        "text": "The Godot Asset Library lists this addon as MIT licensed. The Pocket Audio repository says licensing is mixed across its components; check each component's license before reusing other apps, assets or code.",
+        "sources": [
+          "https://godotengine.org/asset-library/asset/5174",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What input formats does it accept?",
+        "answer": "The public listing describes importing Pocket Chordsmith JSON and PCS1 share codes.",
+        "sources": [
+          "https://godotengine.org/asset-library/asset/5174"
+        ]
+      },
+      {
+        "question": "Does the MIT license cover Pocket Chordsmith itself?",
+        "answer": "No. The MIT listing is for the Godot addon. The repository describes the Pocket Audio components as having mixed licensing.",
+        "sources": [
+          "https://godotengine.org/asset-library/asset/5174",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "godot-asset-library-submission-2026",
+        "kind": "listing",
+        "date": "2026-07-23",
+        "dateMeaning": "Godot Asset Library submission date",
+        "title": "Pocket Chordsmith addon listing",
+        "summary": "The Godot Asset Library lists Pocket Chordsmith 1.2.0 for Godot 4.4 and shows a submission date of July 23, 2026.",
+        "platform": "Godot 4.4",
+        "sources": [
+          "https://godotengine.org/asset-library/asset/5174"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "app-pocket-chordsmith",
+      "app-pocket-audio-handoff"
+    ]
+  },
+  "app-pocket-audio-handoff": {
+    "intro": "Pocket Audio Handoff is a browser helper for moving Pocket Chordsmith PCS1 song data between a phone, Pocket DAW on desktop and the Godot addon. It supports short transfer codes, with copy and file handoff options also available.",
+    "details": [
+      {
+        "heading": "Move a song between tools",
+        "text": "The published helper identifies Pocket Chordsmith PCS1 as its transfer format and provides short-code links, copy and file fallbacks, and a Pocket DAW handoff path. It is a transfer helper, separate from the composer and the desktop DAW.",
+        "sources": [
+          "https://samfa12.com/apps/pocket-audio-handoff/",
+          "https://github.com/Samfa12-tech/samfa12-website/blob/main/apps/pocket-audio-handoff/index.html",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+        ]
+      },
+      {
+        "heading": "Use the current helper route",
+        "text": "The published route is /apps/pocket-audio-handoff/. Keep transfer URLs and its local and relay workflows associated with this helper; they are not product download links or standalone music compositions.",
+        "sources": [
+          "https://samfa12.com/apps/pocket-audio-handoff/",
+          "https://github.com/Samfa12-tech/samfa12-website/blob/main/apps/pocket-audio-handoff/index.html"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What can I transfer?",
+        "answer": "The helper is documented for Pocket Chordsmith PCS1 song data, including transfer by short code and copy or file fallbacks.",
+        "sources": [
+          "https://samfa12.com/apps/pocket-audio-handoff/",
+          "https://github.com/Samfa12-tech/samfa12-website/blob/main/apps/pocket-audio-handoff/index.html"
+        ]
+      },
+      {
+        "question": "Does it replace Pocket Chordsmith or Pocket DAW?",
+        "answer": "No. Its documented role is to move song data between the tools; Chordsmith is the composer and Pocket DAW is a separate desktop application.",
+        "sources": [
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "app-pocket-chordsmith",
+      "app-pocket-daw",
+      "asset-pocket-chordsmith-godot"
+    ]
+  },
+  "game-bug-maze-td": {
+    "intro": "Bug Maze TD is a portrait-first tower-defence game for mobile browsers. Build paths and place bug-themed towers across handcrafted garden levels, while ground and flying enemies follow different routes.",
+    "details": [
+      {
+        "heading": "Build a maze through the garden",
+        "text": "The itch page describes four handcrafted levels, multiple enemy types, towers with different roles, level-specific themes and music, and speed options. The browser game can save a run and continue later.",
+        "sources": [
+          "https://samfa12.itch.io/bug-maze-td"
+        ]
+      },
+      {
+        "heading": "The Android link is a collection",
+        "text": "Bug Maze TD is included in Samfa12 Tower Defense Pack on Google Play. That Play listing is for the five-game collection, not a standalone Android listing for Bug Maze TD.",
+        "sources": [
+          "https://samfa12.itch.io/bug-maze-td",
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can ground and flying enemies be blocked by the same maze?",
+        "answer": "The itch description says ground enemies path around the maze while flying enemies ignore it and head straight through.",
+        "sources": [
+          "https://samfa12.itch.io/bug-maze-td"
+        ]
+      },
+      {
+        "question": "Is the Google Play link a separate Bug Maze TD app?",
+        "answer": "No. It opens Samfa12 Tower Defense Pack, whose listing includes Bug Maze TD alongside other tower-defence games.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-td-pack",
+      "music-tower-defense-pack-ost"
+    ]
+  },
+  "game-breakfast-beat": {
+    "intro": "Breakfast Beat is a rhythm-infused tower-defence game set on a breakfast line. Place food-themed defences against incoming snack waves; lanes map to chord notes and tower columns fire in sequence, turning a defence layout into a musical grid.",
+    "details": [
+      {
+        "heading": "Defend in time with the music",
+        "text": "The itch page describes Egg Shakers, Toast Stacks, Yolk Bombs and Bacon Blasters. It says surviving twelve waves unlocks Endless Mode, and that different chords can be selected.",
+        "sources": [
+          "https://samfa12.itch.io/breakfast-beat"
+        ]
+      },
+      {
+        "heading": "Included in the Android pack",
+        "text": "The Google Play destination is Samfa12 Tower Defense Pack, a collection listing Breakfast Beat with four other games. It is not a separate Play listing for Breakfast Beat.",
+        "sources": [
+          "https://samfa12.itch.io/breakfast-beat",
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How does music relate to the tower defence?",
+        "answer": "The itch description says each lane corresponds to a chord note and each column fires on a step in the sequence, so the placed defences create a musical pattern.",
+        "sources": [
+          "https://samfa12.itch.io/breakfast-beat"
+        ]
+      },
+      {
+        "question": "Where is the Android version listed?",
+        "answer": "Breakfast Beat is listed as part of Samfa12 Tower Defense Pack on Google Play; the pack listing is the destination, not a standalone game listing.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-td-pack",
+      "music-tower-defense-pack-ost"
+    ]
+  },
+  "game-ship-blockade": {
+    "intro": "Ship Blockade is a lane-based arcade tower-defence game about stopping ships from breaking through a shipping lane. Place guns, mines, missile batteries and blocker boats, adapting as faster and more heavily armoured vessels arrive.",
+    "details": [
+      {
+        "heading": "Build while the pressure rises",
+        "text": "The itch page says defences can be placed during a wave, with a build delay, and towers can be upgraded between waves. It also describes the game as an early prototype focused on gameplay and balance, although the listing status says Released.",
+        "sources": [
+          "https://samfa12.itch.io/ship-blockade"
+        ]
+      },
+      {
+        "heading": "Included in the Android pack",
+        "text": "The Play link points to Samfa12 Tower Defense Pack, a collection. It does not identify a standalone Android Ship Blockade app.",
+        "sources": [
+          "https://samfa12.itch.io/ship-blockade",
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Is Ship Blockade a finished game?",
+        "answer": "The itch listing status is Released, but its own Notes section calls it an early prototype focused on gameplay and balance. The page preserves both details rather than treating the status label as proof of completion.",
+        "sources": [
+          "https://samfa12.itch.io/ship-blockade"
+        ]
+      },
+      {
+        "question": "Can I get it from Google Play by itself?",
+        "answer": "The current Play destination is the Samfa12 Tower Defense Pack collection; no standalone listing was verified.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-td-pack",
+      "music-tower-defense-pack-ost"
+    ]
+  },
+  "game-hop-bunny": {
+    "intro": "Hop Bunny is a precision jumping game: charge a jump, release at the right moment and try to reach a target height. Its handcrafted phases grow in scale, with collectibles, hazards, combo scoring and a carrot-moon finale.",
+    "details": [
+      {
+        "heading": "A timing challenge",
+        "text": "The itch page describes charge-and-release jumping, later air steering, mobile-friendly controls and original music. It lists the game as a released HTML5 platformer with keyboard, mouse and touchscreen inputs.",
+        "sources": [
+          "https://samfa12.itch.io/hop-bunny"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How do you jump?",
+        "answer": "Hold the HOP control to charge, then release to jump. The aim is to land as close as possible to the target height.",
+        "sources": [
+          "https://samfa12.itch.io/hop-bunny"
+        ]
+      }
+    ],
+    "updates": []
+  },
+  "game-reckless-dentist": {
+    "intro": "Reckless Dentist is a short browser score-attack game about treating cartoon teeth at speed. Spot the problem and drag the right tool into place while the clinic grows more chaotic.",
+    "details": [
+      {
+        "heading": "Fast dental microgames",
+        "text": "The itch page describes cleaning, filling and extraction, with Shift Mode and Patient Mode. It supports mouse and touch drag-and-drop and stores a local best score in the browser.",
+        "sources": [
+          "https://samfa12.itch.io/reckless-dentist"
+        ]
+      },
+      {
+        "heading": "Cartoon comedy",
+        "text": "The publisher describes the game as deliberately silly, with cartoon mouths and synthetic comedy sound effects; the page says it contains no blood or realism.",
+        "sources": [
+          "https://samfa12.itch.io/reckless-dentist"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How do the controls work?",
+        "answer": "Use mouse or touch to select a tool and drag it to the affected tooth.",
+        "sources": [
+          "https://samfa12.itch.io/reckless-dentist"
+        ]
+      },
+      {
+        "question": "Does the browser save a score?",
+        "answer": "The itch page says a local best score is saved in the browser.",
+        "sources": [
+          "https://samfa12.itch.io/reckless-dentist"
+        ]
+      }
+    ],
+    "updates": []
+  },
+  "game-gremlin-grenade-pinball": {
+    "intro": "Gremlin Grenade Pinball is a prototype that combines pinball with a gremlin horde: keep a live grenade moving with the flippers, hit traps and try to stop gremlins advancing down the board. Its itch page labels the game as in development.",
+    "details": [
+      {
+        "heading": "Prototype features and plans",
+        "text": "The itch listing describes a spring launcher, flippers, bumpers, trap targets and gremlins that move down the board. It separately labels features and five themed boards as planned or in development; these should not be presented as completed content.",
+        "sources": [
+          "https://samfa12.itch.io/gremlin-grenade-pinball"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Are all five listed boards complete?",
+        "answer": "The itch page presents five boards as planned and says the game is currently a prototype in development. It does not establish that all five are complete.",
+        "sources": [
+          "https://samfa12.itch.io/gremlin-grenade-pinball"
+        ]
+      }
+    ],
+    "updates": []
+  },
+  "game-wonky-vehicle-lab": {
+    "intro": "Wonky Vehicle Lab is a prototype vehicle-building sandbox for drawing odd machines and testing them on a bumpy physics track. Sketch parts, connect them with glue or welds, then drive and see whether the design reaches the finish.",
+    "details": [
+      {
+        "heading": "Draw, build and test",
+        "text": "The itch page describes drawing frames, struts, wheels and seats; joining parts; and sharing inventions with WVL1 build codes. It lists HTML5, keyboard, mouse and touchscreen support, and a MIT code license.",
+        "sources": [
+          "https://samfa12.itch.io/wonky-vehicle-lab"
+        ]
+      },
+      {
+        "heading": "A prototype with usability work remaining",
+        "text": "The page labels the project a prototype. A publisher reply to player feedback says mobile scaling was poor at the time; avoid claiming polished mobile usability.",
+        "sources": [
+          "https://samfa12.itch.io/wonky-vehicle-lab"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can I share a vehicle design?",
+        "answer": "Yes. The page describes copying and pasting WVL1 build codes to share vehicle designs.",
+        "sources": [
+          "https://samfa12.itch.io/wonky-vehicle-lab"
+        ]
+      }
+    ],
+    "updates": []
+  },
+  "game-td-pack": {
+    "intro": "Samfa12 Tower Defense Pack is an Android collection of bite-sized tower-defence games. The Google Play listing names Breakfast Beat, Ship Blockade, Bug Maze TD, Coop Guard TD and Library Lockdown TD, each with its own theme, towers, enemies and music.",
+    "details": [
+      {
+        "heading": "Five games in one collection listing",
+        "text": "The current Play About section lists five included games and describes offline play, short levels, shared launcher/settings/audio controls and no ads, accounts or data collection. Its What's New text separately refers to “all six included games,” which conflicts with that five-title list; the count should be treated as unresolved until the publisher clarifies it.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Which games does the listing name?",
+        "answer": "The current About section names Breakfast Beat, Ship Blockade, Bug Maze TD, Coop Guard TD and Library Lockdown TD. The same listing's What's New section says “all six included games,” so its count is internally inconsistent.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
+        ]
+      },
+      {
+        "question": "Are the constituent itch games separate Android store pages?",
+        "answer": "The individual catalogue links for Breakfast Beat, Ship Blockade and Bug Maze TD lead to this pack listing. It is a collection destination, not an individual app page for each game.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack",
+          "https://samfa12.itch.io/breakfast-beat",
+          "https://samfa12.itch.io/ship-blockade",
+          "https://samfa12.itch.io/bug-maze-td"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-bug-maze-td",
+      "game-breakfast-beat",
+      "game-ship-blockade",
+      "music-tower-defense-pack-ost"
+    ]
+  },
+  "game-lofi-and-chill-pack": {
+    "intro": "Samfa12's Lofi and Chill Pack is an Android collection of calm, low-pressure scenes with soft lofi music and voxel-style visuals. Its Play listing describes fish, ants, birds, a train set, a koi pond and Moon Mower as experiences in the collection.",
+    "details": [
+      {
+        "heading": "A collection of pocket worlds",
+        "text": "The listing names Voxel Fish Tank, Pocket Ant Farm, Pocket Aviary, Pocket Train Set, Pocket Koi Pond and Moon Mower. It describes mobile-first scenes with graphics settings and short, relaxed sessions; the listing calls the collection growing, so avoid implying a fixed permanent count.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      },
+      {
+        "heading": "Pack listing versus individual browser games",
+        "text": "The Google Play destination is the collection app. Pocket Fish Tank, Pocket Ant Farm and Moon Mower also have their own itch browser pages; the Play pack should be labelled as their collection destination, not as a standalone Android listing for each individual game.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+          "https://samfa12.itch.io/fish-tank",
+          "https://samfa12.itch.io/ant-farm",
+          "https://samfa12.itch.io/moon-mower"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What scenes are named in the current Play listing?",
+        "answer": "It names Voxel Fish Tank, Pocket Ant Farm, Pocket Aviary, Pocket Train Set, Pocket Koi Pond and Moon Mower. The listing describes the collection as growing, so that list may change.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      },
+      {
+        "question": "Is there a separate Play app for each named scene?",
+        "answer": "The catalogue's Play destination is one Lofi and Chill Pack collection listing. Some individual experiences also have separate itch browser pages; do not treat the pack URL as an individual game listing.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+          "https://samfa12.itch.io/fish-tank",
+          "https://samfa12.itch.io/ant-farm",
+          "https://samfa12.itch.io/moon-mower"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "lofi-pack-listing-august-2026",
+        "kind": "listing",
+        "date": "2026-08-29",
+        "dateMeaning": "Google Play listing's displayed update date",
+        "title": "Lofi and Chill Pack listing updated",
+        "summary": "The listing shows an update date of August 29, 2026 and describes the update as further optimisations and refinements.",
+        "platform": "Android collection",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "game-moon-mower",
+      "game-pocket-fish-tank",
+      "game-pocket-ant-farm",
+      "music-lofi-and-chill-pack-ost"
+    ]
+  },
+  "game-spin-vector": {
+    "intro": "Spin Vector is a neon twin-stick arcade shooter about piloting an upgradeable vector drone through themed arenas. Fight through waves, collect credits for persistent upgrades and face boss encounters; the Android listing also describes post-game Gauntlet and Adventure modes.",
+    "details": [
+      {
+        "heading": "Arena combat and upgrades",
+        "text": "The Google Play listing describes ten themed arenas with twelve waves each, mini-bosses on waves six and nine, and a main boss on wave twelve. Credits can be spent on persistent ship upgrades. It also describes an unlockable Gauntlet and a post-game Adventure hub after clearing the arenas.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.spinvector"
+        ]
+      },
+      {
+        "heading": "Adaptive music",
+        "text": "The Play and itch descriptions say the game has adaptive music; the itch page says it is powered by the Pocket Chordsmith engine. Avoid carrying forward any old closed-testing statement from an itch excerpt as the current Android release status.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.spinvector",
+          "https://samfa12.itch.io/spin-vector"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How many arenas are described in the current Android listing?",
+        "answer": "The Google Play listing describes ten themed arenas and twelve waves per arena, with mini-bosses and a main boss. These details refer to the current Android listing.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.spinvector"
+        ]
+      },
+      {
+        "question": "Is the music generated adaptively?",
+        "answer": "The store descriptions identify adaptive in-game music; the itch page says it uses the Pocket Chordsmith engine.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.spinvector",
+          "https://samfa12.itch.io/spin-vector"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "spin-vector-android-optimisation-august-2026",
+        "kind": "listing",
+        "date": "2026-08-31",
+        "dateMeaning": "Google Play listing's displayed update date",
+        "title": "Smaller Android download",
+        "summary": "The Android What's New text says the build is smaller and leaner through removal of unused code and resources, while gameplay, visuals, controls, saves, music and achievements remain unchanged.",
+        "platform": "Android",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samsmall.spinvector"
+        ]
+      }
+    ]
+  },
+  "game-mandible-wars": {
+    "intro": "Mandible Wars is an early playable, portrait-first RTS-lite about ants and termites fighting over a large patch of dirt. Command squads, scout through fog of war, gather nectar, build a colony and capture strongpoints on grid-based battlefields.",
+    "details": [
+      {
+        "heading": "Two modes and competing colonies",
+        "text": "The itch page lists Pheromone Conquest, where players capture and hold strongpoints, and Colony War, where the goal is to destroy the opposing colony. It describes phone-oriented controls and desktop support.",
+        "sources": [
+          "https://samfa12.itch.io/mandible-wars"
+        ]
+      },
+      {
+        "heading": "A playable build in development",
+        "text": "The publisher calls this an early playable build and asks for feedback on controls, balance, bugs, readability and mobile play. Treat current features as prototype details rather than a final release promise.",
+        "sources": [
+          "https://samfa12.itch.io/mandible-wars"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Which factions can I command?",
+        "answer": "The current itch description lists Ants and Termites as playable factions.",
+        "sources": [
+          "https://samfa12.itch.io/mandible-wars"
+        ]
+      },
+      {
+        "question": "What are the game modes?",
+        "answer": "Pheromone Conquest focuses on capturing strongpoints; Colony War focuses on destroying the opposing colony.",
+        "sources": [
+          "https://samfa12.itch.io/mandible-wars"
+        ]
+      }
+    ],
+    "updates": []
+  },
+  "game-moon-mower": {
+    "intro": "Moon Mower is a cosy-comic arcade game about a tiny astronaut mowing a glowing, overgrown moon. Cut paths through lunar grass, rescue trapped spirits, build combos and chase a score before time runs out.",
+    "details": [
+      {
+        "heading": "Automatic mowing, movement-led play",
+        "text": "The itch page says mowing happens automatically as the player moves, with boost controls, score chasing, quick restarts and graphics settings. It lists the browser game as released HTML5 and describes it as a few-minute session.",
+        "sources": [
+          "https://samfa12.itch.io/moon-mower"
+        ]
+      },
+      {
+        "heading": "Included in Lofi and Chill Pack",
+        "text": "Moon Mower is one of the experiences named in the Lofi and Chill Pack Google Play listing. That Play link is for the collection, while the itch page is the individual browser game page.",
+        "sources": [
+          "https://samfa12.itch.io/moon-mower",
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Is mowing controlled by a separate tool button?",
+        "answer": "The itch description says mowing is automatic as you move; the player steers, boosts, frees spirits and chases a score.",
+        "sources": [
+          "https://samfa12.itch.io/moon-mower"
+        ]
+      },
+      {
+        "question": "What does the Android link open?",
+        "answer": "It opens Samfa12's Lofi and Chill Pack, which names Moon Mower as one of its experiences; it is not a standalone Moon Mower listing.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-lofi-and-chill-pack",
+      "music-lofi-and-chill-pack-ost"
+    ]
+  },
+  "game-pocket-fish-tank": {
+    "intro": "Pocket Fish Tank is a calm aquarium toy: decorate a voxel tank, add water and watch fish and other small creatures settle in. The itch page calls the product “Fish Tank” in its description, while its page title is “Pocket Fish Tank.”",
+    "details": [
+      {
+        "heading": "Create a quiet aquarium",
+        "text": "The itch page describes plants, coral, pebbles, lights and castles, with fish, crabs, snails and shrimp. It says there is no score or fail state and identifies Babylon.js with WebGPU support where available.",
+        "sources": [
+          "https://samfa12.itch.io/fish-tank"
+        ]
+      },
+      {
+        "heading": "Browser and desktop files, plus a collection listing",
+        "text": "The itch page lists HTML5, Windows, macOS and Linux. The Android Play destination is Lofi and Chill Pack, whose current listing names a Voxel Fish Tank experience; it is a collection link, not a standalone Play page for this game.",
+        "sources": [
+          "https://samfa12.itch.io/fish-tank",
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can the aquarium fail?",
+        "answer": "The itch page says there is no score and no fail state; it is presented as a calm aquarium toy.",
+        "sources": [
+          "https://samfa12.itch.io/fish-tank"
+        ]
+      },
+      {
+        "question": "Does the Play link go to a standalone fish tank app?",
+        "answer": "No. It goes to Lofi and Chill Pack, which lists Voxel Fish Tank as one of the pack experiences.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-lofi-and-chill-pack",
+      "music-lofi-and-chill-pack-ost"
+    ]
+  },
+  "game-party-bus": {
+    "intro": "P.A.R.T.Y. Bus: Wasteland Run is a 3D browser driving-survival prototype about taking a battered yellow bus into hostile territory and getting survivors and supplies back to base. Damage, cargo weight, enemies and fuel all add pressure to the return trip.",
+    "details": [
+      {
+        "heading": "Scavenge and bring people home",
+        "text": "The current itch page's v0.9 description lists the Rust Mile route, scrap and fuel scavenging, survivor rescues, hostile encounters, manual turn-back and visible bus upgrades. It says the prototype has desktop and mobile touch controls.",
+        "sources": [
+          "https://samfa12.itch.io/party-bus"
+        ]
+      },
+      {
+        "heading": "Prototype status",
+        "text": "The catalogue calls the game in development; the itch page describes its current build as a browser prototype. These descriptions do not verify future roadmap features, so only the listed current build features are summarized here.",
+        "sources": [
+          "https://samfa12.itch.io/party-bus"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can I choose when to head back?",
+        "answer": "The current build description says the player can turn back manually and survive the ride home.",
+        "sources": [
+          "https://samfa12.itch.io/party-bus"
+        ]
+      },
+      {
+        "question": "Is this a finished release?",
+        "answer": "The publisher describes it as a 3D browser prototype and identifies the current build as v0.9.",
+        "sources": [
+          "https://samfa12.itch.io/party-bus"
+        ]
+      }
+    ],
+    "updates": []
+  },
+  "game-pocket-ant-farm": {
+    "intro": "Pocket Ant Farm is a relaxing voxel ant-colony simulation in a glass-sided dirt slab. Watch ants dig, explore and forage; drop food, suggest digging areas and make the soil translucent to see the tunnels.",
+    "details": [
+      {
+        "heading": "An observation toy in an early build",
+        "text": "The itch page describes a small colony that starts with one ant and can grow by adding workers. It says the prototype emphasizes atmosphere and observation rather than strict win-or-loss play, and recommends portrait mode on phone, tablet or desktop browser.",
+        "sources": [
+          "https://samfa12.itch.io/ant-farm"
+        ]
+      },
+      {
+        "heading": "Included in Lofi and Chill Pack",
+        "text": "The Google Play listing names Pocket Ant Farm as one experience in Lofi and Chill Pack. The Play destination is the collection listing, not an individual Android Pocket Ant Farm app.",
+        "sources": [
+          "https://samfa12.itch.io/ant-farm",
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can I control where ants dig?",
+        "answer": "The itch description says you can tap the farm to place dig hints and drop food; ants dig and explore within the simulation.",
+        "sources": [
+          "https://samfa12.itch.io/ant-farm"
+        ]
+      },
+      {
+        "question": "Is Pocket Ant Farm a standalone Play Store app?",
+        "answer": "The current Play link is for Lofi and Chill Pack, which lists Pocket Ant Farm as one of its experiences.",
+        "sources": [
+          "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-lofi-and-chill-pack",
+      "music-lofi-and-chill-pack-ost"
+    ]
+  },
+  "game-briarhold": {
+    "intro": "Briarhold is a first-person action-defence roguelite with browser and Android testing builds. Prepare defences between attacks, fight the Briar Host and experiment with multiplayer co-op, which remains an experimental feature.",
+    "details": [
+      {
+        "heading": "Defend the fortress",
+        "text": "Briarhold is described as a first-person action-defence roguelite, with repairable defences prepared between attacks. The public Alpha.101 notes focus on combat and fortress fixes; browser play and Android testing use separate destinations.",
+        "sources": [
+          "https://samfa12.com/games/briarhold/",
+          "https://github.com/Samfa12-tech/samfa12-website/releases"
+        ]
+      },
+      {
+        "heading": "Co-op is experimental",
+        "text": "The Alpha.101 release notes say co-op recovery, input, avatar cleanup and firing presentation were improved. They also state that the intermittent Night 5 freeze remains under investigation and that two-phone, cross-network play and sustained performance remain active test areas.",
+        "sources": [
+          "https://github.com/Samfa12-tech/samfa12-website/releases"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Where can I try Briarhold?",
+        "answer": "The catalogue provides a browser play route and a separate Briarhold information/testing page. Android release and updater details should be checked on the current official release page before use.",
+        "sources": [
+          "https://samfa12.com/games/briarhold/",
+          "https://github.com/Samfa12-tech/samfa12-website/releases"
+        ]
+      },
+      {
+        "question": "Is multiplayer co-op finished?",
+        "answer": "The current public description calls co-op experimental.",
+        "sources": [
+          "https://samfa12.com/games/briarhold/"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "platform": "Browser and Android tester builds",
+        "title": "Briarhold Alpha.101",
+        "kind": "release",
+        "id": "alpha-101-september-2026",
+        "sources": [
+          "https://github.com/Samfa12-tech/samfa12-website/releases"
+        ],
+        "dateMeaning": "GitHub prerelease publication date",
+        "date": "2026-09-20",
+        "summary": "The release notes describe fixes for recurring Mason repair and New Run freezes, improvements to auto-fire and enemy presentation, and co-op recovery/input changes. The notes also say the intermittent Night 5 freeze remains under investigation; cross-network co-op and sustained performance remain active test areas."
+      }
+    ],
+    "relatedIds": [
+      "game-the-last-guard"
+    ]
+  },
+  "app-pocket-dj": {
+    "intro": "Pocket DJ is an early browser performance prototype that turns Pocket Chordsmith songs into a live remix deck. Import a song export, launch sections from pads, mute stems, loop bars and shape effects as the track plays.",
+    "details": [
+      {
+        "heading": "A performance companion",
+        "text": "The itch listing says Pocket DJ imports Pocket Chordsmith share codes and project JSON, turns song sections into large performance pads, and supports live muting, loops, builds, drops and DJ-style section launching. It is described as a companion tool, not a replacement editor.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-dj",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+        ]
+      },
+      {
+        "heading": "Prototype and platform status",
+        "text": "The itch page calls Pocket DJ an early performance prototype, labels it In development and lists HTML5. The catalogue's “mobile app” type should not be read as evidence of a native Android app.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-dj"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What can Pocket DJ import?",
+        "answer": "The page lists Pocket Chordsmith share codes and project JSON.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-dj"
+        ]
+      },
+      {
+        "question": "Does it replace Pocket Chordsmith?",
+        "answer": "No. The publisher describes Chordsmith as the studio and Pocket DJ as the stage: DJ is a performance companion for songs made in Chordsmith.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-dj"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "app-pocket-chordsmith",
+      "app-pocket-audio-handoff"
+    ]
+  },
+  "app-pocket-daw": {
+    "intro": "Pocket DAW is an early Windows desktop alpha for arranging and producing Pocket Chordsmith and Pocket Audio projects. Import a song, place parts on a timeline, edit clips, work with audio or MIDI material and export WAV or MIDI files.",
+    "details": [
+      {
+        "heading": "A desktop arrangement workflow",
+        "text": "The itch page describes Chordsmith imports, timeline clips, a compact piano-roll inspector, a simple mixer, project save/reopen, full-song WAV and MIDI exports, and stem WAV or game-audio manifest previews. It is a Windows desktop tool, not a browser DAW.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-daw",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+        ]
+      },
+      {
+        "heading": "Early alpha limitations",
+        "text": "The publisher says Pocket DAW is not yet a finished professional DAW. The itch description notes that recording is not good yet, there is no plugin host or deep waveform editor, game exports are not finished asset-pack ZIPs, and the early installer may show warnings because it is unsigned.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-daw"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Which operating system is listed?",
+        "answer": "The itch page lists Windows and describes the download as an early Windows alpha.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-daw"
+        ]
+      },
+      {
+        "question": "Are game-audio exports finished asset packs?",
+        "answer": "No. The current page says game exports are manifest previews and renderable assets, not complete finished asset-pack ZIPs.",
+        "sources": [
+          "https://samfa12.itch.io/pocket-daw"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "app-pocket-chordsmith",
+      "app-pocket-audio-handoff"
+    ]
+  }
+}

@@ -4,7 +4,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A story-driven bushranger adventure about whether a violent past can ever really stay buried, available on itch.io and Google Play.",
+    "description": "An 1890s Victorian frontier life game with station work and a bushranger past. Android is listed on Google Play; the itch browser build remains in development.",
     "tags": [
       "Game",
       "Adventure",
@@ -32,7 +32,9 @@
     ],
     "sortOrder": 0,
     "thumbnail": "assets/thumbnails/dust-on-the-river-b9a9e3.png",
-    "thumbnailAlt": "Cover image for Dust on the River"
+    "thumbnailAlt": "Cover image for Dust on the River",
+    "id": "game-dust-on-the-river",
+    "detailUrl": "/games/dust-on-the-river/"
   },
   {
     "title": "Drink",
@@ -68,7 +70,9 @@
     ],
     "sortOrder": 1,
     "thumbnail": "assets/thumbnails/drink-2ad44b.webp",
-    "thumbnailAlt": "Cover image for Drink"
+    "thumbnailAlt": "Cover image for Drink",
+    "id": "game-drink",
+    "detailUrl": "/games/drink/"
   },
   {
     "title": "Night Shift at Possum's Cafe",
@@ -96,7 +100,9 @@
     ],
     "sortOrder": 2,
     "thumbnail": "assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg",
-    "thumbnailAlt": "Cover image for Night Shift at Possum's Cafe"
+    "thumbnailAlt": "Cover image for Night Shift at Possum's Cafe",
+    "id": "game-possum-cafe",
+    "detailUrl": "/games/possum-cafe/"
   },
   {
     "title": "The Last Guard",
@@ -121,7 +127,9 @@
     ],
     "sortOrder": 2.1,
     "thumbnail": "assets/thumbnails/the-last-guard.webp",
-    "thumbnailAlt": "The Last Guard key art showing a lone fortress gun facing a vast orc army"
+    "thumbnailAlt": "The Last Guard key art showing a lone fortress gun facing a vast orc army",
+    "id": "game-the-last-guard",
+    "detailUrl": "/games/the-last-guard/"
   },
   {
     "title": "The Horde — Ray Tracing Tech Demo",
@@ -155,7 +163,9 @@
     ],
     "sortOrder": 2.2,
     "thumbnail": "assets/thumbnails/the-horde-ray-tracing-tech-demo.webp",
-    "thumbnailAlt": "Dark gothic lantern artwork for The Horde ray-tracing tech demo"
+    "thumbnailAlt": "Dark gothic lantern artwork for The Horde ray-tracing tech demo",
+    "id": "game-the-horde",
+    "detailUrl": "/games/the-horde/"
   },
   {
     "title": "Bug Swarm",
@@ -183,7 +193,9 @@
     ],
     "sortOrder": 3,
     "thumbnail": "assets/thumbnails/bug-swarm-experiment.webp",
-    "thumbnailAlt": "Key art for Bug Swarm"
+    "thumbnailAlt": "Key art for Bug Swarm",
+    "id": "game-bug-swarm",
+    "detailUrl": "/games/bug-swarm-guide/"
   },
   {
     "title": "Cursed Cutter",
@@ -212,7 +224,9 @@
     ],
     "sortOrder": 3.5,
     "thumbnail": "assets/thumbnails/cursed-cutter-icon.webp",
-    "thumbnailAlt": "Icon for Cursed Cutter"
+    "thumbnailAlt": "Icon for Cursed Cutter",
+    "id": "game-cursed-cutter",
+    "detailUrl": "/games/cursed-cutter-guide/"
   },
   {
     "title": "What Would Win",
@@ -246,7 +260,9 @@
     ],
     "sortOrder": 3.75,
     "thumbnail": "assets/thumbnails/what-would-win.png",
-    "thumbnailAlt": "What Would Win creature matchup simulator interface"
+    "thumbnailAlt": "What Would Win creature matchup simulator interface",
+    "id": "app-what-would-win",
+    "detailUrl": "/tools/what-would-win/"
   },
   {
     "title": "Pocket Chordsmith",
@@ -283,7 +299,9 @@
     ],
     "sortOrder": 3,
     "thumbnail": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
-    "thumbnailAlt": "Cover image for Pocket Chordsmith"
+    "thumbnailAlt": "Cover image for Pocket Chordsmith",
+    "id": "app-pocket-chordsmith",
+    "detailUrl": "/pocket-audio/pocket-chordsmith/"
   },
   {
     "title": "Pocket Chordsmith Godot addon",
@@ -319,7 +337,9 @@
     ],
     "sortOrder": 18,
     "thumbnail": "assets/thumbnails/pocket-chordsmith-godot-addon-icon.png",
-    "thumbnailAlt": "Cover image for Pocket Chordsmith Godot addon"
+    "thumbnailAlt": "Cover image for Pocket Chordsmith Godot addon",
+    "id": "asset-pocket-chordsmith-godot",
+    "detailUrl": "/pocket-audio/godot-addon/"
   },
   {
     "title": "Pocket Audio Handoff",
@@ -351,7 +371,9 @@
     ],
     "sortOrder": 4,
     "thumbnail": "assets/thumbnails/pocket-chordsmith-0f81a2.png",
-    "thumbnailAlt": "Cover image for Pocket Audio Handoff"
+    "thumbnailAlt": "Cover image for Pocket Audio Handoff",
+    "id": "app-pocket-audio-handoff",
+    "detailUrl": "/apps/pocket-audio-handoff/"
   },
   {
     "title": "Bug Maze TD",
@@ -377,7 +399,9 @@
     ],
     "sortOrder": 4,
     "thumbnail": "assets/thumbnails/bug-maze-td-078911.png",
-    "thumbnailAlt": "Cover image for Bug Maze TD"
+    "thumbnailAlt": "Cover image for Bug Maze TD",
+    "id": "game-bug-maze-td",
+    "detailUrl": "/games/bug-maze-td/"
   },
   {
     "title": "Breakfast Beat",
@@ -403,14 +427,16 @@
     ],
     "sortOrder": 5,
     "thumbnail": "assets/thumbnails/breakfast-beat-d686e6.jpg",
-    "thumbnailAlt": "Cover image for Breakfast Beat"
+    "thumbnailAlt": "Cover image for Breakfast Beat",
+    "id": "game-breakfast-beat",
+    "detailUrl": "/games/breakfast-beat/"
   },
   {
     "title": "Ship Blockade",
     "category": "Games",
     "type": "Game",
-    "status": "Published",
-    "description": "A defense-in-depth arcade game with timing, resource pressure, and escalating threats. Featured in Samfa12's TD Pack.",
+    "status": "Early prototype",
+    "description": "An early browser defence prototype in which you protect a ship against waves of threats. Also included in the Android TD Pack.",
     "tags": [
       "Game",
       "Action",
@@ -429,7 +455,9 @@
     ],
     "sortOrder": 6,
     "thumbnail": "assets/thumbnails/ship-blockade-59ef6d.jpg",
-    "thumbnailAlt": "Cover image for Ship Blockade"
+    "thumbnailAlt": "Cover image for Ship Blockade",
+    "id": "game-ship-blockade",
+    "detailUrl": "/games/ship-blockade/"
   },
   {
     "title": "Hop Bunny",
@@ -451,7 +479,9 @@
     ],
     "sortOrder": 7,
     "thumbnail": "assets/thumbnails/hop-bunny-b0d59d.png",
-    "thumbnailAlt": "Cover image for Hop Bunny"
+    "thumbnailAlt": "Cover image for Hop Bunny",
+    "id": "game-hop-bunny",
+    "detailUrl": "/games/hop-bunny/"
   },
   {
     "title": "Backwater",
@@ -474,7 +504,9 @@
     ],
     "sortOrder": 8,
     "thumbnail": "assets/thumbnails/backwater-245d41.png",
-    "thumbnailAlt": "Cover image for Backwater"
+    "thumbnailAlt": "Cover image for Backwater",
+    "id": "book-backwater",
+    "detailUrl": "/books/backwater/"
   },
   {
     "title": "Reckless Dentist",
@@ -496,7 +528,9 @@
     ],
     "sortOrder": 9,
     "thumbnail": "assets/thumbnails/reckless-dentist-05c1f7.png",
-    "thumbnailAlt": "Cover image for Reckless Dentist"
+    "thumbnailAlt": "Cover image for Reckless Dentist",
+    "id": "game-reckless-dentist",
+    "detailUrl": "/games/reckless-dentist/"
   },
   {
     "title": "Gremlin Grenade Pinball",
@@ -519,7 +553,9 @@
     ],
     "sortOrder": 10,
     "thumbnail": "assets/thumbnails/gremlin-grenade-pinball-4f4da7.png",
-    "thumbnailAlt": "Cover image for Gremlin Grenade Pinball"
+    "thumbnailAlt": "Cover image for Gremlin Grenade Pinball",
+    "id": "game-gremlin-grenade-pinball",
+    "detailUrl": "/games/gremlin-grenade-pinball/"
   },
   {
     "title": "Wonky Vehicle Lab",
@@ -541,7 +577,9 @@
     ],
     "sortOrder": 11,
     "thumbnail": "assets/thumbnails/wonky-vehicle-lab-10cf51.png",
-    "thumbnailAlt": "Cover image for Wonky Vehicle Lab"
+    "thumbnailAlt": "Cover image for Wonky Vehicle Lab",
+    "id": "game-wonky-vehicle-lab",
+    "detailUrl": "/games/wonky-vehicle-lab/"
   },
   {
     "title": "ToKnight",
@@ -568,7 +606,9 @@
     ],
     "sortOrder": 12,
     "thumbnail": "assets/thumbnails/toknight-47d9be.png",
-    "thumbnailAlt": "Cover image for ToKnight"
+    "thumbnailAlt": "Cover image for ToKnight",
+    "id": "book-toknight",
+    "detailUrl": "/books/toknight/"
   },
   {
     "title": "Dust on the River",
@@ -591,7 +631,9 @@
     ],
     "sortOrder": 13.5,
     "thumbnail": "assets/thumbnails/dust-on-the-river-novelisation-cover.webp",
-    "thumbnailAlt": "Cover image for Dust on the River novelisation"
+    "thumbnailAlt": "Cover image for Dust on the River novelisation",
+    "id": "book-dust-on-the-river",
+    "detailUrl": "/books/dust-on-the-river/"
   },
   {
     "title": "The Wall that Lied",
@@ -619,7 +661,9 @@
     ],
     "sortOrder": 13.6,
     "thumbnail": "assets/thumbnails/the-wall-that-lied-amazon-cover.jpg",
-    "thumbnailAlt": "Cover for The Wall that Lied, Book 1 of The Broken Road Trilogy"
+    "thumbnailAlt": "Cover for The Wall that Lied, Book 1 of The Broken Road Trilogy",
+    "id": "book-the-wall-that-lied",
+    "detailUrl": "/books/the-wall-that-lied/"
   },
   {
     "title": "No Wall to Hold",
@@ -645,7 +689,9 @@
     ],
     "sortOrder": 13.7,
     "thumbnail": "assets/thumbnails/no-wall-to-hold-amazon-cover.jpg",
-    "thumbnailAlt": "Cover for No Wall to Hold, Book 2 of The Broken Road Trilogy"
+    "thumbnailAlt": "Cover for No Wall to Hold, Book 2 of The Broken Road Trilogy",
+    "id": "book-no-wall-to-hold",
+    "detailUrl": "/books/no-wall-to-hold/"
   },
   {
     "title": "What We Save",
@@ -671,7 +717,9 @@
     ],
     "sortOrder": 13.8,
     "thumbnail": "assets/thumbnails/what-we-save-front-cover.webp",
-    "thumbnailAlt": "Cover for What We Save, Book 3 of The Broken Road Trilogy"
+    "thumbnailAlt": "Cover for What We Save, Book 3 of The Broken Road Trilogy",
+    "id": "book-what-we-save",
+    "detailUrl": "/books/what-we-save/"
   },
   {
     "title": "Article 18",
@@ -701,7 +749,9 @@
     ],
     "sortOrder": 13,
     "thumbnail": "assets/thumbnails/article-18-5b9e27.png",
-    "thumbnailAlt": "Cover image for Article 18"
+    "thumbnailAlt": "Cover image for Article 18",
+    "id": "book-article-18",
+    "detailUrl": "/books/article-18/"
   },
   {
     "title": "Google Play apps",
@@ -723,7 +773,8 @@
     ],
     "sortOrder": 14,
     "thumbnail": "assets/thumbnails/google-play-apps-5325de.png",
-    "thumbnailAlt": "Cover image for Google Play apps"
+    "thumbnailAlt": "Cover image for Google Play apps",
+    "id": "directory-storefronts-google-play-apps"
   },
   {
     "title": "Amazon author",
@@ -745,7 +796,8 @@
     ],
     "sortOrder": 14.1,
     "thumbnail": "assets/thumbnails/amazon-author-card.png",
-    "thumbnailAlt": "Amazon logo card for Samfa12 author page"
+    "thumbnailAlt": "Amazon logo card for Samfa12 author page",
+    "id": "directory-storefronts-amazon-author"
   },
   {
     "title": "Godot Asset Library",
@@ -767,7 +819,8 @@
     ],
     "sortOrder": 14.2,
     "thumbnail": "assets/thumbnails/godot-asset-library-card.png",
-    "thumbnailAlt": "Godot logo card for Samfa12 Asset Library profile"
+    "thumbnailAlt": "Godot logo card for Samfa12 Asset Library profile",
+    "id": "directory-storefronts-godot-asset-library"
   },
   {
     "title": "Spotify",
@@ -789,7 +842,8 @@
     ],
     "sortOrder": 14.3,
     "thumbnail": "assets/thumbnails/spotify-icon.png",
-    "thumbnailAlt": "Logo for Spotify"
+    "thumbnailAlt": "Logo for Spotify",
+    "id": "directory-storefronts-spotify"
   },
   {
     "title": "Steam",
@@ -811,7 +865,8 @@
     ],
     "sortOrder": 15,
     "thumbnail": "assets/thumbnails/steam-storefront-card.png",
-    "thumbnailAlt": "Steam logo card for Samfa12 publisher page"
+    "thumbnailAlt": "Steam logo card for Samfa12 publisher page",
+    "id": "directory-storefronts-steam"
   },
   {
     "title": "Samfa12's TD Pack",
@@ -834,14 +889,16 @@
     ],
     "sortOrder": 15,
     "thumbnail": "assets/thumbnails/td-pack-63e5f6.jpg",
-    "thumbnailAlt": "Cover image for Samfa12's TD Pack"
+    "thumbnailAlt": "Cover image for Samfa12's TD Pack",
+    "id": "game-td-pack",
+    "detailUrl": "/games/td-pack/"
   },
   {
     "title": "Samfa12's Lofi and Chill Pack",
     "category": "Games",
     "type": "Android chill pack",
     "status": "Published",
-    "description": "A pocket collection of six small lofi and chill scenes, including Pocket Fish Tank, Pocket Ant Farm, Moon Mower, and three more cosy worlds built around shared Pocket Audio.",
+    "description": "A Google Play collection of small calming scenes including Fish Tank, Ant Farm and Moon Mower; the listing describes a growing set of experiences.",
     "tags": [
       "Game",
       "Android",
@@ -857,7 +914,9 @@
     ],
     "sortOrder": 15.5,
     "thumbnail": "assets/thumbnails/samfa12-chill-pack-app-icon.webp",
-    "thumbnailAlt": "App icon for Samfa12 Chill Pack"
+    "thumbnailAlt": "App icon for Samfa12 Chill Pack",
+    "id": "game-lofi-and-chill-pack",
+    "detailUrl": "/games/lofi-and-chill-pack/"
   },
   {
     "title": "Spin Vector",
@@ -891,14 +950,16 @@
     ],
     "sortOrder": 16,
     "thumbnail": "assets/thumbnails/spin-vector-7f51f8.png",
-    "thumbnailAlt": "Cover image for Spin Vector"
+    "thumbnailAlt": "Cover image for Spin Vector",
+    "id": "game-spin-vector",
+    "detailUrl": "/games/spin-vector/"
   },
   {
     "title": "Pocket DJ",
     "category": "Apps & Tools",
     "type": "Mobile app",
-    "status": "Published",
-    "description": "A Pocket Audio live remixing tool for turning Pocket Chordsmith song ideas into performance pads, loops, builds, drops, and FX.",
+    "status": "Prototype",
+    "description": "An early browser performance prototype that turns Pocket Chordsmith songs into live pads, loops and stems.",
     "tags": [
       "Music",
       "DJ",
@@ -923,14 +984,16 @@
     ],
     "sortOrder": 17,
     "thumbnail": "assets/thumbnails/pocket-dj-1c5717.png",
-    "thumbnailAlt": "Cover image for Pocket DJ"
+    "thumbnailAlt": "Cover image for Pocket DJ",
+    "id": "app-pocket-dj",
+    "detailUrl": "/pocket-audio/pocket-dj/"
   },
   {
     "title": "Pocket DAW",
     "category": "Apps & Tools",
     "type": "Windows App",
-    "status": "Published",
-    "description": "A Desktop Digital Audio Workspace that builds on the same song-data and export direction as Pocket Chordsmith.",
+    "status": "Early alpha",
+    "description": "A Windows desktop music-workflow alpha for importing Pocket Chordsmith songs and editing audio and MIDI on a timeline.",
     "tags": [
       "Music",
       "DAW",
@@ -947,7 +1010,9 @@
     ],
     "sortOrder": 18,
     "thumbnail": "assets/thumbnails/pocket-daw-8c9f2a.png",
-    "thumbnailAlt": "Cover image for Pocket DAW"
+    "thumbnailAlt": "Cover image for Pocket DAW",
+    "id": "app-pocket-daw",
+    "detailUrl": "/pocket-audio/pocket-daw/"
   },
   {
     "title": "Mandible Wars",
@@ -969,7 +1034,9 @@
     ],
     "sortOrder": 19,
     "thumbnail": "assets/thumbnails/mandible-wars-5acb5c.png",
-    "thumbnailAlt": "Cover image for Mandible Wars"
+    "thumbnailAlt": "Cover image for Mandible Wars",
+    "id": "game-mandible-wars",
+    "detailUrl": "/games/mandible-wars/"
   },
   {
     "title": "Moon Mower",
@@ -996,7 +1063,9 @@
     ],
     "sortOrder": 20,
     "thumbnail": "assets/thumbnails/moon-mower-icon.webp",
-    "thumbnailAlt": "Cover image for Moon Mower"
+    "thumbnailAlt": "Cover image for Moon Mower",
+    "id": "game-moon-mower",
+    "detailUrl": "/games/moon-mower/"
   },
   {
     "title": "Pocket Fish Tank",
@@ -1023,14 +1092,16 @@
     ],
     "sortOrder": 21,
     "thumbnail": "assets/thumbnails/voxel-fish-tank-41a16e.jpg",
-    "thumbnailAlt": "Cover image for Pocket Fish Tank"
+    "thumbnailAlt": "Cover image for Pocket Fish Tank",
+    "id": "game-pocket-fish-tank",
+    "detailUrl": "/games/pocket-fish-tank/"
   },
   {
     "title": "P.A.R.T.Y. Bus: Wasteland Run",
     "category": "Games",
     "type": "Game",
-    "status": "In development",
-    "description": "An energetic project concept around a drifting bus and wasteland route, balancing momentum with level progression.",
+    "status": "Playable prototype",
+    "description": "A playable browser driving-survival prototype about rescuing people and returning to a wasteland base.",
     "tags": [
       "Game",
       "Adventure",
@@ -1046,7 +1117,9 @@
     ],
     "sortOrder": 23,
     "thumbnail": "assets/thumbnails/party-bus-wasteland-run-597195.png",
-    "thumbnailAlt": "Cover image for P.A.R.T.Y. Bus: Wasteland Run"
+    "thumbnailAlt": "Cover image for P.A.R.T.Y. Bus: Wasteland Run",
+    "id": "game-party-bus",
+    "detailUrl": "/games/party-bus/"
   },
   {
     "title": "Pocket Ant Farm",
@@ -1073,7 +1146,9 @@
     ],
     "sortOrder": 24,
     "thumbnail": "assets/thumbnails/ant-farm-485b3d.webp",
-    "thumbnailAlt": "Cover image for Pocket Ant Farm"
+    "thumbnailAlt": "Cover image for Pocket Ant Farm",
+    "id": "game-pocket-ant-farm",
+    "detailUrl": "/games/pocket-ant-farm/"
   },
   {
     "title": "Briarhold",
@@ -1102,7 +1177,8 @@
     "detailUrl": "/games/briarhold/",
     "sortOrder": 25,
     "thumbnail": "assets/thumbnails/briarhold-samfa12-icon-512.webp",
-    "thumbnailAlt": "Briarhold emblem: a gold oak leaf and Warden sword encircled by thorns beneath a moonlit stone arch."
+    "thumbnailAlt": "Briarhold emblem: a gold oak leaf and Warden sword encircled by thorns beneath a moonlit stone arch.",
+    "id": "game-briarhold"
   },
   {
     "title": "ToKnight 2: The Fire Beneath",
@@ -1126,7 +1202,9 @@
     ],
     "sortOrder": 26,
     "thumbnail": "assets/thumbnails/toknight-2-the-fire-beneath-e439e0.png",
-    "thumbnailAlt": "Cover image for ToKnight 2: The Fire Beneath"
+    "thumbnailAlt": "Cover image for ToKnight 2: The Fire Beneath",
+    "id": "book-toknight-2",
+    "detailUrl": "/books/toknight-2-the-fire-beneath/"
   },
   {
     "title": "Free to a Good Home",
@@ -1150,7 +1228,9 @@
     ],
     "sortOrder": 27,
     "thumbnail": "assets/thumbnails/free-to-a-good-home-f3957d.jpg",
-    "thumbnailAlt": "Cover image for Free to a Good Home"
+    "thumbnailAlt": "Cover image for Free to a Good Home",
+    "id": "book-free-to-a-good-home",
+    "detailUrl": "/books/free-to-a-good-home/"
   },
   {
     "title": "A Place of His Own",
@@ -1174,7 +1254,9 @@
     ],
     "sortOrder": 28,
     "thumbnail": "assets/thumbnails/a-place-of-his-own-db90ff.jpg",
-    "thumbnailAlt": "Cover image for A Place of His Own"
+    "thumbnailAlt": "Cover image for A Place of His Own",
+    "id": "book-a-place-of-his-own",
+    "detailUrl": "/books/a-place-of-his-own/"
   },
   {
     "title": "Colossal",
@@ -1196,7 +1278,9 @@
     ],
     "sortOrder": 28.5,
     "thumbnail": "assets/thumbnails/colossal.png",
-    "thumbnailAlt": "Cover image for Colossal"
+    "thumbnailAlt": "Cover image for Colossal",
+    "id": "book-colossal",
+    "detailUrl": "/books/colossal/"
   },
   {
     "title": "Concubine",
@@ -1221,7 +1305,9 @@
     ],
     "sortOrder": 29,
     "thumbnail": "assets/thumbnails/concubine-90dda2.jpg",
-    "thumbnailAlt": "Cover image for Concubine"
+    "thumbnailAlt": "Cover image for Concubine",
+    "id": "book-concubine",
+    "detailUrl": "/books/concubine/"
   },
   {
     "title": "Sober",
@@ -1245,7 +1331,9 @@
     ],
     "sortOrder": 30,
     "thumbnail": "assets/thumbnails/sober-b6b2ac.jpg",
-    "thumbnailAlt": "Cover image for Sober"
+    "thumbnailAlt": "Cover image for Sober",
+    "id": "book-sober",
+    "detailUrl": "/books/sober/"
   },
   {
     "title": "Samfa12 on Spotify",
@@ -1267,7 +1355,8 @@
     ],
     "thumbnail": "assets/thumbnails/spotify-icon.png",
     "thumbnailAlt": "Logo for Samfa12 on Spotify",
-    "sortOrder": 34
+    "sortOrder": 34,
+    "id": "directory-music-samfa12-on-spotify"
   },
   {
     "title": "Drink OST",
@@ -1293,7 +1382,9 @@
     ],
     "thumbnail": "assets/thumbnails/drink-ost-6d4b8e.webp",
     "thumbnailAlt": "Cover image for Drink OST",
-    "sortOrder": 31
+    "sortOrder": 31,
+    "id": "music-drink-ost",
+    "detailUrl": "/music/drink-ost/"
   },
   {
     "title": "Billions of Years",
@@ -1314,7 +1405,9 @@
     ],
     "thumbnail": "assets/thumbnails/billions-of-years-1f8c2a.webp",
     "thumbnailAlt": "Cover image for Billions of Years",
-    "sortOrder": 32
+    "sortOrder": 32,
+    "id": "music-billions-of-years",
+    "detailUrl": "/music/billions-of-years/"
   },
   {
     "title": "Samfa12's Tower Defense Pack OST",
@@ -1336,7 +1429,9 @@
     ],
     "thumbnail": "assets/thumbnails/td-pack-ost-f4e2a9.webp",
     "thumbnailAlt": "Cover image for Samfa12's Tower Defense Pack OST",
-    "sortOrder": 33
+    "sortOrder": 33,
+    "id": "music-tower-defense-pack-ost",
+    "detailUrl": "/music/tower-defense-pack-ost/"
   },
   {
     "title": "Samfa12's Lofi and Chill Pack Original Soundtrack",
@@ -1359,7 +1454,9 @@
     ],
     "thumbnail": "assets/thumbnails/lofi-and-chill-ost-album-art.webp",
     "thumbnailAlt": "Cover image for Samfa12's Lofi and Chill Pack Original Soundtrack",
-    "sortOrder": 33.5
+    "sortOrder": 33.5,
+    "id": "music-lofi-and-chill-pack-ost",
+    "detailUrl": "/music/lofi-and-chill-pack-ost/"
   },
   {
     "title": "YouTube Music",
@@ -1381,7 +1478,8 @@
     ],
     "thumbnail": "assets/thumbnails/youtube-music-icon.png",
     "thumbnailAlt": "Logo for YouTube Music",
-    "sortOrder": 35
+    "sortOrder": 35,
+    "id": "directory-music-youtube-music"
   },
   {
     "title": "GitHub",
@@ -1402,7 +1500,8 @@
       }
     ],
     "thumbnail": "assets/thumbnails/github-social-card.png",
-    "thumbnailAlt": "GitHub logo card for Samfa12 source repositories"
+    "thumbnailAlt": "GitHub logo card for Samfa12 source repositories",
+    "id": "directory-social-github"
   },
   {
     "title": "X / Twitter",
@@ -1422,7 +1521,8 @@
       }
     ],
     "thumbnail": "assets/thumbnails/x-twitter-social-card.png",
-    "thumbnailAlt": "X logo card for Samfa12 updates"
+    "thumbnailAlt": "X logo card for Samfa12 updates",
+    "id": "directory-social-x-twitter"
   },
   {
     "title": "Facebook",
@@ -1442,7 +1542,8 @@
       }
     ],
     "thumbnail": "assets/thumbnails/facebook-social-card.png",
-    "thumbnailAlt": "Facebook logo card for Samfa12 community page"
+    "thumbnailAlt": "Facebook logo card for Samfa12 community page",
+    "id": "directory-social-facebook"
   },
   {
     "title": "Reddit",
@@ -1462,7 +1563,8 @@
       }
     ],
     "thumbnail": "assets/thumbnails/reddit-social-card.png",
-    "thumbnailAlt": "Reddit logo card for Samfa12 profile"
+    "thumbnailAlt": "Reddit logo card for Samfa12 profile",
+    "id": "directory-social-reddit"
   },
   {
     "title": "YouTube",
@@ -1483,7 +1585,8 @@
       }
     ],
     "thumbnail": "assets/thumbnails/youtube-channel-card.png",
-    "thumbnailAlt": "YouTube logo card for Samfa12 channel"
+    "thumbnailAlt": "YouTube logo card for Samfa12 channel",
+    "id": "directory-social-youtube"
   },
   {
     "title": "itch.io",
@@ -1503,6 +1606,7 @@
       }
     ],
     "thumbnail": "assets/thumbnails/itch-io-card.png",
-    "thumbnailAlt": "itch.io logo card for Samfa12 storefront"
+    "thumbnailAlt": "itch.io logo card for Samfa12 storefront",
+    "id": "directory-storefronts-itch-io"
   }
 ]

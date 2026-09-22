@@ -35,6 +35,18 @@ jobs:
           ref: main
       - name: Test Briarhold statistics
         run: node --test tests/briarhold-stats.test.mjs tests/briarhold-browser-stats.test.mjs
+      - name: Install validation dependencies
+        run: npm ci
+      - name: Verify generated content and portal checks
+        run: |
+          npm run check:content
+          npm run validate:catalogue
+          npm run validate:site
+          npm run validate:seo
+          npm run test:content
+          npm run test:analytics
+          npm run test:marketplace
+          npm run test:handoff-relay
       - name: Setup Pages
         uses: actions/configure-pages@v6
       - name: Prepare static site
@@ -45,6 +57,12 @@ jobs:
             --exclude='.github' \
             --exclude='.codex-remote-attachments' \
             --exclude='.wrangler' \
+            --exclude='.analytics' \
+            --exclude='.playwright-cli' \
+            --exclude='node_modules' \
+            --exclude='.env*' \
+            --exclude='/content/' \
+            --exclude='/output/' \
             --exclude='**/.vite/' \
             --exclude='_site' \
             --exclude='/artifacts/' \
@@ -66,6 +84,8 @@ jobs:
         run: WHAT_WOULD_WIN_SITE_ROOT=_site node scripts/verify-what-would-win-pages.mjs
       - name: Verify Briarhold artifact
         run: BRIARHOLD_SITE_ROOT=_site node scripts/verify-briarhold-pages.mjs games/briarhold/play
+      - name: Verify staged SEO routes and privacy exclusions
+        run: SEO_SITE_ROOT=_site npm run validate:seo
       - name: Upload site
         uses: actions/upload-pages-artifact@v5
         with:

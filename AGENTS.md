@@ -57,6 +57,26 @@ release. The copied artifact must retain the source-generated
 ## Editing Guidance
 
 - Edit project listings in `data/projects.json`.
+- Every catalogue record has a stable `id`; products have one `detailUrl` pointing
+  to their first-party landing page. Keep game/book identities and packs distinct.
+- Edit long-form marketing copy, source references, FAQs, real updates, and
+  related-product IDs in `content/game-app-copy.json` or
+  `content/book-music-copy.json`. `content/manifest.json` records every product
+  and directory disposition. `content/source-review.json` and
+  `content/SOURCE_GAPS.md` record verification limits. The Links page's grouped
+  destinations live in `content/link-groups.json`. Update `pageModified` in the
+  product manifest, hub record or `content/site-routes.json` only when visible
+  page content meaningfully changes. Do not infer a release
+  from a source-review date or a planned store date.
+- Run `npm run build:content` after editing these sources. It produces static
+  product pages, the seven catalogue grids, hubs, updates and `sitemap.xml`.
+  Do not hand-edit those managed portions. `npm run check:content` verifies
+  reproducibility; `npm run validate:seo` checks coverage, initial HTML,
+  metadata, schema, links and sitemap. Preview with JavaScript disabled or a
+  failed catalogue fetch when changing rendering.
+- Marketing routes for Pocket Chordsmith, Pocket DJ and What Would Win are
+  outside their protected hosted app directories. Bug Swarm and Cursed Cutter
+  have separate guide pages while their play routes remain unchanged.
 - Keep project thumbnails local under `assets/thumbnails/`; do not hotlink
   remote card images.
 - Keep the shared brand treatment on new pages: the `.brand` link should include
