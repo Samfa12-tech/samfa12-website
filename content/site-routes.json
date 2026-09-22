@@ -1,0 +1,82 @@
+[
+  {
+    "route": "/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/games/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/games/bug-swarm/",
+    "pageModified": "2026-08-08"
+  },
+  {
+    "route": "/games/cursed-cutter/",
+    "pageModified": "2026-08-08"
+  },
+  {
+    "route": "/games/briarhold/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/games/briarhold/play/",
+    "pageModified": "2026-09-20"
+  },
+  {
+    "route": "/books/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/pocket-audio/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/apps/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/stats/",
+    "pageModified": "2026-08-20"
+  },
+  {
+    "route": "/apps/what-would-win/",
+    "pageModified": "2026-07-18"
+  },
+  {
+    "route": "/music/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/links/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/join/",
+    "pageModified": "2026-07-11"
+  },
+  {
+    "route": "/privacy/",
+    "pageModified": "2026-07-11"
+  },
+  {
+    "route": "/apps/pocket-chordsmith/",
+    "pageModified": "2026-06-12"
+  },
+  {
+    "route": "/apps/pocket-dj/",
+    "pageModified": "2026-06-12"
+  },
+  {
+    "route": "/apps/pocket-audio-handoff/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/about/",
+    "pageModified": "2026-09-23"
+  },
+  {
+    "route": "/updates/",
+    "pageModified": "2026-09-23"
+  }
+]

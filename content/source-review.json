@@ -1,0 +1,817 @@
+{
+  "reviewedAt": "2026-09-23",
+  "dateMeaning": "Public source review date, not product release or page modification date",
+  "products": {
+    "game-dust-on-the-river": {
+      "disposition": "create",
+      "landingPath": "/games/dust-on-the-river/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
+          "identity": "play.google.com?id=com.samsmall.dustontheriver",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/dust-on-the-river",
+          "identity": "samfa12.itch.io /dust-on-the-river",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-drink": {
+      "disposition": "create",
+      "landingPath": "/games/drink/",
+      "sources": [
+        {
+          "url": "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg",
+          "identity": "open.spotify.com /album/42zZtz4npdYAkaFBa8fZtg",
+          "access": "read-official-album-and-embed"
+        },
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samsmall.drink",
+          "identity": "play.google.com?id=com.samsmall.drink",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/drink",
+          "identity": "samfa12.itch.io /drink",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://store.steampowered.com/app/4419290/Drink/",
+          "identity": "store.steampowered.com /app/4419290/Drink/",
+          "access": "catalogue-destination-not-used-for-claims"
+        }
+      ]
+    },
+    "game-possum-cafe": {
+      "disposition": "create",
+      "landingPath": "/games/possum-cafe/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe",
+          "identity": "play.google.com?id=com.samsmall.possumcafe",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/possum-cafe",
+          "identity": "samfa12.itch.io /possum-cafe",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-the-last-guard": {
+      "disposition": "create",
+      "landingPath": "/games/the-last-guard/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/the-last-guard",
+          "identity": "samfa12.itch.io /the-last-guard",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-the-horde": {
+      "disposition": "create",
+      "landingPath": "/games/the-horde/",
+      "sources": [
+        {
+          "url": "https://github.com/Samfa12-tech/The-Horde-RT-demo",
+          "identity": "github.com /Samfa12-tech/The-Horde-RT-demo",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/the-horde",
+          "identity": "samfa12.itch.io /the-horde",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-bug-swarm": {
+      "disposition": "create",
+      "landingPath": "/games/bug-swarm-guide/",
+      "sources": [
+        {
+          "url": "https://samfa12.com/games/bug-swarm/",
+          "identity": "samfa12.com /games/bug-swarm/",
+          "access": "read-first-party-route-and-repository"
+        }
+      ]
+    },
+    "game-cursed-cutter": {
+      "disposition": "create",
+      "landingPath": "/games/cursed-cutter-guide/",
+      "sources": [
+        {
+          "url": "https://samfa12.com/games/cursed-cutter/",
+          "identity": "samfa12.com /games/cursed-cutter/",
+          "access": "read-first-party-route-and-repository"
+        }
+      ]
+    },
+    "app-what-would-win": {
+      "disposition": "create",
+      "landingPath": "/tools/what-would-win/",
+      "sources": [
+        {
+          "url": "https://github.com/Samfa12-tech/What-Would-Win",
+          "identity": "github.com /Samfa12-tech/What-Would-Win",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.com/apps/what-would-win/",
+          "identity": "samfa12.com /apps/what-would-win/",
+          "access": "catalogue-destination-not-used-for-claims"
+        }
+      ]
+    },
+    "app-pocket-chordsmith": {
+      "disposition": "create",
+      "landingPath": "/pocket-audio/pocket-chordsmith/",
+      "sources": [
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.com/apps/pocket-chordsmith/",
+          "identity": "samfa12.com /apps/pocket-chordsmith/",
+          "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://samfa12.itch.io/pocket-chordsmith",
+          "identity": "samfa12.itch.io /pocket-chordsmith",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "asset-pocket-chordsmith-godot": {
+      "disposition": "create",
+      "landingPath": "/pocket-audio/godot-addon/",
+      "sources": [
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith/blob/main/README.md",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith/blob/main/README.md",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith/tree/main/addons/pocket_chordsmith",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith/tree/main/addons/pocket_chordsmith",
+          "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://godotengine.org/asset-library/asset/5174",
+          "identity": "godotengine.org /asset-library/asset/5174",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/pocket-chordsmith",
+          "identity": "samfa12.itch.io /pocket-chordsmith",
+          "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://store.godotengine.org/asset/samfa12/pocket-chordsmith/",
+          "identity": "store.godotengine.org /asset/samfa12/pocket-chordsmith/",
+          "access": "catalogue-destination-not-used-for-claims"
+        }
+      ]
+    },
+    "app-pocket-audio-handoff": {
+      "disposition": "enhance-existing-hybrid",
+      "landingPath": "/apps/pocket-audio-handoff/",
+      "sources": [
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/samfa12-website/blob/main/apps/pocket-audio-handoff/index.html",
+          "identity": "github.com /Samfa12-tech/samfa12-website/blob/main/apps/pocket-audio-handoff/index.html",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.com/apps/pocket-audio-handoff/",
+          "identity": "samfa12.com /apps/pocket-audio-handoff/",
+          "access": "read-first-party-route-and-repository"
+        }
+      ]
+    },
+    "game-bug-maze-td": {
+      "disposition": "create",
+      "landingPath": "/games/bug-maze-td/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack",
+          "identity": "play.google.com?id=com.samsmall.samfa12tdpack",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/bug-maze-td",
+          "identity": "samfa12.itch.io /bug-maze-td",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-breakfast-beat": {
+      "disposition": "create",
+      "landingPath": "/games/breakfast-beat/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack",
+          "identity": "play.google.com?id=com.samsmall.samfa12tdpack",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/breakfast-beat",
+          "identity": "samfa12.itch.io /breakfast-beat",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-ship-blockade": {
+      "disposition": "create",
+      "landingPath": "/games/ship-blockade/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack",
+          "identity": "play.google.com?id=com.samsmall.samfa12tdpack",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/ship-blockade",
+          "identity": "samfa12.itch.io /ship-blockade",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-hop-bunny": {
+      "disposition": "create",
+      "landingPath": "/games/hop-bunny/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/hop-bunny",
+          "identity": "samfa12.itch.io /hop-bunny",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "book-backwater": {
+      "disposition": "create",
+      "landingPath": "/books/backwater/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/backwater",
+          "identity": "samfa12.itch.io /backwater",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/backwater/devlog/1506853/backwater-releases-on-amazon",
+          "identity": "samfa12.itch.io /backwater/devlog/1506853/backwater-releases-on-amazon",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0GX2XQR3D",
+          "identity": "www.amazon.com.au /dp/B0GX2XQR3D",
+          "access": "attempted-inaccessible"
+        }
+      ]
+    },
+    "game-reckless-dentist": {
+      "disposition": "create",
+      "landingPath": "/games/reckless-dentist/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/reckless-dentist",
+          "identity": "samfa12.itch.io /reckless-dentist",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-gremlin-grenade-pinball": {
+      "disposition": "create",
+      "landingPath": "/games/gremlin-grenade-pinball/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/gremlin-grenade-pinball",
+          "identity": "samfa12.itch.io /gremlin-grenade-pinball",
+          "access": "partial-search-snippet"
+        }
+      ]
+    },
+    "game-wonky-vehicle-lab": {
+      "disposition": "create",
+      "landingPath": "/games/wonky-vehicle-lab/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/wonky-vehicle-lab",
+          "identity": "samfa12.itch.io /wonky-vehicle-lab",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "book-toknight": {
+      "disposition": "create",
+      "landingPath": "/books/toknight/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/toknight",
+          "identity": "samfa12.itch.io /toknight",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0GX2NG31Z",
+          "identity": "www.amazon.com.au /dp/B0GX2NG31Z",
+          "access": "attempted-inaccessible"
+        }
+      ]
+    },
+    "book-dust-on-the-river": {
+      "disposition": "create",
+      "landingPath": "/books/dust-on-the-river/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/dust-on-the-river",
+          "identity": "samfa12.itch.io /dust-on-the-river",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0H7QQQXBN",
+          "identity": "www.amazon.com.au /dp/B0H7QQQXBN",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        }
+      ]
+    },
+    "book-the-wall-that-lied": {
+      "disposition": "create",
+      "landingPath": "/books/the-wall-that-lied/",
+      "sources": [
+        {
+          "url": "https://www.amazon.com.au/dp/B0H233JY8P",
+          "identity": "www.amazon.com.au /dp/B0H233JY8P",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0H6VJ4VG1",
+          "identity": "www.amazon.com.au /dp/B0H6VJ4VG1",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0HC46KFJP",
+          "identity": "www.amazon.com.au /dp/B0HC46KFJP",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        }
+      ]
+    },
+    "book-no-wall-to-hold": {
+      "disposition": "create",
+      "landingPath": "/books/no-wall-to-hold/",
+      "sources": [
+        {
+          "url": "https://www.amazon.com.au/dp/B0H233JY8P",
+          "identity": "www.amazon.com.au /dp/B0H233JY8P",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0H6VJ4VG1",
+          "identity": "www.amazon.com.au /dp/B0H6VJ4VG1",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        }
+      ]
+    },
+    "book-what-we-save": {
+      "disposition": "create",
+      "landingPath": "/books/what-we-save/",
+      "sources": [
+        {
+          "url": "https://www.amazon.com.au/dp/B0H233JY8P",
+          "identity": "www.amazon.com.au /dp/B0H233JY8P",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0H6VJ4VG1",
+          "identity": "www.amazon.com.au /dp/B0H6VJ4VG1",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0HC46KFJP",
+          "identity": "www.amazon.com.au /dp/B0HC46KFJP",
+          "access": "read-exact-asin-public-listing-in-user-chrome"
+        }
+      ]
+    },
+    "book-article-18": {
+      "disposition": "create",
+      "landingPath": "/books/article-18/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?id=AQAAAEDaH2pfoM",
+          "identity": "play.google.com?id=AQAAAEDaH2pfoM",
+          "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://play.google.com/store/audiobooks/details?id=AQAAAEDaH2pfoM",
+          "identity": "play.google.com?id=AQAAAEDaH2pfoM",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://play.google.com/store/books/details/Samfa12_Article_18?id=WVXaEQAAQBAJ",
+          "identity": "play.google.com?id=WVXaEQAAQBAJ",
+          "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://play.google.com/store/books/details?id=WVXaEQAAQBAJ",
+          "identity": "play.google.com?id=WVXaEQAAQBAJ",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/article-18",
+          "identity": "samfa12.itch.io /article-18",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-td-pack": {
+      "disposition": "create",
+      "landingPath": "/games/td-pack/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack",
+          "identity": "play.google.com?id=com.samsmall.samfa12tdpack",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/breakfast-beat",
+          "identity": "samfa12.itch.io /breakfast-beat",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/bug-maze-td",
+          "identity": "samfa12.itch.io /bug-maze-td",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/ship-blockade",
+          "identity": "samfa12.itch.io /ship-blockade",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-lofi-and-chill-pack": {
+      "disposition": "create",
+      "landingPath": "/games/lofi-and-chill-pack/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+          "identity": "play.google.com?id=com.samfa12.lofiandchillpack",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/ant-farm",
+          "identity": "samfa12.itch.io /ant-farm",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/fish-tank",
+          "identity": "samfa12.itch.io /fish-tank",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/moon-mower",
+          "identity": "samfa12.itch.io /moon-mower",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-spin-vector": {
+      "disposition": "create",
+      "landingPath": "/games/spin-vector/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samsmall.spinvector",
+          "identity": "play.google.com?id=com.samsmall.spinvector",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/spin-vector",
+          "identity": "samfa12.itch.io /spin-vector",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://wavedash.com/games/spin-vector",
+          "identity": "wavedash.com /games/spin-vector",
+          "access": "catalogue-destination-not-used-for-claims"
+        }
+      ]
+    },
+    "app-pocket-dj": {
+      "disposition": "create",
+      "landingPath": "/pocket-audio/pocket-dj/",
+      "sources": [
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.com/apps/pocket-dj/",
+          "identity": "samfa12.com /apps/pocket-dj/",
+          "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://samfa12.itch.io/pocket-dj",
+          "identity": "samfa12.itch.io /pocket-dj",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "app-pocket-daw": {
+      "disposition": "create",
+      "landingPath": "/pocket-audio/pocket-daw/",
+      "sources": [
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/pocket-daw",
+          "identity": "samfa12.itch.io /pocket-daw",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-mandible-wars": {
+      "disposition": "create",
+      "landingPath": "/games/mandible-wars/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/mandible-wars",
+          "identity": "samfa12.itch.io /mandible-wars",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-moon-mower": {
+      "disposition": "create",
+      "landingPath": "/games/moon-mower/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+          "identity": "play.google.com?id=com.samfa12.lofiandchillpack",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/moon-mower",
+          "identity": "samfa12.itch.io /moon-mower",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-pocket-fish-tank": {
+      "disposition": "create",
+      "landingPath": "/games/pocket-fish-tank/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+          "identity": "play.google.com?id=com.samfa12.lofiandchillpack",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/fish-tank",
+          "identity": "samfa12.itch.io /fish-tank",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-party-bus": {
+      "disposition": "create",
+      "landingPath": "/games/party-bus/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/party-bus",
+          "identity": "samfa12.itch.io /party-bus",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-pocket-ant-farm": {
+      "disposition": "create",
+      "landingPath": "/games/pocket-ant-farm/",
+      "sources": [
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
+          "identity": "play.google.com?id=com.samfa12.lofiandchillpack",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/ant-farm",
+          "identity": "samfa12.itch.io /ant-farm",
+          "access": "read-public-source"
+        }
+      ]
+    },
+    "game-briarhold": {
+      "disposition": "enhance-existing",
+      "landingPath": "/games/briarhold/",
+      "sources": [
+        {
+          "url": "https://github.com/Samfa12-tech/samfa12-website/blob/main/games/briarhold/releases/latest.json",
+          "identity": "github.com /Samfa12-tech/samfa12-website/blob/main/games/briarhold/releases/latest.json",
+          "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/samfa12-website/releases",
+          "identity": "github.com /Samfa12-tech/samfa12-website/releases",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.com/games/briarhold/",
+          "identity": "samfa12.com /games/briarhold/",
+          "access": "read-first-party-route-and-repository"
+        }
+      ]
+    },
+    "book-toknight-2": {
+      "disposition": "create",
+      "landingPath": "/books/toknight-2-the-fire-beneath/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/toknight",
+          "identity": "samfa12.itch.io /toknight",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/toknight-2-the-fire-beneath",
+          "identity": "samfa12.itch.io /toknight-2-the-fire-beneath",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0H3MW9LGP",
+          "identity": "www.amazon.com.au /dp/B0H3MW9LGP",
+          "access": "attempted-inaccessible"
+        }
+      ]
+    },
+    "book-free-to-a-good-home": {
+      "disposition": "create",
+      "landingPath": "/books/free-to-a-good-home/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/free-to-a-good-home",
+          "identity": "samfa12.itch.io /free-to-a-good-home",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0GZDH57ZC",
+          "identity": "www.amazon.com.au /dp/B0GZDH57ZC",
+          "access": "attempted-inaccessible"
+        }
+      ]
+    },
+    "book-a-place-of-his-own": {
+      "disposition": "create",
+      "landingPath": "/books/a-place-of-his-own/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/a-place-of-his-own",
+          "identity": "samfa12.itch.io /a-place-of-his-own",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/free-to-a-good-home",
+          "identity": "samfa12.itch.io /free-to-a-good-home",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0H1Q3TGS7",
+          "identity": "www.amazon.com.au /dp/B0H1Q3TGS7",
+          "access": "attempted-inaccessible"
+        }
+      ]
+    },
+    "book-colossal": {
+      "disposition": "create",
+      "landingPath": "/books/colossal/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/colossal",
+          "identity": "samfa12.itch.io /colossal",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0H738LPJ5",
+          "identity": "www.amazon.com.au /dp/B0H738LPJ5",
+          "access": "attempted-inaccessible"
+        }
+      ]
+    },
+    "book-concubine": {
+      "disposition": "create",
+      "landingPath": "/books/concubine/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/concubine",
+          "identity": "samfa12.itch.io /concubine",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0H1LG55MZ",
+          "identity": "www.amazon.com.au /dp/B0H1LG55MZ",
+          "access": "attempted-inaccessible"
+        }
+      ]
+    },
+    "book-sober": {
+      "disposition": "create",
+      "landingPath": "/books/sober/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/sober",
+          "identity": "samfa12.itch.io /sober",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/sober/devlog/1460586/sober-now-available-in-amazon",
+          "identity": "samfa12.itch.io /sober/devlog/1460586/sober-now-available-in-amazon",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://www.amazon.com.au/dp/B0GSQQMS4M",
+          "identity": "www.amazon.com.au /dp/B0GSQQMS4M",
+          "access": "attempted-inaccessible"
+        }
+      ]
+    },
+    "music-drink-ost": {
+      "disposition": "create",
+      "landingPath": "/music/drink-ost/",
+      "sources": [
+        {
+          "url": "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg",
+          "identity": "open.spotify.com /album/42zZtz4npdYAkaFBa8fZtg",
+          "access": "read-official-album-and-embed"
+        },
+        {
+          "url": "https://open.spotify.com/embed/album/42zZtz4npdYAkaFBa8fZtg",
+          "identity": "open.spotify.com /embed/album/42zZtz4npdYAkaFBa8fZtg",
+          "access": "read-official-album-and-embed"
+        }
+      ]
+    },
+    "music-billions-of-years": {
+      "disposition": "create",
+      "landingPath": "/music/billions-of-years/",
+      "sources": [
+        {
+          "url": "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE",
+          "identity": "open.spotify.com /album/5VdeivtOdHyPniSFIBlTEE",
+          "access": "read-official-album-and-embed"
+        },
+        {
+          "url": "https://open.spotify.com/embed/album/5VdeivtOdHyPniSFIBlTEE",
+          "identity": "open.spotify.com /embed/album/5VdeivtOdHyPniSFIBlTEE",
+          "access": "read-official-album-and-embed"
+        }
+      ]
+    },
+    "music-tower-defense-pack-ost": {
+      "disposition": "create",
+      "landingPath": "/music/tower-defense-pack-ost/",
+      "sources": [
+        {
+          "url": "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS",
+          "identity": "open.spotify.com /album/0suDmn5Oj3Uwx6Tt1ghtiS",
+          "access": "read-official-album-and-embed"
+        },
+        {
+          "url": "https://open.spotify.com/embed/album/0suDmn5Oj3Uwx6Tt1ghtiS",
+          "identity": "open.spotify.com /embed/album/0suDmn5Oj3Uwx6Tt1ghtiS",
+          "access": "read-official-album-and-embed"
+        }
+      ]
+    },
+    "music-lofi-and-chill-pack-ost": {
+      "disposition": "create",
+      "landingPath": "/music/lofi-and-chill-pack-ost/",
+      "sources": [
+        {
+          "url": "https://open.spotify.com/album/0VxBtatSWXbnCt5oPW1t3F",
+          "identity": "open.spotify.com /album/0VxBtatSWXbnCt5oPW1t3F",
+          "access": "read-official-album-and-embed"
+        },
+        {
+          "url": "https://open.spotify.com/embed/album/0VxBtatSWXbnCt5oPW1t3F",
+          "identity": "open.spotify.com /embed/album/0VxBtatSWXbnCt5oPW1t3F",
+          "access": "read-official-album-and-embed"
+        }
+      ]
+    }
+  }
+}

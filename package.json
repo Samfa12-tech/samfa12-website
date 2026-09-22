@@ -3,6 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build:content": "node scripts/build-content.mjs",
+    "check:content": "node scripts/build-content.mjs --check",
+    "validate:seo": "node scripts/validate-seo.mjs",
+    "test:content": "node --test tests/content.test.mjs",
     "bump:cache": "node scripts/bump-cache-version.mjs",
     "fetch:thumbnails": "node scripts/fetch-thumbnails.mjs",
     "sync:pocket-apps": "node scripts/sync-pocket-apps.js",

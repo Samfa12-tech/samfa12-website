@@ -1794,6 +1794,76 @@ body[data-page="apps"] .project-card-catalogue {
   font-size: var(--step-hero);
 }
 
+.product-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: var(--space-5);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.product-breadcrumbs a,
+.product-related a,
+.product-narrow p a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.product-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(220px, 0.65fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+
+.product-layout > * { min-width: 0; }
+
+.product-hero .lead { max-width: 65ch; }
+.product-author { color: var(--muted); font-weight: 600; }
+
+.product-hero-art {
+  display: block;
+  width: min(100%, 480px);
+  max-height: 460px;
+  object-fit: contain;
+  justify-self: center;
+  border-radius: var(--radius-md);
+}
+
+.product-actions {
+  --card-accent: var(--cyan);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.product-narrow { max-width: 850px; }
+.product-prose + .product-prose { margin-top: var(--space-6); }
+.product-prose p,
+.product-update p,
+.product-faqs p { max-width: 72ch; line-height: 1.7; }
+.product-faqs { display: grid; gap: var(--space-3); }
+.product-faqs details,
+.product-update {
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.product-faqs summary { cursor: pointer; font-weight: 700; }
+.product-faqs summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+.product-update + .product-update { margin-top: var(--space-4); }
+.product-related { display: grid; gap: var(--space-2); padding-left: 1.4rem; }
+
+@media (max-width: 700px) {
+  .product-layout { grid-template-columns: 1fr; }
+  .product-hero-art { width: min(100%, 300px); order: -1; }
+}
+
 .page-hero .hero-actions {
   margin-top: var(--space-2);
 }
@@ -2657,6 +2727,23 @@ body[data-page="apps"] .project-card-catalogue {
     opacity: 1;
     transform: translateY(0);
   }
+
+  html:not(.js-enhanced) .header-inner { flex-wrap: wrap; }
+  html:not(.js-enhanced) .menu-toggle { display: none; }
+  html:not(.js-enhanced) .site-nav {
+    position: static;
+    width: 100%;
+    max-height: none;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    border: 0;
+    box-shadow: none;
+    background: none;
+    padding: 0 var(--space-2) var(--space-3);
+  }
+  html:not(.js-enhanced) .nav-links { grid-template-columns: repeat(auto-fit, minmax(95px, 1fr)); }
+  html:not(.js-enhanced) .site-nav .surprise-button { display: none; }
 
   .nav-links {
     display: grid;

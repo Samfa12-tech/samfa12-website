@@ -1,216 +1,11 @@
 (() => {
-  const DATA_VERSION = "20260905-2";
+  const DATA_VERSION = "20260923-1";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
   const FETCH_TIMEOUT_MS = 8000;
   const FOCUSABLE_SELECTOR =
     'a[href], button:not([disabled]), iframe, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-  const fallbackProjects = [
-    {
-      title: "Dust on the River",
-      category: "Games",
-      type: "Game",
-      status: "Published",
-      description: "A story-driven bushranger adventure about whether a violent past can ever really stay buried, available on itch.io and Google Play.",
-      featured: true,
-      homepageRank: 1,
-      homepageSize: "hero",
-      links: [
-        { label: "Play on itch.io", url: "https://samfa12.itch.io/dust-on-the-river" },
-        { label: "View on Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver" },
-      ],
-      sortOrder: 0,
-      thumbnail: "assets/thumbnails/dust-on-the-river-b9a9e3.png",
-    },
-    {
-      title: "Cursed Cutter",
-      category: "Games",
-      type: "Browser game",
-      status: "Playable",
-      description: "Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.",
-      links: [{ label: "Play now", url: "/games/cursed-cutter/" }],
-      sortOrder: 3.5,
-      thumbnail: "assets/thumbnails/cursed-cutter-icon.webp",
-    },
-    {
-      title: "Briarhold",
-      category: "Games",
-      type: "Spiritual sequel to The Last Guard",
-      status: "Browser and Android testing available",
-      description: "A first-person action-defence roguelite available for Alpha.98 browser and Android testing, with experimental multiplayer co-op.",
-      featured: true,
-      homepageRank: 2,
-      homepageSize: "tall",
-      links: [
-        { label: "Play in browser", url: "/games/briarhold/play/" },
-        { label: "Enter the Fortress", url: "/games/briarhold/" },
-      ],
-      detailUrl: "/games/briarhold/",
-      sortOrder: 25,
-      thumbnail: "assets/thumbnails/briarhold-samfa12-icon-512.webp",
-    },
-    {
-      title: "Spin Vector",
-      category: "Games",
-      type: "Android game",
-      status: "Published",
-      description: "A neon action arcade game from Samfa12, with a major update just released on Google Play.",
-      featured: true,
-      homepageRank: 3,
-      homepageSize: "wide",
-      links: [
-        { label: "Play on itch.io", url: "https://samfa12.itch.io/spin-vector" },
-        { label: "View on Google Play", url: "https://play.google.com/store/apps/details?id=com.samsmall.spinvector" },
-        { label: "View on Wavedash", url: "https://wavedash.com/games/spin-vector" },
-      ],
-      sortOrder: 16,
-      thumbnail: "assets/thumbnails/spin-vector-7f51f8.png",
-    },
-    {
-      title: "The Horde — Ray Tracing Tech Demo",
-      category: "Games",
-      type: "Tech demo",
-      status: "Experimental — major update",
-      description: "An experimental ray-tracing tech demo for Android and Windows, with a major update now live on itch.io.",
-      featured: true,
-      homepageRank: 4,
-      homepageSize: "standard",
-      links: [
-        { label: "Download on itch.io", url: "https://samfa12.itch.io/the-horde" },
-        { label: "Source on GitHub", url: "https://github.com/Samfa12-tech/The-Horde-RT-demo" },
-      ],
-      sortOrder: 2.2,
-      thumbnail: "assets/thumbnails/the-horde-ray-tracing-tech-demo.webp",
-    },
-    {
-      title: "The Wall that Lied",
-      category: "Books",
-      type: "The Broken Road Trilogy — Book 1",
-      status: "Coming soon — 1 Oct 2026",
-      description: "The Broken Road Trilogy begins. A fractured road, a city behind stone, and a truth that was never meant to survive.",
-      featured: true,
-      homepageRank: 6,
-      homepageSize: "wide",
-      links: [{ label: "Pre-order on Amazon", url: "https://www.amazon.com.au/dp/B0H6VJ4VG1" }],
-      sortOrder: 13.6,
-      thumbnail: "assets/thumbnails/the-wall-that-lied-amazon-cover.jpg",
-    },
-    {
-      title: "Dust on the River",
-      category: "Books",
-      type: "Book",
-      status: "Releases later today",
-      description: "The novelisation of Dust on the River, releasing on Amazon later today.",
-      links: [{ label: "Pre-order on Amazon", url: "https://www.amazon.com.au/dp/B0H7QQQXBN" }],
-      sortOrder: 13.5,
-      thumbnail: "assets/thumbnails/dust-on-the-river-novelisation-cover.webp",
-    },
-    {
-      title: "ToKnight",
-      category: "Books",
-      type: "Book",
-      status: "Published",
-      description: "A middle-grade fantasy adventure about Jason Proud and the first step into the ToKnight world.",
-      featured: false,
-      links: [{ label: "Amazon Kindle", url: "https://www.amazon.com.au/dp/B0GX2NG31Z" }],
-      sortOrder: 12,
-      thumbnail: "assets/thumbnails/toknight-47d9be.png",
-    },
-    {
-      title: "Pocket Chordsmith",
-      category: "Apps & Tools",
-      type: "Web app",
-      status: "Published",
-      description: "The Pocket Audio songwriting hub for sketching progressions, MIDI ideas, exports, and game-audio handoff workflows.",
-      featured: true,
-      homepageRank: 5,
-      links: [{ label: "Use on Samfa12.com", url: "/apps/pocket-chordsmith/" }],
-      sortOrder: 3,
-      thumbnail: "assets/thumbnails/pocket-chordsmith-0f81a2.png",
-    },
-    {
-      title: "Pocket Chordsmith Godot addon",
-      category: "Assets",
-      type: "Godot add-on",
-      status: "Published",
-      description: "A Godot addon for importing Pocket Chordsmith data and driving adaptive music callbacks in games.",
-      links: [{ label: "Godot Asset Library", url: "https://godotengine.org/asset-library/asset/5174" }],
-      sortOrder: 18,
-      thumbnail: "assets/thumbnails/pocket-chordsmith-godot-addon-icon.png",
-    },
-    {
-      title: "Drink OST",
-      category: "Music",
-      type: "Album",
-      status: "Published",
-      description: "The Drink original soundtrack album.",
-      featured: false,
-      links: [{ label: "Listen on Spotify", url: "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg" }],
-      sortOrder: 31,
-      thumbnail: "assets/thumbnails/drink-ost-6d4b8e.webp",
-    },
-    {
-      title: "Samfa12 itch.io",
-      category: "Storefronts",
-      type: "Publisher page",
-      status: "Published",
-      description: "Samfa12's central storefront for playable builds and releases.",
-      featured: false,
-      links: [{ label: "Visit page", url: "https://samfa12.itch.io/" }],
-    },
-    {
-      title: "GitHub",
-      category: "Social",
-      type: "Profile",
-      status: "Published",
-      description: "Public source repositories, releases, and development history for Samfa12 projects.",
-      links: [{ label: "Open profile", url: "https://github.com/Samfa12-tech" }],
-    },
-  ];
-
-  const linkGroups = [
-    {
-      title: "Play",
-      links: [
-        ["itch.io", "https://samfa12.itch.io/"],
-        ["Steam", "https://store.steampowered.com/search/?publisher=Samfa12"],
-        ["Google Play", "https://play.google.com/store/apps/dev?id=7761853381809168545"],
-      ],
-    },
-    {
-      title: "Read",
-      links: [
-        ["Amazon author store", "https://www.amazon.com.au/stores/Samfa-12/author/B0GTPM5KF2?ref=ap_rdr&shoppingPortalEnabled=true"],
-        ["Google Books discovery", "https://www.google.com/search?q=site%3Abooks.google.com+Samfa12"],
-      ],
-    },
-    {
-      title: "Listen",
-      links: [
-        ["Spotify", "https://open.spotify.com/artist/6ZDb5x10yqra2d6lBCpnkS"],
-        ["YouTube Music", "https://music.youtube.com/search?q=Samfa12"],
-        ["YouTube", "https://www.youtube.com/@samsmall12"],
-      ],
-    },
-    {
-      title: "Build / source",
-      links: [
-        ["GitHub", "https://github.com/Samfa12-tech"],
-        ["Pocket Audio source", "https://github.com/Samfa12-tech/Pocket-Chordsmith"],
-        ["Godot Asset Library", "https://godotengine.org/asset-library/asset?filter=Samfa12"],
-      ],
-    },
-    {
-      title: "Follow",
-      links: [
-        ["X / Twitter", "https://x.com/Samfa12"],
-        ["Facebook", "https://www.facebook.com/profile.php?id=61577421161868"],
-        ["Reddit", "https://www.reddit.com/user/Samfa12/"],
-      ],
-    },
-  ];
 
   const dataStatus = document.getElementById("data-status");
   const catalogueControls = document.getElementById("catalogue-controls");
@@ -692,15 +487,11 @@
     return Array.isArray(projects) ? projects.map(normalizeProject).filter(Boolean) : [];
   }
 
-  function getFallbackProjects() {
-    return normalizeProjects(fallbackProjects);
-  }
-
   function getStatusClass(status) {
     const value = String(status || "Available").toLowerCase();
     if (value.includes("coming soon")) return "status-coming-soon";
     if (value.includes("development") || value.includes("wip")) return "status-development";
-    if (value.includes("prototype")) return "status-prototype";
+    if (value.includes("prototype") || value.includes("alpha")) return "status-prototype";
     if (value.includes("experimental")) return "status-experimental";
     if (value.includes("published")) return "status-published";
     return "status-available";
@@ -844,7 +635,7 @@
         dataset: {
           projectTitle: project.title,
           projectCategory: project.category,
-          linkLabel: "View game page",
+          linkLabel: `View ${project.category === "Books" ? "book" : project.category === "Music" ? "album" : project.category === "Games" ? "game" : "project"} page`,
         },
       }));
     } else {
@@ -883,7 +674,7 @@
       if (primaryLink) {
         actions.append(projectLink(primaryLink, project, true));
       } else {
-        actions.append(projectLink({ label: "View game page", url: detailUrl }, project, true));
+        actions.append(projectLink({ label: "About this project", url: detailUrl }, project, true));
       }
 
       const additionalLinks = !isFeatured ? project.links.slice(1) : [];
@@ -1024,13 +815,7 @@
     return replaceGridWithBuiltCards(element, fragment, cardCount, emptyMessage, preserveExistingOnEmpty);
   }
 
-  function usePageFallbackIfEmpty(grid, list, predicate, message) {
-    if (list.length || gridHasUsefulCards(grid)) return list;
-    const fallbackList = getFallbackProjects().filter(predicate).slice().sort(bySortThenTitle);
-    if (fallbackList.length) {
-      showDataStatus(message, true);
-      return fallbackList;
-    }
+  function usePageFallbackIfEmpty(grid, list) {
     return list;
   }
 
@@ -1041,11 +826,10 @@
     let cardCount = 0;
     let selectedProjects = selectHomeProjects(projects);
 
-    if (!selectedProjects.length && !gridHasUsefulCards(grid)) {
-      selectedProjects = selectHomeProjects(getFallbackProjects());
-      if (selectedProjects.length) {
-        showDataStatus("Featured project data is incomplete. Showing saved fallback cards instead.", true);
-      }
+    if (gridHasUsefulCards(grid)) {
+      if (!grid.querySelector(".mini-lab-card")) grid.querySelector(".project-card")?.after(createMiniLabCard());
+      initializeMiniLabs();
+      return;
     }
 
     selectedProjects.forEach((project, index) => {
@@ -1226,7 +1010,12 @@
       );
     }
 
-    applyCatalogueState();
+    if (gridHasUsefulCards(grid)) {
+      controls?.sync(state);
+      showDataStatus(buildCatalogueStatusMessage({ category, config, filterValue: state.filter, sortValue: state.sort, total: list.length, visibleCount: list.length, loaded: context.loaded !== false }), { tone: "summary" });
+    } else {
+      applyCatalogueState();
+    }
   }
 
   function renderApps(projects) {
@@ -1260,28 +1049,7 @@
     });
   }
 
-  function renderLinkGroups() {
-    const linkGrid = document.getElementById("link-grid");
-    if (!linkGrid) return;
-    linkGrid.replaceChildren();
-    linkGroups.forEach((group) => {
-      const list = createElement("div", { className: "link-group-list" });
-      group.links.forEach(([label, url]) => {
-        const href = safeUrl(url);
-        if (!href) return;
-        const anchor = createElement("a", { href }, [label, createElement("span", { text: "->", "aria-hidden": "true" })]);
-        if (isExternalUrl(href)) {
-          anchor.target = "_blank";
-          anchor.rel = "noopener noreferrer";
-        }
-        list.append(anchor);
-      });
-      linkGrid.append(createElement("section", { className: "link-group", dataset: { reveal: "" } }, [createElement("h2", { text: group.title }), list]));
-    });
-  }
-
   function renderLinks(projects) {
-    renderLinkGroups();
     const grid = document.getElementById("project-grid");
     const predicate = (project) => ["Social", "Storefronts"].includes(project.category);
     const list = usePageFallbackIfEmpty(
@@ -1351,7 +1119,7 @@
     } catch (error) {
       console.warn("Project data could not be loaded:", error);
       showDataStatus("Project data could not be loaded. Saved catalogue cards are still available.", { canRetry: true, tone: "warning" });
-      return { projects: normalizeProjects(fallbackProjects), loaded: false };
+      return { projects: [], loaded: false };
     }
   }
 
@@ -2397,11 +2165,10 @@
     const primaryGrid = document.getElementById("featured-grid") || document.getElementById("project-grid");
     const hasSavedCards = gridHasUsefulCards(primaryGrid);
     const { projects, loaded } = await loadProjects();
-    if (loaded || !hasSavedCards) {
-      renderPage(projects, { loaded });
-    } else {
-      initializeReveals(primaryGrid);
+    if (!hasSavedCards || document.body.dataset.page === "catalogue" || document.body.dataset.page === "home") {
+      if (loaded || !hasSavedCards) renderPage(projects, { loaded });
     }
+    if (primaryGrid) initializeReveals(primaryGrid);
     initializeSurprise(projects, loaded);
     initializeMiniLabs();
     initializePointerGlow();

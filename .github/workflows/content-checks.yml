@@ -1,0 +1,29 @@
+name: Check catalogue content
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run check:content
+      - run: npm run validate:catalogue
+      - run: npm run validate:site
+      - run: npm run validate:seo
+      - run: npm run test:content
+      - run: npm run test:analytics
+      - run: npm run test:marketplace
+      - run: npm run test:handoff-relay
+      - run: npm run verify:what-would-win-pages
+      - run: npm run verify:briarhold-pages -- games/briarhold/play
