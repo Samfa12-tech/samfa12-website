@@ -130,6 +130,11 @@
       "landingPath": "/pocket-audio/pocket-chordsmith/",
       "sources": [
         {
+          "url": "https://godotengine.org/asset-library/asset/5174",
+          "identity": "godotengine.org /asset-library/asset/5174",
+          "access": "read-public-source"
+        },
+        {
           "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
           "identity": "github.com /Samfa12-tech/Pocket-Chordsmith",
           "access": "read-public-source"
