@@ -221,6 +221,13 @@ iframe:focus-visible {
   margin: 0.7rem 0 0;
 }
 
+.section-note a,
+.product-narrow p a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
 .lead {
   max-width: 720px;
   margin: 0;
@@ -1160,6 +1167,7 @@ h3 {
 }
 
 .stats-trend-point {
+  position: relative;
   display: grid;
   grid-template-rows: auto 1fr auto;
   align-items: end;

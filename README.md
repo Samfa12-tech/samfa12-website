@@ -391,6 +391,7 @@ npm run check:content
 npm run validate:catalogue
 npm run validate:site
 npm run validate:seo
+npm run audit:indexing -- --check
 npm run test:content
 ```
 
@@ -401,6 +402,13 @@ and release artifacts before upload, excludes editorial source files and
 dependencies from the public artifact, then validates the staged routes.
 Runtime copies under `apps/pocket-chordsmith/`, `apps/pocket-dj/`,
 `apps/what-would-win/` and `games/briarhold/play/` remain separate.
+
+For the new-project checklist, official-source refresh, Search Console review,
+meaningful sitemap dates and monthly report, use the
+[search maintenance workflow](ops/seo/README.md). Its
+[indexing audit](ops/seo/indexing-audit.json) records per-route checks and the
+approved relationship graph. Refresh it with `npm run audit:indexing -- --write`
+after a substantive page change and review the diff before committing.
 
 For measurement after an authorised deployment, inspect Search Console's
 indexed URLs, sitemap coverage and search impressions/clicks over time. Its

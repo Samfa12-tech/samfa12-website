@@ -6,6 +6,7 @@ import os from "node:os";
 import { fileURLToPath } from "node:url";
 import { html, jsonLd, safeRoute, safeUrl } from "../scripts/content-utils.mjs";
 import { brokenHostedEntrypoints } from "../scripts/hosted-entrypoints.mjs";
+import { sitemapEntries, validateUpdateDates } from "../scripts/content-dates.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalogue = JSON.parse(fs.readFileSync(path.join(root,"data/projects.json"),"utf8"));
@@ -133,4 +134,44 @@ test("hosted HTML script entry points resolve in the staged tree", () => {
   } finally {
     fs.rmSync(fixture,{recursive:true,force:true});
   }
+});
+
+test("descriptive SEO titles stay aligned across generated metadata", () => {
+  for (const plan of manifest.products.filter((item)=>item.action==="create" && copy[item.id]?.seoTitle)) {
+    const source = fs.readFileSync(path.join(root,safeRoute(plan.path)),"utf8");
+    const title = `${copy[plan.id].seoTitle} | Samfa12`;
+    assert.ok(source.includes(`<title>${title}</title>`),plan.id);
+    assert.ok(source.includes(`<meta property="og:title" content="${title}"`),plan.id);
+    assert.ok(source.includes(`<meta name="twitter:title" content="${title}"`),plan.id);
+    const graph = JSON.parse(source.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+    assert.equal(graph.find((item)=>item["@type"]==="WebPage").name,title,plan.id);
+  }
+});
+
+test("sitemap dates follow explicit page sources, not the build clock", () => {
+  const site = [{route:"/",pageModified:"2026-01-01"},{route:"/updates/",pageModified:"2026-02-01"}];
+  const products = {products:[{id:"game-test",path:"/games/test/",action:"create",pageModified:"2026-02-01"}]};
+  const hubs = [{route:"/books/series/",pageModified:"2026-01-15"}];
+  const before = sitemapEntries(site,products,hubs);
+  products.products[0].pageModified = "2026-02-03";
+  const after = sitemapEntries(site,products,hubs);
+  assert.deepEqual(after.filter(([route,date])=>date!==before.find(([oldRoute])=>oldRoute===route)?.[1]),[["/games/test/","2026-02-03"]]);
+  const copy = {"game-test":{updates:[{id:"release",date:"2026-02-04"}]}};
+  assert.throws(()=>validateUpdateDates(site,products,copy),/pageModified predates update/);
+  products.products[0].pageModified = "2026-02-04";
+  assert.throws(()=>validateUpdateDates(site,products,copy),/\/updates\/ pageModified predates update/);
+  site[1].pageModified = "2026-02-04";
+  assert.doesNotThrow(()=>validateUpdateDates(site,products,copy));
+});
+
+test("related links resolve to an approved catalogue identity", () => {
+  const plans = new Map(manifest.products.map((item)=>[item.id,item]));
+  for (const [id,record] of Object.entries(copy)) {
+    for (const relatedId of record.relatedIds || []) {
+      assert.notEqual(relatedId,id);
+      assert.ok(plans.has(relatedId) && plans.get(relatedId).action!=="hold",`${id} -> ${relatedId}`);
+    }
+    for (const labelId of Object.keys(record.relatedLabels || {})) assert.ok(record.relatedIds?.includes(labelId),`${id} related label ${labelId}`);
+  }
+  assert.doesNotMatch(fs.readFileSync(path.join(root,"games/breakfast-beat/index.html"),"utf8"),/href="\/music\/tower-defense-pack-ost\/"/);
 });

@@ -1,5 +1,6 @@
 {
   "book-backwater": {
+    "seoTitle": "Backwater Australian post-apocalyptic novel",
     "intro": "Backwater is an Australian post-apocalyptic novel about a water carrier crossing a water-scarce landscape. Its story follows the strain of survival, grief and exhaustion, and the difficult choices that can let isolated communities cooperate.",
     "details": [
       {
@@ -352,6 +353,7 @@
     "authorCredit": "Samfa12"
   },
   "book-sober": {
+    "seoTitle": "Sober novel set after the Drink game",
     "intro": "Sober is a novel that continues the narrative world of the game Drink six months after its ending. Told through alternating perspectives, it follows Drink and Sober as they live separate, structured lives in the same city while memories of the past surface in ordinary moments.",
     "details": [
       {
@@ -405,9 +407,11 @@
       "game-drink",
       "music-drink-ost"
     ],
+    "relatedLabels": {"game-drink": "Play Drink, the earlier game", "music-drink-ost": "Listen to the Drink original soundtrack"},
     "authorCredit": "Samfa12"
   },
   "music-drink-ost": {
+    "seoTitle": "Drink original soundtrack album",
     "intro": "Spotify lists Drink (Original Soundtrack) by Samfa12 as a nine-track album. The track names move through a sequence of places and moments, from “The Day” and “The Pub” to “The Cabaret” and “The End.”",
     "details": [
       {
@@ -438,7 +442,8 @@
     "relatedIds": [
       "game-drink",
       "book-sober"
-    ]
+    ],
+    "relatedLabels": {"game-drink": "Explore the Drink game", "book-sober": "Read Sober, a later story in Drink's world"}
   },
   "music-billions-of-years": {
     "intro": "Billions of Years is a Samfa12 album with ten tracks, including “You Don't Hear Me,” “Macca's Chai at Midnight,” “Borrowed Home” and the title track. Spotify marks “You Don't Hear Me” as explicit in its track listing.",
@@ -580,6 +585,7 @@
     "relatedIds": [
       "game-dust-on-the-river"
     ],
+    "relatedLabels": {"game-dust-on-the-river": "Play the separate Dust on the River game"},
     "authorCredit": "Samfa 12"
   },
   "book-the-wall-that-lied": {

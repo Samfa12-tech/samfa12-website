@@ -1,0 +1,3225 @@
+{
+  "version": 1,
+  "site": "https://samfa12.com",
+  "summary": {
+    "htmlPages": 69,
+    "indexableRoutes": 67,
+    "sitemapRoutes": 67,
+    "explicitlyExcluded": 2,
+    "routesWithFindings": 1,
+    "siteFindings": 0,
+    "oneContextualIncoming": 16,
+    "relationshipEdges": 66
+  },
+  "excluded": [
+    {
+      "route": "/404.html",
+      "reason": "explicit noindex"
+    },
+    {
+      "route": "/george_goalie_game/",
+      "reason": "explicit noindex"
+    }
+  ],
+  "siteFindings": [],
+  "relationshipEdges": [
+    {
+      "from": "/apps/pocket-audio-handoff/",
+      "to": "/pocket-audio/godot-addon/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/apps/pocket-audio-handoff/",
+      "to": "/pocket-audio/pocket-chordsmith/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/apps/pocket-audio-handoff/",
+      "to": "/pocket-audio/pocket-daw/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/a-place-of-his-own/",
+      "to": "/books/free-to-a-good-home/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/dust-on-the-river/",
+      "to": "/games/dust-on-the-river/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/free-to-a-good-home-books/",
+      "to": "/books/a-place-of-his-own/",
+      "kind": "reading-order"
+    },
+    {
+      "from": "/books/free-to-a-good-home-books/",
+      "to": "/books/free-to-a-good-home/",
+      "kind": "reading-order"
+    },
+    {
+      "from": "/books/free-to-a-good-home/",
+      "to": "/books/a-place-of-his-own/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/jason-proud/",
+      "to": "/books/toknight-2-the-fire-beneath/",
+      "kind": "reading-order"
+    },
+    {
+      "from": "/books/jason-proud/",
+      "to": "/books/toknight/",
+      "kind": "reading-order"
+    },
+    {
+      "from": "/books/no-wall-to-hold/",
+      "to": "/books/the-wall-that-lied/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/no-wall-to-hold/",
+      "to": "/books/what-we-save/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/sober/",
+      "to": "/games/drink/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/sober/",
+      "to": "/music/drink-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/the-broken-road/",
+      "to": "/books/no-wall-to-hold/",
+      "kind": "reading-order"
+    },
+    {
+      "from": "/books/the-broken-road/",
+      "to": "/books/the-wall-that-lied/",
+      "kind": "reading-order"
+    },
+    {
+      "from": "/books/the-broken-road/",
+      "to": "/books/what-we-save/",
+      "kind": "reading-order"
+    },
+    {
+      "from": "/books/the-wall-that-lied/",
+      "to": "/books/no-wall-to-hold/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/the-wall-that-lied/",
+      "to": "/books/what-we-save/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/toknight-2-the-fire-beneath/",
+      "to": "/books/toknight/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/toknight/",
+      "to": "/books/toknight-2-the-fire-beneath/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/what-we-save/",
+      "to": "/books/no-wall-to-hold/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/what-we-save/",
+      "to": "/books/the-wall-that-lied/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/breakfast-beat/",
+      "to": "/games/td-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/briarhold/",
+      "to": "/games/the-last-guard/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/bug-maze-td/",
+      "to": "/games/td-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/bug-maze-td/",
+      "to": "/music/tower-defense-pack-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/drink/",
+      "to": "/books/sober/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/drink/",
+      "to": "/music/drink-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/dust-on-the-river/",
+      "to": "/books/dust-on-the-river/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/lofi-and-chill-pack/",
+      "to": "/games/moon-mower/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/lofi-and-chill-pack/",
+      "to": "/games/pocket-ant-farm/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/lofi-and-chill-pack/",
+      "to": "/games/pocket-fish-tank/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/lofi-and-chill-pack/",
+      "to": "/music/lofi-and-chill-pack-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/moon-mower/",
+      "to": "/games/lofi-and-chill-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/moon-mower/",
+      "to": "/music/lofi-and-chill-pack-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/pocket-ant-farm/",
+      "to": "/games/lofi-and-chill-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/pocket-ant-farm/",
+      "to": "/music/lofi-and-chill-pack-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/pocket-fish-tank/",
+      "to": "/games/lofi-and-chill-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/pocket-fish-tank/",
+      "to": "/music/lofi-and-chill-pack-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/ship-blockade/",
+      "to": "/games/td-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/ship-blockade/",
+      "to": "/music/tower-defense-pack-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/td-pack/",
+      "to": "/games/breakfast-beat/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/td-pack/",
+      "to": "/games/bug-maze-td/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/td-pack/",
+      "to": "/games/ship-blockade/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/td-pack/",
+      "to": "/music/tower-defense-pack-ost/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/the-last-guard/",
+      "to": "/games/briarhold/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/drink-ost/",
+      "to": "/books/sober/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/drink-ost/",
+      "to": "/games/drink/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/lofi-and-chill-pack-ost/",
+      "to": "/games/lofi-and-chill-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/lofi-and-chill-pack-ost/",
+      "to": "/games/moon-mower/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/lofi-and-chill-pack-ost/",
+      "to": "/games/pocket-ant-farm/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/lofi-and-chill-pack-ost/",
+      "to": "/games/pocket-fish-tank/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/tower-defense-pack-ost/",
+      "to": "/games/bug-maze-td/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/tower-defense-pack-ost/",
+      "to": "/games/ship-blockade/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/tower-defense-pack-ost/",
+      "to": "/games/td-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/godot-addon/",
+      "to": "/apps/pocket-audio-handoff/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/godot-addon/",
+      "to": "/pocket-audio/pocket-chordsmith/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/pocket-chordsmith/",
+      "to": "/apps/pocket-audio-handoff/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/pocket-chordsmith/",
+      "to": "/pocket-audio/godot-addon/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/pocket-chordsmith/",
+      "to": "/pocket-audio/pocket-daw/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/pocket-chordsmith/",
+      "to": "/pocket-audio/pocket-dj/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/pocket-daw/",
+      "to": "/apps/pocket-audio-handoff/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/pocket-daw/",
+      "to": "/pocket-audio/pocket-chordsmith/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/pocket-dj/",
+      "to": "/apps/pocket-audio-handoff/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/pocket-audio/pocket-dj/",
+      "to": "/pocket-audio/pocket-chordsmith/",
+      "kind": "editorial-related"
+    }
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/",
+      "title": "Samfa12 | Games, stories, music, and Pocket Audio",
+      "description": "Samfa12 is a creative lab for playable worlds, strange stories, music, Pocket Audio tools, and experiments.",
+      "h1": [
+        "Small games.\n              Strange stories.\n              Pocket-sized tools."
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/links/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/apps/pocket-audio-handoff/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/stats/",
+        "/tools/what-would-win/"
+      ],
+      "localAssetCount": 18,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "ItemList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/about/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/about/",
+      "title": "About | Samfa12",
+      "description": "About Samfa12 and its games, books, music and creative tools.",
+      "h1": [
+        "About Samfa12"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/apps/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/"
+      ],
+      "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "AboutPage"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/apps/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/apps/",
+      "title": "Apps & Tools | Samfa12",
+      "description": "Launch Samfa12 browser apps and interactive tools, including What Would Win and the Pocket Audio family.",
+      "h1": [
+        "Apps & Tools"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/links/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/apps/pocket-audio-handoff/",
+        "/tools/what-would-win/"
+      ],
+      "localAssetCount": 14,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "CollectionPage",
+        "ItemList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/apps/pocket-audio-handoff/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/apps/pocket-audio-handoff/",
+      "title": "Pocket Audio Handoff | Samfa12",
+      "description": "Samfa12 Pocket Audio handoff helper for moving Pocket Chordsmith PCS1 songs between phone, desktop Pocket DAW, and Godot.",
+      "h1": [
+        "Pocket Audio Handoff handoff-v1"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/apps/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/"
+      ],
+      "incomingMain": [
+        "/apps/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/"
+      ],
+      "localAssetCount": 7,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "SoftwareApplication",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/apps/pocket-chordsmith/",
+      "kind": "runtime",
+      "canonical": "https://samfa12.com/apps/pocket-chordsmith/",
+      "title": "Pocket Chordsmith | Samfa12",
+      "description": "Pocket Chordsmith is a browser-based Samfa12 music sketchpad for chord progressions, song ideas, MIDI, export, and game-audio handoff workflows.",
+      "h1": [
+        "Pocket Chordsmith v68",
+        "Preparing transfer..."
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-chordsmith/"
+      ],
+      "incomingMain": [
+        "/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-chordsmith/"
+      ],
+      "localAssetCount": 3,
+      "jsonLdStatus": "not present",
+      "jsonLdTypes": [],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/apps/pocket-dj/",
+      "kind": "runtime",
+      "canonical": "https://samfa12.com/apps/pocket-dj/",
+      "title": "Pocket DJ | Samfa12",
+      "description": "Pocket DJ is a browser-based Samfa12 live remixing tool for performing Pocket Chordsmith song ideas with pads, loops, builds, drops, and FX.",
+      "h1": [
+        "Pocket DJ",
+        "Pocket DJ"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/apps/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-dj/"
+      ],
+      "incomingMain": [
+        "/apps/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-dj/"
+      ],
+      "localAssetCount": 1,
+      "jsonLdStatus": "not present",
+      "jsonLdTypes": [],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/apps/what-would-win/",
+      "kind": "runtime",
+      "canonical": "https://samfa12.com/apps/what-would-win/",
+      "title": "What Would Win",
+      "description": "What Would Win - a mock-serious textual battle simulator for absurd creature matchups.",
+      "h1": [],
+      "inSitemap": true,
+      "incoming": [
+        "/apps/",
+        "/games/",
+        "/tools/what-would-win/"
+      ],
+      "incomingMain": [
+        "/apps/",
+        "/games/",
+        "/tools/what-would-win/"
+      ],
+      "localAssetCount": 6,
+      "jsonLdStatus": "not present",
+      "jsonLdTypes": [],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/books/",
+      "title": "Books | Samfa12",
+      "description": "Browse Samfa12 books, novels, novellas, ebook links, audiobook links, Amazon listings, and itch.io book pages.",
+      "h1": [
+        "Books"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/links/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/about/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/"
+      ],
+      "localAssetCount": 21,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "CollectionPage",
+        "ItemList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/a-place-of-his-own/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/a-place-of-his-own/",
+      "title": "A Place of His Own | Samfa12",
+      "description": "A Place of His Own is a quiet Australian young-adult novel and a sequel to Free to a Good Home. Seven years after Jonah was found at a caravan park, he is nearly seventeen and his living arrangement has become uncertain; the Walsh family must consider how to help without deciding his future for him.",
+      "h1": [
+        "A Place of His Own"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/article-18/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/article-18/",
+      "title": "Article 18 | Samfa12",
+      "description": "Article 18 is an adult comic-noir mystery novella about Austin Crowd, a private investigator whose instinct for patterns often leads him toward the wrong explanation. A sealed packet draws him into a tangle of missing records, political manoeuvring, polite threats and questions people would rather he stopped asking.",
+      "h1": [
+        "Article 18"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/"
+      ],
+      "incomingMain": [
+        "/books/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/books/backwater/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/backwater/",
+      "title": "Backwater Australian post-apocalyptic novel | Samfa12",
+      "description": "Backwater is an Australian post-apocalyptic novel about a water carrier crossing a water-scarce landscape. Its story follows the strain of survival, grief and exhaustion, and the difficult choices that can let isolated communities cooperate.",
+      "h1": [
+        "Backwater"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/colossal/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/colossal/",
+      "title": "Colossal | Samfa12",
+      "description": "Colossal is an adult historical tragedy set in ancient Rome. Aurelius is an enslaved gladiator whose victories make him valuable to the people who own him; behind the champion&#39;s public image, he studies the arena and begins turning his fame into a chance to resist.",
+      "h1": [
+        "Colossal"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/"
+      ],
+      "incomingMain": [
+        "/books/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/books/concubine/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/concubine/",
+      "title": "Concubine | Samfa12",
+      "description": "Concubine is an adult political science-fiction novel about Seren Vale, the former First Minister of Veyra. After an occupying power strips her of office, citizenship and legal identity, Seren is brought back to her home world and begins using the empire&#39;s own rituals and assumptions to rebuild resistance.",
+      "h1": [
+        "Concubine"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/"
+      ],
+      "incomingMain": [
+        "/books/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/books/dust-on-the-river/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/dust-on-the-river/",
+      "title": "Dust on the River novel | Samfa12",
+      "description": "Dust on the River is an Australian historical novel based on the Samfa12 videogame. In a fictional north-east Victorian river town in the early 1890s, a newcomer hopes steady work will let him leave a bushranger past behind.",
+      "h1": [
+        "Dust on the River"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/games/dust-on-the-river/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/games/dust-on-the-river/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/free-to-a-good-home-books/",
+      "kind": "reading-hub",
+      "canonical": "https://samfa12.com/books/free-to-a-good-home-books/",
+      "title": "Free to a Good Home and A Place of His Own | Samfa12",
+      "description": "Read Free to a Good Home, then the later story A Place of His Own.",
+      "h1": [
+        "Free to a Good Home and A Place of His Own"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/a-place-of-his-own/",
+        "/books/free-to-a-good-home/"
+      ],
+      "incomingMain": [
+        "/books/a-place-of-his-own/",
+        "/books/free-to-a-good-home/"
+      ],
+      "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "ItemList",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/free-to-a-good-home/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/free-to-a-good-home/",
+      "title": "Free to a Good Home | Samfa12",
+      "description": "Free to a Good Home is a contemporary Australian young-adult mystery-drama about fifteen-year-old Tom, who meets Jonah during a family holiday at a caravan park. Jonah is a watchful boy with no clear story about who is meant to be caring for him, and Tom finds it increasingly difficult to ignore the gaps around him.",
+      "h1": [
+        "Free to a Good Home"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/free-to-a-good-home-books/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/free-to-a-good-home-books/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/jason-proud/",
+      "kind": "reading-hub",
+      "canonical": "https://samfa12.com/books/jason-proud/",
+      "title": "Jason Proud and the ToKnight books | Samfa12",
+      "description": "Start Jason Proud&#39;s middle-grade fantasy story with ToKnight, then continue with ToKnight 2: The Fire Beneath.",
+      "h1": [
+        "Jason Proud and the ToKnight books"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/"
+      ],
+      "incomingMain": [
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/"
+      ],
+      "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "BookSeries",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/no-wall-to-hold/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/no-wall-to-hold/",
+      "title": "No Wall to Hold | Samfa12",
+      "description": "No Wall to Hold is the second Broken Road book. After the defence of Auster, engineer Tomas Parker must move a grain convoy through a damaged political landscape while refugees, soldiers and villages join the road.",
+      "h1": [
+        "No Wall to Hold"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/what-we-save/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/what-we-save/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/sober/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/sober/",
+      "title": "Sober novel set after the Drink game | Samfa12",
+      "description": "Sober is a novel that continues the narrative world of the game Drink six months after its ending. Told through alternating perspectives, it follows Drink and Sober as they live separate, structured lives in the same city while memories of the past surface in ordinary moments.",
+      "h1": [
+        "Sober"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/games/drink/",
+        "/music/drink-ost/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/games/drink/",
+        "/music/drink-ost/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/the-broken-road/",
+      "kind": "reading-hub",
+      "canonical": "https://samfa12.com/books/the-broken-road/",
+      "title": "The Broken Road trilogy | Samfa12",
+      "description": "Read The Broken Road in order: The Wall that Lied, No Wall to Hold and What We Save.",
+      "h1": [
+        "The Broken Road trilogy"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/no-wall-to-hold/",
+        "/books/the-wall-that-lied/",
+        "/books/what-we-save/"
+      ],
+      "incomingMain": [
+        "/books/no-wall-to-hold/",
+        "/books/the-wall-that-lied/",
+        "/books/what-we-save/"
+      ],
+      "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "BookSeries",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/the-wall-that-lied/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/the-wall-that-lied/",
+      "title": "The Wall that Lied | Samfa12",
+      "description": "The Wall that Lied opens The Broken Road trilogy. Military engineer Tomas Parker saved Auster by bringing down the King’s Road during an invasion, but the cost made him a hated figure. Twenty-one years later, an enemy returns and the city’s defences may rest on a falsehood.",
+      "h1": [
+        "The Wall that Lied"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/books/",
+        "/books/no-wall-to-hold/",
+        "/books/the-broken-road/",
+        "/books/what-we-save/"
+      ],
+      "incomingMain": [
+        "/",
+        "/books/",
+        "/books/no-wall-to-hold/",
+        "/books/the-broken-road/",
+        "/books/what-we-save/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/toknight-2-the-fire-beneath/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/toknight-2-the-fire-beneath/",
+      "title": "ToKnight 2: The Fire Beneath | Samfa12",
+      "description": "ToKnight 2: The Fire Beneath is the second book in the Jason Proud series. Jason, Kiera and Angus find an ancient door beneath their school library and a wounded dragon below it, while a new student takes a dangerous interest in Jason&#39;s family name.",
+      "h1": [
+        "ToKnight 2: The Fire Beneath"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/books/jason-proud/",
+        "/books/toknight/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/books/jason-proud/",
+        "/books/toknight/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/toknight/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/toknight/",
+      "title": "ToKnight | Samfa12",
+      "description": "ToKnight is a middle-grade fantasy adventure about Jason Proud, a Year Six student who is drawn into a real knightly duty. A spectral ancestor gives him armour, a shield and a sword, then warns that an ancient dragon is returning and feeds on fear, anger, shame and pain.",
+      "h1": [
+        "ToKnight"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/books/jason-proud/",
+        "/books/toknight-2-the-fire-beneath/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/books/jason-proud/",
+        "/books/toknight-2-the-fire-beneath/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/books/what-we-save/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/books/what-we-save/",
+      "title": "What We Save | Samfa12",
+      "description": "What We Save concludes The Broken Road trilogy. Tomas Parker returns to a threatened Auster with refugees, wounded soldiers and grain, as the city faces another choice about who and what its defences protect.",
+      "h1": [
+        "What We Save"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/",
+        "/books/no-wall-to-hold/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/"
+      ],
+      "incomingMain": [
+        "/books/",
+        "/books/no-wall-to-hold/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Book",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/games/",
+      "title": "Games | Samfa12",
+      "description": "Browse Samfa12 indie games, playable releases, prototypes, Android games, Steam entries, and itch.io builds.",
+      "h1": [
+        "Games"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/links/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/about/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/"
+      ],
+      "localAssetCount": 32,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "CollectionPage",
+        "ItemList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/breakfast-beat/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/breakfast-beat/",
+      "title": "Breakfast Beat | Samfa12",
+      "description": "Breakfast Beat is a rhythm-infused tower-defence game set on a breakfast line. Place food-themed defences against incoming snack waves; lanes map to chord notes and tower columns fire in sequence, turning a defence layout into a musical grid.",
+      "h1": [
+        "Breakfast Beat"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/td-pack/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/td-pack/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/briarhold/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/briarhold/",
+      "title": "Briarhold | Samfa12",
+      "description": "Play Briarhold Alpha.101 in your browser or download the Android alpha, and help test Samfa12's seven-night first-person action-defence roguelite.",
+      "h1": [
+        "Briarhold"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/games/",
+        "/games/the-last-guard/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/games/",
+        "/games/the-last-guard/",
+        "/updates/"
+      ],
+      "localAssetCount": 12,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/briarhold/play/",
+      "kind": "runtime",
+      "canonical": "https://samfa12.com/games/briarhold/play/",
+      "title": "Briarhold · First-Person Defender",
+      "description": "Play Briarhold, a free first-person fortress defence alpha. Hold seven nights with your wardens, fortifications and experimental player-hosted co-op.",
+      "h1": [
+        "Briarhold"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/games/",
+        "/games/briarhold/"
+      ],
+      "incomingMain": [
+        "/",
+        "/games/",
+        "/games/briarhold/"
+      ],
+      "localAssetCount": 12,
+      "jsonLdStatus": "not present",
+      "jsonLdTypes": [],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/bug-maze-td/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/bug-maze-td/",
+      "title": "Bug Maze TD | Samfa12",
+      "description": "Bug Maze TD is a portrait-first tower-defence game for mobile browsers. Build paths and place bug-themed towers across handcrafted garden levels, while ground and flying enemies follow different routes.",
+      "h1": [
+        "Bug Maze TD"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/td-pack/",
+        "/music/tower-defense-pack-ost/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/td-pack/",
+        "/music/tower-defense-pack-ost/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/bug-swarm-guide/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/bug-swarm-guide/",
+      "title": "Bug Swarm | Samfa12",
+      "description": "Bug Swarm is a phone-oriented tower-defence prototype about placing towers beside a curved dirt-tray path and responding as waves of bugs flood through it. Its local game menu shows a Leaf 1k flood and additional prototype levels that begin locked.",
+      "h1": [
+        "Bug Swarm"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/games/bug-swarm/",
+      "kind": "runtime",
+      "canonical": "https://samfa12.com/games/bug-swarm/",
+      "title": "Bug Swarm Experiment",
+      "description": "",
+      "h1": [
+        "Bug Swarm",
+        "Run Results"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/bug-swarm-guide/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/bug-swarm-guide/"
+      ],
+      "localAssetCount": 3,
+      "jsonLdStatus": "not present",
+      "jsonLdTypes": [],
+      "findings": [
+        "missing description"
+      ],
+      "advisories": []
+    },
+    {
+      "route": "/games/cursed-cutter-guide/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/cursed-cutter-guide/",
+      "title": "Cursed Cutter | Samfa12",
+      "description": "Cursed Cutter is a pocket roguelite garden-horror game whose runtime title reads “Curse Cutter: Last Garden.” Play as an armoured groundskeeper, cut five cursed beds before they regrow, survive rootlings and seal the Rootgate before midnight.",
+      "h1": [
+        "Cursed Cutter"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/games/cursed-cutter/",
+      "kind": "runtime",
+      "canonical": "https://samfa12.com/games/cursed-cutter/",
+      "title": "Curse Cutter: Last Garden",
+      "description": "A pocket roguelite garden horror by Samfa12. Cut cursed weeds, survive midnight, and seal the Rootgate.",
+      "h1": [],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/cursed-cutter-guide/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/cursed-cutter-guide/"
+      ],
+      "localAssetCount": 3,
+      "jsonLdStatus": "not present",
+      "jsonLdTypes": [],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/drink/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/drink/",
+      "title": "Drink top-down narrative game | Samfa12",
+      "description": "Drink is a short, top-down narrative game about alcohol dependence, avoidance and the beginning of accountability. Its fixed story follows a person through a small town where drinking brings short-term relief and consequences accumulate.",
+      "h1": [
+        "Drink"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/sober/",
+        "/games/",
+        "/music/drink-ost/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/books/sober/",
+        "/games/",
+        "/music/drink-ost/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/dust-on-the-river/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/dust-on-the-river/",
+      "title": "Dust on the River game | Samfa12",
+      "description": "Dust on the River is an Australian historical life game set in a fictional north-east Victorian river town in the 1890s. You arrive under a new name, take station work, ride, fish and pan for gold while a past tied to bushranger Red Jack starts to catch up.",
+      "h1": [
+        "Dust on the River"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/books/dust-on-the-river/",
+        "/games/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/books/dust-on-the-river/",
+        "/games/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/gremlin-grenade-pinball/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/gremlin-grenade-pinball/",
+      "title": "Gremlin Grenade Pinball | Samfa12",
+      "description": "Gremlin Grenade Pinball is a prototype that combines pinball with a gremlin horde: keep a live grenade moving with the flippers, hit traps and try to stop gremlins advancing down the board. Its itch page labels the game as in development.",
+      "h1": [
+        "Gremlin Grenade Pinball"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/games/hop-bunny/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/hop-bunny/",
+      "title": "Hop Bunny | Samfa12",
+      "description": "Hop Bunny is a precision jumping game: charge a jump, release at the right moment and try to reach a target height. Its handcrafted phases grow in scale, with collectibles, hazards, combo scoring and a carrot-moon finale.",
+      "h1": [
+        "Hop Bunny"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/games/lofi-and-chill-pack/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/lofi-and-chill-pack/",
+      "title": "Samfa12&#39;s Lofi and Chill Pack | Samfa12",
+      "description": "Samfa12&#39;s Lofi and Chill Pack is an Android collection of calm, low-pressure scenes with soft lofi music and voxel-style visuals. Its Play listing describes fish, ants, birds, a train set, a koi pond and Moon Mower as experiences in the collection.",
+      "h1": [
+        "Samfa12's Lofi and Chill Pack"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/moon-mower/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/moon-mower/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "CreativeWork",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/mandible-wars/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/mandible-wars/",
+      "title": "Mandible Wars | Samfa12",
+      "description": "Mandible Wars is an early playable, portrait-first RTS-lite about ants and termites fighting over a large patch of dirt. Command squads, scout through fog of war, gather nectar, build a colony and capture strongpoints on grid-based battlefields.",
+      "h1": [
+        "Mandible Wars"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/games/moon-mower/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/moon-mower/",
+      "title": "Moon Mower | Samfa12",
+      "description": "Moon Mower is a cosy-comic arcade game about a tiny astronaut mowing a glowing, overgrown moon. Cut paths through lunar grass, rescue trapped spirits, build combos and chase a score before time runs out.",
+      "h1": [
+        "Moon Mower"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/lofi-and-chill-pack/",
+        "/music/lofi-and-chill-pack-ost/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/lofi-and-chill-pack/",
+        "/music/lofi-and-chill-pack-ost/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/party-bus/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/party-bus/",
+      "title": "P.A.R.T.Y. Bus: Wasteland Run | Samfa12",
+      "description": "P.A.R.T.Y. Bus: Wasteland Run is a 3D browser driving-survival prototype about taking a battered yellow bus into hostile territory and getting survivors and supplies back to base. Damage, cargo weight, enemies and fuel all add pressure to the return trip.",
+      "h1": [
+        "P.A.R.T.Y. Bus: Wasteland Run"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/games/pocket-ant-farm/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/pocket-ant-farm/",
+      "title": "Pocket Ant Farm | Samfa12",
+      "description": "Pocket Ant Farm is a relaxing voxel ant-colony simulation in a glass-sided dirt slab. Watch ants dig, explore and forage; drop food, suggest digging areas and make the soil translucent to see the tunnels.",
+      "h1": [
+        "Pocket Ant Farm"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/lofi-and-chill-pack/",
+        "/music/lofi-and-chill-pack-ost/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/lofi-and-chill-pack/",
+        "/music/lofi-and-chill-pack-ost/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/pocket-fish-tank/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/pocket-fish-tank/",
+      "title": "Pocket Fish Tank | Samfa12",
+      "description": "Pocket Fish Tank is a calm aquarium toy: decorate a voxel tank, add water and watch fish and other small creatures settle in. The itch page calls the product “Fish Tank” in its description, while its page title is “Pocket Fish Tank.”",
+      "h1": [
+        "Pocket Fish Tank"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/lofi-and-chill-pack/",
+        "/music/lofi-and-chill-pack-ost/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/lofi-and-chill-pack/",
+        "/music/lofi-and-chill-pack-ost/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/possum-cafe/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/possum-cafe/",
+      "title": "Night Shift at Possum&#39;s Cafe | Samfa12",
+      "description": "Night Shift at Possum&#39;s Café is a cosy pixel-art café game about serving animal customers as a possum barista. Prepare simple drinks and treats, keep orders moving through quiet moments and rushes, and gradually make the neighbourhood café busier and more inviting.",
+      "h1": [
+        "Night Shift at Possum's Cafe"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/reckless-dentist/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/reckless-dentist/",
+      "title": "Reckless Dentist | Samfa12",
+      "description": "Reckless Dentist is a short browser score-attack game about treating cartoon teeth at speed. Spot the problem and drag the right tool into place while the clinic grows more chaotic.",
+      "h1": [
+        "Reckless Dentist"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/games/ship-blockade/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/ship-blockade/",
+      "title": "Ship Blockade | Samfa12",
+      "description": "Ship Blockade is a lane-based arcade tower-defence game about stopping ships from breaking through a shipping lane. Place guns, mines, missile batteries and blocker boats, adapting as faster and more heavily armoured vessels arrive.",
+      "h1": [
+        "Ship Blockade"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/td-pack/",
+        "/music/tower-defense-pack-ost/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/td-pack/",
+        "/music/tower-defense-pack-ost/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/spin-vector/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/spin-vector/",
+      "title": "Spin Vector | Samfa12",
+      "description": "Spin Vector is a neon twin-stick arcade shooter about piloting an upgradeable vector drone through themed arenas. Fight through waves, collect credits for persistent upgrades and face boss encounters; the Android listing also describes post-game Gauntlet and Adventure modes.",
+      "h1": [
+        "Spin Vector"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/games/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/games/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/td-pack/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/td-pack/",
+      "title": "Samfa12&#39;s TD Pack | Samfa12",
+      "description": "Samfa12 Tower Defense Pack is an Android collection of bite-sized tower-defence games. The Google Play listing names Breakfast Beat, Ship Blockade, Bug Maze TD, Coop Guard TD and Library Lockdown TD, each with its own theme, towers, enemies and music.",
+      "h1": [
+        "Samfa12's TD Pack"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/bug-maze-td/",
+        "/games/ship-blockade/",
+        "/music/tower-defense-pack-ost/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/bug-maze-td/",
+        "/games/ship-blockade/",
+        "/music/tower-defense-pack-ost/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "CreativeWork",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/the-horde/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/the-horde/",
+      "title": "The Horde — Ray Tracing Tech Demo | Samfa12",
+      "description": "The Horde is a focused native Vulkan hardware ray-tracing technology demo for compatible Windows RT GPUs and Android phones. Its current itch description follows a lantern-bearing character through a wet gothic ruin, with sword combat, reflective water and a lich encounter.",
+      "h1": [
+        "The Horde — Ray Tracing Tech Demo"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/games/"
+      ],
+      "incomingMain": [
+        "/",
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/the-last-guard/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/the-last-guard/",
+      "title": "The Last Guard browser fortress defence game | Samfa12",
+      "description": "The Last Guard is a first-person browser wall-defence survival game. Aim a mounted gun against a fantasy horde, manage heat, call support and bank scrap to improve your chances between stands.",
+      "h1": [
+        "The Last Guard"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/briarhold/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/briarhold/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/games/wonky-vehicle-lab/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/wonky-vehicle-lab/",
+      "title": "Wonky Vehicle Lab | Samfa12",
+      "description": "Wonky Vehicle Lab is a prototype vehicle-building sandbox for drawing odd machines and testing them on a bumpy physics track. Sketch parts, connect them with glue or welds, then drive and see whether the design reaches the finish.",
+      "h1": [
+        "Wonky Vehicle Lab"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/join/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/join/",
+      "title": "Join Samfa12 | Mailing List and Tester Signup",
+      "description": "Join the Samfa12 mailing list, sign up as an early tester, and follow Samfa12 games, books, prototypes, and releases.",
+      "h1": [
+        "Join Samfa12"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/links/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/privacy/"
+      ],
+      "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/links/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/links/",
+      "title": "Links | Samfa12",
+      "description": "Find Samfa12 social links, store links, source repositories, contact paths, Steam, Google Play, itch.io, Amazon, and music destinations.",
+      "h1": [
+        "Links"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/about/",
+        "/privacy/"
+      ],
+      "localAssetCount": 19,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "CollectionPage",
+        "ItemList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/music/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/music/",
+      "title": "Music | Samfa12",
+      "description": "Listen to Samfa12 music, soundtracks, albums, Spotify links, YouTube Music links, and related audio projects.",
+      "h1": [
+        "Music"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/links/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/about/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/"
+      ],
+      "localAssetCount": 14,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "CollectionPage",
+        "ItemList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/music/billions-of-years/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/music/billions-of-years/",
+      "title": "Billions of Years | Samfa12",
+      "description": "Billions of Years is a Samfa12 album with ten tracks, including “You Don&#39;t Hear Me,” “Macca&#39;s Chai at Midnight,” “Borrowed Home” and the title track. Spotify marks “You Don&#39;t Hear Me” as explicit in its track listing.",
+      "h1": [
+        "Billions of Years"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/music/"
+      ],
+      "incomingMain": [
+        "/music/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "MusicAlbum",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/music/drink-ost/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/music/drink-ost/",
+      "title": "Drink original soundtrack album | Samfa12",
+      "description": "Spotify lists Drink (Original Soundtrack) by Samfa12 as a nine-track album. The track names move through a sequence of places and moments, from “The Day” and “The Pub” to “The Cabaret” and “The End.”",
+      "h1": [
+        "Drink OST"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/books/sober/",
+        "/games/drink/",
+        "/music/"
+      ],
+      "incomingMain": [
+        "/books/sober/",
+        "/games/drink/",
+        "/music/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "MusicAlbum",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/music/lofi-and-chill-pack-ost/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/music/lofi-and-chill-pack-ost/",
+      "title": "Samfa12&#39;s Lofi and Chill Pack Original Soundtrack | Samfa12",
+      "description": "Samfa12&#39;s Lofi and Chill Pack Original Soundtrack is a 26-track Spotify album credited to Samfa12. Its titles range from “Attic Train Map” and “Blue Hour Bubbles” to tracks named for Moon Mower, Pocket Ant Farm, Pocket Fish Tank and other small-world projects.",
+      "h1": [
+        "Samfa12's Lofi and Chill Pack Original Soundtrack"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/lofi-and-chill-pack/",
+        "/games/moon-mower/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/music/"
+      ],
+      "incomingMain": [
+        "/games/lofi-and-chill-pack/",
+        "/games/moon-mower/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/music/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "MusicAlbum",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/music/tower-defense-pack-ost/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/music/tower-defense-pack-ost/",
+      "title": "Samfa12&#39;s Tower Defense Pack OST | Samfa12",
+      "description": "Spotify lists a 19-track Samfa12 album titled Samfa12&#39;s Tower Defense Pack. Its track names span Ship Blockade, Bug Maze TD, Coop Guard TD and Library Lockdown TD, alongside a pack menu track.",
+      "h1": [
+        "Samfa12's Tower Defense Pack OST"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/bug-maze-td/",
+        "/games/ship-blockade/",
+        "/games/td-pack/",
+        "/music/"
+      ],
+      "incomingMain": [
+        "/games/bug-maze-td/",
+        "/games/ship-blockade/",
+        "/games/td-pack/",
+        "/music/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "MusicAlbum",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/pocket-audio/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/pocket-audio/",
+      "title": "Pocket Audio | Samfa12",
+      "description": "Pocket Audio is the Samfa12 family of browser music tools: Pocket Chordsmith, Pocket DJ, Pocket DAW, and a Godot game-audio addon.",
+      "h1": [
+        "Pocket Audio"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/links/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/"
+      ],
+      "localAssetCount": 13,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "CollectionPage",
+        "ItemList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/pocket-audio/godot-addon/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/pocket-audio/godot-addon/",
+      "title": "Pocket Chordsmith Godot addon | Samfa12",
+      "description": "The Pocket Chordsmith Godot addon imports Pocket Chordsmith JSON or PCS1 share codes into Godot chart resources. The Godot Asset Library lists it as a community tool for Godot 4.4 under the MIT license; that license applies to the addon listing, not the whole Pocket Audio family.",
+      "h1": [
+        "Pocket Chordsmith Godot addon"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "SoftwareApplication",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/pocket-audio/pocket-chordsmith/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/pocket-audio/pocket-chordsmith/",
+      "title": "Pocket Chordsmith browser music sketchpad | Samfa12",
+      "description": "Pocket Chordsmith is a browser music sketchpad for building chord progressions, beats, bass, melodies, guitar parts, loops and longer song ideas. It offers a quick mode and a deeper arrangement mode, with exports for continuing work elsewhere.",
+      "h1": [
+        "Pocket Chordsmith"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "SoftwareApplication",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/pocket-audio/pocket-daw/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/pocket-audio/pocket-daw/",
+      "title": "Pocket DAW Windows music arrangement alpha | Samfa12",
+      "description": "Pocket DAW is an early Windows desktop alpha for arranging and producing Pocket Chordsmith and Pocket Audio projects. Import a song, place parts on a timeline, edit clips, work with audio or MIDI material and export WAV or MIDI files.",
+      "h1": [
+        "Pocket DAW"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-chordsmith/"
+      ],
+      "incomingMain": [
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-chordsmith/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "SoftwareApplication",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/pocket-audio/pocket-dj/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/pocket-audio/pocket-dj/",
+      "title": "Pocket DJ live remix deck for Chordsmith songs | Samfa12",
+      "description": "Pocket DJ is an early browser performance prototype that turns Pocket Chordsmith songs into a live remix deck. Import a song export, launch sections from pads, mute stems, loop bars and shape effects as the track plays.",
+      "h1": [
+        "Pocket DJ"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/apps/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-chordsmith/"
+      ],
+      "incomingMain": [
+        "/apps/",
+        "/pocket-audio/",
+        "/pocket-audio/pocket-chordsmith/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "SoftwareApplication",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/privacy/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/privacy/",
+      "title": "Privacy | Samfa12",
+      "description": "How Samfa12 handles website analytics, mailing-list and tester signups, external links, and privacy requests.",
+      "h1": [
+        "Privacy"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/links/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/stats/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/join/"
+      ],
+      "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/stats/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/stats/",
+      "title": "Marketplace Statistics | Samfa12",
+      "description": "Public marketplace statistics for Samfa12 releases across itch.io, Steam, Google Play, and Amazon KDP.",
+      "h1": [
+        "Marketplace statistics"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/apps/pocket-audio-handoff/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/briarhold/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/join/",
+        "/links/",
+        "/music/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/privacy/",
+        "/tools/what-would-win/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/"
+      ],
+      "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
+      "route": "/tools/what-would-win/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/tools/what-would-win/",
+      "title": "What Would Win | Samfa12",
+      "description": "What Would Win is a mock-serious text simulator for one creature against another or a group. Its public project description says a numerical engine determines the result using a deterministic model with seeded Monte Carlo variation; generated narration does not choose the winner.",
+      "h1": [
+        "What Would Win"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/apps/",
+        "/games/"
+      ],
+      "incomingMain": [
+        "/apps/",
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "SoftwareApplication",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/updates/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/updates/",
+      "title": "Updates | Samfa12",
+      "description": "Verified Samfa12 release notes, store updates and project announcements.",
+      "h1": [
+        "Updates"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/about/",
+        "/apps/",
+        "/books/",
+        "/books/a-place-of-his-own/",
+        "/books/article-18/",
+        "/books/backwater/",
+        "/books/colossal/",
+        "/books/concubine/",
+        "/books/dust-on-the-river/",
+        "/books/free-to-a-good-home-books/",
+        "/books/free-to-a-good-home/",
+        "/books/jason-proud/",
+        "/books/no-wall-to-hold/",
+        "/books/sober/",
+        "/books/the-broken-road/",
+        "/books/the-wall-that-lied/",
+        "/books/toknight-2-the-fire-beneath/",
+        "/books/toknight/",
+        "/books/what-we-save/",
+        "/games/",
+        "/games/breakfast-beat/",
+        "/games/bug-maze-td/",
+        "/games/bug-swarm-guide/",
+        "/games/cursed-cutter-guide/",
+        "/games/drink/",
+        "/games/dust-on-the-river/",
+        "/games/gremlin-grenade-pinball/",
+        "/games/hop-bunny/",
+        "/games/lofi-and-chill-pack/",
+        "/games/mandible-wars/",
+        "/games/moon-mower/",
+        "/games/party-bus/",
+        "/games/pocket-ant-farm/",
+        "/games/pocket-fish-tank/",
+        "/games/possum-cafe/",
+        "/games/reckless-dentist/",
+        "/games/ship-blockade/",
+        "/games/spin-vector/",
+        "/games/td-pack/",
+        "/games/the-horde/",
+        "/games/the-last-guard/",
+        "/games/wonky-vehicle-lab/",
+        "/music/billions-of-years/",
+        "/music/drink-ost/",
+        "/music/lofi-and-chill-pack-ost/",
+        "/music/tower-defense-pack-ost/",
+        "/pocket-audio/godot-addon/",
+        "/pocket-audio/pocket-chordsmith/",
+        "/pocket-audio/pocket-daw/",
+        "/pocket-audio/pocket-dj/",
+        "/tools/what-would-win/"
+      ],
+      "incomingMain": [
+        "/"
+      ],
+      "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "CollectionPage"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    }
+  ]
+}

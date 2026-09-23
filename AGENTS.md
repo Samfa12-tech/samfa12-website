@@ -74,6 +74,11 @@ release. The copied artifact must retain the source-generated
   reproducibility; `npm run validate:seo` checks coverage, initial HTML,
   metadata, schema, links and sitemap. Preview with JavaScript disabled or a
   failed catalogue fetch when changing rendering.
+- For new products, source refresh, Search Console review and sitemap-date rules,
+  follow `ops/seo/README.md`. Run `npm run audit:indexing -- --write` after
+  meaningful page changes, review the machine-readable audit diff, then run
+  `npm run audit:indexing -- --check`. The audit is excluded from the public
+  Pages artifact; it is not search-performance data.
 - Marketing routes for Pocket Chordsmith, Pocket DJ and What Would Win are
   outside their protected hosted app directories. Bug Swarm and Cursed Cutter
   have separate guide pages while their play routes remain unchanged.
