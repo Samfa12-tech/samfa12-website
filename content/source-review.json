@@ -267,6 +267,22 @@
         }
       ]
     },
+    "game-pocket-pattern": {
+      "disposition": "create",
+      "landingPath": "/games/pocket-pattern/",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/pocket-pattern",
+          "identity": "samfa12.itch.io /pocket-pattern",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1QVaa_ZTKBYbNEYsEdQAT06elp63q5-YU",
+          "identity": "owner-supplied Pocket Pattern game and artwork folder",
+          "access": "read-owner-supplied-assets"
+        }
+      ]
+    },
     "book-backwater": {
       "disposition": "create",
       "landingPath": "/books/backwater/",

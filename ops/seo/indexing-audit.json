@@ -2,14 +2,14 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 69,
-    "indexableRoutes": 67,
-    "sitemapRoutes": 67,
+    "htmlPages": 70,
+    "indexableRoutes": 68,
+    "sitemapRoutes": 68,
     "explicitlyExcluded": 2,
     "routesWithFindings": 1,
     "siteFindings": 0,
     "oneContextualIncoming": 16,
-    "relationshipEdges": 66
+    "relationshipEdges": 67
   },
   "excluded": [
     {
@@ -224,6 +224,11 @@
       "kind": "editorial-related"
     },
     {
+      "from": "/games/pocket-pattern/",
+      "to": "/pocket-audio/pocket-chordsmith/",
+      "kind": "editorial-related"
+    },
+    {
       "from": "/games/ship-blockade/",
       "to": "/games/td-pack/",
       "kind": "editorial-related"
@@ -402,6 +407,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -460,6 +466,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -535,6 +542,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -616,6 +624,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -826,6 +835,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -1439,6 +1449,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -1482,6 +1493,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -1491,7 +1503,7 @@
         "/games/the-last-guard/",
         "/games/wonky-vehicle-lab/"
       ],
-      "localAssetCount": 32,
+      "localAssetCount": 33,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -2056,6 +2068,36 @@
       "advisories": []
     },
     {
+      "route": "/games/pocket-pattern/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/pocket-pattern/",
+      "title": "Pocket Pattern browser sliding puzzle | Samfa12",
+      "description": "Pocket Pattern is a tactile 3D sliding puzzle you can play in a browser. Shake a miniature cube to make a 3×3 colour target, then slide tiles around the large board until its centre matches. Each round measures your time and tile moves.",
+      "h1": [
+        "Pocket Pattern"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/updates/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/updates/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
       "route": "/games/possum-cafe/",
       "kind": "product",
       "canonical": "https://samfa12.com/games/possum-cafe/",
@@ -2353,6 +2395,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -2439,6 +2482,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -2527,6 +2571,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -2750,6 +2795,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -2844,6 +2890,7 @@
         "/",
         "/apps/",
         "/apps/pocket-audio-handoff/",
+        "/games/pocket-pattern/",
         "/pocket-audio/",
         "/pocket-audio/godot-addon/",
         "/pocket-audio/pocket-daw/",
@@ -2854,6 +2901,7 @@
         "/",
         "/apps/",
         "/apps/pocket-audio-handoff/",
+        "/games/pocket-pattern/",
         "/pocket-audio/",
         "/pocket-audio/godot-addon/",
         "/pocket-audio/pocket-daw/",
@@ -2986,6 +3034,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -3073,6 +3122,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
@@ -3188,6 +3238,7 @@
         "/games/party-bus/",
         "/games/pocket-ant-farm/",
         "/games/pocket-fish-tank/",
+        "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
         "/games/ship-blockade/",
