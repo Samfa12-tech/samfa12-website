@@ -484,6 +484,23 @@
     "detailUrl": "/games/hop-bunny/"
   },
   {
+    "title": "Pocket Pattern",
+    "category": "Games",
+    "type": "Browser game",
+    "status": "Published",
+    "description": "Shake a 3×3 colour target, slide the board's tiles to match it, and try to beat your time and move count in this browser puzzle.",
+    "tags": ["Game", "Puzzle", "Sliding puzzle", "Touch-friendly", "Samfa12"],
+    "featured": false,
+    "links": [
+      {"label": "Play on itch.io", "url": "https://samfa12.itch.io/pocket-pattern"}
+    ],
+    "sortOrder": 8,
+    "thumbnail": "assets/thumbnails/pocket-pattern.webp",
+    "thumbnailAlt": "Pocket Pattern artwork with colourful sliding tiles and a 3×3 target cube",
+    "id": "game-pocket-pattern",
+    "detailUrl": "/games/pocket-pattern/"
+  },
+  {
     "title": "Backwater",
     "category": "Books",
     "type": "Book",

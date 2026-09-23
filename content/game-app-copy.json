@@ -663,6 +663,53 @@
     ],
     "updates": []
   },
+  "game-pocket-pattern": {
+    "seoTitle": "Pocket Pattern browser sliding puzzle",
+    "intro": "Pocket Pattern is a tactile 3D sliding puzzle you can play in a browser. Shake a miniature cube to make a 3×3 colour target, then slide tiles around the large board until its centre matches. Each round measures your time and tile moves.",
+    "details": [
+      {
+        "heading": "Shake a target, then solve the centre",
+        "text": "The itch page says the miniature pattern cube generates a random 3×3 colour arrangement. Slide tiles into the empty space to reproduce it in the centre of the larger board; tiles sharing a row or column with the gap can be pushed together.",
+        "sources": ["https://samfa12.itch.io/pocket-pattern"]
+      },
+      {
+        "heading": "Browser play, controls and scoring",
+        "text": "The released HTML5 game is designed for phones, tablets and desktop browsers, with touch, drag and mouse controls. It tracks completion time, individual tile slides and local personal bests. The listing also describes colour symbols, optional vibration on supported devices, and music, sound, graphics and motion settings.",
+        "sources": ["https://samfa12.itch.io/pocket-pattern"]
+      },
+      {
+        "heading": "Music from Pocket Chordsmith",
+        "text": "The itch page credits the game's original music as created with Pocket Chordsmith, a separate Samfa12 browser music tool.",
+        "sources": ["https://samfa12.itch.io/pocket-pattern"]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Where can I play Pocket Pattern?",
+        "answer": "Play it on the official itch.io page in a browser. The listing says no download is required and identifies the platform as HTML5.",
+        "sources": ["https://samfa12.itch.io/pocket-pattern"]
+      },
+      {
+        "question": "Can I move several tiles at once?",
+        "answer": "Yes. Tiles in the same row or column as the empty space can be pushed together, but each tile moved one space counts as one slide toward your score.",
+        "sources": ["https://samfa12.itch.io/pocket-pattern"]
+      }
+    ],
+    "updates": [
+      {
+        "id": "pocket-pattern-itch-publication-september-2026",
+        "kind": "listing",
+        "date": "2026-09-22",
+        "dateMeaning": "itch.io page publication date (UTC)",
+        "title": "Pocket Pattern playable on itch.io",
+        "summary": "The official itch.io page published Pocket Pattern as a released HTML5 sliding puzzle playable in a browser.",
+        "platform": "HTML5 browser",
+        "sources": ["https://samfa12.itch.io/pocket-pattern"]
+      }
+    ],
+    "relatedIds": ["app-pocket-chordsmith"],
+    "relatedLabels": {"app-pocket-chordsmith": "Explore Pocket Chordsmith, used to create the music"}
+  },
   "game-reckless-dentist": {
     "intro": "Reckless Dentist is a short browser score-attack game about treating cartoon teeth at speed. Spot the problem and drag the right tool into place while the clinic grows more chaotic.",
     "details": [

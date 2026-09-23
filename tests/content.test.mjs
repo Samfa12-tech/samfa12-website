@@ -175,3 +175,21 @@ test("related links resolve to an approved catalogue identity", () => {
   }
   assert.doesNotMatch(fs.readFileSync(path.join(root,"games/breakfast-beat/index.html"),"utf8"),/href="\/music\/tower-defense-pack-ost\/"/);
 });
+
+test("Pocket Pattern has one itch-hosted game identity and a sourced static page", () => {
+  const records = catalogue.filter((item)=>item.id==="game-pocket-pattern");
+  assert.equal(records.length,1);
+  const game = records[0];
+  assert.equal(game.title,"Pocket Pattern");
+  assert.equal(game.category,"Games");
+  assert.equal(game.detailUrl,"/games/pocket-pattern/");
+  assert.deepEqual(game.links,[{label:"Play on itch.io",url:"https://samfa12.itch.io/pocket-pattern"}]);
+  assert.ok(fs.existsSync(path.join(root,game.thumbnail)));
+  const page = fs.readFileSync(path.join(root,"games/pocket-pattern/index.html"),"utf8");
+  assert.match(page,/<h1>Pocket Pattern<\/h1>/);
+  assert.match(page,/href="https:\/\/samfa12\.itch\.io\/pocket-pattern"/);
+  assert.match(page,/3×3 colour target/);
+  assert.match(page,/id="pocket-pattern-itch-publication-september-2026"/);
+  assert.ok(fs.readFileSync(path.join(root,"updates/index.html"),"utf8").includes('/games/pocket-pattern/#pocket-pattern-itch-publication-september-2026'));
+  assert.equal(fs.existsSync(path.join(root,"games/pocket-pattern/play/index.html")),false);
+});

@@ -2,6 +2,8 @@
 
 Reviewed 2026-09-23 (Australia/Sydney). `source-review.json` lists each official destination, identity and access result. Claim-level `sources` arrays in the editorial files identify what supports each visible section, FAQ and dated update. Review time is separate from product release dates and page modification dates.
 
+Pocket Pattern was added from the owner's Drive folder and the live `https://samfa12.itch.io/pocket-pattern` listing. The owner confirmed **Pocket Pattern** as the intended name after initially calling it Pocket Puzzle. The listing identifies a released HTML5 browser puzzle; the website links directly to itch and does not host a copy of the game. Its local card art is an optimised version of the official itch background supplied in the folder.
+
 The four Amazon-only books initially appeared blocked to the public web reader. The owner then made their exact ASIN pages available in Chrome. The public product title, description, Kindle edition data and preorder state were read there for Dust on the River (`B0H7QQQXBN`), The Wall That Lied (`B0H6VJ4VG1`), No Wall to Hold (`B0H233JY8P`) and What We Save (`B0HC46KFJP`). This resolved the content gap and allowed all four pages. No private KDP data, order history, account details or location information was used. The three Broken Road books were explicitly labelled Books 1–3 of 3 on Amazon; the review showed Kindle preorders scheduled for 1 October, 1 November and 1 December 2026 respectively. These dates are scheduled edition dates, not confirmed completed releases.
 
 ## Remaining conflicts and limits
