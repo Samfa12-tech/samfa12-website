@@ -43,6 +43,7 @@ jobs:
           npm run validate:catalogue
           npm run validate:site
           npm run validate:seo
+          npm run audit:indexing -- --check
           npm run test:content
           npm run test:analytics
           npm run test:marketplace
@@ -85,7 +86,9 @@ jobs:
       - name: Verify Briarhold artifact
         run: BRIARHOLD_SITE_ROOT=_site node scripts/verify-briarhold-pages.mjs games/briarhold/play
       - name: Verify staged SEO routes and privacy exclusions
-        run: SEO_SITE_ROOT=_site npm run validate:seo
+        run: |
+          SEO_SITE_ROOT=_site npm run validate:seo
+          SEO_SITE_ROOT=_site npm run audit:indexing -- --check
       - name: Upload site
         uses: actions/upload-pages-artifact@v5
         with:

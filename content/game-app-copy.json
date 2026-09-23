@@ -57,9 +57,11 @@
     ],
     "relatedIds": [
       "book-dust-on-the-river"
-    ]
+    ],
+    "relatedLabels": {"book-dust-on-the-river": "Read the separate Dust on the River novel"}
   },
   "game-drink": {
+    "seoTitle": "Drink top-down narrative game",
     "intro": "Drink is a short, top-down narrative game about alcohol dependence, avoidance and the beginning of accountability. Its fixed story follows a person through a small town where drinking brings short-term relief and consequences accumulate.",
     "details": [
       {
@@ -113,7 +115,8 @@
     "relatedIds": [
       "book-sober",
       "music-drink-ost"
-    ]
+    ],
+    "relatedLabels": {"book-sober": "Read Sober, the later novel", "music-drink-ost": "Listen to the Drink original soundtrack"}
   },
   "game-possum-cafe": {
     "intro": "Night Shift at Possum's Café is a cosy pixel-art café game about serving animal customers as a possum barista. Prepare simple drinks and treats, keep orders moving through quiet moments and rushes, and gradually make the neighbourhood café busier and more inviting.",
@@ -168,6 +171,7 @@
     ]
   },
   "game-the-last-guard": {
+    "seoTitle": "The Last Guard browser fortress defence game",
     "intro": "The Last Guard is a first-person browser wall-defence survival game. Aim a mounted gun against a fantasy horde, manage heat, call support and bank scrap to improve your chances between stands.",
     "details": [
       {
@@ -204,7 +208,8 @@
     "updates": [],
     "relatedIds": [
       "game-briarhold"
-    ]
+    ],
+    "relatedLabels": {"game-briarhold": "Explore Briarhold action-defence and co-op testing"}
   },
   "game-the-horde": {
     "intro": "The Horde is a focused native Vulkan hardware ray-tracing technology demo for compatible Windows RT GPUs and Android phones. Its current itch description follows a lantern-bearing character through a wet gothic ruin, with sword combat, reflective water and a lich encounter.",
@@ -409,7 +414,8 @@
       "app-pocket-daw",
       "asset-pocket-chordsmith-godot",
       "app-pocket-audio-handoff"
-    ]
+    ],
+    "relatedLabels": {"app-pocket-dj": "Perform Chordsmith songs in Pocket DJ", "app-pocket-daw": "Arrange songs in Pocket DAW for Windows", "asset-pocket-chordsmith-godot": "Bring Chordsmith songs into Godot", "app-pocket-audio-handoff": "Transfer song data with Pocket Audio Handoff"}
   },
   "asset-pocket-chordsmith-godot": {
     "intro": "The Pocket Chordsmith Godot addon imports Pocket Chordsmith JSON or PCS1 share codes into Godot chart resources. The Godot Asset Library lists it as a community tool for Godot 4.4 under the MIT license; that license applies to the addon listing, not the whole Pocket Audio family.",
@@ -510,7 +516,8 @@
       "app-pocket-chordsmith",
       "app-pocket-daw",
       "asset-pocket-chordsmith-godot"
-    ]
+    ],
+    "relatedLabels": {"app-pocket-chordsmith": "Make a song in Pocket Chordsmith", "app-pocket-daw": "Continue arranging in Pocket DAW", "asset-pocket-chordsmith-godot": "Use the Godot addon for game audio"}
   },
   "game-bug-maze-td": {
     "intro": "Bug Maze TD is a portrait-first tower-defence game for mobile browsers. Build paths and place bug-themed towers across handcrafted garden levels, while ground and flying enemies follow different routes.",
@@ -590,8 +597,7 @@
     ],
     "updates": [],
     "relatedIds": [
-      "game-td-pack",
-      "music-tower-defense-pack-ost"
+      "game-td-pack"
     ]
   },
   "game-ship-blockade": {
@@ -1141,7 +1147,8 @@
     ],
     "relatedIds": [
       "game-the-last-guard"
-    ]
+    ],
+    "relatedLabels": {"game-the-last-guard": "Explore The Last Guard action-defence game"}
   },
   "app-pocket-dj": {
     "seoTitle": "Pocket DJ live remix deck for Chordsmith songs",
@@ -1183,9 +1190,11 @@
     "relatedIds": [
       "app-pocket-chordsmith",
       "app-pocket-audio-handoff"
-    ]
+    ],
+    "relatedLabels": {"app-pocket-chordsmith": "Compose a song in Pocket Chordsmith", "app-pocket-audio-handoff": "Transfer songs with Pocket Audio Handoff"}
   },
   "app-pocket-daw": {
+    "seoTitle": "Pocket DAW Windows music arrangement alpha",
     "intro": "Pocket DAW is an early Windows desktop alpha for arranging and producing Pocket Chordsmith and Pocket Audio projects. Import a song, place parts on a timeline, edit clips, work with audio or MIDI material and export WAV or MIDI files.",
     "details": [
       {
@@ -1224,6 +1233,7 @@
     "relatedIds": [
       "app-pocket-chordsmith",
       "app-pocket-audio-handoff"
-    ]
+    ],
+    "relatedLabels": {"app-pocket-chordsmith": "Start a song in Pocket Chordsmith", "app-pocket-audio-handoff": "Move song data with Pocket Audio Handoff"}
   }
 }

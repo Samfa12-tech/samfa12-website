@@ -21,6 +21,7 @@ jobs:
       - run: npm run validate:catalogue
       - run: npm run validate:site
       - run: npm run validate:seo
+      - run: npm run audit:indexing -- --check
       - run: npm run test:content
       - run: npm run test:analytics
       - run: npm run test:marketplace
@@ -61,3 +62,4 @@ jobs:
       - run: WHAT_WOULD_WIN_SITE_ROOT=_site npm run verify:what-would-win-pages
       - run: BRIARHOLD_SITE_ROOT=_site npm run verify:briarhold-pages -- games/briarhold/play
       - run: SEO_SITE_ROOT=_site npm run validate:seo
+      - run: SEO_SITE_ROOT=_site npm run audit:indexing -- --check
