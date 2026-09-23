@@ -2,8 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { fileURLToPath } from "node:url";
 import { html, jsonLd, safeRoute, safeUrl } from "../scripts/content-utils.mjs";
+import { brokenHostedEntrypoints } from "../scripts/hosted-entrypoints.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalogue = JSON.parse(fs.readFileSync(path.join(root,"data/projects.json"),"utf8"));
@@ -76,5 +78,59 @@ test("generated pages contain initial content and direct actions", () => {
     const source = fs.readFileSync(path.join(root,route),"utf8");
     assert.match(source,/<article class="project-card /,route);
     assert.doesNotMatch(source,/<article class="project-card [^>]*data-reveal/,route);
+  }
+});
+
+test("What Would Win visible breadcrumb agrees with structured Apps parent", () => {
+  const source = fs.readFileSync(path.join(root,"tools/what-would-win/index.html"),"utf8");
+  assert.match(source,/<nav class="product-breadcrumbs"[^>]*>.*?<a href="\/apps\/">Apps<\/a>/);
+  const graph = JSON.parse(source.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+  const parent = graph.find((entry)=>entry["@type"]==="BreadcrumbList").itemListElement[1];
+  assert.deepEqual([parent.name,parent.item],["Apps","https://samfa12.com/apps/"]);
+});
+
+test("Pocket Audio marketing titles differ from runtime and agree across metadata", () => {
+  for (const [name,title] of [["pocket-chordsmith","Pocket Chordsmith browser music sketchpad"],["pocket-dj","Pocket DJ live remix deck for Chordsmith songs"]]) {
+    const marketing = fs.readFileSync(path.join(root,`pocket-audio/${name}/index.html`),"utf8");
+    const runtime = fs.readFileSync(path.join(root,`apps/${name}/index.html`),"utf8");
+    const fullTitle = `${title} | Samfa12`;
+    assert.ok(marketing.includes(`<title>${fullTitle}</title>`));
+    assert.ok(marketing.includes(`<meta property="og:title" content="${fullTitle}"`));
+    assert.ok(marketing.includes(`<meta name="twitter:title" content="${fullTitle}"`));
+    const graph = JSON.parse(marketing.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+    assert.equal(graph.find((entry)=>entry["@type"]==="WebPage").name,fullTitle);
+    assert.notEqual(runtime.match(/<title>([^<]+)<\/title>/)?.[1],fullTitle);
+  }
+});
+
+test("home and main categories expose About and Updates in their footers", () => {
+  for (const route of ["index.html","games/index.html","books/index.html","apps/index.html"]) {
+    const footer = fs.readFileSync(path.join(root,route),"utf8").split('<footer class="site-footer">')[1];
+    assert.match(footer,/<a href="\/updates\/">Updates<\/a>/,route);
+    assert.match(footer,/<a href="\/about\/">About<\/a>/,route);
+  }
+});
+
+test("public editorial copy states limitations without writing instructions to editors", () => {
+  for (const [id,record] of Object.entries(copy)) {
+    for (const claim of [...(record.details || []),...(record.faqs || [])]) {
+      const text = claim.text || claim.answer;
+      assert.doesNotMatch(text,/;\s*(?:do not|avoid|treat current|only the listed)/i,id);
+    }
+  }
+});
+
+test("hosted HTML script entry points resolve in the staged tree", () => {
+  const fixture = fs.mkdtempSync(path.join(os.tmpdir(),"samfa12-entrypoints-"));
+  try {
+    const app = path.join(fixture,"apps","pocket-chordsmith");
+    fs.mkdirSync(app,{recursive:true});
+    fs.writeFileSync(path.join(app,"index.html"),'<script type="module" src="./src/wav-export-preflight.js"></script>');
+    assert.deepEqual(brokenHostedEntrypoints(fixture),["/apps/pocket-chordsmith/index.html: missing script entry point ./src/wav-export-preflight.js"]);
+    fs.mkdirSync(path.join(app,"src"));
+    fs.writeFileSync(path.join(app,"src","wav-export-preflight.js"),"export {};\n");
+    assert.deepEqual(brokenHostedEntrypoints(fixture),[]);
+  } finally {
+    fs.rmSync(fixture,{recursive:true,force:true});
   }
 });

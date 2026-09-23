@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { brokenHostedEntrypoints } from "./hosted-entrypoints.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const siteRoot = path.resolve(process.env.SEO_SITE_ROOT || root);
@@ -23,11 +24,14 @@ function canonical(html, route) {
   if (/<meta\s+name="robots"[^>]*noindex/i.test(html)) fail(`${route}: indexable page is noindex`);
 }
 function localRefs(html, route) {
-  for (const match of html.matchAll(/<(?:a|img|script|link)\b[^>]*\b(?:href|src)="(\/[^"]*)"/gi)) {
-    const raw = match[1].split(/[?#]/,1)[0];
-    if (!raw || raw.startsWith("//") || raw.includes("..") || raw.includes("\\")) { fail(`${route}: unsafe local URL ${match[1]}`); continue; }
-    const relative = raw.endsWith("/") ? `${raw.slice(1)}index.html` : raw.slice(1);
-    if (!has(relative)) fail(`${route}: broken local URL ${match[1]}`);
+  for (const match of html.matchAll(/<(?:a|img|script|link)\b[^>]*\b(?:href|src)="([^"]*)"/gi)) {
+    const reference = match[1];
+    if (!reference || reference.startsWith("#") || /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(reference)) continue;
+    const raw = reference.split(/[?#]/,1)[0];
+    if (raw.includes("..") || raw.includes("\\")) { fail(`${route}: unsafe local URL ${reference}`); continue; }
+    const destination = new URL(reference, `https://samfa12.com${route}`).pathname;
+    const relative = destination.endsWith("/") ? `${destination.slice(1)}index.html` : destination.slice(1);
+    if (!has(relative)) fail(`${route}: broken local URL ${reference}`);
   }
   for (const match of html.matchAll(/<a\b[^>]*\bhref="(#[^"]+|\/[^"]*#[^"]+)"/gi)) {
     const [pathname,fragment] = match[1].split("#",2);
@@ -129,6 +133,7 @@ for (const relative of JSON.parse(fs.readFileSync(path.join(root,"content/genera
   const route = `/${relative.slice(0,-"index.html".length)}`;
   if (has(relative)) localRefs(read(relative),route);
 }
+errors.push(...brokenHostedEntrypoints(siteRoot));
 for (const date of sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)) if (!/^\d{4}-\d{2}-\d{2}$/.test(date[1])) fail(`sitemap: invalid lastmod ${date[1]}`);
 if (siteRoot !== root) {
   for (const forbidden of ["node_modules","content","scripts","tests","ops","workers","AGENTS.md",".env.analytics",".env.marketplace",".git",".github"]) if (has(forbidden)) fail(`staged artifact contains ${forbidden}`);

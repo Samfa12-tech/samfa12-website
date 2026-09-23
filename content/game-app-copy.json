@@ -219,7 +219,7 @@
       },
       {
         "heading": "Compatibility is hardware-dependent",
-        "text": "The page names compatible Android phones and Windows RT GPUs as target platforms, but it does not provide a verified device compatibility list. Do not infer support for a particular phone or GPU from the general platform label.",
+        "text": "The page names compatible Android phones and Windows RT GPUs as target platforms, but it does not provide a verified device compatibility list. Support for a particular phone or GPU remains unverified.",
         "sources": [
           "https://samfa12.itch.io/the-horde"
         ]
@@ -353,6 +353,7 @@
     "updates": []
   },
   "app-pocket-chordsmith": {
+    "seoTitle": "Pocket Chordsmith browser music sketchpad",
     "intro": "Pocket Chordsmith is a browser music sketchpad for building chord progressions, beats, bass, melodies, guitar parts, loops and longer song ideas. It offers a quick mode and a deeper arrangement mode, with exports for continuing work elsewhere.",
     "details": [
       {
@@ -365,10 +366,11 @@
       },
       {
         "heading": "Browser audio and licensing",
-        "text": "The product page says Pocket Chordsmith runs in the browser using lightweight Web Audio instruments and that performance can vary by device and browser. The public repository describes the app as source-available and unlicensed; do not describe the application as open source or imply that MIT covers it.",
+        "text": "The product page says Pocket Chordsmith runs in the browser using lightweight Web Audio instruments and that performance can vary by device and browser. Its public repository makes the app source available but does not publish an app license. The separate Godot addon has its own MIT listing.",
         "sources": [
           "https://samfa12.itch.io/pocket-chordsmith",
-          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith",
+          "https://godotengine.org/asset-library/asset/5174"
         ]
       }
     ],
@@ -696,7 +698,7 @@
     "details": [
       {
         "heading": "Prototype features and plans",
-        "text": "The itch listing describes a spring launcher, flippers, bumpers, trap targets and gremlins that move down the board. It separately labels features and five themed boards as planned or in development; these should not be presented as completed content.",
+        "text": "The itch listing describes a spring launcher, flippers, bumpers, trap targets and gremlins that move down the board. It separately labels features and five themed boards as planned or in development; their completion is not confirmed.",
         "sources": [
           "https://samfa12.itch.io/gremlin-grenade-pinball"
         ]
@@ -725,7 +727,7 @@
       },
       {
         "heading": "A prototype with usability work remaining",
-        "text": "The page labels the project a prototype. A publisher reply to player feedback says mobile scaling was poor at the time; avoid claiming polished mobile usability.",
+        "text": "The page labels the project a prototype. A publisher reply to player feedback says mobile scaling was poor at the time; current mobile usability has not been verified.",
         "sources": [
           "https://samfa12.itch.io/wonky-vehicle-lab"
         ]
@@ -747,7 +749,7 @@
     "details": [
       {
         "heading": "Five games in one collection listing",
-        "text": "The current Play About section lists five included games and describes offline play, short levels, shared launcher/settings/audio controls and no ads, accounts or data collection. Its What's New text separately refers to “all six included games,” which conflicts with that five-title list; the count should be treated as unresolved until the publisher clarifies it.",
+        "text": "The current Play About section lists five included games and describes offline play, short levels, shared launcher/settings/audio controls and no ads, accounts or data collection. Its What's New text separately refers to “all six included games,” which conflicts with that five-title list; the included-game count is unresolved.",
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
         ]
@@ -785,14 +787,14 @@
     "details": [
       {
         "heading": "A collection of pocket worlds",
-        "text": "The listing names Voxel Fish Tank, Pocket Ant Farm, Pocket Aviary, Pocket Train Set, Pocket Koi Pond and Moon Mower. It describes mobile-first scenes with graphics settings and short, relaxed sessions; the listing calls the collection growing, so avoid implying a fixed permanent count.",
+        "text": "The listing names Voxel Fish Tank, Pocket Ant Farm, Pocket Aviary, Pocket Train Set, Pocket Koi Pond and Moon Mower. It describes mobile-first scenes with graphics settings and short, relaxed sessions; the listing calls the collection growing, and the selection may change.",
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
         ]
       },
       {
         "heading": "Pack listing versus individual browser games",
-        "text": "The Google Play destination is the collection app. Pocket Fish Tank, Pocket Ant Farm and Moon Mower also have their own itch browser pages; the Play pack should be labelled as their collection destination, not as a standalone Android listing for each individual game.",
+        "text": "The Google Play destination is the collection app. Pocket Fish Tank, Pocket Ant Farm and Moon Mower also have their own itch browser pages; that Play link is for the collection, not a standalone Android listing for each game.",
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
           "https://samfa12.itch.io/fish-tank",
@@ -811,7 +813,7 @@
       },
       {
         "question": "Is there a separate Play app for each named scene?",
-        "answer": "The catalogue's Play destination is one Lofi and Chill Pack collection listing. Some individual experiences also have separate itch browser pages; do not treat the pack URL as an individual game listing.",
+        "answer": "The catalogue's Play destination is one Lofi and Chill Pack collection listing. Some individual experiences also have separate itch browser pages; the pack URL is not an individual game listing.",
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack",
           "https://samfa12.itch.io/fish-tank",
@@ -853,7 +855,7 @@
       },
       {
         "heading": "Adaptive music",
-        "text": "The Play and itch descriptions say the game has adaptive music; the itch page says it is powered by the Pocket Chordsmith engine. Avoid carrying forward any old closed-testing statement from an itch excerpt as the current Android release status.",
+        "text": "The Play and itch descriptions say the game has adaptive music; the itch page says it is powered by the Pocket Chordsmith engine. The current Play listing describes the Android release; an older itch excerpt refers to closed testing.",
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samsmall.spinvector",
           "https://samfa12.itch.io/spin-vector"
@@ -904,7 +906,7 @@
       },
       {
         "heading": "A playable build in development",
-        "text": "The publisher calls this an early playable build and asks for feedback on controls, balance, bugs, readability and mobile play. Treat current features as prototype details rather than a final release promise.",
+        "text": "The publisher calls this an early playable build and asks for feedback on controls, balance, bugs, readability and mobile play. Its listed features describe the current prototype, not a promised final release.",
         "sources": [
           "https://samfa12.itch.io/mandible-wars"
         ]
@@ -1022,7 +1024,7 @@
       },
       {
         "heading": "Prototype status",
-        "text": "The catalogue calls the game in development; the itch page describes its current build as a browser prototype. These descriptions do not verify future roadmap features, so only the listed current build features are summarized here.",
+        "text": "The catalogue calls the game in development; the itch page describes its current build as a browser prototype. These descriptions do not verify future roadmap features.",
         "sources": [
           "https://samfa12.itch.io/party-bus"
         ]
@@ -1142,6 +1144,7 @@
     ]
   },
   "app-pocket-dj": {
+    "seoTitle": "Pocket DJ live remix deck for Chordsmith songs",
     "intro": "Pocket DJ is an early browser performance prototype that turns Pocket Chordsmith songs into a live remix deck. Import a song export, launch sections from pads, mute stems, loop bars and shape effects as the track plays.",
     "details": [
       {
@@ -1154,7 +1157,7 @@
       },
       {
         "heading": "Prototype and platform status",
-        "text": "The itch page calls Pocket DJ an early performance prototype, labels it In development and lists HTML5. The catalogue's “mobile app” type should not be read as evidence of a native Android app.",
+        "text": "The itch page calls Pocket DJ an early performance prototype, labels it In development and lists HTML5. The available listing establishes a browser build, not a native Android release.",
         "sources": [
           "https://samfa12.itch.io/pocket-dj"
         ]

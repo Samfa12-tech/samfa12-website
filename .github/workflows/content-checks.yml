@@ -27,3 +27,37 @@ jobs:
       - run: npm run test:handoff-relay
       - run: npm run verify:what-would-win-pages
       - run: npm run verify:briarhold-pages -- games/briarhold/play
+      - name: Stage with Pages Linux exclusions
+        run: |
+          mkdir -p _site
+          rsync -av \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.codex-remote-attachments' \
+            --exclude='.wrangler' \
+            --exclude='.analytics' \
+            --exclude='.playwright-cli' \
+            --exclude='node_modules' \
+            --exclude='.env*' \
+            --exclude='/content/' \
+            --exclude='/output/' \
+            --exclude='**/.vite/' \
+            --exclude='_site' \
+            --exclude='/artifacts/' \
+            --exclude='/ops/' \
+            --exclude='/tests/' \
+            --exclude='/scripts/' \
+            --exclude='/workers/' \
+            --exclude='**/docs/' \
+            --exclude='**/tests/' \
+            --exclude='**/scripts/' \
+            --exclude='**/README.md' \
+            --exclude='**/package.json' \
+            --exclude='**/package-lock.json' \
+            --exclude='/AGENTS.md' \
+            --exclude='/.gitignore' \
+            --exclude='/qa-*.png' \
+            ./ _site/
+      - run: WHAT_WOULD_WIN_SITE_ROOT=_site npm run verify:what-would-win-pages
+      - run: BRIARHOLD_SITE_ROOT=_site npm run verify:briarhold-pages -- games/briarhold/play
+      - run: SEO_SITE_ROOT=_site npm run validate:seo

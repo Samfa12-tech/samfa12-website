@@ -49,6 +49,11 @@ const apps = [
         destination: "src/genre-composer.js",
         optional: false,
       },
+      {
+        source: path.join(pocketRoot, "apps", "chordsmith-web", "src", "wav-export-preflight.js"),
+        destination: "src/wav-export-preflight.js",
+        optional: false,
+      },
     ],
   },
   {
@@ -236,6 +241,21 @@ async function run() {
     throw new Error(
       `Pocket Chordsmith repo not found at ${pocketRoot}. Set POCKET_CHORDSMITH_ROOT to override.`
     );
+  }
+
+  if (process.argv.includes("--chordsmith-preflight-only")) {
+    const app = apps[0];
+    const source = app.extraCopies.find((copy) => copy.destination === "src/wav-export-preflight.js").source;
+    const hosted = path.join(app.destinationDir, app.destinationFile);
+    if (!(await exists(source))) throw new Error(`Required Chordsmith preflight missing: ${source}`);
+    if (!(await exists(hosted)) || !(await fs.readFile(hosted, "utf8")).includes('src="./src/wav-export-preflight.js"')) {
+      throw new Error(`Hosted Chordsmith page does not reference the required preflight: ${hosted}`);
+    }
+    const destination = path.join(app.destinationDir, "src", "wav-export-preflight.js");
+    await fs.mkdir(path.dirname(destination), { recursive: true });
+    await fs.copyFile(source, destination);
+    console.log(`Synced Pocket Chordsmith preflight: ${source} -> ${destination}`);
+    return;
   }
 
   if (!(await exists(pocketAudioCoreSource))) {
