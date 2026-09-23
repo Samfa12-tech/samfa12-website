@@ -4329,8 +4329,11 @@ function filterTextureSample(input, state) {
   return state.lowpass;
 }
 function renderPocketAudioWav(project, options = {}) {
+  return new Blob([renderPocketAudioWavBytes(project, options)], { type: "audio/wav" });
+}
+function renderPocketAudioWavBytes(project, options = {}) {
   const buffer = renderPocketAudioBuffer(project, options);
-  return encodePcm16WavBlob({ channels: buffer.channels, sampleRate: buffer.sampleRate });
+  return encodePcm16WavBytes({ channels: buffer.channels, sampleRate: buffer.sampleRate });
 }
 function renderEventToChannels(event, left, right, sampleRate) {
   const funk = event.audioProfile === "funk_groove" ? funkParameters(event) : null;
@@ -7538,6 +7541,7 @@ export {
   renderPocketAudioStemBuffers,
   renderPocketAudioStems,
   renderPocketAudioWav,
+  renderPocketAudioWavBytes,
   renderStemPlaceholders,
   renderWav,
   resolvePocketBassToneId,
