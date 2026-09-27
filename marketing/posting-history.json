@@ -118,6 +118,83 @@
       "textSha256": "eefcff7466d5ba59a0092f5eeeb569504520da8330e79fbd7da3aa59e00267ca",
       "scheduledAt": "2026-09-20T13:25:04.014Z",
       "dueAt": "2026-09-26T22:15:00.000Z"
+    },
+    {
+      "id": "dust-format-1",
+      "project": "Dust on the River",
+      "category": "Games",
+      "date": "2026-09-29",
+      "status": "scheduled",
+      "bufferPostId": "6ab928be70ec211d1d1b3bfd",
+      "textSha256": "ff506810485ce738281ce6519592fa379bc2a4b40fbe672a28848c99dc8e04d5",
+      "scheduledAt": "2026-09-27T14:31:26.244Z",
+      "dueAt": "2026-09-28T22:15:00.000Z"
+    },
+    {
+      "id": "chordsmith-open-1",
+      "project": "Pocket Chordsmith",
+      "category": "Web development",
+      "date": "2026-09-30",
+      "status": "scheduled",
+      "bufferPostId": "6ab928be36a0dcfcb3d84c47",
+      "textSha256": "6930722b65f3856a1268c3c0e27f43cfae3367176f4245d6547221b540bb16b7",
+      "scheduledAt": "2026-09-27T14:31:26.432Z",
+      "dueAt": "2026-09-29T22:15:00.000Z"
+    },
+    {
+      "id": "briarhold-coop-1",
+      "project": "Briarhold",
+      "category": "Games",
+      "date": "2026-10-01",
+      "status": "scheduled",
+      "bufferPostId": "6ab928be1bf030e330aa90db",
+      "textSha256": "9a8f74bb540a06ca5bb6065c87e135f744599a5516e94cc2b1b72067dfb036c2",
+      "scheduledAt": "2026-09-27T14:31:26.648Z",
+      "dueAt": "2026-09-30T22:15:00.000Z"
+    },
+    {
+      "id": "brokenroad-parker-1",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-10-02",
+      "status": "scheduled",
+      "bufferPostId": "6ab928be54f1e60c7e6e90d7",
+      "textSha256": "6e4aa37862a63d0670eb387dc8766ff6629f67c9c2fac30bafa9b1f02c1085d7",
+      "scheduledAt": "2026-09-27T14:31:26.847Z",
+      "dueAt": "2026-10-01T22:15:00.000Z"
+    },
+    {
+      "id": "horde-1",
+      "project": "The Horde",
+      "category": "Games",
+      "date": "2026-10-03",
+      "status": "scheduled",
+      "bufferPostId": "6ab928be43493a0ede921b86",
+      "textSha256": "bcc632a5d5e6919cf51562dcfd8593383855390453359505f87cc57b24818b48",
+      "scheduledAt": "2026-09-27T14:31:27.081Z",
+      "dueAt": "2026-10-02T22:15:00.000Z"
+    },
+    {
+      "id": "site-1",
+      "project": "Samfa12.com",
+      "category": "Web development",
+      "date": "2026-10-04",
+      "status": "scheduled",
+      "bufferPostId": "6ab928bf43493a0ede921bb4",
+      "textSha256": "a51ea97e59a6159408fd98ee0d767b62bcba793dfebf8b9bbc303d8900c9c3b9",
+      "scheduledAt": "2026-09-27T14:31:27.278Z",
+      "dueAt": "2026-10-03T21:15:00.000Z"
+    },
+    {
+      "id": "dust-creator-1",
+      "project": "Dust on the River",
+      "category": "Games",
+      "date": "2026-10-05",
+      "status": "scheduled",
+      "bufferPostId": "6ab928bf36a0dcfcb3d84c7b",
+      "textSha256": "e5815ec64eb4d4bbc15b7455db01e664625bf82a6ddd56bf5d3157644cc19559",
+      "scheduledAt": "2026-09-27T14:31:27.485Z",
+      "dueAt": "2026-10-04T21:15:00.000Z"
     }
   ]
 }
