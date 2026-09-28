@@ -13,6 +13,7 @@ const timeZone = (process.env.SOCIAL_TIME_ZONE || 'Australia/Sydney').trim();
 const postHour = Number(process.env.SOCIAL_POST_HOUR || 8);
 const postMinute = Number(process.env.SOCIAL_POST_MINUTE || 15);
 const weeklyPostCount = Number(process.env.SOCIAL_WEEKLY_POST_COUNT || 7);
+const minimumScheduleLeadMinutes = Number(process.env.SOCIAL_MIN_SCHEDULE_LEAD_MINUTES || 5);
 
 const allowedActions = new Set(['dry-run', 'preview-week', 'list-channels', 'draft', 'publish', 'schedule-week']);
 if (!allowedActions.has(action)) {
@@ -23,6 +24,9 @@ if (!Number.isInteger(postHour) || postHour < 0 || postHour > 23 || !Number.isIn
 }
 if (!Number.isInteger(weeklyPostCount) || weeklyPostCount < 1 || weeklyPostCount > 10) {
   throw new Error('SOCIAL_WEEKLY_POST_COUNT must be an integer from 1 to 10.');
+}
+if (!Number.isInteger(minimumScheduleLeadMinutes) || minimumScheduleLeadMinutes < 0 || minimumScheduleLeadMinutes > 60) {
+  throw new Error('SOCIAL_MIN_SCHEDULE_LEAD_MINUTES must be an integer from 0 to 60.');
 }
 
 function localIsoDay(date = new Date(), zone = timeZone) {
@@ -67,6 +71,13 @@ function localDateTimeToUtc(day, hour, minute, zone = timeZone) {
     guess = next;
   }
   return guess.toISOString();
+}
+
+function firstSchedulableDay(now = new Date()) {
+  const today = localIsoDay(now);
+  const todayDueAt = Date.parse(localDateTimeToUtc(today, postHour, postMinute));
+  const minimumLeadMs = minimumScheduleLeadMinutes * 60000;
+  return todayDueAt - now.getTime() >= minimumLeadMs ? today : addDays(today, 1);
 }
 
 function stableScore(seed) {
@@ -332,7 +343,7 @@ async function main() {
   const [bank, history] = await Promise.all([loadJson(bankPath), loadJson(historyPath)]);
 
   if (action === 'preview-week') {
-    const startDay = addDays(today, 1);
+    const startDay = firstSchedulableDay();
     const plan = buildWeekPlan(bank, history, startDay);
     console.log(`Previewing ${weeklyPostCount} daily slots starting ${startDay}. Nothing will be sent to Buffer.`);
     printWeekPlan(plan);
@@ -353,7 +364,8 @@ async function main() {
   console.log(`Target channel: ${channel.name} (${channel.service}) ${channel.id}`);
 
   if (action === 'schedule-week') {
-    const startDay = addDays(today, 1);
+    const startDay = firstSchedulableDay();
+    console.log(`First schedulable local day: ${startDay} (minimum lead: ${minimumScheduleLeadMinutes} minute(s)).`);
     const existing = await getScheduledPosts(channel.organizationId, channel.id);
     const blockedDays = new Set(existing.filter((post) => post.dueAt).map((post) => localIsoDay(new Date(post.dueAt))));
     const plan = buildWeekPlan(bank, history, startDay, blockedDays);
