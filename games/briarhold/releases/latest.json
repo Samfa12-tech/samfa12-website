@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 101,
-  "versionName": "0.3.0-alpha.101",
-  "title": "Alpha.101 is available",
-  "notes": "Fixes the recurring Mason repair/Strengthen and New Run freeze, improves close-body auto-fire, Wicker routing, sprite heading and lighting, woodland appearance and co-op recovery/input/firing. Optional report diagnostics now include bounded game progress and recent errors. Both co-op players should update. The intermittent Night 5 freeze remains under investigation.",
+  "versionCode": 102,
+  "versionName": "0.3.0-alpha.102",
+  "title": "Alpha.102 is available",
+  "notes": "Improves all five NPC presentations, rear woodland coverage and west stair handrail support. Ashwing is visible and targetable, dives toward reachable player positions, and has clearer ash and diagonal warnings. Phone rendering is sharper. Both co-op players should update. An intermittent Android WebView crash remains under investigation; recovery can restart from saved progress. The separate Night 5 freeze and sustained/cross-network testing remain open.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
