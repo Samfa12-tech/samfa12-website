@@ -17,13 +17,13 @@ const RAW_BOSS_ASSETS = {
     animationStateToClip: {idle: "idle", shield_rotate: "idle", hit: "hit", collapse: "death"},
   },
   "root-sapper-prime": {
-    asset: `${RUNTIME_ROOT}boss-root-sapper-prime.glb`,
-    animationStateToClip: {idle: "idle", attack: "attack", hit: "hit", collapse: "death"},
+    asset: `${RUNTIME_ROOT}boss-root-sapper-prime-walk.glb`,
+    animationStateToClip: {idle: "idle", walk: "walk", attack: "attack", hit: "hit", collapse: "death"},
   },
   "ashwing-matriarch": {
-    asset: `${RUNTIME_ROOT}boss-ashwing-matriarch.glb`,
+    asset: `${RUNTIME_ROOT}boss-ashwing-matriarch-flight.glb`,
     animationStateToClip: {
-      idle: "idle", dive_windup: "attack", grounded: "idle", airborne: "run", hit: "hit", collapse: "death",
+      idle: "idle", dive_windup: "attack", grounded: "idle", airborne: "flap", hit: "hit", collapse: "death",
     },
   },
   "moonless-herald": {
@@ -32,8 +32,8 @@ const RAW_BOSS_ASSETS = {
     animationStateToClip: {idle: "idle", attack: "attack", hit: "hit", collapse: "death"},
   },
   "caravan-eater": {
-    asset: `${RUNTIME_ROOT}boss-caravan-eater.glb`,
-    animationStateToClip: {idle: "idle", attack: "attack", hit: "hit", collapse: "death"},
+    asset: `${RUNTIME_ROOT}boss-caravan-eater-walk.glb`,
+    animationStateToClip: {idle: "idle", walk: "walk", attack: "attack", hit: "hit", collapse: "death"},
   },
   "hollow-hart": {
     asset: `${RUNTIME_ROOT}boss-hollow-hart.glb`,
@@ -193,13 +193,15 @@ export function createBossRuntimeAssetAdapter({
   const records = new Map();
   const pending = new Map();
   const errors = new Map();
+  let paused = false;
+  let disposed = false;
   const canLoad = enabled === true && Boolean(BABYLON?.SceneLoader?.ImportMeshAsync && scene && BABYLON?.TransformNode);
 
   const statusFor = id => records.has(id) ? "ready" : errors.has(id) ? "fallback" : canLoad ? "idle" : "offline";
 
   async function load(id) {
     const definition = bossRuntimeAssetDefinition(id, manifest);
-    if (!definition) return null;
+    if (!definition || disposed) return null;
     if (records.has(id)) return records.get(id);
     if (pending.has(id)) return pending.get(id);
     if (!canLoad) return null;
@@ -227,6 +229,7 @@ export function createBossRuntimeAssetAdapter({
         // ImportMeshAsync resolves once the hierarchy exists, before all GLB
         // textures and material effects are necessarily ready to draw.
         await scene.whenReadyAsync?.();
+        if (disposed) throw new Error("boss asset adapter disposed during load");
         for (const group of imported.animationGroups ?? []) group.stop?.();
         let groundOffset = 0;
         try {
@@ -241,14 +244,42 @@ export function createBossRuntimeAssetAdapter({
           imported,
           clips: mapStableClips(definition, imported.animationGroups),
           activeClip: null,
+          presentationVisible: true,
+          pausedGroup: null,
+          meshVisibility: new Map(imported.meshes.map(mesh => [mesh, Number(mesh.visibility ?? 1)])),
+          syncPause() {
+            const group = this.activeClip ? this.clips.get(this.activeClip) : null;
+            if (paused || !this.presentationVisible) {
+              if (group?.isPlaying === true) {
+                group.pause?.();
+                this.pausedGroup = group;
+              }
+            } else if (this.pausedGroup) {
+              const resume = this.pausedGroup;
+              this.pausedGroup = null;
+              if (resume === group) resume.play?.(resume.loopAnimation);
+            }
+          },
+          setVisible(visible) {
+            this.presentationVisible = visible === true;
+            this.root.setEnabled?.(this.presentationVisible);
+            this.syncPause();
+          },
+          setOpacity(opacity = 1) {
+            const factor = Number.isFinite(opacity) ? Math.max(0, Math.min(1, opacity)) : 1;
+            for (const [mesh, original] of this.meshVisibility) mesh.visibility = original * factor;
+          },
           play(animationState) {
             const stable = bossAnimationClipName(id, animationState, manifest);
             const group = stable ? this.clips.get(stable) : null;
             if (!group) return false;
-            if (this.activeClip === stable) return true;
+            if (this.activeClip === stable && (group.isPlaying !== false || this.pausedGroup === group
+              || stable === "death" || stable === "fall")) return true;
             if (this.activeClip) this.clips.get(this.activeClip)?.stop?.();
+            this.pausedGroup = null;
             this.activeClip = stable;
             group.start?.(["idle", "walk", "run", "flap", "glide"].includes(stable), 1, group.from, group.to, false);
+            this.syncPause();
             return true;
           },
           dispose() {
@@ -259,7 +290,7 @@ export function createBossRuntimeAssetAdapter({
         records.set(id, record);
         return record;
       } catch (error) {
-        errors.set(id, String(error?.message ?? error));
+        if (!disposed) errors.set(id, String(error?.message ?? error));
         disposeImported(imported, root);
         return null;
       } finally {
@@ -274,10 +305,15 @@ export function createBossRuntimeAssetAdapter({
     enabled: canLoad,
     manifest,
     load,
+    setPaused(value) {
+      paused = value === true;
+      for (const record of records.values()) record.syncPause();
+    },
     status(id) { return statusFor(id); },
     diagnostics() {
       return Object.freeze({
         enabled: canLoad,
+        paused,
         statuses: Object.freeze(Object.fromEntries(BOSS_RUNTIME_ASSET_IDS.map(id => [id, statusFor(id)]))),
         loaded: records.size,
         activeClips: Object.freeze(Object.fromEntries([...records].map(([id, record]) => {
@@ -289,6 +325,7 @@ export function createBossRuntimeAssetAdapter({
       });
     },
     dispose() {
+      disposed = true;
       for (const record of records.values()) record.dispose();
       records.clear();
       errors.clear();

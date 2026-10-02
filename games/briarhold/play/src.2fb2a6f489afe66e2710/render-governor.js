@@ -23,12 +23,13 @@ export function isSoftwareGraphics(info) {
   return SOFTWARE_RENDERER.test(`${safe.vendor} ${safe.renderer}`);
 }
 
-export function maximumRenderScale({coarse = false, software = false} = {}) {
-  // Beyond 3x, software WebGL can corrupt Babylon's resized framebuffer and
-  // phones become too soft to aim accurately. Density remains untouched; if a
-  // device is still slow at this floor, we optimise rendering rather than
-  // degrading the picture into an unstable 3.5-4x target.
-  return coarse || software ? 3 : 4;
+export function maximumRenderScale({coarse = false, software = false, cssWidth, cssHeight} = {}) {
+  if (software) return 3;
+  // Keep at least 320 pixels on a phone's short edge (or native resolution on
+  // smaller viewports). Slow frames must not turn the fight into a 137px image.
+  if (coarse) return Math.max(1, Math.min(1.5,
+    Math.min(finite(cssWidth, 960), finite(cssHeight, 480)) / 320));
+  return 4;
 }
 
 /**

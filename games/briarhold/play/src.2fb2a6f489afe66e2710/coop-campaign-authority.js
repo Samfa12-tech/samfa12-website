@@ -1477,11 +1477,13 @@ function validateCheckpointBossSemantics(run, boss, path = "co-op checkpoint run
   }
   if (boss.encounterId === "root-sapper-prime") {
     const target = boss.actors[0]?.target;
-    const expectedTarget = canonicalSockets[0] ?? null;
+    // Navigation may choose another reachable occupied socket. Both that target
+    // and the historical first target remain bound to actual authored builds.
+    const expectedTarget = canonicalSocketById.get(target?.id) ?? null;
     const targetMatches = expectedTarget
       ? target?.kind === "fortification_socket" && target.id === expectedTarget.id
         && target.x === expectedTarget.x && target.z === expectedTarget.z
-      : target?.kind === "fortification_socket" && target.id === null
+      : canonicalSockets.length === 0 && target?.kind === "fortification_socket" && target.id === null
         && !Object.hasOwn(target, "x") && !Object.hasOwn(target, "z");
     if (!targetMatches) {
       throw new RangeError(`${path} Sapper target contradicts its authored fortification socket`);
@@ -1543,7 +1545,16 @@ function validateCheckpointBossSemantics(run, boss, path = "co-op checkpoint run
       objectiveLanePosition: boss.options.objectiveLanePosition,
       boons: canonicalBoons,
     }));
-    if (JSON.stringify(snapshotBoss) !== JSON.stringify(expectedInitialBoss)) {
+    let legacyInitialBoss = null;
+    if (boss.encounterId === "root-sapper-prime" && canonicalSockets.length) {
+      // Accept the exact old initial checkpoint without rewriting it on load.
+      // Every other field still has to match canonical wave-start authority.
+      const legacy = clone(expectedInitialBoss);
+      legacy.actors[0].target = {kind: "fortification_socket", ...canonicalSockets[0]};
+      legacyInitialBoss = serialiseBossDirector(legacy);
+    }
+    if (JSON.stringify(snapshotBoss) !== JSON.stringify(expectedInitialBoss)
+      && (!legacyInitialBoss || JSON.stringify(snapshotBoss) !== JSON.stringify(legacyInitialBoss))) {
       throw new RangeError(`${path} wave-start boss is not the exact canonical initial authority`);
     }
     for (const field of ["encounterId", "boons", "options"]) {

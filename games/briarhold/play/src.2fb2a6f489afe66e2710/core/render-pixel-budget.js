@@ -42,9 +42,13 @@ export function resolveRenderPixelBudget(options = {}) {
     configuredBudget > 0 ? configuredBudget : Number.POSITIVE_INFINITY;
   const minimumWidth = Math.max(1, finite(options.minimumWidth, 480));
   const minimumHeight = Math.max(1, finite(options.minimumHeight, 270));
+  const minimumShortEdge = Math.max(0, finite(options.minimumShortEdge, 0));
+  const readableScale = Math.max(1, Math.min(cssWidth, cssHeight) / Math.max(1, minimumShortEdge));
+  const readablePixels = minimumShortEdge > 0 ? sourcePixels / (readableScale * readableScale) : 0;
   const minimumPixels = Math.min(
     sourcePixels,
-    Math.max(minimumWidth * minimumHeight, 1)
+    pixelBudget,
+    Math.max(minimumWidth * minimumHeight, readablePixels, 1)
   );
   const targetPixels = clamp(
     Math.min(requestedPixels, pixelBudget),

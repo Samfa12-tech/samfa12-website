@@ -502,6 +502,7 @@ function playerGateCollisionOptions(currentBattlefield) {
 }
 
 function budgetedGraphicsScale(requestedScale, graphicsQuality) {
+  const readablePhone = coarsePointer && !isSoftwareGraphics(graphicsInfoForEngine(engine));
   const maxCanvasPixels = renderPixelBudgetForDevice({
     coarse: coarsePointer,
     graphicsQuality,
@@ -511,6 +512,7 @@ function budgetedGraphicsScale(requestedScale, graphicsQuality) {
     cssHeight: innerHeight,
     requestedDownscale: requestedScale,
     maxCanvasPixels,
+    minimumShortEdge: readablePhone ? 320 : 0,
   }).hardwareScalingLevel;
 }
 
@@ -531,7 +533,7 @@ const softwareGraphics = isSoftwareGraphics(graphicsInfo);
 const fastEnemy3dHardware = enemy3dFastHardware(graphicsInfo.renderer);
 const renderGovernor = createRenderGovernor({
   baseScale: baseHardwareScale,
-  maxScale: maximumRenderScale({coarse: coarsePointer, software: softwareGraphics}),
+  maxScale: maximumRenderScale({coarse: coarsePointer, software: softwareGraphics, cssWidth: innerWidth, cssHeight: innerHeight}),
   software: softwareGraphics,
   enabled: !search.has("noAdaptiveResolution"),
   targetFps: 60,
@@ -1663,7 +1665,7 @@ function applyGraphicsQuality(value, {persist = true, announceChange = false} = 
   renderGovernor.baseScale = scale;
   renderGovernor.maxScale = Math.max(
     scale,
-    maximumRenderScale({coarse: coarsePointer, software: softwareGraphics}),
+    maximumRenderScale({coarse: coarsePointer, software: softwareGraphics, cssWidth: innerWidth, cssHeight: innerHeight}),
   );
   const learnedAutoScale = Number(profile.settings?.autoHardwareScale);
   renderGovernor.scale = renderGovernor.enabled && Number.isFinite(learnedAutoScale)
@@ -3385,7 +3387,13 @@ function nextBossCommandId(kind, actorId = "encounter") {
 function applyBossDirectorUpdate({elapsedMs = 0, commands = [], crowdCleared = false} = {}) {
   if (run?.bossEncounter?.mode !== "authored-director") return null;
   const previousSequence = run.bossEncounter.eventSequence;
-  run = updateSoloBossEncounter(run, {elapsedMs, commands, crowdCleared});
+  const wardens = coopPreview?.role === "host" && coopPreview.connected
+    ? [...coopPreview.authority.players.values()]
+    : [{playerId: "warden-host", position: player.position, hp: player.hp}];
+  const wardenTargets = wardens.filter(warden => warden.hp > 0).map(warden => ({
+    id: warden.playerId, x: warden.position.x, z: warden.position.z,
+  }));
+  run = updateSoloBossEncounter(run, {elapsedMs, commands, crowdCleared, wardenTargets});
   const snapshot = buildBossPresentationSnapshot(run.bossEncounter, run.bossEncounter.accumulatorMs / 50, {afterEventSequence: bossEventCursor});
   bossPresentationAdapter.update(snapshot);
   for (const announcement of snapshot.announcements) announce(announcement.text);
@@ -6178,6 +6186,10 @@ function returnToMenu() {
   return true;
 }
 
+function syncBossAnimationPauseState() {
+  bossPresentationAdapter.setPaused(paused || Boolean(coopPreview?.connected && coopPreview.authorityPaused));
+}
+
 function togglePause(force) {
   if (coopPreview?.connected) {
     announce("Online rooms cannot be paused");
@@ -6187,6 +6199,7 @@ function togglePause(force) {
   const next = typeof force === "boolean" ? force : !paused;
   if (next === paused) return;
   paused = next;
+  syncBossAnimationPauseState();
   if (paused) {
     resetTouchInput();
     closeHubService();
@@ -6212,6 +6225,7 @@ function pauseForLifecycle(reason) {
   }
   paused = true;
   audio.setPaused(true);
+  syncBossAnimationPauseState();
   if (coopPreview.role === 'host') lifecycleCoopPauseToken = coopAuthorityPauseScopes.pause(coopPreview, reason);
   else coopPreview.authorityPaused = true;
   announce(coopPreview.role === 'host' ? 'Shared authority paused while the host is away' : 'Co-op presentation paused in the background');
@@ -6230,6 +6244,7 @@ function resumeFromLifecycle() {
     coopPreview.authorityPaused = false;
     coopPreview.requestResume();
   }
+  syncBossAnimationPauseState();
 }
 
 const reportNumber = (value, places = 3) => Number((Number(value) || 0).toFixed(places));
@@ -7098,7 +7113,11 @@ function updateCombat(frame, dt, now, {coopAuthority = false} = {}) {
       applyBossDirectorUpdate({commands: [{id: nextBossCommandId("release"), type: "encounter_release"}]});
       persistRun();
     }
-    if (stats.activeCount === 0) {
+    // Wicker leaves the combat count as soon as its death begins. Keep its
+    // actual presentation tail alive so the DEAD transition above can emit
+    // defeat music before wave rewards and the next phase dispose the body.
+    const wickerDeathPresenting = wickerBossId >= 0 && battlefield.status[wickerBossId] === DYING;
+    if (stats.activeCount === 0 && !wickerDeathPresenting) {
       if (run?.bossEncounter?.mode === "authored-director") {
         if (run.bossEncounter.status === "waiting") {
           applyBossDirectorUpdate({
@@ -7251,7 +7270,7 @@ function presentFrame(nowMs) {
         && (!coopPreview?.connected || coopPreview.role === 'host')) {
         updateCombat(frame, dt, now, {coopAuthority: coopPreview?.role === 'host' && coopPreview.connected});
       }
-      else world.setFirstPersonPose(player, dt, {aiming: adsActive});
+      else if (!narrativePresentation.isOpen) world.setFirstPersonPose(player, dt, {aiming: adsActive});
     }
   }
   frameMonitor.simulationMs = performance.now() - simulationStartedAt;
@@ -7273,6 +7292,7 @@ function presentFrame(nowMs) {
   frameMonitor.rendererUpdateMs = performance.now() - rendererStartedAt;
   const sceneStartedAt = performance.now();
   if (coopPreview?.role !== 'guest') supplyOrbRenderer.update(supplyOrbPresentationForRun(run));
+  syncBossAnimationPauseState();
   world.scene.render();
   presentedFrame++;
   frameMonitor.sceneRenderMs = performance.now() - sceneStartedAt;
@@ -7745,7 +7765,7 @@ function resizeRenderer() {
   renderGovernor.baseScale = safeBaseScale;
   renderGovernor.maxScale = Math.max(
     safeBaseScale,
-    maximumRenderScale({coarse: coarsePointer, software: softwareGraphics}),
+    maximumRenderScale({coarse: coarsePointer, software: softwareGraphics, cssWidth: innerWidth, cssHeight: innerHeight}),
   );
   renderGovernor.scale = renderGovernor.enabled
     ? clamp(renderGovernor.scale, safeBaseScale, renderGovernor.maxScale)

@@ -79,26 +79,31 @@ export const HUB_NPC_ATTACK_SECONDS = 0.34;
 export const HUB_NPC_MODELS = Object.freeze({
   bellkeeper: Object.freeze({
     asset: 'assets/meshy/runtime/hub-npc-bellkeeper-512.glb',
+    revision: 'alpha102-bell-v4',
     clip: 'NPC|bellkeeper|idle',
     silhouette: 'bell-cowl',
   }),
   mason: Object.freeze({
     asset: 'assets/meshy/runtime/hub-npc-mason-512.glb',
+    revision: 'alpha102-mason-planted-v1',
     clip: 'NPC|mason|idle',
     silhouette: 'mason-apron',
   }),
   quartermaster: Object.freeze({
     asset: 'assets/meshy/runtime/hub-npc-quartermaster-512.glb',
+    revision: 'alpha102-quartermaster-v2',
     clip: 'NPC|quartermaster|idle',
     silhouette: 'stores-coat',
   }),
   trapper: Object.freeze({
     asset: 'assets/meshy/runtime/hub-npc-trapper-512.glb',
+    revision: 'alpha102-trapper-v2',
     clip: 'NPC|trapper|idle',
     silhouette: 'hunter-cowl',
   }),
   greenwarden: Object.freeze({
     asset: 'assets/meshy/runtime/hub-npc-greenwarden-512.glb',
+    revision: 'alpha102-green-v3',
     clip: 'NPC|greenwarden|idle',
     silhouette: 'branch-crown',
   }),
@@ -298,7 +303,7 @@ export function hubNpcAssetPath(npcId, {mobileTextures = false} = {}) {
   const slash = asset.lastIndexOf('/');
   return Object.freeze({
     rootUrl: asset.slice(0, slash + 1),
-    fileName: asset.slice(slash + 1),
+    fileName: asset.slice(slash + 1) + (definition.revision ? `?v=${definition.revision}` : ''),
   });
 }
 
@@ -397,7 +402,7 @@ async function loadHubNpcCharacter({BABYLON, scene, station, mobileTextures = fa
   const state = hubNpcStateForStation(station);
   const definition = HUB_NPC_MODELS[state.npcId];
   const {rootUrl, fileName} = hubNpcAssetPath(state.npcId, {mobileTextures});
-  const imported = await BABYLON.SceneLoader.ImportMeshAsync('', rootUrl, fileName, scene);
+  const imported = await BABYLON.SceneLoader.ImportMeshAsync('', rootUrl, fileName, scene, undefined, '.glb');
   const sourceRoot = imported.meshes?.[0];
   const idle = (imported.animationGroups ?? []).find(group => group.name === definition.clip);
   if (!sourceRoot || !idle) {

@@ -172,7 +172,11 @@ export function tryKnifeMelee(state, nowSeconds, {manual = false, automatic = tr
   const now = Math.max(0, Number(nowSeconds) || 0);
   if (!knifeMeleeScanDue(state, now, {manual, automatic})) return null;
   state.nextScanAt = now + KNIFE_MELEE.autoCheckIntervalSeconds;
-  const resolvedTarget = Number.isInteger(targetId) && targetId >= 0 ? targetId : null;
+  // Crowd targets use numeric slots; authored bosses use stable actor IDs.
+  // Keep either identity through windup so contact can revalidate that target.
+  const resolvedTarget = (Number.isInteger(targetId) && targetId >= 0)
+    || (typeof targetId === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:+-]{0,255}$/u.test(targetId))
+    ? targetId : null;
   if (resolvedTarget === null && !manual) return null;
   state.nextReadyAt = now + KNIFE_MELEE.cooldownSeconds;
   state.strikes = Math.max(0, Math.floor(Number(state.strikes) || 0)) + 1;

@@ -116,6 +116,21 @@ function blocksPlayer(volume) {
   return volume?.playerSolid !== false;
 }
 
+function rampRailSupports(mapDefinition, position, radius, disabledCollisionIds) {
+  return (mapDefinition.collisionVolumes ?? []).filter(volume => (
+    volume.appearance === "ramp-rail"
+    && blocksPlayer(volume)
+    && !disabledCollisionIds?.has(volume.id)
+    && position.x > volume.min.x - radius
+    && position.x < volume.max.x + radius
+    && position.z > volume.min.z - radius
+    && position.z < volume.max.z + radius
+  )).map(volume => ({
+    volume,
+    y: collisionVerticalRange(volume, mapDefinition, position).max,
+  }));
+}
+
 function resolveRampFillAxis(position, target, axis, mapDefinition, radius, maxStepHeight) {
   const targetPosition = {...position, [axis]: target};
   const options = {feetY: position.y, radius, maxStepHeight};
@@ -513,6 +528,7 @@ export function updatePlayerController(
   let nextY = previousY;
   let nextVerticalVelocity = state.velocity.y;
   let grounded = false;
+  const railSupports = rampRailSupports(mapDefinition, horizontal, capsuleRadius, disabledCollisionIds);
 
   if (jumpPressed && state.grounded) {
     state.grounded = false;
@@ -520,13 +536,20 @@ export function updatePlayerController(
   }
 
   if (state.grounded && !jumpPressed) {
-    const support = sampleWalkableGround(mapDefinition, horizontal.x, horizontal.z, {
+    let support = sampleWalkableGround(mapDefinition, horizontal.x, horizontal.z, {
       currentY: previousY,
       radius: capsuleRadius,
       maxStepHeight,
       maxDropHeight: groundSnapDistance,
       preferHighest: true,
     });
+    // A jump can land on a narrow rail even though its top is not an authored
+    // floor. Retain that support on later ticks, including along the slope.
+    for (const rail of railSupports) {
+      if (rail.y - previousY <= maxStepHeight + 1e-6
+        && previousY - rail.y <= groundSnapDistance + 1e-6
+        && (!support || rail.y > support.y)) support = rail;
+    }
     if (support) {
       nextY = support.y;
       nextVerticalVelocity = seconds > 0 ? (nextY - previousY) / seconds : 0;
@@ -547,6 +570,20 @@ export function updatePlayerController(
     });
     if (landing && previousY >= landing.y - 1e-6 && nextY <= landing.y + 1e-6) {
       nextY = landing.y;
+      nextVerticalVelocity = 0;
+      grounded = true;
+    }
+  }
+
+  // Horizontal collision permits a capsule whose feet clear a rail. Sweep
+  // those feet against its local top during descent instead of letting the
+  // later floor landing leave the capsule inside the masonry. Compare both
+  // slope samples so movement along a rail cannot fall through its rising top.
+  for (const rail of railSupports) {
+    const previousTop = collisionVerticalRange(rail.volume, mapDefinition, state.position).max;
+    if (previousY >= previousTop - 1e-6 && nextY <= rail.y + 1e-6
+      && (!grounded || nextY < rail.y)) {
+      nextY = rail.y;
       nextVerticalVelocity = 0;
       grounded = true;
     }

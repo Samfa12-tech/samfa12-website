@@ -1,11 +1,11 @@
 [
   {
     "route": "/",
-    "pageModified": "2026-09-23"
+    "pageModified": "2026-10-02"
   },
   {
     "route": "/games/",
-    "pageModified": "2026-09-23"
+    "pageModified": "2026-10-02"
   },
   {
     "route": "/games/bug-swarm/",
@@ -17,11 +17,11 @@
   },
   {
     "route": "/games/briarhold/",
-    "pageModified": "2026-09-23"
+    "pageModified": "2026-10-02"
   },
   {
     "route": "/games/briarhold/play/",
-    "pageModified": "2026-09-20"
+    "pageModified": "2026-10-02"
   },
   {
     "route": "/books/",
@@ -77,6 +77,6 @@
   },
   {
     "route": "/updates/",
-    "pageModified": "2026-09-23"
+    "pageModified": "2026-10-02"
   }
 ]

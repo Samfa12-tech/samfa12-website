@@ -1,4 +1,20 @@
+import {BRIARHOLD_FIRST_PERSON_MAP} from "./map-definition.js";
+
 export const BOSS_DIRECTOR_VERSION = 1;
+
+// Runtime GLB death/fall input samples, rounded up to a 50ms authority tick.
+// These numbers are checked against the shipped seven-night-bosses-t2 assets;
+// authority never imports the asset loader or relies on a renderer clock.
+export const BOSS_DEFEAT_CLIP_MS = Object.freeze({
+  "moss-crowned-matron": 2000,
+  "root-sapper-prime": 2000,
+  "ashwing-matriarch": 3550, // GLB float32 endpoint: 3.500000238s.
+  "moonless-herald": 3550,
+  "caravan-eater": 2000,
+  "hollow-hart": 2000,
+  cinderwing: 1300, // GLB float32 endpoint: 1.266666770s.
+});
+export const BOSS_DEFEAT_FADE_MS = 250;
 
 const FIXED_STEP_MS = 50;
 const MAX_ACTORS = 2;
@@ -57,16 +73,16 @@ const ACTOR_STATE_IDS = Object.freeze({
 });
 const ACTOR_ANIMATION_IDS = Object.freeze({
   "moss-crowned-matron": new Set(["idle", "shield_rotate", "hit", "collapse"]),
-  "root-sapper-prime": new Set(["idle", "attack", "hit", "collapse"]),
+  "root-sapper-prime": new Set(["idle", "walk", "attack", "hit", "collapse"]),
   "ashwing-matriarch": new Set(["idle", "dive_windup", "grounded", "airborne", "hit", "collapse"]),
   "moonless-herald": new Set(["idle", "attack", "hit", "collapse"]),
-  "caravan-eater": new Set(["idle", "attack", "hit", "collapse"]),
+  "caravan-eater": new Set(["idle", "walk", "attack", "hit", "collapse"]),
   "hollow-hart": new Set(["idle", "attack", "hit", "collapse"]),
   cinderwing: new Set(["flap", "glide", "breath", "hit", "fall"]),
 });
 const ATTACK_IDS = new Set(["ward_reveal", "socket_plant", "dive_lane", "lantern_burst", "objective_charge",
   "root_lane", "lane_strafe"]);
-const WEAPON_IDS = new Set(["arbalest", "sunfire", "runebolt", "unknown"]);
+const WEAPON_IDS = new Set(["arbalest", "sunfire", "runebolt", "knife", "fortification", "unknown"]);
 const HIT_VOLUME_ACTORS = Object.freeze({
   socket_plant_telegraph: "root-sapper-prime",
   dive_lane: "ashwing-matriarch",
@@ -104,7 +120,9 @@ const rawDefinitions = {
     title: "Ashwing Matriarch",
     fixedActor: true,
     mechanics: {diveCooldownMs: 2200, diveTelegraphMs: 800, ashTelegraphMs: 800, ashActiveMs: 4000, ashRadius: 4.5, maxAshZones: 3},
-    actors: [{id: "ashwing-matriarch", maxHp: 7200, phaseThresholds: [0.67, 0.34], position: {x: -8, y: 8, z: 86}, radius: 3.2}],
+    // Start clear of the lintel and travel the central western field lane.
+    // Both ends remain in normal arbalest range from the reported gate pose.
+    actors: [{id: "ashwing-matriarch", maxHp: 7200, phaseThresholds: [0.67, 0.34], position: {x: -16, y: 4, z: 36}, radius: 3.2}],
   },
   "moonless-herald": {
     title: "Moonless Herald",
@@ -158,8 +176,10 @@ export function createBossDirector({
     : {x: -16, z: 20};
   const actors = definition.actors.map(actorDefinition => {
     const maxHp = Math.round(actorDefinition.maxHp * hpMultiplier);
+    const socketId = actorDefinition.id === "root-sapper-prime"
+      ? reachableSapperSocket(actorDefinition, sockets, socketPositions) : null;
     const target = actorDefinition.id === "root-sapper-prime"
-      ? {kind: "fortification_socket", id: sockets[0] ?? null, ...(socketPositions.get(sockets[0]) ?? {})}
+      ? {kind: "fortification_socket", id: socketId, ...(socketPositions.get(socketId) ?? {})}
       : actorDefinition.id === "caravan-eater"
         ? {kind: "objective_lane", id: isNonEmptyString(objectiveLaneId) ? objectiveLaneId : "evacuation-lane", ...lanePosition}
         : actorDefinition.id === "cinderwing"
@@ -223,12 +243,19 @@ export function createBossDirector({
   };
 }
 
-export function stepBossDirector(input, {elapsedMs = 0, commands = []} = {}) {
+export function stepBossDirector(input, {elapsedMs = 0, commands = [], wardenTargets = []} = {}) {
   validateDirector(input, {requireHash: false});
   if (!Number.isFinite(elapsedMs) || elapsedMs < 0 || !Number.isInteger(elapsedMs)) throw new RangeError("boss director elapsedMs must be a non-negative integer");
   if (!Array.isArray(commands) || commands.length > 128) throw new RangeError("boss director commands must be a bounded array");
+  if (!Array.isArray(wardenTargets) || wardenTargets.length > 8
+    || wardenTargets.some(target => !boundedId(target?.id)
+      || ![target.x, target.z].every(value => Number.isFinite(value) && Math.abs(value) <= MAX_WORLD_COORDINATE))
+    || new Set(wardenTargets.map(target => target.id)).size !== wardenTargets.length) {
+    throw new RangeError("boss warden targets must be bounded authoritative positions");
+  }
   const state = clone(input);
   delete state.hash;
+  relocateLegacyAshwing(state);
   const ordered = [...commands].sort((left, right) => {
     const orderDelta = (Number(left?.order) || 0) - (Number(right?.order) || 0);
     return orderDelta || String(left?.id ?? "").localeCompare(String(right?.id ?? ""));
@@ -238,7 +265,7 @@ export function stepBossDirector(input, {elapsedMs = 0, commands = []} = {}) {
   while (state.accumulatorMs >= FIXED_STEP_MS) {
     state.accumulatorMs -= FIXED_STEP_MS;
     state.timeMs += FIXED_STEP_MS;
-    fixedStep(state);
+    fixedStep(state, wardenTargets);
   }
   return state;
 }
@@ -277,13 +304,56 @@ export function normaliseBossDirector(input) {
   return restoreBossDirector(serialiseBossDirector(input));
 }
 
+// Only the shipped per-wave counter has ordering semantics. Opaque callers keep
+// their permanent exact-ID protection; never evict those IDs to admit a replay.
+function runtimeCommandSerial(state, id) {
+  const match = /^boss:([2-7]):2:(?:release|hit|ward-light|fortification-interrupt):([a-z-]+):([1-9][0-9]*)$/u.exec(id);
+  if (!match || Number(match[1]) !== Object.keys(BOSS_ENCOUNTER_DEFINITIONS).indexOf(state.encounterId) + 2
+    || (match[2] !== "encounter" && !state.actors.some(actor => actor.id === match[2]))) return null;
+  const serial = Number(match[3]);
+  return Number.isSafeInteger(serial) ? serial : null;
+}
+
+function commandAlreadyProcessed(state, id) {
+  if (state.processedCommandIds.includes(id)) return true;
+  const serial = runtimeCommandSerial(state, id);
+  return serial !== null && (serial <= (state.commandReplay?.floor ?? 0)
+    || state.processedCommandIds.some(processed => runtimeCommandSerial(state, processed) === serial));
+}
+
+function eventCommandInLedger(state, id) {
+  if (state.processedCommandIds.includes(id)) return true;
+  const serial = runtimeCommandSerial(state, id);
+  return serial !== null && serial <= (state.commandReplay?.floor ?? 0);
+}
+
+function recordCommand(state, id) {
+  if (commandAlreadyProcessed(state, id)) return false;
+  const serial = runtimeCommandSerial(state, id);
+  if (state.processedCommandIds.length >= MAX_COMMAND_IDS) {
+    // Unordered IDs have no safe bounded compaction rule. Their existing full
+    // ledger still fails closed, while runtime counters can keep fights moving.
+    if (serial === null) return false;
+    state.commandReplay ??= {floor: 0, acceptedCount: state.processedCommandIds.length};
+    const retainedSerials = state.processedCommandIds.map(processed => runtimeCommandSerial(state, processed))
+      .filter(value => value !== null);
+    const floor = Math.min(serial, ...retainedSerials);
+    state.commandReplay.floor = Math.max(state.commandReplay.floor, floor);
+    state.processedCommandIds = state.processedCommandIds.filter(processed => {
+      const processedSerial = runtimeCommandSerial(state, processed);
+      return processedSerial === null || processedSerial > state.commandReplay.floor;
+    });
+  }
+  if (state.commandReplay) state.commandReplay.acceptedCount += 1;
+  if (serial === null || serial > (state.commandReplay?.floor ?? 0)) state.processedCommandIds.push(id);
+  return true;
+}
+
 function processCommand(state, command) {
   if (!command || typeof command !== "object" || !isNonEmptyString(command.id) || !isNonEmptyString(command.type)) {
     throw new TypeError("boss director command requires stable id and type");
   }
-  if (state.processedCommandIds.includes(command.id)) return;
-  if (state.processedCommandIds.length >= MAX_COMMAND_IDS) return;
-  state.processedCommandIds.push(command.id);
+  if (!recordCommand(state, command.id)) return;
   if (command.type === "encounter_release") {
     if (state.status !== "waiting") return;
     state.status = "active";
@@ -401,7 +471,7 @@ function applyHit(state, actor, command) {
   if (actor.hp <= 0) defeatActor(state, actor, command.id, command.weaponId ?? "unknown");
 }
 
-function fixedStep(state) {
+function fixedStep(state, wardenTargets) {
   state.rngState = xorshift(state.rngState);
   for (const actor of state.actors) {
     actor.previousPosition = clone(actor.position);
@@ -410,7 +480,7 @@ function fixedStep(state) {
     actor.cooldownRemainingMs = Math.max(0, actor.cooldownRemainingMs - FIXED_STEP_MS);
     if (actor.id === "moss-crowned-matron") updateMatron(state, actor);
     else if (actor.id === "root-sapper-prime") updateSapper(state, actor);
-    else if (actor.id === "ashwing-matriarch") updateAshwing(state, actor);
+    else if (actor.id === "ashwing-matriarch") updateAshwing(state, actor, wardenTargets);
     else if (actor.id === "moonless-herald") updateHerald(state, actor);
     else if (actor.id === "caravan-eater") updateCaravan(state, actor);
     else if (actor.id === "hollow-hart") updateHart(state, actor);
@@ -448,6 +518,17 @@ function updateMatron(state, actor) {
 
 function updateSapper(state, actor) {
   if (state.timeMs >= actor.hitUntilMs) actor.animationState = actor.state === "plant_telegraph" ? "attack" : "idle";
+  actor.velocity.x = 0;
+  actor.velocity.z = 0;
+  // Old checkpoints retain their original first socket until an actual step.
+  // Retarget only before any plant history; past plant events keep their exact
+  // authored target rather than being rewritten by navigation.
+  if (actor.state === "active" && Number.isFinite(actor.target.x)
+    && !state.events.some(event => event.actorId === actor.id && event.attack === "socket_plant")) {
+    const sockets = new Map(state.options.occupiedSockets.map(socket => [socket.id, socket]));
+    const socketId = reachableSapperSocket(actor, state.options.occupiedSocketIds, sockets);
+    if (socketId !== actor.target.id) actor.target = {kind: "fortification_socket", id: socketId, ...(sockets.get(socketId) ?? {})};
+  }
   if (!actor.target.id) {
     // A no-build run has no semantic socket target to disable. Keep that
     // persisted contract intact, but bring the boss out of its forest spawn to
@@ -459,7 +540,7 @@ function updateSapper(state, actor) {
     if (actor.cooldownRemainingMs === 0) actor.state = "active";
     return;
   }
-  if (actor.state === "active") moveToward(actor, actor.target, 4);
+  if (actor.state === "active") moveToward(actor, actor.target, 4, 3.8);
   const atTarget = !Number.isFinite(actor.target.x) || !Number.isFinite(actor.target.z)
     || Math.hypot(actor.position.x - actor.target.x, actor.position.z - actor.target.z) <= 4;
   if (actor.state === "active" && actor.cooldownRemainingMs === 0 && atTarget) {
@@ -479,7 +560,7 @@ function updateSapper(state, actor) {
   }
 }
 
-function updateAshwing(state, actor) {
+function updateAshwing(state, actor, wardenTargets) {
   if (state.timeMs >= actor.hitUntilMs) {
     actor.animationState = actor.state === "dive_telegraph"
       ? "dive_windup"
@@ -488,17 +569,89 @@ function updateAshwing(state, actor) {
   if (actor.state === "grounded") {
     if (actor.cooldownRemainingMs === 0) {
       actor.state = "active";
-      actor.position.y = 8;
       actor.animationState = "airborne";
       actor.cooldownRemainingMs = 2200;
     }
     return;
   }
+  // Keep the existing grounded/telegraph/damage windows. Height itself moves
+  // in authority, so rendered interpolation and weapon collision share the
+  // same takeoff/landing rather than hiding a teleport with a visual offset.
+  const flightHeight = BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].actors[0].position.y;
+  const targeted = Object.hasOwn(actor.target, "x");
+  if (actor.state === "active" && targeted) {
+    // Recover distance along a collision-clear route before the next lunge.
+    // The full retained wing/death envelope, rather than just the hit sphere,
+    // protects the arch and other masonry during both flight and targeting.
+    const moving = ashwingNavigationActor(actor);
+    moveToward(moving, actor.target.approach ? actor.target : {x: -16, z: 58}, 6);
+    actor.velocity.x = moving.velocity.x; actor.velocity.z = moving.velocity.z;
+    actor.heading = moving.heading;
+    updateAshwingHeight(actor, flightHeight);
+  } else if (actor.state === "active") {
+    // A ground-clear corridor through the authored arch. Lower before entering
+    // its slab, then regain height after clearing it; do not enlarge the opening
+    // or hide collision with a presentation-only offset.
+    if (actor.position.z === 58 && actor.heading < Math.PI) {
+      actor.heading = Math.min(Math.PI, actor.heading + Math.PI * FIXED_STEP_MS / 400);
+      actor.velocity.z = 0;
+    } else if (actor.position.z === 36 && actor.heading > 0) {
+      actor.heading = Math.max(0, actor.heading - Math.PI * FIXED_STEP_MS / 400);
+      actor.velocity.z = 0;
+    } else {
+      const end = actor.heading < Math.PI / 2 ? 58 : 36;
+      const delta = end - actor.position.z;
+      const step = Math.sign(delta) * Math.min(Math.abs(delta), 6 * FIXED_STEP_MS / 1000);
+      actor.position.z += step;
+      actor.velocity.z = step * 1000 / FIXED_STEP_MS;
+    }
+    // Evaluated retained attack geometry is 6.353 m tall at runtime scale;
+    // 1.8 m clearance flight leaves 0.297 m below the 8.45 m lintel.
+    // Retained hit/death poses can reach 6.311 m radially. Include that full
+    // envelope around the 43.9..48.1 slab, including during endpoint turns.
+    const ceiling = Math.min(flightHeight, 1.8 + Math.max(0, Math.abs(actor.position.z - 46) - 8.5) * 2.2 / 2);
+    const rise = flightHeight * FIXED_STEP_MS / 500;
+    const gap = ceiling - actor.position.y;
+    actor.position.y = Math.abs(gap) <= rise + 1e-9 ? ceiling : actor.position.y + Math.sign(gap) * rise;
+  } else if (actor.state === "dive_telegraph") {
+    const remaining = Math.max(0, actor.telegraphUntilMs - state.timeMs);
+    actor.position.y *= remaining / (remaining + FIXED_STEP_MS);
+    actor.velocity.x = 0; actor.velocity.z = 0;
+    if (targeted) {
+      const desired = Math.atan2(actor.target.x - actor.target.startX, actor.target.z - actor.target.startZ);
+      const turn = Math.atan2(Math.sin(desired - actor.heading), Math.cos(desired - actor.heading));
+      actor.heading = Math.atan2(Math.sin(actor.heading + Math.sign(turn) * Math.min(Math.abs(turn), Math.PI / 8)),
+        Math.cos(actor.heading + Math.sign(turn) * Math.min(Math.abs(turn), Math.PI / 8)));
+      // Keep the first half of the warning still; commit to the locked point
+      // in its second half. Dodging never drags the warning behind the player.
+      if (remaining < 400) {
+        const fraction = FIXED_STEP_MS / (remaining + FIXED_STEP_MS);
+        actor.position.x += (actor.target.x - actor.position.x) * fraction;
+        actor.position.z += (actor.target.z - actor.position.z) * fraction;
+        actor.velocity.x = (actor.position.x - actor.previousPosition.x) * 1000 / FIXED_STEP_MS;
+        actor.velocity.z = (actor.position.z - actor.previousPosition.z) * 1000 / FIXED_STEP_MS;
+      }
+    }
+  }
   if (actor.state === "active" && actor.cooldownRemainingMs === 0) {
+    if (wardenTargets.length) {
+      const target = selectAshwingDiveTarget(actor, wardenTargets);
+      if (!target) {
+        const approach = selectAshwingDiveTarget(actor, wardenTargets, {direct: false});
+        if (approach) actor.target = {kind: "warden", id: "warden:host", playerId: approach.id,
+          x: approach.x, z: approach.z, startX: actor.position.x, startZ: actor.position.z, approach: true};
+        return; // Route into range; solid cover cannot receive a remote dive.
+      }
+      actor.target = {kind: "warden", id: "warden:host", playerId: target.id,
+        x: target.x, z: target.z, startX: actor.position.x, startZ: actor.position.z};
+    }
+    actor.velocity.x = 0; actor.velocity.z = 0;
     actor.state = "dive_telegraph";
     actor.telegraphUntilMs = state.timeMs + 800;
     actor.animationState = "dive_windup";
-    replaceActorVolume(state, actor, {kind: "dive_lane", visible: true, active: false, damaging: false, width: 5, length: 24, untilMs: actor.telegraphUntilMs});
+    replaceActorVolume(state, actor, {kind: "dive_lane", visible: true, active: false, damaging: false,
+      ...(Object.hasOwn(actor.target, "x") ? ashwingDiveFootprint(actor.target) : {width: 5, length: 24}),
+      untilMs: actor.telegraphUntilMs});
     emit(state, "attack_telegraph", {actorId: actor.id, attack: "dive_lane", resolvesAtMs: actor.telegraphUntilMs});
   } else if (actor.state === "dive_telegraph" && state.timeMs >= actor.telegraphUntilMs) {
     const definition = BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].mechanics;
@@ -506,8 +659,9 @@ function updateAshwing(state, actor) {
       id: `ash:${state.eventSequence + 1}`,
       actorId: actor.id,
       kind: "ash",
-      x: actor.position.x + randomSigned(actor.rngState) * 8,
-      z: actor.position.z - 10,
+      x: targeted ? actor.position.x : actor.position.x + randomSigned(actor.rngState) * 8,
+      z: targeted ? actor.position.z : actor.position.z - 10,
+      ...(targeted ? {targeted: true} : {}),
       radius: definition.ashRadius,
       visible: true,
       damaging: true,
@@ -523,6 +677,49 @@ function updateAshwing(state, actor) {
     actor.cooldownRemainingMs = 700;
     removeActorVolumes(state, actor.id);
   }
+}
+
+// Conservative authored GLB bounds from every retained clip at runtime scale.
+// Use a stable ground-clear graph to avoid one graph per interpolated height.
+function ashwingNavigationActor(actor) {
+  return {...actor, radius: 6.311, navigationHeight: 6.353, position: actor.position};
+}
+function ashwingNavigation() {
+  return bossNavigation({radius: 6.311, navigationHeight: 6.353, position: {y: 0}});
+}
+function selectAshwingDiveTarget(actor, targets, {direct = true} = {}) {
+  const graph = ashwingNavigation();
+  const ordered = [...targets].sort((a, b) => Math.hypot(a.x - actor.position.x, a.z - actor.position.z)
+    - Math.hypot(b.x - actor.position.x, b.z - actor.position.z) || a.id.localeCompare(b.id));
+  for (const target of ordered) {
+    // A player can stand closer to a wall than the retained wing envelope.
+    // Land within body-contact distance if the exact point cannot fit, rather
+    // than intersecting masonry or placing the attack remotely through cover.
+    const heading = Math.atan2(actor.position.x - target.x, actor.position.z - target.z);
+    const candidates = [{...target}];
+    for (const radius of [1, 2, 3.2]) for (let index = 0; index < 16; index++) {
+      const angle = heading + index * Math.PI / 8;
+      candidates.push({id: target.id, x: target.x + Math.sin(angle) * radius, z: target.z + Math.cos(angle) * radius});
+    }
+    const point = candidates.find(point => direct
+      ? Math.hypot(point.x - actor.position.x, point.z - actor.position.z) <= 24
+        && bossSegmentClear(graph, actor.position, point)
+      : bossPointClear(graph, point));
+    if (point) return point;
+  }
+  return null;
+}
+function ashwingDiveFootprint(target) {
+  return {x: (target.startX + target.x) / 2, z: (target.startZ + target.z) / 2,
+    // Rectangle volumes use the inverse heading of forward actor movement.
+    heading: -Math.atan2(target.x - target.startX, target.z - target.startZ),
+    width: 9, length: Math.hypot(target.x - target.startX, target.z - target.startZ) + 9};
+}
+function updateAshwingHeight(actor, flightHeight) {
+  const ceiling = Math.min(flightHeight, 1.8 + Math.max(0, Math.abs(actor.position.z - 46) - 8.5) * 2.2 / 2);
+  const rise = flightHeight * FIXED_STEP_MS / 500;
+  const gap = ceiling - actor.position.y;
+  actor.position.y += Math.sign(gap) * Math.min(Math.abs(gap), rise);
 }
 
 function updateHerald(state, actor) {
@@ -570,8 +767,7 @@ function updateCaravan(state, actor) {
   const mechanics = BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].mechanics;
   if (state.timeMs >= actor.hitUntilMs) actor.animationState = actor.state === "objective_telegraph" ? "attack" : "idle";
   if (actor.state === "staggered") {
-    actor.position.x += actor.velocity.x * FIXED_STEP_MS / 1000;
-    actor.position.z += actor.velocity.z * FIXED_STEP_MS / 1000;
+    moveActorBy(actor, actor.velocity.x * FIXED_STEP_MS / 1000, actor.velocity.z * FIXED_STEP_MS / 1000);
     actor.velocity.x *= 0.9;
     actor.velocity.z *= 0.9;
     if (actor.cooldownRemainingMs === 0) {
@@ -580,7 +776,9 @@ function updateCaravan(state, actor) {
     }
     return;
   }
-  if (actor.state === "active") moveToward(actor, actor.target, 3.5);
+  actor.velocity.x = 0;
+  actor.velocity.z = 0;
+  if (actor.state === "active") moveToward(actor, actor.target, 3.5, mechanics.objectiveAttackRange - 0.2);
   const objectiveDistance = Math.hypot(actor.position.x - actor.target.x, actor.position.z - actor.target.z);
   const inAttackRange = Number.isFinite(objectiveDistance) && objectiveDistance <= mechanics.objectiveAttackRange;
   if (actor.state === "active" && actor.cooldownRemainingMs === 0 && inAttackRange) {
@@ -614,7 +812,7 @@ function updateHart(state, actor) {
     actor.state = "root_telegraph";
     actor.animationState = "attack";
     actor.telegraphUntilMs = state.timeMs + 1000;
-    replaceActorVolume(state, actor, {kind: "root_lane", visible: true, active: false, damaging: false, width: 5, length: 26, untilMs: actor.telegraphUntilMs});
+    replaceActorVolume(state, actor, {kind: "root_lane", x: actor.position.x, z: actor.position.z - 13, heading: actor.heading, visible: true, active: false, damaging: false, width: 5, length: 26, untilMs: actor.telegraphUntilMs});
     emit(state, "attack_telegraph", {actorId: actor.id, attack: "root_lane", resolvesAtMs: actor.telegraphUntilMs});
   } else if (actor.state === "root_telegraph" && state.timeMs >= actor.telegraphUntilMs) {
     replaceActorVolume(state, actor, {kind: "root_lane", x: actor.position.x, z: actor.position.z - 13, heading: actor.heading, visible: true, active: true, damaging: true, width: 5, length: 26, untilMs: state.timeMs + 400});
@@ -631,7 +829,9 @@ function updateCinderwing(state, actor) {
   if (state.timeMs >= actor.hitUntilMs) actor.animationState = actor.state === "breath_telegraph"
     ? "breath"
     : Math.floor(state.timeMs / 600) % 2 === 0 ? "flap" : "glide";
-  actor.position.y = actor.animationState === "flap" ? 14 : 12;
+  // Flight height is continuous authority, independent of transient hit/breath
+  // clip selection. The loaded body and aim/collision queries share this pose.
+  actor.position.y = 13 + Math.cos(state.timeMs * Math.PI / 600);
   if (actor.state === "airborne" && actor.cooldownRemainingMs === 0) {
     actor.state = "breath_telegraph";
     actor.animationState = "breath";
@@ -666,7 +866,7 @@ function defeatActor(state, actor, commandId, weaponId) {
   actor.state = "defeated";
   actor.animationState = actor.id === "cinderwing" ? "fall" : "collapse";
   actor.defeatedAtMs = state.timeMs;
-  actor.presentationUntilMs = state.timeMs + (actor.id === "cinderwing" ? 1200 : 700);
+  actor.presentationUntilMs = state.timeMs + BOSS_DEFEAT_CLIP_MS[actor.id] + BOSS_DEFEAT_FADE_MS;
   actor.hitVolumes = [];
   removeActorVolumes(state, actor.id);
   emit(state, "boss_defeat", {actorId: actor.id, commandId, weaponId});
@@ -676,22 +876,200 @@ function defeatActor(state, actor, commandId, weaponId) {
   }
 }
 
-function moveToward(actor, target, speed) {
+// Derived navigation is shared by the two grounded moving encounters. Caches
+// contain map geometry only; the persisted actor pose fully determines a route.
+// Inflating authored boxes by the combat radius is conservative for the body.
+const bossNavigationGraphs = new Map();
+const bossNavigationGoals = new Map();
+
+function reachableSapperSocket(actor, ids, positions) {
+  const graph = bossNavigation(actor);
+  for (const id of ids) {
+    const target = positions.get(id);
+    // Position-less legacy socket commands retain their semantic behavior.
+    if (!target) return id;
+    const route = bossGoalRoute(graph, target, 3.8);
+    if (route.goals.some(goal => bossSegmentClear(graph, actor.position, goal))
+      || graph.nodes.some((node, index) => Number.isFinite(route.distances[index])
+        && bossSegmentClear(graph, actor.position, node))) return id;
+  }
+  return ids[0] ?? null;
+}
+
+function bossNavigation(actor) {
+  const height = actor.navigationHeight ?? actor.radius * 2;
+  const groundY = actor.navigationHeight ? 0 : actor.position.y;
+  const key = `${actor.radius}:${groundY}:${height}`;
+  if (bossNavigationGraphs.has(key)) return bossNavigationGraphs.get(key);
+  const radius = actor.radius + 0.02;
+  const bounds = BRIARHOLD_FIRST_PERSON_MAP.navigationBounds;
+  const graph = {
+    bounds: {minX: bounds.min.x + radius, maxX: bounds.max.x - radius,
+      minZ: bounds.min.z + radius, maxZ: bounds.max.z - radius},
+    boxes: BRIARHOLD_FIRST_PERSON_MAP.collisionVolumes
+      .filter(box => box.max.y > groundY + 0.01 && box.min.y < groundY + height)
+      .map(box => ({minX: box.min.x - radius, maxX: box.max.x + radius,
+        minZ: box.min.z - radius, maxZ: box.max.z + radius})),
+    nodes: [], edges: [], key,
+  };
+  const seen = new Set();
+  for (const box of graph.boxes) {
+    for (const x of [box.minX - 0.01, box.maxX + 0.01]) {
+      for (const z of [box.minZ - 0.01, box.maxZ + 0.01]) {
+        const point = {x, z};
+        const identity = `${x}:${z}`;
+        if (!seen.has(identity) && bossPointClear(graph, point)) {
+          seen.add(identity); graph.nodes.push(point);
+        }
+      }
+    }
+  }
+  graph.edges = graph.nodes.map(() => []);
+  for (let a = 0; a < graph.nodes.length; a++) {
+    for (let b = a + 1; b < graph.nodes.length; b++) {
+      if (!bossSegmentClear(graph, graph.nodes[a], graph.nodes[b])) continue;
+      const distance = Math.hypot(graph.nodes[a].x - graph.nodes[b].x, graph.nodes[a].z - graph.nodes[b].z);
+      graph.edges[a].push([b, distance]); graph.edges[b].push([a, distance]);
+    }
+  }
+  // Only two fixed actor radii and ground heights are normally used.
+  if (bossNavigationGraphs.size >= 8) bossNavigationGraphs.delete(bossNavigationGraphs.keys().next().value);
+  bossNavigationGraphs.set(key, graph);
+  return graph;
+}
+
+function bossPointClear(graph, point) {
+  const b = graph.bounds;
+  return point.x >= b.minX && point.x <= b.maxX && point.z >= b.minZ && point.z <= b.maxZ
+    && !graph.boxes.some(box => point.x >= box.minX && point.x <= box.maxX
+      && point.z >= box.minZ && point.z <= box.maxZ);
+}
+
+function bossBoxEntry(box, from, to) {
+  let near = 0; let far = 1;
+  for (const [axis, minimum, maximum] of [['x', box.minX, box.maxX], ['z', box.minZ, box.maxZ]]) {
+    const delta = to[axis] - from[axis];
+    if (Math.abs(delta) < 1e-12) {
+      if (from[axis] < minimum || from[axis] > maximum) return null;
+    } else {
+      let first = (minimum - from[axis]) / delta; let last = (maximum - from[axis]) / delta;
+      if (first > last) [first, last] = [last, first];
+      near = Math.max(near, first); far = Math.min(far, last);
+      if (near > far) return null;
+    }
+  }
+  return near;
+}
+
+function bossSegmentClear(graph, from, to) {
+  return bossPointClear(graph, from) && bossPointClear(graph, to)
+    && graph.boxes.every(box => bossBoxEntry(box, from, to) === null);
+}
+
+function bossGoalRoute(graph, target, stopDistance) {
+  const key = `${graph.key}:${target.x}:${target.z}:${stopDistance}`;
+  if (bossNavigationGoals.has(key)) return bossNavigationGoals.get(key);
+  const goals = [];
+  // The objective remains authored; approach any reachable point in its
+  // attack envelope rather than walking the actor into a socket's obstacle.
+  const count = stopDistance > 0 ? 32 : 1;
+  for (let i = 0; i < count; i++) {
+    const angle = i * Math.PI * 2 / count;
+    const point = {x: target.x + Math.sin(angle) * stopDistance, z: target.z + Math.cos(angle) * stopDistance};
+    if (bossPointClear(graph, point)) goals.push(point);
+  }
+  const distances = graph.nodes.map(() => Infinity);
+  const next = graph.nodes.map(() => null);
+  for (let i = 0; i < graph.nodes.length; i++) {
+    for (const goal of goals) {
+      if (!bossSegmentClear(graph, graph.nodes[i], goal)) continue;
+      const distance = Math.hypot(goal.x - graph.nodes[i].x, goal.z - graph.nodes[i].z);
+      if (distance < distances[i]) {distances[i] = distance; next[i] = goal;}
+    }
+  }
+  const visited = new Set();
+  for (let i = 0; i < graph.nodes.length; i++) {
+    let best = -1;
+    for (let j = 0; j < graph.nodes.length; j++) {
+      if (!visited.has(j) && Number.isFinite(distances[j]) && (best < 0 || distances[j] < distances[best])) best = j;
+    }
+    if (best < 0) break;
+    visited.add(best);
+    for (const [neighbour, length] of graph.edges[best]) {
+      if (visited.has(neighbour) || distances[best] + length >= distances[neighbour]) continue;
+      distances[neighbour] = distances[best] + length; next[neighbour] = graph.nodes[best];
+    }
+  }
+  const route = {goals, distances, next};
+  if (bossNavigationGoals.size >= 64) bossNavigationGoals.delete(bossNavigationGoals.keys().next().value);
+  bossNavigationGoals.set(key, route);
+  return route;
+}
+
+function moveToward(actor, target, speed, stopDistance = 0) {
   if (!Number.isFinite(target?.x) || !Number.isFinite(target?.z)) return;
-  const dx = target.x - actor.position.x;
-  const dz = target.z - actor.position.z;
-  const distance = Math.hypot(dx, dz);
-  if (distance <= 0.05) {
-    actor.velocity.x = 0;
-    actor.velocity.z = 0;
+  if (Math.hypot(target.x - actor.position.x, target.z - actor.position.z) <= stopDistance + 0.05) return;
+  const graph = bossNavigation(actor);
+  const route = bossGoalRoute(graph, target, stopDistance);
+  let waypoint = null; let cost = Infinity;
+  for (const goal of route.goals) {
+    const distance = Math.hypot(goal.x - actor.position.x, goal.z - actor.position.z);
+    if (distance < cost && bossSegmentClear(graph, actor.position, goal)) {waypoint = goal; cost = distance;}
+  }
+  for (let i = 0; i < graph.nodes.length; i++) {
+    const node = graph.nodes[i];
+    const distance = Math.hypot(node.x - actor.position.x, node.z - actor.position.z);
+    const total = distance + route.distances[i];
+    if (total >= cost || !bossSegmentClear(graph, actor.position, node)) continue;
+    waypoint = distance < 0.001 ? route.next[i] : node; cost = total;
+  }
+  if (!waypoint) {
+    // A closed gate can disconnect an objective. Approach the nearest reachable
+    // exterior frontier, preserving the target and refusing remote attacks.
+    const reachable = new Set(); const pending = [];
+    for (let i = 0; i < graph.nodes.length; i++) {
+      if (bossSegmentClear(graph, actor.position, graph.nodes[i])) {reachable.add(i); pending.push(i);}
+    }
+    for (let i = 0; i < pending.length; i++) {
+      for (const [next] of graph.edges[pending[i]]) {
+        if (!reachable.has(next)) {reachable.add(next); pending.push(next);}
+      }
+    }
+    let frontier = null; let remaining = Infinity;
+    for (const index of reachable) {
+      const node = graph.nodes[index];
+      const distance = Math.hypot(node.x - target.x, node.z - target.z);
+      if (distance < remaining) {remaining = distance; frontier = node;}
+    }
+    if (frontier) moveToward(actor, frontier, speed);
     return;
   }
+  const dx = waypoint.x - actor.position.x; const dz = waypoint.z - actor.position.z;
+  const distance = Math.hypot(dx, dz);
+  if (distance < 1e-9) return;
   const step = Math.min(distance, speed * FIXED_STEP_MS / 1000);
-  actor.velocity.x = dx / distance * speed;
-  actor.velocity.z = dz / distance * speed;
-  actor.heading = Math.atan2(actor.velocity.x, actor.velocity.z);
-  actor.position.x += dx / distance * step;
-  actor.position.z += dz / distance * step;
+  moveActorBy(actor, dx / distance * step, dz / distance * step);
+  actor.velocity.x = (actor.position.x - actor.previousPosition.x) * 1000 / FIXED_STEP_MS;
+  actor.velocity.z = (actor.position.z - actor.previousPosition.z) * 1000 / FIXED_STEP_MS;
+  if (Math.hypot(actor.velocity.x, actor.velocity.z) > 0.01) {
+    actor.heading = Math.atan2(actor.velocity.x, actor.velocity.z);
+    actor.animationState = "walk";
+  }
+}
+
+function moveActorBy(actor, dx, dz) {
+  const graph = bossNavigation(actor);
+  if (!bossPointClear(graph, actor.position)) return;
+  const to = {x: actor.position.x + dx, z: actor.position.z + dz};
+  let fraction = 1;
+  for (const box of graph.boxes) {
+    const entry = bossBoxEntry(box, actor.position, to);
+    if (entry !== null) fraction = Math.min(fraction, Math.max(0, entry - 0.001 / (Math.hypot(dx, dz) || 1)));
+  }
+  const bounds = graph.bounds;
+  actor.position.x = Math.max(bounds.minX, Math.min(bounds.maxX, actor.position.x + dx * fraction));
+  actor.position.z = Math.max(bounds.minZ, Math.min(bounds.maxZ, actor.position.z + dz * fraction));
+  if (fraction < 1) {actor.velocity.x = 0; actor.velocity.z = 0;}
 }
 
 function replaceActorVolume(state, actor, volume, identitySequence = state.eventSequence + 1) {
@@ -771,7 +1149,17 @@ function validateTarget(target, actorId, options, fail) {
     : actorId === "caravan-eater" ? "objective_lane" : actorId === "cinderwing" ? "anchor" : "warden";
   if (target.kind !== expectedKind) fail("actor target kind is inconsistent");
   if (target.kind === "warden" || target.kind === "anchor") {
-    exactKeys(target, new Set(["kind", "id"]), new Set(), "actor target", fail);
+    const dive = actorId === "ashwing-matriarch" && Object.hasOwn(target, "x");
+    exactKeys(target, new Set(["kind", "id", ...(dive ? ["playerId", "x", "z", "startX", "startZ"] : [])]),
+      dive ? new Set(["approach"]) : new Set(), "actor target", fail);
+    if (Object.hasOwn(target, "approach") && target.approach !== true) fail("Ashwing approach flag is invalid");
+    if (dive && (!boundedId(target.playerId) || ![target.x, target.z, target.startX, target.startZ].every(Number.isFinite)
+      || (target.approach ? !bossPointClear(ashwingNavigation(), target)
+        || !bossPointClear(ashwingNavigation(), {x: target.startX, z: target.startZ})
+        : Math.hypot(target.x - target.startX, target.z - target.startZ) > 24 + 1e-9
+          || !bossSegmentClear(ashwingNavigation(), {x: target.startX, z: target.startZ}, target)))) {
+      fail("Ashwing locked dive target is not reachable");
+    }
     const expectedId = target.kind === "anchor" ? "hollow-hart" : "warden:host";
     if (!boundedId(target.id) || target.id !== expectedId) fail("actor target id is invalid");
     return;
@@ -786,9 +1174,9 @@ function validateTarget(target, actorId, options, fail) {
     const positioned = Object.hasOwn(target, "x") || Object.hasOwn(target, "z");
     exactKeys(target, new Set(["kind", "id"]), positioned ? new Set(["x", "z"]) : new Set(), "actor target", fail,
       {requireOptional: positioned});
-    const expectedId = options.occupiedSocketIds[0] ?? null;
-    if (target.id !== expectedId || (target.id !== null && !boundedId(target.id))) fail("socket target id is invalid");
-    const expectedSocket = options.occupiedSockets.find(socket => socket.id === expectedId);
+    if (target.id === null ? options.occupiedSocketIds.length !== 0
+      : !boundedId(target.id) || !options.occupiedSocketIds.includes(target.id)) fail("socket target id is invalid");
+    const expectedSocket = options.occupiedSockets.find(socket => socket.id === target.id);
     if ((expectedSocket !== undefined) !== positioned
       || (positioned && (target.x !== expectedSocket.x || target.z !== expectedSocket.z))) fail("socket target position is invalid");
     return;
@@ -817,20 +1205,62 @@ function validateActorHitVolumeState(actor, fail) {
   if (!deepExactEqual(actor.hitVolumes, expected)) fail("actor hit volumes differ from authored state");
 }
 
+// Accept only the exact Alpha.101 authored anchor at the validation boundary.
+// Move it on the next authoritative step, after validation/hash checks, keeping
+// save-v4 authority, HP, attack timers, ledgers and in-flight ash zones intact.
+function relocateLegacyAshwing(state) {
+  if (state.encounterId !== "ashwing-matriarch") return;
+  const actor = state.actors[0];
+  const original101 = actor.position.x === -8 && actor.position.z === 86;
+  const interim102 = actor.position.x === -16 && actor.position.z === 48 && actor.position.y === 4
+    && actor.previousPosition.z === 48 && actor.velocity.z === 0 && actor.heading === 0;
+  if (!original101 && !interim102) return;
+  const destination = BOSS_ENCOUNTER_DEFINITIONS[state.encounterId].actors[0].position;
+  const dx = destination.x - actor.position.x;
+  const dz = destination.z - actor.position.z;
+  for (const pose of [actor.position, actor.previousPosition]) {
+    pose.x += dx;
+    pose.z += dz;
+    if (pose.y === 8) pose.y = destination.y;
+  }
+  for (const zone of [...state.zones, ...state.authoredAreaZones]) {
+    if (zone.actorId !== actor.id) continue;
+    zone.x += dx;
+    zone.z += dz;
+  }
+}
+
 function validateActorDynamicAuthority(actor, actorDefinition, director, fail) {
   const mobile = actor.id === "root-sapper-prime" || actor.id === "caravan-eater";
-  const yValues = actor.id === "ashwing-matriarch" ? new Set([0, 8])
+  const legacyAshwing = actor.id === "ashwing-matriarch" && actor.position.x === -8 && actor.position.z === 86;
+  const anchor = legacyAshwing ? {x: -8, y: 8, z: 86} : actorDefinition.position;
+  const yValues = actor.id === "ashwing-matriarch" ? new Set([0, anchor.y])
     : actor.id === "cinderwing" ? new Set([12, 14]) : new Set([actorDefinition.position.y]);
-  if (!mobile) {
-    if (actor.position.x !== actorDefinition.position.x || actor.position.z !== actorDefinition.position.z
-      || actor.previousPosition.x !== actorDefinition.position.x || actor.previousPosition.z !== actorDefinition.position.z
-      || !yValues.has(actor.position.y) || !yValues.has(actor.previousPosition.y)
+  const validFixedHeight = y => actor.id === "ashwing-matriarch"
+    ? Number.isFinite(y) && y >= 0 && y <= anchor.y
+    : actor.id === "cinderwing" ? Number.isFinite(y) && y >= 12 && y <= 14 : yValues.has(y);
+  if (actor.id === "ashwing-matriarch" && Object.hasOwn(actor.target, "x")) {
+    const graph = ashwingNavigation();
+    if ([actor.position, actor.previousPosition].some(pose => !bossPointClear(graph, pose) || !validFixedHeight(pose.y))
+      || !bossSegmentClear(graph, actor.previousPosition, actor.position)
+      || actor.velocity.y !== 0 || Math.hypot(actor.velocity.x, actor.velocity.z) > 60.000000001
+      || Math.hypot(actor.position.x - actor.previousPosition.x, actor.position.z - actor.previousPosition.z) > 3.000000001) {
+      fail("Ashwing targeted movement crosses authored masonry or exceeds dive speed");
+    }
+  } else if (actor.id === "ashwing-matriarch" && !legacyAshwing) {
+    if ([actor.position, actor.previousPosition].some(pose => pose.x !== -16 || pose.z < 36 || pose.z > 58 || !validFixedHeight(pose.y))
+      || actor.velocity.x !== 0 || actor.velocity.y !== 0 || Math.abs(actor.velocity.z) > 6.000000001
+      || Math.abs(actor.position.z - actor.previousPosition.z) > 0.300000001) fail("Ashwing pose differs from authored flight corridor");
+  } else if (!mobile) {
+    if (actor.position.x !== anchor.x || actor.position.z !== anchor.z
+      || actor.previousPosition.x !== anchor.x || actor.previousPosition.z !== anchor.z
+      || !validFixedHeight(actor.position.y) || !validFixedHeight(actor.previousPosition.y)
       || Object.values(actor.velocity).some(value => value !== 0)) fail("fixed actor pose differs from authored authority");
   } else if (actor.position.y !== actorDefinition.position.y || actor.previousPosition.y !== actorDefinition.position.y
     || actor.velocity.y !== 0) fail("ground actor pose differs from authored authority");
   if (actor.id === "moss-crowned-matron") {
     if (actor.heading < 0 || actor.heading >= Math.PI * 2) fail("Matron heading is not normalized");
-  } else if (mobile) {
+  } else if (mobile || (actor.id === "ashwing-matriarch" && !legacyAshwing)) {
     if (Math.abs(actor.heading) > Math.PI) fail("mobile actor heading is not normalized");
   } else if (actor.heading !== 0) fail("fixed actor heading differs from authored authority");
   if (actor.id === "moss-crowned-matron" ? actor.livingMossguards > 3 : actor.livingMossguards !== 0) {
@@ -879,7 +1309,7 @@ function validateHitVolume(volume, fail, director) {
     objective_lane: ["targetId", "x", "z", "heading", "width", "length"],
     fire_breath: ["x", "z", "heading", "width", "length"],
   };
-  if (volume?.kind === "root_lane") {
+  if (["root_lane", "dive_lane"].includes(volume?.kind)) {
     const positioned = ["x", "z", "heading"].some(key => Object.hasOwn(volume, key));
     exactKeys(volume, new Set([...common, "width", "length"]), positioned ? new Set(["x", "z", "heading"]) : new Set(),
       "hit volume", fail, {requireOptional: positioned});
@@ -927,8 +1357,10 @@ function validateHitVolume(volume, fail, director) {
   if (volume.kind === "socket_plant_telegraph" && (volume.targetId !== actor.target.id || volume.radius !== 2.5)) {
     fail("socket telegraph differs from authored geometry");
   }
-  if (volume.kind === "dive_lane" && (volume.width !== 5 || volume.length !== 24)) {
-    fail("dive telegraph differs from authored geometry");
+  if (volume.kind === "dive_lane") {
+    const expected = Object.hasOwn(actor.target, "x") ? ashwingDiveFootprint(actor.target) : {width: 5, length: 24};
+    if (Object.entries(expected).some(([key, value]) => volume[key] !== value)
+      || (Object.hasOwn(volume, "x") !== Object.hasOwn(actor.target, "x"))) fail("dive telegraph differs from locked geometry");
   }
   if (volume.kind === "ward_reveal" && (volume.x !== actor.position.x || volume.z !== actor.position.z || volume.radius !== 3)) {
     fail("ward telegraph differs from authored geometry");
@@ -957,7 +1389,8 @@ function validateZone(zone, fail, director, label = "zone") {
   const extra = zone?.kind === "ash" ? [] : zone?.kind === "fire_breath"
     ? ["heading", "width", "length", "damageCadenceMs"] : null;
   if (extra === null) fail(`${label} kind is invalid`);
-  exactKeys(zone, new Set([...common, ...extra]), new Set(), label, fail);
+  exactKeys(zone, new Set([...common, ...extra]), zone.kind === "ash" ? new Set(["targeted"]) : new Set(), label, fail);
+  if (Object.hasOwn(zone, "targeted") && zone.targeted !== true) fail("targeted ash marker is invalid");
   for (const key of ["x", "z", "radius", "telegraphMs", "activeAtMs", "expiresAtMs", ...extra]) {
     if (!Number.isFinite(zone[key])) fail(`${label} ${key} must be finite`);
   }
@@ -986,9 +1419,16 @@ function validateZone(zone, fail, director, label = "zone") {
   if (zone.expiresAtMs <= director.timeMs || zone.visible !== true || zone.damaging !== true || zone.telegraphMs > 60_000) {
     fail(`${label} authored state is inconsistent`);
   }
+  const ashLaneValid = actor.position.x === -8 && actor.position.z === 86
+    ? zone.z === 76 : zone.z >= 26 - 1e-9 && zone.z <= 48 + 1e-9;
+  // Ash persists where the dive landed while the actor travels on. Its bounded
+  // lane is authority, rather than continually dragging the zone with the boss.
   if (zone.kind === "ash" && (zone.radius !== 4.5 || zone.telegraphMs !== 800
-    || zone.activeAtMs + 4_000 !== zone.expiresAtMs || zone.z !== actor.position.z - 10
-    || Math.abs(zone.x - actor.position.x) > 8 + 1e-9)) fail(`${label} differs from authored ash geometry`);
+    || zone.activeAtMs + 4_000 !== zone.expiresAtMs || !ashLaneValid
+      || Math.abs(zone.x - (actor.position.x === -8 && actor.position.z === 86 ? -8 : -16)) > 8 + 1e-9)
+    && !zone.targeted) fail(`${label} differs from authored ash geometry`);
+  if (zone.kind === "ash" && zone.targeted && (zone.radius !== 4.5 || zone.telegraphMs !== 800
+    || zone.activeAtMs + 4_000 !== zone.expiresAtMs || !bossPointClear(ashwingNavigation(), zone))) fail(`${label} differs from targeted ash geometry`);
   if (zone.kind === "fire_breath" && (zone.radius !== 5 || zone.telegraphMs !== 1_000
     || zone.width !== 7 || zone.length !== 30 || zone.damageCadenceMs !== 750
     || zone.x !== actor.position.x || zone.z !== actor.position.z - 15 || zone.heading !== actor.heading
@@ -1020,7 +1460,7 @@ function validateEvent(event, fail, director) {
       fail(`event ${key} is invalid`);
     }
   }
-  if (Object.hasOwn(event, "commandId") && !director.processedCommandIds.includes(event.commandId)) {
+  if (Object.hasOwn(event, "commandId") && !eventCommandInLedger(director, event.commandId)) {
     fail("event command is absent from the replay ledger");
   }
   for (const key of ["actorId", "targetId"]) {
@@ -1109,8 +1549,8 @@ function validateDirector(input, {requireHash}) {
   let checkpointText;
   try { checkpointText = JSON.stringify(input); } catch { fail("state must be JSON serialisable"); }
   if (!checkpointText || checkpointText.length > MAX_CHECKPOINT_CHARS) fail("checkpoint payload out of bounds");
-  exactKeys(input, DIRECTOR_KEYS, requireHash ? new Set(["hash"]) : new Set(["hash"]), "director", fail,
-    {requireOptional: requireHash});
+  exactKeys(input, DIRECTOR_KEYS, new Set(["hash", "commandReplay"]), "director", fail);
+  if (requireHash && !Object.hasOwn(input, "hash")) fail("director.hash is required");
   if (input.version !== BOSS_DIRECTOR_VERSION) fail("unsupported version");
   const definition = BOSS_ENCOUNTER_DEFINITIONS[input.encounterId];
   if (!definition) fail("unknown encounter");
@@ -1131,6 +1571,20 @@ function validateDirector(input, {requireHash}) {
     if (!boundedId(id)) fail("authority identifier out of bounds");
   }
   if (new Set(input.processedCommandIds).size !== input.processedCommandIds.length) fail("duplicate processed command id");
+  if (Object.hasOwn(input, "commandReplay")) {
+    exactKeys(input.commandReplay, new Set(["floor", "acceptedCount"]), new Set(), "command replay", fail);
+    const {floor, acceptedCount} = input.commandReplay;
+    // Old exact-ID checkpoints could retain different kinds/actors using the
+    // same counter. Keep those valid while bounding historical command counts.
+    const legacyAliasesPerSerial = 4 * (definition.actors.length + 1);
+    if (!Number.isSafeInteger(floor) || floor < 1 || !Number.isSafeInteger(acceptedCount)
+      || acceptedCount <= MAX_COMMAND_IDS || acceptedCount < input.processedCommandIds.length
+      || acceptedCount > Math.min(Number.MAX_SAFE_INTEGER, floor * legacyAliasesPerSerial + MAX_COMMAND_IDS)) fail("command replay bounds are inconsistent");
+    if (input.processedCommandIds.some(id => {
+      const serial = runtimeCommandSerial(input, id);
+      return serial !== null && serial <= floor;
+    })) fail("retained command is below the replay floor");
+  }
   if (new Set(input.disabledSocketIds).size !== input.disabledSocketIds.length || new Set(input.boons).size !== input.boons.length) {
     fail("duplicate authority identifier");
   }
@@ -1138,7 +1592,8 @@ function validateDirector(input, {requireHash}) {
   if (!Number.isSafeInteger(input.timeMs) || input.timeMs < 0 || input.timeMs > MAX_DIRECTOR_TIME_MS) fail("authority time out of bounds");
   if (!Number.isInteger(input.accumulatorMs) || input.accumulatorMs < 0 || input.accumulatorMs >= FIXED_STEP_MS) fail("authority accumulator out of bounds");
   if (!Number.isInteger(input.rngState) || input.rngState < 0 || input.rngState > 0xffffffff) fail("authority rng out of bounds");
-  const maximumEventSequence = MAX_COMMAND_IDS * 4 + Math.floor(input.timeMs / FIXED_STEP_MS) * 8;
+  const maximumEventSequence = Math.min(Number.MAX_SAFE_INTEGER,
+    (input.commandReplay?.acceptedCount ?? MAX_COMMAND_IDS) * 4 + Math.floor(input.timeMs / FIXED_STEP_MS) * 8);
   if (!Number.isSafeInteger(input.eventSequence) || input.eventSequence < 0 || input.eventSequence > maximumEventSequence) fail("authority event sequence out of bounds");
   for (const actor of input.actors) {
     exactKeys(actor, ACTOR_KEYS, new Set(), "actor", fail);
@@ -1157,7 +1612,8 @@ function validateDirector(input, {requireHash}) {
       || !Number.isInteger(actor.phase) || actor.phase < 1 || actor.phase > actorDefinition.phaseThresholds.length + 1
       || actor.stagger < 0 || actor.stagger > MAX_COMBAT_SCALAR || Math.abs(actor.heading) > Math.PI * 2 + 1e-9) fail("actor range violation");
     const timerLeadMs = {cooldownRemainingMs: 5_000, telegraphUntilMs: 1_000, vulnerableUntilMs: 4_050,
-      regenerationInterruptedUntilMs: 4_000, hitUntilMs: 500, defeatedAtMs: 0, presentationUntilMs: 1_200,
+      regenerationInterruptedUntilMs: 4_000, hitUntilMs: 500, defeatedAtMs: 0,
+      presentationUntilMs: BOSS_DEFEAT_CLIP_MS[actor.id] + BOSS_DEFEAT_FADE_MS,
       wardPulseReadyAtMs: 1_500};
     for (const key of Object.keys(timerLeadMs)) {
       const upper = key === "cooldownRemainingMs" ? timerLeadMs[key] : input.timeMs + timerLeadMs[key];
@@ -1166,6 +1622,15 @@ function validateDirector(input, {requireHash}) {
       }
     }
     if (actor.defeatedAtMs > input.timeMs) fail("actor defeatedAtMs is inconsistent");
+    if (actor.defeated === true) {
+      const duration = actor.presentationUntilMs - actor.defeatedAtMs;
+      const legacyDuration = actor.id === "cinderwing" ? 1200 : 700;
+      // Preserve existing checkpoint bytes/hashes, including already expired
+      // legacy tails. Only newly authored defeats receive the longer window.
+      if (duration !== legacyDuration && duration !== BOSS_DEFEAT_CLIP_MS[actor.id] + BOSS_DEFEAT_FADE_MS) {
+        fail("actor defeat presentation duration is inconsistent");
+      }
+    }
     if (!ACTOR_STATE_IDS[actor.id]?.has(actor.state)) fail("actor state is invalid");
     if (!ACTOR_ANIMATION_IDS[actor.id]?.has(actor.animationState)) fail("actor animation state is invalid");
     if ((actor.defeated === true) !== (actor.state === "defeated")) fail("actor defeated state is inconsistent");
@@ -1218,13 +1683,15 @@ function projectKeys(value, keys) {
 }
 
 function canonicalDirectorProjection(input) {
-  const output = projectKeys(input, new Set([...DIRECTOR_KEYS, "hash"]));
+  const output = projectKeys(input, new Set([...DIRECTOR_KEYS, "hash", "commandReplay"]));
   output.actors = input.actors.map(actor => {
     const projected = projectKeys(actor, ACTOR_KEYS);
     projected.position = projectKeys(actor.position, VECTOR_KEYS);
     projected.previousPosition = projectKeys(actor.previousPosition, VECTOR_KEYS);
     projected.velocity = projectKeys(actor.velocity, VECTOR_KEYS);
     const targetKeys = actor.target.kind === "objective_lane" ? new Set(["kind", "id", "x", "z"])
+      : actor.id === "ashwing-matriarch" && Object.hasOwn(actor.target, "x")
+        ? new Set(["kind", "id", "playerId", "x", "z", "startX", "startZ", "approach"])
       : actor.target.kind === "fortification_socket" && Object.hasOwn(actor.target, "x")
         ? new Set(["kind", "id", "x", "z"]) : new Set(["kind", "id"]);
     projected.target = projectKeys(actor.target, targetKeys);
@@ -1232,7 +1699,7 @@ function canonicalDirectorProjection(input) {
     return projected;
   });
   const zoneProjection = zone => projectKeys(zone, new Set(["id", "actorId", "kind", "x", "z", "radius", "visible",
-    "damaging", "telegraphMs", "activeAtMs", "expiresAtMs", "heading", "width", "length", "damageCadenceMs"]));
+    "damaging", "telegraphMs", "activeAtMs", "expiresAtMs", "heading", "width", "length", "damageCadenceMs", "targeted"]));
   const volumeProjection = volume => projectKeys(volume, new Set(["id", "actorId", "kind", "targetId", "x", "z",
     "heading", "radius", "width", "length", "untilMs", "visible", "active", "damaging"]));
   output.zones = input.zones.map(zoneProjection);

@@ -113,7 +113,9 @@ export function landscapeTreeTransforms({lowSpec = false} = {}) {
     const bounds = LANDSCAPE_PROFILE.inner;
     const x = side === 0 ? bounds.minX - offset : side === 1 ? bounds.maxX + offset
       : -90 + amount * 180;
-    const z = side === 2 ? bounds.minZ - offset : side === 3 ? bounds.maxZ + offset
+    // Rear trees sit among the wooded ridges, rather than isolated on the low
+    // foreground skirt. The dense rear layers reuse the existing forest budget.
+    const z = side === 2 ? bounds.minZ - 65 - (row % 2) * 35 : side === 3 ? bounds.maxZ + offset
       : -12 + amount * 197;
     const scale = 1.15 + ((index * 17) % 40) / 100;
     return {x, y: landscapeHeightAt(x, z) - 0.25, z,

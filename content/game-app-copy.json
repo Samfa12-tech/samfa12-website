@@ -1147,7 +1147,7 @@
     "details": [
       {
         "heading": "Defend the fortress",
-        "text": "Briarhold is described as a first-person action-defence roguelite, with repairable defences prepared between attacks. The public Alpha.101 notes focus on combat and fortress fixes; browser play and Android testing use separate destinations.",
+        "text": "Briarhold is a first-person action-defence roguelite with repairable defences prepared during daytime. Alpha.102 improves NPC poses, rear woodland coverage and west stair handrail landings, alongside Ashwing visibility, dives and ash hazards. Dive warnings follow the actual approach path, including diagonal dives. Browser play and Android testing use separate destinations.",
         "sources": [
           "https://samfa12.com/games/briarhold/",
           "https://github.com/Samfa12-tech/samfa12-website/releases"
@@ -1155,8 +1155,16 @@
       },
       {
         "heading": "Co-op is experimental",
-        "text": "The Alpha.101 release notes say co-op recovery, input, avatar cleanup and firing presentation were improved. They also state that the intermittent Night 5 freeze remains under investigation and that two-phone, cross-network play and sustained performance remain active test areas.",
+        "text": "Multiplayer co-op remains experimental. Both players should update to Alpha.102. Two-phone and cross-network play, sustained performance and the intermittent Night 5 freeze remain active test areas.",
         "sources": [
+          "https://github.com/Samfa12-tech/samfa12-website/releases"
+        ]
+      },
+      {
+        "heading": "Android recovery and testing",
+        "text": "An intermittent Android WebView crash remains under investigation. If the renderer stops, a recovery prompt can restart Briarhold from saved progress. This recovery does not establish that the underlying crash is fixed.",
+        "sources": [
+          "https://samfa12.com/games/briarhold/",
           "https://github.com/Samfa12-tech/samfa12-website/releases"
         ]
       }
@@ -1179,6 +1187,18 @@
       }
     ],
     "updates": [
+      {
+        "platform": "Browser and Android tester builds",
+        "title": "Briarhold Alpha.102",
+        "kind": "release",
+        "id": "alpha-102-october-2026",
+        "sources": [
+          "https://github.com/Samfa12-tech/samfa12-website/releases"
+        ],
+        "dateMeaning": "GitHub prerelease publication date",
+        "date": "2026-10-02",
+        "summary": "Alpha.102 improves NPC arm and hand poses, woodland behind the fortress and west stair handrail landings. Ashwing is easier to see and target, locks dives toward the player after a warning, and leaves clearer ash hazards. Dive warnings follow the actual approach path, including diagonal dives. Phone rendering is sharper. An intermittent Android WebView crash remains under investigation; the recovery prompt can restart from saved progress. Both co-op players should update."
+      },
       {
         "platform": "Browser and Android tester builds",
         "title": "Briarhold Alpha.101",

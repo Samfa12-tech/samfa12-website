@@ -3,7 +3,7 @@ import { HUB_FEATURE_IDS, HUB_NPC_IDS } from './hub.js';
 import {advanceWalkBob, createWalkBobState} from './camera-motion.js';
 import {createDaySky} from './world-day-sky.js';
 import {advancePresentationElapsed, blendPresentation, PRESENTATION_BLEND_SECONDS} from './presentation-transition.js';
-import {createWorldLandscape} from './world-landscape.js';
+import {createWorldLandscape, landscapeHeightAt} from './world-landscape.js';
 import {createAnimatedFireMaterial} from './world-fire.js';
 import {TORCH_MOUNTS, TORCH_PLACEMENTS, TORCH_STANDOFF, torchHardwareTransforms} from './world-torch-mounts.js';
 export {TORCH_MOUNTS, TORCH_PLACEMENTS} from './world-torch-mounts.js';
@@ -1516,17 +1516,31 @@ export function forestDepthTransforms(layer = 'mid', requestedCount = 0) {
   const counts = forestDepthBandCounts(count);
   const transforms = [];
   const appendSide = (band, bandCount) => {
+    // Wrap a bounded third of each flank behind the fortress. Retain the
+    // existing flank batch so rear coverage costs no extra geometry or draws.
+    const rearCount = Math.floor(bandCount / 3);
+    const flankCount = bandCount - rearCount;
     for (let index = 0; index < bandCount; index += 1) {
       const globalIndex = transforms.length;
-      const amount = bandCount <= 1 ? 0.5 : index / (bandCount - 1);
+      const rear = index < rearCount;
+      const rank = rear ? index : index - rearCount;
+      const rowCount = rear ? rearCount : flankCount;
+      const amount = rowCount <= 1 ? 0.5 : rank / (rowCount - 1);
       const depth = layer === 'mid' ? 60 + (index % 3) * 3.8 : 80 + (index % 4) * 6.5;
       const sign = band === 'west' ? -1 : 1;
+      // Keep the same open-lane rule even beyond the rear navigation boundary.
+      const rearX = sign * (rank === 0 ? 4
+        : 26 + (rearCount <= 2 ? 0 : (rank - 1) / (rearCount - 2)) * 100);
+      const x = rear ? rearX : sign * depth;
+      const z = rear
+        ? -(layer === 'mid' ? 58 : 102) - (rank % 3) * (layer === 'mid' ? 10 : 17)
+        : -22 + amount * (layer === 'mid' ? 164 : 210);
       transforms.push({
         layer,
         band,
-        x: sign * depth,
-        y: layer === 'mid' ? -0.08 : -0.14,
-        z: -22 + amount * (layer === 'mid' ? 164 : 210),
+        x: rear ? rearX : x,
+        y: rear ? landscapeHeightAt(rearX, z) - 0.25 : layer === 'mid' ? -0.08 : -0.14,
+        z,
         ry: (globalIndex * 2.399963229728653) % (Math.PI * 2),
         sx: (layer === 'mid' ? 0.82 : 1.25) + ((globalIndex * 31) % 29) / 100,
         sy: (layer === 'mid' ? 0.84 : 1.6) + ((globalIndex * 23) % 37) / 100,

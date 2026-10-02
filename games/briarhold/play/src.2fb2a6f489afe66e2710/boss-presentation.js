@@ -1,11 +1,11 @@
-import {BOSS_ENCOUNTER_DEFINITIONS} from "./boss-director.js";
+import {BOSS_DEFEAT_FADE_MS, BOSS_ENCOUNTER_DEFINITIONS} from "./boss-director.js";
 import {createBossRuntimeAssetAdapter} from "./boss-assets.js";
 import {selectTouchAimAssistTarget} from "./aim-assist.js";
 
 const PRESENTATION = Object.freeze({
   "moss-crowned-matron": {kind: "matron", color: "#73945f", scale: {x: 1.1, y: 1.45, z: 1.1}, counter: "Runebolt the exposed core between rotating shield arcs."},
   "root-sapper-prime": {kind: "sapper", color: "#b56b3f", scale: {x: 1.35, y: 0.8, z: 1.7}, counter: "Interrupt the visible plant before the occupied socket is disabled."},
-  "ashwing-matriarch": {kind: "ashwing", color: "#a65346", scale: {x: 1.5, y: 0.65, z: 1.1}, wingSpan: 9, counter: "Move clear of the dive lane before the ash zone ignites."},
+  "ashwing-matriarch": {kind: "ashwing", color: "#a65346", scale: {x: 1.5, y: 0.65, z: 1.1}, assetScale: 2.1, wingSpan: 9, counter: "Move clear of the dive lane before the ash zone ignites."},
   "moonless-herald": {kind: "herald", color: "#7972a8", scale: {x: 0.8, y: 1.7, z: 0.8}, counter: "Ward light reveals the heart-lantern; phased attacks deal no damage."},
   "caravan-eater": {kind: "caravan-beast", color: "#8b6849", scale: {x: 1.25, y: 0.7, z: 2.2}, counter: "Build stagger to drive it away from the evacuation lane."},
   "hollow-hart": {kind: "hart", color: "#525f45", scale: {x: 1.35, y: 1.5, z: 1.25}, counter: "Read the roots while the grounded sovereign changes lane pressure."},
@@ -20,9 +20,17 @@ export function buildBossPresentationSnapshot(director, interpolation = 1, {afte
     const style = PRESENTATION[actor.id];
     const matron = actor.id === "moss-crowned-matron" ? matronPresentation(actor, director.timeMs, newEvents) : undefined;
     const defeatDuration = Math.max(1, actor.presentationUntilMs - actor.defeatedAtMs);
+    const collapseDuration = actor.id === "cinderwing" ? 1200 : 700;
+    const defeatElapsed = director.timeMs - actor.defeatedAtMs;
     const defeatProgress = actor.defeated
-      ? clamp((director.timeMs - actor.defeatedAtMs) / defeatDuration, 0, 1)
+      ? clamp(defeatElapsed / Math.min(collapseDuration, defeatDuration), 0, 1)
       : 0;
+    // Procedural collapse keeps its existing pace. Imported clips stay fully
+    // opaque until the final fade; old checkpoints retain their original fade.
+    const fadeDuration = defeatDuration === collapseDuration ? defeatDuration : BOSS_DEFEAT_FADE_MS;
+    const opacity = actor.defeated
+      ? clamp((actor.presentationUntilMs - director.timeMs) / fadeDuration, 0, 1)
+      : 1;
     const interpolatedY = lerp(actor.previousPosition.y, actor.position.y, alpha);
     return {
       id: actor.id,
@@ -44,7 +52,7 @@ export function buildBossPresentationSnapshot(director, interpolation = 1, {afte
       authoritative: false,
       hitFlash: !actor.defeated && director.timeMs < actor.hitUntilMs,
       defeatProgress,
-      opacity: actor.defeated ? 1 - defeatProgress : 1,
+      opacity,
       presentationVisible: !actor.defeated || director.timeMs < actor.presentationUntilMs,
       ...(matron ? {matron} : {}),
     };
@@ -160,6 +168,7 @@ export function collectBossDamageContacts(snapshot, point, nowMs, nextDamageAtBy
 export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = null}) {
   const actorRecords = new Map();
   const telegraphRecords = [];
+  const ashRecords = [];
   let lastVolumes = [];
   const materials = new Map();
   const ownsRuntimeAssets = Boolean(runtimeAssets && !runtimeAssets.load);
@@ -192,6 +201,13 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
     body.material = materialFor(actor.color);
     const parts = [body];
     const style = actor.silhouette;
+    if (style.kind === "ashwing") {
+      // The fallback dives into the torch-lit foreground. Bound its lighting so
+      // overlapping point lights cannot wash its silhouette into a white blob.
+      body.material.disableLighting = true;
+      body.material.specularColor = BABYLON.Color3.Black();
+      body.material.emissiveColor = BABYLON.Color3.FromHexString(actor.color).scale(0.85);
+    }
     if (style.kind === "dragon" || style.kind === "ashwing") {
       for (const side of [-1, 1]) {
         const wing = BABYLON.MeshBuilder.CreateBox(`boss:${actor.id}:wing:${side}`, {width: style.wingSpan / 2, height: 0.18, depth: 2.1}, scene);
@@ -261,6 +277,7 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
     if (!assetAdapter) return;
     record.latestAnimationState = actor.animationState;
     record.latestVisible = visible;
+    record.latestOpacity = actor.opacity;
     if (!record.asset && !record.assetAttempted && !record.assetRequest) {
       record.assetAttempted = true;
       record.assetRequest = Promise.resolve(assetAdapter.load?.(actor.id)).then(asset => {
@@ -268,7 +285,9 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
         record.assetRequest = null;
         if (record.asset?.root) {
           record.asset.root.parent = record.root;
-          record.asset.root.setEnabled?.(record.latestVisible === true);
+          if (record.asset.setVisible) record.asset.setVisible(record.latestVisible === true);
+          else record.asset.root.setEnabled?.(record.latestVisible === true);
+          record.asset.setOpacity?.(record.latestOpacity);
           record.asset.play?.(record.latestAnimationState);
         }
       }).catch(() => {
@@ -278,10 +297,12 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
     }
     const assetRoot = record.asset?.root;
     if (assetRoot) {
-      const authoredScale = Math.max(1, Number(actor.silhouette?.scale?.y) || 1);
+      const authoredScale = Math.max(1, Number(actor.silhouette?.assetScale ?? actor.silhouette?.scale?.y) || 1);
       assetRoot.scaling?.set?.(authoredScale, authoredScale, authoredScale);
       if (assetRoot.position) assetRoot.position.y = (Number(record.asset.groundOffset) || 0) * authoredScale;
-      assetRoot.setEnabled?.(visible);
+      if (record.asset.setVisible) record.asset.setVisible(visible);
+      else assetRoot.setEnabled?.(visible);
+      record.asset.setOpacity?.(actor.opacity);
       record.asset.play?.(actor.animationState);
       const effectParts = new Set([
         ...(record.matron?.shields ?? []),
@@ -292,15 +313,52 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
       }
     }
   };
-  const ensureTelegraph = index => {
-    if (telegraphRecords[index]) return telegraphRecords[index];
-    const mesh = BABYLON.MeshBuilder.CreateCylinder(`boss-telegraph:${index}`, {diameter: 2, height: 0.08, tessellation: 24}, scene);
-    mesh.material = materialFor("#ef7048", 0.42);
-    mesh.setEnabled(false);
-    telegraphRecords[index] = mesh;
-    return mesh;
+  const ensureTelegraph = (index, shape) => {
+    const record = telegraphRecords[index] ??= {};
+    for (const mesh of Object.values(record)) mesh.setEnabled(false);
+    if (!record[shape]) {
+      // Pool both footprints per slot: a zone replacing a lane must not inherit
+      // its old primitive, and attack cycles must not allocate new meshes.
+      const name = `boss-telegraph:${index}:${shape}`;
+      const mesh = shape === "rectangle"
+        ? BABYLON.MeshBuilder.CreateBox(name, {width: 2, depth: 2, height: 0.08}, scene)
+        : BABYLON.MeshBuilder.CreateCylinder(name, {diameter: 2, height: 0.08, tessellation: 64}, scene);
+      mesh.material = materialFor("#ef7048", 0.42);
+      mesh.isPickable = false;
+      mesh.checkCollisions = false;
+      mesh.setEnabled(false);
+      record[shape] = mesh;
+    }
+    return record[shape];
+  };
+  const updateAsh = (index, volume) => {
+    let record = ashRecords[index];
+    if (!volume || volume.kind !== "ash" || !volume.visible) {
+      for (const mesh of record ?? []) mesh.setEnabled(false);
+      return;
+    }
+    if (!record) {
+      const rim = BABYLON.MeshBuilder.CreateTorus(`boss-ash:${index}:rim`, {diameter: 2, thickness: 0.1, tessellation: 32}, scene);
+      const embers = Array.from({length: 8}, (_, part) => BABYLON.MeshBuilder.CreateCylinder(
+        `boss-ash:${index}:ember:${part}`, {diameter: 0.38, height: 0.45, tessellation: 5}, scene));
+      record = ashRecords[index] = [rim, ...embers];
+      for (const mesh of record) { mesh.isPickable = false; mesh.checkCollisions = false; }
+    }
+    const [rim, ...embers] = record;
+    const radius = Math.max(0, Number(volume.radius) || 0);
+    const emberMaterial = materialFor(volume.active ? "#ff6136" : "#ffcf5d", 0.9);
+    emberMaterial.emissiveColor = BABYLON.Color3.FromHexString(volume.active ? "#ff6136" : "#ffcf5d");
+    rim.position.set(volume.x, 0.15, volume.z); rim.scaling.set(radius, 1, radius);
+    rim.material = emberMaterial; rim.setEnabled(true);
+    for (let part = 0; part < embers.length; part++) {
+      const angle = part * Math.PI / 4;
+      const mesh = embers[part];
+      mesh.position.set(volume.x + Math.sin(angle) * radius * 0.72, 0.3, volume.z + Math.cos(angle) * radius * 0.72);
+      mesh.material = emberMaterial; mesh.setEnabled(true);
+    }
   };
   return {
+    setPaused(value) { assetAdapter?.setPaused?.(value); },
     update(snapshot) {
       const activeIds = new Set(snapshot?.actors?.map(actor => actor.id) ?? []);
       for (const actor of snapshot?.actors ?? []) {
@@ -344,7 +402,11 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
           }
         }
       }
-      for (const [id, record] of actorRecords) if (!activeIds.has(id)) record.root.setEnabled(false);
+      for (const [id, record] of actorRecords) if (!activeIds.has(id)) {
+        record.latestVisible = false;
+        record.root.setEnabled(false);
+        record.asset?.setVisible?.(false);
+      }
       const volumes = [...(snapshot?.telegraphs ?? []), ...(snapshot?.zones ?? [])].slice(0, 16);
       lastVolumes = volumes.map(volume => ({
         id: volume.id,
@@ -353,15 +415,22 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
         damaging: volume.damaging === true,
       }));
       for (let index = 0; index < 16; index += 1) {
-        const mesh = ensureTelegraph(index);
         const volume = volumes[index];
+          if (!volume) {
+            for (const mesh of Object.values(telegraphRecords[index] ?? {})) mesh.setEnabled(false);
+            updateAsh(index, null);
+            continue;
+        }
+        const footprint = telegraphFootprint(volume);
+        const mesh = ensureTelegraph(index, footprint.shape);
         mesh.setEnabled(Boolean(volume?.visible));
-        if (!volume) continue;
         mesh.position.set(volume.x ?? snapshot.actors.find(actor => actor.id === volume.actorId)?.position.x ?? 0, 0.08, volume.z ?? snapshot.actors.find(actor => actor.id === volume.actorId)?.position.z ?? 0);
-        const radius = volume.radius ?? (volume.width ?? 4) / 2;
-        mesh.scaling.set(radius, 1, (volume.length ?? radius * 2) / 2);
-        mesh.rotation.y = Number(volume.heading) || 0;
-        mesh.material = materialFor(volume.active ? "#d6422f" : "#efb44c", volume.active ? 0.5 : 0.35);
+        mesh.scaling.set(footprint.halfWidth, 1, footprint.halfLength);
+        mesh.rotation.y = footprint.rotationY;
+          mesh.material = volume.kind === "ash"
+            ? materialFor(volume.active ? "#433c35" : "#d9a44e", volume.active ? 0.85 : 0.65)
+            : materialFor(volume.active ? "#d6422f" : "#efb44c", volume.active ? 0.5 : 0.35);
+          updateAsh(index, volume);
       }
     },
     diagnostics() {
@@ -396,7 +465,8 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
     },
     dispose() {
       for (const record of actorRecords.values()) record.root.dispose(false, true);
-      for (const mesh of telegraphRecords) mesh?.dispose();
+        for (const record of telegraphRecords) for (const mesh of Object.values(record ?? {})) mesh.dispose();
+        for (const record of ashRecords) for (const mesh of record ?? []) mesh.dispose();
       for (const material of materials.values()) material.dispose();
       if (ownsRuntimeAssets) assetAdapter?.dispose?.();
       actorRecords.clear();
@@ -405,12 +475,27 @@ export function createBossProceduralAdapter({BABYLON, scene, runtimeAssets = nul
   };
 }
 
+function telegraphFootprint(volume) {
+  // Match the shape precedence and coordinate convention used by the actual
+  // damage predicate. Rectangle corners remain marked even when radius is also
+  // present on a fire-breath zone; circular zones never inherit a lane length.
+  if (Number.isFinite(volume.width) && Number.isFinite(volume.length)) {
+    return {shape: "rectangle", halfWidth: volume.width / 2, halfLength: volume.length / 2,
+      rotationY: -(Number(volume.heading) || 0)};
+  }
+  const radius = Math.max(0, Number(volume.radius) || 0);
+  return {shape: "circle", halfWidth: radius, halfLength: radius, rotationY: 0};
+}
+
 function presentationVolume(volume, actors, active) {
   const actor = actors.find(item => item.id === volume.actorId);
+  // Earlier Hart checkpoints omitted warning coordinates. Keep their saved
+  // authority/hash untouched while displaying the footprint that will resolve.
+  const fallbackZ = actor ? actor.position.z - (volume.kind === "root_lane" ? 13 : 0) : 0;
   return {
     ...volume,
     x: Number.isFinite(volume.x) ? volume.x : actor?.position.x ?? 0,
-    z: Number.isFinite(volume.z) ? volume.z : actor?.position.z ?? 0,
+    z: Number.isFinite(volume.z) ? volume.z : fallbackZ,
     heading: Number.isFinite(volume.heading) ? volume.heading : actor?.heading ?? 0,
     active: Boolean(active),
     damaging: volume.damaging === true,

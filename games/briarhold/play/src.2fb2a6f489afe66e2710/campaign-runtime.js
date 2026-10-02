@@ -257,7 +257,7 @@ export function shouldReleaseMatronWithShieldCompany(run, roster, elapsedSeconds
 }
 
 /** Step one fixed encounter and fold semantic boss outcomes into run authority. */
-export function updateSoloBossEncounter(run, {elapsedMs = 0, commands = [], crowdCleared = false} = {}) {
+export function updateSoloBossEncounter(run, {elapsedMs = 0, commands = [], crowdCleared = false, wardenTargets = []} = {}) {
   if (!run || typeof run !== "object") throw new TypeError("an authored run is required");
   const current = run;
   const encounter = current.bossEncounter;
@@ -281,7 +281,7 @@ export function updateSoloBossEncounter(run, {elapsedMs = 0, commands = [], crow
     : commands;
   const nextEncounter = serialiseBossDirector(stepBossDirector(
     restoreBossDirector(encounter),
-    {elapsedMs, commands: resolvedCommands},
+    {elapsedMs, commands: resolvedCommands, wardenTargets},
   ));
   const newEvents = nextEncounter.events.filter(event => event.sequence > beforeSequence);
   let fortifications = current.fortifications;

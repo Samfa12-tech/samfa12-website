@@ -30,8 +30,8 @@ export function graphicsScaleForQuality(value, {
 } = {}) {
   const quality = normaliseGraphicsQuality(value);
   if (quality === GRAPHICS_QUALITY.HIGH) return 1;
-  if (quality === GRAPHICS_QUALITY.BALANCED) return 1.5;
-  if (quality === GRAPHICS_QUALITY.PERFORMANCE) return 2;
+  if (quality === GRAPHICS_QUALITY.BALANCED) return coarse && !software ? 1.15 : 1.5;
+  if (quality === GRAPHICS_QUALITY.PERFORMANCE) return coarse && !software ? 1.25 : 2;
   if (software) return 2.5;
   // Auto begins at native resolution and moves down only after measured,
   // sustained pressure. This makes it the highest stable quality policy rather
