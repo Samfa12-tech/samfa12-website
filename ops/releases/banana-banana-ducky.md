@@ -55,5 +55,42 @@ Physical iPad Safari retesting, audio listening and sustained device performance
 remain owner review steps. Windows WebKit screenshots can omit the WebGL canvas
 after a viewport resize; fresh orientation loads are used for visual evidence.
 Screenshots, event traces and the supplied package are private working evidence
-and are excluded from the repository and Pages artifact. This revision is a
-draft review candidate until the owner approves publication.
+and are excluded from the repository and Pages artifact. This revision was
+published in merge commit `348272be2966e18971f371bcb8ef4bde815aad69`.
+
+## Game gesture and visible viewport candidate (2026-10-03)
+
+A subsequent physical iPad report described rapid action taps followed by apparent
+browser zoom, offscreen controls and a displaced character. Rapid native Chromium
+action taps did not reproduce spontaneous zoom. Forcing actual browser page zoom
+to 2x did reproduce the old offscreen joystick and displaced actor tag. This
+confirms a viewport layout gap, not the cause of Safari's reported zoom.
+
+The candidate scopes touch defaults and Safari gesture fallbacks to the active
+canvas and control clusters. Existing action handlers receive one activation for
+an eligible touch tap; disabled cooldown buttons, cancelled touches and drags do
+not fire an action. Pointer ownership remains independent for simultaneous thumbs
+and action fingers. Menus and help retain ordinary browser gestures; viewport
+metadata does not disable browser zoom globally.
+
+The canvas and HUD share a surface fitted to `visualViewport` size, scale and
+offsets. Scene hit testing and joystick displacement convert client coordinates
+back to that surface. A changed zoom or pan clears stale input coordinates;
+ordinary toolbar height changes preserve held movement. Scale or pan alone does
+not reallocate the canvas. Controls also respect horizontal safe-area insets.
+The cel shader, game rules, original package and save identity remain unchanged.
+
+Regression tests execute the shipped gesture and viewport helpers, projection
+math and scaled joystick code. Local browser checks cover 18 rapid simultaneous
+action taps, activation counts, actual 2x Chromium page zoom, visibility and tag
+alignment, fresh portrait/landscape rendering, help navigation and saved settings.
+Windows WebKit checks use native button taps with a held pointer; its Safari
+gesture fallback is checked with a synthetic event. Offset and toolbar behavior
+are event-harness checks. Reviewed screenshots remain private.
+
+Physical iPad Safari gesture behavior and toolbar/safe-area handling still need an
+owner retest. This viewport revision is a draft candidate; publication is pending
+approval. After publication, test repeated HUG/DASH/SWAP taps while holding the
+joystick, release and restart movement, rotate both ways, pause/open help/resume,
+and background then return. Confirm the joystick stays visible, movement stops on
+release, the character stays horizontally centred and help can still be zoomed.

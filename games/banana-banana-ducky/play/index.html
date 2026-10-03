@@ -16,9 +16,10 @@
 @media(max-width:700px){#menu{padding:12px;align-items:flex-end;justify-content:center;background:linear-gradient(transparent 20%,#cde4c48c 60%)}.menu-panel{width:min(440px,100%);max-height:67dvh;padding:18px 20px;border-radius:27px;overflow:auto}.eyebrow{font-size:9px;letter-spacing:1.6px}.logo{font-size:38px;margin:8px 0;line-height:.93}.logo .ducky{display:inline}.tagline{font-size:11px;margin-bottom:12px}.worlds{gap:6px;margin:7px 0 12px}.world{min-height:49px;padding:6px 9px;font-size:11px;border-radius:12px}.world .icon{font-size:22px}.world .meta{font-size:9px}.setup{margin-bottom:12px;gap:8px}.setup select{padding:6px;font-size:12px;min-height:33px}.primary{min-height:47px;font-size:18px}.menu-footer{margin-top:10px;font-size:9px}.scene-caption{display:none}#objective{left:12px;top:calc(12px + env(safe-area-inset-top,0px));width:183px;padding:10px 12px;border-radius:18px}#timer{font-size:24px}#count{font-size:19px}.stat-label{font-size:8px}.progress{margin-top:9px;height:5px}#topActions{right:12px;top:calc(12px + env(safe-area-inset-top,0px));gap:6px}button.round{width:39px;height:39px;font-size:17px}#worldBadge{left:14px;top:106px;font-size:9px}#radar{right:12px;top:62px;width:74px;height:74px}#statusBadge{top:145px;font-size:11px;padding:5px 10px}#toast{top:26%;font-size:12px;padding:9px 14px;width:max-content;max-width:88%}#joystick{left:19px;width:108px;height:108px}#stick{left:30px;top:30px}.action-cluster{right:14px}#squadBtn{left:20px}.dialog{padding:23px}h2{font-size:27px}#result .dialog{padding:17px 22px}#result h2{margin-bottom:5px}#result .small{margin-bottom:8px}.result-stats{margin:10px 0}.result-stats strong{font-size:21px}#commandBar{font-size:11px;padding:9px;gap:7px}.credit{font-size:10px}}
 @media(max-height:600px) and (min-width:701px){#menu{padding:12px}.menu-panel{padding:16px 20px;max-height:95dvh}.logo{font-size:35px;margin:8px 0}.tagline{margin-bottom:9px}.worlds{margin:6px 0 10px}.world{min-height:44px;padding:5px 8px}.setup{margin-bottom:10px}.menu-footer{margin-top:10px}.primary{min-height:45px;font-size:18px}.scene-caption{bottom:15px}#squadPanel{max-height:50dvh}}
 .touch-input #joystick{display:block}.touch-input #desktopHint,.touch-input .hint-key{display:none}.action-btn{touch-action:none}
+#playSurface{position:fixed;left:0;top:0;width:100%;height:100%;transform-origin:0 0;overflow:hidden}#hud button{pointer-events:auto}#bottomControls,#topActions,#commandBar{touch-action:none;-webkit-touch-callout:none}#joystick,#objective{margin-left:env(safe-area-inset-left,0px)}.action-cluster,#topActions{margin-right:env(safe-area-inset-right,0px)}
 </style><meta name="robots" content="noindex,follow"><link rel="canonical" href="https://samfa12.com/games/banana-banana-ducky/"><link rel="icon" type="image/png" href="/assets/favicon.png"><link rel="apple-touch-icon" href="/assets/thumbnails/banana-banana-ducky-apple-touch-icon.png"></head>
 <body>
-<canvas id="game" aria-label="Banana Banana Ducky 3D game. Use WASD or arrow keys to move, Space to hug, E for a trick, Q to swap characters." tabindex="0"></canvas>
+<div id="playSurface"><canvas id="game" aria-label="Banana Banana Ducky 3D game. Use WASD or arrow keys to move, Space to hug, E for a trick, Q to swap characters." tabindex="0"></canvas></div>
 <div id="loading"><div><div class="load-duck">🍌 🐥</div><div class="load-label">Putting on our ties…</div></div></div>
 <div id="error" class="hidden"><div><h2>Oh crumbs. A wobbly start!</h2><p id="errorText"></p><button class="pill primary" onclick="location.reload()">Try again</button></div></div>
 <div id="ui">
@@ -88,12 +89,13 @@ void main(){
       this.geos={};for(const[k,g]of Object.entries({sphere:sphere(),rock:sphere(8,5),box:box(),cyl:cylinder(),cone:cylinder(0),ring:ring(),banana:banana(),tie:tie()})){let vao=gl.createVertexArray();gl.bindVertexArray(vao);let v=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,v);const data=new Float32Array(g.p.length*2);for(let i=0;i<g.p.length/3;i++){data.set(g.p.slice(i*3,i*3+3),i*6);data.set(g.n.slice(i*3,i*3+3),i*6+3);}gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,3,gl.FLOAT,false,24,0);gl.enableVertexAttribArray(1);gl.vertexAttribPointer(1,3,gl.FLOAT,false,24,12);let e=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,e);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(g.idx),gl.STATIC_DRAW);this.geos[k]={vao,count:g.idx.length,v,e};}
       gl.enable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);this.resize();
     }
-    resize(quality=1.5){let w=innerWidth,h=innerHeight;this.width=w;this.height=h;this.aspect=w/h;let d=Math.min(devicePixelRatio||1,quality);this.canvas.width=Math.round(w*d);this.canvas.height=Math.round(h*d);this.gl.viewport(0,0,this.canvas.width,this.canvas.height);}
+    resize(quality=1.5){let w=this.canvas.clientWidth||innerWidth,h=this.canvas.clientHeight||innerHeight;this.width=w;this.height=h;this.aspect=w/h;let d=Math.min(devicePixelRatio||1,quality);this.canvas.width=Math.round(w*d);this.canvas.height=Math.round(h*d);this.gl.viewport(0,0,this.canvas.width,this.canvas.height);}
+    clientPoint(x,y){const b=this.canvas.getBoundingClientRect();return {x:(x-b.left)*this.width/b.width,y:(y-b.top)*this.height/b.height};}
     flatten(root,out,parent=mat4()){if(!root.visible)return;let m=mul(parent,compose(root.p,root.r,root.s));if(root.g)out.push({g:root.g,c:root.c,m});for(const c of root.children)this.flatten(c,out,m);}
     prepare(objects,staticDraw=false){const gl=this.gl,groups={};for(const o of objects){let key=o.g+(o.c[3]<.99?'_alpha':'');(groups[key]??=[]).push(o);}const result=[];for(const[key,items]of Object.entries(groups)){let data=new Float32Array(items.length*20);for(let i=0;i<items.length;i++){data.set(items[i].m,i*20);data.set(items[i].c,i*20+16);}let buf;if(staticDraw){buf=gl.createBuffer();}else{buf=this.batches[key]??=(gl.createBuffer());}gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,data,staticDraw?gl.STATIC_DRAW:gl.DYNAMIC_DRAW);result.push({g:items[0].g,buf,count:items.length,alpha:key.endsWith('_alpha')});}return result;}
     setWorld(root){for(const b of this.static)this.gl.deleteBuffer(b.buf);let objects=[];this.flatten(root,objects);this.static=this.prepare(objects,true);}
     project(x,y,z){let c=this.cam,co=Math.cos(c.elev),si=Math.sin(c.elev);return{x:(.5+(x-c.x)/(2*c.half*this.aspect))*this.width,y:(.5-((y-c.targetY)*co-(z-c.z)*si)/(2*c.half))*this.height};}
-    ground(sx,sy){let c=this.cam;return{x:c.x+(sx/this.width-.5)*2*c.half*this.aspect,z:c.z-((.5-sy/this.height)*2*c.half+c.targetY*Math.cos(c.elev))/Math.sin(c.elev)};}
+    ground(sx,sy){const p=this.clientPoint(sx,sy);sx=p.x;sy=p.y;let c=this.cam;return{x:c.x+(sx/this.width-.5)*2*c.half*this.aspect,z:c.z-((.5-sy/this.height)*2*c.half+c.targetY*Math.cos(c.elev))/Math.sin(c.elev)};}
     draw(roots){let gl=this.gl,c=this.cam,co=Math.cos(c.elev),si=Math.sin(c.elev),ex=c.x,ey=c.targetY+si*70,ez=c.z+co*70;
       let view=new Float32Array([1,0,0,0,0,co,si,0,0,-si,co,0,-ex, -co*ey+si*ez,-si*ey-co*ez,1]);let w=c.half*this.aspect,h=c.half;let proj=new Float32Array([1/w,0,0,0,0,1/h,0,0,0,0,-2/180,0,0,0,-1,1]);let vp=mul(proj,view);
       let objects=[];for(let r of roots)this.flatten(r,objects);this.dynamic=this.prepare(objects);let all=[...this.static,...this.dynamic];this.stats={calls:0,instances:0,triangles:0};gl.clearColor(...this.clear,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(this.program);gl.uniformMatrix4fv(this.uVP,false,vp);gl.uniform3f(this.uLight,...this.light);gl.uniform3f(this.uEye,ex,ey,ez);
@@ -124,6 +126,7 @@ settings.trophies=settings.trophies&&typeof settings.trophies==='object'&&!Array
 settings.autoHug=settings.autoHug!==false;settings.reduced=!!settings.reduced;settings.muted=!!settings.muted;
 function save(){try{localStorage.setItem('banana-banana-ducky-v1',JSON.stringify(settings));}catch{}}
 let R;
+$('playSurface').appendChild($('hud'));
 try{R=new V3D.Renderer($('game'));}catch(e){$('errorText').textContent=e.message;$('error').classList.remove('hidden');$('loading').classList.add('hidden');return;}
 let world=node(),decor=node(),actors=[],clones=[],items=[],particles=[],rabbits=[],obstacles=[],waters=[],bridges=[],bounces=[];
 let selectedMap='park',difficulty='normal',initialTime=300,mode='menu',controlId=0,nextId=1,elapsed=0,remaining=300,worldTime=0,roundTime=0,countdown=3,swaps=0,catches=0,slips=0,commandId=null,powerActor=null,toastTime=0,win=false,finishTime=0,rainbowPlanned=false,rainbowAt=0,rainbowSpawned=false;
@@ -133,7 +136,7 @@ const actorById=id=>actors.find(a=>a.id===id),controlled=()=>actorById(controlId
 const view={x:0,z:0,half:12};
 function show(id,on=true){$(id).classList.toggle('hidden',!on);}
 function toast(text,seconds=2.5){$('toast').textContent=text;$('toast').classList.add('show');toastTime=seconds;}
-function clearInput(){input.keys.clear();joystickControl.reset();stopHug();input.gamepadX=input.gamepadZ=0;input.gamepadHug=false;clickStart=null;}
+function clearInput(){input.keys.clear();joystickControl.reset();gameGestures.reset();stopHug();input.gamepadX=input.gamepadZ=0;input.gamepadHug=false;clickStart=null;}
 function colorCycle(t){const list=['#f2637e','#ffb848','#f7ed69','#67cc82','#55c4e1','#a787ed'];return list[Math.floor(t*5)%list.length];}
 
 // ---- Original, lightweight procedural music and cartoon sound effects. ----
@@ -359,7 +362,7 @@ function updateHUD(){const a=controlled();if(!a)return;const touchUI=matchMedia(
  const skill=a.id===0?'DASH':types[a.type].trick;$('skillBtn').innerHTML=`${a.skillCD>.1?Math.ceil(a.skillCD)+'s':skill}<small>${touchUI?(a.skillCD>.1?'recharging':'tap trick'):`E · ${a.skillCD>.1?'recharging':'trick'}`}</small>`;$('skillBtn').disabled=a.skillCD>.1||mode!=='play';$('swapBtn').innerHTML=(a.id===0?'BE A DUCK':'BE A BANANA')+`<small>${touchUI?'tap · swap':'Q · swap'}</small>`;$('swapBtn').disabled=mode!=='play';$('hugBtn').innerHTML=`HUG!<small>${touchUI?'tap to hug':'Space'}</small>`;$('hugBtn').disabled=mode!=='play';
  let status=a.freeze>0?`❄️ Frozen · ${Math.ceil(a.freeze)}s`:a.stun>0?'💫 A small tumble!':a.burrow>0?'🐰 Rabbit express!':a.fly>0?'🪽 Flying · hug to swoop':a.speedBuff>0?`⚡ Speedy · ${Math.ceil(a.speedBuff)}s`:a.giant>0?`💛 Super hugs · ${Math.ceil(a.giant)}s`:a.shield>0?`🫧 Protected · ${Math.ceil(a.shield)}s`:a.slow>0?`🐌 Slow feet · ${Math.ceil(a.slow)}s`:'';$('statusBadge').textContent=status;show('statusBadge',!!status);updateSquad();drawRadar();}
 function positionHUD(){const a=controlled();if(!a)return;let p=R.project(a.x,a.kind==='banana'?3.3:1.85,a.z);$('tag').style.left=p.x+'px';$('tag').style.top=p.y+'px';$('tag').textContent=a.id===0?'YOU · BANANA BOY':'YOU · '+a.name.toUpperCase();let list=freeDucks().sort((b,c)=>dist(a,b)-dist(a,c));if(!list.length){show('offscreen',false);return;}let b=list[0],sp=R.project(b.x,.6,b.z);let pad=30,top=145,bottom=R.height-(matchMedia('(pointer:coarse)').matches?200:125);let outside=sp.x<25||sp.x>R.width-25||sp.y<top||sp.y>bottom;show('offscreen',outside&&mode==='play');if(outside){let cx=R.width/2,cy=R.height/2,dx=sp.x-cx,dy=sp.y-cy;let angle=Math.atan2(dy,dx),arrows=['→','↘','↓','↙','←','↖','↑','↗'];let arrow=arrows[(Math.round(angle/(TAU/8))+8)%8];$('offscreen').textContent='🐥 '+arrow;$('offscreen').style.left=clamp(sp.x,pad,R.width-pad)+'px';$('offscreen').style.top=clamp(sp.y,top,bottom)+'px';}}
-function screenActor(x,y,onlyAllies=false){let best=null,bd=36;for(const a of actors.concat(clones)){if(onlyAllies&&!a.team||a.burrow>0)continue;let p=R.project(a.x,a.id===0?1.5:.68,a.z),d=Math.hypot(p.x-x,p.y-y);if(d<bd){best=a;bd=d;}}return best;}
+function screenActor(x,y,onlyAllies=false){const point=R.clientPoint(x,y);x=point.x;y=point.y;let best=null,bd=36;for(const a of actors.concat(clones)){if(onlyAllies&&!a.team||a.burrow>0)continue;let p=R.project(a.x,a.id===0?1.5:.68,a.z),d=Math.hypot(p.x-x,p.y-y);if(d<bd){best=a;bd=d;}}return best;}
 function pickWorld(map){if(mode!=='menu')return;selectedMap=map;document.querySelectorAll('[data-map]').forEach(b=>{let yes=b.dataset.map===map;b.classList.toggle('selected',yes);b.setAttribute('aria-pressed',yes);});buildWorld(map);}
 for(const b of document.querySelectorAll('[data-map]'))b.onclick=()=>pickWorld(b.dataset.map);
 $('start').onclick=startRound;$('againBtn').onclick=startRound;$('worldBtn').onclick=menuMode;$('pauseBtn').onclick=pauseGame;$('resumeBtn').onclick=resume;$('swapBtn').onclick=cycle;$('skillBtn').onclick=()=>{audio.init();useSkill(controlled());};$('soundBtn').onclick=()=>{audio.init();settings.muted=!settings.muted;audio.volume();syncSettings();save();};
@@ -380,13 +383,13 @@ function bindJoystick(joystick,stick,state,{enabled,start}){
  let type=null,touchId=null,center=null,lastPoint=null,touches=[];
  function reset(){const id=state.joyId;state.joyId=null;state.x=state.z=0;type=touchId=center=lastPoint=null;touches=[];stick.style.transform='';try{if(id!==null&&joystick.hasPointerCapture(id))joystick.releasePointerCapture(id);}catch{}}
  function identifyTouch(){if(type!=='touch'||touchId!==null||!lastPoint)return;const t=touches.find(t=>Math.hypot(t.clientX-lastPoint.x,t.clientY-lastPoint.y)<2);if(t)touchId=t.identifier;}
- function move(e){if(state.joyId!==e.pointerId)return;if(type!=='touch'&&e.buttons===0){reset();return;}e.preventDefault();lastPoint={x:e.clientX,y:e.clientY};identifyTouch();const dx=e.clientX-center.x,dy=e.clientY-center.y,max=34,l=Math.hypot(dx,dy),fac=l>max?max/l:1;state.x=dx*fac/max;state.z=dy*fac/max;stick.style.transform=`translate(${dx*fac}px,${dy*fac}px)`;}
+ function move(e){if(state.joyId!==e.pointerId)return;if(type!=='touch'&&e.buttons===0){reset();return;}e.preventDefault();lastPoint={x:e.clientX,y:e.clientY};identifyTouch();const dx=(e.clientX-center.x)*center.sx,dy=(e.clientY-center.y)*center.sy,max=34,l=Math.hypot(dx,dy),fac=l>max?max/l:1;state.x=dx*fac/max;state.z=dy*fac/max;stick.style.transform=`translate(${dx*fac}px,${dy*fac}px)`;}
  joystick.addEventListener('pointerdown',e=>{
   if(!enabled()||e.pointerType==='mouse'&&e.button!==0)return;
   // A new primary touch means the previous touch sequence has ended. Recover
   // even if Safari omitted both its release and capture-loss notification.
   if(state.joyId!==null&&type==='touch'&&e.pointerType==='touch'&&e.isPrimary)reset();
-  if(state.joyId!==null)return;e.preventDefault();start();const b=joystick.getBoundingClientRect();center={x:b.left+b.width/2,y:b.top+b.height/2};state.joyId=e.pointerId;type=e.pointerType;touchId=null;
+  if(state.joyId!==null)return;e.preventDefault();start();const b=joystick.getBoundingClientRect();center={x:b.left+b.width/2,y:b.top+b.height/2,sx:(joystick.offsetWidth||b.width)/b.width,sy:(joystick.offsetHeight||b.height)/b.height};state.joyId=e.pointerId;type=e.pointerType;touchId=null;
   try{joystick.setPointerCapture(e.pointerId);}catch{} // Page listeners still own the release if capture fails.
   move(e);
  });
@@ -402,6 +405,28 @@ function bindJoystick(joystick,stick,state,{enabled,start}){
 }
 // ---- End joystick lifecycle. ----
 const joystickControl=bindJoystick($('joystick'),$('stick'),input,{enabled:()=>mode==='play',start:()=>audio.init()});
+// ---- Game-only gesture and visual viewport handling. ----
+function bindGameGestures({active}){
+ const held=new Map(),surface=target=>target?.closest?.('#game,#bottomControls,#topActions,#commandBar');
+ window.addEventListener('touchstart',e=>{if(!active())return;let guarded=false;for(const t of e.changedTouches){if(!surface(t.target))continue;guarded=true;held.set(t.identifier,{x:t.clientX,y:t.clientY,button:t.target.closest?.('button')});}if(guarded&&e.cancelable)e.preventDefault();},{capture:true,passive:false});
+ for(const name of['touchend','touchcancel'])window.addEventListener(name,e=>{let guarded=false;const taps=[];for(const t of e.changedTouches){const h=held.get(t.identifier);if(!h)continue;guarded=true;held.delete(t.identifier);if(name==='touchend'&&h.button&&!h.button.disabled&&Math.hypot(t.clientX-h.x,t.clientY-h.y)<15&&h.button.contains(document.elementFromPoint(t.clientX,t.clientY)))taps.push(h.button);}if(guarded&&e.cancelable)e.preventDefault();for(const button of taps)button.click();},{capture:true,passive:false});
+ for(const name of['gesturestart','gesturechange','dblclick'])window.addEventListener(name,e=>{if(active()&&surface(e.target)&&e.cancelable)e.preventDefault();},{capture:true,passive:false});
+ return {reset:()=>held.clear()};
+}
+function bindGameViewport(surface,{resize,reset}){
+ let previous=null;
+ function sync(){const v=window.visualViewport,s=Math.max(.1,v?.scale||1),w=(v?.width||innerWidth)*s,h=(v?.height||innerHeight)*s,x=v?.offsetLeft||0,y=v?.offsetTop||0,next={s,w,h,x,y};
+  if(previous&&Math.abs(s-previous.s)<.001&&Math.abs(w-previous.w)<.5&&Math.abs(h-previous.h)<.5&&Math.abs(x-previous.x)<.5&&Math.abs(y-previous.y)<.5)return;
+  // Panning/zoom changes the input coordinate frame; toolbar-height changes do not.
+  if(previous&&(Math.abs(s-previous.s)>.001||Math.abs(x-previous.x)>.5||Math.abs(y-previous.y)>.5))reset();
+  const resized=!previous||Math.abs(w-previous.w)>.5||Math.abs(h-previous.h)>.5;
+  surface.style.width=w+'px';surface.style.height=h+'px';surface.style.transform=`translate(${x}px,${y}px) scale(${1/s})`;previous=next;if(resized)resize();
+ }
+ for(const name of['resize','scroll'])window.visualViewport?.addEventListener(name,sync);sync();return {sync};
+}
+// ---- End game-only viewport handling. ----
+const gameGestures=bindGameGestures({active:()=>mode==='play'||mode==='countdown'});
+const gameViewport=bindGameViewport($('playSurface'),{resize:()=>R.resize(settings.quality),reset:clearInput});
 $('game').addEventListener('pointerdown',e=>{if(mode==='play')clickStart={x:e.clientX,y:e.clientY,t:performance.now(),id:e.pointerId};});$('game').addEventListener('pointerup',e=>{if(mode!=='play'||!clickStart||clickStart.id!==e.pointerId)return;let c=clickStart;clickStart=null;if(Math.hypot(e.clientX-c.x,e.clientY-c.y)>15||performance.now()-c.t>600)return;let target=screenActor(e.clientX,e.clientY),pos=R.ground(e.clientX,e.clientY);if(commandId!==null){setCommand(pos,target);return;}if(target?.team)command(target);else if(target&&!target.team&&dist(controlled(),target)<2.6)tryHug(controlled());});$('game').addEventListener('pointercancel',()=>clickStart=null);$('game').addEventListener('contextmenu',e=>e.preventDefault());$('game').addEventListener('wheel',e=>{if(mode==='play'){e.preventDefault();cameraZoom=clamp(cameraZoom+e.deltaY*.0006,.75,1.45);}},{passive:false});
 window.addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();debugOn=!debugOn;show('debug',debugOn);return;}if(e.code==='Escape'){e.preventDefault();if(mode==='help')closeHelp();else if(mode==='settings')closeSettings();else if(!$('confirm').classList.contains('hidden'))show('confirm',false);else if(mode==='pause')resume();else if(mode==='play'||mode==='countdown')pauseGame();return;}if(mode==='play'||mode==='countdown'){if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyW','KeyA','KeyS','KeyD','KeyE','KeyQ'].includes(e.code))e.preventDefault();input.keys.add(e.code);if(!e.repeat&&e.code==='KeyQ')cycle();if(!e.repeat&&e.code==='KeyE')useSkill(controlled());}
  if(e.code==='Tab'){let active=[...document.querySelectorAll('.overlay:not(.hidden)')].pop();if(active&&mode!=='result'){let focus=[...active.querySelectorAll('button:not(:disabled),input,select')].filter(b=>b.offsetParent!==null);if(focus.length){if(e.shiftKey&&document.activeElement===focus[0]){e.preventDefault();focus.at(-1).focus();}else if(!e.shiftKey&&document.activeElement===focus.at(-1)){e.preventDefault();focus[0].focus();}}}}
@@ -409,7 +434,7 @@ window.addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();debug
 function backgroundGame(){clearInput();pauseGame();if(audio.ctx)audio.ctx.suspend().catch(()=>{});}
 window.addEventListener('blur',backgroundGame);window.addEventListener('pagehide',backgroundGame);document.addEventListener('freeze',backgroundGame);document.addEventListener('visibilitychange',()=>{if(document.hidden)backgroundGame();});
 let landscape=innerWidth>innerHeight;
-window.addEventListener('resize',()=>{R.resize(settings.quality);const next=innerWidth>innerHeight;if(next!==landscape)clearInput();landscape=next;});
+window.addEventListener('resize',()=>{gameViewport.sync();const next=innerWidth>innerHeight;if(next!==landscape)clearInput();landscape=next;});
 window.addEventListener('orientationchange',clearInput);screen.orientation?.addEventListener('change',clearInput);
 window.addEventListener('gamepaddisconnected',()=>{input.gamepadX=input.gamepadZ=0;input.gamepadHug=false;input.gamepadPrevious=[];});
 function gamepad(){input.gamepadX=input.gamepadZ=0;input.gamepadHug=false;let gp;try{gp=[...(navigator.getGamepads?.()||[])].find(Boolean);}catch{return;}if(!gp){input.gamepadPrevious=[];return;}if(mode==='play'){const x=gp.axes[0]||0,z=gp.axes[1]||0;input.gamepadX=Math.abs(x)>.18?x:0;input.gamepadZ=Math.abs(z)>.18?z:0;input.gamepadHug=!!gp.buttons[0]?.pressed;}for(const[index,fn]of[[1,()=>useSkill(controlled())],[3,cycle],[9,()=>mode==='pause'?resume():pauseGame()]]){let down=!!gp.buttons[index]?.pressed;if(down&&!input.gamepadPrevious[index])fn();input.gamepadPrevious[index]=down;}}
