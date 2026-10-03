@@ -7,7 +7,7 @@
     "check:content": "node scripts/build-content.mjs --check",
     "validate:seo": "node scripts/validate-seo.mjs",
     "audit:indexing": "node scripts/indexing-audit.mjs",
-    "test:content": "node --test tests/content.test.mjs tests/indexing-audit.test.mjs tests/breakfast-beat-down-release.test.mjs",
+    "test:content": "node --test tests/content.test.mjs tests/indexing-audit.test.mjs tests/breakfast-beat-down-release.test.mjs tests/banana-banana-ducky-release.test.mjs",
     "bump:cache": "node scripts/bump-cache-version.mjs",
     "fetch:thumbnails": "node scripts/fetch-thumbnails.mjs",
     "sync:pocket-apps": "node scripts/sync-pocket-apps.js",
@@ -37,7 +37,8 @@
     "deploy:handoff-relay": "npx wrangler deploy --config workers/pocket-audio-handoff/wrangler.toml",
     "verify:handoff-live": "node scripts/verify-pocket-handoff-live.mjs",
     "sync:breakfast-beat-down": "node scripts/breakfast-beat-down-release.mjs",
-    "verify:breakfast-beat-down": "node scripts/breakfast-beat-down-release.mjs --verify"
+    "verify:breakfast-beat-down": "node scripts/breakfast-beat-down-release.mjs --verify",
+    "verify:banana-banana-ducky": "node scripts/banana-banana-ducky-release.mjs"
   },
   "dependencies": {
     "@google-cloud/storage": "^8.0.1",

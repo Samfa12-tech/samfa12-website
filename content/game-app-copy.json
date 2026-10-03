@@ -1361,5 +1361,57 @@
       "game-breakfast-beat": "Explore the original Breakfast Beat tower-defence game",
       "app-pocket-chordsmith": "Explore Pocket Chordsmith, used for the embedded music"
     }
+  },
+  "game-banana-banana-ducky": {
+    "seoTitle": "Banana Banana Ducky! — play the cartoon duck chase",
+    "intro": "A banana. A red tie. A very silly plan. In Banana Banana Ducky! v1.1, chase and hug every real yellow duck before the clock runs out. Your new friends put on red ties and help recruit the rest of the flock. Play here in your browser with touch controls or a keyboard.",
+    "details": [
+      {
+        "heading": "Make friends, then become a duck",
+        "text": "Steer Banana Boy, hold HUG! to recruit nearby ducks, and swap into a recruited duck while Banana Boy keeps helping. Each duck keeps its own trick, from flying and burrowing to decoys and a rallying quack. Use Your flock to choose a friend or give a chase command. Fake clones do not count toward the goal.",
+        "sources": [
+          "https://samfa12.com/games/banana-banana-ducky/play/"
+        ]
+      },
+      {
+        "heading": "Four worlds, plenty of banana mischief",
+        "text": "Pondside Park, Blossom Grove, The Cheese Moon and The Backyard are all available from the start. Choose the difficulty and round length separately. Gold bananas help, stone bananas are a gamble, and a rainbow banana has a 40% chance to appear during a round. Winners celebrate with a silly dance party.",
+        "sources": [
+          "https://samfa12.com/games/banana-banana-ducky/play/"
+        ]
+      },
+      {
+        "heading": "Play with two thumbs or a keyboard",
+        "text": "On a touch screen, drag the left movement stick and use HUG!, the purple trick button and the swap button with your other thumb. On a keyboard, move with WASD or arrow keys, hug with Space, use a trick with E and swap with Q. Escape pauses. Start a round to enable browser audio; music and effects have separate volume controls.",
+        "sources": [
+          "https://samfa12.com/games/banana-banana-ducky/play/"
+        ]
+      },
+      {
+        "heading": "A browser game with local settings",
+        "text": "The game requires WebGL 2. Choose Light picture quality in Settings if your device needs a simpler render. Settings and world victory counts save in this browser where local storage is available. An unfinished round does not save. There are no accounts, adverts or purchases, and the game runtime uses no external libraries or network services.",
+        "sources": [
+          "https://samfa12.com/games/banana-banana-ducky/play/"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can I play on iPad?",
+        "answer": "The game includes a touch joystick and action buttons, with portrait and landscape layouts. It requires a browser with WebGL 2. Desktop and emulated tablet browser checks are part of this integration; physical iPad performance and Safari compatibility still need hands-on testing.",
+        "sources": [
+          "https://samfa12.com/games/banana-banana-ducky/play/"
+        ]
+      },
+      {
+        "question": "Will my saved progress move between devices?",
+        "answer": "Settings and world victories stay in this browser on this site. They do not transfer automatically between devices or from another host. Clearing browser storage removes them.",
+        "sources": [
+          "https://samfa12.com/games/banana-banana-ducky/play/"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": []
   }
 }

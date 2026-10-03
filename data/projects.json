@@ -489,10 +489,19 @@
     "type": "Browser game",
     "status": "Published",
     "description": "Shake a 3×3 colour target, slide the board's tiles to match it, and try to beat your time and move count in this browser puzzle.",
-    "tags": ["Game", "Puzzle", "Sliding puzzle", "Touch-friendly", "Samfa12"],
+    "tags": [
+      "Game",
+      "Puzzle",
+      "Sliding puzzle",
+      "Touch-friendly",
+      "Samfa12"
+    ],
     "featured": false,
     "links": [
-      {"label": "Play on itch.io", "url": "https://samfa12.itch.io/pocket-pattern"}
+      {
+        "label": "Play on itch.io",
+        "url": "https://samfa12.itch.io/pocket-pattern"
+      }
     ],
     "sortOrder": 8,
     "thumbnail": "assets/thumbnails/pocket-pattern.webp",
@@ -1653,6 +1662,52 @@
       {
         "label": "Play now",
         "url": "/games/breakfast-beat-down/play/",
+        "fullscreen": true
+      }
+    ]
+  },
+  {
+    "id": "game-banana-banana-ducky",
+    "title": "Banana Banana Ducky!",
+    "category": "Games",
+    "type": "3D cartoon browser game",
+    "status": "Playable",
+    "description": "Hug every yellow duck before time runs out. Build a red-tied flock, become a duck, and chase through four playful worlds in the touch-friendly v1.1 browser game.",
+    "tags": [
+      "Game",
+      "Browser",
+      "3D",
+      "Touch",
+      "Cartoon",
+      "Samfa12"
+    ],
+    "featured": false,
+    "accent": "green",
+    "imageFit": "contain",
+    "sortOrder": 5.2,
+    "detailUrl": "/games/banana-banana-ducky/",
+    "thumbnail": "assets/thumbnails/banana-banana-ducky-icon-960.webp",
+    "thumbnailAlt": "Original Banana Banana Ducky! icon: a smiling banana and yellow duck hugging, both wearing red ties beside a turquoise pond",
+    "thumbnailWidth": 960,
+    "thumbnailHeight": 960,
+    "thumbnailVariants": [
+      {
+        "path": "assets/thumbnails/banana-banana-ducky-icon-320.webp",
+        "width": 320
+      },
+      {
+        "path": "assets/thumbnails/banana-banana-ducky-icon-640.webp",
+        "width": 640
+      },
+      {
+        "path": "assets/thumbnails/banana-banana-ducky-icon-960.webp",
+        "width": 960
+      }
+    ],
+    "links": [
+      {
+        "label": "Play now",
+        "url": "/games/banana-banana-ducky/play/",
         "fullscreen": true
       }
     ]
