@@ -204,7 +204,9 @@
       "title": "Pocket Pattern",
       "path": "/games/pocket-pattern/",
       "action": "create",
-      "officialSources": ["https://samfa12.itch.io/pocket-pattern"],
+      "officialSources": [
+        "https://samfa12.itch.io/pocket-pattern"
+      ],
       "notes": "Owner confirmed Pocket Pattern as the display name after an initial Pocket Puzzle shorthand. Itch hosts the HTML5 game; this site links to it and does not copy the runtime.",
       "pageModified": "2026-09-23"
     },
@@ -590,6 +592,18 @@
       ],
       "notes": "",
       "pageModified": "2026-09-23"
+    },
+    {
+      "id": "game-breakfast-beat-down",
+      "category": "Games",
+      "title": "Breakfast Beat-down",
+      "path": "/games/breakfast-beat-down/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.com/games/breakfast-beat-down/play/"
+      ],
+      "notes": "Owner-supplied v0.2: Rush Hour Remix browser release. The first-party play URL identifies this hosted package, not a previously inspected live publication. Keep the original Breakfast Beat distinct. Hosting adds only canonical/noindex/favicon metadata; verify the remaining release bytes against the owner-supplied SHA-256.",
+      "pageModified": "2026-10-03"
     }
   ],
   "directories": [

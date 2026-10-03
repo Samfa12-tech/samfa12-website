@@ -1,2 +1,5 @@
 # Preserve the verified browser package byte for byte on every checkout.
 games/briarhold/play/** -text
+
+# Preserve reviewed release bytes across Windows and Linux checkouts.
+games/breakfast-beat-down/play/index.html -text
