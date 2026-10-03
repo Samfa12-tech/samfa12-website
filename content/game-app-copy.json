@@ -1302,5 +1302,64 @@
       "app-pocket-audio-handoff"
     ],
     "relatedLabels": {"app-pocket-chordsmith": "Start a song in Pocket Chordsmith", "app-pocket-audio-handoff": "Move song data with Pocket Audio Handoff"}
+  },
+  "game-breakfast-beat-down": {
+    "seoTitle": "Breakfast Beat-down: Rush Hour Remix browser game",
+    "intro": "Breakfast Beat-down is a rhythm-action roguelite set in Sunny’s breakfast world. In v0.2: Rush Hour Remix, grab a spatula, move through crowded kitchens and time attacks to the beat, offbeat and melody. Play the portrait-first browser game here.",
+    "details": [
+      {
+        "heading": "Serve a special on the beat",
+        "text": "Gold circles mark the main beat, mint diamonds mark offbeats, and purple notes follow the lead melody. Timed attacks build groove and score. Four offbeat FLIPs unleash Backbeat Blast; six consecutive melody FLIPs, including two between main beats, fire Hook Shot.",
+        "sources": [
+          "https://samfa12.com/games/breakfast-beat-down/play/"
+        ]
+      },
+      {
+        "heading": "Three shifts, twenty-four waves",
+        "text": "Fight through The Sunny Side, The Midnight Freezer and The Boiler Room, with eight waves in each stage. Crowded packs and finite boss support crews increase the pressure. Crumbs buy equipment for the current run; sugar buys permanent upgrades in The Pantry.",
+        "sources": [
+          "https://samfa12.com/games/breakfast-beat-down/play/"
+        ]
+      },
+      {
+        "heading": "Touch controls and keyboard play",
+        "text": "Use the left joystick to move, FLIP to attack and SLIP to dodge on a touch screen. On a keyboard, use WASD or the arrow keys to move, J or Space to attack, K or Shift to dodge, and Escape or P to pause. Start a Shift enables browser audio. Portrait is the intended phone orientation.",
+        "sources": [
+          "https://samfa12.com/games/breakfast-beat-down/play/"
+        ]
+      },
+      {
+        "heading": "Four original Pocket Chordsmith compositions",
+        "text": "The game contains four embedded Pocket Chordsmith projects. Sound & timing offers separate music and effects volumes, input calibration, wider timing windows, reduced motion, reduced flashes and low-effects mode. The soundtrack menu lets you listen and export the music projects.",
+        "sources": [
+          "https://samfa12.com/games/breakfast-beat-down/play/"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Where is progress saved?",
+        "answer": "Pantry upgrades and settings are saved in this browser on this site. Storage is not shared automatically between sites or devices. Use The Pantry’s export and import controls to move progress from another build, and keep an exported backup if browser storage is blocked.",
+        "sources": [
+          "https://samfa12.com/games/breakfast-beat-down/play/"
+        ]
+      },
+      {
+        "question": "How is this related to Breakfast Beat?",
+        "answer": "Breakfast Beat-down is the rhythm-action sequel in the breakfast world. The original Breakfast Beat has its own page and tower-defence gameplay.",
+        "sources": [
+          "https://samfa12.com/games/breakfast-beat-down/play/"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-breakfast-beat",
+      "app-pocket-chordsmith"
+    ],
+    "relatedLabels": {
+      "game-breakfast-beat": "Explore the original Breakfast Beat tower-defence game",
+      "app-pocket-chordsmith": "Explore Pocket Chordsmith, used for the embedded music"
+    }
   }
 }

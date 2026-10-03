@@ -17,6 +17,6 @@ export function safeUrl(value) {
 export function safeRoute(value) {
   if (typeof value !== "string" || !/^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*\/$/.test(value)) throw Error(`Unsafe route: ${JSON.stringify(value)}`);
   const relative = `${value.slice(1)}index.html`;
-  if (["apps/pocket-chordsmith/index.html", "apps/pocket-dj/index.html", "apps/what-would-win/index.html", "games/briarhold/play/index.html"].includes(relative)) throw Error(`Protected route: ${value}`);
+  if (["apps/pocket-chordsmith/index.html", "apps/pocket-dj/index.html", "apps/what-would-win/index.html", "games/briarhold/play/index.html", "games/breakfast-beat-down/play/index.html"].includes(relative)) throw Error(`Protected route: ${value}`);
   return relative;
 }

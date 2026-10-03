@@ -2,18 +2,22 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 70,
-    "indexableRoutes": 68,
-    "sitemapRoutes": 68,
-    "explicitlyExcluded": 2,
+    "htmlPages": 72,
+    "indexableRoutes": 69,
+    "sitemapRoutes": 69,
+    "explicitlyExcluded": 3,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 16,
-    "relationshipEdges": 67
+    "oneContextualIncoming": 17,
+    "relationshipEdges": 69
   },
   "excluded": [
     {
       "route": "/404.html",
+      "reason": "explicit noindex"
+    },
+    {
+      "route": "/games/breakfast-beat-down/play/",
       "reason": "explicit noindex"
     },
     {
@@ -136,6 +140,16 @@
     {
       "from": "/books/what-we-save/",
       "to": "/books/the-wall-that-lied/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/breakfast-beat-down/",
+      "to": "/games/breakfast-beat/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/breakfast-beat-down/",
+      "to": "/pocket-audio/pocket-chordsmith/",
       "kind": "editorial-related"
     },
     {
@@ -392,6 +406,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -451,6 +466,7 @@
         "/books/toknight-2-the-fire-beneath/",
         "/books/toknight/",
         "/books/what-we-save/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -528,6 +544,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/bug-maze-td/",
         "/games/bug-swarm-guide/",
@@ -609,6 +626,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -820,6 +838,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -1434,6 +1453,7 @@
         "/books/toknight-2-the-fire-beneath/",
         "/books/toknight/",
         "/books/what-we-save/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -1478,6 +1498,7 @@
       "incomingMain": [
         "/",
         "/about/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -1503,7 +1524,7 @@
         "/games/the-last-guard/",
         "/games/wonky-vehicle-lab/"
       ],
-      "localAssetCount": 33,
+      "localAssetCount": 34,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -1513,6 +1534,36 @@
       ],
       "findings": [],
       "advisories": []
+    },
+    {
+      "route": "/games/breakfast-beat-down/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/breakfast-beat-down/",
+      "title": "Breakfast Beat-down: Rush Hour Remix browser game | Samfa12",
+      "description": "Breakfast Beat-down is a rhythm-action roguelite set in Sunny’s breakfast world. In v0.2: Rush Hour Remix, grab a spatula, move through crowded kitchens and time attacks to the beat, offbeat and melody. Play the portrait-first browser game here.",
+      "h1": [
+        "Breakfast Beat-down"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
     },
     {
       "route": "/games/breakfast-beat/",
@@ -1526,10 +1577,12 @@
       "inSitemap": true,
       "incoming": [
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/td-pack/"
       ],
       "incomingMain": [
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/td-pack/"
       ],
       "localAssetCount": 9,
@@ -2380,6 +2433,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -2467,6 +2521,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -2556,6 +2611,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -2780,6 +2836,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -2890,6 +2947,7 @@
         "/",
         "/apps/",
         "/apps/pocket-audio-handoff/",
+        "/games/breakfast-beat-down/",
         "/games/pocket-pattern/",
         "/pocket-audio/",
         "/pocket-audio/godot-addon/",
@@ -2901,6 +2959,7 @@
         "/",
         "/apps/",
         "/apps/pocket-audio-handoff/",
+        "/games/breakfast-beat-down/",
         "/games/pocket-pattern/",
         "/pocket-audio/",
         "/pocket-audio/godot-addon/",
@@ -3019,6 +3078,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -3107,6 +3167,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
         "/games/bug-maze-td/",
@@ -3224,6 +3285,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/bug-maze-td/",
         "/games/bug-swarm-guide/",

@@ -44,6 +44,7 @@ jobs:
           npm run validate:site
           npm run validate:seo
           npm run audit:indexing -- --check
+          npm run verify:breakfast-beat-down
           npm run test:content
           npm run test:analytics
           npm run test:marketplace
@@ -85,6 +86,8 @@ jobs:
         run: WHAT_WOULD_WIN_SITE_ROOT=_site node scripts/verify-what-would-win-pages.mjs
       - name: Verify Briarhold artifact
         run: BRIARHOLD_SITE_ROOT=_site node scripts/verify-briarhold-pages.mjs games/briarhold/play
+      - name: Verify Breakfast Beat-down artifact
+        run: BREAKFAST_BEAT_DOWN_SITE_ROOT=_site npm run verify:breakfast-beat-down
       - name: Verify staged SEO routes and privacy exclusions
         run: |
           SEO_SITE_ROOT=_site npm run validate:seo

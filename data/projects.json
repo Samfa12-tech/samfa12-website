@@ -1625,5 +1625,36 @@
     "thumbnail": "assets/thumbnails/itch-io-card.png",
     "thumbnailAlt": "itch.io logo card for Samfa12 storefront",
     "id": "directory-storefronts-itch-io"
+  },
+  {
+    "id": "game-breakfast-beat-down",
+    "title": "Breakfast Beat-down",
+    "category": "Games",
+    "type": "Rhythm-action browser game",
+    "status": "Playable",
+    "description": "Rush Hour Remix v0.2: grab Sunny’s spatula, fight crowded breakfast waves on the beat, and build permanent Pantry upgrades.",
+    "tags": [
+      "Game",
+      "Browser",
+      "Rhythm",
+      "Action",
+      "Roguelite",
+      "Samfa12"
+    ],
+    "featured": false,
+    "homepageSize": "standard",
+    "accent": "orange",
+    "imageFit": "contain",
+    "sortOrder": 5.1,
+    "detailUrl": "/games/breakfast-beat-down/",
+    "thumbnail": "assets/thumbnails/breakfast-beat-down.webp",
+    "thumbnailAlt": "Sunny with headphones and a spatula in the Sunny Side kitchen, from Breakfast Beat-down gameplay",
+    "links": [
+      {
+        "label": "Play now",
+        "url": "/games/breakfast-beat-down/play/",
+        "fullscreen": true
+      }
+    ]
   }
 ]
