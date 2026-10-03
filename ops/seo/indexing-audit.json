@@ -2,18 +2,22 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 72,
-    "indexableRoutes": 69,
-    "sitemapRoutes": 69,
-    "explicitlyExcluded": 3,
+    "htmlPages": 74,
+    "indexableRoutes": 70,
+    "sitemapRoutes": 70,
+    "explicitlyExcluded": 4,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 17,
+    "oneContextualIncoming": 18,
     "relationshipEdges": 69
   },
   "excluded": [
     {
       "route": "/404.html",
+      "reason": "explicit noindex"
+    },
+    {
+      "route": "/games/banana-banana-ducky/play/",
       "reason": "explicit noindex"
     },
     {
@@ -406,6 +410,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -466,6 +471,7 @@
         "/books/toknight-2-the-fire-beneath/",
         "/books/toknight/",
         "/books/what-we-save/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -544,6 +550,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/bug-maze-td/",
@@ -626,6 +633,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -838,6 +846,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -1453,6 +1462,7 @@
         "/books/toknight-2-the-fire-beneath/",
         "/books/toknight/",
         "/books/what-we-save/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -1498,6 +1508,7 @@
       "incomingMain": [
         "/",
         "/about/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -1524,7 +1535,7 @@
         "/games/the-last-guard/",
         "/games/wonky-vehicle-lab/"
       ],
-      "localAssetCount": 34,
+      "localAssetCount": 35,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -1534,6 +1545,36 @@
       ],
       "findings": [],
       "advisories": []
+    },
+    {
+      "route": "/games/banana-banana-ducky/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/banana-banana-ducky/",
+      "title": "Banana Banana Ducky! — play the cartoon duck chase | Samfa12",
+      "description": "A banana. A red tie. A very silly plan. In Banana Banana Ducky! v1.1, chase and hug every real yellow duck before the clock runs out. Your new friends put on red ties and help recruit the rest of the flock. Play here in your browser with touch controls or a keyboard.",
+      "h1": [
+        "Banana Banana Ducky!"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
     },
     {
       "route": "/games/breakfast-beat-down/",
@@ -2433,6 +2474,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -2521,6 +2563,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -2611,6 +2654,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -2836,6 +2880,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -3078,6 +3123,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -3167,6 +3213,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/briarhold/",
@@ -3285,6 +3332,7 @@
         "/books/toknight/",
         "/books/what-we-save/",
         "/games/",
+        "/games/banana-banana-ducky/",
         "/games/breakfast-beat-down/",
         "/games/breakfast-beat/",
         "/games/bug-maze-td/",

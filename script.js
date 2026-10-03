@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20260923-2";
+  const DATA_VERSION = "20261003-3";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -557,8 +557,8 @@
       alt: project.thumbnailAlt || project.imageAlt || `Cover image for ${project.title}`,
       loading: priority ? "eager" : "lazy",
       decoding: "async",
-      width: project.category === "Books" ? 640 : 960,
-      height: project.category === "Books" ? 800 : 540,
+      width: project.thumbnailWidth || (project.category === "Books" ? 640 : 960),
+      height: project.thumbnailHeight || (project.category === "Books" ? 800 : 540),
     });
 
     image.addEventListener("error", () => {
@@ -566,6 +566,10 @@
       image.closest(".project-media")?.replaceChildren(fallback);
     });
     image.src = rootRelativePath(thumbnail);
+    if (project.thumbnailVariants?.length) {
+      image.srcset = project.thumbnailVariants.map(item => `${rootRelativePath(item.path)} ${Number(item.width)}w`).join(", ");
+      image.sizes = "(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 360px";
+    }
 
     return createElement("div", { className: mediaClass }, [image]);
   }

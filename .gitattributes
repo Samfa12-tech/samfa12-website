@@ -3,3 +3,4 @@ games/briarhold/play/** -text
 
 # Preserve reviewed release bytes across Windows and Linux checkouts.
 games/breakfast-beat-down/play/index.html -text
+games/banana-banana-ducky/play/index.html -text

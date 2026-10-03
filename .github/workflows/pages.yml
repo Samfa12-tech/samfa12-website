@@ -44,6 +44,7 @@ jobs:
           npm run validate:site
           npm run validate:seo
           npm run audit:indexing -- --check
+          npm run verify:banana-banana-ducky
           npm run verify:breakfast-beat-down
           npm run test:content
           npm run test:analytics
@@ -92,6 +93,8 @@ jobs:
         run: |
           SEO_SITE_ROOT=_site npm run validate:seo
           SEO_SITE_ROOT=_site npm run audit:indexing -- --check
+      - name: Verify Banana Banana Ducky artifact
+        run: BANANA_DUCKY_SITE_ROOT=_site npm run verify:banana-banana-ducky
       - name: Upload site
         uses: actions/upload-pages-artifact@v5
         with:

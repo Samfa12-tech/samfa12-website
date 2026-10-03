@@ -26,6 +26,7 @@ jobs:
       - run: npm run test:analytics
       - run: npm run test:marketplace
       - run: npm run test:handoff-relay
+      - run: npm run verify:banana-banana-ducky
       - run: npm run verify:breakfast-beat-down
       - run: npm run verify:what-would-win-pages
       - run: npm run verify:briarhold-pages -- games/briarhold/play
@@ -62,6 +63,7 @@ jobs:
             ./ _site/
       - run: WHAT_WOULD_WIN_SITE_ROOT=_site npm run verify:what-would-win-pages
       - run: BRIARHOLD_SITE_ROOT=_site npm run verify:briarhold-pages -- games/briarhold/play
+      - run: BANANA_DUCKY_SITE_ROOT=_site npm run verify:banana-banana-ducky
       - run: BREAKFAST_BEAT_DOWN_SITE_ROOT=_site npm run verify:breakfast-beat-down
       - run: SEO_SITE_ROOT=_site npm run validate:seo
       - run: SEO_SITE_ROOT=_site npm run audit:indexing -- --check

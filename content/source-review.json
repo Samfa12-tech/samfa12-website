@@ -853,6 +853,26 @@
           "notes": "All three HTML releases match. README, source modules and supplied screenshots reviewed. No itch URL or Android inclusion asserted; package provenance is not an independent rights audit. The promotional icon is a new original imagegen illustration based on inspected game art, not a supplied screenshot; PNG master 1254x1254, local WebP 960x960, generated 2026-10-03 at the owner’s request."
         }
       ]
+    },
+    "game-banana-banana-ducky": {
+      "disposition": "create",
+      "landingPath": "/games/banana-banana-ducky/",
+      "reviewedAt": "2026-10-03",
+      "dateMeaning": "Local owner-package inspection, not a public release date",
+      "sources": [
+        {
+          "url": "https://samfa12.com/games/banana-banana-ducky/play/",
+          "identity": "Owner-supplied Banana Banana Ducky! v1.1 cartoon + touch package",
+          "access": "read-owner-supplied-local-release",
+          "files": [
+            "index.html",
+            "README.txt"
+          ],
+          "archiveSha256": "24108bc72ad8365117cb5cd576f39629be8438711adb93786623e4c640415a1d",
+          "sourceSha256": "56c4f1c04ce505aed5dfcf6351360a9320dcb9c3bdfc734ef6eda2574d1325b7",
+          "notes": "Two-entry ZIP; self-contained WebGL 2 runtime and documentation reviewed. No third-party dependency or asset references and no separate license file supplied; this is owner-authorized hosting, not an independent rights audit. Original package preserved privately. Hosting removes personal attribution, uses a neutral storage key, adds canonical/noindex/site favicon/Apple touch icon, makes touch controls available with hybrid input, prevents a second joystick pointer from stealing control, and resumes initialized audio on subsequent user gestures. No raw archive or private evidence published. Original promotional icon generated with the built-in imagegen tool from inspected characters; private PNG master and public WebP 320/640/960 variants plus 180px Apple touch icon."
+        }
+      ]
     }
   }
 }

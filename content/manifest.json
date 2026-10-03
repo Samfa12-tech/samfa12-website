@@ -604,6 +604,18 @@
       ],
       "notes": "Owner-supplied v0.2: Rush Hour Remix browser release. The first-party play URL identifies this hosted package, not a previously inspected live publication. Keep the original Breakfast Beat distinct. Hosting adds only canonical/noindex/favicon metadata; verify the remaining release bytes against the owner-supplied SHA-256.",
       "pageModified": "2026-10-03"
+    },
+    {
+      "id": "game-banana-banana-ducky",
+      "title": "Banana Banana Ducky!",
+      "category": "Games",
+      "path": "/games/banana-banana-ducky/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.com/games/banana-banana-ducky/play/"
+      ],
+      "pageModified": "2026-10-03",
+      "notes": "Owner-supplied v1.1 cartoon + touch package. First-party play URL identifies the copy prepared here, not an earlier live publication. Public copy contains only game information. No external storefront destination is asserted."
     }
   ],
   "directories": [
