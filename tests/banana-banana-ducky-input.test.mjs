@@ -12,10 +12,10 @@ function surface(){
   return {addEventListener(type,fn){const list=listeners.get(type)||[];list.push(fn);listeners.set(type,list);},
     fire(type,event={}){for(const fn of listeners.get(type)||[])fn(event);}};
 }
-function harness({captureFails=false}={}){
+function harness({captureFails=false,scale=1}={}){
   const window=surface(),joystick=surface(),stick={style:{transform:''}},state={joyId:null,x:0,z:0};
   let captured=null,enabled=true,starts=0;
-  Object.assign(joystick,{getBoundingClientRect:()=>({left:10,top:20,width:116,height:116}),
+  Object.assign(joystick,{offsetWidth:116,offsetHeight:116,getBoundingClientRect:()=>({left:10,top:20,width:116/scale,height:116/scale}),
     setPointerCapture(id){if(captureFails)throw Error('NotFoundError');captured=id;},
     hasPointerCapture:id=>captured===id,releasePointerCapture(id){captured=null;joystick.fire('lostpointercapture',{pointerId:id});}});
   const context=vm.createContext({window});vm.runInContext(controller,context);
@@ -25,6 +25,10 @@ function harness({captureFails=false}={}){
   return {window,joystick,stick,state,control,pointer,down,setEnabled:v=>enabled=v,starts:()=>starts,capture:()=>captured};
 }
 const stopped=h=>{assert.equal(h.state.joyId,null);assert.equal(h.state.x,0);assert.equal(h.state.z,0);assert.equal(h.stick.style.transform,'');};
+
+test('scaled joystick keeps full-speed logical axes and correctly positions the thumb',()=>{
+  const h=harness({scale:2});h.down(1,55,49);assert.ok(h.state.x>.9);assert.equal(h.state.z,0);assert.equal(h.stick.style.transform,'translate(32px,0px)');
+});
 
 test('page-level release outside the joystick stops downward movement and accepts the next thumb',()=>{
   const h=harness();h.down(7);assert.ok(h.state.z>.9);
@@ -84,7 +88,7 @@ function lifecycleHarness(){
   const window=surface(),document=surface(),orientation=surface();document.hidden=false;
   const input={joyId:31,x:1,z:0,gamepadX:0,gamepadZ:0,gamepadHug:false,gamepadPrevious:[]};
   let clears=0,pauses=0,suspends=0,resizes=0,pads=[];
-  const context=vm.createContext({window,document,screen:{orientation},innerWidth:810,innerHeight:1080,input,settings:{quality:1},R:{resize(){resizes++;}},mode:'play',audio:{ctx:{suspend(){suspends++;return Promise.resolve();}}},clearInput(){clears++;input.joyId=null;input.x=input.z=0;},pauseGame(){pauses++;},navigator:{getGamepads:()=>pads},useSkill(){},controlled(){},cycle(){},resume(){}});
+  const context=vm.createContext({window,document,screen:{orientation},innerWidth:810,innerHeight:1080,input,settings:{quality:1},gameViewport:{sync(){resizes++;}},mode:'play',audio:{ctx:{suspend(){suspends++;return Promise.resolve();}}},clearInput(){clears++;input.joyId=null;input.x=input.z=0;},pauseGame(){pauses++;},navigator:{getGamepads:()=>pads},useSkill(){},controlled(){},cycle(){},resume(){}});
   vm.runInContext(lifecycle,context);
   return {window,document,orientation,context,input,setPads:v=>pads=v,counts:()=>({clears,pauses,suspends,resizes})};
 }
