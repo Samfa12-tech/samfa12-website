@@ -25,9 +25,12 @@ Keep catalogue/editorial changes in the content model, then use the checks in
 ZIPs, QA output, soundtrack WAVs and working uploads belong outside this repo
 or in excluded local output. No external sequel storefront was supplied.
 
-The screenshot-derived WebP is 590x900, cropped to the game panel from the
-owner's inspected 1440x900 desktop combat screenshot. The original Breakfast
-Beat remains a distinct product.
+The current WebP icon is 960x960, encoded from a new original 1254x1254 PNG
+created with the built-in imagegen tool at the owner's request on 2026-10-03.
+Sunny, mint headphones, a spatula and a gold rhythm ring echo the inspected
+game artwork. The PNG master and prompt remain in private ignored output.
+The public WebP filename contains its SHA-256 prefix to avoid stale artwork.
+The original Breakfast Beat remains a distinct product.
 
 Gameplay and storage are unchanged. Saves use `samfa12.breakfast-beatdown.v1`
 and settings use `samfa12.breakfast-beatdown.settings.v1`. Browser storage is
