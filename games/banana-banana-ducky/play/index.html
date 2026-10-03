@@ -63,7 +63,25 @@ const V3D = (() => {
       this.gl=gl;this.canvas=canvas;this.batches={};this.static=[];this.dynamic=[];this.stats={calls:0,instances:0,triangles:0};this.cam={x:0,z:0,half:13,targetY:.5,elev:.9};this.clear=[.85,.92,.82];this.light=[-.5,.8,.6];
       const vs=`#version 300 es\nprecision highp float;layout(location=0)in vec3 p;layout(location=1)in vec3 n;layout(location=2)in mat4 model;layout(location=6)in vec4 col;uniform mat4 vp;out vec3 N;out vec3 W;out vec4 C;void main(){vec4 w=model*vec4(p,1.);W=w.xyz;vec3 s=vec3(dot(model[0].xyz,model[0].xyz),dot(model[1].xyz,model[1].xyz),dot(model[2].xyz,model[2].xyz));N=normalize(mat3(model)*(n/max(s,vec3(.00001))));C=col;gl_Position=vp*w;}`;
       const fs=`#version 300 es
-precision highp float;in vec3 N;in vec3 W;in vec4 C;uniform vec3 light;uniform vec3 eye;out vec4 frag;float toon(float v){if(v<.24)return .42; if(v<.48)return .66; if(v<.74)return .88; return 1.08;}void main(){vec3 n=normalize(N);vec3 l=normalize(light);vec3 v=normalize(eye-W);float d=max(0.,dot(n,l));float hemi=.62+.16*n.y;float shade=toon(clamp(hemi*.60+d*.82,0.,1.2));vec3 c=C.rgb*shade;float rim=pow(1.-max(0.,dot(n,v)),2.4);c+=C.rgb*rim*.08;float ink=smoothstep(.64,.98,rim)*.52;c=mix(c,vec3(.10,.14,.16),ink);float sp=step(.86,max(0.,dot(n,normalize(l+v))))*.05;c+=vec3(sp);frag=vec4(min(c*1.05,vec3(1.)),C.a);}`;
+precision highp float;
+in vec3 N;in vec3 W;in vec4 C;uniform vec3 light;uniform vec3 eye;out vec4 frag;
+void main(){
+ vec3 n=normalize(N),l=normalize(light),v=normalize(eye-W);
+ float d=max(0.,dot(n,l));
+ // Three broad cel bands keep yellow bodies, orange beaks and red ties distinct.
+ float shade=d<.28?.65:d<.68?.86:1.04;
+ vec3 tint=d<.28?vec3(.82,.90,1.):vec3(1.);
+ vec3 c=C.rgb*tint*shade;
+ // An antialiased ink contour inside each silhouette, in the existing pass.
+ // No extra geometry, framebuffer, full-screen filter or texture is required.
+ float edge=1.-abs(dot(n,v)),aa=max(fwidth(edge),.008);
+ float ink=smoothstep(.80-aa,.80+aa,edge);
+ c=mix(c,vec3(.10,.17,.19),ink*.90);
+ float spec=max(0.,dot(n,normalize(l+v)));
+ float shine=smoothstep(.94-fwidth(spec),.94+fwidth(spec)+.001,spec);
+ c=mix(c,vec3(1.,.98,.84),shine*.13*(1.-ink));
+ frag=vec4(min(c,vec3(1.)),C.a);
+}`;
       function shader(type,src){let s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;}
       this.program=gl.createProgram();gl.attachShader(this.program,shader(gl.VERTEX_SHADER,vs));gl.attachShader(this.program,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(this.program);if(!gl.getProgramParameter(this.program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(this.program));
       this.uVP=gl.getUniformLocation(this.program,'vp');this.uLight=gl.getUniformLocation(this.program,'light');this.uEye=gl.getUniformLocation(this.program,'eye');
@@ -110,12 +128,12 @@ try{R=new V3D.Renderer($('game'));}catch(e){$('errorText').textContent=e.message
 let world=node(),decor=node(),actors=[],clones=[],items=[],particles=[],rabbits=[],obstacles=[],waters=[],bridges=[],bounces=[];
 let selectedMap='park',difficulty='normal',initialTime=300,mode='menu',controlId=0,nextId=1,elapsed=0,remaining=300,worldTime=0,roundTime=0,countdown=3,swaps=0,catches=0,slips=0,commandId=null,powerActor=null,toastTime=0,win=false,finishTime=0,rainbowPlanned=false,rainbowAt=0,rainbowSpawned=false;
 let preview=[],decorAnim=[],effectRoots=[],clickStart=null,uiClock=0,lastHud='',lastSquad='',fps=60,debugOn=new URLSearchParams(location.search).has('debug'),frame=0;
-const input={keys:new Set(),x:0,z:0,hug:false,gamepadHug:false,joyId:null,gamepadPrevious:[]};
+const input={keys:new Set(),x:0,z:0,hug:false,hugId:null,gamepadHug:false,gamepadX:0,gamepadZ:0,joyId:null,gamepadPrevious:[]};
 const actorById=id=>actors.find(a=>a.id===id),controlled=()=>actorById(controlId),allies=()=>actors.filter(a=>a.team),freeDucks=()=>actors.filter(a=>!a.team),friends=()=>actors.filter(a=>a.team&&a.id!==0);
 const view={x:0,z:0,half:12};
 function show(id,on=true){$(id).classList.toggle('hidden',!on);}
 function toast(text,seconds=2.5){$('toast').textContent=text;$('toast').classList.add('show');toastTime=seconds;}
-function clearInput(){input.keys.clear();input.x=input.z=0;input.hug=false;input.gamepadHug=false;input.joyId=null;$('stick').style.transform='';}
+function clearInput(){input.keys.clear();joystickControl.reset();stopHug();input.gamepadX=input.gamepadZ=0;input.gamepadHug=false;clickStart=null;}
 function colorCycle(t){const list=['#f2637e','#ffb848','#f7ed69','#67cc82','#55c4e1','#a787ed'];return list[Math.floor(t*5)%list.length];}
 
 // ---- Original, lightweight procedural music and cartoon sound effects. ----
@@ -299,7 +317,7 @@ function tryHug(a){if(!a||mode!=='play'||a.hugCD>0||a.hug>0||a.freeze>0||a.stun>
  if(target.kind==='clone'){clones.splice(clones.indexOf(target),1);burst(target.x,target.z,'#d9b9eb',16);a.hugCD=.65;if(a.id===controlId)toast('POP! A pretend duck. Very convincing.',1.8);audio.fx('clone');return false;}
  const dx=target.x-a.x,dz=target.z-a.z;a.yaw=Math.atan2(dx,dz);target.team=true;target.command=null;target.target=null;target.freeze=0;target.crawl=0;target.fly=0;target.burrow=0;target.hug=.90;target.stun=.90;target.hugCD=1.65;target.skillCD=Math.max(target.skillCD,2);target.pickCD=2;target.goal=null;a.hug=.90;a.hugCD=1.75;a.vx=a.vz=0;a.hugTarget=target.id;target.yaw=a.yaw+Math.PI;target.x=a.x+Math.sin(a.yaw)*.86;target.z=a.z+Math.cos(a.yaw)*.86;catches++;burst(target.x,target.z,'#f09caa',13,1.1);audio.fx('catch');if(a.id===controlId){toast(`${target.name} joined the flock! Nice tie.`,2);if(friends().length===1)toast('Your first duck! Press Q / BE A DUCK to become it.',4);}updateSquad(true);return true;
 }
-function playerUpdate(a,dt){let dx=input.x,dz=input.z;const k=input.keys;if(k.has('KeyA')||k.has('ArrowLeft'))dx-=1;if(k.has('KeyD')||k.has('ArrowRight'))dx+=1;if(k.has('KeyW')||k.has('ArrowUp'))dz-=1;if(k.has('KeyS')||k.has('ArrowDown'))dz+=1;let len=Math.hypot(dx,dz);if(len>1){dx/=len;dz/=len;}move(a,dx,dz,a.kind==='banana'?5.65:5.15,dt);
+function playerUpdate(a,dt){let dx=input.joyId!==null?input.x:input.gamepadX,dz=input.joyId!==null?input.z:input.gamepadZ;const k=input.keys;if(k.has('KeyA')||k.has('ArrowLeft'))dx-=1;if(k.has('KeyD')||k.has('ArrowRight'))dx+=1;if(k.has('KeyW')||k.has('ArrowUp'))dz-=1;if(k.has('KeyS')||k.has('ArrowDown'))dz+=1;let len=Math.hypot(dx,dz);if(len>1){dx/=len;dz/=len;}move(a,dx,dz,a.kind==='banana'?5.65:5.15,dt);
  if(input.hug||input.gamepadHug||k.has('Space'))tryHug(a);else if(settings.autoHug&&len>.1&&freeDucks().concat(clones.filter(c=>!c.team)).some(b=>dist(a,b)<(a.kind==='banana'?1.12:1.00)))tryHug(a);
 }
 function updateActors(dt){for(const a of actors){for(const key of['stun','freeze','shield','speedBuff','slow','giant','slippery','hug','hugCD','skillCD','fly','crawl','pickCD','splashCD','bounce','punch'])a[key]=Math.max(0,a[key]-dt);a.rainbow=Math.max(0,a.rainbow-dt);
@@ -355,15 +373,46 @@ function closeSettings(){show('settings',false);mode=settingsBack==='play'||sett
 $('helpMenu').onclick=openHelp;$('helpPause').onclick=openHelp;$('closeHelp').onclick=closeHelp;$('settingsMenu').onclick=openSettings;$('settingsPause').onclick=openSettings;$('closeSettings').onclick=closeSettings;
 function syncSettings(){$('musicVol').value=settings.music;$('sfxVol').value=settings.sfx;$('quality').value=String(settings.quality);$('autoHug').checked=settings.autoHug;$('reduceMotion').checked=settings.reduced;$('soundBtn').textContent=settings.muted?'♩̸':'♪';$('soundBtn').setAttribute('aria-label',settings.muted?'Unmute audio':'Mute audio');R.resize(Number(settings.quality));}
 for(const [id,key]of[['musicVol','music'],['sfxVol','sfx']])$(id).oninput=e=>{settings[key]=Number(e.target.value);audio.init();audio.volume();save();};$('quality').onchange=e=>{settings.quality=Number(e.target.value);R.resize(settings.quality);save();};$('autoHug').onchange=e=>{settings.autoHug=e.target.checked;save();};$('reduceMotion').onchange=e=>{settings.reduced=e.target.checked;save();};
-function stopHug(e){input.hug=false;try{if(e&&$('hugBtn').hasPointerCapture(e.pointerId))$('hugBtn').releasePointerCapture(e.pointerId);}catch{}}
-$('hugBtn').addEventListener('pointerdown',e=>{e.preventDefault();audio.init();input.hug=true;try{$('hugBtn').setPointerCapture(e.pointerId);}catch{}tryHug(controlled());});for(const name of['pointerup','pointercancel','lostpointercapture'])$('hugBtn').addEventListener(name,stopHug);$('hugBtn').addEventListener('click',()=>tryHug(controlled()));
-const joystick=$('joystick');function joyMove(e){if(input.joyId!==e.pointerId)return;const b=joystick.getBoundingClientRect(),dx=e.clientX-b.left-b.width/2,dy=e.clientY-b.top-b.height/2,max=34,l=Math.hypot(dx,dy),fac=l>max?max/l:1;input.x=dx*fac/max;input.z=dy*fac/max;$('stick').style.transform=`translate(${dx*fac}px,${dy*fac}px)`;}
-joystick.addEventListener('pointerdown',e=>{if(mode!=='play'||input.joyId!==null)return;e.preventDefault();audio.init();input.joyId=e.pointerId;joystick.setPointerCapture(e.pointerId);joyMove(e);});joystick.addEventListener('pointermove',e=>{if(input.joyId===e.pointerId){e.preventDefault();joyMove(e);}});for(const n of['pointerup','pointercancel','lostpointercapture'])joystick.addEventListener(n,e=>{if(input.joyId===e.pointerId){input.joyId=null;input.x=input.z=0;$('stick').style.transform='';}});
+function stopHug(e){if(e&&input.hugId!==e.pointerId)return;const id=input.hugId;input.hugId=null;input.hug=false;try{if(id!==null&&$('hugBtn').hasPointerCapture(id))$('hugBtn').releasePointerCapture(id);}catch{}}
+$('hugBtn').addEventListener('pointerdown',e=>{if(mode!=='play'||input.hugId!==null)return;e.preventDefault();audio.init();input.hugId=e.pointerId;input.hug=true;try{$('hugBtn').setPointerCapture(e.pointerId);}catch{}tryHug(controlled());});for(const name of['pointerup','pointercancel'])window.addEventListener(name,stopHug,true);$('hugBtn').addEventListener('lostpointercapture',stopHug);$('hugBtn').addEventListener('click',()=>tryHug(controlled()));
+// ---- Joystick lifecycle (also exercised directly by the input regression tests). ----
+function bindJoystick(joystick,stick,state,{enabled,start}){
+ let type=null,touchId=null,center=null,lastPoint=null,touches=[];
+ function reset(){const id=state.joyId;state.joyId=null;state.x=state.z=0;type=touchId=center=lastPoint=null;touches=[];stick.style.transform='';try{if(id!==null&&joystick.hasPointerCapture(id))joystick.releasePointerCapture(id);}catch{}}
+ function identifyTouch(){if(type!=='touch'||touchId!==null||!lastPoint)return;const t=touches.find(t=>Math.hypot(t.clientX-lastPoint.x,t.clientY-lastPoint.y)<2);if(t)touchId=t.identifier;}
+ function move(e){if(state.joyId!==e.pointerId)return;if(type!=='touch'&&e.buttons===0){reset();return;}e.preventDefault();lastPoint={x:e.clientX,y:e.clientY};identifyTouch();const dx=e.clientX-center.x,dy=e.clientY-center.y,max=34,l=Math.hypot(dx,dy),fac=l>max?max/l:1;state.x=dx*fac/max;state.z=dy*fac/max;stick.style.transform=`translate(${dx*fac}px,${dy*fac}px)`;}
+ joystick.addEventListener('pointerdown',e=>{
+  if(!enabled()||e.pointerType==='mouse'&&e.button!==0)return;
+  // A new primary touch means the previous touch sequence has ended. Recover
+  // even if Safari omitted both its release and capture-loss notification.
+  if(state.joyId!==null&&type==='touch'&&e.pointerType==='touch'&&e.isPrimary)reset();
+  if(state.joyId!==null)return;e.preventDefault();start();const b=joystick.getBoundingClientRect();center={x:b.left+b.width/2,y:b.top+b.height/2};state.joyId=e.pointerId;type=e.pointerType;touchId=null;
+  try{joystick.setPointerCapture(e.pointerId);}catch{} // Page listeners still own the release if capture fails.
+  move(e);
+ });
+ // Capture-phase page listeners see releases outside the pad and over buttons.
+ // Only the owning pointer can stop movement; an action finger cannot steal it.
+ window.addEventListener('pointermove',move,{capture:true,passive:false});
+ for(const name of['pointerup','pointercancel'])window.addEventListener(name,e=>{if(state.joyId===e.pointerId)reset();},true);
+ joystick.addEventListener('lostpointercapture',e=>{if(state.joyId===e.pointerId)reset();});
+ // Touch identifiers are not PointerEvent IDs. Reconcile the browser's live
+ // touch list independently, including an end while another action finger stays.
+ for(const name of['touchstart','touchmove','touchend','touchcancel'])window.addEventListener(name,e=>{touches=Array.from(e.touches);identifyTouch();if(type==='touch'&&(touches.length===0||touchId!==null&&!touches.some(t=>t.identifier===touchId)))reset();},{capture:true,passive:true});
+ return {reset};
+}
+// ---- End joystick lifecycle. ----
+const joystickControl=bindJoystick($('joystick'),$('stick'),input,{enabled:()=>mode==='play',start:()=>audio.init()});
 $('game').addEventListener('pointerdown',e=>{if(mode==='play')clickStart={x:e.clientX,y:e.clientY,t:performance.now(),id:e.pointerId};});$('game').addEventListener('pointerup',e=>{if(mode!=='play'||!clickStart||clickStart.id!==e.pointerId)return;let c=clickStart;clickStart=null;if(Math.hypot(e.clientX-c.x,e.clientY-c.y)>15||performance.now()-c.t>600)return;let target=screenActor(e.clientX,e.clientY),pos=R.ground(e.clientX,e.clientY);if(commandId!==null){setCommand(pos,target);return;}if(target?.team)command(target);else if(target&&!target.team&&dist(controlled(),target)<2.6)tryHug(controlled());});$('game').addEventListener('pointercancel',()=>clickStart=null);$('game').addEventListener('contextmenu',e=>e.preventDefault());$('game').addEventListener('wheel',e=>{if(mode==='play'){e.preventDefault();cameraZoom=clamp(cameraZoom+e.deltaY*.0006,.75,1.45);}},{passive:false});
 window.addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();debugOn=!debugOn;show('debug',debugOn);return;}if(e.code==='Escape'){e.preventDefault();if(mode==='help')closeHelp();else if(mode==='settings')closeSettings();else if(!$('confirm').classList.contains('hidden'))show('confirm',false);else if(mode==='pause')resume();else if(mode==='play'||mode==='countdown')pauseGame();return;}if(mode==='play'||mode==='countdown'){if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyW','KeyA','KeyS','KeyD','KeyE','KeyQ'].includes(e.code))e.preventDefault();input.keys.add(e.code);if(!e.repeat&&e.code==='KeyQ')cycle();if(!e.repeat&&e.code==='KeyE')useSkill(controlled());}
  if(e.code==='Tab'){let active=[...document.querySelectorAll('.overlay:not(.hidden)')].pop();if(active&&mode!=='result'){let focus=[...active.querySelectorAll('button:not(:disabled),input,select')].filter(b=>b.offsetParent!==null);if(focus.length){if(e.shiftKey&&document.activeElement===focus[0]){e.preventDefault();focus.at(-1).focus();}else if(!e.shiftKey&&document.activeElement===focus.at(-1)){e.preventDefault();focus[0].focus();}}}}
-});window.addEventListener('keyup',e=>input.keys.delete(e.code));window.addEventListener('blur',()=>{clearInput();pauseGame();});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();pauseGame();if(audio.ctx)audio.ctx.suspend().catch(()=>{});}});window.addEventListener('resize',()=>{R.resize(settings.quality);clearInput();});window.addEventListener('gamepaddisconnected',()=>{clearInput();input.gamepadPrevious=[];});
-function gamepad(){let gp;try{gp=[...(navigator.getGamepads?.()||[])].find(Boolean);}catch{return;}if(!gp)return;if(mode==='play'&&input.joyId===null){const x=gp.axes[0]||0,z=gp.axes[1]||0;input.x=Math.abs(x)>.18?x:0;input.z=Math.abs(z)>.18?z:0;}input.gamepadHug=!!gp.buttons[0]?.pressed;for(const[index,fn]of[[1,()=>useSkill(controlled())],[3,cycle],[9,()=>mode==='pause'?resume():pauseGame()]]){let down=!!gp.buttons[index]?.pressed;if(down&&!input.gamepadPrevious[index])fn();input.gamepadPrevious[index]=down;}}
+});window.addEventListener('keyup',e=>input.keys.delete(e.code));
+function backgroundGame(){clearInput();pauseGame();if(audio.ctx)audio.ctx.suspend().catch(()=>{});}
+window.addEventListener('blur',backgroundGame);window.addEventListener('pagehide',backgroundGame);document.addEventListener('freeze',backgroundGame);document.addEventListener('visibilitychange',()=>{if(document.hidden)backgroundGame();});
+let landscape=innerWidth>innerHeight;
+window.addEventListener('resize',()=>{R.resize(settings.quality);const next=innerWidth>innerHeight;if(next!==landscape)clearInput();landscape=next;});
+window.addEventListener('orientationchange',clearInput);screen.orientation?.addEventListener('change',clearInput);
+window.addEventListener('gamepaddisconnected',()=>{input.gamepadX=input.gamepadZ=0;input.gamepadHug=false;input.gamepadPrevious=[];});
+function gamepad(){input.gamepadX=input.gamepadZ=0;input.gamepadHug=false;let gp;try{gp=[...(navigator.getGamepads?.()||[])].find(Boolean);}catch{return;}if(!gp){input.gamepadPrevious=[];return;}if(mode==='play'){const x=gp.axes[0]||0,z=gp.axes[1]||0;input.gamepadX=Math.abs(x)>.18?x:0;input.gamepadZ=Math.abs(z)>.18?z:0;input.gamepadHug=!!gp.buttons[0]?.pressed;}for(const[index,fn]of[[1,()=>useSkill(controlled())],[3,cycle],[9,()=>mode==='pause'?resume():pauseGame()]]){let down=!!gp.buttons[index]?.pressed;if(down&&!input.gamepadPrevious[index])fn();input.gamepadPrevious[index]=down;}}
 for(const el of document.querySelectorAll('.overlay')){el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');let heading=el.querySelector('h2');if(heading){heading.id=heading.id||el.id+'Title';el.setAttribute('aria-labelledby',heading.id);}}
 
 // ---- Main loop and testable read-only state. ----
@@ -391,7 +440,7 @@ function loop(now){requestAnimationFrame(loop);if(contextLost)return;const real=
 $('game').addEventListener('webglcontextlost',e=>{e.preventDefault();contextLost=true;clearInput();pauseGame();$('errorText').textContent='The graphics took a little tumble. They will recover automatically if your browser restores them, or use Try again to restart.';show('error');});$('game').addEventListener('webglcontextrestored',()=>{try{R=new V3D.Renderer($('game'));R.setWorld(world);R.clear=maps[selectedMap].sky;syncSettings();contextLost=false;last=performance.now();show('error',false);}catch{}});
 window.render_game_to_text=()=>JSON.stringify({mode,map:selectedMap,time:Number(remaining.toFixed(2)),elapsed:Number(elapsed.toFixed(2)),controlled:controlId,flock:friends().length,total:actors.length-1,free:freeDucks().length,swaps,rainbow:{planned:rainbowPlanned,spawned:rainbowSpawned},actors:actors.map(a=>({id:a.id,name:a.name,type:a.type,team:a.team,x:+a.x.toFixed(2),z:+a.z.toFixed(2),h:+a.h.toFixed(2),freeze:+a.freeze.toFixed(2),stun:+a.stun.toFixed(2),skillCD:+a.skillCD.toFixed(2),command:a.command,burrow:a.burrow,fly:a.fly})),clones:clones.length,items:items.map(i=>({kind:i.kind,x:i.x,z:i.z,cooldown:i.cd,used:i.used})),render:R.stats});
 if(new URLSearchParams(location.search).has('debug')){
- window.__BBD={state:()=>JSON.parse(window.render_game_to_text()),start:startRound,advance:seconds=>{for(let i=0;i<seconds*60;i++)simulate(1/60);updateHUD();},teleport:(id,x,z)=>{let a=actorById(id);if(a){a.x=x;a.z=z;a.vx=a.vz=0;}},setActor:(id,values)=>Object.assign(actorById(id),values),hug:id=>tryHug(actorById(id)),skill:id=>useSkill(actorById(id)),switchTo,chooseRainbow,forceItem:(kind,id=controlId)=>{let a=actorById(id),item=makeItem(kind,{x:a.x,z:a.z});items.push(item);collectItem(a,item);},finish,pause:pauseGame,resume,command:(id,p)=>{commandId=id;setCommand(p);},selectMap:pickWorld,menu:menuMode,renderer:()=>R.stats,glError:()=>R.gl.getError(),validPoint,dryAt};
+ window.__BBD={input:()=>({joyId:input.joyId,x:input.x,z:input.z,hug:input.hug,gamepadX:input.gamepadX,gamepadZ:input.gamepadZ}),state:()=>JSON.parse(window.render_game_to_text()),start:startRound,advance:seconds=>{for(let i=0;i<seconds*60;i++)simulate(1/60);updateHUD();},teleport:(id,x,z)=>{let a=actorById(id);if(a){a.x=x;a.z=z;a.vx=a.vz=0;}},setActor:(id,values)=>Object.assign(actorById(id),values),hug:id=>tryHug(actorById(id)),skill:id=>useSkill(actorById(id)),switchTo,chooseRainbow,forceItem:(kind,id=controlId)=>{let a=actorById(id),item=makeItem(kind,{x:a.x,z:a.z});items.push(item);collectItem(a,item);},finish,pause:pauseGame,resume,command:(id,p)=>{commandId=id;setCommand(p);},selectMap:pickWorld,menu:menuMode,renderer:()=>R.stats,glError:()=>R.gl.getError(),validPoint,dryAt};
 }
 // Catch late initialization errors visibly instead of leaving a blank loading screen.
 window.addEventListener('error',e=>{console.error('Banana Ducky runtime:',e.error||e.message);$('errorText').textContent='Something tripped over: '+e.message;show('error');});
