@@ -65,6 +65,8 @@ jobs:
           SOCIAL_TIME_ZONE: Australia/Sydney
           SOCIAL_POST_HOUR: "8"
           SOCIAL_POST_MINUTE: "15"
+          SOCIAL_SECOND_POST_HOUR: "17"
+          SOCIAL_SECOND_POST_MINUTE: "15"
           SOCIAL_WEEKLY_POST_COUNT: "10"
           SOCIAL_MIN_SCHEDULE_LEAD_MINUTES: "5"
         run: node scripts/social-post.mjs
