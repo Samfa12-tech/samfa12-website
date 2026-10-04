@@ -195,6 +195,105 @@
       "textSha256": "e5815ec64eb4d4bbc15b7455db01e664625bf82a6ddd56bf5d3157644cc19559",
       "scheduledAt": "2026-09-27T14:31:27.485Z",
       "dueAt": "2026-10-04T21:15:00.000Z"
+    },
+    {
+      "id": "toknight-series-1",
+      "project": "ToKnight",
+      "category": "Books",
+      "date": "2026-10-06",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb4365aeab50bdf9059",
+      "textSha256": "5153c9ee0085f8ac4154d7a6e8645921265ef18921e5f102140db8aa96dec0f8",
+      "scheduledAt": "2026-10-04T11:47:00.275Z",
+      "dueAt": "2026-10-05T21:15:00.000Z"
+    },
+    {
+      "id": "lastguard-web-1",
+      "project": "The Last Guard",
+      "category": "Games",
+      "date": "2026-10-07",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb4365aeab50bdf9082",
+      "textSha256": "3954974d36161cff445623f8e7ce459bcc7a98636cb0d2baac0e4d5a72df1ce2",
+      "scheduledAt": "2026-10-04T11:47:00.593Z",
+      "dueAt": "2026-10-06T21:15:00.000Z"
+    },
+    {
+      "id": "concubine-power-1",
+      "project": "Concubine",
+      "category": "Books",
+      "date": "2026-10-08",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb4a486988a6e1495d8",
+      "textSha256": "ffa45638e1870f45a1b190dcec18cece3d880e4c0ec99c5bf6c03425c337f26d",
+      "scheduledAt": "2026-10-04T11:47:00.803Z",
+      "dueAt": "2026-10-07T21:15:00.000Z"
+    },
+    {
+      "id": "briarhold-browser-1",
+      "project": "Briarhold",
+      "category": "Games",
+      "date": "2026-10-09",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb411a7340ba024e211",
+      "textSha256": "3e57ec03b5335082244fc6ce300f4c8a9243a73800fe83aa35693324c88257f7",
+      "scheduledAt": "2026-10-04T11:47:01.003Z",
+      "dueAt": "2026-10-08T21:15:00.000Z"
+    },
+    {
+      "id": "drink-sober-1",
+      "project": "Sober / Drink",
+      "category": "Books",
+      "date": "2026-10-10",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb5fb26f2c2fb5ccc0f",
+      "textSha256": "a16d205d63f39b9db904b70084483775a8b9c10a2f6f8a513c87a276dff1d440",
+      "scheduledAt": "2026-10-04T11:47:01.309Z",
+      "dueAt": "2026-10-09T21:15:00.000Z"
+    },
+    {
+      "id": "moon-mower-premise-1",
+      "project": "Moon Mower",
+      "category": "Games",
+      "date": "2026-10-11",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb56f5f5d018d9f4648",
+      "textSha256": "72ae05a56f935e914f0fd80a4dcf8402112a9f0438977d8f3a0896edace12e93",
+      "scheduledAt": "2026-10-04T11:47:01.580Z",
+      "dueAt": "2026-10-10T21:15:00.000Z"
+    },
+    {
+      "id": "chordsmith-handoff-1",
+      "project": "Pocket Chordsmith",
+      "category": "Web development",
+      "date": "2026-10-06",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb56f5f5d018d9f4671",
+      "textSha256": "70a896931105268782bbf33f669c5ec18059cd52de9ae23666c176d8796cdf19",
+      "scheduledAt": "2026-10-04T11:47:01.877Z",
+      "dueAt": "2026-10-06T06:15:00.000Z"
+    },
+    {
+      "id": "possum-cafe-nightshift-1",
+      "project": "Night Shift at Possum's Cafe",
+      "category": "Games",
+      "date": "2026-10-08",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb5a486988a6e14961a",
+      "textSha256": "bbbfa590b2c5f9573c6210fb29081023d312f7df740e3f08171fb8ff56bf3c3f",
+      "scheduledAt": "2026-10-04T11:47:02.114Z",
+      "dueAt": "2026-10-08T06:15:00.000Z"
+    },
+    {
+      "id": "lastguard-1",
+      "project": "The Last Guard",
+      "category": "Games",
+      "date": "2026-10-10",
+      "status": "scheduled",
+      "bufferPostId": "6ac23cb611a7340ba024e253",
+      "textSha256": "967983e7b16893662e0f00a2dad4720c875ac65644b10d8206aac94f4b564cba",
+      "scheduledAt": "2026-10-04T11:47:02.400Z",
+      "dueAt": "2026-10-10T06:15:00.000Z"
     }
   ]
 }
