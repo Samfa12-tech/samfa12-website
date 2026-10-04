@@ -12,6 +12,8 @@ const channelNameHint = (process.env.BUFFER_X_CHANNEL_NAME || 'Samfa12').trim().
 const timeZone = (process.env.SOCIAL_TIME_ZONE || 'Australia/Sydney').trim();
 const postHour = Number(process.env.SOCIAL_POST_HOUR || 8);
 const postMinute = Number(process.env.SOCIAL_POST_MINUTE || 15);
+const secondPostHour = Number(process.env.SOCIAL_SECOND_POST_HOUR || 17);
+const secondPostMinute = Number(process.env.SOCIAL_SECOND_POST_MINUTE || 15);
 const weeklyPostCount = Number(process.env.SOCIAL_WEEKLY_POST_COUNT || 7);
 const minimumScheduleLeadMinutes = Number(process.env.SOCIAL_MIN_SCHEDULE_LEAD_MINUTES || 5);
 
@@ -21,6 +23,9 @@ if (!allowedActions.has(action)) {
 }
 if (!Number.isInteger(postHour) || postHour < 0 || postHour > 23 || !Number.isInteger(postMinute) || postMinute < 0 || postMinute > 59) {
   throw new Error('SOCIAL_POST_HOUR and SOCIAL_POST_MINUTE must describe a valid local clock time.');
+}
+if (!Number.isInteger(secondPostHour) || secondPostHour < 0 || secondPostHour > 23 || !Number.isInteger(secondPostMinute) || secondPostMinute < 0 || secondPostMinute > 59) {
+  throw new Error('SOCIAL_SECOND_POST_HOUR and SOCIAL_SECOND_POST_MINUTE must describe a valid local clock time.');
 }
 if (!Number.isInteger(weeklyPostCount) || weeklyPostCount < 1 || weeklyPostCount > 10) {
   throw new Error('SOCIAL_WEEKLY_POST_COUNT must be an integer from 1 to 10.');
@@ -78,6 +83,35 @@ function firstSchedulableDay(now = new Date()) {
   const todayDueAt = Date.parse(localDateTimeToUtc(today, postHour, postMinute));
   const minimumLeadMs = minimumScheduleLeadMinutes * 60000;
   return todayDueAt - now.getTime() >= minimumLeadMs ? today : addDays(today, 1);
+}
+
+function localSlotKey(date, zone = timeZone) {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: zone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}|${values.hour}:${values.minute}`;
+}
+
+function weeklySlotTemplates(count = weeklyPostCount) {
+  const slots = [];
+  for (let dayOffset = 0; dayOffset < 7 && slots.length < count; dayOffset += 1) {
+    slots.push({dayOffset, hour: postHour, minute: postMinute});
+  }
+
+  // Extra weekly posts are spread across Tue/Thu/Sat evenings when the week starts on Monday.
+  // If the run starts later, the same offsets still distribute them rather than clustering them.
+  for (const dayOffset of [1, 3, 5, 0, 2, 4, 6]) {
+    if (slots.length >= count) break;
+    slots.push({dayOffset, hour: secondPostHour, minute: secondPostMinute});
+  }
+  return slots;
 }
 
 function stableScore(seed) {
@@ -151,30 +185,23 @@ function choosePost(bank, history, targetDay) {
     .sort((a, b) => a.score.localeCompare(b.score))[0].post;
 }
 
-function buildWeekPlan(bank, history, startDay, blockedDays = new Set()) {
+function buildWeekPlan(bank, history, startDay, blockedSlots = new Set()) {
   const virtualHistory = {posts: [...(history.posts || [])]};
   const slots = [];
-  let scheduledCount = 0;
-  let dayOffset = 0;
+  const templates = weeklySlotTemplates();
 
-  // Fill seven actual open Buffer slots. Previously a blocked day still consumed one
-  // of the seven iterations, which could leave the weekly batch short.
-  while (scheduledCount < weeklyPostCount) {
-    if (dayOffset > 31) {
-      throw new Error(`Could not find ${weeklyPostCount} open social slots within 32 days of ${startDay}.`);
-    }
+  for (const template of templates) {
+    const date = addDays(startDay, template.dayOffset);
+    const dueAt = localDateTimeToUtc(date, template.hour, template.minute);
+    const slotKey = `${date}|${String(template.hour).padStart(2, '0')}:${String(template.minute).padStart(2, '0')}`;
 
-    const date = addDays(startDay, dayOffset);
-    dayOffset += 1;
-
-    if (blockedDays.has(date)) {
-      slots.push({date, skipped: true, reason: 'Buffer already has a scheduled post on this date'});
+    if (blockedSlots.has(slotKey)) {
+      slots.push({date, dueAt, hour: template.hour, minute: template.minute, skipped: true, reason: 'Buffer already has a scheduled post in this slot'});
       continue;
     }
 
     const post = choosePost(bank, virtualHistory, date);
-    const dueAt = localDateTimeToUtc(date, postHour, postMinute);
-    slots.push({date, dueAt, post});
+    slots.push({date, dueAt, hour: template.hour, minute: template.minute, post});
     virtualHistory.posts.push({
       id: post.id,
       project: post.project,
@@ -182,7 +209,6 @@ function buildWeekPlan(bank, history, startDay, blockedDays = new Set()) {
       date,
       status: 'planned',
     });
-    scheduledCount += 1;
   }
 
   return slots;
@@ -342,7 +368,7 @@ function printWeekPlan(plan) {
       console.log(`${slot.date}: SKIP — ${slot.reason}`);
       continue;
     }
-    console.log(`${slot.date} ${postHour.toString().padStart(2, '0')}:${postMinute.toString().padStart(2, '0')} ${timeZone} -> ${slot.post.id} [${slot.post.category} / ${slot.post.project}]`);
+    console.log(`${slot.date} ${String(slot.hour).padStart(2, '0')}:${String(slot.minute).padStart(2, '0')} ${timeZone} -> ${slot.post.id} [${slot.post.category} / ${slot.post.project}]`);
     console.log(`  ${slot.post.text}`);
   }
 }
@@ -362,7 +388,7 @@ async function main() {
   if (action === 'preview-week') {
     const startDay = firstSchedulableDay();
     const plan = buildWeekPlan(bank, history, startDay);
-    console.log(`Previewing ${weeklyPostCount} daily slots starting ${startDay}. Nothing will be sent to Buffer.`);
+    console.log(`Previewing ${weeklyPostCount} weekly slots across 7 days starting ${startDay}. Nothing will be sent to Buffer.`);
     printWeekPlan(plan);
     return;
   }
@@ -384,8 +410,8 @@ async function main() {
     const startDay = firstSchedulableDay();
     console.log(`First schedulable local day: ${startDay} (minimum lead: ${minimumScheduleLeadMinutes} minute(s)).`);
     const existing = await getScheduledPosts(channel.organizationId, channel.id);
-    const blockedDays = new Set(existing.filter((post) => post.dueAt).map((post) => localIsoDay(new Date(post.dueAt))));
-    const plan = buildWeekPlan(bank, history, startDay, blockedDays);
+    const blockedSlots = new Set(existing.filter((post) => post.dueAt).map((post) => localSlotKey(new Date(post.dueAt))));
+    const plan = buildWeekPlan(bank, history, startDay, blockedSlots);
     console.log(`Buffer currently has ${existing.length} scheduled post(s) for this X channel.`);
     printWeekPlan(plan);
 
