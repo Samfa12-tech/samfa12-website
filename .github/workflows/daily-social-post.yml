@@ -4,7 +4,7 @@ on:
   schedule:
     # Sunday 06:00 UTC = 16:00 AEST / 17:00 AEDT in Australia/Sydney.
     # Running earlier gives GitHub Actions plenty of delay tolerance before Monday's 08:15 post.
-    # The workflow then schedules one post per day for the next 7 available daily slots.
+    # The workflow schedules 10 posts across the next 7 days: one each morning, plus three evening slots.
     - cron: "0 6 * * 0"
   workflow_dispatch:
     inputs:
@@ -65,7 +65,7 @@ jobs:
           SOCIAL_TIME_ZONE: Australia/Sydney
           SOCIAL_POST_HOUR: "8"
           SOCIAL_POST_MINUTE: "15"
-          SOCIAL_WEEKLY_POST_COUNT: "7"
+          SOCIAL_WEEKLY_POST_COUNT: "10"
           SOCIAL_MIN_SCHEDULE_LEAD_MINUTES: "5"
         run: node scripts/social-post.mjs
 
