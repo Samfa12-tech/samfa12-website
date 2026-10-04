@@ -129,13 +129,19 @@ function choosePost(bank, history, targetDay) {
     throw new Error(`No eligible social posts remain for ${targetDay}. Add content or reduce reuse windows.`);
   }
 
-  let eligible = dateEligible.filter((post) => {
+  // Prefer genuinely fresh bank entries before considering previously used posts.
+  // Reuse windows still apply either way, but this keeps newly added material moving
+  // into the live schedule instead of letting older evergreen posts win the hash draw.
+  const neverUsed = dateEligible.filter((post) => !lastUseById.has(post.id));
+  const priorityPool = neverUsed.length ? neverUsed : dateEligible;
+
+  let eligible = priorityPool.filter((post) => {
     const lastProjectUse = lastUseByProject.get(post.project);
     if (!lastProjectUse) return true;
     return daysBetween(lastProjectUse, targetDay) >= (post.projectCooldownDays ?? projectCooldownDays);
   });
 
-  if (!eligible.length) eligible = dateEligible;
+  if (!eligible.length) eligible = priorityPool;
 
   const alternateCategory = eligible.filter((post) => !last || post.category !== last.category);
   if (alternateCategory.length) eligible = alternateCategory;
@@ -148,9 +154,19 @@ function choosePost(bank, history, targetDay) {
 function buildWeekPlan(bank, history, startDay, blockedDays = new Set()) {
   const virtualHistory = {posts: [...(history.posts || [])]};
   const slots = [];
+  let scheduledCount = 0;
+  let dayOffset = 0;
 
-  for (let i = 0; i < weeklyPostCount; i += 1) {
-    const date = addDays(startDay, i);
+  // Fill seven actual open Buffer slots. Previously a blocked day still consumed one
+  // of the seven iterations, which could leave the weekly batch short.
+  while (scheduledCount < weeklyPostCount) {
+    if (dayOffset > 31) {
+      throw new Error(`Could not find ${weeklyPostCount} open social slots within 32 days of ${startDay}.`);
+    }
+
+    const date = addDays(startDay, dayOffset);
+    dayOffset += 1;
+
     if (blockedDays.has(date)) {
       slots.push({date, skipped: true, reason: 'Buffer already has a scheduled post on this date'});
       continue;
@@ -166,6 +182,7 @@ function buildWeekPlan(bank, history, startDay, blockedDays = new Set()) {
       date,
       status: 'planned',
     });
+    scheduledCount += 1;
   }
 
   return slots;
