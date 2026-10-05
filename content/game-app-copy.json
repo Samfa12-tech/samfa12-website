@@ -247,7 +247,21 @@
         ]
       }
     ],
-    "updates": []
+    "updates": [
+      {
+        "id": "showcase-alpha-1-6-1-october-2026",
+        "kind": "release",
+        "date": "2026-10-03",
+        "dateMeaning": "GitHub prerelease publication date",
+        "title": "Showcase Alpha 1.6.1",
+        "summary": "The engineering update adds dedicated ray-traced viewmodel arms and a separately owned player body, adaptive music with separate audio controls, consent-based in-game reporting, and resource and lifecycle improvements. The release is available for Windows and Android.",
+        "platform": "Windows and Android",
+        "sources": [
+          "https://github.com/Samfa12-tech/The-Horde-RT-demo/releases/tag/v1.6.1",
+          "https://samfa12.itch.io/the-horde"
+        ]
+      }
+    ]
   },
   "game-bug-swarm": {
     "intro": "Bug Swarm is a phone-oriented tower-defence prototype about placing towers beside a curved dirt-tray path and responding as waves of bugs flood through it. Its local game menu shows a Leaf 1k flood and additional prototype levels that begin locked.",
@@ -396,6 +410,19 @@
       }
     ],
     "updates": [
+      {
+        "id": "chordsmith-v68-core-bridge-september-2026",
+        "kind": "release",
+        "date": "2026-09-23",
+        "dateMeaning": "itch.io release publication date (UTC)",
+        "title": "v68 Core bridge and WAV export",
+        "summary": "The v68 update adds a Pocket Audio Core bridge for local project loading and timeline diagnostics, mirrors transport start and stop when the module is available, and tries Core-first WAV rendering with the existing offline renderer as fallback.",
+        "platform": "Browser",
+        "sources": [
+          "https://samfa12.itch.io/pocket-chordsmith",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/blob/main/docs/releases/web/chordsmith-2026-09-23.json"
+        ]
+      },
       {
         "id": "chordsmith-v63-may-2026",
         "kind": "release",
@@ -1296,7 +1323,21 @@
         ]
       }
     ],
-    "updates": [],
+    "updates": [
+      {
+        "id": "pocket-daw-v0-6-50-october-2026",
+        "kind": "release",
+        "date": "2026-10-01",
+        "dateMeaning": "GitHub release publication date",
+        "title": "0.6.50 — Track Sounds and Playback Recovery",
+        "summary": "Melody instrument changes now apply across the whole track and persist through save and reopen. Native stem rendering moves to a background worker, and playback can recover when a decoded asset has been evicted from cache.",
+        "platform": "Windows",
+        "sources": [
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.50",
+          "https://samfa12.itch.io/pocket-daw"
+        ]
+      }
+    ],
     "relatedIds": [
       "app-pocket-chordsmith",
       "app-pocket-audio-handoff"
@@ -1352,7 +1393,22 @@
         ]
       }
     ],
-    "updates": [],
+    "updates": [
+      {
+        "id": "breakfast-beat-down-catalogue-october-2026",
+        "kind": "announcement",
+        "date": "2026-10-03",
+        "dateMeaning": "Samfa12.com catalogue addition date",
+        "title": "Rush Hour Remix joins Samfa12.com",
+        "summary": "The v0.2: Rush Hour Remix build is now hosted in the Samfa12 browser game catalogue. This portrait-first rhythm-action roguelite is a sequel to Breakfast Beat, with beat-timed spatula combat across three shifts and 24 waves.",
+        "platform": "Browser",
+        "sources": [
+          "https://samfa12.com/games/breakfast-beat-down/",
+          "https://samfa12.com/games/breakfast-beat-down/play/",
+          "https://github.com/Samfa12-tech/samfa12-website/commit/2874def0c235f9fc3ae894826ed0e958b6fdb355"
+        ]
+      }
+    ],
     "relatedIds": [
       "game-breakfast-beat",
       "app-pocket-chordsmith"
@@ -1411,7 +1467,22 @@
         ]
       }
     ],
-    "updates": [],
+    "updates": [
+      {
+        "id": "banana-banana-ducky-catalogue-october-2026",
+        "kind": "announcement",
+        "date": "2026-10-03",
+        "dateMeaning": "Samfa12.com catalogue addition date",
+        "title": "v1.1 joins Samfa12.com",
+        "summary": "Banana Banana Ducky! v1.1 is now hosted in the Samfa12 browser game catalogue. Recruit ducks into a flock, switch characters and chase through four playful worlds with touch or keyboard controls.",
+        "platform": "Browser",
+        "sources": [
+          "https://samfa12.com/games/banana-banana-ducky/",
+          "https://samfa12.com/games/banana-banana-ducky/play/",
+          "https://github.com/Samfa12-tech/samfa12-website/commit/5acbd2983fee1cf482061821832955d3a7a9de21"
+        ]
+      }
+    ],
     "relatedIds": []
   }
 }

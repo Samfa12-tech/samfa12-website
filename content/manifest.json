@@ -66,7 +66,7 @@
         "https://github.com/Samfa12-tech/The-Horde-RT-demo"
       ],
       "notes": "Preserve experimental/tech-demo limitations and platform requirements. Do not market unverified hardware compatibility.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-05"
     },
     {
       "id": "game-bug-swarm",
@@ -117,7 +117,7 @@
         "https://samfa12.com/apps/pocket-chordsmith/"
       ],
       "notes": "Separate marketing page outside protected release-copy directory. Verify actual export formats, browser behaviour and licensing.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-05"
     },
     {
       "id": "asset-pocket-chordsmith-godot",
@@ -394,7 +394,7 @@
         "https://samfa12.itch.io/pocket-daw"
       ],
       "notes": "Windows desktop download; do not invent a browser DAW or market it as the Pocket Chordsmith app.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-05"
     },
     {
       "id": "game-mandible-wars",
@@ -603,7 +603,7 @@
         "https://samfa12.com/games/breakfast-beat-down/play/"
       ],
       "notes": "Owner-supplied v0.2: Rush Hour Remix browser release. The first-party play URL identifies this hosted package, not a previously inspected live publication. Keep the original Breakfast Beat distinct. Hosting adds only canonical/noindex/favicon metadata; verify the remaining release bytes against the owner-supplied SHA-256.",
-      "pageModified": "2026-10-03"
+      "pageModified": "2026-10-05"
     },
     {
       "id": "game-banana-banana-ducky",
@@ -614,7 +614,7 @@
       "officialSources": [
         "https://samfa12.com/games/banana-banana-ducky/play/"
       ],
-      "pageModified": "2026-10-03",
+      "pageModified": "2026-10-05",
       "notes": "Owner-supplied v1.1 cartoon + touch package. First-party play URL identifies the copy prepared here, not an earlier live publication. Public copy contains only game information. No external storefront destination is asserted."
     }
   ],
