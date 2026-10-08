@@ -205,7 +205,21 @@
         ]
       }
     ],
-    "updates": [],
+    "updates": [
+      {
+        "id": "last-guard-alpha-15-september-2026",
+        "kind": "release",
+        "date": "2026-09-27",
+        "dateMeaning": "itch.io development log publication date (UTC)",
+        "title": "Alpha.15: Reliability and accessibility update",
+        "summary": "Alpha.15 improves loading, touch input, keyboard and controller navigation, and safe resume after switching away. New options include remappable keys, per-device aiming settings, mirrored touch controls, toggle-to-fire and larger UI and text. Physical Android performance remains unverified.",
+        "platform": "HTML5 browser",
+        "sources": [
+          "https://samfa12.itch.io/the-last-guard/devlog/1678884/alpha15-reliability-and-accessibility-update",
+          "https://samfa12.itch.io/the-last-guard"
+        ]
+      }
+    ],
     "relatedIds": [
       "game-briarhold"
     ],

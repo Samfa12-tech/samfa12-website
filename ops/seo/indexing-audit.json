@@ -2395,11 +2395,13 @@
       "inSitemap": true,
       "incoming": [
         "/games/",
-        "/games/briarhold/"
+        "/games/briarhold/",
+        "/updates/"
       ],
       "incomingMain": [
         "/games/",
-        "/games/briarhold/"
+        "/games/briarhold/",
+        "/updates/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
