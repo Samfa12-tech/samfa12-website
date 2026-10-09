@@ -16,7 +16,7 @@ The four Amazon-only books initially appeared blocked to the public web reader. 
 - Spotify album pages and official embeds support titles, artist and track names. They did not provide reliable release dates, composition history or licensing terms, so no album changelog dates or such claims were added.
 - A formal “Good Home novels” series name was not verified. The two books are linked as predecessor and sequel without BookSeries markup. The Broken Road and Jason Proud sequences have verified order and separate reading hubs.
 
-Store prices, ratings, download bands, exact mobile compatibility and private storefront developer disclosures are absent from marketing copy. Dated entries in `/updates/` state whether they describe a store listing update, author announcement or verified release.
+Store prices, ratings, download bands and private storefront developer disclosures are absent from marketing copy. Device coverage is stated only where official sources identify tested hardware, with current-release checks distinguished from earlier testing; it is not a universal compatibility guarantee. Dated entries in `/updates/` state whether they describe a store listing update, author announcement or verified release.
 
 ## Breakfast Beat-down v0.2 owner package (2026-10-03)
 

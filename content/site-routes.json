@@ -1,11 +1,11 @@
 [
   {
     "route": "/",
-    "pageModified": "2026-10-02"
+    "pageModified": "2026-10-09"
   },
   {
     "route": "/games/",
-    "pageModified": "2026-10-03"
+    "pageModified": "2026-10-09"
   },
   {
     "route": "/games/bug-swarm/",
@@ -77,6 +77,6 @@
   },
   {
     "route": "/updates/",
-    "pageModified": "2026-10-08"
+    "pageModified": "2026-10-09"
   }
 ]

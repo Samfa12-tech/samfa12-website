@@ -84,8 +84,20 @@
           "url": "https://samfa12.itch.io/the-horde",
           "identity": "samfa12.itch.io /the-horde",
           "access": "read-public-source"
+        },
+        {
+          "url": "https://samfa12.itch.io/the-horde/devlog/1698261/the-horde-162-finishing-the-tomb",
+          "identity": "Official Horde 1.6.2 itch.io announcement, published 2026-10-09 01:01 UTC",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/The-Horde-RT-demo/blob/main/docs/evidence/2026-10-09-release-publication/README.md",
+          "identity": "Verified Android and Windows 1.6.2 distribution receipt; no GitHub Release created",
+          "access": "read-public-source"
         }
-      ]
+      ],
+      "reviewedAt": "2026-10-09",
+      "dateMeaning": "Official public release and storefront verification date, not a substitute for event dates"
     },
     "game-bug-swarm": {
       "disposition": "create",

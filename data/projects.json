@@ -135,8 +135,8 @@
     "title": "The Horde — Ray Tracing Tech Demo",
     "category": "Games",
     "type": "Tech demo",
-    "status": "Experimental — major update",
-    "description": "An experimental ray-tracing tech demo for Android and Windows, with a major update now live on itch.io.",
+    "status": "Version 1.6.2 · Experimental",
+    "description": "A native hardware ray-tracing tomb demo for Windows and Android. Version 1.6.2 adds a live graphics preview, refined touch controls and Android controller support.",
     "tags": [
       "Game",
       "Tech Demo",

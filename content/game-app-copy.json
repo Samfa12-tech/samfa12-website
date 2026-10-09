@@ -226,7 +226,7 @@
     "relatedLabels": {"game-briarhold": "Explore Briarhold action-defence and co-op testing"}
   },
   "game-the-horde": {
-    "intro": "The Horde is a focused native Vulkan hardware ray-tracing technology demo for compatible Windows RT GPUs and Android phones. Its current itch description follows a lantern-bearing character through a wet gothic ruin, with sword combat, reflective water and a lich encounter.",
+    "intro": "The Horde 1.6.2 is a native Vulkan hardware ray-tracing tomb demo for Windows and compatible Android phones. Explore a torch-lit gothic ruin, fight skeletons and confront the Lich, with reflective water, an adaptive soundtrack and a new lantern-lit menu.",
     "details": [
       {
         "heading": "A technology showcase, not a complete game",
@@ -237,10 +237,26 @@
         ]
       },
       {
-        "heading": "Compatibility is hardware-dependent",
-        "text": "The page names compatible Android phones and Windows RT GPUs as target platforms, but it does not provide a verified device compatibility list. Support for a particular phone or GPU remains unverified.",
+        "heading": "Graphics you can preview and keep",
+        "text": "A live ray-traced Graphics preview lets you compare render scale, water, fire, glass, mist and dust before keeping or restoring your settings. New Android installs start at 50% render scale with Mobile water and fire, glass off, mist on and Low dust. Windows starts at 100%, High water and fire, glass on, mist on and Low dust. Existing settings are preserved; 33% and 40% scales are experimental.",
         "sources": [
-          "https://samfa12.itch.io/the-horde"
+          "https://samfa12.itch.io/the-horde/devlog/1698261/the-horde-162-finishing-the-tomb"
+        ]
+      },
+      {
+        "heading": "Touch controls, controllers and the tomb",
+        "text": "Swing, Parry and Dodge touch buttons accompany a heart-based health display. Android controller support covers menus, gameplay and reconnects. The sword starts sheathed and draws at the waterfall guards, with improved equipment clearance. The update also adds subtle dust, torch-lit waterfall refinements, a closed base beneath the grate and collision for the Keeper’s torch stands.",
+        "sources": [
+          "https://samfa12.itch.io/the-horde/devlog/1698261/the-horde-162-finishing-the-tomb"
+        ]
+      },
+      {
+        "heading": "Hardware and testing limits",
+        "text": "Windows requires Windows 10/11 and a Vulkan-capable hardware ray-tracing GPU. The published 1.6.2 build has recorded checks on a Galaxy S26 Ultra and an RTX 5050 Laptop GPU. Earlier S24 Ultra testing does not certify this release on every device; S25 Ultra remains unverified. Backbone One PlayStation Edition USB-C is the tested Android controller, with other combinations still needing coverage. Sustained 30 FPS is not guaranteed. Combat remains forgiving: a hit can register before exact visible blade contact.",
+        "sources": [
+          "https://samfa12.itch.io/the-horde",
+          "https://samfa12.itch.io/the-horde/devlog/1698261/the-horde-162-finishing-the-tomb",
+          "https://github.com/Samfa12-tech/The-Horde-RT-demo/blob/main/docs/evidence/2026-10-09-release-publication/README.md"
         ]
       }
     ],
@@ -254,14 +270,35 @@
       },
       {
         "question": "Will it run on my Android phone?",
-        "answer": "Only if the phone supports the required Vulkan hardware ray-tracing features. The listing does not confirm compatibility for every model; check the project source and device support before installing.",
+        "answer": "The phone needs the required Vulkan hardware ray-tracing features. Release 1.6.2 was checked on a Galaxy S26 Ultra; other models are not all verified. The official listing describes earlier Galaxy S24 Ultra testing and lists S25 Ultra support as expected, pending physical testing. Performance depends on your device and settings.",
         "sources": [
           "https://samfa12.itch.io/the-horde",
-          "https://github.com/Samfa12-tech/The-Horde-RT-demo"
+          "https://github.com/Samfa12-tech/The-Horde-RT-demo/blob/main/docs/evidence/2026-10-09-release-publication/README.md"
+        ]
+      },
+      {
+        "question": "Where can I get version 1.6.2?",
+        "answer": "Download the Windows build or Android APK from the official itch.io page. Version 1.6.2 is published there; the GitHub repository provides source and technical documentation.",
+        "sources": [
+          "https://samfa12.itch.io/the-horde",
+          "https://samfa12.itch.io/the-horde/devlog/1698261/the-horde-162-finishing-the-tomb"
         ]
       }
     ],
     "updates": [
+      {
+        "id": "showcase-alpha-1-6-2-october-2026",
+        "kind": "release",
+        "date": "2026-10-09",
+        "dateMeaning": "itch.io development log publication date (UTC)",
+        "title": "1.6.2: Finishing the tomb",
+        "summary": "Now available for Windows and Android, 1.6.2 adds a lantern-lit menu, live graphics preview, reworked touch controls and Android controller support. Equipment clearance, waterfall lighting and dungeon details are improved. Saved settings are preserved. Combat remains forgiving, and sustained phone frame rates are not guaranteed.",
+        "platform": "Windows and Android",
+        "sources": [
+          "https://samfa12.itch.io/the-horde/devlog/1698261/the-horde-162-finishing-the-tomb",
+          "https://samfa12.itch.io/the-horde"
+        ]
+      },
       {
         "id": "showcase-alpha-1-6-1-october-2026",
         "kind": "release",
