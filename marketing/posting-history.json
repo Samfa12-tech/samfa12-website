@@ -294,6 +294,116 @@
       "textSha256": "967983e7b16893662e0f00a2dad4720c875ac65644b10d8206aac94f4b564cba",
       "scheduledAt": "2026-10-04T11:47:02.400Z",
       "dueAt": "2026-10-10T06:15:00.000Z"
+    },
+    {
+      "id": "chordsmith-godot-1",
+      "project": "Pocket Chordsmith",
+      "category": "Web development",
+      "date": "2026-10-12",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bc8c4de2d2b125d50c0",
+      "textSha256": "d3fc98efa02d6ac75d2c2b4ae95620c75cb2e9b6961e65fe4cf85227e8e9a7ec",
+      "scheduledAt": "2026-10-11T12:06:32.440Z",
+      "dueAt": "2026-10-11T21:15:00.000Z"
+    },
+    {
+      "id": "hop-bunny-carrot-moon-1",
+      "project": "Hop Bunny",
+      "category": "Games",
+      "date": "2026-10-13",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bc8d9cab260a7f7ee4c",
+      "textSha256": "391662f889a26dcaa042acf990c540f6245e318aefffb552e59cc051708fd495",
+      "scheduledAt": "2026-10-11T12:06:32.733Z",
+      "dueAt": "2026-10-12T21:15:00.000Z"
+    },
+    {
+      "id": "pocket-dj-stage-1",
+      "project": "Pocket DJ",
+      "category": "Web development",
+      "date": "2026-10-14",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bc8d9cab260a7f7ee97",
+      "textSha256": "7ec81a841ca05503490ee08395c964946335cd0e2ab4e52efbb98d110c4ae851",
+      "scheduledAt": "2026-10-11T12:06:32.957Z",
+      "dueAt": "2026-10-13T21:15:00.000Z"
+    },
+    {
+      "id": "ship-blockade-lanes-1",
+      "project": "Ship Blockade",
+      "category": "Games",
+      "date": "2026-10-15",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bc9bba9419ccb350ed8",
+      "textSha256": "4818b62d7479bfe38c9968b64ba6b4112ae2d66ac13c2804c6cc25d874fc5988",
+      "scheduledAt": "2026-10-11T12:06:33.159Z",
+      "dueAt": "2026-10-14T21:15:00.000Z"
+    },
+    {
+      "id": "chordsmith-1",
+      "project": "Pocket Chordsmith",
+      "category": "Web development",
+      "date": "2026-10-16",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bc9c4de2d2b125d5112",
+      "textSha256": "34f845028c8fc1b61785ad5134a7dd6c4eff40906aa555913ce54f5612241b1e",
+      "scheduledAt": "2026-10-11T12:06:33.418Z",
+      "dueAt": "2026-10-15T21:15:00.000Z"
+    },
+    {
+      "id": "banana-ducky-flock-1",
+      "project": "Banana Banana Ducky!",
+      "category": "Games",
+      "date": "2026-10-17",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bc9d9cab260a7f7eec1",
+      "textSha256": "cc2b798e96321bc022fb9024e5ae69637b94dcbe66b2c6f5530c95db6f4f5526",
+      "scheduledAt": "2026-10-11T12:06:33.667Z",
+      "dueAt": "2026-10-16T21:15:00.000Z"
+    },
+    {
+      "id": "site-sourced-catalogue-1",
+      "project": "Samfa12.com",
+      "category": "Web development",
+      "date": "2026-10-18",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bc9b07d37ac97a5f068",
+      "textSha256": "0a83a4f5e1a96df7bd095fd74c152974a695d69a65b7f12319f058a4ad39d079",
+      "scheduledAt": "2026-10-11T12:06:33.879Z",
+      "dueAt": "2026-10-17T21:15:00.000Z"
+    },
+    {
+      "id": "www-1",
+      "project": "What Would Win",
+      "category": "Web development",
+      "date": "2026-10-13",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bcabba9419ccb350f0b",
+      "textSha256": "07ebb4554e1c7ce5b2a2cd825f85700c123cbeb0d1def92c2906412f81aa1c6a",
+      "scheduledAt": "2026-10-11T12:06:34.101Z",
+      "dueAt": "2026-10-13T06:15:00.000Z"
+    },
+    {
+      "id": "brokenroad-open-city",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-10-15",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bcad9cab260a7f7ef01",
+      "textSha256": "3ed331e89d997035c42f9e26e58fead1e8b733575b96d11d5b8017bcfd4c4b7b",
+      "scheduledAt": "2026-10-11T12:06:34.457Z",
+      "dueAt": "2026-10-15T06:15:00.000Z"
+    },
+    {
+      "id": "creator-small-1",
+      "project": "Samfa12",
+      "category": "Creator",
+      "date": "2026-10-17",
+      "status": "scheduled",
+      "bufferPostId": "6acb7bcabba9419ccb350f63",
+      "textSha256": "c904880085da9bbbecf445aa6990ef6913fb5807bc8ebe27d9220d307008f76d",
+      "scheduledAt": "2026-10-11T12:06:34.683Z",
+      "dueAt": "2026-10-17T06:15:00.000Z"
     }
   ]
 }
