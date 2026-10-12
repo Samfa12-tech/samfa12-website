@@ -617,6 +617,18 @@
       ],
       "pageModified": "2026-10-05",
       "notes": "Owner-supplied v1.1 cartoon + touch package. First-party play URL identifies the copy prepared here, not an earlier live publication. Public copy contains only game information. No external storefront destination is asserted."
+    },
+    {
+      "id": "game-towtal-chaos",
+      "category": "Games",
+      "title": "Towtal Chaos",
+      "path": "/games/towtal-chaos/",
+      "action": "create",
+      "officialSources": [
+        "https://samfa12.itch.io/towtal-chaos"
+      ],
+      "pageModified": "2026-10-13",
+      "notes": "Owner-confirmed itch launch. Live listing and owner-supplied 0.3.1 notes support a playable HTML5 alpha. Promotional artwork is not a gameplay screenshot. No Android download, offline engine or device performance claim."
     }
   ],
   "directories": [

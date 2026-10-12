@@ -886,6 +886,34 @@
           "hostingRevisionReview": "2026-10-03: published joystick lifecycle repair and single-pass cel shader; subsequent draft game-scoped gesture and visual viewport repair. Forced Chromium page zoom reproduced the old offscreen HUD; rapid native action taps did not reproduce spontaneous zoom. Candidate checked with simultaneous Chromium touches, actual page zoom, Windows WebKit and event-harness regressions. Safari gesture fallback tested synthetically; physical iPad cause and owner retest remain pending. See ops/releases/banana-banana-ducky.md."
         }
       ]
+    },
+    "game-towtal-chaos": {
+      "disposition": "create",
+      "landingPath": "/games/towtal-chaos/",
+      "reviewedAt": "2026-10-13",
+      "sources": [
+        {
+          "url": "https://samfa12.itch.io/towtal-chaos",
+          "identity": "samfa12.itch.io /towtal-chaos",
+          "access": "read-live-public-listing-and-embedded-menu"
+        }
+      ],
+      "ownerMaterials": [
+        {
+          "libraryFileId": "libfile_fbd1dd727a8c8191bff1a750237821b3",
+          "filename": "towtal-chaos-v0.3.1-notes.md",
+          "use": "Controls, engine dependency and storage limits"
+        },
+        {
+          "libraryFileId": "libfile_6832952e92088191af2ae874cc242ec1",
+          "filename": "Sunset Caravan at Campsite 12.png",
+          "use": "Inspected promotional artwork; optimised local thumbnails"
+        }
+      ],
+      "limits": [
+        "Itch metadata says Released while the description says alpha; public copy uses playable alpha.",
+        "No game build or gameplay performance validation was performed for this website addition."
+      ]
     }
   }
 }

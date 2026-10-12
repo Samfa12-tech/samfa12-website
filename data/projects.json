@@ -1711,5 +1711,50 @@
         "fullscreen": true
       }
     ]
+  },
+  {
+    "id": "game-towtal-chaos",
+    "title": "Towtal Chaos",
+    "category": "Games",
+    "type": "Caravan parking browser game",
+    "status": "Playable alpha",
+    "description": "Reverse caravans into increasingly awkward campsites in a physics-based browser parking game. Try eight locations, four towing setups, and Challenge, Relaxed or Sandbox modes.",
+    "tags": [
+      "Game",
+      "Browser",
+      "Simulation",
+      "Physics",
+      "Touch",
+      "Samfa12"
+    ],
+    "featured": false,
+    "accent": "orange",
+    "imageFit": "contain",
+    "sortOrder": 5.3,
+    "detailUrl": "/games/towtal-chaos/",
+    "thumbnail": "assets/thumbnails/towtal-chaos-960.webp",
+    "thumbnailAlt": "Towtal Chaos promotional artwork: a green 4WD towing a white caravan beside campsite 12 at sunset",
+    "thumbnailWidth": 960,
+    "thumbnailHeight": 960,
+    "thumbnailVariants": [
+      {
+        "path": "assets/thumbnails/towtal-chaos-320.webp",
+        "width": 320
+      },
+      {
+        "path": "assets/thumbnails/towtal-chaos-640.webp",
+        "width": 640
+      },
+      {
+        "path": "assets/thumbnails/towtal-chaos-960.webp",
+        "width": 960
+      }
+    ],
+    "links": [
+      {
+        "label": "Play on itch.io",
+        "url": "https://samfa12.itch.io/towtal-chaos"
+      }
+    ]
   }
 ]
