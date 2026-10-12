@@ -2,14 +2,14 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 74,
-    "indexableRoutes": 70,
-    "sitemapRoutes": 70,
+    "htmlPages": 75,
+    "indexableRoutes": 71,
+    "sitemapRoutes": 71,
     "explicitlyExcluded": 4,
     "routesWithFindings": 1,
     "siteFindings": 0,
     "oneContextualIncoming": 16,
-    "relationshipEdges": 69
+    "relationshipEdges": 70
   },
   "excluded": [
     {
@@ -282,6 +282,11 @@
       "kind": "editorial-related"
     },
     {
+      "from": "/games/towtal-chaos/",
+      "to": "/games/wonky-vehicle-lab/",
+      "kind": "editorial-related"
+    },
+    {
       "from": "/music/drink-ost/",
       "to": "/books/sober/",
       "kind": "editorial-related"
@@ -435,6 +440,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/links/",
@@ -496,6 +502,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/music/billions-of-years/",
         "/music/drink-ost/",
@@ -574,6 +581,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/music/billions-of-years/",
         "/music/drink-ost/",
@@ -658,6 +666,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/links/",
@@ -871,6 +880,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/links/",
@@ -1487,6 +1497,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/links/",
@@ -1533,9 +1544,10 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/"
       ],
-      "localAssetCount": 35,
+      "localAssetCount": 36,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -2416,13 +2428,13 @@
       "advisories": []
     },
     {
-      "route": "/games/wonky-vehicle-lab/",
+      "route": "/games/towtal-chaos/",
       "kind": "product",
-      "canonical": "https://samfa12.com/games/wonky-vehicle-lab/",
-      "title": "Wonky Vehicle Lab | Samfa12",
-      "description": "Wonky Vehicle Lab is a prototype vehicle-building sandbox for drawing odd machines and testing them on a bumpy physics track. Sketch parts, connect them with glue or welds, then drive and see whether the design reaches the finish.",
+      "canonical": "https://samfa12.com/games/towtal-chaos/",
+      "title": "Towtal Chaos - play the caravan parking game | Samfa12",
+      "description": "Towtal Chaos is a caravan parking game about small steering inputs and very large trailers. Take the wheel of a 4WD, ute or SUV, manage your hitch angle, and guide the caravan into its marked bay without giving the spectators too much to laugh about. The playable alpha is available on itch.io.",
       "h1": [
-        "Wonky Vehicle Lab"
+        "Towtal Chaos"
       ],
       "inSitemap": true,
       "incoming": [
@@ -2444,6 +2456,36 @@
       "advisories": [
         "one contextual incoming page; review only when a genuine relationship exists"
       ]
+    },
+    {
+      "route": "/games/wonky-vehicle-lab/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/wonky-vehicle-lab/",
+      "title": "Wonky Vehicle Lab | Samfa12",
+      "description": "Wonky Vehicle Lab is a prototype vehicle-building sandbox for drawing odd machines and testing them on a bumpy physics track. Sketch parts, connect them with glue or welds, then drive and see whether the design reaches the finish.",
+      "h1": [
+        "Wonky Vehicle Lab"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/",
+        "/games/towtal-chaos/"
+      ],
+      "incomingMain": [
+        "/games/",
+        "/games/towtal-chaos/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": []
     },
     {
       "route": "/join/",
@@ -2503,6 +2545,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/links/",
         "/music/",
@@ -2592,6 +2635,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/music/",
@@ -2683,6 +2727,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/links/",
@@ -2909,6 +2954,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/links/",
@@ -3154,6 +3200,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/links/",
@@ -3244,6 +3291,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/join/",
         "/links/",
@@ -3362,6 +3410,7 @@
         "/games/td-pack/",
         "/games/the-horde/",
         "/games/the-last-guard/",
+        "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
         "/music/billions-of-years/",
         "/music/drink-ost/",

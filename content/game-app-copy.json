@@ -1535,5 +1535,62 @@
       }
     ],
     "relatedIds": []
+  },
+  "game-towtal-chaos": {
+    "seoTitle": "Towtal Chaos - play the caravan parking game",
+    "intro": "Towtal Chaos is a caravan parking game about small steering inputs and very large trailers. Take the wheel of a 4WD, ute or SUV, manage your hitch angle, and guide the caravan into its marked bay without giving the spectators too much to laugh about. The playable alpha is available on itch.io.",
+    "details": [
+      {
+        "heading": "Eight stops, four towing setups",
+        "text": "Park through eight challenges, from a roomy holiday park arrival to tight campsites and repair workshops. Choose between compact campers, touring caravans and large tandem-axle rigs. Get the caravan fully inside the marked bay, facing the right way, then stop and apply the parking brake.",
+        "sources": [
+          "https://samfa12.itch.io/towtal-chaos"
+        ]
+      },
+      {
+        "heading": "Choose your pace",
+        "text": "Challenge mode scores your parking; Relaxed mode gives you room to practise; Sandbox lets you explore freely. Earn stars and cash, unlock challenges and watch the repair bills. An optional parking helper offers alignment guidance, ghost positioning and direction indicators.",
+        "sources": [
+          "https://samfa12.itch.io/towtal-chaos"
+        ]
+      },
+      {
+        "heading": "Keyboard or touch controls",
+        "text": "On desktop, A/D or left/right arrows steer, W accelerates, and S or Space brakes. Select Drive with Shift+D, Reverse with R and Neutral with N when nearly stationary. P applies the parking brake and Escape pauses. On touch screens, use the steering wheel, pedals and gear buttons; pinch and rotate with two fingers to adjust the camera.",
+        "sources": [
+          "https://samfa12.itch.io/towtal-chaos"
+        ]
+      },
+      {
+        "heading": "Play in your browser",
+        "text": "Open the official itch.io page to play the HTML5 alpha in a desktop or mobile browser. Progress saves locally in that browser. An internet connection is required to load the 3D engine.",
+        "sources": [
+          "https://samfa12.itch.io/towtal-chaos"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Where can I play Towtal Chaos?",
+        "answer": "Use Play on itch.io to open the official browser game. The current listing describes it as a playable alpha with desktop and touch controls.",
+        "sources": [
+          "https://samfa12.itch.io/towtal-chaos"
+        ]
+      },
+      {
+        "question": "Can I play offline or move my progress between devices?",
+        "answer": "An internet connection is needed to load the 3D engine. Progress is stored locally in the browser where you play and does not automatically transfer to another device or host.",
+        "sources": [
+          "https://samfa12.itch.io/towtal-chaos"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-wonky-vehicle-lab"
+    ],
+    "relatedLabels": {
+      "game-wonky-vehicle-lab": "Try another Samfa12 vehicle physics experiment"
+    }
   }
 }

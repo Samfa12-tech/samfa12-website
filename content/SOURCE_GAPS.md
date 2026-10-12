@@ -25,3 +25,8 @@ The owner supplied the standalone HTML, source ZIP and itch-format ZIP locally. 
 ## Banana Banana Ducky! v1.1 owner package (2026-10-03)
 
 The supplied two-file ZIP and README support the game identity, mechanics and local-save behavior. The first-party play URL identifies this integration candidate. No itch URL, external dependency, third-party asset license, public release date or physical-device test is asserted. The original input and package documentation stay private. Hosting removes personal attribution and applies the limited touch/audio fixes recorded in source-review.json. The original icon uses the inspected yellow banana/duck characters, red ties and pondside palette; it is promotional artwork, not a gameplay screenshot. Physical iPad Safari and hardware performance still require hands-on review.
+
+
+## Towtal Chaos itch launch (2026-10-13 Australia/Sydney)
+
+The owner confirmed the launch and supplied 0.3.1 notes and the square sunset caravan illustration. The live itch listing and embedded menu were inspected. The listing identifies HTML5, eight parking challenges, four tow setups, Challenge/Relaxed/Sandbox modes, desktop/touch controls, local browser progress and an internet dependency for the 3D engine. Itch metadata uses Released while visible copy calls it alpha; the site uses playable alpha. The illustration depicts a green 4WD and white caravan beside campsite 12 at sunset and is promotional artwork, not a gameplay screenshot. The supplied notes do not verify actual WebGL rendering, shadow motion or physical-phone frame rates. This task validates the website page and links; it does not certify gameplay performance or publish a game build.
