@@ -939,7 +939,7 @@
         },
         {
           "url": "https://samfa12.com/games/reef-sweep/play/",
-          "identity": "Owner-maintained local Reef Sweep source tree at output/reef-sweep/source/reef-sweep; package metadata identifies 0.2.0-preview.2. The owner approved the local High shadow build and continued publication on 2026-10-13.",
+          "identity": "Owner-maintained local Reef Sweep source tree at output/reef-sweep/source/reef-sweep; package metadata identifies 0.2.0-preview.3. The owner approved the local High shadow build and continued publication on 2026-10-13.",
           "access": "read-owner-maintained-local-source-tree",
           "files": [
             "package.json",
