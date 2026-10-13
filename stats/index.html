@@ -27,6 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/styles.css?v=20261013-1" />
+    <link rel="stylesheet" href="/assets/game-starts.css?v=1" />
   </head>
   <body data-page="stats">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -62,6 +63,16 @@
           <p class="eyebrow">Storefront signal // public dashboard</p>
           <h1>Marketplace statistics</h1>
           <p class="lead">A privacy-safe readout of lifetime activity across the places Samfa12 releases live.</p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="game-starts-title">
+        <div class="container">
+          <p class="eyebrow">Browser games</p>
+          <h2 id="game-starts-title">Briarhold and Reef Sweep starts</h2>
+          <p class="section-intro">One start per consenting browser play session, after the game is ready and play begins. These are separate from Cloudflare page-request estimates and marketplace activity.</p>
+          <div data-game-start-stats aria-live="polite"><p>Start tracking is not enabled yet. Totals will appear after tracking begins.</p></div>
+          <p class="stats-panel-note">Blocked or undelivered events can be missed. Repeat plays within one session count once. Historical page requests are not converted into starts. <a href="/privacy/">Privacy and analytics preferences</a></p>
         </div>
       </section>
 
@@ -147,6 +158,7 @@
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
       </div>
     </footer>
+    <script type="module" src="/assets/game-starts-stats.js?v=1"></script>
     <script src="/script.js?v=20261013-1" defer></script>
   </body>
 </html>

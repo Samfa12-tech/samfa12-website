@@ -281,6 +281,7 @@
     } catch {
       // The choice still applies to this page when storage is unavailable.
     }
+    window.dispatchEvent(new CustomEvent("samfa12:analytics-consent", { detail: value }));
   }
 
   function loadClarityAnalytics() {

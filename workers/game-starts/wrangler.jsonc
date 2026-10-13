@@ -1,0 +1,16 @@
+{
+  "name": "samfa12-game-starts-review",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-13",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [],
+  "vars": {
+    "ENABLE_GAME_STARTS": "false",
+    "ALLOWED_ORIGIN": "https://samfa12.com",
+    "TRACKING_STARTS": "{}"
+  },
+  "durable_objects": {"bindings": [{"name": "GAME_STARTS", "class_name": "GameStarts"}]},
+  "migrations": [{"tag": "game-starts-v1", "new_sqlite_classes": ["GameStarts"]}],
+  "observability": {"enabled": false}
+}

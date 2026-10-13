@@ -1,0 +1,6 @@
+.game-starts-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+.game-starts-table caption { text-align: left; color: var(--text-muted, #b8b8cc); padding: .75rem 0; }
+.game-starts-table th, .game-starts-table td { text-align: left; padding: .7rem; border-bottom: 1px solid rgba(255,255,255,.15); vertical-align: top; }
+.game-starts-table th { font-weight: 600; }
+[data-game-start-stats] { overflow-x: auto; }
+@media (max-width: 600px) { .game-starts-table th, .game-starts-table td { padding: .5rem; font-size: .85rem; } }
