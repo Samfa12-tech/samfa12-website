@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "appId": "com.samfa.briarhold",
   "channel": "alpha",
-  "versionCode": 102,
-  "versionName": "0.3.0-alpha.102",
-  "title": "Alpha.102 is available",
-  "notes": "Improves all five NPC presentations, rear woodland coverage and west stair handrail support. Ashwing is visible and targetable, dives toward reachable player positions, and has clearer ash and diagonal warnings. Phone rendering is sharper. Both co-op players should update. An intermittent Android WebView crash remains under investigation; recovery can restart from saved progress. The separate Night 5 freeze and sustained/cross-network testing remain open.",
+  "versionCode": 103,
+  "versionName": "0.3.0-alpha.103",
+  "title": "Alpha.103 is available",
+  "notes": "Adds authored field defences, mechanical ballista upgrades, a directional gate rack and daytime reclaim/replacement. Short Fire taps perform active cooling; prepared medicine automatically helps a living Warden at 10% Health or below, once per night. Co-op recovery and guest defence choices are corrected, with improved compact touch layouts and release asset identities. Both co-op players should update. The intermittent Android WebView crash and separate earlier Night5 freeze remain unresolved; physical, sustained and cross-network testing continue.",
   "updateUrl": "https://samfa12.com/games/briarhold/"
 }
