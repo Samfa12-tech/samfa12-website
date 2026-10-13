@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "source": "first-party-game-starts",
+  "status": "fixture",
+  "updatedAt": "2026-10-14T12:00:00.000Z",
+  "games": [
+    {
+      "gameId": "briarhold",
+      "trackingSince": "2026-10-06T10:00:00.000Z",
+      "daily": [
+        {"day":"2026-10-06","starts":2,"coverage":"partial"},
+        {"day":"2026-10-07","starts":3,"coverage":"complete"},
+        {"day":"2026-10-08","starts":4,"coverage":"complete"},
+        {"day":"2026-10-09","starts":0,"coverage":"complete"},
+        {"day":"2026-10-10","starts":1,"coverage":"complete"},
+        {"day":"2026-10-11","starts":2,"coverage":"complete"},
+        {"day":"2026-10-12","starts":3,"coverage":"complete"},
+        {"day":"2026-10-13","starts":4,"coverage":"complete"},
+        {"day":"2026-10-14","starts":1,"coverage":"partial"}
+      ]
+    },
+    {
+      "gameId": "reef-sweep",
+      "trackingSince": "2026-10-12T00:00:00.000Z",
+      "daily": [
+        {"day":"2026-10-12","starts":5,"coverage":"complete"},
+        {"day":"2026-10-14","starts":2,"coverage":"unverified"}
+      ]
+    }
+  ]
+}

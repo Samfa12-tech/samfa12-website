@@ -24,6 +24,7 @@ jobs:
       - run: npm run audit:indexing -- --check
       - run: npm run test:content
       - run: npm run test:analytics
+      - run: npm run test:game-starts
       - run: npm run test:marketplace
       - run: npm run test:handoff-relay
       - run: npm run verify:banana-banana-ducky

@@ -4,6 +4,9 @@
   "type": "module",
   "scripts": {
     "build:content": "node scripts/build-content.mjs",
+    "test:game-starts": "node --test tests/game-starts.test.mjs",
+    "dev:game-starts": "node scripts/serve-game-starts-dev.mjs",
+    "export:game-starts-local": "node scripts/export-game-starts-local.mjs",
     "check:content": "node scripts/build-content.mjs --check",
     "validate:seo": "node scripts/validate-seo.mjs",
     "audit:indexing": "node scripts/indexing-audit.mjs",
