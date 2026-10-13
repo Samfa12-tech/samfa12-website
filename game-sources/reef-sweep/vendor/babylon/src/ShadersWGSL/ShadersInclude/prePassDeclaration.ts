@@ -1,0 +1,29 @@
+// Do not edit.
+import { ShaderStore } from "../../Engines/shaderStore";
+import "./objectIdFunctions";
+const name = "prePassDeclaration";
+const shader = `#ifdef PREPASS
+#ifdef PREPASS_LOCAL_POSITION
+varying vPosition : vec3f;
+#endif
+#ifdef PREPASS_DEPTH
+varying vViewPos: vec3f;
+#endif
+#ifdef PREPASS_NORMALIZED_VIEW_DEPTH
+varying vNormViewDepth: f32;
+#endif
+#if defined(PREPASS_VELOCITY) || defined(PREPASS_VELOCITY_LINEAR)
+varying vCurrentPosition: vec4f;varying vPreviousPosition: vec4f;
+#endif
+#ifdef PREPASS_OBJECT_ID
+uniform objectId: f32;
+#include<objectIdFunctions>
+#endif
+#endif
+`;
+// Sideeffect
+if (!ShaderStore.IncludesShadersStoreWGSL[name]) {
+    ShaderStore.IncludesShadersStoreWGSL[name] = shader;
+}
+/** @internal */
+export const prePassDeclarationWGSL = { name, shader };

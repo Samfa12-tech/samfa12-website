@@ -51,6 +51,12 @@ jobs:
           npm run test:game-starts
           npm run test:marketplace
           npm run test:handoff-relay
+      - name: Verify canonical Reef Sweep export
+        run: |
+          npm ci --prefix game-sources/reef-sweep
+          npm run test:reef-sweep
+          npm run build:reef-sweep
+          npm run verify:reef-sweep-pages
       - name: Setup Pages
         uses: actions/configure-pages@v6
       - name: Prepare static site
@@ -67,6 +73,7 @@ jobs:
             --exclude='.env*' \
             --exclude='/content/' \
             --exclude='/output/' \
+            --exclude='/game-sources/' \
             --exclude='**/.vite/' \
             --exclude='_site' \
             --exclude='/artifacts/' \
@@ -90,6 +97,10 @@ jobs:
         run: BRIARHOLD_SITE_ROOT=_site node scripts/verify-briarhold-pages.mjs games/briarhold/play
       - name: Verify Breakfast Beat-down artifact
         run: BREAKFAST_BEAT_DOWN_SITE_ROOT=_site npm run verify:breakfast-beat-down
+      - name: Verify staged Reef Sweep and source exclusion
+        run: |
+          REEF_SWEEP_SITE_ROOT=_site npm run verify:reef-sweep-pages
+          test ! -e _site/game-sources
       - name: Verify staged SEO routes and privacy exclusions
         run: |
           SEO_SITE_ROOT=_site npm run validate:seo

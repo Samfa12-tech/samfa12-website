@@ -1,0 +1,240 @@
+{
+  "checks": [
+    {
+      "test": "Boat warning is audible/visible and lasts before gear descends",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Warning remains for a full approach interval",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Gear appears after warning",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Fishing contact loses about 2 bar with a single cooldown",
+      "pass": true,
+      "detail": {
+        "before": 196.23977599999938,
+        "after": 194.22262359700176,
+        "contact": 1
+      }
+    },
+    {
+      "test": "Lingering cannot cause repeated snag damage",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Active boat phase/contact cooldown survives reload",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Abandoned gear is a valid aimed interaction",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Gear cleanup marks one recovery without permanent-job credit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Repeated cleanup cannot duplicate recovery",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "One exact $5 recovery line settles",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Repeated settlement cannot pay again",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Boat avoids unavoidable close spawn",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Assignment accepted recognition-80",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Assignment recognized at actual settlement without extra cash recognition-80",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Assignment accepted recognition-160",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Assignment recognized at actual settlement without extra cash recognition-160",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Assignment accepted recognition-300",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Assignment recognized at actual settlement without extra cash recognition-300",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Nested Replay and Suspend preserve the original career exactly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Suspending practice returns to the real harbour without a practice save",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Controller adjusts native settings range",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Controller adjusts achievable contract selector",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Controller begins from dock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Controller moves and looks in real RAF frames",
+      "pass": true,
+      "detail": {
+        "before": {
+          "x": 0.00048213030458479325,
+          "y": 8,
+          "z": -40.996986685596355
+        },
+        "yaw": 0.08,
+        "after": {
+          "p": {
+            "x": 0.09215031292368485,
+            "y": 7.986540669168873,
+            "z": -40.878267318253606
+          },
+          "yaw": 0.258125,
+          "paused": false
+        }
+      }
+    },
+    {
+      "test": "Controller pause clears interaction",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Unavailable research does not offer a premature invitation 320",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Menu message occupies layout without overlay 320",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Phone character acceptance stays usable 320",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual browser touch draws before cancellation 320",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Cancelled touch cannot leave draw/release stuck 320",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Unavailable research does not offer a premature invitation 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Menu message occupies layout without overlay 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Phone character acceptance stays usable 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual browser touch draws before cancellation 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Cancelled touch cannot leave draw/release stuck 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Unavailable research does not offer a premature invitation 844",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Menu message occupies layout without overlay 844",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Phone character acceptance stays usable 844",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual browser touch draws before cancellation 844",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Cancelled touch cannot leave draw/release stuck 844",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Shipping gameplay creates no analytics request",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "No runtime errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "fixtures": true,
+  "physicalDevices": false,
+  "reviewCandidate": "0.4.0-preview.1",
+  "gameBundleSha256": "133a47a6dc95ff48a07c7f0238f189a645ed2f02efe020fd70c0c6041cf73162",
+  "scope": "Controlled browser fixtures, not natural or physical-device playtests"
+}

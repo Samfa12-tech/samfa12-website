@@ -1,0 +1,158 @@
+{
+  "version": "0.3.0-preview.1",
+  "sourceImportBundleExact": true,
+  "findings": {
+    "resume": {
+      "simulation": "gardens",
+      "world": "passage",
+      "sameRun": false,
+      "simPosition": {
+        "x": 0.07729670289984969,
+        "y": 7.899134639964118,
+        "z": -40.10087191840849
+      },
+      "camera": [
+        0,
+        12,
+        -44
+      ]
+    },
+    "eventReload": {
+      "before": true,
+      "after": false
+    }
+  },
+  "performance": {
+    "gardens": {
+      "quality": "high",
+      "viewport": [
+        1280,
+        800
+      ],
+      "samples": [
+        {
+          "medianMs": 18.099999999999454,
+          "p95Ms": 24.200000000000728,
+          "samples": 180
+        },
+        {
+          "medianMs": 18.199999999999818,
+          "p95Ms": 24.299999999999272,
+          "samples": 180
+        },
+        {
+          "medianMs": 23.900000000000546,
+          "p95Ms": 30.30000000000109,
+          "samples": 180
+        }
+      ],
+      "renderer": {
+        "engine": "9.26.1",
+        "fps": 52,
+        "drawCalls": 113,
+        "meshes": 139,
+        "vertices": 1669207,
+        "renderSize": [
+          1280,
+          800
+        ],
+        "watch": {
+          "raised": false,
+          "textureUpdates": 59,
+          "secured": 0,
+          "exposed": false
+        },
+        "watchRaised": false,
+        "recoveryStage": 0,
+        "shadows": {
+          "enabled": true,
+          "sunResolution": 2048,
+          "torchResolution": 1024,
+          "sunRenders": 200,
+          "torchRenders": 0,
+          "depthDraws": 0
+        },
+        "bubbles": 8,
+        "bubbleEmissions": 24,
+        "environmentCounts": {
+          "coral": 1760,
+          "seaweedClumps": 1000,
+          "seaweedFronds": 6573,
+          "nativeFish": 180,
+          "nativeSchools": 10,
+          "shipwrecks": 1,
+          "pipeMouths": 1,
+          "coastlinePieces": 12
+        }
+      },
+      "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A7A8) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    "passage": {
+      "quality": "high",
+      "viewport": [
+        1280,
+        800
+      ],
+      "samples": [
+        {
+          "medianMs": 18.199999999999818,
+          "p95Ms": 24.400000000000546,
+          "samples": 180
+        },
+        {
+          "medianMs": 18.149999999999636,
+          "p95Ms": 24.299999999999272,
+          "samples": 180
+        },
+        {
+          "medianMs": 18.149999999999636,
+          "p95Ms": 24.299999999999272,
+          "samples": 180
+        }
+      ],
+      "renderer": {
+        "engine": "9.26.1",
+        "fps": 58,
+        "drawCalls": 116,
+        "meshes": 142,
+        "vertices": 1694721,
+        "renderSize": [
+          1280,
+          800
+        ],
+        "watch": {
+          "raised": false,
+          "textureUpdates": 56,
+          "secured": 0,
+          "exposed": false
+        },
+        "watchRaised": false,
+        "recoveryStage": 0,
+        "shadows": {
+          "enabled": true,
+          "sunResolution": 2048,
+          "torchResolution": 1024,
+          "sunRenders": 190,
+          "torchRenders": 0,
+          "depthDraws": 0
+        },
+        "bubbles": 8,
+        "bubbleEmissions": 24,
+        "environmentCounts": {
+          "coral": 1793,
+          "seaweedClumps": 1000,
+          "seaweedFronds": 6493,
+          "nativeFish": 180,
+          "nativeSchools": 10,
+          "shipwrecks": 1,
+          "pipeMouths": 1,
+          "coastlinePieces": 12
+        }
+      },
+      "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A7A8) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    }
+  },
+  "reviewCandidate": "0.4.0-preview.1",
+  "gameBundleSha256": "historical v0.3 baseline; import identity verified before edits",
+  "scope": "Controlled browser fixtures, not natural or physical-device playtests"
+}

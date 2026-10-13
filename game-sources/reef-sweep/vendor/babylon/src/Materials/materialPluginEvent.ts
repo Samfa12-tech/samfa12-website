@@ -1,0 +1,1 @@
+export enum MaterialPluginEvent { Created=0x1, Disposed=0x2, GetDefineNames=0x4, PrepareUniformBuffer=0x8, IsReadyForSubMesh=0x10, PrepareDefines=0x20, BindForSubMesh=0x40, PrepareEffect=0x80, GetAnimatables=0x100, GetActiveTextures=0x200, HasTexture=0x400, FillRenderTargetTextures=0x800, HasRenderTargetTextures=0x1000, HardBindForSubMesh=0x2000 }

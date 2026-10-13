@@ -136,7 +136,7 @@ for (const relative of JSON.parse(fs.readFileSync(path.join(root,"content/genera
 errors.push(...brokenHostedEntrypoints(siteRoot));
 for (const date of sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)) if (!/^\d{4}-\d{2}-\d{2}$/.test(date[1])) fail(`sitemap: invalid lastmod ${date[1]}`);
 if (siteRoot !== root) {
-  for (const forbidden of ["node_modules","content","scripts","tests","ops","workers","AGENTS.md",".env.analytics",".env.marketplace",".git",".github"]) if (has(forbidden)) fail(`staged artifact contains ${forbidden}`);
+  for (const forbidden of ["game-sources","node_modules","content","scripts","tests","ops","workers","AGENTS.md",".env.analytics",".env.marketplace",".git",".github"]) if (has(forbidden)) fail(`staged artifact contains ${forbidden}`);
   for (const required of ["apps/what-would-win/legal-notices.txt","games/briarhold/play/index.html","apps/pocket-dj/index.html","apps/pocket-chordsmith/index.html"]) if (!has(required)) fail(`staged artifact missing ${required}`);
 }
 if (errors.length) { console.error(`SEO validation failed (${errors.length}):\n${errors.map((x)=>`- ${x}`).join("\n")}`); process.exit(1); }
