@@ -1656,7 +1656,7 @@ exports.createGameStartLifecycle = createGameStartLifecycle;
 exports.prepareWebsiteGameStartHook = prepareWebsiteGameStartHook;
 const shared_game_starts_client_js_1 = require("./shared-game-starts-client.js");
 /** Guard even unexpected adapter errors. Gameplay never waits for telemetry. */
-function createGameStartLifecycle(tracker) {
+function createGameStartLifecycle(tracker, enabled = true) {
     let ready = false;
     const safely = (call) => { try {
         Promise.resolve(call()).catch(() => { });
@@ -1664,16 +1664,17 @@ function createGameStartLifecycle(tracker) {
     catch { /* Measurement is optional. */ } };
     return {
         markReady() { ready = true; safely(() => tracker.markReady()); },
-        start() { if (ready)
+        start() { if (ready && enabled)
             safely(() => tracker.start()); },
-        activity() { if (ready)
+        activity() { if (ready && enabled)
             safely(() => tracker.activity()); },
         dispose() { safely(() => tracker.dispose()); },
     };
 }
 function prepareWebsiteGameStartHook() {
     // Shared contract b928454. Production activation remains held for approval.
-    return createGameStartLifecycle((0, shared_game_starts_client_js_1.createGameStartTracker)({ gameId: 'reef-sweep', enabled: false, endpoint: '' }));
+    const config = { gameId: 'reef-sweep', enabled: false, endpoint: '' };
+    return createGameStartLifecycle((0, shared_game_starts_client_js_1.createGameStartTracker)(config), config.enabled);
 }
 
 },

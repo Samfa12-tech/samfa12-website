@@ -27,7 +27,7 @@ test('only a ready genuine start counts, once across new runs and reload',async(
 });
 test('shipping adapter is disabled with an empty endpoint and exact shared client',async()=>{
  const source=fs.readFileSync(new URL('../src/analytics/game-start.ts',import.meta.url),'utf8');
- assert.match(source,/gameId:'reef-sweep',enabled:false,endpoint:''/);
+ assert.match(source,/gameId:'reef-sweep' as const,enabled:false,endpoint:''/);
  assert.match(fs.readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),/if\(!debug\)gameStarts.start\(\)/);
  const f=fixture();f.options.enabled=false;f.options.endpoint='';const t=createGameStartTracker(f.options);t.markReady();await t.start();t.activity();assert.equal(f.requests.length,0);assert.equal(f.win.sessionStorage.length,0);
  assert.doesNotThrow(()=>prepareWebsiteGameStartHook().markReady());
@@ -68,4 +68,9 @@ test('storage and arbitrary synchronous/rejected adapter failures cannot enter g
   const hook=createGameStartLifecycle({markReady:fail,start:fail,activity:fail,dispose:fail});assert.doesNotThrow(()=>{hook.start();hook.markReady();hook.start();hook.activity();hook.dispose()});
  }
  await new Promise(resolve=>setTimeout(resolve,0));
+});
+
+test('disabled activation avoids per-frame consent/storage activity as well as transmission',()=>{
+ let work=0;const hook=createGameStartLifecycle({markReady(){},start(){work++},activity(){work++},dispose(){}},false);
+ hook.markReady();hook.start();for(let i=0;i<1000;i++)hook.activity();assert.equal(work,0);
 });
