@@ -1599,14 +1599,14 @@
     "details": [
       {
         "heading": "Explore Lantern Bay",
-        "text": "Start in the warm shallows of Sunlit Gardens, then unlock the stronger currents of Tideglass Passage. Follow schools of fish through the reef, explore the deeper trench and visit the Lantern wreck. Seaweed sways with the current, your regulator keeps you breathing, and bubbles rise towards the surface. You can swim up for a look at the coast, though surfacing won't refill your tank.",
+        "text": "Start in the warm shallows of Sunlit Gardens, then unlock the currents of Tideglass Passage. Further out, Mangrove Reach has root channels and a bright sandbar, Azure Cenote opens into deep limestone basins, and Rusted Harbour shelters fish among wreck ribs and old cargo containers. Seaweed sways with the current, your regulator keeps you breathing, and bubbles rise towards the surface. Swim up for a look at the coast, though surfacing won't refill your tank.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
       },
       {
         "heading": "Hunt lionfish and restore the reef",
-        "text": "Get close, settle your aim, hold to draw the pole spear and release to strike. Hold Interact to secure the fish in your collection tube before moving on. Lionfish spines hurt and drain your air, so give them room. Between hunts, clear abandoned fishing gear, plant nursery-grown coral and survey field stations. Take on restaurant orders and conservation contracts, and return to a reef that remembers your work.",
+        "text": "Get close, settle your aim, hold to draw the pole spear and release to strike. Hold Interact to secure the fish in your collection tube before moving on. Lionfish spines hurt and drain your air, so give them room. Between hunts, clear abandoned fishing gear, plant nursery-grown coral and survey field stations. Take on restaurant orders and conservation contracts, and return to a reef that remembers your work. Fish return between dives as you keep clearing lionfish. Come back for three, four or five productive outings and the reef starts to bustle with larger, more colourful schools.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
@@ -1614,6 +1614,13 @@
       {
         "heading": "Better gear and night dives",
         "text": "Spend your earnings on fins, a better spear, more air and a battery-powered scooter. Nine equipment types have five upgrade levels each, giving you more room to explore as your diving business grows. Upgrade your regulator to level 2, fit a head torch and unlock Tideglass Passage to try a night dive. Keep an eye out for the reef shark. High graphics adds shadows across the reef, including those cast by your torch; reload when prompted to apply the full detail.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "heading": "Check your dive watch",
+        "text": "Raise your wrist to check air, depth, dive time, secured catch, battery and the air you need to get home. Press V, tap Watch or use your mapped controller button. Keep the usual air and timer display, or turn it off in Settings once you're comfortable using the watch.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
@@ -1664,7 +1671,7 @@
       },
       {
         "question": "Is the game finished?",
-        "answer": "It's an early playable build. Both dive sites, equipment upgrades, night dives and filleting are available, but the artwork and balance are still being worked on. Expect a few rough edges.",
+        "answer": "It's an early playable build. Five dive sites, equipment upgrades, night dives, filleting and a working dive watch are available, but the artwork and balance are still being worked on. Expect a few rough edges.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]

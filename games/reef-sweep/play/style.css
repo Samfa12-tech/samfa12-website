@@ -69,3 +69,18 @@
 .quality-reload-note{border:1px solid #edc78d70;background:#edc78d12;border-radius:9px;padding:12px;margin:10px 0}.quality-reload-note p{font-size:12px;color:var(--sand)}.quality-reload-note .button-row{margin-top:8px}
 #fullscreen-button{width:44px;height:44px;min-width:44px;min-height:44px;padding:3px;font-size:23px;line-height:1}
 @media(max-width:680px) and (orientation:portrait){body.touch .hud-top{flex-direction:column;align-items:stretch;gap:6px}.dive-computer{width:100%;max-width:100%;padding:6px 10px}.hud-buttons{align-self:flex-end;gap:6px}.hud-buttons button{min-height:44px;padding:5px 10px}body.touch #return-warning{top:calc(145px + var(--safe-top))}body.touch #dive-caption{left:50%;top:calc(195px + var(--safe-top));bottom:auto;transform:translateX(-50%);width:min(80vw,280px);text-align:center;font-size:9px}body.touch #joystick{left:16px;bottom:calc(16px + var(--safe-bottom))}body.touch .touch-vertical{left:16px;bottom:calc(166px + var(--safe-bottom))}body.touch .touch-actions{right:8px;bottom:calc(12px + var(--safe-bottom));grid-template-columns:44px 54px 54px;gap:4px;transform:none}body.touch .touch-actions .small-touch,body.touch .touch-actions [data-touch=light]{grid-column:1;width:44px;min-height:44px;padding:4px}body.touch .touch-actions [data-touch=steady]{grid-row:1}body.touch .touch-actions [data-touch=scooter]{grid-row:2}body.touch .touch-actions [data-touch=light]{grid-row:3}body.touch .touch-actions .interact-touch{grid-column:2;grid-row:1/4;width:54px;height:140px;min-height:44px}body.touch .touch-actions .spear-touch{grid-column:3;grid-row:1/4;width:54px;height:140px;min-height:44px}}
+
+.hud-buttons #watch-button{min-height:44px;padding:8px 12px;border-color:#8bd8c477}.hud-buttons #watch-button[aria-pressed=true]{color:#092e33;background:#a8e4c8;border-color:#a8e4c8}.instrument-hud-hidden .dive-computer{display:none}.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+
+.recovery-note{font-size:11px;line-height:1.35;color:var(--teal);margin:8px 0 11px}.dock-card .recovery-note{margin:7px 0 10px}.modal .recovery-note{padding:8px 10px;border-left:2px solid var(--teal);background:#8bd8c40b}
+
+
+.instrument-hud-hidden .dive-computer{display:block;width:auto;min-width:145px;align-self:flex-start}
+.instrument-hud-hidden #air,.instrument-hud-hidden .dive-computer .micro,.instrument-hud-hidden .dive-computer .unit,.instrument-hud-hidden .air-meter,.instrument-hud-hidden #clock{display:none}
+
+
+body.watch-raised #reticle,body.watch-raised #interaction{display:none!important}
+body.watch-raised #dive-caption{display:none}
+@media(max-width:680px) and (orientation:portrait){body.touch #toast{top:calc(137px + var(--safe-top))}body.touch:has(#return-warning:not([hidden])) #toast{top:calc(187px + var(--safe-top))}}
+

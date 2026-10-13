@@ -862,7 +862,7 @@
             "Breakfast-Beat-down-v0.2-itch.zip"
           ],
           "releaseSha256": "a2b61eed4248a4daafa6b6012073ea83c46cc5959e064e9038eade837d9ac5d9",
-          "notes": "All three HTML releases match. README, source modules and supplied screenshots reviewed. No itch URL or Android inclusion asserted; package provenance is not an independent rights audit. The promotional icon is a new original imagegen illustration based on inspected game art, not a supplied screenshot; PNG master 1254x1254, local WebP 960x960, generated 2026-10-03 at the owner\u2019s request."
+          "notes": "All three HTML releases match. README, source modules and supplied screenshots reviewed. No itch URL or Android inclusion asserted; package provenance is not an independent rights audit. The promotional icon is a new original imagegen illustration based on inspected game art, not a supplied screenshot; PNG master 1254x1254, local WebP 960x960, generated 2026-10-03 at the owner’s request."
         }
       ]
     },
@@ -918,7 +918,7 @@
     "game-reef-sweep": {
       "disposition": "create",
       "landingPath": "/games/reef-sweep/",
-      "reviewedAt": "2026-10-13",
+      "reviewedAt": "2026-10-14",
       "dateMeaning": "Owner-supplied source archive and code inspection date, not a public release date",
       "sources": [
         {
@@ -960,6 +960,24 @@
             "src/main.ts"
           ],
           "notes": "The current source implements nine five-rank gear types, a progression fixture, surface breaching, deeper wreck/outfall surveys, an optional night shark, contact injury that drains air, optional three-cut filleting, simulation-timed breathing/bubbles, High-only 2048 sun and 1024 torch depth-map shadows, a saved Now/Later quality choice that reapplies after reload, compact mobile footer and fullscreen control, portrait controls without forced pause, and the knownSpinVector Backbone One preset with saved calibration. Automated Chromium validation covers the implemented source behavior; owner physical-play evidence confirms landscape touch feel in Android Chrome and approval of the local High shadow build. The owner also physically tested and approved the USB Backbone controls in Windows Chrome. Physical acceptance of revised portrait and fullscreen behavior remains pending. iPhone/Safari compatibility, sustained performance, and a natural campaign result are unverified; audible timing and mix need validation."
+        },
+        {
+          "url": "https://samfa12.com/games/reef-sweep/play/",
+          "identity": "Reef Sweep 0.3.0-preview.1; exact tested distribution and retained source handoff. Publication authorized 2026-10-14.",
+          "access": "read-owner-maintained-local-source-tree",
+          "files": [
+            "package.json",
+            "docs/CAMPAIGN_PREVIEW.md",
+            "dist/build-manifest.json",
+            "src/game/data.ts",
+            "src/game/profile.ts",
+            "src/game/simulation.ts",
+            "src/render/renderer.ts",
+            "src/ui/ui.ts"
+          ],
+          "buildManifestSha256": "40e46c5f49b6e052b2fb21920b04deb2c7b9b3c5898bf68c0ad910a562e80ae4",
+          "handoffSha256": "072ed45f47982d066e5e0a65edcd243e426da202322d71220e49af31fa419575",
+          "notes": "Five sites, delayed productive-return reef recovery, animated wildlife/arms and functioning dive watch; 118 source and 8 package tests, plus campaign, terrain, shadow and responsive Chromium evidence. No within-outing population gain. Previous physical approval belongs to v0.2; current phone/controller watch and new-site acceptance, sustained performance and natural campaign pacing remain outstanding. Original eel geometry, controller mapping and schema-1 saves preserved."
         }
       ],
       "limits": [

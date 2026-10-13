@@ -27,8 +27,12 @@ const input = new input_js_1.InputController(canvas, settings, action => {
         else
             open('journal');
     }
-    else if (action === 'scooter')
+    else if (action === 'scooter') {
+        setWatchRaised(false);
         sim?.toggleScooter();
+    }
+    else if (action === 'watch')
+        toggleWatch();
     else if (action === 'light' && sim) {
         if ((0, data_js_1.upgradeLevel)(profile, 'torch') < 1) {
             ui.toast('Install a head torch at the equipment shop.');
@@ -40,9 +44,50 @@ const input = new input_js_1.InputController(canvas, settings, action => {
 });
 input.mountTouch();
 let accum = 0, last = 0, visualTime = 0, hudClock = 0, frameCount = 0;
+let watchRaised = false;
 const debug = new URLSearchParams(location.search).has('debug') || location.hash.includes('debug') || window.REEF_TEST_MODE === true;
 function persist() { store.save(profile); const w = document.getElementById('storage-warning'); w.hidden = !store.warning; w.textContent = store.warning; }
+function setWatchRaised(value) {
+    const raised = value && !paused && visualDive && !!sim;
+    watchRaised = raised;
+    document.body.classList.toggle('watch-raised', raised);
+    renderer?.setWatchRaised(raised);
+    input.setWatchRaised(raised);
+    const button = document.getElementById('watch-button');
+    if (button) {
+        button.setAttribute('aria-pressed', String(raised));
+        button.setAttribute('aria-label', `${raised ? 'Lower' : 'Raise'} dive computer (${settings.keys.watch.replace('Key', '')})`);
+        button.title = `${raised ? 'Lower' : 'Raise'} dive computer (${settings.keys.watch.replace('Key', '')})`;
+    }
+    updateWatchReadout();
+}
+function toggleWatch() {
+    if (paused || !visualDive || !sim)
+        return;
+    if (!watchRaised) {
+        if (sim.run.scooter)
+            sim.toggleScooter();
+        sim.run.charge = 0;
+        sim.run.interaction = 0;
+        input.cancelDraw = true;
+        input.release = false;
+    }
+    setWatchRaised(!watchRaised);
+}
+function updateWatchReadout() {
+    const output = document.getElementById('watch-readout');
+    if (!output)
+        return;
+    if (!watchRaised || !sim) {
+        output.textContent = `Dive computer lowered. Press ${settings.keys.watch.replace('Key', '')} or use the Watch button to raise it.`;
+        return;
+    }
+    const run = sim.run, depth = Math.max(0, sim.site.surface - run.p.y);
+    output.textContent = `Dive computer raised. Air ${Math.ceil(run.air)} bar. Depth ${depth < .05 ? 'surface' : `${depth.toFixed(1)} metres`}. Elapsed ${Math.floor(run.time / 60)} minutes ${Math.floor(run.time % 60)} seconds. Secured ${run.cargo.length} of ${(0, data_js_1.capacity)(profile)}. ${run.exposed ? "One fish remains exposed on the spear. " : ""} Battery ${Math.ceil(run.battery)} percent. Return reserve ${Math.ceil(sim.reserve)} bar. The spear is stowed; lower the watch before drawing.`;
+}
 function setPause(v) {
+    if (v)
+        setWatchRaised(false);
     paused = v;
     input.setActive(!v);
     accum = 0;
@@ -156,7 +201,7 @@ function review() {
     show('debrief');
 }
 function download(name, text, type = 'application/json') { const blob = new Blob([text], { type }), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 10000); }
-function applySettings() { input.settings = settings; renderer?.configure(settings); audio.setSettings(settings); store.saveSettings(settings); document.body.classList.toggle('reduced', settings.reducedMotion); document.querySelector('#chart-button kbd').textContent = settings.keys.journal.replace('Key', ''); document.documentElement.style.setProperty('--touch-scale', String(settings.touchScale)); }
+function applySettings() { input.settings = settings; renderer?.configure(settings); audio.setSettings(settings); store.saveSettings(settings); document.body.classList.toggle('reduced', settings.reducedMotion); document.body.classList.toggle('instrument-hud-hidden', settings.instrumentHud === false); document.querySelector('#chart-button kbd').textContent = settings.keys.journal.replace('Key', ''); document.querySelector('#watch-button kbd').textContent = settings.keys.watch.replace('Key', ''); document.documentElement.style.setProperty('--touch-scale', String(settings.touchScale)); }
 async function toggleFullscreen() {
     const doc = document, root = document.documentElement;
     const active = !!(doc.fullscreenElement || doc.webkitFullscreenElement);
@@ -296,7 +341,11 @@ function dispatch(action, data) {
                 }
                 break;
             case 'fullscreen':
+                setWatchRaised(false);
                 void toggleFullscreen();
+                break;
+            case 'watch':
+                toggleWatch();
                 break;
             case 'quality-reload':
                 persist();
@@ -425,6 +474,8 @@ function frame(now) {
     // Controller look uses the simulation time actually covered by this sample.
     const inputTime = Math.min(5, Math.floor((accum + dt) * 60)) / 60;
     const f = paused || !sim ? input.sample(dt) : inputTime > 0 ? input.sample(inputTime) : simulation_js_1.EMPTY_INPUT;
+    if (input.padDisconnected && watchRaised)
+        setWatchRaised(false);
     if (ui.screen === 'settings' && hudClock > .09) {
         hudClock = 0;
         ui.updateControllerStatus(input.controllerStatus());
@@ -445,6 +496,7 @@ function frame(now) {
     audio.update(sim?.run || null, visualDive);
     hudClock += dt;
     try {
+        renderer.setWatchReserve(sim?.reserve ?? 40);
         renderer.render(visualDive ? sim?.run.time ?? visualTime : visualTime, visualDive);
     }
     catch (e) {
@@ -459,6 +511,9 @@ function frame(now) {
     if (!paused && sim && hudClock > .09) {
         hudClock = 0;
         ui.updateHUD(sim, input.gamepad ? 'gamepad' : input.touchMode ? 'touch' : 'keyboard');
+        if (watchRaised && !input.touchMode)
+            document.getElementById('controls-hint').textContent = 'Watch raised · Movement and looking remain available · Lower watch before drawing the spear';
+        updateWatchReadout();
         const mark = renderer.homeMarker(), el = document.getElementById('home-marker');
         el.style.left = mark.x + '%';
         el.style.top = mark.y + '%';
@@ -515,7 +570,7 @@ function orientation() { document.getElementById('rotate').hidden = true; }
 function resizeViewport() { renderer?.engine.resize(); orientation(); }
 window.addEventListener('resize', resizeViewport);
 window.visualViewport?.addEventListener('resize', resizeViewport);
-document.addEventListener('fullscreenchange', () => { input.clear(); resizeViewport(); ui.updateFullscreenState(!!document.fullscreenElement); });
+document.addEventListener('fullscreenchange', () => { setWatchRaised(false); input.clear(); resizeViewport(); ui.updateFullscreenState(!!document.fullscreenElement); });
 canvas.addEventListener('webglcontextrestored', () => ui.toast('Graphics restored. Resume when you are ready.'));
 try {
     renderer = new renderer_js_1.ReefRenderer(canvas, settings);
@@ -571,15 +626,28 @@ exports.validateProfile = validateProfile;
 exports.buy = buy;
 const data_js_1 = require("./data.js");
 const math_js_1 = require("./math.js");
+const reef_recovery_js_1 = require("./reef-recovery.js");
 exports.SAVE_PREFIX = 'reef-sweep:v1:';
-function freshProfile(slot = 1) { const reef = () => ({ removed: [], cleaned: [], restored: {}, visits: 0, surveys: 0, lastDay: 0 }); return { version: 1, slot, day: 1, cash: 80, debt: 0, reputation: 0, audience: 12, totalRemoved: 0, totalCleaned: 0, totalRestored: 0, upgrades: [], reefs: { gardens: reef(), passage: reef() }, records: [], published: [], discoveries: [], tutorial: 0, sponsorPaidDay: 0, lastReport: 'Your boat. Your first reef. A little room to make a difference.', active: null, pending: null }; }
+const REEF_IDS = ['gardens', 'passage', 'mangrove', 'cenote', 'harbour'];
+const emptyReef = () => ({ removed: [], cleaned: [], restored: {}, visits: 0, productiveVisits: 0, surveys: 0, lastDay: 0 });
+function freshProfile(slot = 1) { return { version: 1, slot, day: 1, cash: 80, debt: 0, reputation: 0, audience: 12, totalRemoved: 0, totalCleaned: 0, totalRestored: 0, upgrades: [], reefs: { gardens: emptyReef(), passage: emptyReef(), mangrove: emptyReef(), cenote: emptyReef(), harbour: emptyReef() }, records: [], published: [], discoveries: [], tutorial: 0, sponsorPaidDay: 0, lastReport: 'Your boat. Your first reef. A little room to make a difference.', active: null, pending: null }; }
 const numeric = (v, min, max) => typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max;
 const strings = (v, n = 3000) => Array.isArray(v) && v.length <= n && v.every(s => typeof s === 'string' && s.length < 140);
 /** Import is intentionally strict. Invalid data is never allowed to replace a good slot. */
 function validateProfile(v) {
-    const p = v;
+    const source = v;
+    const p = source && typeof source === 'object' ? structuredClone(source) : source;
     if (!p || p.version !== 1)
         throw Error('This is not a supported Reef Sweep save (schema 1).');
+    if (!p.reefs || typeof p.reefs !== 'object' || Array.isArray(p.reefs))
+        throw Error('Invalid reef progress.');
+    const keys = Object.keys(p.reefs);
+    const legacyTwoSiteSave = keys.length === 2 && keys.includes('gardens') && keys.includes('passage');
+    if (legacyTwoSiteSave) {
+        p.reefs = { ...p.reefs, mangrove: emptyReef(), cenote: emptyReef(), harbour: emptyReef() };
+    }
+    else if (keys.length !== REEF_IDS.length || REEF_IDS.some(id => !keys.includes(id)) || keys.some(id => !REEF_IDS.includes(id)))
+        throw Error('Invalid reef-site inventory.');
     for (const k of ['day', 'cash', 'debt', 'reputation', 'audience', 'totalRemoved', 'totalCleaned', 'totalRestored'])
         if (!numeric(p[k], 0, 1e8))
             throw Error('Invalid save field: ' + k);
@@ -593,19 +661,23 @@ function validateProfile(v) {
         throw Error('Invalid equipment levels.');
     if (!strings(p.published, 3000) || !strings(p.discoveries, 200))
         throw Error('Invalid journal.');
-    if (!Array.isArray(p.records) || p.records.length > 80 || !p.records.every(r => numeric(r.score, 0, 1e8) && ['gardens', 'passage'].includes(r.site) && numeric(r.day, 1, 1e6)))
+    if (!Array.isArray(p.records) || p.records.length > 80 || !p.records.every(r => numeric(r.score, 0, 1e8) && REEF_IDS.includes(r.site) && numeric(r.day, 1, 1e6)))
         throw Error('Invalid event history.');
-    for (const id of ['gardens', 'passage']) {
+    for (const id of REEF_IDS) {
         const r = p.reefs?.[id];
         if (!r || !strings(r.removed) || !strings(r.cleaned) || !r.restored || typeof r.restored !== 'object' || Array.isArray(r.restored) || Object.entries(r.restored).length > 100 || !Object.entries(r.restored).every(([k, n]) => /^coral-\d+$/.test(k) && numeric(n, 1, 1e6)))
             throw Error('Invalid reef progress.');
         if (!numeric(r.visits, 0, 1e6) || !numeric(r.surveys, 0, 1e6))
             throw Error('Invalid reef counters.');
+        if (r.productiveVisits !== undefined && (!numeric(r.productiveVisits, 0, 1e6) || !Number.isInteger(r.productiveVisits)))
+            throw Error('Invalid productive-visit counter.');
     }
     for (const r of [p.active, p.pending])
         if (r) {
-            if (!['gardens', 'passage'].includes(r.site) || !numeric(r.seed, 0, 0xffffffff) || typeof r.id !== 'string' || !numeric(r.time, 0, 10000) || !numeric(r.air, 0, (0, data_js_1.airCapacity)(p)) || !numeric(r.health, 0, 100) || !numeric(r.battery, 0, 100) || !numeric(r.yaw, -1e9, 1e9) || !numeric(r.pitch, -2, 2))
+            if (!REEF_IDS.includes(r.site) || !numeric(r.seed, 0, 0xffffffff) || typeof r.id !== 'string' || !numeric(r.time, 0, 10000) || !numeric(r.air, 0, (0, data_js_1.airCapacity)(p)) || !numeric(r.health, 0, 100) || !numeric(r.battery, 0, 100) || !numeric(r.yaw, -1e9, 1e9) || !numeric(r.pitch, -2, 2))
                 throw Error('Invalid suspended dive.');
+            if (r.recoveryStage !== undefined && (!Number.isInteger(r.recoveryStage) || r.recoveryStage < 0 || r.recoveryStage > 5))
+                throw Error('Invalid reef recovery snapshot.');
             if (r.night !== undefined && typeof r.night !== 'boolean' || r.night && (0, data_js_1.upgradeLevel)(p, 'torch') < 1)
                 throw Error('Invalid night dive.');
             if (r.filletQuality !== undefined && (!numeric(r.filletQuality, 0, 1) || !r.finished || r.rescued || !r.cargo.length))
@@ -656,7 +728,19 @@ function validateProfile(v) {
         }
     if (p.active?.finished || p.pending && !p.pending.finished)
         throw Error('Invalid outing lifecycle.');
-    return structuredClone(p);
+    for (const id of REEF_IDS) {
+        const reef = p.reefs[id];
+        if (reef.productiveVisits === undefined) {
+            const outing = p.active?.site === id ? p.active : p.pending?.site === id ? p.pending : null;
+            const currentClearances = outing ? Math.min(reef.removed.length, Math.max(0, Math.floor(outing.removed))) : 0;
+            const priorClearances = reef.removed.length - currentClearances;
+            reef.productiveVisits = Math.min(Math.floor(reef.visits), Math.floor(priorClearances / 2));
+        }
+    }
+    for (const r of [p.active, p.pending])
+        if (r && r.recoveryStage === undefined)
+            r.recoveryStage = (0, reef_recovery_js_1.recoveryForRun)(r, p.reefs[r.site]);
+    return p;
 }
 function buy(p, id) {
     const u = data_js_1.UPGRADES.find(x => x.id === id), cost = (0, data_js_1.upgradeCost)(p, id);
@@ -741,7 +825,7 @@ class SaveStore {
                         continue;
                     gamepads[key] = { key, id: p.id.slice(0, 200), mapping: p.mapping.slice(0, 40), axisCount: p.axisCount, buttonCount: p.buttonCount, axes: p.axes, centers: p.centers, buttons: p.buttons, axisButtons: p.axisButtons, moveDeadzone: (0, math_js_1.clamp)(Number(p.moveDeadzone) || .14, .05, .4), lookDeadzone: (0, math_js_1.clamp)(Number(p.lookDeadzone) || .2, .05, .45) };
                 }
-            return { ...data_js_1.DEFAULT_SETTINGS, ...s, quality: q, music: (0, math_js_1.clamp)(Number(s.music ?? .42) || 0, 0, 1), ambience: (0, math_js_1.clamp)(Number(s.ambience ?? .6) || 0, 0, 1), effects: (0, math_js_1.clamp)(Number(s.effects ?? .7) || 0, 0, 1), sensitivity: (0, math_js_1.clamp)(Number(s.sensitivity ?? 1) || 1, .25, 2.5), fov: (0, math_js_1.clamp)(Number(s.fov ?? 78) || 78, 60, 100), touchScale: (0, math_js_1.clamp)(Number(s.touchScale ?? 1) || 1, .8, 1.3), keys: { ...data_js_1.DEFAULT_SETTINGS.keys, ...s.keys }, gamepads };
+            return { ...data_js_1.DEFAULT_SETTINGS, ...s, quality: q, music: (0, math_js_1.clamp)(Number(s.music ?? .42) || 0, 0, 1), ambience: (0, math_js_1.clamp)(Number(s.ambience ?? .6) || 0, 0, 1), effects: (0, math_js_1.clamp)(Number(s.effects ?? .7) || 0, 0, 1), sensitivity: (0, math_js_1.clamp)(Number(s.sensitivity ?? 1) || 1, .25, 2.5), fov: (0, math_js_1.clamp)(Number(s.fov ?? 78) || 78, 60, 100), touchScale: (0, math_js_1.clamp)(Number(s.touchScale ?? 1) || 1, .8, 1.3), instrumentHud: typeof s.instrumentHud === 'boolean' ? s.instrumentHud : true, keys: { ...data_js_1.DEFAULT_SETTINGS.keys, ...s.keys }, gamepads };
         }
         catch {
             return structuredClone(data_js_1.DEFAULT_SETTINGS);
@@ -776,14 +860,100 @@ exports.wreckAnchor = wreckAnchor;
 exports.pipeAnchor = pipeAnchor;
 exports.healthOfReef = healthOfReef;
 exports.siteUnlocked = siteUnlocked;
+exports.siteUnlockText = siteUnlockText;
 exports.reefFishHomes = reefFishHomes;
 const math_js_1 = require("./math.js");
-const rock = (id, x, z, sx, sy, sz, tint = 0) => ({ id, p: (0, math_js_1.vec)(x, sy * .4, z), s: (0, math_js_1.vec)(sx, sy, sz), tint });
-const gardenRocks = [rock('west-ledge', -11, -25, 7, 3.8, 6), rock('east-head', 12, -22, 7, 4.6, 6, 1), rock('nursery-wall', -18, -7, 5, 6, 8), rock('arch-left', 10, 5, 4, 6, 5), rock('arch-right', 23, 5, 4, 6, 5), { id: 'arch-crown', p: (0, math_js_1.vec)(16.5, 9, 5), s: (0, math_js_1.vec)(8, 2, 4), tint: 1 }, rock('grouper-home', -19, 15, 7, 6, 7, 1), rock('north-head', 6, 31, 8, 6, 7), rock('outer-east', 34, 23, 7, 5, 11), rock('outer-west', -38, 1, 9, 5, 12), rock('far-west', -30, 40, 10, 7, 9), rock('far-east', 33, 45, 11, 6, 9)];
-const passageRocks = [rock('entry-left', -13, -32, 8, 5, 6), rock('entry-right', 14, -29, 8, 6, 6), rock('west-wall', -17, -6, 7, 10, 12), rock('east-wall', 18, -2, 7, 10, 12, 1), rock('split-west', -12, 26, 7, 9, 9), rock('split-east', 13, 26, 7, 8, 8), { id: 'passage-crown', p: (0, math_js_1.vec)(0, 15, 26), s: (0, math_js_1.vec)(15, 2.5, 5), tint: 1 }, rock('outer-head', 34, 13, 9, 8, 12), rock('outer-west', -37, 29, 10, 7, 13), rock('north', 2, 53, 15, 8, 9)];
-exports.SITES = { gardens: { id: 'gardens', name: 'Sunlit Gardens', eyebrow: 'LANTERN BAY / SITE 01', description: 'Warm shallows, a coral nursery and a familiar face beneath the ledges.', surface: 18, radius: 68, seed: 120726, entry: (0, math_js_1.vec)(0, 8, -41), current: .18, rocks: gardenRocks, landmarks: [{ name: 'Home buoy', p: (0, math_js_1.vec)(0, 17, -44), kind: 'boat' }, { name: 'The nursery', p: (0, math_js_1.vec)(-9, 2, -7), kind: 'coral' }, { name: 'Marlow’s ledge', p: (0, math_js_1.vec)(-19, 6, 15), kind: 'wildlife' }, { name: 'Sun arch', p: (0, math_js_1.vec)(16, 7, 5), kind: 'landmark' }] }, passage: { id: 'passage', name: 'Tideglass Passage', eyebrow: 'LANTERN BAY / SITE 02', description: 'Tall reef walls and a flowing channel. Find shelter before you commit.', surface: 25, radius: 74, seed: 741309, entry: (0, math_js_1.vec)(0, 12, -44), current: .42, rocks: passageRocks, landmarks: [{ name: 'Home buoy', p: (0, math_js_1.vec)(0, 24, -47), kind: 'boat' }, { name: 'Restoration shelf', p: (0, math_js_1.vec)(-4, 2, -4), kind: 'coral' }, { name: 'The throat', p: (0, math_js_1.vec)(0, 10, 10), kind: 'current' }, { name: 'Cathedral arch', p: (0, math_js_1.vec)(0, 12, 26), kind: 'landmark' }] } };
+const rock = (id, x, z, sx, sy, sz, tint = 0, form = 'rock') => ({
+    id, p: (0, math_js_1.vec)(x, sy * .4, z), s: (0, math_js_1.vec)(sx, sy, sz), tint, form
+});
+const ellipsoid = (id, x, y, z, sx, sy, sz, form, tint = 0) => ({
+    id, p: (0, math_js_1.vec)(x, y, z), s: (0, math_js_1.vec)(sx, sy, sz), tint, form
+});
+const rootCluster = (id, x, z, offsets, tint = 0) => offsets.flatMap(([dx, dz], i) => [
+    ellipsoid(`${id}-trunk-${i}`, x + dx, 8.8, z + dz, .48, 12.3, .48, 'root', tint),
+    ellipsoid(`${id}-buttress-${i}`, x + dx, -.8, z + dz, 1.45, 2.7, 1.35, 'root', tint)
+]);
+const anchors = (debris, coral, surveys = []) => ({
+    debris: debris.map(([x, z]) => (0, math_js_1.vec)(x, 0, z)),
+    coral: coral.map(([x, z]) => (0, math_js_1.vec)(x, 0, z)),
+    surveys: surveys.map(([x, z]) => (0, math_js_1.vec)(x, 0, z))
+});
+const gardenRocks = [rock('west-ledge', -11, -25, 7, 3.8, 6), rock('east-head', 12, -22, 7, 4.6, 6, 1), rock('nursery-wall', -18, -7, 5, 6, 8), rock('arch-left', 10, 5, 4, 6, 5), rock('arch-right', 23, 5, 4, 6, 5), { id: 'arch-crown', p: (0, math_js_1.vec)(16.5, 9, 5), s: (0, math_js_1.vec)(8, 2, 4), tint: 1, form: 'rock' }, rock('grouper-home', -19, 15, 7, 6, 7, 1), rock('north-head', 6, 31, 8, 6, 7), rock('outer-east', 34, 23, 7, 5, 11), rock('outer-west', -38, 1, 9, 5, 12), rock('far-west', -30, 40, 10, 7, 9), rock('far-east', 33, 45, 11, 6, 9)];
+const passageRocks = [rock('entry-left', -13, -32, 8, 5, 6), rock('entry-right', 14, -29, 8, 6, 6), rock('west-wall', -17, -6, 7, 10, 12), rock('east-wall', 18, -2, 7, 10, 12, 1), rock('split-west', -12, 26, 7, 9, 9), rock('split-east', 13, 26, 7, 8, 8), { id: 'passage-crown', p: (0, math_js_1.vec)(0, 15, 26), s: (0, math_js_1.vec)(15, 2.5, 5), tint: 1, form: 'rock' }, rock('outer-head', 34, 13, 9, 8, 12), rock('outer-west', -37, 29, 10, 7, 13), rock('north', 2, 53, 15, 8, 9)];
+const mangroveRocks = [
+    ...rootCluster('root-west-bank', -17, -24, [[-2, -4], [1, -2], [-1, 1], [2, 4]]),
+    ...rootCluster('root-east-bank', 17, -21, [[-2, -4], [1, -2], [-1, 1], [2, 4]], 1),
+    ...rootCluster('root-northwest-bank', -24, 1, [[-2, -3], [1, -1], [-1, 2], [2, 4]], 1),
+    ...rootCluster('root-northeast-bank', 23, 4, [[-2, -3], [1, -1], [-1, 2], [2, 4]]),
+    ellipsoid('sandbar-rock-west', -33, -0.2, 25, 6, 2, 9, 'rock'),
+    ellipsoid('sandbar-rock-east', 34, -0.1, 23, 6, 2, 10, 'rock', 1)
+];
+const cenoteRocks = [
+    ellipsoid('limestone-west-shoulder', -31, -2, -6, 7, 15, 19, 'limestone'),
+    ellipsoid('limestone-east-shoulder', 31, -1, -2, 7, 16, 20, 'limestone', 1),
+    ellipsoid('limestone-south-pillar', -19, 2, 24, 5, 17, 10, 'limestone', 1),
+    ellipsoid('limestone-east-pillar', 20, 1, 29, 5, 16, 9, 'limestone'),
+    ellipsoid('limestone-west-alcove', -24, -3, 39, 8, 13, 8, 'limestone'),
+    ellipsoid('limestone-east-alcove', 28, -2, 42, 8, 13, 8, 'limestone', 1),
+    ellipsoid('limestone-rim-west', -43, 3, -35, 6, 12, 12, 'limestone'),
+    ellipsoid('limestone-rim-east', 43, 3, -35, 6, 12, 12, 'limestone', 1)
+];
+const harbourRocks = [
+    ellipsoid('pier-piling-west-0', -18, 7.5, -35, .7, 15.5, .7, 'piling'),
+    ellipsoid('pier-piling-west-1', -10, 7.5, -35, .7, 15.5, .7, 'piling', 1),
+    ellipsoid('pier-piling-east-0', 10, 7.5, -35, .7, 15.5, .7, 'piling', 1),
+    ellipsoid('pier-piling-east-1', 18, 7.5, -35, .7, 15.5, .7, 'piling'),
+    ellipsoid('container-blue', 27, -4.8, -17, 7, 5.2, 4.2, 'container', 1),
+    ellipsoid('container-rust', 28, -4.5, -6, 7, 5.5, 4.2, 'container'),
+    ellipsoid('container-low-west', -30, -6, 17, 7, 4.2, 4.5, 'container', 1),
+    ellipsoid('harbour-reef-west', -42, -5, -2, 8, 6, 13, 'rock'),
+    ellipsoid('harbour-reef-east', 44, -4, 22, 8, 7, 12, 'rock', 1)
+];
+exports.SITES = {
+    gardens: {
+        id: 'gardens', name: 'Sunlit Gardens', eyebrow: 'LANTERN BAY / SITE 01', description: 'Warm shallows, a coral nursery and a familiar face beneath the ledges.',
+        surface: 18, radius: 68, seed: 120726, entry: (0, math_js_1.vec)(0, 8, -41), current: .18, channelX: 18, rocks: gardenRocks,
+        landmarks: [{ name: 'Home buoy', p: (0, math_js_1.vec)(0, 17, -44), kind: 'boat' }, { name: 'The nursery', p: (0, math_js_1.vec)(-9, 2, -7), kind: 'coral' }, { name: 'Marlow’s ledge', p: (0, math_js_1.vec)(-19, 6, 15), kind: 'wildlife' }, { name: 'Sun arch', p: (0, math_js_1.vec)(16, 7, 5), kind: 'landmark' }],
+        worksites: anchors([[-4, -31], [6, -11], [-8, 7], [24, 20], [-25, 29]], [[-7, -8], [-5, -6], [-9, -5]], [[-7, -10]]),
+        deepFeatures: { wreck: (0, math_js_1.vec)(34, 0, -40), outfall: (0, math_js_1.vec)(43, 0, -29) }
+    },
+    passage: {
+        id: 'passage', name: 'Tideglass Passage', eyebrow: 'LANTERN BAY / SITE 02', description: 'Tall reef walls and a flowing channel. Find shelter before you commit.',
+        surface: 25, radius: 74, seed: 741309, entry: (0, math_js_1.vec)(0, 12, -44), current: .42, channelX: 0, rocks: passageRocks,
+        landmarks: [{ name: 'Home buoy', p: (0, math_js_1.vec)(0, 24, -47), kind: 'boat' }, { name: 'Restoration shelf', p: (0, math_js_1.vec)(-4, 2, -4), kind: 'coral' }, { name: 'The throat', p: (0, math_js_1.vec)(0, 10, 10), kind: 'current' }, { name: 'Cathedral arch', p: (0, math_js_1.vec)(0, 12, 26), kind: 'landmark' }],
+        worksites: anchors([[-4, -29], [5, -12], [-3, 7], [8, 40]], [[-4, -3], [-2, -1], [-6, 0]], [[-3, -5]]),
+        deepFeatures: { wreck: (0, math_js_1.vec)(34, 0, -40), outfall: (0, math_js_1.vec)(46, 0, -29) }
+    },
+    mangrove: {
+        id: 'mangrove', name: 'Mangrove Reach', label: 'Mangrove Reach', eyebrow: 'LANTERN BAY / SITE 03', biome: 'mangrove',
+        shortDescription: 'Shallow root channels wind between the mangroves and a bright sandbar.',
+        description: 'Follow the shallow root channels across a pale sandbar, then look for the quiet offshore drop.',
+        waterColor: 0x3c9d8d, sandColor: 0xd6c58f, surface: 21, radius: 78, seed: 368104, entry: (0, math_js_1.vec)(0, 8, -48), current: .24, channelX: -8, rocks: mangroveRocks,
+        landmarks: [{ name: 'Home buoy', p: (0, math_js_1.vec)(0, 20, -51), kind: 'boat' }, { name: 'Root channel', p: (0, math_js_1.vec)(-17, 17, -24), kind: 'channel' }, { name: 'Open sandbar', p: (0, math_js_1.vec)(1, 1, 35), kind: 'sandbar' }, { name: 'Offshore drop', p: (0, math_js_1.vec)(36, -16, -39), kind: 'dropoff' }],
+        worksites: anchors([[2, -32], [15, -10], [-15, 7], [26, 18], [-27, 34]], [[-7, -5], [-3, -2], [2, -5]], [[-4, -8]]),
+        deepFeatures: { wreck: (0, math_js_1.vec)(36, 0, -40), outfall: (0, math_js_1.vec)(48, 0, -32) }
+    },
+    cenote: {
+        id: 'cenote', name: 'Azure Cenote', label: 'Azure Cenote', eyebrow: 'LANTERN BAY / SITE 04', biome: 'cenote',
+        shortDescription: 'Open-roof limestone chambers with clear, vertical routes to the light.',
+        description: 'Explore deep limestone chambers open to the sky. Every basin has a direct, calm ascent route.',
+        waterColor: 0x287fbd, sandColor: 0xd9d0b8, surface: 40, radius: 78, seed: 512927, entry: (0, math_js_1.vec)(0, 17, -51), current: .12, channelX: 0, rocks: cenoteRocks,
+        landmarks: [{ name: 'Home buoy', p: (0, math_js_1.vec)(0, 39, -54), kind: 'boat' }, { name: 'Sun window', p: (0, math_js_1.vec)(0, 2, -3), kind: 'surface' }, { name: 'Limestone gallery', p: (0, math_js_1.vec)(-22, -2, 16), kind: 'chamber' }, { name: 'Deep blue basin', p: (0, math_js_1.vec)(0, -18, 31), kind: 'basin' }],
+        worksites: anchors([[-12, -35], [12, -30], [-19, 2], [18, 17], [1, 43]], [[-8, -8], [8, -7], [0, 11]], [[-8, -11]]),
+        deepFeatures: { wreck: (0, math_js_1.vec)(36, 0, -44), outfall: (0, math_js_1.vec)(49, 0, -36) }
+    },
+    harbour: {
+        id: 'harbour', name: 'Rusted Harbour', label: 'Rusted Harbour', eyebrow: 'LANTERN BAY / SITE 05', biome: 'harbour',
+        shortDescription: 'Wreck ribs, old pier pilings and abandoned containers shelter the harbour reef.',
+        description: 'Work around a grounded wreck, timber pilings and rusting cargo containers. Leave a clear route to the surface.',
+        waterColor: 0x3f7890, sandColor: 0x9b8d78, surface: 23, radius: 80, seed: 882461, entry: (0, math_js_1.vec)(0, 9, -50), current: .28, channelX: 15, rocks: harbourRocks,
+        landmarks: [{ name: 'Home buoy', p: (0, math_js_1.vec)(0, 22, -53), kind: 'boat' }, { name: 'Outer wreck', p: (0, math_js_1.vec)(-31, -6, 39), kind: 'wreck' }, { name: 'Old pier', p: (0, math_js_1.vec)(-10, 23, -35), kind: 'pier' }, { name: 'Cargo stack', p: (0, math_js_1.vec)(28, -2, -12), kind: 'container' }],
+        worksites: anchors([[-15, -26], [10, -22], [-22, 3], [20, 17], [0, 40]], [[-10, -6], [-6, -2], [-12, 2]], [[-8, -10]]),
+        deepFeatures: { wreck: (0, math_js_1.vec)(-34, 0, 39), outfall: (0, math_js_1.vec)(36, 0, -43) }
+    }
+};
 const foundationRocks = [...gardenRocks, ...passageRocks];
-function floorHeight(x, z) {
+function oldFloorHeight(x, z) {
     const shelf = -.7 + Math.sin(x * .067) * .7 + Math.sin(z * .09 + x * .028) * .55 + Math.cos((z - x) * .036) * .4;
     let foundation = 0;
     for (const r of foundationRocks) {
@@ -798,11 +968,57 @@ function floorHeight(x, z) {
     const trench = 30 * Math.exp(-(((x - 38) / 19) ** 2) - (((z + 38) / 24) ** 2));
     return shelf - trench * (1 - foundation);
 }
-function currentAt(p, site, time) { const channel = Math.exp(-Math.pow((p.x - (site.id === 'gardens' ? 18 : 0)) / 12, 2)); const strength = site.current * (.45 + channel * 1.8) * (1 + .12 * Math.sin(time * .023)); return (0, math_js_1.vec)(.16 * strength, 0, strength); }
-function freePoint(p, site, padding = .8) { return site.rocks.every(r => Math.pow((p.x - r.p.x) / (r.s.x + padding), 2) + Math.pow((p.y - r.p.y) / (r.s.y + padding), 2) + Math.pow((p.z - r.p.z) / (r.s.z + padding), 2) > 1); }
-function groundPoint(x, z, lift = 1) { return (0, math_js_1.vec)(x, floorHeight(x, z) + lift, z); }
-exports.DEFAULT_KEYS = { forward: 'KeyW', back: 'KeyS', left: 'KeyA', right: 'KeyD', up: 'Space', down: 'ControlLeft', boost: 'ShiftLeft', steady: 'KeyF', interact: 'KeyE', spear: 'Mouse0', scooter: 'KeyQ', pause: 'Escape', journal: 'KeyJ', light: 'KeyL' };
-exports.DEFAULT_SETTINGS = { quality: 'balanced', music: .42, ambience: .6, effects: .7, sensitivity: 1, invertY: false, reducedMotion: false, assist: true, toggleDraw: false, fov: 78, touchScale: 1, keys: { ...exports.DEFAULT_KEYS } };
+function terrainSite(site) { return typeof site === 'string' ? exports.SITES[site] : site; }
+/** Omitted/legacy site terrain exactly preserves Sunlit Gardens and Passage's shared seabed. */
+function floorHeight(x, z, siteArg) {
+    const site = terrainSite(siteArg);
+    if (!site || site.id === 'gardens' || site.id === 'passage')
+        return oldFloorHeight(x, z);
+    const ripple = Math.sin(x * .071) * .34 + Math.sin(z * .064 + x * .03) * .28 + Math.cos((z - x) * .038) * .22;
+    if (site.id === 'mangrove') {
+        const channelWest = Math.exp(-Math.pow((x + 13) / 5.8, 2));
+        const channelEast = Math.exp(-Math.pow((x - 12) / 6.6, 2));
+        const sandbar = 2.15 * Math.exp(-Math.pow((z - 35) / 11, 2)) * Math.exp(-Math.pow(x / 34, 2));
+        const offshoreDrop = 24 * Math.exp(-(((x - 38) / 17) ** 2) - (((z + 40) / 20) ** 2));
+        return -2.5 + ripple - 1.4 * Math.max(channelWest, channelEast) + sandbar - offshoreDrop;
+    }
+    if (site.id === 'cenote') {
+        const basin = Math.exp(-((x / 32) ** 4) - (((z - 7) / 37) ** 4));
+        const ledge = .9 * Math.exp(-(((x + 31) / 13) ** 2) - (((z - 7) / 27) ** 2));
+        const deepPocket = 5 * Math.exp(-((x / 15) ** 2) - (((z - 29) / 18) ** 2));
+        return -8.5 + ripple + ledge - 17 * basin - deepPocket;
+    }
+    const quayShelf = 2 * Math.exp(-(((z + 35) / 12) ** 2)) * Math.exp(-((x / 30) ** 4));
+    const siltDrop = 18 * Math.exp(-(((x + 35) / 18) ** 2) - (((z - 40) / 22) ** 2));
+    const dockChannel = 18 * Math.exp(-(((x - 36) / 18) ** 2) - (((z + 43) / 22) ** 2));
+    return -10 + ripple + quayShelf - siltDrop - dockChannel;
+}
+// New biome structures must meet their own deeper seabed. Retain tree/cliff
+// tops; cargo boxes use an inscribed body whose bottom is 0.56 of its envelope.
+for (const site of [exports.SITES.mangrove, exports.SITES.cenote, exports.SITES.harbour])
+    for (const r of site.rocks) {
+        const bed = floorHeight(r.p.x, r.p.z, site) - .25;
+        if (r.form === 'container')
+            r.p.y = bed + r.s.y * .56;
+        else if (r.p.y - r.s.y > bed) {
+            const top = r.p.y + r.s.y;
+            r.p.y = (top + bed) / 2;
+            r.s.y = (top - bed) / 2;
+        }
+    }
+function currentAt(p, site, time) {
+    const channel = Math.exp(-Math.pow((p.x - (site.channelX ?? (site.id === 'gardens' ? 18 : 0))) / 12, 2));
+    const strength = site.current * (.45 + channel * 1.8) * (1 + .12 * Math.sin(time * .023));
+    return (0, math_js_1.vec)(.16 * strength, 0, strength);
+}
+function freePoint(p, site, padding = .8) {
+    if (p.y - padding < floorHeight(p.x, p.z, site))
+        return false;
+    return site.rocks.every(r => Math.pow((p.x - r.p.x) / (r.s.x + padding), 2) + Math.pow((p.y - r.p.y) / (r.s.y + padding), 2) + Math.pow((p.z - r.p.z) / (r.s.z + padding), 2) > 1);
+}
+function groundPoint(x, z, lift = 1, site) { return (0, math_js_1.vec)(x, floorHeight(x, z, site) + lift, z); }
+exports.DEFAULT_KEYS = { forward: 'KeyW', back: 'KeyS', left: 'KeyA', right: 'KeyD', up: 'Space', down: 'ControlLeft', boost: 'ShiftLeft', steady: 'KeyF', interact: 'KeyE', spear: 'Mouse0', scooter: 'KeyQ', pause: 'Escape', journal: 'KeyJ', light: 'KeyL', watch: 'KeyV' };
+exports.DEFAULT_SETTINGS = { quality: 'balanced', music: .42, ambience: .6, effects: .7, sensitivity: 1, invertY: false, reducedMotion: false, assist: true, toggleDraw: false, fov: 78, touchScale: 1, instrumentHud: true, keys: { ...exports.DEFAULT_KEYS } };
 exports.UPGRADES = [
     { id: 'fins', name: 'Reefglide fins', cost: 95, tag: 'MOVE', description: 'Each level adds 12% of base fin speed, up to 60% at level 5.', requires: '' },
     { id: 'tube', name: 'Wide-mouth collection tube', cost: 120, tag: 'CAPACITY', description: 'Carry 12 fish at level 1, then 2 more per level, up to 20. Secured catches cannot be stolen.', requires: '' },
@@ -820,29 +1036,62 @@ function upgradeCost(p, id) { const u = exports.UPGRADES.find(u => u.id === id),
 function capacity(p) { const level = upgradeLevel(p, 'tube'); return level ? 10 + level * 2 : 8; }
 function airCapacity(p) { return 200 + Math.max(0, upgradeLevel(p, 'air') - 1) * 30; }
 function spearReach(p) { return 3 + upgradeLevel(p, 'spear') * .45; }
-function wreckAnchor(site) { return (0, math_js_1.vec)(34, floorHeight(34, -40), -40); }
-function pipeAnchor(site) { const x = site.id === 'gardens' ? 43 : 46; return (0, math_js_1.vec)(x, floorHeight(x, -29), -29); }
+function wreckAnchor(site) {
+    const feature = site.deepFeatures?.wreck;
+    if (feature)
+        return (0, math_js_1.vec)(feature.x, floorHeight(feature.x, feature.z, site), feature.z);
+    return (0, math_js_1.vec)(34, floorHeight(34, -40), -40);
+}
+function pipeAnchor(site) {
+    const feature = site.deepFeatures?.outfall;
+    if (feature)
+        return (0, math_js_1.vec)(feature.x, floorHeight(feature.x, feature.z, site), feature.z);
+    const x = site.id === 'gardens' ? 43 : 46;
+    return (0, math_js_1.vec)(x, floorHeight(x, -29), -29);
+}
 for (const site of Object.values(exports.SITES)) {
     const w = wreckAnchor(site), p = pipeAnchor(site);
     for (const side of [-1, 1])
-        site.rocks.push({ id: 'wreck-rail-' + side, p: (0, math_js_1.vec)(w.x + side * 2.6, w.y + 1, w.z), s: (0, math_js_1.vec)(.5, 1, 7.5), tint: 0, hidden: true });
-    site.rocks.push({ id: 'wreck-bow', p: (0, math_js_1.vec)(w.x, w.y + .8, w.z + 7.6), s: (0, math_js_1.vec)(2.6, .8, .5), tint: 0, hidden: true });
+        site.rocks.push({ id: 'wreck-rail-' + side, p: (0, math_js_1.vec)(w.x + side * 2.6, w.y + 1, w.z), s: (0, math_js_1.vec)(.5, 1, 7.5), tint: 0, hidden: true, form: 'container' });
+    site.rocks.push({ id: 'wreck-bow', p: (0, math_js_1.vec)(w.x, w.y + .8, w.z + 7.6), s: (0, math_js_1.vec)(2.6, .8, .5), tint: 0, hidden: true, form: 'container' });
     for (const side of [-1, 1])
-        site.rocks.push({ id: 'pipe-wall-' + side, p: (0, math_js_1.vec)(p.x + side * 1.05, p.y + 1.2, p.z), s: (0, math_js_1.vec)(.25, 1.2, 5), tint: 0, hidden: true });
-    site.rocks.push({ id: 'pipe-top', p: (0, math_js_1.vec)(p.x, p.y + 2.3, p.z), s: (0, math_js_1.vec)(1.1, .2, 5), tint: 0, hidden: true });
-    site.rocks.push({ id: 'pipe-back', p: (0, math_js_1.vec)(p.x, p.y + 1.2, p.z - 4.95), s: (0, math_js_1.vec)(1.2, 1.2, .2), tint: 0, hidden: true });
+        site.rocks.push({ id: 'pipe-wall-' + side, p: (0, math_js_1.vec)(p.x + side * 1.05, p.y + 1.2, p.z), s: (0, math_js_1.vec)(.25, 1.2, 5), tint: 0, hidden: true, form: 'container' });
+    site.rocks.push({ id: 'pipe-top', p: (0, math_js_1.vec)(p.x, p.y + 2.3, p.z), s: (0, math_js_1.vec)(1.1, .2, 5), tint: 0, hidden: true, form: 'container' });
+    site.rocks.push({ id: 'pipe-back', p: (0, math_js_1.vec)(p.x, p.y + 1.2, p.z - 4.95), s: (0, math_js_1.vec)(1.2, 1.2, .2), tint: 0, hidden: true, form: 'container' });
     site.landmarks.push({ name: 'Lantern wreck · deep field station', p: (0, math_js_1.vec)(w.x, w.y + 2, w.z), kind: 'landmark' }, { name: 'Old outfall · deep field station', p: (0, math_js_1.vec)(p.x, p.y + 3, p.z - 6), kind: 'landmark' });
 }
 function healthOfReef(p, id) { const r = p.reefs[id]; return Math.round((0, math_js_1.clamp)(24 + r.removed.length * 1.25 + r.cleaned.length * 3 + Object.keys(r.restored).length * 5 + r.surveys * 2, 24, 98)); }
-function siteUnlocked(p, id) { return id === 'gardens' || p.totalRemoved >= 6 || p.reputation >= 5; }
+const SITE_UNLOCKS = {
+    gardens: { removals: 0, reputation: 0 }, passage: { removals: 6, reputation: 5 }, mangrove: { removals: 12, reputation: 8 }, cenote: { removals: 26, reputation: 17 }, harbour: { removals: 42, reputation: 27 }
+};
+function siteUnlocked(p, id) { const need = SITE_UNLOCKS[id]; return id === 'gardens' || p.totalRemoved >= need.removals || p.reputation >= need.reputation; }
+function siteUnlockText(p, id) {
+    if (id === 'gardens')
+        return 'Starting site · always available';
+    if (siteUnlocked(p, id))
+        return 'Available · ready for your next dive';
+    const need = SITE_UNLOCKS[id];
+    return 'Unlock at ' + need.removals + ' lionfish removed or ' + need.reputation + ' reputation';
+}
+const FISH_STARTERS = {
+    gardens: [[3, -31], [-4, -23], [7, -15], [-8, -2], [6, 12]],
+    passage: [[3, -32], [-5, -23], [5, -12], [-5, 12], [5, 34]],
+    mangrove: [[3, -34], [-6, -26], [8, -16], [-4, 4], [7, 27]],
+    cenote: [[4, -40], [-7, -26], [10, -13], [-8, 12], [5, 37]],
+    harbour: [[3, -43], [-6, -27], [5, -15], [-7, 11], [4, 33]]
+};
 function reefFishHomes(site, seed) {
     const random = (0, math_js_1.rng)(seed), points = [];
-    const starters = site.id === 'gardens' ? [[3, -31], [-4, -23], [7, -15], [-8, -2], [6, 12]] : [[3, -32], [-5, -23], [5, -12], [-5, 12], [5, 34]];
-    for (const [x, z] of starters)
-        points.push(groundPoint(x, z, 2.2));
-    for (let i = 0; i < 90 && points.length < 24; i++) {
-        let x = (random() - .5) * 91, z = -25 + random() * 80;
-        const p = groundPoint(x, z, 1.8 + random() * 3);
+    for (const [x, z] of FISH_STARTERS[site.id]) {
+        const p = groundPoint(x, z, 2.2, site);
+        if (freePoint(p, site, .4) && points.every(q => (0, math_js_1.distance)(p, q) > 5))
+            points.push(p);
+    }
+    for (let i = 0; i < 360 && points.length < 24; i++) {
+        const x = (random() - .5) * site.radius * 1.35, z = -33 + random() * 88;
+        if (Math.hypot(x, z) > site.radius - 3)
+            continue;
+        const p = groundPoint(x, z, 1.8 + random() * 3, site);
         if (freePoint(p, site, 1) && points.every(q => (0, math_js_1.distance)(p, q) > 5))
             points.push(p);
     }
@@ -910,6 +1159,62 @@ const timeText = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().p
 exports.timeText = timeText;
 
 },
+"game/reef-recovery.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RECOVERY_THRESHOLDS = void 0;
+exports.recoveryFromProgress = recoveryFromProgress;
+exports.recoveryForRun = recoveryForRun;
+exports.recoveryPopulationShare = recoveryPopulationShare;
+/**
+ * Recovery advances between productive visits. The first two stages are subtle;
+ * denser native life only appears after a diver has returned to do more work.
+ */
+exports.RECOVERY_THRESHOLDS = [
+    { visits: 1, clearances: 2 },
+    { visits: 2, clearances: 5 },
+    { visits: 3, clearances: 9 },
+    { visits: 4, clearances: 13 },
+    { visits: 5, clearances: 17 }
+];
+/** Fraction used by presentation to scale native-life density for a captured stage. */
+const POPULATION_SHARE = [0, .04, .09, .2, .34, .5];
+function inferredProductiveVisits(progress) {
+    // Legacy saves did not record which visits contained removals. Two clearances
+    // per productive trip is a conservative estimate capped by completed visits.
+    return Math.min(Math.floor(progress.visits), Math.floor(progress.removed.length / 2));
+}
+function recoveryFromProgress(progress) {
+    const productiveVisits = progress.productiveVisits ?? inferredProductiveVisits(progress);
+    const cleared = progress.removed.length;
+    let stage = 0;
+    for (const threshold of exports.RECOVERY_THRESHOLDS) {
+        if (productiveVisits >= threshold.visits && cleared >= threshold.clearances)
+            stage++;
+        else
+            break;
+    }
+    return stage;
+}
+/**
+ * Return the immutable ecology stage for a run. New runs carry their start
+ * snapshot. For schema-1 runs created before snapshots existed, remove this
+ * outing's tail entries from persistent clearance before estimating the stage.
+ */
+function recoveryForRun(run, progress) {
+    if (Number.isInteger(run.recoveryStage) && run.recoveryStage >= 0 && run.recoveryStage <= 5)
+        return run.recoveryStage;
+    const outingRemovals = Math.max(0, Math.min(Math.floor(run.removed), progress.removed.length));
+    const priorRemoved = progress.removed.slice(0, progress.removed.length - outingRemovals);
+    const legacyVisits = progress.productiveVisits ?? Math.min(Math.floor(progress.visits), Math.floor(priorRemoved.length / 2));
+    return recoveryFromProgress({ ...progress, removed: priorRemoved, productiveVisits: legacyVisits });
+}
+function recoveryPopulationShare(stage) {
+    const index = Math.max(0, Math.min(5, Math.floor(Number.isFinite(stage) ? stage : 0)));
+    return POPULATION_SHARE[index];
+}
+
+},
 "game/simulation.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -921,6 +1226,7 @@ const data_js_1 = require("./data.js");
 const math_js_1 = require("./math.js");
 const navigation_js_1 = require("./navigation.js");
 const fish_motion_js_1 = require("./fish-motion.js");
+const reef_recovery_js_1 = require("./reef-recovery.js");
 exports.EMPTY_INPUT = { moveX: 0, moveZ: 0, vertical: 0, lookX: 0, lookY: 0, boost: false, steady: false, draw: false, release: false, cancelDraw: false, interact: false };
 function startRun(p, id, order = 'catch', event = false, night = false) {
     if (p.active || p.pending)
@@ -929,17 +1235,31 @@ function startRun(p, id, order = 'catch', event = false, night = false) {
         throw Error('Dive site locked.');
     if (night && ((0, data_js_1.upgradeLevel)(p, 'torch') < 1 || !(0, data_js_1.siteUnlocked)(p, 'passage')))
         throw Error('Night dives need a head torch and Passage experience.');
-    const site = data_js_1.SITES[id], reef = p.reefs[id], seed = (site.seed + reef.visits * 37) >>> 0, random = (0, math_js_1.rng)(seed);
+    const site = data_js_1.SITES[id], reef = p.reefs[id], seed = (site.seed + reef.visits * 37) >>> 0, random = (0, math_js_1.rng)(seed), recoveryStage = (0, reef_recovery_js_1.recoveryFromProgress)(reef);
     const homes = (0, data_js_1.reefFishHomes)(site, site.seed);
     const fish = homes.map((home, i) => { const fid = `fish-${i}`; const returned = reef.visits >= 4 && i < 3 ? `return-${Math.floor(reef.visits / 4)}-${i}` : fid; const alive = !reef.removed.includes(returned); const size = .72 + random() * .44; return { id: returned, p: { ...home }, home: { ...home }, size, weight: Math.round((.3 + size * random() * .8) * 100) / 100, alive, phase: random() * 6.28, flee: 0 }; });
     for (const f of fish)
         f.p = (0, fish_motion_js_1.clearFishPosition)(site, f.p, f.size * 1.5 + .15);
-    const jobAt = (id, kind, x, z) => ({ id, kind, p: (0, data_js_1.groundPoint)(x, z, kind === 'survey' ? 2.5 : .5), done: kind === 'debris' ? reef.cleaned.includes(id) : kind === 'coral' ? id in reef.restored : false, progress: 0, stage: kind === 'coral' && id in reef.restored ? (0, math_js_1.clamp)(p.day - reef.restored[id], 1, 5) : 0 });
-    const jobs = id === 'gardens' ? [jobAt('debris-0', 'debris', -4, -31), jobAt('debris-1', 'debris', 6, -11), jobAt('debris-2', 'debris', -8, 7), jobAt('debris-3', 'debris', 24, 20), jobAt('debris-4', 'debris', -25, 29), jobAt('coral-0', 'coral', -7, -8), jobAt('coral-1', 'coral', -5, -6), jobAt('coral-2', 'coral', -9, -5), jobAt('survey-0', 'survey', -7, -10)] : [jobAt('debris-0', 'debris', -4, -29), jobAt('debris-1', 'debris', 5, -12), jobAt('debris-2', 'debris', -3, 7), jobAt('debris-3', 'debris', 8, 40), jobAt('coral-0', 'coral', -4, -3), jobAt('coral-1', 'coral', -2, -1), jobAt('coral-2', 'coral', -6, 0), jobAt('survey-0', 'survey', -3, -5)];
+    const jobAt = (jobId, kind, x, z) => ({ id: jobId, kind, p: (0, data_js_1.groundPoint)(x, z, kind === 'survey' ? 2.5 : .5, site), done: kind === 'debris' ? reef.cleaned.includes(jobId) : kind === 'coral' ? jobId in reef.restored : false, progress: 0, stage: kind === 'coral' && jobId in reef.restored ? (0, math_js_1.clamp)(p.day - reef.restored[jobId], 1, 5) : 0 });
+    const worksites = site.worksites;
+    const jobs = [
+        ...worksites.debris.map((point, i) => jobAt(`debris-${i}`, 'debris', point.x, point.z)),
+        ...worksites.coral.map((point, i) => jobAt(`coral-${i}`, 'coral', point.x, point.z)),
+        ...worksites.surveys.map((point, i) => jobAt(`survey-${i}`, 'survey', point.x, point.z))
+    ];
     const wreck = (0, data_js_1.wreckAnchor)(site), pipe = (0, data_js_1.pipeAnchor)(site);
     jobs.push(jobAt('survey-1', 'survey', wreck.x - 5, wreck.z), jobAt('survey-2', 'survey', pipe.x, pipe.z - 7));
-    const animal = (id, p) => ({ id, p: { ...p }, home: { ...p }, heading: 0, state: 'roam', timer: 0, cooldown: 0, phase: random() * 6.28 });
-    const run = { id: `${p.slot}-${p.day}-${seed}`, site: id, seed, day: p.day, time: 0, p: { ...site.entry }, velocity: (0, math_js_1.vec)(), yaw: .08, pitch: .12, air: 200, health: 100, battery: 100, cargo: [], exposed: null, fish, jobs, animals: [animal('marlow', (0, math_js_1.vec)(id === 'gardens' ? -10 : -6, 5.5, id === 'gardens' ? 15 : 11)), animal('moray', (0, math_js_1.vec)(id === 'gardens' ? 28 : 26.5, 5, id === 'gardens' ? 8 : -1)), animal('turtle', (0, math_js_1.vec)(-4, 11, 2)), animal('ray', (0, math_js_1.vec)(id === 'gardens' ? 15 : 0, 2.4, id === 'gardens' ? 25 : 37))], clips: [], removed: 0, cleaned: 0, restored: 0, surveyed: 0, nativeHits: 0, coralHits: 0, stolen: 0, distance: 0, fragments: p.upgrades.includes('kit') ? 5 : 3, charge: 0, strikeCooldown: 0, hurtCooldown: 0, interaction: 0, interactionId: '', scooter: false, light: false, returnWarn: false, lowWarn: false, finished: false, rescued: false, order, event, notices: [], seen: [], cooldowns: {} };
+    const animal = (animalId, point) => ({ id: animalId, p: { ...point }, home: { ...point }, heading: 0, state: 'roam', timer: 0, cooldown: 0, phase: random() * 6.28 });
+    const wildlife = id === 'gardens'
+        ? [animal('marlow', (0, math_js_1.vec)(-10, 5.5, 15)), animal('moray', (0, math_js_1.vec)(28, 5, 8)), animal('turtle', (0, math_js_1.vec)(-4, 11, 2)), animal('ray', (0, math_js_1.vec)(15, 2.4, 25))]
+        : id === 'passage'
+            ? [animal('marlow', (0, math_js_1.vec)(-6, 5.5, 11)), animal('moray', (0, math_js_1.vec)(26.5, 5, -1)), animal('turtle', (0, math_js_1.vec)(-4, 11, 2)), animal('ray', (0, math_js_1.vec)(0, 2.4, 37))]
+            : id === 'mangrove'
+                ? [animal('marlow', (0, data_js_1.groundPoint)(-34, 9, 4, site)), animal('moray', (0, data_js_1.groundPoint)(35, 9, 3, site)), animal('turtle', (0, data_js_1.groundPoint)(1, 12, 3, site)), animal('ray', (0, data_js_1.groundPoint)(4, 45, 3, site))]
+                : id === 'cenote'
+                    ? [animal('marlow', (0, data_js_1.groundPoint)(-10, 2, 5, site)), animal('moray', (0, data_js_1.groundPoint)(12, 8, 4, site)), animal('turtle', (0, data_js_1.groundPoint)(0, -23, 4, site)), animal('ray', (0, data_js_1.groundPoint)(7, 28, 4, site))]
+                    : [animal('marlow', (0, data_js_1.groundPoint)(-21, 4, 4, site)), animal('moray', (0, data_js_1.groundPoint)(-7, 18, 3, site)), animal('turtle', (0, data_js_1.groundPoint)(4, -20, 4, site)), animal('ray', (0, data_js_1.groundPoint)(-12, 28, 3, site))];
+    const run = { id: `${p.slot}-${p.day}-${seed}`, site: id, recoveryStage, seed, day: p.day, time: 0, p: { ...site.entry }, velocity: (0, math_js_1.vec)(), yaw: .08, pitch: .12, air: 200, health: 100, battery: 100, cargo: [], exposed: null, fish, jobs, animals: wildlife, clips: [], removed: 0, cleaned: 0, restored: 0, surveyed: 0, nativeHits: 0, coralHits: 0, stolen: 0, distance: 0, fragments: p.upgrades.includes('kit') ? 5 : 3, charge: 0, strikeCooldown: 0, hurtCooldown: 0, interaction: 0, interactionId: '', scooter: false, light: false, returnWarn: false, lowWarn: false, finished: false, rescued: false, order, event, notices: [], seen: [], cooldowns: {} };
     run.air = (0, data_js_1.airCapacity)(p);
     run.fragments = 3 + (0, data_js_1.upgradeLevel)(p, 'kit') * 2;
     run.night = night;
@@ -1073,7 +1393,7 @@ class Simulation {
     }
     collide() {
         const r = this.run, site = this.site;
-        r.p.y = (0, math_js_1.clamp)(r.p.y, (0, data_js_1.floorHeight)(r.p.x, r.p.z) + .85, site.surface + 1.3);
+        r.p.y = (0, math_js_1.clamp)(r.p.y, (0, data_js_1.floorHeight)(r.p.x, r.p.z, site) + .85, site.surface + 1.3);
         const radial = Math.hypot(r.p.x, r.p.z);
         if (radial > site.radius) {
             r.p.x *= site.radius / radial;
@@ -1440,7 +1760,7 @@ class Simulation {
             const delta = (0, math_js_1.sub)(target, a.p), len = (0, math_js_1.length)(delta);
             if (len > .01) {
                 const np = (0, math_js_1.add)(a.p, (0, math_js_1.scale)(delta, Math.min(1, speed * dt / len)));
-                np.y = Math.max(np.y, (0, data_js_1.floorHeight)(np.x, np.z) + (a.id === 'shark' ? 1.6 : 1));
+                np.y = Math.max(np.y, (0, data_js_1.floorHeight)(np.x, np.z, this.site) + (a.id === 'shark' ? 1.6 : 1));
                 if ((0, data_js_1.freePoint)(np, this.site, a.id === 'shark' ? 1.6 : a.id === 'marlow' ? 1.6 : a.id === 'moray' ? .4 : 1.3))
                     a.p = np;
                 a.heading = (0, math_js_1.angleLerp)(a.heading, Math.atan2(delta.x, delta.z), Math.min(1, dt * 2));
@@ -1546,8 +1866,13 @@ function settleRun(p, run, allocation, chosen) {
     const debtPaid = Math.min(p.debt, Math.max(0, Math.floor(earned * .2)), p.cash);
     p.cash -= debtPaid;
     p.debt -= debtPaid;
-    p.reefs[run.site].visits++;
-    p.reefs[run.site].lastDay = p.day;
+    const reef = p.reefs[run.site];
+    reef.visits++;
+    // Rescue keeps completed ecological work, so a rescued trip with removals
+    // still counts as productive. Empty visits never advance recovery.
+    if (run.removed > 0)
+        reef.productiveVisits = (reef.productiveVisits ?? 0) + 1;
+    reef.lastDay = p.day;
     p.day++;
     p.pending = null;
     p.active = null;
@@ -1564,7 +1889,19 @@ exports.clearSegment = clearSegment;
 exports.homeRoute = homeRoute;
 const math_js_1 = require("./math.js");
 const data_js_1 = require("./data.js");
-function clearSegment(a, b, site) { const d = (0, math_js_1.norm)((0, math_js_1.sub)(b, a)), len = (0, math_js_1.distance)(a, b); return site.rocks.every(r => (0, math_js_1.rayEllipsoid)(a, d, r.p, r.s) > len); }
+function clearSegment(a, b, site) {
+    const d = (0, math_js_1.norm)((0, math_js_1.sub)(b, a)), len = (0, math_js_1.distance)(a, b);
+    if (!site.rocks.every(r => (0, math_js_1.rayEllipsoid)(a, d, r.p, r.s) > len))
+        return false;
+    // Avoid a route that is clear of rocks but cuts through the site-specific seabed.
+    const steps = Math.ceil(len / 2);
+    for (let i = 1; i < steps; i++) {
+        const t = i / steps, x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t, z = a.z + (b.z - a.z) * t;
+        if (y < (0, data_js_1.floorHeight)(x, z, site) + .35)
+            return false;
+    }
+    return true;
+}
 function homeRoute(from, site) {
     const target = { ...site.entry, y: Math.max(from.y, site.entry.y) };
     if (clearSegment(from, target, site))
@@ -1612,6 +1949,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NATIVE_FISH_SURFACE_MARGIN = exports.NATIVE_FISH_TERRAIN_MARGIN = exports.NATIVE_FISH_ROCK_MARGIN = exports.NATIVE_FISH_MAX_SCALE = exports.NATIVE_FISH_UNIT_BOUND = void 0;
 exports.nativeFishEnvelope = nativeFishEnvelope;
 exports.clearFishPosition = clearFishPosition;
+exports.prepareNativeOrbit = prepareNativeOrbit;
 exports.nativeFishMotion = nativeFishMotion;
 const data_js_1 = require("./data.js");
 const math_js_1 = require("./math.js");
@@ -1628,6 +1966,16 @@ const smoothstep = (t) => {
     const x = Math.max(0, Math.min(1, t));
     return x * x * (3 - 2 * x);
 };
+function stepAside(position, rock, innerX, innerZ) {
+    if (rock.s.x <= rock.s.z) {
+        const sign = rock.p.x <= 0 ? 1 : -1;
+        position.x = rock.p.x + sign * (innerX + .02);
+    }
+    else {
+        const sign = rock.p.z <= 0 ? 1 : -1;
+        position.z = rock.p.z + sign * (innerZ + .02);
+    }
+}
 function nativeFishEnvelope(scale) {
     return exports.NATIVE_FISH_UNIT_BOUND * Math.max(0, scale) + exports.NATIVE_FISH_ROCK_MARGIN;
 }
@@ -1642,45 +1990,105 @@ function clearFishPosition(site, source, envelope, out) {
     position.y = source.y;
     position.z = source.z;
     const bodyRadius = Math.max(0, envelope - exports.NATIVE_FISH_ROCK_MARGIN);
-    position.y = Math.max(position.y, (0, data_js_1.floorHeight)(position.x, position.z) + bodyRadius + exports.NATIVE_FISH_TERRAIN_MARGIN);
-    let safeY = position.y;
-    for (const rock of site.rocks) {
-        const innerX = rock.s.x + envelope;
-        const innerY = rock.s.y + envelope;
-        const innerZ = rock.s.z + envelope;
-        const outerX = innerX + ROCK_LIFT_BLEND;
-        const outerY = innerY + ROCK_VERTICAL_LIFT;
-        const outerZ = innerZ + ROCK_LIFT_BLEND;
-        const dx = (position.x - rock.p.x) / outerX;
-        const dz = (position.z - rock.p.z) / outerZ;
-        const radial = Math.hypot(dx, dz);
-        if (radial >= 1)
-            continue;
-        const ratioX = innerX / outerX, ratioZ = innerZ / outerZ;
-        const directionX = radial > 1e-8 ? dx / radial : 0;
-        const directionZ = radial > 1e-8 ? dz / radial : 0;
-        const innerBoundary = radial > 1e-8 ? 1 / Math.hypot(directionX / ratioX, directionZ / ratioZ) : 1;
-        const blend = radial <= innerBoundary ? 1 : smoothstep((1 - radial) / (1 - innerBoundary));
-        const top = rock.p.y + outerY * Math.sqrt(Math.max(0, 1 - radial * radial)) + ROCK_LIFT_EPSILON;
-        const target = position.y + Math.max(0, top - position.y) * blend;
-        safeY = Math.max(safeY, target);
+    const maxCenterY = site.surface - bodyRadius - exports.NATIVE_FISH_SURFACE_MARGIN;
+    position.y = Math.min(maxCenterY, Math.max(position.y, (0, data_js_1.floorHeight)(position.x, position.z, site) + envelope + exports.NATIVE_FISH_TERRAIN_MARGIN));
+    // A surface-reaching root or piling cannot be cleared by lifting a fish over
+    // it. Move an intersecting body sideways into open water instead.
+    for (let pass = 0; pass < 3; pass++) {
+        let movedSideways = false;
+        for (const rock of site.rocks) {
+            const innerX = rock.s.x + envelope;
+            const innerY = rock.s.y + envelope;
+            const innerZ = rock.s.z + envelope;
+            if (rock.form === 'root' || rock.form === 'piling') {
+                const overlapX = (position.x - rock.p.x) / innerX;
+                const overlapY = (position.y - rock.p.y) / innerY;
+                const overlapZ = (position.z - rock.p.z) / innerZ;
+                if (overlapX * overlapX + overlapY * overlapY + overlapZ * overlapZ < 1) {
+                    stepAside(position, rock, innerX, innerZ);
+                    position.y = Math.max(position.y, (0, data_js_1.floorHeight)(position.x, position.z, site) + envelope + exports.NATIVE_FISH_TERRAIN_MARGIN);
+                    movedSideways = true;
+                }
+                continue;
+            }
+            const outerX = innerX + ROCK_LIFT_BLEND;
+            const outerY = innerY + ROCK_VERTICAL_LIFT;
+            const outerZ = innerZ + ROCK_LIFT_BLEND;
+            const dx = (position.x - rock.p.x) / outerX;
+            const dz = (position.z - rock.p.z) / outerZ;
+            const radial = Math.hypot(dx, dz);
+            if (radial >= 1)
+                continue;
+            const ratioX = innerX / outerX, ratioZ = innerZ / outerZ;
+            const directionX = radial > 1e-8 ? dx / radial : 0;
+            const directionZ = radial > 1e-8 ? dz / radial : 0;
+            const innerBoundary = radial > 1e-8 ? 1 / Math.hypot(directionX / ratioX, directionZ / ratioZ) : 1;
+            const blend = radial <= innerBoundary ? 1 : smoothstep((1 - radial) / (1 - innerBoundary));
+            const top = rock.p.y + outerY * Math.sqrt(Math.max(0, 1 - radial * radial)) + ROCK_LIFT_EPSILON;
+            const target = position.y + Math.max(0, top - position.y) * blend;
+            if (target <= maxCenterY) {
+                position.y = Math.max(position.y, target);
+                continue;
+            }
+            const overlapX = (position.x - rock.p.x) / innerX;
+            const overlapY = (position.y - rock.p.y) / innerY;
+            const overlapZ = (position.z - rock.p.z) / innerZ;
+            if (overlapX * overlapX + overlapY * overlapY + overlapZ * overlapZ >= 1)
+                continue;
+            stepAside(position, rock, innerX, innerZ);
+            position.y = Math.max(position.y, (0, data_js_1.floorHeight)(position.x, position.z, site) + envelope + exports.NATIVE_FISH_TERRAIN_MARGIN);
+            movedSideways = true;
+        }
+        if (!movedSideways)
+            break;
     }
-    position.y = safeY;
+    position.y = Math.min(maxCenterY, Math.max(position.y, (0, data_js_1.floorHeight)(position.x, position.z, site) + envelope + exports.NATIVE_FISH_TERRAIN_MARGIN));
     return position;
 }
+function orbitCenterAwayFromCurtains(site, source, radius, envelope) {
+    const center = (0, math_js_1.vec)(source.x, source.y, source.z), spanZ = radius * .66;
+    const lowY = center.y - 1.3 - envelope, highY = center.y + 1.3 + envelope;
+    const gap = .5;
+    const curtains = site.rocks.filter(rock => (rock.form === 'root' || rock.form === 'piling') && lowY < rock.p.y + rock.s.y && highY > rock.p.y - rock.s.y);
+    const blocked = (x, z) => curtains.some(rock => {
+        const minX = rock.p.x - rock.s.x - envelope - gap, maxX = rock.p.x + rock.s.x + envelope + gap;
+        const minZ = rock.p.z - rock.s.z - envelope - gap, maxZ = rock.p.z + rock.s.z + envelope + gap;
+        return x + radius > minX && x - radius < maxX && z + spanZ > minZ && z - spanZ < maxZ;
+    });
+    const fitsSite = (x, z) => Math.max(Math.hypot(x - radius, z - spanZ), Math.hypot(x + radius, z - spanZ), Math.hypot(x - radius, z + spanZ), Math.hypot(x + radius, z + spanZ)) < site.radius - 1;
+    if (!blocked(center.x, center.z))
+        return center;
+    // Pick one nearby clear orbit center before animating the school. Sampling a
+    // deterministic set of offsets avoids sequential projection cycles between
+    // neighbouring trunks while retaining a smooth, repeatable swim path.
+    const directions = 24;
+    for (let step = .5; step <= site.radius * .55; step += .5) {
+        for (let i = 0; i < directions; i++) {
+            const angle = i / directions * Math.PI * 2;
+            const x = source.x + Math.cos(angle) * step, z = source.z + Math.sin(angle) * step;
+            if (fitsSite(x, z) && !blocked(x, z))
+                return (0, math_js_1.vec)(x, center.y, z);
+        }
+    }
+    return center;
+}
+function prepareNativeOrbit(site, center, radius, scale) {
+    return orbitCenterAwayFromCurtains(site, center, radius, nativeFishEnvelope(scale));
+}
 /**
- * Samples the existing deterministic native-school orbit and smoothly lifts
- * the whole fish over terrain and authored rocks. The horizontal approach
- * envelope gives the lift room to begin before the fish body reaches a rock.
- * No state is stored, so a paused dive or repeated timestamp is reproducible.
+ * Samples the deterministic native-school orbit, lifts members over low relief,
+ * and offsets schools around surface-reaching root and piling groups. No state
+ * is stored, so a paused dive or repeated timestamp is reproducible.
  */
 function nativeFishMotion(site, center, radius, seed, time, scale = exports.NATIVE_FISH_MAX_SCALE, out) {
     const angle = time * .13 + seed;
+    const envelope = nativeFishEnvelope(scale);
+    const orbitCenter = out?.orbitCenter ?? orbitCenterAwayFromCurtains(site, center, radius, envelope);
     const position = out?.position ?? (0, math_js_1.vec)(0, 0, 0);
-    position.x = center.x + Math.sin(angle) * radius;
-    position.y = center.y + Math.sin(angle * 1.8 + seed) * 1.3;
-    position.z = center.z + Math.cos(angle) * radius * .66;
-    clearFishPosition(site, position, nativeFishEnvelope(scale), position);
+    position.x = orbitCenter.x + Math.sin(angle) * radius;
+    position.y = orbitCenter.y + Math.sin(angle * 1.8 + seed) * 1.3;
+    position.z = orbitCenter.z + Math.cos(angle) * radius * .66;
+    clearFishPosition(site, position, envelope, position);
     const heading = Math.atan2(Math.cos(angle), -Math.sin(angle) * .66);
     if (out) {
         out.heading = heading;
@@ -1694,6 +2102,10 @@ function nativeFishMotion(site, center, radius, seed, time, scale = exports.NATI
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReefRenderer = void 0;
+const dive_watch_js_1 = require("./dive-watch.js");
+const diver_animation_js_1 = require("./diver-animation.js");
+const biome_geometry_js_1 = require("./biome-geometry.js");
+const reef_recovery_js_1 = require("../game/reef-recovery.js");
 const shadows_js_1 = require("./shadows.js");
 const breathing_js_1 = require("../game/breathing.js");
 const geometry_js_1 = require("./geometry.js");
@@ -1714,6 +2126,10 @@ function clearDecoration(x, z, site, run, radius) {
 }
 /** Renderer boundary: Babylon objects are never used by the domain simulation. */
 class ReefRenderer {
+    setWatchRaised(value) { this.watchRequested = value; }
+    setWatchReserve(value) { if (Number.isFinite(value))
+        this.watchReserve = Math.max(0, value); }
+    get watchRaised() { return this.watchRequested; }
     constructor(canvas, settings) {
         this.canvas = canvas;
         this.materials = [];
@@ -1727,6 +2143,12 @@ class ReefRenderer {
         this.atmosphere = '';
         this.bubblePool = new breathing_js_1.BubblePool();
         this.bubbleMatrices = new Float32Array(24 * 16);
+        this.watch = null;
+        this.watchRequested = false;
+        this.watchBlend = 0;
+        this.watchReserve = 40;
+        this.lastPoseTime = 0;
+        this.pose = { left: (0, math_js_1.vec)(), right: (0, math_js_1.vec)(), leftRoll: 0, rightRoll: 0, reach: 0, thrust: 0 };
         this.site = data_js_1.SITES.gardens;
         this.run = null;
         this.profile = null;
@@ -1767,16 +2189,17 @@ class ReefRenderer {
         if (m)
             return m;
         const B = BABYLON;
-        m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow', 'uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 });
+        m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uWaterColor', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow', 'uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 });
         m._reefMode = mode;
         m.backFaceCulling = false;
         m.setFloat('uMode', mode);
         m.setFloat('uSurface', this.site.surface);
         m.setFloat('uMotion', 1);
+        m.setVector3('uWaterColor', new B.Vector3(.035, .31, .39));
         m.setFloat('uFog', .030);
         m.setFloat('uLight', 0);
         m.setFloat('uNight', 0);
-        m.setVector2('uCurrent', { x: this.site.current, y: this.site.id === 'gardens' ? 18 : 0 });
+        m.setVector2('uCurrent', { x: this.site.current, y: this.site.channelX ?? (this.site.id === 'gardens' ? 18 : 0) });
         m.setVector2('uTorch', { x: 24, y: .10 });
         if (mode === 5 || mode === 6 || mode === 8) {
             m.disableDepthWrite = true;
@@ -1793,6 +2216,10 @@ class ReefRenderer {
     }
     mesh(name, g, mode = 1) { const B = BABYLON, m = new B.Mesh(name, this.scene), v = new B.VertexData(); v.positions = g.positions; v.normals = g.normals; v.colors = g.colors; v.uvs = g.uvs; v.indices = g.indices; v.applyToMesh(m, false); m.material = this.material(mode); m.isPickable = false; return m; }
     disposeWorld() {
+        this.watch?.dispose();
+        this.watch = null;
+        this.watchRequested = false;
+        this.watchBlend = 0;
         for (const m of this.scene.meshes.slice())
             m.dispose(false, false);
         this.staticMeshes = [];
@@ -1813,10 +2240,10 @@ class ReefRenderer {
         this.environmentCounts = { coral: 0, seaweedClumps: 0, seaweedFronds: 0, nativeFish: 0, nativeSchools: 0, shipwrecks: 0, pipeMouths: 0, coastlinePieces: 0 };
         for (const m of this.materials) {
             m.setFloat('uSurface', site.surface);
-            m.setVector2('uCurrent', { x: site.current, y: site.id === 'gardens' ? 18 : 0 });
+            m.setVector2('uCurrent', { x: site.current, y: site.channelX ?? (site.id === 'gardens' ? 18 : 0) });
         }
         // Ground is authored topography, not a regenerated collision surface.
-        const ground = (0, terrain_js_1.seabedGeometry)();
+        const ground = (0, terrain_js_1.seabedGeometry)(site);
         this.staticMeshes.push(this.mesh('rippled-sand', ground, 0));
         const chunks = new Map(), seaweedChunks = new Map();
         const chunk = (x, z) => {
@@ -1834,13 +2261,13 @@ class ReefRenderer {
         const visibleRocks = site.rocks.filter(rock => !rock.hidden);
         for (const rock of visibleRocks) {
             const g = chunk(rock.p.x, rock.p.z);
-            const color = (0, geometry_js_1.rgb)(rock.tint ? '#5c8e83' : '#729f90');
-            g.ellipsoid(rock.p, rock.s, color, 26, 18, (x, y, z) => (0, geometry_js_1.tint)(color, .85 + .11 * Math.sin(x * 14 + z * 12) * Math.cos(y * 20) + y * .16));
+            g.merge((0, biome_geometry_js_1.siteObstacleGeometry)(rock, site));
         }
         const templates = Array.from({ length: 6 }, (_, i) => (0, geometry_js_1.coral)(i, site.seed + i * 523));
-        const coralCount = this.settings.quality === 'high' ? 1800 : this.settings.quality === 'low' ? 1000 : 1400;
+        const biomeCoral = site.biome === 'cenote' ? .48 : site.biome === 'mangrove' ? .55 : site.biome === 'harbour' ? .70 : 1;
+        const coralCount = Math.round((this.settings.quality === 'high' ? 1800 : this.settings.quality === 'low' ? 1000 : 1400) * biomeCoral);
         const coralPatches = [];
-        for (const rock of visibleRocks)
+        for (const rock of visibleRocks.filter(rock => rock.form !== 'root' && rock.form !== 'piling'))
             for (let patch = 0; patch < 5; patch++) {
                 const angle = patch / 5 * Math.PI * 2 + random() * .24, radius = .24 + random() * .48;
                 const nx = Math.cos(angle) * radius, nz = Math.sin(angle) * radius;
@@ -1849,8 +2276,10 @@ class ReefRenderer {
                     coralPatches.push({ rock, nx, nz });
             }
         if (!coralPatches.length)
-            visibleRocks.forEach(rock => coralPatches.push({ rock, nx: 0, nz: 0 }));
+            visibleRocks.filter(rock => rock.form !== 'root' && rock.form !== 'piling').forEach(rock => coralPatches.push({ rock, nx: 0, nz: 0 }));
         for (let i = 0; i < coralCount; i++) {
+            if (!coralPatches.length)
+                break;
             const patch = coralPatches[i % coralPatches.length], rock = patch.rock;
             const a = random() * Math.PI * 2, r = Math.sqrt(random()) * .28;
             const nx = patch.nx + Math.cos(a) * r, nz = patch.nz + Math.sin(a) * r;
@@ -1863,19 +2292,19 @@ class ReefRenderer {
             this.environmentCounts.coral++;
         }
         // Low reef patches fill the edges of the entry lane and work areas.
-        const lowReefPatches = this.settings.quality === 'high' ? 360 : this.settings.quality === 'low' ? 180 : 270;
+        const lowReefPatches = Math.round((this.settings.quality === 'high' ? 360 : this.settings.quality === 'low' ? 180 : 270) * biomeCoral);
         for (let i = 0; i < lowReefPatches; i++) {
             const x = (random() - .5) * 95, z = -38 + random() * 95;
             if (!clearDecoration(x, z, site, run, 1.1))
                 continue;
-            const p = (0, math_js_1.vec)(x, (0, terrain_js_1.sandHeight)(x, z), z);
+            const p = (0, math_js_1.vec)(x, (0, terrain_js_1.sandHeight)(x, z, site), z);
             if (!(0, data_js_1.freePoint)({ ...p, y: p.y + 1 }, site, 1))
                 continue;
             const s = .25 + random() * .55;
-            (0, terrain_js_1.mergeGrounded)(chunk(x, z), templates[Math.floor(random() * 6)], p, (0, math_js_1.vec)(s, s, s), random() * 6.28);
+            (0, terrain_js_1.mergeGrounded)(chunk(x, z), templates[Math.floor(random() * 6)], p, (0, math_js_1.vec)(s, s, s), random() * 6.28, site);
             this.environmentCounts.coral++;
         }
-        const seaweedCount = this.settings.quality === 'high' ? 1000 : this.settings.quality === 'low' ? 500 : 760;
+        const seaweedCount = Math.round((this.settings.quality === 'high' ? 1000 : this.settings.quality === 'low' ? 500 : 760) * (site.biome === 'cenote' ? .30 : site.biome === 'mangrove' ? 1.15 : 1));
         let seaweedAttempts = 0;
         while (this.environmentCounts.seaweedClumps < seaweedCount && seaweedAttempts++ < seaweedCount * 4) {
             const area = random();
@@ -1901,11 +2330,11 @@ class ReefRenderer {
             }
             if (!clearDecoration(x, z, site, run, 1.1))
                 continue;
-            const y = (0, terrain_js_1.sandHeight)(x, z), p = (0, math_js_1.vec)(x, y, z);
+            const y = (0, terrain_js_1.sandHeight)(x, z, site), p = (0, math_js_1.vec)(x, y, z);
             if (!(0, data_js_1.freePoint)((0, math_js_1.vec)(x, y + .6, z), site, .4))
                 continue;
             const fronds = (0, geometry_js_1.seaweedGeometry)(site.seed + seaweedAttempts * 53, .8 + random() * .75);
-            (0, terrain_js_1.mergeGrounded)(seaweedChunk(x, z), fronds, p, (0, math_js_1.vec)(.9 + random() * .32, 1, .9 + random() * .32), random() * Math.PI * 2);
+            (0, terrain_js_1.mergeGrounded)(seaweedChunk(x, z), fronds, p, (0, math_js_1.vec)(.9 + random() * .32, 1, .9 + random() * .32), random() * Math.PI * 2, site);
             this.environmentCounts.seaweedClumps++;
             this.environmentCounts.seaweedFronds += fronds.positions.length / 60;
         }
@@ -1949,7 +2378,7 @@ class ReefRenderer {
         this.staticMeshes.push(this.mesh('drifting-plankton', dust, 6));
         // Boat and mooring are always in the same location; their shadow is a navigational landmark.
         const home = site.landmarks[0].p, boat = new geometry_js_1.Geometry();
-        boat.rod((0, math_js_1.vec)(home.x, (0, data_js_1.floorHeight)(home.x, home.z), home.z), (0, math_js_1.vec)(home.x, site.surface, home.z), .035, .035, (0, geometry_js_1.rgb)('#d6c6a5'), 7);
+        boat.rod((0, math_js_1.vec)(home.x, (0, data_js_1.floorHeight)(home.x, home.z, site), home.z), (0, math_js_1.vec)(home.x, site.surface, home.z), .035, .035, (0, geometry_js_1.rgb)('#d6c6a5'), 7);
         boat.ellipsoid((0, math_js_1.vec)(home.x, site.surface + .38, home.z), (0, math_js_1.vec)(1.85, .62, 3.2), (0, geometry_js_1.rgb)('#ccd6bd'), 20, 10);
         boat.ellipsoid((0, math_js_1.vec)(home.x + 2.5, site.surface - .2, home.z), (0, math_js_1.vec)(.3, .43, .3), (0, geometry_js_1.rgb)('#f0b16e'), 14, 9);
         boat.box((0, math_js_1.vec)(home.x, site.surface + .9, home.z), (0, math_js_1.vec)(2.5, .22, 4.4), (0, geometry_js_1.rgb)('#b98861'));
@@ -1965,7 +2394,7 @@ class ReefRenderer {
         for (let i = 0; i < 12; i++) {
             const angle = i / 12 * Math.PI * 2 + .12 + Math.sin(i * 2.7) * .07;
             const radius = 260 + (i % 3) * 22;
-            coast.merge((0, geometry_js_1.islandGeometry)(site.seed + i * 173), (0, math_js_1.vec)(Math.cos(angle) * radius, site.surface, Math.sin(angle) * radius), (0, math_js_1.vec)(.8 + i % 3 * .15, .8 + i % 4 * .08, 1), angle + .4);
+            coast.merge((0, geometry_js_1.islandGeometry)(site.seed + i * 173, Math.max(45, (site.surface + 12) / .8)), (0, math_js_1.vec)(Math.cos(angle) * radius, site.surface, Math.sin(angle) * radius), (0, math_js_1.vec)(.8 + i % 3 * .15, .8 + i % 4 * .08, 1), angle + .4);
         }
         this.staticMeshes.push(this.mesh('lantern-bay-coastline', coast, 9));
         this.environmentCounts.coastlinePieces = 12;
@@ -1982,7 +2411,7 @@ class ReefRenderer {
             this.fishMeshes.set(f.id, m);
         }
         for (const a of run.animals) {
-            const m = this.mesh(a.id, (0, geometry_js_1.fishGeometry)(a.id), a.id === 'turtle' ? 1 : 2);
+            const m = this.mesh(a.id, (0, geometry_js_1.fishGeometry)(a.id), 2);
             this.animalMeshes.set(a.id, m);
         }
         for (const job of run.jobs) {
@@ -2025,22 +2454,25 @@ class ReefRenderer {
             m.setEnabled(!(job.kind === 'debris' && job.done));
             this.jobMeshes.set(job.id, m);
         }
-        const total = this.settings.quality === 'high' ? 760 : this.settings.quality === 'low' ? 360 : 560;
-        const life = (0, data_js_1.healthOfReef)(profile, site.id);
+        const stage = (0, reef_recovery_js_1.recoveryForRun)(run, profile.reefs[site.id]), share = (0, reef_recovery_js_1.recoveryPopulationShare)(stage);
+        // An immutable dive-start snapshot: population grows only on later visits.
+        const qualityScale = this.settings.quality === 'high' ? 1 : this.settings.quality === 'low' ? .50 : .75;
+        const total = Math.round((180 + share * 1400) * qualityScale);
         const schoolCenters = Array.from({ length: 8 }, (_, species) => ({
-            center: (0, math_js_1.vec)(Math.sin(species * .85) * 19, 4 + (species % 4) * 2.0, (-22 + (species * 13) % 55)),
+            center: (() => { const x = Math.sin(species * .85) * 19, z = -22 + (species * 13) % 55; return (0, math_js_1.vec)(x, Math.min(site.surface - 3, Math.max((0, data_js_1.floorHeight)(x, z, site) + 4, 4 + (species % 4) * 2)), z); })(),
             minRadius: 4,
             radiusSpan: 11
         }));
         schoolCenters.push({ center: (0, math_js_1.vec)(wreck.x - 3.4, wreck.y + 5.3, wreck.z + 1.2), minRadius: 3.2, radiusSpan: 8.5 }, { center: (0, math_js_1.vec)(pipe.x + 3.2, pipe.y + 4.4, pipe.z + .4), minRadius: 3, radiusSpan: 7.5 });
         for (let species = 0; species < schoolCenters.length; species++) {
             const members = [];
-            const count = Math.round(total / schoolCenters.length + life * .08);
+            const count = Math.round(total / schoolCenters.length);
             for (let i = 0; i < count; i++) {
                 const { center, minRadius, radiusSpan } = schoolCenters[species];
-                members.push({ seed: random() * 6.28, center, scale: .8 + random() * .6, radius: minRadius + random() * radiusSpan, motion: { position: (0, math_js_1.vec)(), heading: 0 } });
+                const seed = random() * 6.28, scale = .8 + random() * .6, radius = minRadius + random() * radiusSpan;
+                members.push({ seed, center, scale, radius, motion: { position: (0, math_js_1.vec)(), heading: 0, orbitCenter: (0, fish_motion_js_1.prepareNativeOrbit)(site, center, radius, scale) } });
             }
-            const mesh = this.mesh('school-' + species, (0, geometry_js_1.fishGeometry)('native', species % 8), 2), matrices = new Float32Array(count * 16);
+            const mesh = this.mesh('school-' + species, (0, geometry_js_1.fishGeometry)('native', stage < 2 ? species % 2 : species % Math.min(8, stage + 3)), 2), matrices = new Float32Array(count * 16);
             mesh.thinInstanceSetBuffer('matrix', matrices, 16, false);
             mesh.alwaysSelectAsActiveMesh = true;
             this.nativeSchools.push({ mesh, matrices, members });
@@ -2052,7 +2484,19 @@ class ReefRenderer {
         this.bubbleMesh = this.mesh('regulator-bubbles', bubbles, 8);
         this.bubbleMesh.thinInstanceSetBuffer('matrix', this.bubbleMatrices, 16, false);
         this.bubbleMesh.alwaysSelectAsActiveMesh = true;
-        this.arms = this.mesh('diver-arms', (0, geometry_js_1.equipment)('arms'), 4);
+        this.arms = new B.Mesh('diver-rig', this.scene);
+        this.leftArm = this.mesh('left-forearm', (0, diver_animation_js_1.forearmGeometry)(-1), 4);
+        this.rightArm = this.mesh('right-forearm', (0, diver_animation_js_1.forearmGeometry)(1), 4);
+        this.leftSleeve = this.mesh('left-sleeve', (0, diver_animation_js_1.sleeveGeometry)(), 4);
+        this.rightSleeve = this.mesh('right-sleeve', (0, diver_animation_js_1.sleeveGeometry)(), 4);
+        for (const m of [this.leftArm, this.rightArm, this.leftSleeve, this.rightSleeve]) {
+            m.parent = this.arms;
+            m.renderingGroupId = 1;
+            m.alwaysSelectAsActiveMesh = true;
+        }
+        this.watch = new dive_watch_js_1.DiveWatch(this.scene, this.leftArm);
+        this.watch.root.position.set(0, .10, -.20);
+        this.watch.root.scaling.setAll(.78);
         this.spear = this.mesh('pole-spear', (0, geometry_js_1.equipment)('spear'), 4);
         this.tube = this.mesh('collection-tube', (0, geometry_js_1.equipment)('tube'), 4);
         this.scooter = this.mesh('minnow-scooter', (0, geometry_js_1.equipment)('scooter'), 4);
@@ -2062,12 +2506,12 @@ class ReefRenderer {
             m.renderingGroupId = 1;
             m.alwaysSelectAsActiveMesh = true;
         }
-        this.arms.scaling.setAll(.86);
         this.tube.position.set(.14, -.20, .35);
         this.held.scaling.setAll(.40);
         this.held.position.set(.02, -.02, 2.25);
         this.held.rotation.z = .5;
         this.held.rotation.y = 1.4;
+        this.atmosphere = '';
         this.render(0, false);
     }
     workChanged(id) {
@@ -2100,7 +2544,7 @@ class ReefRenderer {
         const view = night ? 'night' : p.y > this.site.surface ? 'surface' : 'underwater';
         if (view !== this.atmosphere) {
             this.atmosphere = view;
-            this.scene.clearColor = view === 'night' ? new B.Color4(.008, .025, .052, 1) : view === 'surface' ? new B.Color4(.48, .70, .76, 1) : new B.Color4(.035, .31, .37, 1);
+            this.scene.clearColor = view === 'night' ? new B.Color4(.008, .025, .052, 1) : view === 'surface' ? new B.Color4(.48, .70, .76, 1) : (() => { const c = (0, geometry_js_1.rgb)('#' + (this.site.waterColor ?? 0x09505f).toString(16).padStart(6, '0')); return new B.Color4(c[0] * .65, c[1] * .70, c[2] * .80, 1); })();
         }
         this.camera.position.set(p.x, p.y, p.z);
         this.camera.rotation.set(pitch, yaw, 0);
@@ -2114,7 +2558,15 @@ class ReefRenderer {
             m.setVector3('uEye', this.camera.position);
             m.setVector3('uForward', this.forwardVector);
             m.setFloat('uMotion', this.settings.reducedMotion ? 0 : 1);
-            m.setFloat('uFog', this.site.id === 'passage' ? .034 : .028);
+            m.setFloat('uFog', this.site.biome === 'cenote' ? .020 : this.site.biome === 'harbour' ? .032 : this.site.id === 'passage' ? .034 : .028);
+            const c = this.site.waterColor;
+            if (!this.waterVector)
+                this.waterVector = new B.Vector3();
+            if (c !== undefined)
+                this.waterVector.set(((c >> 16) & 255) / 255 * .42, ((c >> 8) & 255) / 255 * .60, (c & 255) / 255 * .70);
+            else
+                this.waterVector.set(.035, .31, .39);
+            m.setVector3('uWaterColor', this.waterVector);
             m.setFloat('uNight', night ? 1 : 0);
             m.setFloat('uLight', torchIntensity);
             m.setVector2('uTorch', this.torchVector);
@@ -2162,7 +2614,7 @@ class ReefRenderer {
         const visible = playing;
         for (const m of [this.arms, this.tube])
             m.setEnabled(visible);
-        this.spear.setEnabled(visible && !r.scooter);
+        this.spear.setEnabled(visible && !r.scooter && !this.watchRequested && this.watchBlend < .1);
         this.scooter.setEnabled(visible && r.scooter);
         this.held.setEnabled(visible && !!r.exposed);
         let stow = 0;
@@ -2178,8 +2630,32 @@ class ReefRenderer {
         this.spear.position.z = -r.charge * .25 + thrust - stow;
         this.spear.position.y = sway - stow;
         this.spear.rotation.x = stow * .8;
-        this.arms.position.y = sway - .14;
-        this.arms.position.z = .18 - r.charge * .10;
+        const watchTarget = this.watchRequested && !r.scooter && r.charge === 0 ? 1 : 0;
+        const poseDt = Math.max(0, Math.min(.083, time - this.lastPoseTime));
+        this.lastPoseTime = time;
+        this.watchBlend = this.settings.reducedMotion ? watchTarget : this.watchBlend + (watchTarget - this.watchBlend) * (1 - Math.exp(-poseDt * 11));
+        if (Math.abs(this.watchBlend - watchTarget) < .001)
+            this.watchBlend = watchTarget;
+        const pose = (0, diver_animation_js_1.diverPose)(r, time, this.watchBlend, this.settings.reducedMotion, this.pose);
+        // In portrait the raised instrument sits to the right of ascent controls.
+        pose.left.x += this.watchBlend * Math.max(0, 1 - this.engine.getRenderWidth() / this.engine.getRenderHeight()) * .21;
+        this.leftArm.position.set(pose.left.x, pose.left.y, pose.left.z);
+        this.rightArm.position.set(pose.right.x, pose.right.y, pose.right.z);
+        this.leftArm.rotation.set(-.08 * (1 - this.watchBlend), 0, pose.leftRoll);
+        this.rightArm.rotation.set(0, 0, pose.rightRoll);
+        const sleeve = (m, side, wrist) => {
+            const x = side * .66, y = -.72, z = .18, dx = wrist.x + side * .08 - x, dy = wrist.y - .10 - y, dz = wrist.z - .22 - z;
+            m.position.set(x, y, z);
+            m.rotation.set(-Math.atan2(dy, Math.hypot(dx, dz)), Math.atan2(dx, dz), 0);
+            m.scaling.z = Math.hypot(dx, dy, dz);
+        };
+        sleeve(this.leftSleeve, -1, pose.left);
+        sleeve(this.rightSleeve, 1, pose.right);
+        if (this.watch) {
+            this.watch.root.setEnabled(visible);
+            this.watch.setRaised(this.watchRequested);
+            this.watch.update(r, this.site, this.profile, r.time, this.watchReserve);
+        }
         this.scooter.position.y = sway;
         if (r.exposed) {
             this.held.position.z = 2.25 - r.interaction * .6;
@@ -2229,377 +2705,282 @@ class ReefRenderer {
         return { x: (0, math_js_1.clamp)(v.x / this.engine.getRenderWidth() * 100, 7, 93), y: (0, math_js_1.clamp)(v.y / this.engine.getRenderHeight() * 100, 12, 78), behind: false };
     }
     screenshot() { this.scene.render(); return this.canvas.toDataURL('image/png'); }
-    stats() { return { engine: BABYLON.Engine.Version, fps: Math.round(this.fps), drawCalls: this.draws, meshes: this.scene.meshes.length, vertices: this.scene.getTotalVertices(), renderSize: [this.engine.getRenderWidth(), this.engine.getRenderHeight()], shadows: this.shadows.stats(), bubbles: this.bubblePool.active(this.run?.time ?? 0), bubbleEmissions: this.bubblePool.emitted, environmentCounts: { ...this.environmentCounts } }; }
+    stats() { return { engine: BABYLON.Engine.Version, fps: Math.round(this.fps), drawCalls: this.draws, meshes: this.scene.meshes.length, vertices: this.scene.getTotalVertices(), renderSize: [this.engine.getRenderWidth(), this.engine.getRenderHeight()], watch: this.watch?.stats(), watchRaised: this.watchRaised, recoveryStage: this.run && this.profile ? (0, reef_recovery_js_1.recoveryForRun)(this.run, this.profile.reefs[this.run.site]) : 0, shadows: this.shadows.stats(), bubbles: this.bubblePool.active(this.run?.time ?? 0), bubbleEmissions: this.bubblePool.emitted, environmentCounts: { ...this.environmentCounts } }; }
 }
 exports.ReefRenderer = ReefRenderer;
 
 },
-"render/shadows.ts":function(require,module,exports){
+"render/dive-watch.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReefShadows = void 0;
-const shaders_js_1 = require("./shaders.js");
-const depthFragment = `precision highp float;
-void main(){
- vec4 packed=fract(min(gl_FragCoord.z,.999999)*vec4(1.0,255.0,65025.0,16581375.0));
- packed-=packed.yzww*vec4(1.0/255.0,1.0/255.0,1.0/255.0,0.0);
- gl_FragColor=packed;
-}`;
-/** Geometry-based depth maps: shared deformation shaders keep caster silhouettes
- * aligned with animated coral, seaweed and thin-instanced fish. High only. */
-class ReefShadows {
-    constructor(scene, engine) {
+exports.DiveWatch = void 0;
+const data_js_1 = require("../game/data.js");
+const math_js_1 = require("../game/math.js");
+/** A small wrist-mounted dive computer. The display is a reusable RGBA texture. */
+class DiveWatch {
+    constructor(scene, parent) {
+        this.lastDraw = -Infinity;
+        this.raised = false;
+        this.disposed = false;
+        this.current = { air: 0, maxAir: 1, depth: 0, elapsed: 0, cargo: 0, capacity: 0, battery: 100, reserve: 0, low: false, exposed: false, site: '' };
+        this.textureUpdates = 0;
+        const B = BABYLON;
         this.scene = scene;
-        this.engine = engine;
-        this.sun = null;
-        this.torch = null;
-        this.depthMaterials = new Map();
-        this.lastSun = -99;
-        this.sunRenders = 0;
-        this.torchRenders = 0;
-        this.lastDraws = 0;
-        this.passReady = true;
-        this.enabled = false;
-        const B = BABYLON;
-        this.white = B.RawTexture.CreateRGBATexture(new Uint8Array([255, 255, 255, 255]), 1, 1, scene, false, false, B.Texture.NEAREST_SAMPLINGMODE);
-        this.sunMatrix = B.Matrix.Identity();
-        this.torchMatrix = B.Matrix.Identity();
-        this.sunDirection = new B.Vector3(-.4, 1, -.23).normalize();
-        this.sunPass = engine.createRenderPassId('reef-sun-shadow');
-        this.torchPass = engine.createRenderPassId('reef-torch-shadow');
-        B.Effect.ShadersStore['reefShadowVertexShader'] = shaders_js_1.reefVertex;
-        B.Effect.ShadersStore['reefShadowFragmentShader'] = depthFragment;
+        B.Effect.ShadersStore['diveWatchVertexShader'] = `precision highp float; attribute vec3 position; attribute vec3 normal; attribute vec4 color; attribute vec2 uv; uniform mat4 world; uniform mat4 viewProjection; varying vec3 vColor; varying vec3 vNormal; varying vec2 vUV; void main(void){vColor=color.rgb;vNormal=normalize(mat3(world)*normal);vUV=uv;gl_Position=viewProjection*world*vec4(position,1.0);}`;
+        B.Effect.ShadersStore['diveWatchFragmentShader'] = `precision highp float; varying vec3 vColor; varying vec3 vNormal; void main(void){float light=0.72+0.28*max(dot(normalize(vNormal),normalize(vec3(-0.25,0.4,-0.85))),0.0);gl_FragColor=vec4(vColor*light,1.0);}`;
+        B.Effect.ShadersStore['diveWatchDisplayVertexShader'] = `precision highp float; attribute vec3 position; attribute vec2 uv; uniform mat4 world; uniform mat4 viewProjection; varying vec2 vUV; void main(void){vUV=uv;gl_Position=viewProjection*world*vec4(position,1.0);}`;
+        B.Effect.ShadersStore['diveWatchDisplayFragmentShader'] = `precision highp float; varying vec2 vUV; uniform sampler2D displayTexture; void main(void){gl_FragColor=texture2D(displayTexture,vUV);}`;
+        this.bodyMaterial = new B.ShaderMaterial('dive-watch-body', scene, { vertex: 'diveWatch', fragment: 'diveWatch' }, { attributes: ['position', 'normal', 'color'], uniforms: ['world', 'viewProjection'] });
+        this.bodyMaterial.backFaceCulling = false;
+        this.root = new B.Mesh('dive-watch-root', scene);
+        if (parent)
+            this.root.parent = parent;
+        // Wrist-sized case. Its front faces -Z toward the first-person camera.
+        this.box('watch-strap-upper', .205, .115, .024, 0, .202, -.002, '#182b2c');
+        this.box('watch-strap-lower', .205, .115, .024, 0, -.202, -.002, '#182b2c');
+        this.box('watch-case', .292, .368, .054, 0, 0, 0, '#223a3a');
+        this.box('watch-bezel', .268, .343, .019, 0, 0, -.034, '#647c70');
+        this.box('watch-screen-backing', .239, .313, .009, 0, 0, -.046, '#091c1b');
+        this.box('watch-button-left', .028, .068, .026, -.161, .071, -.025, '#8c9c82');
+        this.box('watch-button-right', .028, .068, .026, .161, .071, -.025, '#8c9c82');
+        this.box('watch-clasp', .12, .036, .027, 0, -.202, -.006, '#91a18b');
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = 320;
+        this.canvas.height = 420;
+        const context = this.canvas.getContext('2d', { alpha: false });
+        if (!context)
+            throw new Error('Canvas rendering is required for the dive computer.');
+        this.ctx = context;
+        const pixels = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height).data;
+        this.texture = B.RawTexture.CreateRGBATexture(pixels, this.canvas.width, this.canvas.height, scene, false, true, B.Texture.NEAREST_SAMPLINGMODE);
+        this.texture.wrapU = B.Texture.CLAMP_ADDRESSMODE;
+        this.texture.wrapV = B.Texture.CLAMP_ADDRESSMODE;
+        this.displayMaterial = new B.ShaderMaterial('dive-watch-display', scene, { vertex: 'diveWatchDisplay', fragment: 'diveWatchDisplay' }, { attributes: ['position', 'uv'], uniforms: ['world', 'viewProjection'], samplers: ['displayTexture'] });
+        this.displayMaterial.backFaceCulling = false;
+        this.displayMaterial.setTexture('displayTexture', this.texture);
+        this.face = this.quad('watch-display', .232, .306, 0, 0, 0, -.052, this.displayMaterial);
+        this.root.isPickable = false;
+        this.draw(true);
     }
-    target(size) {
-        const B = BABYLON;
-        const wrapper = this.engine.createRenderTargetTexture(size, { generateMipMaps: false, generateDepthBuffer: true, generateStencilBuffer: false, type: B.Constants.TEXTURETYPE_UNSIGNED_BYTE, format: B.Constants.TEXTUREFORMAT_RGBA, samplingMode: B.Texture.NEAREST_SAMPLINGMODE });
-        const texture = new B.Texture(null, this.scene, true, false, B.Texture.NEAREST_SAMPLINGMODE);
-        texture._texture = wrapper.texture;
-        texture.wrapU = B.Texture.CLAMP_ADDRESSMODE;
-        texture.wrapV = B.Texture.CLAMP_ADDRESSMODE;
-        return { wrapper, texture };
-    }
-    configure(high) {
-        this.enabled = high;
-        if (high && !this.sun) {
-            this.sun = this.target(2048);
-            this.torch = this.target(1024);
-            this.lastSun = -99;
+    box(name, width, height, depth, x, y, z, color) {
+        const B = BABYLON, mesh = new B.Mesh(name, this.scene), v = new B.VertexData();
+        const x0 = -width / 2, x1 = width / 2, y0 = -height / 2, y1 = height / 2, z0 = -depth / 2, z1 = depth / 2;
+        const positions = [
+            x0, y0, z0, x1, y0, z0, x1, y1, z0, x0, y1, z0,
+            x0, y0, z1, x1, y0, z1, x1, y1, z1, x0, y1, z1,
+            x0, y0, z0, x0, y1, z0, x0, y1, z1, x0, y0, z1,
+            x1, y0, z0, x1, y1, z0, x1, y1, z1, x1, y0, z1,
+            x0, y0, z0, x1, y0, z0, x1, y0, z1, x0, y0, z1,
+            x0, y1, z0, x1, y1, z0, x1, y1, z1, x0, y1, z1,
+        ];
+        const normals = [
+            0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+        ];
+        const indices = [];
+        for (let f = 0; f < 6; f++) {
+            const i = f * 4;
+            indices.push(i, i + 1, i + 2, i, i + 2, i + 3);
         }
-        if (!high && this.sun) {
-            for (const target of [this.sun, this.torch]) {
-                target.texture._texture = null;
-                target.texture.dispose();
-                target.wrapper.dispose();
-            }
-            this.sun = this.torch = null;
-        }
-        this.sunTexture = this.sun?.texture || this.white;
-        this.torchTexture = this.torch?.texture || this.white;
+        const rgb = [parseInt(color.slice(1, 3), 16) / 255, parseInt(color.slice(3, 5), 16) / 255, parseInt(color.slice(5, 7), 16) / 255];
+        const shade = [.60, 1, .80, .90, .68, 1];
+        v.positions = positions;
+        v.normals = normals;
+        v.indices = indices;
+        v.colors = shade.flatMap((scale) => [...rgb.map(n => n * scale), 1].concat([...rgb.map(n => n * scale), 1], [...rgb.map(n => n * scale), 1], [...rgb.map(n => n * scale), 1]));
+        v.applyToMesh(mesh, false);
+        mesh.material = this.bodyMaterial;
+        mesh.position.set(x, y, z);
+        mesh.parent = this.root;
+        mesh.isPickable = false;
+        mesh.renderingGroupId = 1;
+        return mesh;
     }
-    reset() { this.lastSun = -99; }
-    depth(mode) {
-        let material = this.depthMaterials.get(mode);
-        if (material)
-            return material;
-        const B = BABYLON;
-        material = new B.ShaderMaterial('reef-shadow-' + mode, this.scene, { vertex: 'reefShadow', fragment: 'reefShadow' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uMotion', 'uSurface', 'uNight', 'uCurrent'] });
-        material.backFaceCulling = false;
-        material.setFloat('uMode', mode);
-        material.setFloat('uMotion', 1);
-        this.depthMaterials.set(mode, material);
-        return material;
+    quad(name, width, height, depth, x, y, z, material) {
+        const B = BABYLON, mesh = new B.Mesh(name, this.scene), v = new B.VertexData();
+        v.positions = [-width / 2, -height / 2, -depth / 2, width / 2, -height / 2, -depth / 2, width / 2, height / 2, -depth / 2, -width / 2, height / 2, -depth / 2];
+        v.normals = [0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1];
+        v.uvs = [0, 0, 1, 0, 1, 1, 0, 1];
+        v.indices = [0, 2, 1, 0, 3, 2];
+        v.applyToMesh(mesh, false);
+        mesh.material = material;
+        mesh.position.set(x, y, z);
+        mesh.parent = this.root;
+        mesh.isPickable = false;
+        mesh.renderingGroupId = 1;
+        return mesh;
     }
-    pass(target, passId, view, projection, run, site, reducedMotion) {
-        const B = BABYLON, oldView = this.scene.activeCamera.getViewMatrix(), oldProjection = this.scene.activeCamera.getProjectionMatrix(), oldPass = this.engine.currentRenderPassId;
-        let draws = 0;
-        this.passReady = true;
-        try {
-            this.engine.currentRenderPassId = passId;
-            this.scene.setTransformMatrix(view, projection);
-            this.scene.resetCachedMaterial();
-            this.engine.bindFramebuffer(target.wrapper, undefined, undefined, undefined, true);
-            this.engine.setAlphaMode(B.Engine.ALPHA_DISABLE);
-            this.engine.setDepthBuffer(true);
-            this.engine.setDepthWrite(true);
-            this.engine.clear(new B.Color4(1, 1, 1, 1), true, true, false);
-            for (const mesh of this.scene.meshes) {
-                const mode = mesh.material?._reefMode;
-                if (![0, 1, 2, 7].includes(mode) || !mesh.isEnabled() || !mesh.isVisible)
-                    continue;
-                const material = this.depth(mode);
-                material.setFloat('uTime', run.time);
-                material.setFloat('uSurface', site.surface);
-                material.setFloat('uMotion', reducedMotion ? 0 : 1);
-                material.setVector2('uCurrent', { x: site.current, y: site.id === 'gardens' ? 18 : 0 });
-                mesh.setMaterialForRenderPass(passId, material);
-                mesh.computeWorldMatrix(true);
-                if (!material.isReady(mesh, mesh.hasThinInstances)) {
-                    this.passReady = false;
-                    continue;
-                }
-                for (const sub of mesh.subMeshes || []) {
-                    mesh.render(sub, false);
-                    draws++;
-                }
-            }
-        }
-        finally {
-            this.engine.restoreDefaultFramebuffer();
-            this.engine.currentRenderPassId = oldPass;
-            this.scene.setTransformMatrix(oldView, oldProjection);
-            this.scene.resetCachedMaterial();
-        }
-        return draws;
-    }
-    render(run, site, reducedMotion, torchActive, camera) {
-        if (!this.enabled || !this.sun)
+    setRaised(value) {
+        if (value === this.raised)
             return;
-        const B = BABYLON;
-        this.lastDraws = 0;
-        if (run.time - this.lastSun >= .05 || run.time < this.lastSun) {
-            const center = new B.Vector3(0, -3, 0), eye = center.add(this.sunDirection.scale(100));
-            const view = B.Matrix.LookAtLH(eye, center, new B.Vector3(0, 1, 0)), projection = B.Matrix.OrthoLH(160, 160, 1, 190);
-            view.multiplyToRef(projection, this.sunMatrix);
-            this.lastDraws += this.pass(this.sun, this.sunPass, view, projection, run, site, reducedMotion);
-            if (this.passReady)
-                this.lastSun = run.time;
-            this.sunRenders++;
-        }
-        if (torchActive) {
-            const view = camera.getViewMatrix(), projection = B.Matrix.PerspectiveFovLH(1.35, 1, .08, 70);
-            view.multiplyToRef(projection, this.torchMatrix);
-            this.lastDraws += this.pass(this.torch, this.torchPass, view, projection, run, site, reducedMotion);
-            this.torchRenders++;
-        }
+        this.raised = value;
+        this.draw(true);
     }
-    stats() { return { enabled: this.enabled, sunResolution: this.sun ? 2048 : 0, torchResolution: this.torch ? 1024 : 0, sunRenders: this.sunRenders, torchRenders: this.torchRenders, depthDraws: this.lastDraws }; }
+    update(run, site, profile, time = run?.time ?? 0, reserve = 40) {
+        if (this.disposed || !run)
+            return;
+        const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+        if (now - this.lastDraw < 200)
+            return;
+        const maxAir = (0, data_js_1.airCapacity)(profile), depth = Math.max(0, site.surface - run.p.y);
+        this.current.air = run.air;
+        this.current.maxAir = maxAir;
+        this.current.depth = depth;
+        this.current.elapsed = time;
+        this.current.cargo = run.cargo.length;
+        this.current.exposed = !!run.exposed;
+        this.current.capacity = (0, data_js_1.capacity)(profile);
+        this.current.battery = run.battery;
+        this.current.reserve = reserve;
+        this.current.low = run.air <= reserve;
+        this.current.site = site.name;
+        this.draw(false, now);
+    }
+    stats() { return { raised: this.raised, textureUpdates: this.textureUpdates, secured: this.current.cargo, exposed: this.current.exposed }; }
+    draw(force, now = typeof performance !== 'undefined' ? performance.now() : Date.now()) {
+        if (!force && now - this.lastDraw < 200)
+            return;
+        this.lastDraw = now;
+        const c = this.ctx, w = this.canvas.width, h = this.canvas.height, d = this.current;
+        c.fillStyle = '#071716';
+        c.fillRect(0, 0, w, h);
+        c.fillStyle = '#102722';
+        c.fillRect(7, 7, w - 14, h - 14);
+        c.strokeStyle = '#668a69';
+        c.lineWidth = 3;
+        c.strokeRect(8.5, 8.5, w - 17, h - 17);
+        c.textAlign = 'left';
+        c.textBaseline = 'middle';
+        c.fillStyle = '#a4d89e';
+        c.font = 'bold 18px Arial, sans-serif';
+        c.fillText('REEF SWEEP', 22, 31);
+        c.textAlign = 'right';
+        c.fillStyle = '#a9c5a0';
+        c.font = 'bold 12px Arial, sans-serif';
+        c.fillText('DIVE COMPUTER', w - 22, 31);
+        c.strokeStyle = '#52735a';
+        c.lineWidth = 1;
+        c.beginPath();
+        c.moveTo(20, 51);
+        c.lineTo(w - 20, 51);
+        c.stroke();
+        const air = Math.max(0, Math.ceil(d.air)), ratio = Math.max(0, Math.min(1, d.air / Math.max(1, d.maxAir)));
+        c.fillStyle = d.low ? '#ff9b70' : '#e3edc8';
+        c.font = 'bold 65px Arial, sans-serif';
+        c.textAlign = 'left';
+        c.fillText(String(air), 20, 119);
+        c.fillStyle = d.low ? '#ffb29a' : '#9fc69b';
+        c.font = 'bold 17px Arial, sans-serif';
+        c.fillText('AIR', 22, 157);
+        c.textAlign = 'right';
+        c.fillStyle = '#d0dfc5';
+        c.font = 'bold 18px Arial, sans-serif';
+        c.fillText('bar*', w - 20, 146);
+        c.fillStyle = '#244137';
+        c.fillRect(20, 174, w - 40, 12);
+        c.fillStyle = d.low ? '#fa704d' : '#7bd5a4';
+        c.fillRect(20, 174, (w - 40) * ratio, 12);
+        c.fillStyle = '#8da98d';
+        c.font = '13px Arial, sans-serif';
+        c.textAlign = 'left';
+        c.fillText(`HOME RESERVE ${Math.ceil(d.reserve)} bar`, 20, 207);
+        c.strokeStyle = '#52735a';
+        c.beginPath();
+        c.moveTo(20, 227);
+        c.lineTo(w - 20, 227);
+        c.stroke();
+        const row = (label, value, y, color = '#e3edc8') => { c.textAlign = 'left'; c.fillStyle = '#9fc69b'; c.font = 'bold 15px Arial, sans-serif'; c.fillText(label, 21, y); c.textAlign = 'right'; c.fillStyle = color; c.font = 'bold 23px Arial, sans-serif'; c.fillText(value, w - 21, y + 2); };
+        row('DEPTH', d.depth < .05 ? 'SURFACE' : `${d.depth.toFixed(1)} m`, 261);
+        row('ELAPSED', (0, math_js_1.timeText)(d.elapsed), 313);
+        row('SECURED', `${Math.min(d.cargo, d.capacity)} / ${d.capacity}`, 365, d.cargo >= d.capacity ? '#ffd08a' : '#e3edc8');
+        c.strokeStyle = '#52735a';
+        c.beginPath();
+        c.moveTo(20, 391);
+        c.lineTo(w - 20, 391);
+        c.stroke();
+        if (d.low) {
+            c.fillStyle = '#8d3228';
+            c.fillRect(8, 395, w - 16, 19);
+            c.textAlign = 'center';
+            c.fillStyle = '#fff2d8';
+            c.font = 'bold 15px Arial, sans-serif';
+            c.fillText('LOW AIR · RETURN NOW', w / 2, 405);
+        }
+        else {
+            c.textAlign = 'left';
+            c.fillStyle = '#9fc69b';
+            c.font = 'bold 12px Arial, sans-serif';
+            c.fillText(d.exposed ? 'FISH ON SPEAR · EXPOSED' : d.site.toUpperCase(), 21, 404);
+            c.textAlign = 'right';
+            c.fillStyle = '#c4d7b7';
+            c.fillText(`BAT ${Math.ceil(d.battery)}%`, w - 21, 404);
+        }
+        const bytes = c.getImageData(0, 0, w, h).data;
+        this.texture.update(bytes);
+        this.textureUpdates++;
+    }
+    dispose() {
+        if (this.disposed)
+            return;
+        this.disposed = true;
+        this.root.dispose(false, false);
+        this.bodyMaterial.dispose();
+        this.displayMaterial.dispose();
+        this.texture.dispose();
+    }
 }
-exports.ReefShadows = ReefShadows;
+exports.DiveWatch = DiveWatch;
 
 },
-"render/shaders.ts":function(require,module,exports){
+"render/diver-animation.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reefFragment = exports.reefVertex = void 0;
-exports.reefVertex = `precision highp float;
-attribute vec3 position;
-attribute vec3 normal;
-attribute vec4 color;
-attribute vec2 uv;
-uniform mat4 world;
-uniform mat4 viewProjection;
-uniform float uTime;
-uniform float uMode;
-uniform float uMotion;
-uniform float uSurface;
-uniform float uNight;
-uniform vec2 uCurrent;
-uniform mat4 uSunMatrix;
-uniform mat4 uTorchMatrix;
-#ifdef INSTANCES
-attribute vec4 world0;
-attribute vec4 world1;
-attribute vec4 world2;
-attribute vec4 world3;
-#endif
-varying vec3 vWorld;
-varying vec3 vNormal;
-varying vec4 vColor;
-varying vec2 vUV;
-varying vec4 vSunCoord;
-varying vec4 vTorchCoord;
-void main(){
- vec3 p=position;
- if(uMode==1.0){
-  p.x+=sin(uTime*.75+p.z*.7+p.x*.5)*uv.y*.08*uMotion;
-  p.z+=sin(uTime*.54+p.x*.6)*uv.y*.04*uMotion;
- }
- if(uMode==2.0){float tail=max(0.0,-p.z);p.x+=sin(uTime*4.3+p.z*7.0)*tail*tail*.12;}
- if(uMode==3.0){p.y+=sin(p.x*.30+uTime*.48)*.14+sin(p.z*.28-uTime*.3)*.09;}
- if(uMode==6.0){p.x+=sin(uTime*.17+p.y)*.35;p.y+=sin(uTime*.34+p.z)*.20;p.z+=mod(uTime*.23,6.0);}
- if(uMode==7.0){
-  float channel=exp(-pow((p.x-uCurrent.y)/12.0,2.0));
-  float current=uCurrent.x*(.45+channel*1.8)*(1.0+.12*sin(uTime*.023));
-  float tip=uv.y*uv.y*uMotion;
-  float phase=uTime*(.72+current*.55)+uv.x*6.28318+p.x*.31+p.z*.19;
-  p.x+=(sin(phase)*.14+current*.48*.16)*tip;
-  p.z+=(sin(phase-1.1)*.16+current*.48)*tip;
- }
- mat4 w=world;
- #ifdef INSTANCES
- w=mat4(world0,world1,world2,world3);
- #endif
- vec4 pos=w*vec4(p,1.0);
- vWorld=pos.xyz;
- vSunCoord=uSunMatrix*vec4(pos.xyz+normalize(mat3(w)*normal)*.10,1.0);
- vTorchCoord=uTorchMatrix*vec4(pos.xyz+normalize(mat3(w)*normal)*.025,1.0);
- vNormal=normalize(mat3(w)*normal);
- vColor=color;
- vUV=uv;
- gl_Position=viewProjection*pos;
-}`;
-exports.reefFragment = `precision highp float;
-varying vec3 vWorld;
-varying vec3 vNormal;
-varying vec4 vColor;
-varying vec2 vUV;
-varying vec4 vSunCoord;
-varying vec4 vTorchCoord;
-uniform vec3 uEye;
-uniform vec3 uForward;
-uniform float uTime;
-uniform float uMode;
-uniform float uSurface;
-uniform float uFog;
-uniform float uLight;
-uniform float uNight;
-uniform vec2 uTorch;
-uniform float uShadows;
-uniform float uTorchShadows;
-uniform sampler2D uSunShadow;
-uniform sampler2D uTorchShadow;
-float shadowVisibility(sampler2D shadowMap,vec4 coordinate,float texel,float bias,float depthSpan){
- if(coordinate.w<=0.0)return 1.0;
- vec3 q=coordinate.xyz/coordinate.w*.5+.5;
- if(q.x<.002||q.x>.998||q.y<.002||q.y>.998||q.z<0.0||q.z>1.0)return 1.0;
- vec4 blockerPacked=texture2D(shadowMap,q.xy);
- float blockerDepth=dot(blockerPacked,vec4(1.0,1.0/255.0,1.0/65025.0,1.0/16581375.0));
- float radius=1.0+clamp((q.z-blockerDepth)*depthSpan*.2,0.0,.5);
- float visible=0.0;
- for(int x=0;x<4;x++)for(int y=0;y<4;y++){
-  vec4 packed=texture2D(shadowMap,q.xy+(vec2(float(x),float(y))-1.5)*texel*radius);
-  float depth=dot(packed,vec4(1.0,1.0/255.0,1.0/65025.0,1.0/16581375.0));
-  visible+=step(q.z-bias,depth);
- }
- return visible/16.0;
-}
-float caustic(vec2 p){
- float a=sin(p.x*1.47+uTime*.33+sin(p.y*.82-uTime*.23));
- float b=sin(p.y*1.42-uTime*.29+cos(p.x*.71+uTime*.17));
- return pow(max(0.0,1.0-abs(a+b)*.87),11.0);
-}
-void main(){
- vec3 n=normalize(vNormal);
- float dist=length(vWorld-uEye);
- float depth=max(0.0,uSurface-vWorld.y);
- vec3 col=vColor.rgb;
- float alpha=1.0;
- if(uMode==3.0){
-  vec2 p=vWorld.xz;
-  float w=sin(p.x*.62+uTime*.44+sin(p.y*.26))+sin(p.y*.49-uTime*.3);
-  float threads=pow(max(0.0,1.0-abs(w)*.6),5.0);
-  vec3 to=normalize(vWorld-uEye);
-  float sun=pow(max(0.0,dot(to,normalize(vec3(-.35,1.0,.25)))),120.0);
-  vec3 daylight=mix(vec3(.12,.53,.60),vec3(.44,.78,.73),.48+w*.11)+threads*.055+sun*vec3(.66,.73,.57);
-  vec3 moonlight=vec3(.025,.105,.17)+threads*.025+sun*vec3(.15,.24,.34);
-  col=mix(daylight,moonlight,uNight);
- }
- else if(uMode==5.0){alpha=(1.0-vUV.y)*.075*pow(max(0.0,sin(vUV.x*3.14159)),1.5);if(uShadows>.5)alpha*=shadowVisibility(uSunShadow,vSunCoord,1.0/2048.0,.00055,190.0);col=mix(vec3(.62,.87,.76),vec3(.15,.39,.56),uNight);}
- else if(uMode==8.0){float rim=pow(1.0-abs(dot(n,normalize(uEye-vWorld))),2.0);col=vec3(.58,.86,.91);alpha=.10+rim*.50;}
- else if(uMode==6.0){col=mix(vec3(.54,.82,.78),vec3(.24,.47,.66),uNight);alpha=.34;}
- else {
-  float sunNormal=max(0.0,dot(n,normalize(vec3(-.4,1.0,-.23))));
-  float sunShadow=uShadows>.5?shadowVisibility(uSunShadow,vSunCoord,1.0/2048.0,.00055+.00055*(1.0-sunNormal),190.0):1.0;
-  float light=.65+.52*sunNormal*sunShadow;
-  float side=.08*max(0.0,dot(n,normalize(vec3(.7,.2,.5))));
-  col*=mix(light+side,.25+.18*max(0.0,n.y),uNight);
-  col*=mix(vec3(.82,.93,1.0),vec3(1.0),mix(1.0,sunShadow,smoothstep(.05,.4,sunNormal)*(1.0-uNight)));
-  if(uMode!=4.0){
-   float c=(caustic(vWorld.xz)+caustic(vWorld.xz*.51+.3)*.35)*(1.0-step(uSurface+.03,vWorld.y));
-   col+=mix(vec3(.30,.47,.35),vec3(.10,.20,.30),uNight)*c*max(.10,n.y)*exp(-depth*.037)*(1.0-uNight)*sunShadow;
-   col*=vec3(exp(-depth*.008),1.0,1.0);
-   float alignment=max(0.0,dot(normalize(vWorld-uEye),uForward));
-   float cone=pow(alignment,max(5.0,uTorch.x))*uLight*exp(-dist*max(.001,uTorch.y));
-   float core=pow(alignment,40.0)*uLight*exp(-dist*.12);
-   float torchShadow=uTorchShadows>.5?shadowVisibility(uTorchShadow,vTorchCoord,1.0/1024.0,.000015,0.0):1.0;
-   col+=vColor.rgb*(cone*.82+core*.45)*torchShadow;
-  }
-  else col=col*.85+vColor.rgb*.3;
- }
- if(uMode!=4.0&&uMode!=3.0&&uMode!=6.0){
-  float underwater=1.0-step(uSurface,vWorld.y);
-  float submergedFog=(1.0-exp(-dist*uFog))*underwater;
-  vec3 deepFog=mix(vec3(.035,.31,.39),vec3(.012,.047,.085),uNight);
-  vec3 farFog=mix(vec3(.15,.51,.55),vec3(.035,.12,.20),uNight);
-  vec3 waterFog=mix(deepFog,farFog,clamp((vWorld.y+2.0)/uSurface,0.0,1.0));
-  col=mix(col,waterFog,clamp(submergedFog,0.0,.985));
-  float aboveFog=(1.0-exp(-dist*uFog*(uMode==9.0?.09:.34)))*(1.0-underwater);
-  vec3 skyFog=mix(vec3(.58,.77,.80),vec3(.018,.045,.10),uNight);
-  col=mix(col,skyFog,clamp(aboveFog,0.0,.8));
- }
- col=pow(max(col,vec3(0.0)),vec3(.96));
- gl_FragColor=vec4(col,alpha);
-}`;
-
-},
-"game/breathing.ts":function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BubblePool = exports.BreathClock = exports.EXHALE_START = exports.BREATH_PERIOD = void 0;
-const data_js_1 = require("./data.js");
-exports.BREATH_PERIOD = 4.3;
-exports.EXHALE_START = 1.7;
-/** Simulation time keeps regulator sound and bubbles together across pauses. */
-class BreathClock {
-    constructor() {
-        this.last = -1;
+exports.forearmGeometry = forearmGeometry;
+exports.sleeveGeometry = sleeveGeometry;
+exports.diverPose = diverPose;
+const math_js_1 = require("../game/math.js");
+const geometry_js_1 = require("./geometry.js");
+/** Separate wrists and elbow sleeves give tools purposeful hand movement. */
+function forearmGeometry(side) {
+    const g = new geometry_js_1.Geometry(), rubber = (0, geometry_js_1.rgb)('#102b32'), seam = (0, geometry_js_1.rgb)('#59b9a9');
+    g.rod((0, math_js_1.vec)(side * .11, -.10, -.24), (0, math_js_1.vec)(), .098, .076, rubber, 14);
+    g.rod((0, math_js_1.vec)(side * .03, -.025, -.06), (0, math_js_1.vec)(), .083, .080, seam, 14);
+    g.ellipsoid((0, math_js_1.vec)(-side * .04, .012, .115), (0, math_js_1.vec)(.085, .062, .10), rubber, 14, 9);
+    for (let finger = 0; finger < 4; finger++) {
+        const x = -side * .04 + (finger - 1.5) * .031;
+        g.rod((0, math_js_1.vec)(x, .015, .16), (0, math_js_1.vec)(x, -.022, .225 - finger * .006), .014, .012, rubber, 7);
+        g.rod((0, math_js_1.vec)(x, -.022, .225 - finger * .006), (0, math_js_1.vec)(x, -.057, .20 - finger * .006), .012, .009, rubber, 7);
     }
-    sample(time, enabled, paused = false) {
-        if (paused)
-            return null;
-        if (!enabled) {
-            this.last = -1;
-            return null;
-        }
-        const cycle = Math.floor(time / exports.BREATH_PERIOD);
-        const exhale = time - cycle * exports.BREATH_PERIOD >= exports.EXHALE_START;
-        const phase = cycle * 2 + Number(exhale);
-        if (phase === this.last)
-            return null;
-        this.last = phase;
-        return exhale ? 'exhale' : 'inhale';
-    }
+    g.rod((0, math_js_1.vec)(-side * .095, 0, .12), (0, math_js_1.vec)(-side * .13, -.04, .18), .022, .014, rubber, 8);
+    return g;
 }
-exports.BreathClock = BreathClock;
-class BubblePool {
-    constructor() {
-        this.clock = new BreathClock();
-        this.previous = -1;
-        this.cursor = 0;
-        this.emitted = 0;
-        this.bubbles = Array.from({ length: 24 }, () => ({ p: { x: 0, y: 0, z: 0 }, born: -99, size: .025 }));
-    }
-    update(run, site, playing) {
-        const enabled = playing && !run.finished && run.p.y < site.surface - .12;
-        const dt = this.previous < 0 ? 0 : Math.max(0, Math.min(.1, run.time - this.previous));
-        this.previous = run.time;
-        if (this.clock.sample(run.time, enabled) === 'exhale') {
-            for (let i = 0; i < 8; i++) {
-                const b = this.bubbles[this.cursor++ % this.bubbles.length];
-                const side = i % 2 ? .20 : -.20, forward = .40 + i * .025;
-                b.p.x = run.p.x + Math.sin(run.yaw) * forward + Math.cos(run.yaw) * side;
-                b.p.y = run.p.y - .24 - i * .025;
-                b.p.z = run.p.z + Math.cos(run.yaw) * forward - Math.sin(run.yaw) * side;
-                b.size = .017 + (i % 4) * .007;
-                b.born = run.time;
-                this.emitted++;
-            }
-        }
-        for (const b of this.bubbles) {
-            if (run.time - b.born > 3 || b.p.y >= site.surface || !playing) {
-                b.born = -99;
-                continue;
-            }
-            const flow = (0, data_js_1.currentAt)(b.p, site, run.time);
-            b.p.x += flow.x * dt;
-            b.p.z += flow.z * dt;
-            b.p.y += (.55 + b.size * 7) * dt;
-        }
-    }
-    active(time) { return this.bubbles.filter(b => time - b.born < 3).length; }
+function sleeveGeometry() {
+    const g = new geometry_js_1.Geometry();
+    g.rod((0, math_js_1.vec)(), (0, math_js_1.vec)(0, 0, 1), .118, .10, (0, geometry_js_1.rgb)('#20434c'), 14);
+    g.rod((0, math_js_1.vec)(0, 0, .25), (0, math_js_1.vec)(0, 0, .35), .122, .122, (0, geometry_js_1.rgb)('#3e847f'), 14);
+    return g;
 }
-exports.BubblePool = BubblePool;
+function diverPose(run, time, watch, reducedMotion, output) {
+    const pose = output ?? { left: (0, math_js_1.vec)(), right: (0, math_js_1.vec)(), leftRoll: 0, rightRoll: 0, reach: 0, thrust: 0 };
+    const speed = (0, math_js_1.clamp)(Math.hypot(run.velocity.x, run.velocity.y, run.velocity.z) / 2.7, 0, 1);
+    const swim = reducedMotion ? 0 : Math.sin(time * 2.5) * speed * (run.charge > 0 ? .007 : .022);
+    const breathing = reducedMotion ? 0 : Math.sin(time * 1.3) * .007;
+    const thrust = run.strikeCooldown > .38 ? Math.sin((.75 - run.strikeCooldown) / .37 * Math.PI) * .23 : 0;
+    const reach = run.interaction > 0 ? Math.sin((0, math_js_1.clamp)(run.interaction, 0, 1) * Math.PI * .75) * .15 : 0;
+    const leftX = run.scooter ? -.37 : -.38 - reach * .9, leftZ = run.scooter ? .60 : .82 + reach;
+    pose.left.x = leftX * (1 - watch) - .035 * watch;
+    pose.left.y = ((run.scooter ? -.24 : -.45) + breathing + swim + reach * .35) * (1 - watch) - .13 * watch;
+    pose.left.z = leftZ * (1 - watch) + .68 * watch;
+    pose.right.x = run.scooter ? .37 : .29;
+    pose.right.y = (run.scooter ? -.24 : -.37) + breathing - swim * .6;
+    pose.right.z = (run.scooter ? .60 : .95) - run.charge * .16 + thrust;
+    pose.leftRoll = watch * .16 + (1 - watch) * (-.20 + swim);
+    pose.rightRoll = .14 - swim;
+    pose.reach = reach;
+    pose.thrust = thrust;
+    return pose;
+}
 
 },
 "render/geometry.ts":function(require,module,exports){
@@ -3042,16 +3423,53 @@ function fishGeometry(kind, variant = 0) {
         g.tri((0, math_js_1.vec)(0, 0, -1.12), (0, math_js_1.vec)(0, -.48, -1.92), (0, math_js_1.vec)(0, -.08, -1.60), (0, exports.tint)(slate, .78));
     }
     else {
-        const colors = ['#edc757', '#79afca', '#638de1', '#e0ad87', '#3ec6b8', '#d57b7f', '#c4d1c6', '#adbf79'];
-        const c = (0, exports.rgb)(colors[variant % colors.length]);
-        const fat = variant % 3 === 0 ? .22 : .14;
-        g.ellipsoid((0, math_js_1.vec)(), (0, math_js_1.vec)(.09, fat, .38), c, 12, 8, (x, y, z) => variant % 3 === 1 && Math.abs(z) < .16 ? dark : variant % 3 === 2 && y > .3 ? (0, exports.tint)(c, .7) : c);
-        g.tri((0, math_js_1.vec)(0, 0, -.24), (0, math_js_1.vec)(0, .24, -.63), (0, math_js_1.vec)(0, -.22, -.63), c);
-        g.tri((0, math_js_1.vec)(0, .12, .10), (0, math_js_1.vec)(0, .34, -.17), (0, math_js_1.vec)(0, .16, -.3), (0, exports.tint)(c, .8));
-        for (const s of [-1, 1]) {
-            g.ellipsoid((0, math_js_1.vec)(s * .079, .067, .24), (0, math_js_1.vec)(.027, .032, .035), dark, 6, 4);
-            g.tri((0, math_js_1.vec)(s * .07, 0, .1), (0, math_js_1.vec)(s * .22, -.09, -.08), (0, math_js_1.vec)(s * .075, -.06, -.16), (0, exports.tint)(c, 1.1));
+        const colors = ['#f1cc54', '#5ebace', '#517bdd', '#f2a477', '#45cfb4', '#e1859b', '#cce0d4', '#a9cd61'];
+        const c = (0, exports.rgb)(colors[variant % colors.length]), kind = variant % 8;
+        const deep = [0, 2, 5].includes(kind), slender = [1, 6].includes(kind);
+        const height = deep ? .24 : slender ? .10 : .16, length = slender ? .46 : .36;
+        g.ellipsoid((0, math_js_1.vec)(), (0, math_js_1.vec)(deep ? .075 : .105, height, length), c, 18, 11, (x, y, z) => {
+            if (kind === 0 && z < -.15 && z > -.5 || kind === 2 && z > .12 && z < .35)
+                return (0, exports.rgb)('#172c59');
+            if (kind === 1 && y > .08 && y < .3)
+                return (0, exports.rgb)('#d9f1e1');
+            if (kind === 3 && Math.sin(z * 13) > .35)
+                return (0, exports.rgb)('#f5e5bc');
+            if (kind === 4 && y > .1 && Math.sin(z * 22 + y * 8) > .6)
+                return (0, exports.rgb)('#2667a8');
+            if (kind === 5 && y < -.2)
+                return (0, exports.rgb)('#ffd398');
+            if (kind === 6 && y > 0)
+                return (0, exports.rgb)('#578e9c');
+            return (0, exports.tint)(c, .93 + y * .13);
+        });
+        // Fan tails, curved dorsal fins and paired translucent-looking pectorals.
+        const tail = (0, math_js_1.vec)(0, 0, -length * .8), tailY = deep ? .27 : .18;
+        for (let i = 0; i < 6; i++) {
+            const t = i / 6, n = (i + 1) / 6;
+            const edge = (v) => (0, math_js_1.vec)(0, (v * 2 - 1) * tailY, -length - .22 + Math.abs(v - .5) * .07);
+            g.tri(tail, edge(t), edge(n), (0, exports.tint)(c, i % 2 ? .94 : 1.15));
+            g.rod(tail, edge(t), .003, .001, (0, exports.tint)(c, .66), 4);
         }
+        for (let i = 0; i < 7; i++) {
+            const z = length * .65 - i * length * 1.4 / 7, zn = z - length * 1.4 / 7;
+            const h = height + Math.sin((i + 1) / 8 * Math.PI) * (deep ? .13 : .075);
+            g.quad((0, math_js_1.vec)(0, height * .7, z), (0, math_js_1.vec)(0, h, z), (0, math_js_1.vec)(0, h, zn), (0, math_js_1.vec)(0, height * .7, zn), (0, exports.tint)(c, .85));
+        }
+        for (const side of [-1, 1]) {
+            g.ellipsoid((0, math_js_1.vec)(side * .077, height * .35, length * .62), (0, math_js_1.vec)(.028, .029, .026), (0, exports.rgb)('#e3e4b0'), 8, 6);
+            g.ellipsoid((0, math_js_1.vec)(side * .091, height * .35, length * .66), (0, math_js_1.vec)(.017, .020, .018), dark, 7, 5);
+            g.rod((0, math_js_1.vec)(side * .09, height * .15, length * .2), (0, math_js_1.vec)(side * .087, -height * .55, length * .1), .007, .004, (0, exports.tint)(c, .5), 5);
+            g.tri((0, math_js_1.vec)(side * .07, 0, .11), (0, math_js_1.vec)(side * .22, -.04, -.07), (0, math_js_1.vec)(side * .10, -.07, -.16), (0, exports.tint)(c, 1.13));
+        }
+        g.ellipsoid((0, math_js_1.vec)(0, -height * .12, length * .92), (0, math_js_1.vec)(.026, .018, .025), (0, exports.tint)(c, .62), 8, 5);
+    }
+    // UV metadata: creature family and a fin weight. One shared material and
+    // one deformation shader are reused by regular meshes and shadow passes.
+    const family = kind === 'turtle' ? 2 : kind === 'ray' ? 3 : kind === 'moray' ? 4 : kind === 'lionfish' ? 5 : kind === 'shark' ? 6 : kind === 'marlow' ? 7 : 1;
+    for (let i = 0; i < g.positions.length / 3; i++) {
+        const x = Math.abs(g.positions[i * 3]);
+        g.uvs[i * 2] = family;
+        g.uvs[i * 2 + 1] = kind === 'turtle' ? Math.max(0, x - .5) : kind === 'ray' ? Math.max(0, x - .3) : family === 1 ? Math.max(0, x - .1) : 0;
     }
     return g;
 }
@@ -3090,6 +3508,455 @@ function equipment(kind) {
 }
 
 },
+"render/biome-geometry.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.siteObstacleGeometry = siteObstacleGeometry;
+const math_js_1 = require("../game/math.js");
+const geometry_js_1 = require("./geometry.js");
+/** Every underwater solid follows an authored collision envelope. */
+function siteObstacleGeometry(rock, site) {
+    const g = new geometry_js_1.Geometry(), { p, s } = rock;
+    if (rock.form === 'container') {
+        const color = (0, geometry_js_1.rgb)(rock.tint ? '#487986' : '#ad714d');
+        // Inscribe the box in the ellipsoid used by fish and diver navigation.
+        const size = (0, math_js_1.vec)(s.x * 1.12, s.y * 1.12, s.z * 1.12);
+        g.box(p, size, color);
+        for (let i = -5; i <= 5; i++)
+            for (const side of [-1, 1]) {
+                const x = p.x + i * size.x / 12, z = p.z + side * size.z * .505;
+                g.rod((0, math_js_1.vec)(x, p.y - size.y * .45, z), (0, math_js_1.vec)(x, p.y + size.y * .45, z), .04, .04, (0, geometry_js_1.tint)(color, .72), 5);
+            }
+    }
+    else if (rock.form === 'piling') {
+        const wood = (0, geometry_js_1.rgb)('#79634a');
+        // A rounded, tapered piling stays inside its collision ellipsoid.
+        for (let i = 0; i < 12; i++) {
+            const y0 = -.99 + i * 1.98 / 12, y1 = -.99 + (i + 1) * 1.98 / 12;
+            g.rod((0, math_js_1.vec)(p.x, p.y + y0 * s.y, p.z), (0, math_js_1.vec)(p.x, p.y + y1 * s.y, p.z), Math.sqrt(1 - y0 * y0) * s.x * .96, Math.sqrt(1 - y1 * y1) * s.x * .96, wood, 12);
+        }
+        for (const fraction of [-.48, .45])
+            g.rod((0, math_js_1.vec)(p.x, p.y + s.y * fraction - .08, p.z), (0, math_js_1.vec)(p.x, p.y + s.y * fraction + .08, p.z), s.x * .84, s.x * .84, (0, geometry_js_1.rgb)('#436e68'), 12);
+    }
+    else if (rock.form === 'root') {
+        const wood = (0, geometry_js_1.rgb)('#78694a'), alongX = s.x > s.z;
+        // Dense roots occupy a woody curtain, with smaller buttress roots fanning down.
+        g.ellipsoid(p, (0, math_js_1.vec)(s.x * .97, s.y, s.z * .97), wood, 24, 16, (x, y, z) => (0, geometry_js_1.tint)(wood, .72 + .25 * Math.abs(Math.sin((alongX ? x : z) * 25)) + y * .08));
+        for (let i = -4; i <= 4; i++) {
+            const t = i / 5, top = (0, math_js_1.vec)(p.x + (alongX ? t * s.x * .66 : 0), p.y + s.y * .54, p.z + (alongX ? 0 : t * s.z * .66));
+            const bottom = (0, math_js_1.vec)(p.x + (alongX ? t * s.x * .80 : s.x * .42), p.y - s.y * .45, p.z + (alongX ? s.z * .42 : t * s.z * .80));
+            g.rod(top, bottom, .12, .045, (0, geometry_js_1.tint)(wood, .77), 9);
+        }
+        // Leaves sit on the emerged ends, rather than floating over submerged roots.
+        if (p.y + s.y > site.surface - .7)
+            for (let i = -2; i <= 2; i++) {
+                const t = i * .23;
+                g.ellipsoid((0, math_js_1.vec)(p.x + (alongX ? t * s.x : 0), p.y + s.y - .45, p.z + (alongX ? 0 : t * s.z)), (0, math_js_1.vec)(alongX ? 1.9 : .6, .7, alongX ? .6 : 1.9), (0, geometry_js_1.rgb)('#48785b'), 12, 8);
+            }
+    }
+    else {
+        const color = (0, geometry_js_1.rgb)(rock.form === 'limestone' ? '#b3b69d' : rock.tint ? '#5c8e83' : '#729f90');
+        g.ellipsoid(p, s, color, 26, 18, (x, y, z) => (0, geometry_js_1.tint)(color, .85 + .11 * Math.sin(x * 14 + z * 12) * Math.cos(y * 20) + y * .16));
+        if (rock.form === 'limestone') {
+            // Irregular erosion cuts into the collision envelope, never outside it.
+            for (let i = 0; i < g.positions.length / 3; i++) {
+                const k = i * 3, x = g.positions[k] - p.x, y = g.positions[k + 1] - p.y, z = g.positions[k + 2] - p.z;
+                const rough = .94 + .05 * Math.sin(y * 1.8 + Math.atan2(z, x) * 5) * Math.cos(y * .6);
+                g.positions[k] = p.x + x * rough;
+                g.positions[k + 2] = p.z + z * rough;
+            }
+            // Bands are colour changes in the same surface, keeping the open roof clear.
+            for (let i = 0; i < g.positions.length / 3; i++)
+                if (Math.sin(g.positions[i * 3 + 1] * 1.1) > .65) {
+                    g.colors[i * 4] *= .85;
+                    g.colors[i * 4 + 1] *= .88;
+                    g.colors[i * 4 + 2] *= .89;
+                }
+        }
+    }
+    return g;
+}
+
+},
+"render/shadows.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ReefShadows = void 0;
+const shaders_js_1 = require("./shaders.js");
+const depthFragment = `precision highp float;
+void main(){
+ vec4 packed=fract(min(gl_FragCoord.z,.999999)*vec4(1.0,255.0,65025.0,16581375.0));
+ packed-=packed.yzww*vec4(1.0/255.0,1.0/255.0,1.0/255.0,0.0);
+ gl_FragColor=packed;
+}`;
+/** Geometry-based depth maps: shared deformation shaders keep caster silhouettes
+ * aligned with animated coral, seaweed and thin-instanced fish. High only. */
+class ReefShadows {
+    constructor(scene, engine) {
+        this.scene = scene;
+        this.engine = engine;
+        this.sun = null;
+        this.torch = null;
+        this.depthMaterials = new Map();
+        this.lastSun = -99;
+        this.sunRenders = 0;
+        this.torchRenders = 0;
+        this.lastDraws = 0;
+        this.passReady = true;
+        this.enabled = false;
+        const B = BABYLON;
+        this.white = B.RawTexture.CreateRGBATexture(new Uint8Array([255, 255, 255, 255]), 1, 1, scene, false, false, B.Texture.NEAREST_SAMPLINGMODE);
+        this.sunMatrix = B.Matrix.Identity();
+        this.torchMatrix = B.Matrix.Identity();
+        this.sunDirection = new B.Vector3(-.4, 1, -.23).normalize();
+        this.sunPass = engine.createRenderPassId('reef-sun-shadow');
+        this.torchPass = engine.createRenderPassId('reef-torch-shadow');
+        B.Effect.ShadersStore['reefShadowVertexShader'] = shaders_js_1.reefVertex;
+        B.Effect.ShadersStore['reefShadowFragmentShader'] = depthFragment;
+    }
+    target(size) {
+        const B = BABYLON;
+        const wrapper = this.engine.createRenderTargetTexture(size, { generateMipMaps: false, generateDepthBuffer: true, generateStencilBuffer: false, type: B.Constants.TEXTURETYPE_UNSIGNED_BYTE, format: B.Constants.TEXTUREFORMAT_RGBA, samplingMode: B.Texture.NEAREST_SAMPLINGMODE });
+        const texture = new B.Texture(null, this.scene, true, false, B.Texture.NEAREST_SAMPLINGMODE);
+        texture._texture = wrapper.texture;
+        texture.wrapU = B.Texture.CLAMP_ADDRESSMODE;
+        texture.wrapV = B.Texture.CLAMP_ADDRESSMODE;
+        return { wrapper, texture };
+    }
+    configure(high) {
+        this.enabled = high;
+        if (high && !this.sun) {
+            this.sun = this.target(2048);
+            this.torch = this.target(1024);
+            this.lastSun = -99;
+        }
+        if (!high && this.sun) {
+            for (const target of [this.sun, this.torch]) {
+                target.texture._texture = null;
+                target.texture.dispose();
+                target.wrapper.dispose();
+            }
+            this.sun = this.torch = null;
+        }
+        this.sunTexture = this.sun?.texture || this.white;
+        this.torchTexture = this.torch?.texture || this.white;
+    }
+    reset() { this.lastSun = -99; }
+    depth(mode) {
+        let material = this.depthMaterials.get(mode);
+        if (material)
+            return material;
+        const B = BABYLON;
+        material = new B.ShaderMaterial('reef-shadow-' + mode, this.scene, { vertex: 'reefShadow', fragment: 'reefShadow' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uMotion', 'uSurface', 'uNight', 'uCurrent'] });
+        material.backFaceCulling = false;
+        material.setFloat('uMode', mode);
+        material.setFloat('uMotion', 1);
+        this.depthMaterials.set(mode, material);
+        return material;
+    }
+    pass(target, passId, view, projection, run, site, reducedMotion) {
+        const B = BABYLON, oldView = this.scene.activeCamera.getViewMatrix(), oldProjection = this.scene.activeCamera.getProjectionMatrix(), oldPass = this.engine.currentRenderPassId;
+        let draws = 0;
+        this.passReady = true;
+        try {
+            this.engine.currentRenderPassId = passId;
+            this.scene.setTransformMatrix(view, projection);
+            this.scene.resetCachedMaterial();
+            this.engine.bindFramebuffer(target.wrapper, undefined, undefined, undefined, true);
+            this.engine.setAlphaMode(B.Engine.ALPHA_DISABLE);
+            this.engine.setDepthBuffer(true);
+            this.engine.setDepthWrite(true);
+            this.engine.clear(new B.Color4(1, 1, 1, 1), true, true, false);
+            for (const mesh of this.scene.meshes) {
+                const mode = mesh.material?._reefMode;
+                if (![0, 1, 2, 7].includes(mode) || !mesh.isEnabled() || !mesh.isVisible)
+                    continue;
+                const material = this.depth(mode);
+                material.setFloat('uTime', run.time);
+                material.setFloat('uSurface', site.surface);
+                material.setFloat('uMotion', reducedMotion ? 0 : 1);
+                material.setVector2('uCurrent', { x: site.current, y: site.channelX ?? (site.id === 'gardens' ? 18 : 0) });
+                mesh.setMaterialForRenderPass(passId, material);
+                mesh.computeWorldMatrix(true);
+                if (!material.isReady(mesh, mesh.hasThinInstances)) {
+                    this.passReady = false;
+                    continue;
+                }
+                for (const sub of mesh.subMeshes || []) {
+                    mesh.render(sub, false);
+                    draws++;
+                }
+            }
+        }
+        finally {
+            this.engine.restoreDefaultFramebuffer();
+            this.engine.currentRenderPassId = oldPass;
+            this.scene.setTransformMatrix(oldView, oldProjection);
+            this.scene.resetCachedMaterial();
+        }
+        return draws;
+    }
+    render(run, site, reducedMotion, torchActive, camera) {
+        if (!this.enabled || !this.sun)
+            return;
+        const B = BABYLON;
+        this.lastDraws = 0;
+        if (run.time - this.lastSun >= .05 || run.time < this.lastSun) {
+            const center = new B.Vector3(0, -3, 0), eye = center.add(this.sunDirection.scale(100));
+            const view = B.Matrix.LookAtLH(eye, center, new B.Vector3(0, 1, 0)), projection = B.Matrix.OrthoLH(160, 160, 1, 190);
+            view.multiplyToRef(projection, this.sunMatrix);
+            this.lastDraws += this.pass(this.sun, this.sunPass, view, projection, run, site, reducedMotion);
+            if (this.passReady)
+                this.lastSun = run.time;
+            this.sunRenders++;
+        }
+        if (torchActive) {
+            const view = camera.getViewMatrix(), projection = B.Matrix.PerspectiveFovLH(1.35, 1, .08, 70);
+            view.multiplyToRef(projection, this.torchMatrix);
+            this.lastDraws += this.pass(this.torch, this.torchPass, view, projection, run, site, reducedMotion);
+            this.torchRenders++;
+        }
+    }
+    stats() { return { enabled: this.enabled, sunResolution: this.sun ? 2048 : 0, torchResolution: this.torch ? 1024 : 0, sunRenders: this.sunRenders, torchRenders: this.torchRenders, depthDraws: this.lastDraws }; }
+}
+exports.ReefShadows = ReefShadows;
+
+},
+"render/shaders.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reefFragment = exports.reefVertex = void 0;
+exports.reefVertex = `precision highp float;
+attribute vec3 position;
+attribute vec3 normal;
+attribute vec4 color;
+attribute vec2 uv;
+uniform mat4 world;
+uniform mat4 viewProjection;
+uniform float uTime;
+uniform float uMode;
+uniform float uMotion;
+uniform float uSurface;
+uniform float uNight;
+uniform vec2 uCurrent;
+uniform mat4 uSunMatrix;
+uniform mat4 uTorchMatrix;
+#ifdef INSTANCES
+attribute vec4 world0;
+attribute vec4 world1;
+attribute vec4 world2;
+attribute vec4 world3;
+#endif
+varying vec3 vWorld;
+varying vec3 vNormal;
+varying vec4 vColor;
+varying vec2 vUV;
+varying vec4 vSunCoord;
+varying vec4 vTorchCoord;
+void main(){
+ mat4 w=world;
+ #ifdef INSTANCES
+ w=mat4(world0,world1,world2,world3);
+ #endif
+ vec3 p=position;
+ if(uMode==1.0){
+  p.x+=sin(uTime*.75+p.z*.7+p.x*.5)*uv.y*.08*uMotion;
+  p.z+=sin(uTime*.54+p.x*.6)*uv.y*.04*uMotion;
+ }
+ if(uMode==2.0){
+  float phase=uTime+dot(w[3].xz,vec2(.17,.23));
+  float tail=max(0.0,-p.z), fin=uv.y;
+  if(uv.x==2.0){p.y+=sin(phase*1.8+p.z*.9)*fin*.23; p.z+=cos(phase*1.8)*fin*.08;}
+  else if(uv.x==3.0){p.y+=sin(phase*2.0-abs(p.x)*1.5)*fin*.24;p.x*=1.0-fin*.018*cos(phase*2.0);}
+  else if(uv.x==4.0){p.x+=sin(phase*2.4+p.z*3.5)*tail*tail*.09; p.y+=sin(phase*1.3)*max(0.0,p.z-.38)*.08;}
+  else {float frequency=uv.x==5.0?2.1:uv.x==6.0?2.6:4.3;
+   p.x+=sin(phase*frequency+p.z*7.0)*tail*tail*(uv.x==5.0?.055:.12);
+   p.y+=sin(phase*6.0+p.z*3.0)*fin*.26;
+  }
+ }
+ if(uMode==3.0){p.y+=sin(p.x*.30+uTime*.48)*.14+sin(p.z*.28-uTime*.3)*.09;}
+ if(uMode==6.0){p.x+=sin(uTime*.17+p.y)*.35;p.y+=sin(uTime*.34+p.z)*.20;p.z+=mod(uTime*.23,6.0);}
+ if(uMode==7.0){
+  float channel=exp(-pow((p.x-uCurrent.y)/12.0,2.0));
+  float current=uCurrent.x*(.45+channel*1.8)*(1.0+.12*sin(uTime*.023));
+  float tip=uv.y*uv.y*uMotion;
+  float phase=uTime*(.72+current*.55)+uv.x*6.28318+p.x*.31+p.z*.19;
+  p.x+=(sin(phase)*.14+current*.48*.16)*tip;
+  p.z+=(sin(phase-1.1)*.16+current*.48)*tip;
+ }
+ vec4 pos=w*vec4(p,1.0);
+ vWorld=pos.xyz;
+ vSunCoord=uSunMatrix*vec4(pos.xyz+normalize(mat3(w)*normal)*.10,1.0);
+ vTorchCoord=uTorchMatrix*vec4(pos.xyz+normalize(mat3(w)*normal)*.025,1.0);
+ vNormal=normalize(mat3(w)*normal);
+ vColor=color;
+ vUV=uv;
+ gl_Position=viewProjection*pos;
+}`;
+exports.reefFragment = `precision highp float;
+varying vec3 vWorld;
+varying vec3 vNormal;
+varying vec4 vColor;
+varying vec2 vUV;
+varying vec4 vSunCoord;
+varying vec4 vTorchCoord;
+uniform vec3 uEye;
+uniform vec3 uForward;
+uniform vec3 uWaterColor;
+uniform float uTime;
+uniform float uMode;
+uniform float uSurface;
+uniform float uFog;
+uniform float uLight;
+uniform float uNight;
+uniform vec2 uTorch;
+uniform float uShadows;
+uniform float uTorchShadows;
+uniform sampler2D uSunShadow;
+uniform sampler2D uTorchShadow;
+float shadowVisibility(sampler2D shadowMap,vec4 coordinate,float texel,float bias,float depthSpan){
+ if(coordinate.w<=0.0)return 1.0;
+ vec3 q=coordinate.xyz/coordinate.w*.5+.5;
+ if(q.x<.002||q.x>.998||q.y<.002||q.y>.998||q.z<0.0||q.z>1.0)return 1.0;
+ vec4 blockerPacked=texture2D(shadowMap,q.xy);
+ float blockerDepth=dot(blockerPacked,vec4(1.0,1.0/255.0,1.0/65025.0,1.0/16581375.0));
+ float radius=1.0+clamp((q.z-blockerDepth)*depthSpan*.2,0.0,.5);
+ float visible=0.0;
+ for(int x=0;x<4;x++)for(int y=0;y<4;y++){
+  vec4 packed=texture2D(shadowMap,q.xy+(vec2(float(x),float(y))-1.5)*texel*radius);
+  float depth=dot(packed,vec4(1.0,1.0/255.0,1.0/65025.0,1.0/16581375.0));
+  visible+=step(q.z-bias,depth);
+ }
+ return visible/16.0;
+}
+float caustic(vec2 p){
+ float a=sin(p.x*1.47+uTime*.33+sin(p.y*.82-uTime*.23));
+ float b=sin(p.y*1.42-uTime*.29+cos(p.x*.71+uTime*.17));
+ return pow(max(0.0,1.0-abs(a+b)*.87),11.0);
+}
+void main(){
+ vec3 n=normalize(vNormal);
+ float dist=length(vWorld-uEye);
+ float depth=max(0.0,uSurface-vWorld.y);
+ vec3 col=vColor.rgb;
+ float alpha=1.0;
+ if(uMode==3.0){
+  vec2 p=vWorld.xz;
+  float w=sin(p.x*.62+uTime*.44+sin(p.y*.26))+sin(p.y*.49-uTime*.3);
+  float threads=pow(max(0.0,1.0-abs(w)*.6),5.0);
+  vec3 to=normalize(vWorld-uEye);
+  float sun=pow(max(0.0,dot(to,normalize(vec3(-.35,1.0,.25)))),120.0);
+  vec3 daylight=mix(vec3(.12,.53,.60),vec3(.44,.78,.73),.48+w*.11)+threads*.055+sun*vec3(.66,.73,.57);
+  vec3 moonlight=vec3(.025,.105,.17)+threads*.025+sun*vec3(.15,.24,.34);
+  col=mix(daylight,moonlight,uNight);
+ }
+ else if(uMode==5.0){alpha=(1.0-vUV.y)*.075*pow(max(0.0,sin(vUV.x*3.14159)),1.5);if(uShadows>.5)alpha*=shadowVisibility(uSunShadow,vSunCoord,1.0/2048.0,.00055,190.0);col=mix(vec3(.62,.87,.76),vec3(.15,.39,.56),uNight);}
+ else if(uMode==8.0){float rim=pow(1.0-abs(dot(n,normalize(uEye-vWorld))),2.0);col=vec3(.58,.86,.91);alpha=.10+rim*.50;}
+ else if(uMode==6.0){col=mix(vec3(.54,.82,.78),vec3(.24,.47,.66),uNight);alpha=.34;}
+ else {
+  float sunNormal=max(0.0,dot(n,normalize(vec3(-.4,1.0,-.23))));
+  float sunShadow=uShadows>.5?shadowVisibility(uSunShadow,vSunCoord,1.0/2048.0,.00055+.00055*(1.0-sunNormal),190.0):1.0;
+  float light=.65+.52*sunNormal*sunShadow;
+  float side=.08*max(0.0,dot(n,normalize(vec3(.7,.2,.5))));
+  col*=mix(light+side,.25+.18*max(0.0,n.y),uNight);
+  col*=mix(vec3(.82,.93,1.0),vec3(1.0),mix(1.0,sunShadow,smoothstep(.05,.4,sunNormal)*(1.0-uNight)));
+  if(uMode!=4.0){
+   float c=(caustic(vWorld.xz)+caustic(vWorld.xz*.51+.3)*.35)*(1.0-step(uSurface+.03,vWorld.y));
+   col+=mix(vec3(.30,.47,.35),vec3(.10,.20,.30),uNight)*c*max(.10,n.y)*exp(-depth*.037)*(1.0-uNight)*sunShadow;
+   col*=vec3(exp(-depth*.008),1.0,1.0);
+   float alignment=max(0.0,dot(normalize(vWorld-uEye),uForward));
+   float cone=pow(alignment,max(5.0,uTorch.x))*uLight*exp(-dist*max(.001,uTorch.y));
+   float core=pow(alignment,40.0)*uLight*exp(-dist*.12);
+   float torchShadow=uTorchShadows>.5?shadowVisibility(uTorchShadow,vTorchCoord,1.0/1024.0,.000015,0.0):1.0;
+   col+=vColor.rgb*(cone*.82+core*.45)*torchShadow;
+  }
+  else col=col*.85+vColor.rgb*.3;
+ }
+ if(uMode!=4.0&&uMode!=3.0&&uMode!=6.0){
+  float underwater=1.0-step(uSurface,vWorld.y);
+  float submergedFog=(1.0-exp(-dist*uFog))*underwater;
+  vec3 deepFog=mix(uWaterColor,vec3(.012,.047,.085),uNight);
+  vec3 farFog=mix(uWaterColor*1.20+vec3(.09,.09,.06),vec3(.035,.12,.20),uNight);
+  vec3 waterFog=mix(deepFog,farFog,clamp((vWorld.y+2.0)/uSurface,0.0,1.0));
+  col=mix(col,waterFog,clamp(submergedFog,0.0,.985));
+  float aboveFog=(1.0-exp(-dist*uFog*(uMode==9.0?.09:.34)))*(1.0-underwater);
+  vec3 skyFog=mix(vec3(.58,.77,.80),vec3(.018,.045,.10),uNight);
+  col=mix(col,skyFog,clamp(aboveFog,0.0,.8));
+ }
+ col=pow(max(col,vec3(0.0)),vec3(.96));
+ gl_FragColor=vec4(col,alpha);
+}`;
+
+},
+"game/breathing.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BubblePool = exports.BreathClock = exports.EXHALE_START = exports.BREATH_PERIOD = void 0;
+const data_js_1 = require("./data.js");
+exports.BREATH_PERIOD = 4.3;
+exports.EXHALE_START = 1.7;
+/** Simulation time keeps regulator sound and bubbles together across pauses. */
+class BreathClock {
+    constructor() {
+        this.last = -1;
+    }
+    sample(time, enabled, paused = false) {
+        if (paused)
+            return null;
+        if (!enabled) {
+            this.last = -1;
+            return null;
+        }
+        const cycle = Math.floor(time / exports.BREATH_PERIOD);
+        const exhale = time - cycle * exports.BREATH_PERIOD >= exports.EXHALE_START;
+        const phase = cycle * 2 + Number(exhale);
+        if (phase === this.last)
+            return null;
+        this.last = phase;
+        return exhale ? 'exhale' : 'inhale';
+    }
+}
+exports.BreathClock = BreathClock;
+class BubblePool {
+    constructor() {
+        this.clock = new BreathClock();
+        this.previous = -1;
+        this.cursor = 0;
+        this.emitted = 0;
+        this.bubbles = Array.from({ length: 24 }, () => ({ p: { x: 0, y: 0, z: 0 }, born: -99, size: .025 }));
+    }
+    update(run, site, playing) {
+        const enabled = playing && !run.finished && run.p.y < site.surface - .12;
+        const dt = this.previous < 0 ? 0 : Math.max(0, Math.min(.1, run.time - this.previous));
+        this.previous = run.time;
+        if (this.clock.sample(run.time, enabled) === 'exhale') {
+            for (let i = 0; i < 8; i++) {
+                const b = this.bubbles[this.cursor++ % this.bubbles.length];
+                const side = i % 2 ? .20 : -.20, forward = .40 + i * .025;
+                b.p.x = run.p.x + Math.sin(run.yaw) * forward + Math.cos(run.yaw) * side;
+                b.p.y = run.p.y - .24 - i * .025;
+                b.p.z = run.p.z + Math.cos(run.yaw) * forward - Math.sin(run.yaw) * side;
+                b.size = .017 + (i % 4) * .007;
+                b.born = run.time;
+                this.emitted++;
+            }
+        }
+        for (const b of this.bubbles) {
+            if (run.time - b.born > 3 || b.p.y >= site.surface || !playing) {
+                b.born = -99;
+                continue;
+            }
+            const flow = (0, data_js_1.currentAt)(b.p, site, run.time);
+            b.p.x += flow.x * dt;
+            b.p.z += flow.z * dt;
+            b.p.y += (.55 + b.size * 7) * dt;
+        }
+    }
+    active(time) { return this.bubbles.filter(b => time - b.born < 3).length; }
+}
+exports.BubblePool = BubblePool;
+
+},
 "render/terrain.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -3102,30 +3969,34 @@ const math_js_1 = require("../game/math.js");
 const geometry_js_1 = require("./geometry.js");
 exports.SEABED_SIZE = 170;
 exports.SEABED_STEPS = 90;
-const sandSamples = new Float64Array((exports.SEABED_STEPS + 1) ** 2).fill(NaN);
-function sampleHeight(ix, iz) {
+const samples = new Map();
+function sampleHeight(ix, iz, site) {
+    const key = typeof site === 'string' ? site : site?.id ?? 'legacy';
+    if (!samples.has(key))
+        samples.set(key, new Float64Array((exports.SEABED_STEPS + 1) ** 2).fill(NaN));
+    const sandSamples = samples.get(key);
     const index = iz * (exports.SEABED_STEPS + 1) + ix;
     if (Number.isNaN(sandSamples[index]))
-        sandSamples[index] = (0, data_js_1.floorHeight)(-exports.SEABED_SIZE / 2 + ix * exports.SEABED_SIZE / exports.SEABED_STEPS, -exports.SEABED_SIZE / 2 + iz * exports.SEABED_SIZE / exports.SEABED_STEPS);
+        sandSamples[index] = (0, data_js_1.floorHeight)(-exports.SEABED_SIZE / 2 + ix * exports.SEABED_SIZE / exports.SEABED_STEPS, -exports.SEABED_SIZE / 2 + iz * exports.SEABED_SIZE / exports.SEABED_STEPS, site);
     return sandSamples[index];
 }
 /** Height of the visible sand triangles, rather than the curved authoring function. */
-function sandHeight(x, z) {
+function sandHeight(x, z, site) {
     const half = exports.SEABED_SIZE / 2, cell = exports.SEABED_SIZE / exports.SEABED_STEPS;
     if (Math.abs(x) >= half || Math.abs(z) >= half)
-        return (0, data_js_1.floorHeight)(x, z);
+        return (0, data_js_1.floorHeight)(x, z, site);
     const ix = Math.floor((x + half) / cell), iz = Math.floor((z + half) / cell);
     const x0 = -half + ix * cell, z0 = -half + iz * cell;
     const tx = (x - x0) / cell, tz = (z - z0) / cell;
-    const a = sampleHeight(ix, iz), b = sampleHeight(ix, iz + 1), c = sampleHeight(ix + 1, iz), d = sampleHeight(ix + 1, iz + 1);
+    const a = sampleHeight(ix, iz, site), b = sampleHeight(ix, iz + 1, site), c = sampleHeight(ix + 1, iz, site), d = sampleHeight(ix + 1, iz + 1, site);
     return tx + tz <= 1 ? a + (c - a) * tx + (b - a) * tz : d + (b - d) * (1 - tx) + (c - d) * (1 - tz);
 }
-function seabedGeometry() {
+function seabedGeometry(site) {
     const ground = new geometry_js_1.Geometry(), half = exports.SEABED_SIZE / 2;
     const vertex = (x, z) => {
-        const eps = .08, n = (0, math_js_1.norm)((0, math_js_1.vec)((0, data_js_1.floorHeight)(x - eps, z) - (0, data_js_1.floorHeight)(x + eps, z), 2 * eps, (0, data_js_1.floorHeight)(x, z - eps) - (0, data_js_1.floorHeight)(x, z + eps)));
+        const eps = .08, n = (0, math_js_1.norm)((0, math_js_1.vec)((0, data_js_1.floorHeight)(x - eps, z, site) - (0, data_js_1.floorHeight)(x + eps, z, site), 2 * eps, (0, data_js_1.floorHeight)(x, z - eps, site) - (0, data_js_1.floorHeight)(x, z + eps, site)));
         const grain = .92 + .06 * Math.sin(x * 5 + z * 6) + .035 * Math.sin(z * 19);
-        ground.v((0, math_js_1.vec)(x, (0, data_js_1.floorHeight)(x, z), z), n, (0, geometry_js_1.tint)((0, geometry_js_1.rgb)('#c5ceaf'), grain));
+        ground.v((0, math_js_1.vec)(x, (0, data_js_1.floorHeight)(x, z, site), z), n, (0, geometry_js_1.tint)((0, geometry_js_1.rgb)('#' + (site?.sandColor ?? 0xc5ceaf).toString(16).padStart(6, '0')), grain));
     };
     for (let iz = 0; iz <= exports.SEABED_STEPS; iz++)
         for (let ix = 0; ix <= exports.SEABED_STEPS; ix++)
@@ -3152,12 +4023,12 @@ function seabedGeometry() {
     return ground;
 }
 /** Embed each root footprint in the actual sand, including steep trench slopes. */
-function mergeGrounded(destination, source, p, s, yaw) {
+function mergeGrounded(destination, source, p, s, yaw, site) {
     const start = destination.positions.length;
-    destination.merge(source, (0, math_js_1.vec)(p.x, sandHeight(p.x, p.z) - .035, p.z), s, yaw);
-    const center = sandHeight(p.x, p.z);
+    destination.merge(source, (0, math_js_1.vec)(p.x, sandHeight(p.x, p.z, site) - .035, p.z), s, yaw);
+    const center = sandHeight(p.x, p.z, site);
     for (let i = start; i < destination.positions.length; i += 3)
-        destination.positions[i + 1] += sandHeight(destination.positions[i], destination.positions[i + 2]) - center;
+        destination.positions[i + 1] += sandHeight(destination.positions[i], destination.positions[i + 2], site) - center;
 }
 
 },
@@ -3181,6 +4052,7 @@ const PAD_BUTTONS = [
     { action: 'boost', prompt: 'Press the control that gives a stronger fin kick.' },
     { action: 'pause', prompt: 'Press the control that pauses the dive.' },
     { action: 'light', prompt: 'Press the control that toggles your head torch.' },
+    { action: 'watch', prompt: 'Press the control that raises and lowers your dive computer.' },
     { action: 'journal', prompt: 'Press the control that opens the reef chart.' },
     { action: 'menuConfirm', prompt: 'Press the menu confirm control.' },
     { action: 'menuBack', prompt: 'Press the menu back or cancel control.' },
@@ -3197,7 +4069,7 @@ function standardProfile(pad) {
     return { key: gamepadKey(pad), id: pad.id || 'Unknown gamepad', mapping: pad.mapping || '', axisCount: pad.axes.length, buttonCount: pad.buttons.length,
         axes: { moveX: { index: 0, sign: 1 }, moveZ: { index: 1, sign: -1 }, lookX: { index: 2, sign: 1 }, lookY: { index: 3, sign: 1 } },
         centers: Array.from(pad.axes, () => 0),
-        buttons: { spear: 7, interact: 0, up: 3, down: 1, scooter: 2, steady: 4, boost: 5, pause: standard ? 9 : 9, light: 6, journal: standard ? 8 : 8, menuConfirm: 0, menuBack: 1, menuPrevious: 12, menuNext: 13 },
+        buttons: { spear: 7, interact: 0, up: 3, down: 1, scooter: 2, steady: 4, boost: 5, pause: 9, light: 6, journal: 8, watch: 10, menuConfirm: 0, menuBack: 1, menuPrevious: 12, menuNext: 13 },
         axisButtons: {}, moveDeadzone: .14, lookDeadzone: .2 };
 }
 /** Narrow known-good preset from Spin Vector's exact Windows USB capture. */
@@ -3213,10 +4085,24 @@ function knownBackboneProfile(pad) {
     if (profile.centers.length > 9)
         profile.centers[9] = 1;
     profile.axisButtons = { spear: { index: 3, value: 1 }, light: { index: 4, value: 1 } };
-    profile.buttons = { spear: 9, interact: 0, up: 3, down: 1, scooter: 2, steady: 4, boost: 5, pause: 11, light: 6, journal: 8, menuConfirm: 0, menuBack: 1, menuPrevious: 12, menuNext: 13 };
+    profile.buttons = { spear: 9, interact: 0, up: 3, down: 1, scooter: 2, steady: 4, boost: 5, pause: 11, light: 6, journal: 8, watch: 10, menuConfirm: 0, menuBack: 1, menuPrevious: 12, menuNext: 13 };
     return profile;
 }
-function profileFor(settings, pad) { return settings.gamepads?.[gamepadKey(pad)] || knownBackboneProfile(pad) || standardProfile(pad); }
+const checkedWatchDefaults = new WeakSet();
+function profileFor(settings, pad) {
+    const saved = settings.gamepads?.[gamepadKey(pad)];
+    if (!saved)
+        return knownBackboneProfile(pad) || standardProfile(pad);
+    if (!checkedWatchDefaults.has(saved)) {
+        checkedWatchDefaults.add(saved);
+        // Older calibrated profiles predate the watch. Add a spare, known stick
+        // click without changing any measured axes, triggers or existing buttons.
+        const fallback = pad.mapping === 'standard' ? 10 : knownBackboneProfile(pad)?.buttons.watch;
+        if (saved.buttons.watch === undefined && !saved.axisButtons.watch && fallback !== undefined && fallback < pad.buttons.length && !Object.values(saved.buttons).includes(fallback))
+            saved.buttons.watch = fallback;
+    }
+    return saved;
+}
 function mappedAxis(pad, profile, axis) {
     const binding = profile.axes[axis], center = finiteAxis(profile.centers[binding.index]);
     const raw = finiteAxis(pad.axes[binding.index]), delta = raw - center;
@@ -3244,6 +4130,7 @@ class InputController {
         this.command = command;
         this.active = false;
         this.keys = new Set();
+        this.blockedKeys = new Set();
         this.touch = new Set();
         this.lookX = 0;
         this.lookY = 0;
@@ -3267,6 +4154,7 @@ class InputController {
         this.hoverY = 0;
         this.touchMode = matchMedia('(pointer:coarse)').matches;
         this.gamepad = false;
+        this.watchRaised = false;
         window.addEventListener('keydown', e => {
             if (this.calibration)
                 return;
@@ -3282,10 +4170,24 @@ class InputController {
                 }
                 return;
             }
+            if (this.blockedKeys.has(e.code)) {
+                e.preventDefault();
+                return;
+            }
+            if ((action === 'spear' || action === 'interact') && this.watchRaised) {
+                e.preventDefault();
+                if (!e.repeat) {
+                    this.blockedKeys.add(e.code);
+                    this.command('watch');
+                }
+                return;
+            }
             if (!this.active)
                 return;
             e.preventDefault();
             if (!e.repeat && ['scooter', 'light'].includes(action))
+                this.command(action);
+            if (action === 'watch' && !e.repeat)
                 this.command(action);
             if (action === 'spear' && !e.repeat && this.settings.toggleDraw)
                 this.toggle();
@@ -3293,6 +4195,10 @@ class InputController {
                 this.keys.add(e.code);
         });
         window.addEventListener('keyup', e => {
+            if (this.blockedKeys.delete(e.code)) {
+                this.keys.delete(e.code);
+                return;
+            }
             if (this.actionFor(e.code) === 'spear' && !this.settings.toggleDraw && this.keys.has(e.code))
                 this.release = true;
             this.keys.delete(e.code);
@@ -3313,6 +4219,7 @@ class InputController {
             }
             this.touchMode = false;
             if (e.button === 0) {
+                const watchWasRaised = this.watchRaised;
                 if (document.pointerLockElement !== canvas) {
                     // Keep draw and drag-look usable when capture is denied by a host.
                     this.lookPointer = e.pointerId;
@@ -3321,7 +4228,9 @@ class InputController {
                     canvas.setPointerCapture(e.pointerId);
                     this.capture();
                 }
-                if (this.settings.toggleDraw)
+                if (watchWasRaised)
+                    this.command('watch');
+                else if (this.settings.toggleDraw)
                     this.toggle();
                 else
                     this.keys.add('Mouse0');
@@ -3362,6 +4271,8 @@ class InputController {
                 this.hoverX = null;
         });
         window.addEventListener('pointerup', e => {
+            if (e.button === 0 && e.pointerType !== 'touch')
+                this.blockedKeys.delete('Mouse0');
             if (e.button === 0 && e.pointerType !== 'touch' && this.keys.has('Mouse0')) {
                 this.keys.delete('Mouse0');
                 this.release = true;
@@ -3422,6 +4333,31 @@ class InputController {
         if (!v && document.pointerLockElement)
             document.exitPointerLock();
     }
+    setWatchRaised(value) { this.watchRaised = value; if (value) {
+        this.cancelDraw = true;
+        this.release = false;
+        this.drawToggle = false;
+        for (const code of this.keys) {
+            const action = this.actionFor(code);
+            if (action === 'spear' || action === 'interact') {
+                this.blockedKeys.add(code);
+                this.keys.delete(code);
+            }
+        }
+        this.touch.delete('spear');
+        this.touch.delete('interact');
+        if (this.keys.has('Mouse0'))
+            this.blockedKeys.add('Mouse0');
+        this.keys.delete('Mouse0');
+        const pad = this.selectedGamepad();
+        if (pad) {
+            const profile = profileFor(this.settings, pad);
+            if (mappedButton(pad, profile, 'spear'))
+                this.blockedPadActions.add('spear');
+            if (mappedButton(pad, profile, 'interact'))
+                this.blockedPadActions.add('interact');
+        }
+    } }
     pads() { try {
         return Array.from(navigator.getGamepads?.() || []).filter((p) => !!p?.connected);
     }
@@ -3536,6 +4472,11 @@ class InputController {
         }
     }
     clear() {
+        for (const code of this.keys) {
+            const action = this.actionFor(code);
+            if (action === 'spear' || action === 'interact')
+                this.blockedKeys.add(code);
+        }
         this.keys.clear();
         this.touch.clear();
         this.lookX = this.lookY = 0;
@@ -3601,11 +4542,14 @@ class InputController {
                 id = e.pointerId;
                 btn.setPointerCapture(id);
                 btn.classList.add('pressed');
-                if (['scooter', 'light', 'pause', 'journal'].includes(action)) {
+                if (['scooter', 'light', 'pause', 'journal', 'watch'].includes(action)) {
                     this.command(action);
                     return;
                 }
-                if (action === 'spear') {
+                if ((action === 'spear' || action === 'interact') && this.watchRaised) {
+                    this.command('watch');
+                }
+                else if (action === 'spear') {
                     if (this.settings.toggleDraw)
                         this.toggle();
                     else
@@ -3638,6 +4582,7 @@ class InputController {
         return this.keys.has(this.settings.keys[a]) || this.touch.has(a);
     }
     sample(dt) {
+        const watchRaisedAtFrame = this.watchRaised;
         const pad = this.selectedGamepad();
         this.padDisconnected = !!this.currentPad && !pad;
         this.gamepad = !!pad;
@@ -3697,6 +4642,16 @@ class InputController {
                     this.command('pause');
                 if (edge('journal'))
                     this.command('journal');
+                if (edge('watch'))
+                    this.command('watch');
+                if (this.watchRaised && edge('spear')) {
+                    this.blockedPadActions.add('spear');
+                    this.command('watch');
+                }
+                if (this.watchRaised && edge('interact')) {
+                    this.blockedPadActions.add('interact');
+                    this.command('watch');
+                }
             }
             else if (!this.calibration) {
                 if (edge('menuPrevious') || edge('menuNext')) {
@@ -3712,7 +4667,7 @@ class InputController {
             this.previousPadActions = actionNow;
         }
         const factor = .0025 * this.settings.sensitivity;
-        const frame = { ...simulation_js_1.EMPTY_INPUT, moveX: (0, math_js_1.clamp)((this.down('right') ? 1 : 0) - (this.down('left') ? 1 : 0) + this.joyX + px, -1, 1), moveZ: (0, math_js_1.clamp)((this.down('forward') ? 1 : 0) - (this.down('back') ? 1 : 0) + this.joyZ + pz, -1, 1), vertical: (0, math_js_1.clamp)((this.down('up') ? 1 : 0) - (this.down('down') ? 1 : 0) + py, -1, 1), lookX: this.lookX * factor, lookY: this.lookY * factor * (this.settings.invertY ? -1 : 1), boost: this.down('boost') || boost, steady: this.down('steady') || steady, draw: this.settings.toggleDraw ? this.drawToggle : this.down('spear') || draw, release: this.release, cancelDraw: this.cancelDraw, interact: this.down('interact') || interact };
+        const frame = { ...simulation_js_1.EMPTY_INPUT, moveX: (0, math_js_1.clamp)((this.down('right') ? 1 : 0) - (this.down('left') ? 1 : 0) + this.joyX + px, -1, 1), moveZ: (0, math_js_1.clamp)((this.down('forward') ? 1 : 0) - (this.down('back') ? 1 : 0) + this.joyZ + pz, -1, 1), vertical: (0, math_js_1.clamp)((this.down('up') ? 1 : 0) - (this.down('down') ? 1 : 0) + py, -1, 1), lookX: this.lookX * factor, lookY: this.lookY * factor * (this.settings.invertY ? -1 : 1), boost: this.down('boost') || boost, steady: this.down('steady') || steady, draw: !watchRaisedAtFrame && !this.watchRaised && (this.settings.toggleDraw ? this.drawToggle : this.down('spear') || draw), release: !watchRaisedAtFrame && !this.watchRaised && this.release, cancelDraw: this.cancelDraw, interact: !watchRaisedAtFrame && !this.watchRaised && (this.down('interact') || interact) };
         this.lookX = this.lookY = 0;
         this.release = false;
         this.cancelDraw = false;
@@ -4083,9 +5038,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UI = void 0;
 const data_js_1 = require("../game/data.js");
 const math_js_1 = require("../game/math.js");
+const reef_recovery_js_1 = require("../game/reef-recovery.js");
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const key = (s) => s.replace('Key', '').replace('Left', '').replace('Mouse0', 'Mouse 1');
 const orderText = { catch: 'The Sandbar Kitchen · Land and sell 4 fish for a $65 order bonus.', cleanup: 'Lantern Bay Trust · Remove 2 pieces of fishing gear for a $70 contract bonus.', restore: 'Coral Commons · Plant 2 nursery-grown fragments for an $80 contract bonus.', research: 'Lantern Bay Field Archive · Survey 2 different field stations. Bonus: $140 by day or $180 at night.' };
+function reefRecoveryText(p, site) { const stage = (0, reef_recovery_js_1.recoveryFromProgress)(p.reefs[site]); return stage === 0 ? 'Reef life returns between productive visits. Revisit over 3–5 outings to see more fish.' : stage < 5 ? 'Fish are returning between visits. Each productive outing helps the reef grow livelier.' : 'Fish and reef life are returning between visits. Keep revisiting to see the change.'; }
 const upgradeIcon = (id) => {
     const drawings = {
         fins: '<path d="M15 37c4-10 3-19 2-25 7 4 13 12 14 23M28 40c5-9 11-14 18-16-1 9-6 17-15 21"/><path d="M11 40c7 3 13 3 20 0M29 45c6 2 12 1 17-2"/>',
@@ -4126,7 +5083,7 @@ class UI {
         this.confirmText = '';
         this.controllerInventory = '';
         this.qualityReloadPending = false;
-        this.controllerReadout = { pads: [], selectedKey: null, connected: false, rawAxes: [], rawButtons: [], saved: false, calibration: { phase: 'idle', prompt: '', step: 0, total: 17, completed: false }, scanning: true };
+        this.controllerReadout = { pads: [], selectedKey: null, connected: false, rawAxes: [], rawButtons: [], saved: false, calibration: { phase: 'idle', prompt: '', step: 0, total: 19, completed: false }, scanning: true };
         this.panel = document.getElementById('panel');
         this.hud = document.getElementById('hud');
         this.panel.addEventListener('click', e => {
@@ -4241,6 +5198,7 @@ class UI {
         }, true);
         document.getElementById('pause-button').onclick = () => this.dispatch('screen', 'pause');
         document.getElementById('chart-button').onclick = () => this.dispatch('screen', 'journal');
+        document.getElementById('watch-button').onclick = () => this.dispatch('watch');
         document.getElementById('fullscreen-button').onclick = () => this.dispatch('fullscreen');
     }
     updateControllerStatus(status) {
@@ -4362,17 +5320,17 @@ class UI {
         this.updateFullscreenState(!!document.fullscreenElement || !!document.webkitFullscreenElement);
         requestAnimationFrame(() => (screen === 'filleting' ? this.panel.querySelector('[data-action="fillet-cut"]') : this.panel.querySelector('button:not(:disabled),select'))?.focus({ preventScroll: true }));
     }
-    dock(p) { const site = data_js_1.SITES[this.site]; return `<header class="topbar"><div class="wordmark">Reef Sweep<span>DIVING CO.</span></div><nav class="toplinks" aria-label="Harbour"><span class="wallet"><strong>${(0, math_js_1.money)(p.cash)}</strong> Day ${p.day} · ${p.audience} followers</span><button data-screen="gear">Equipment</button><button data-screen="events">Events${p.day % 3 === 0 ? ' •' : ''}</button><button data-screen="settings" aria-label="Settings">⚙</button><button data-screen="saves" aria-label="Save slots">Saves</button><button data-action="fullscreen" data-fullscreen-label aria-label="Enter full screen">Full screen</button></nav></header><div class="dock-main"><section class="hero"><div class="eyebrow overline">A SAMFA12 GAME · LANTERN BAY</div><h1>A little room<br>for <em>life.</em></h1><p>Follow the light. Learn the reef.<br>Build a diving company that leaves<br>something better behind.</p><div class="hero-progress"><div><strong>${p.totalRemoved}</strong><span>lionfish removed</span></div><div><strong>${p.totalRestored}</strong><span>fragments planted</span></div><div><strong>${p.reputation}</strong><span>reputation</span></div></div><button class="link-button" data-screen="help" style="margin-top:18px;font-size:12px">Your first dive? Start here ↗</button></section><section class="dock-card"><div class="eyebrow">THE NEXT OUTING</div><h2>The reef is waiting.</h2><div class="site-selector">${Object.values(data_js_1.SITES).map(t => `<button class="site-choice ${this.site === t.id ? 'selected' : ''}" data-site="${t.id}" ${!(0, data_js_1.siteUnlocked)(p, t.id) ? 'disabled' : ''}><span class="micro">${t.id === 'gardens' ? '01 / SHALLOWS' : '02 / CHANNEL'}</span><strong>${t.name}</strong><span class="tiny">${(0, data_js_1.siteUnlocked)(p, t.id) ? t.id === 'gardens' ? 'Gentle drift · nursery' : 'Stronger current · tall arches' : '6 removals or 5 reputation'}</span></button>`).join('')}</div><p class="site-copy">${site.description}</p><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, this.site)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, this.site)}%"></i></div><label class="field" for="order-choice">Take a field contract</label><select id="order-choice" ${p.active || p.pending ? 'disabled' : ''}><option value="catch" ${this.order === 'catch' ? 'selected' : ''}>Restaurant · Sell 4 lionfish</option><option value="cleanup" ${this.order === 'cleanup' ? 'selected' : ''}>Cleanup · Remove 2 pieces of gear</option><option value="restore" ${this.order === 'restore' ? 'selected' : ''}>Restoration · Plant 2 fragments</option></select><p id="order-detail" class="contract-note">${orderText[this.order]}</p><div class="launch-row"><button class="primary" data-action="${p.pending ? 'review' : p.active ? 'resume' : 'dive'}">${p.pending ? 'Review landed catch' : p.active ? 'Resume suspended dive' : 'Begin dive'} <span aria-hidden="true">↗</span></button><button data-screen="journal" title="Reef chart">Chart</button></div><p class="status-note">${p.pending ? 'Your last outing is ready to settle.' : p.active ? 'Saved mid-dive. Air and wildlife have been paused.' : this.event ? 'Event entered · Land safely to record your score.' : 'Air filled · Nursery fragments stocked · Pole spear ready'}</p></section></div><footer class="bottomline"><span>Reef Sweep · v0.2 preview · Local saves</span><button class="link-button" data-screen="help" style="font-size:10px">Credits & controls</button></footer>`; }
+    dock(p) { const site = data_js_1.SITES[this.site]; return `<header class="topbar"><div class="wordmark">Reef Sweep<span>DIVING CO.</span></div><nav class="toplinks" aria-label="Harbour"><span class="wallet"><strong>${(0, math_js_1.money)(p.cash)}</strong> Day ${p.day} · ${p.audience} followers</span><button data-screen="gear">Equipment</button><button data-screen="events">Events${p.day % 3 === 0 ? ' •' : ''}</button><button data-screen="settings" aria-label="Settings">⚙</button><button data-screen="saves" aria-label="Save slots">Saves</button><button data-action="fullscreen" data-fullscreen-label aria-label="Enter full screen">Full screen</button></nav></header><div class="dock-main"><section class="hero"><div class="eyebrow overline">A SAMFA12 GAME · LANTERN BAY</div><h1>A little room<br>for <em>life.</em></h1><p>Follow the light. Learn the reef.<br>Build a diving company that leaves<br>something better behind.</p><div class="hero-progress"><div><strong>${p.totalRemoved}</strong><span>lionfish removed</span></div><div><strong>${p.totalRestored}</strong><span>fragments planted</span></div><div><strong>${p.reputation}</strong><span>reputation</span></div></div><button class="link-button" data-screen="help" style="margin-top:18px;font-size:12px">Your first dive? Start here ↗</button></section><section class="dock-card"><div class="eyebrow">THE NEXT OUTING</div><h2>The reef is waiting.</h2><div class="site-selector">${Object.values(data_js_1.SITES).map((t, index) => `<button class="site-choice ${this.site === t.id ? 'selected' : ''}" data-site="${t.id}" ${!(0, data_js_1.siteUnlocked)(p, t.id) ? 'disabled' : ''}><span class="micro">${String(index + 1).padStart(2, '0')} / ${esc(t.label ?? t.name)}</span><strong>${esc(t.name)}</strong><span class="tiny">${(0, data_js_1.siteUnlocked)(p, t.id) ? esc(t.shortDescription ?? t.description) : esc((0, data_js_1.siteUnlockText)(p, t.id))}</span></button>`).join('')}</div><p class="site-copy">${esc(site.description)}</p><p class="recovery-note">${reefRecoveryText(p, this.site)}</p><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, this.site)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, this.site)}%"></i></div><label class="field" for="order-choice">Take a field contract</label><select id="order-choice" ${p.active || p.pending ? 'disabled' : ''}><option value="catch" ${this.order === 'catch' ? 'selected' : ''}>Restaurant · Sell 4 lionfish</option><option value="cleanup" ${this.order === 'cleanup' ? 'selected' : ''}>Cleanup · Remove 2 pieces of gear</option><option value="restore" ${this.order === 'restore' ? 'selected' : ''}>Restoration · Plant 2 fragments</option></select><p id="order-detail" class="contract-note">${orderText[this.order]}</p><div class="launch-row"><button class="primary" data-action="${p.pending ? 'review' : p.active ? 'resume' : 'dive'}">${p.pending ? 'Review landed catch' : p.active ? 'Resume suspended dive' : 'Begin dive'} <span aria-hidden="true">↗</span></button><button data-screen="journal" title="Reef chart">Chart</button></div><p class="status-note">${p.pending ? 'Your last outing is ready to settle.' : p.active ? 'Saved mid-dive. Air and wildlife have been paused.' : this.event ? 'Event entered · Land safely to record your score.' : 'Air filled · Nursery fragments stocked · Pole spear ready'}</p></section></div><footer class="bottomline"><span>Reef Sweep · v0.3 preview · Local saves</span><button class="link-button" data-screen="help" style="font-size:10px">Credits & controls</button></footer>`; }
     nightControl(p) { const available = (0, data_js_1.upgradeLevel)(p, 'torch') >= 1 && (0, data_js_1.siteUnlocked)(p, 'passage'), lockedReason = (0, data_js_1.upgradeLevel)(p, 'torch') < 1 ? 'Install a head torch and unlock Tideglass Passage to open night dives.' : 'Unlock Tideglass Passage to open night dives.'; return `<label class="night-option"><span><strong>Night dive</strong><small>${available ? 'Challenge conditions · torch and wildlife adapt to the dark.' : lockedReason}</small></span><input type="checkbox" aria-label="Night dive" data-night ${this.night ? 'checked' : ''} ${available && !p.active && !p.pending ? '' : 'disabled'}></label>`; }
     gearCard(u, p) { const level = (0, data_js_1.upgradeLevel)(p, u.id), maxed = level >= data_js_1.MAX_UPGRADE_LEVEL, cost = (0, data_js_1.upgradeCost)(p, u.id), blockedBy = u.requires && (0, data_js_1.upgradeLevel)(p, u.requires) < (u.requiredLevel ?? 1), prerequisiteName = u.requires ? data_js_1.UPGRADES.find(item => item.id === u.requires)?.name || u.requires : '', requirement = u.requires === 'air' ? `Regulator level ${u.requiredLevel ?? 1} needed` : `${prerequisiteName} needed`, disabled = maxed || p.cash < cost || !!p.active || !!p.pending || !!blockedBy; return `<article class="gear-card"><div class="gear-art" aria-hidden="true">${upgradeIcon(u.id)}</div><div class="eyebrow">${u.tag}</div><h3>${u.name}</h3><div class="gear-rank">Level ${level} <span>/ ${data_js_1.MAX_UPGRADE_LEVEL}</span></div><p>${u.description}</p><div class="price"><strong>${maxed ? 'MAX LEVEL' : (0, math_js_1.money)(cost)}</strong><button data-buy="${u.id}" ${disabled ? 'disabled' : ''}>${maxed ? 'Maxed' : blockedBy ? requirement : `Upgrade to ${level + 1}`}</button></div></article>`; }
-    help(s) { return `<section class="modal help-copy">${this.header('Work gently. Come home.', 'DIVER’S FIELD GUIDE')}<p><b>Find the striped, fan-finned lionfish.</b> Move close, settle your aim, hold to draw the pole spear and release to strike. A fish stays exposed until you hold Interact to secure it in your tube.</p><div class="control-sheet"><div><b>Keyboard & mouse</b><p>${key(s.keys.forward)}${key(s.keys.left)}${key(s.keys.back)}${key(s.keys.right)} swim · mouse look<br>${key(s.keys.up)} ascend · ${key(s.keys.down)} descend<br>${key(s.keys.boost)} stronger fin kick · ${key(s.keys.steady)} steady<br>Mouse 1 draw / release · ${key(s.keys.interact)} hold to interact<br>${key(s.keys.scooter)} scooter · ${key(s.keys.light)} light · ${key(s.keys.journal)} chart · Esc pause</p></div><div><b>Touch & controller</b><p>Touch (portrait or landscape): left stick moves; drag the scene to look. Hold and drag Draw to aim, then release. Hold Interact to secure catches or work.<br>Controller: sticks move / look. Button meanings vary by browser and device; open Settings → Controller calibration to see live readings and set your own map. The standard browser layout has a ready-to-use fallback.</p></div></div><p>Aim with the centre reticle. Hold Mouse 1 to draw, then release to strike. This also requests mouse capture. If capture is unavailable, simply move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag also looks. Hold <b>R</b> as an alternate spear input. Uncaptured look is bounded by the browser window. Releasing or cancelling a pointer outside the canvas will not leave the controls stuck.</p><div class="rule"></div><div class="two-col"><div><h3>A living reef</h3><p><b>Cleanup:</b> hold Interact near discarded nets or crates.<br><b>Restore:</b> plant nursery-grown fragments at the marked nursery plots. Growth happens between game days.<br><b>Survey:</b> record the site at the teal survey sign. The chart marks all work areas.</p><p><b>Marlow:</b> this grouper may watch, approach and then steal an exposed fish. Secure it or move away. Your tube is safe.<br><b>Moray:</b> give its crevice room. If it moves towards you and a warning appears, back away.</p></div><div><h3>Leave a reserve</h3><p>The home marker points towards the mooring. Return to it, ascend alongside the rope, and hold Interact to board. The chart shows a route around major rocks.</p><p>Rescue costs $85 and forfeits the day’s catch, but equipment and completed reef work remain. Loan gear is always available. Pause or suspend at any time.</p><p>After the dive, sell, keep a meal or donate. Choose two highlight <b>image cards</b> to publish. They represent footage in the fiction; this build does not record playable video.</p></div></div><div class="rule"></div><h3>Inspiration, not instruction.</h3><p>Inspired by the underwater storytelling and conservation work of <b>Lionfish Extermination Corp</b>; art and loop inspiration from <b>Dave the Diver</b>. This is an independent fictional game, not affiliated with or endorsed by either. Marlow, the companies and the island are fictional. Music is an original composition using <b>Samfa12’s Pocket Chordsmith</b> instruments.</p><p>Lionfish are native in the Indo-Pacific and invasive in the Atlantic/Caribbean setting used here. Do not feed wild predators. Morays normally open their mouths to breathe; mouth opening alone is not a warning. Coral recovery is time-compressed. Air, ascent, currents, handling and restoration are simplified gameplay—not dive training, medical advice or permission to undertake real restoration.</p><p class="tiny">Babylon.js 9.26.1 · Apache-2.0. Original procedural art and game code. Source details and third-party notices are included in the handoff package.</p><div class="button-row"><button class="primary" data-close>Ready for the reef</button><button data-screen="settings">Adjust controls</button></div></section>`; }
+    help(s) { return `<section class="modal help-copy">${this.header('Work gently. Come home.', 'DIVER’S FIELD GUIDE')}<p><b>Find the striped, fan-finned lionfish.</b> Move close, settle your aim, hold to draw the pole spear and release to strike. A fish stays exposed until you hold Interact to secure it in your tube.</p><div class="control-sheet"><div><b>Keyboard & mouse</b><p>${key(s.keys.forward)}${key(s.keys.left)}${key(s.keys.back)}${key(s.keys.right)} swim · mouse look<br>${key(s.keys.up)} ascend · ${key(s.keys.down)} descend<br>${key(s.keys.boost)} stronger fin kick · ${key(s.keys.steady)} steady<br>Mouse 1 draw / release · ${key(s.keys.interact)} hold to interact<br>${key(s.keys.scooter)} scooter · ${key(s.keys.light)} light · ${key(s.keys.journal)} chart · ${key(s.keys.watch)} raise/lower watch · Esc pause</p></div><div><b>Touch & controller</b><p>Touch (portrait or landscape): left stick moves; drag the scene to look. Hold and drag Draw to aim, then release. Hold Interact to secure catches or work. Use the Watch button in the upper HUD to check your instruments.<br>Controller: sticks move / look. Click the left stick for the dive computer by default. Button meanings vary by browser and device; open Settings → Controller calibration to see live readings and set your own map. The standard browser layout has a ready-to-use fallback.</p></div></div><p>Aim with the centre reticle. Hold Mouse 1 to draw, then release to strike. This also requests mouse capture. If capture is unavailable, simply move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag also looks. Hold <b>R</b> as an alternate spear input. Uncaptured look is bounded by the browser window. Releasing or cancelling a pointer outside the canvas will not leave the controls stuck.</p><div class="rule"></div><div class="two-col"><div><h3>A living reef</h3><p><b>Cleanup:</b> hold Interact near discarded nets or crates.<br><b>Restore:</b> plant nursery-grown fragments at the marked nursery plots. Growth happens between game days.<br><b>Survey:</b> record the site at the teal survey sign. The chart marks all work areas.</p><p><b>Marlow:</b> this grouper may watch, approach and then steal an exposed fish. Secure it or move away. Your tube is safe.<br><b>Moray:</b> give its crevice room. If it moves towards you and a warning appears, back away.</p></div><div><h3>Leave a reserve</h3><p>The home marker points towards the mooring. Return to it, ascend alongside the rope, and hold Interact to board. The chart shows a route around major rocks.</p><p>Rescue costs $85 and forfeits the day’s catch, but equipment and completed reef work remain. Loan gear is always available. Pause or suspend at any time.</p><p>After the dive, sell, keep a meal or donate. Choose two highlight <b>image cards</b> to publish. They represent footage in the fiction; this build does not record playable video.</p></div></div><div class="rule"></div><h3>Inspiration, not instruction.</h3><p>Inspired by the underwater storytelling and conservation work of <b>Lionfish Extermination Corp</b>; art and loop inspiration from <b>Dave the Diver</b>. This is an independent fictional game, not affiliated with or endorsed by either. Marlow, the companies and the island are fictional. Music is an original composition using <b>Samfa12’s Pocket Chordsmith</b> instruments.</p><p>Lionfish are native in the Indo-Pacific and invasive in the Atlantic/Caribbean setting used here. Do not feed wild predators. Morays normally open their mouths to breathe; mouth opening alone is not a warning. Coral recovery is time-compressed. Air, ascent, currents, handling and restoration are simplified gameplay—not dive training, medical advice or permission to undertake real restoration.</p><p class="tiny">Babylon.js 9.26.1 · Apache-2.0. Original procedural art and game code. Source details and third-party notices are included in the handoff package.</p><div class="button-row"><button class="primary" data-close>Ready for the reef</button><button data-screen="settings">Adjust controls</button></div></section>`; }
     gamepadSettings() {
         const state = this.controllerReadout, selected = state.selectedKey || '';
         const options = state.pads.length ? state.pads.map((p) => `<option value="${esc(p.key)}" ${p.key === selected ? 'selected' : ''}>Gamepad ${p.index + 1} · ${esc(p.id)} · ${esc(p.mapping)} · ${p.axes.length} axes / ${p.buttons.length} buttons</option>`).join('') : '<option value="">No controller detected</option>';
         return `<div class="settings-section">CONTROLLER CALIBRATION</div><p class="tiny muted">Select the USB controller the game should use. Scan and calibration require a click; the controller profile stays in this browser on this device.</p><label class="setting">Active controller<select id="gamepad-choice">${options}</select></label><p id="gamepad-status" class="tiny muted" aria-live="polite"></p><pre id="gamepad-raw" class="gamepad-raw" aria-label="Live raw controller axes and buttons">Waiting for controller readings…</pre><p id="gamepad-step" class="status-note" aria-live="polite"></p><p id="gamepad-test" class="tiny muted" aria-live="polite">Live test · Connect a controller to test it.</p><div class="button-row controller-actions"><button data-action="gamepad-scan">Scan controllers</button><button id="gamepad-start" data-action="gamepad-start" ${state.connected && state.calibration.phase === 'idle' ? '' : 'disabled'}>Start guided calibration</button><button id="gamepad-cancel" data-action="gamepad-cancel" ${state.calibration.phase === 'idle' ? 'hidden' : ''}>Cancel setup</button><button id="gamepad-use" class="primary" data-action="gamepad-use" ${state.calibration.completed ? '' : 'hidden'}>Use this calibration</button><button id="gamepad-restore" data-action="gamepad-restore" ${state.connected && state.saved ? '' : 'disabled'}>Restore controller defaults</button></div><p class="tiny muted">Keep still for the neutral sample. Move each stick when prompted, then release it. For each action, press or move only that control and release before the next prompt. Trigger axes are supported. Resume your dive only after selecting Use or Cancel.</p>`;
     }
-    settings(s) { const slider = (id, label, min, max, step) => `<label class="setting">${label}<span id="read-${id}" class="tiny muted">${id === 'fov' ? s[id] + '°' : id === 'sensitivity' ? Number(s[id]).toFixed(2) : Math.round(Number(s[id]) * 100) + '%'}</span><input aria-label="${label}" data-setting="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${s[id]}"></label>`; const check = (id, label, detail) => `<label class="setting"><span>${label}<small>${detail}</small></span><input type="checkbox" data-setting="${id}" ${s[id] ? 'checked' : ''}></label>`; return `<section class="modal">${this.header('Make yourself comfortable.', 'SETTINGS')}<div class="two-col"><div><div class="settings-section">SOUND</div>${slider('music', 'Pocket Chordsmith music', 0, 1, .01)}${slider('ambience', 'Breathing & ambience', 0, 1, .01)}${slider('effects', 'Equipment & warnings', 0, 1, .01)}<div class="settings-section">WATER & DISPLAY</div><label class="setting">Render quality<select data-setting="quality"><option value="high" ${s.quality === 'high' ? 'selected' : ''}>High</option><option value="balanced" ${s.quality === 'balanced' ? 'selected' : ''}>Balanced</option><option value="low" ${s.quality === 'low' ? 'selected' : ''}>Performance</option></select></label><p class="tiny muted">Resolution changes immediately; decorative population changes on the next site load. Targets, wildlife and rules are unchanged.</p>${slider('fov', 'Field of view', 60, 100, 1)}${check('reducedMotion', 'Steady camera & reduced motion', 'Suppresses equipment sway and coral animation.')}${check('assist', 'Target identification', 'Names visible targets in the aiming reticle.')}</div><div><div class="settings-section">CONTROLS</div>${slider('sensitivity', 'Look sensitivity', .25, 2.5, .05)}${check('invertY', 'Invert vertical look', 'Mouse, touch and controller.')}${check('toggleDraw', 'Toggle spear draw', 'Press once to draw; press again to strike.')}${slider('touchScale', 'Touch control size', .8, 1.3, .05)}<div class="settings-section">KEY BINDINGS · SELECT TO REASSIGN</div><div class="bindings">${['forward', 'back', 'left', 'right', 'up', 'down', 'boost', 'steady', 'interact', 'scooter', 'journal', 'light'].map(a => `<div class="bind"><span>${a}</span><button data-bind="${a}">${key(s.keys[a])}</button></div>`).join('')}</div><button class="link-button tiny" data-action="defaults" style="margin-top:12px">Restore default settings</button>${this.gamepadSettings()}</div></div><div class="button-row"><button class="primary" data-close>Done</button><button data-action="fullscreen" data-fullscreen-label>Full screen</button></div></section>`; }
-    journal(p) { const run = p.active || p.pending, id = run?.site || this.site, site = data_js_1.SITES[id], reef = p.reefs[id]; return `<section class="modal">${this.header(site.name, 'CHART / FIELD NOTES')}<div class="chart-layout"><div><canvas id="chart" width="660" height="660" class="chart" aria-label="Top-down reef chart: home buoy, player, obstacles, work sites and return route"></canvas><p class="tiny muted" style="margin-top:8px">Gold: you · cream: mooring · teal: work sites<br>Line: estimated return route · North is up</p></div><div><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, id)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, id)}%"></i></div><div class="row-stats"><div><strong>${reef.removed.length}</strong>removals recorded</div><div><strong>${reef.cleaned.length}</strong>cleanup sites</div><div><strong>${Object.keys(reef.restored).length}</strong>coral plots</div></div>${run ? `<div class="field-note"><b>Your contract</b><p>${orderText[run.order]}</p><p>This outing: ${run.removed} removed · ${run.cleaned} cleaned · ${run.restored} planted · ${run.fragments} fragments left.</p></div>` : ''}<div class="field-note"><b>The nursery</b><p>Plant fragments at gold-tagged plots, remove nearby rubbish and record a survey. Revisit on later days to see growth.</p></div><div class="field-note"><b>${p.discoveries.includes('marlow') ? 'Marlow’s ledge' : 'A large shadow beneath the ledge'}</b><p>A broad mottled grouper sometimes follows working divers. Not a pet. Secure your catch and respect its space.</p></div><div class="field-note"><b>Company support</b><p>Lantern Bay Trust: reputation 12 + two cleanup/restoration jobs earns $50 support.<br>Tideframe Cameras: audience 80 + a published grouper, turtle or ray highlight earns $35. At most one sponsor contribution per day.</p></div></div></div><div class="button-row"><button class="primary" data-close>${run && !run.finished ? 'Back to the dive' : 'Back to harbour'}</button></div></section>`; }
+    settings(s) { const slider = (id, label, min, max, step) => `<label class="setting">${label}<span id="read-${id}" class="tiny muted">${id === 'fov' ? s[id] + '°' : id === 'sensitivity' ? Number(s[id]).toFixed(2) : Math.round(Number(s[id]) * 100) + '%'}</span><input aria-label="${label}" data-setting="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${s[id]}"></label>`; const check = (id, label, detail) => `<label class="setting"><span>${label}<small>${detail}</small></span><input type="checkbox" data-setting="${id}" ${(id === 'instrumentHud' ? s.instrumentHud !== false : s[id]) ? 'checked' : ''}></label>`; return `<section class="modal">${this.header('Make yourself comfortable.', 'SETTINGS')}<div class="two-col"><div><div class="settings-section">SOUND</div>${slider('music', 'Pocket Chordsmith music', 0, 1, .01)}${slider('ambience', 'Breathing & ambience', 0, 1, .01)}${slider('effects', 'Equipment & warnings', 0, 1, .01)}<div class="settings-section">WATER & DISPLAY</div><label class="setting">Render quality<select data-setting="quality"><option value="high" ${s.quality === 'high' ? 'selected' : ''}>High</option><option value="balanced" ${s.quality === 'balanced' ? 'selected' : ''}>Balanced</option><option value="low" ${s.quality === 'low' ? 'selected' : ''}>Performance</option></select></label><p class="tiny muted">Resolution changes immediately; decorative population changes on the next site load. Targets, wildlife and rules are unchanged.</p>${slider('fov', 'Field of view', 60, 100, 1)}${check('reducedMotion', 'Steady camera & reduced motion', 'Suppresses equipment sway and coral animation.')}${check('assist', 'Target identification', 'Names visible targets in the aiming reticle.')}${check('instrumentHud', 'Show air and timer HUD', 'Keeps air and elapsed time in view while the wrist computer is lowered.')}</div><div><div class="settings-section">CONTROLS</div>${slider('sensitivity', 'Look sensitivity', .25, 2.5, .05)}${check('invertY', 'Invert vertical look', 'Mouse, touch and controller.')}${check('toggleDraw', 'Toggle spear draw', 'Press once to draw; press again to strike.')}${slider('touchScale', 'Touch control size', .8, 1.3, .05)}<div class="settings-section">KEY BINDINGS · SELECT TO REASSIGN</div><div class="bindings">${['forward', 'back', 'left', 'right', 'up', 'down', 'boost', 'steady', 'interact', 'scooter', 'journal', 'light', 'watch'].map(a => `<div class="bind"><span>${a}</span><button data-bind="${a}">${key(s.keys[a])}</button></div>`).join('')}</div><button class="link-button tiny" data-action="defaults" style="margin-top:12px">Restore default settings</button>${this.gamepadSettings()}</div></div><div class="button-row"><button class="primary" data-close>Done</button><button data-action="fullscreen" data-fullscreen-label>Full screen</button></div></section>`; }
+    journal(p) { const run = p.active || p.pending, id = run?.site || this.site, site = data_js_1.SITES[id], reef = p.reefs[id]; return `<section class="modal">${this.header(site.name, 'CHART / FIELD NOTES')}<div class="chart-layout"><div><canvas id="chart" width="660" height="660" class="chart" aria-label="Top-down reef chart: home buoy, player, obstacles, work sites and return route"></canvas><p class="tiny muted" style="margin-top:8px">Gold: you · cream: mooring · teal: work sites<br>Line: estimated return route · North is up</p></div><div><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, id)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, id)}%"></i></div><div class="row-stats"><div><strong>${reef.removed.length}</strong>removals recorded</div><div><strong>${reef.cleaned.length}</strong>cleanup sites</div><div><strong>${Object.keys(reef.restored).length}</strong>coral plots</div></div><p class="recovery-note">${reefRecoveryText(p, id)}</p>${run ? `<div class="field-note"><b>Your contract</b><p>${orderText[run.order]}</p><p>This outing: ${run.removed} removed · ${run.cleaned} cleaned · ${run.restored} planted · ${run.fragments} fragments left.</p></div>` : ''}<div class="field-note"><b>The nursery</b><p>Plant fragments at gold-tagged plots, remove nearby rubbish and record a survey. Revisit on later days to see growth.</p></div><div class="field-note"><b>${p.discoveries.includes('marlow') ? 'Marlow’s ledge' : 'A large shadow beneath the ledge'}</b><p>A broad mottled grouper sometimes follows working divers. Not a pet. Secure your catch and respect its space.</p></div><div class="field-note"><b>Company support</b><p>Lantern Bay Trust: reputation 12 + two cleanup/restoration jobs earns $50 support.<br>Tideframe Cameras: audience 80 + a published grouper, turtle or ray highlight earns $35. At most one sponsor contribution per day.</p></div></div></div><div class="button-row"><button class="primary" data-close>${run && !run.finished ? 'Back to the dive' : 'Back to harbour'}</button></div></section>`; }
     initDebrief(r) { const n = r.rescued ? 0 : r.cargo.length; this.allocation = { sell: n, eat: 0, donate: 0 }; this.chosen = new Set(r.clips.slice().sort((a, b) => b.quality - a.quality).slice(0, 2).map(c => c.id)); }
     debrief(p) {
         const r = p.pending;
@@ -4383,7 +5341,7 @@ class UI {
         const filletStatus = quality === null
             ? (n ? `<div class="fillet-summary"><div class="fillet-stamp" aria-hidden="true">✦</div><div><strong>Fresh catch, ready for the table</strong><p>Optional careful filleting can improve its sale value. Your allocation stays the same.</p></div><button class="outline" data-screen="filleting">Prepare fillets</button></div>` : '')
             : `<div class="fillet-summary completed"><div class="fillet-stamp" aria-hidden="true">${quality >= 75 ? '✦' : '≈'}</div><div><strong>Fillet quality · ${quality}%</strong><p>The preparation bonus will be added once when you settle this catch.</p></div></div>`;
-        return `<section class="modal">${this.header(r.rescued ? 'Tomorrow is another dive.' : 'Back with a story.', 'DAY ' + r.day + ' / ' + data_js_1.SITES[r.site].name.toUpperCase())}<p class="muted tiny">${r.rescued ? 'Rescue recovered you and your equipment. The catch is lost, but your reef work remains.' : 'The engine settles. The catch goes on ice. Decide what this outing becomes.'}</p><div class="row-stats"><div><strong>${(0, math_js_1.timeText)(r.time)}</strong>underwater</div><div><strong>${n}</strong>fish landed</div><div><strong>${r.cleaned}</strong>cleanup jobs</div><div><strong>${r.restored}</strong>corals planted</div><div><strong>${r.stolen}</strong>fish stolen</div></div><h3>Allocate your catch</h3><div class="allocation">${['sell', 'eat', 'donate'].map(a => `<label>${a === 'sell' ? 'Sell to restaurants' : a === 'eat' ? 'Keep for meals' : 'Donate to the community'}<input aria-label="${a} catch" data-allocate="${a}" type="number" min="0" max="${n}" step="1" value="${this.allocation[a]}" ${n ? '' : 'disabled'}></label>`).join('')}</div><p id="allocation-status" class="tiny muted"></p><p class="tiny muted">Selling four meets a restaurant order. A kept meal offsets $8 in food costs; extras have no further bonus. Donations build reputation.</p>${filletStatus}<div class="rule"></div><h3>Choose the stories to tell <span id="chosen-count" class="muted tiny"></span></h3><p class="tiny muted" style="margin-top:6px">Automatic highlight image cards. Publish up to two. Repeating a familiar subject earns less attention.</p><div class="highlight-grid">${r.clips.length ? r.clips.map(c => `<button class="highlight" data-clip="${esc(c.id)}" aria-pressed="false">${c.image ? `<img src="${c.image}" alt="Captured gameplay: ${esc(c.title)}">` : '<div class="blank-image">≈</div>'}<div class="card-copy"><strong>${esc(c.title)}</strong><span>${esc(c.kind)} · quality ${c.quality}</span></div><i class="check" hidden>✓</i></button>`).join('') : '<p class="tiny muted">No highlight cards this time. A quiet dive still counts.</p>'}</div><div class="button-row"><button id="settle" class="primary" data-action="settle">Settle the outing & publish</button></div></section>`;
+        return `<section class="modal">${this.header(r.rescued ? 'Tomorrow is another dive.' : 'Back with a story.', 'DAY ' + r.day + ' / ' + data_js_1.SITES[r.site].name.toUpperCase())}<p class="muted tiny">${r.rescued ? 'Rescue recovered you and your equipment. The catch is lost, but your reef work remains.' : 'The engine settles. The catch goes on ice. Decide what this outing becomes.'}</p><p class="recovery-note">${reefRecoveryText(p, r.site)}</p><div class="row-stats"><div><strong>${(0, math_js_1.timeText)(r.time)}</strong>underwater</div><div><strong>${n}</strong>fish landed</div><div><strong>${r.cleaned}</strong>cleanup jobs</div><div><strong>${r.restored}</strong>corals planted</div><div><strong>${r.stolen}</strong>fish stolen</div></div><h3>Allocate your catch</h3><div class="allocation">${['sell', 'eat', 'donate'].map(a => `<label>${a === 'sell' ? 'Sell to restaurants' : a === 'eat' ? 'Keep for meals' : 'Donate to the community'}<input aria-label="${a} catch" data-allocate="${a}" type="number" min="0" max="${n}" step="1" value="${this.allocation[a]}" ${n ? '' : 'disabled'}></label>`).join('')}</div><p id="allocation-status" class="tiny muted"></p><p class="tiny muted">Selling four meets a restaurant order. A kept meal offsets $8 in food costs; extras have no further bonus. Donations build reputation.</p>${filletStatus}<div class="rule"></div><h3>Choose the stories to tell <span id="chosen-count" class="muted tiny"></span></h3><p class="tiny muted" style="margin-top:6px">Automatic highlight image cards. Publish up to two. Repeating a familiar subject earns less attention.</p><div class="highlight-grid">${r.clips.length ? r.clips.map(c => `<button class="highlight" data-clip="${esc(c.id)}" aria-pressed="false">${c.image ? `<img src="${c.image}" alt="Captured gameplay: ${esc(c.title)}">` : '<div class="blank-image">≈</div>'}<div class="card-copy"><strong>${esc(c.title)}</strong><span>${esc(c.kind)} · quality ${c.quality}</span></div><i class="check" hidden>✓</i></button>`).join('') : '<p class="tiny muted">No highlight cards this time. A quiet dive still counts.</p>'}</div><div class="button-row"><button id="settle" class="primary" data-action="settle">Settle the outing & publish</button></div></section>`;
     }
     filleting(p) {
         const r = p.pending;
