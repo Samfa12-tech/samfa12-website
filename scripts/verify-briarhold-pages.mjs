@@ -8,5 +8,10 @@ const siteRoot = process.env.BRIARHOLD_SITE_ROOT
 const sourceArg = process.argv[2];
 if (!sourceArg) throw new Error("Usage: npm run verify:briarhold-pages -- <verified Briarhold package directory>");
 const hosted = path.join(siteRoot, "games", "briarhold", "play");
-const result = await comparePackageTrees(path.resolve(sourceArg), hosted);
-console.log(`Verified hosted Briarhold ${result.manifest.version}: ${result.files.length} files match the supplied package byte for byte.`);
+const source = path.resolve(sourceArg);
+const designatedWebsitePlayRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "games", "briarhold", "play");
+const result = await comparePackageTrees(source, hosted, {
+  sourceHasAuthenticatedRetention: source === designatedWebsitePlayRoot,
+});
+const retained = result.retainedFiles?.length ?? 0;
+console.log(`Verified Briarhold ${result.manifest.version}: ${result.files.length} current-package files match byte for byte${retained ? `; ${retained} authenticated Alpha.102 runtime files remain available for open tabs` : "; no prior compatibility files are present"}.`);

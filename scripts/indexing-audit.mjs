@@ -15,7 +15,7 @@ function visibleText(markup) {
   return markup.replace(/<[^>]*>/g, "").replace(/&#(x[\da-f]+|\d+);|&([a-z]+);/gi, (entity, number, named) => {
     if (number) return String.fromCodePoint(number[0].toLowerCase() === "x" ? parseInt(number.slice(1),16) : parseInt(number,10));
     return {amp:"&",quot:'"',apos:"'",lt:"<",gt:">"}[named.toLowerCase()] || entity;
-  }).trim();
+  }).replace(/\r\n?/g,"\n").trim();
 }
 function tags(html, name) {
   return [...html.matchAll(new RegExp(`<${name}\\b[^>]*>`, "gi"))].map((match) => attributes(match[0]));

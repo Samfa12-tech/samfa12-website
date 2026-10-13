@@ -1,5 +1,6 @@
 # Preserve the verified browser package byte for byte on every checkout.
 games/briarhold/play/** -text
+scripts/briarhold-alpha102-retention.json -text whitespace=cr-at-eol
 
 # Preserve reviewed release bytes across Windows and Linux checkouts.
 games/breakfast-beat-down/play/index.html -text

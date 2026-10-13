@@ -11,7 +11,7 @@
     <meta name="briarhold-release-channel" content="production-alpha">
     <meta name="briarhold-turnstile-site-key" content="0x4AAAAAAEhf76L7CP5yrpYp">
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="styles.2fb2a6f489afe66e2710/game.css">
+    <link rel="stylesheet" href="styles.13d9b2fef9e9e36cdeb5/game.css">
     <title>Briarhold · First-Person Defender</title>
   </head>
   <body data-phase="menu" data-input="mouse" data-controller="disconnected">
@@ -25,7 +25,7 @@
       </div>
 
       <section id="rotateDevice" class="rotate-screen" role="alert" hidden>
-        <img src="assets/ui/bolt-icon.png" alt="">
+        <img src="assets.13d9b2fef9e9e36cdeb5/ui/bolt-icon.png" alt="">
         <h2>Turn the shield sideways</h2>
         <p>Briarhold is played in landscape.</p>
       </section>
@@ -35,6 +35,7 @@
         <section class="vital-stack hud-panel" aria-label="Defender and fortress vitality">
           <div class="identity-line"><span class="crest-dot" aria-hidden="true"></span><strong>Warden</strong><b id="playerHealthText">100</b></div>
           <div id="playerHealthBar" class="meter player-meter" role="progressbar" aria-label="Player health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
+          <small id="medicineStatus" class="medicine-status" role="status"></small>
           <div class="identity-line gate-line"><span>Heart Gate</span><b id="heartHealthText">100%</b></div>
           <div id="heartHealthBar" class="meter gate-meter" role="progressbar" aria-label="Heart Gate health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
           <div class="outer-gate-line"><span>West Outer Gate</span><b id="outerHealthText">100%</b></div>
@@ -47,7 +48,7 @@
           <span id="nightText" class="eyebrow">Night 1 of 7</span>
           <strong id="waveText">Prepare the hold</strong>
           <span id="objectiveText" class="wave-objective">Speak with Nell at the bell</span>
-          <div class="host-count"><img src="assets/ui/bolt-icon.png" alt=""><b id="enemyCountText">0</b><span>host remaining</span></div>
+          <div class="host-count"><img src="assets.13d9b2fef9e9e36cdeb5/ui/bolt-icon.png" alt=""><b id="enemyCountText">0</b><span>host remaining</span></div>
         </section>
         <section id="bossStatus" class="boss-status hud-panel" aria-label="Boss health" hidden>
           <span id="bossName">Wicker Colossus</span><b id="bossHealthText">3600</b>
@@ -57,7 +58,7 @@
         </section>
 
         <button id="pauseButton" class="pause-button hud-panel" type="button" aria-label="Pause" aria-keyshortcuts="Escape">
-          <img src="assets/ui/pause-icon.png" alt="">
+          <img src="assets.13d9b2fef9e9e36cdeb5/ui/pause-icon.png" alt="">
         </button>
         <button id="playtestReportButton" class="playtest-report-button hud-panel" type="button" aria-label="Report a playtest issue" aria-keyshortcuts="F8" hidden>
           <span>Report issue</span><kbd>F8</kbd>
@@ -75,11 +76,13 @@
 
         <section class="weapon-dock hud-panel" aria-label="Weapons">
           <div class="weapon-current">
-            <img src="assets/ui/bolt-icon.png" alt="">
+            <img src="assets.13d9b2fef9e9e36cdeb5/ui/bolt-icon.png" alt="">
             <span><small id="weaponCue">IRON</small><strong id="weaponName">Arbalest</strong></span>
             <b id="heatText">Cool</b>
           </div>
           <div id="heatBar" class="meter heat-meter" role="progressbar" aria-label="Weapon heat" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <span id="coolingStatus" class="cooling-status" role="status" hidden></span>
+          <div id="coolingTiming" class="cooling-timing" aria-label="Cooling timing" hidden><i class="cooling-success-window"></i><i class="cooling-perfect-window"></i><b id="coolingCursor"></b></div>
           <div class="weapon-tabs" role="group" aria-label="Select weapon">
             <button type="button" data-weapon="arbalest" class="is-selected" aria-pressed="true"><kbd>1</kbd><span class="weapon-label">Arbalest</span></button>
             <button type="button" data-weapon="sunfire" aria-pressed="false"><kbd>2</kbd><span class="weapon-label">Sunfire</span></button>
@@ -98,12 +101,12 @@
           <span>Sprint at edge</span>
         </div>
         <div id="lookSurface" class="look-surface touch-control" aria-label="Look"></div>
-        <button id="fireButton" class="round-action fire-action touch-control" type="button" aria-label="Fire">
-          <img src="assets/ui/fire-icon.png" alt=""><span>Fire</span>
+        <button id="fireButton" class="round-action fire-action touch-control" type="button" aria-label="Hold to fire; drag to look" aria-describedby="coolingStatus">
+          <img src="assets.13d9b2fef9e9e36cdeb5/ui/fire-icon.png" alt=""><span id="fireLabel">Fire</span>
         </button>
         <button id="aimButton" class="round-action aim-action touch-control" type="button" aria-label="Hold to aim down sights; drag to look" aria-pressed="false"><span>Aim</span></button>
         <button id="contextButton" class="round-action context-action touch-control" type="button" aria-label="Context action">
-          <img src="assets/ui/context-icon.png" alt=""><span>Use</span>
+          <img src="assets.13d9b2fef9e9e36cdeb5/ui/context-icon.png" alt=""><span>Use</span>
         </button>
         <button id="jumpButton" class="round-action traversal-action jump-action touch-control" type="button" aria-label="Jump or mantle"><span>Jump</span></button>
         <button id="slideButton" class="round-action traversal-action slide-action touch-control" type="button" aria-label="Slide"><span>Slide</span></button>
@@ -185,10 +188,12 @@
                 </small>
               </header>
               <label><span>Master volume</span><input id="volumeControl" type="range" min="0" max="100" value="70"></label>
+              <label><span>Sound effects</span><input id="sfxVolumeControl" type="range" min="0" max="100" value="100"></label>
+              <small class="settings-inline-status">Weapons, footsteps and interface sounds. Music and NPC dialogue cues keep their own level.</small>
               <label><span>Look sensitivity</span><input id="lookSensitivityControl" type="range" min="50" max="200" step="5" value="100"></label>
               <label class="toggle-row"><input id="invertVerticalLookToggle" type="checkbox"><span>Invert vertical look</span></label>
               <label><span>Touch aim assist</span><input id="aimAssistControl" type="range" min="0" max="100" value="100"></label>
-              <label><span>Graphics quality</span><select id="graphicsQualityControl"><option value="auto">Auto (recommended)</option><option value="high">High · native resolution</option><option value="balanced">Balanced</option><option value="performance">Performance</option></select></label>
+              <label><span>Graphics quality</span><select id="graphicsQualityControl"><option value="auto">Auto (recommended)</option><option value="high">High — up to viewport resolution</option><option value="balanced">Balanced</option><option value="performance">Performance</option></select></label>
               <label><span>Enemy presentation</span><select id="enemyPresentationControl"><option value="auto">Auto (recommended)</option><option value="animated3d">Animated 3D nearby (fast devices)</option><option value="sprites">Sprites (fastest)</option></select></label>
               <small id="enemyPresentationStatus" class="settings-inline-status" role="status" hidden></small>
               <label><span>Frame rate</span><select id="frameRateLimitControl"><option value="60">60 FPS · phone default</option><option value="uncapped">Uncapped</option></select></label>
@@ -234,12 +239,17 @@
           <p id="wardenOrder" class="warden-order" aria-live="polite">Speak with Nell at the bell</p>
           <div id="buildChoices" class="build-choices" hidden>
             <p id="socketName">Defence socket</p>
+            <p id="defenceInspect" class="defence-inspect"></p>
             <div>
               <button type="button" data-fortification="barricade"><strong>Briar barricade</strong><small class="build-choice-description" data-fortification-description>Redirects and compresses the approach stream.</small><span class="build-choice-price">32</span></button>
               <button type="button" data-fortification="thornSnare"><strong>Thorn snare</strong><small class="build-choice-description" data-fortification-description>Slows the first packed ranks that cross it.</small><span class="build-choice-price">24</span></button>
               <button type="button" data-fortification="firePot"><strong>Sunfire pot</strong><small class="build-choice-description" data-fortification-description>Shoot the vessel to detonate it across the surrounding Host.</small><span class="build-choice-price">38</span></button>
               <button type="button" data-fortification="ballista"><strong>Ballista</strong><small class="build-choice-description" data-fortification-description>Automatically strikes one priority target at a measured cadence.</small><span class="build-choice-price">70</span></button>
+              <button type="button" data-fortification="wardLantern"><strong>Ward lantern</strong><small class="build-choice-description" data-fortification-description>Reveals the Moonless Herald within 18 metres; no cooling effect.</small><span class="build-choice-price">45</span></button>
+              <button type="button" data-fortification="gateDropTrap"><strong>Gate drop rack</strong><small class="build-choice-description" data-fortification-description>Use once each night: warning, then a directional strike beneath the gate. Bosses resist it.</small><span class="build-choice-price">52</span></button>
             </div>
+            <div class="defence-management"><button id="defenceReclaim" type="button" hidden>Reclaim</button><button type="button" data-defence-branch="heavyBolt" hidden>Heavy bolt</button><button type="button" data-defence-branch="fastWinch" hidden>Faster winch</button></div>
+            <div id="defenceConfirm" class="defence-confirm" hidden><p id="defenceConfirmText"></p><button id="defenceConfirmButton" type="button">Confirm change</button><button id="defenceCancelButton" type="button">Cancel</button></div>
           </div>
         </div>
       </section>
@@ -411,9 +421,9 @@
     </div>
 
     <noscript>Briarhold requires JavaScript to run.</noscript>
-    <script src="vendor.2fb2a6f489afe66e2710/babylon/babylon-9.16.1.min.js"></script>
-    <script src="vendor.2fb2a6f489afe66e2710/babylon/babylonjs.loaders-9.16.1.min.js"></script>
-    <script src="vendor.2fb2a6f489afe66e2710/pocket-audio-core/pocket-audio-core-0.2.0.iife.js"></script>
-    <script type="module" src="src.2fb2a6f489afe66e2710/game.js"></script>
+    <script src="vendor.13d9b2fef9e9e36cdeb5/babylon/babylon-9.16.1.min.js"></script>
+    <script src="vendor.13d9b2fef9e9e36cdeb5/babylon/babylonjs.loaders-9.16.1.min.js"></script>
+    <script src="vendor.13d9b2fef9e9e36cdeb5/pocket-audio-core/pocket-audio-core-0.2.0.iife.js"></script>
+    <script type="module" src="src.13d9b2fef9e9e36cdeb5/game.js"></script>
   </body>
 </html>

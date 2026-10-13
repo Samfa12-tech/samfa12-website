@@ -471,8 +471,8 @@
         "https://github.com/Samfa12-tech/samfa12-website/releases",
         "https://github.com/Samfa12-tech/samfa12-website/blob/main/games/briarhold/releases/latest.json"
       ],
-      "notes": "Preserve existing detailed page, statistics definitions, Android release/update trust chain and protected browser assets. Alpha.101 observed at audit; verify at execution. Co-op remains experimental unless current verified sources say otherwise.",
-      "pageModified": "2026-10-02"
+      "notes": "Prepare the existing detailed page for the frozen Alpha.103 browser and Android package. Preserve statistics definitions and protected browser assets. Keep the updater manifest at Alpha.102 until the separate final publication step. Co-op remains experimental; state unverified paired and physical areas plainly.",
+      "pageModified": "2026-10-13"
     },
     {
       "id": "book-toknight-2",

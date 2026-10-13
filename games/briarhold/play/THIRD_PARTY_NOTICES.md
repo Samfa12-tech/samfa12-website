@@ -5,8 +5,8 @@
 Seven runtime sound effects are derived from original FilmCow recordings made
 available to this project with the project owner's explicit authorisation.
 They are credited to FilmCow and are not represented as CC0 or licensed for
-reuse outside Briarhold. See `assets/audio/filmcow/LICENSE-NOTICE.md` for the
-distribution boundary and `assets/audio/filmcow/provenance.json` for hashes.
+reuse outside Briarhold. See `assets.13d9b2fef9e9e36cdeb5/audio/filmcow/LICENSE-NOTICE.md` for the
+distribution boundary and `assets.13d9b2fef9e9e36cdeb5/audio/filmcow/provenance.json` for hashes.
 
 ## Babylon.js 9.16.1
 
@@ -15,8 +15,8 @@ Copyright (c) Microsoft Corporation and contributors.
 Babylon.js is distributed under the Apache License, Version 2.0. The vendored
 runtime files are:
 
-- `vendor/babylon/babylon-9.16.1.min.js`
-- `vendor/babylon/babylonjs.loaders-9.16.1.min.js`
+- `vendor.13d9b2fef9e9e36cdeb5/babylon/babylon-9.16.1.min.js`
+- `vendor.13d9b2fef9e9e36cdeb5/babylon/babylonjs.loaders-9.16.1.min.js`
 
 The complete license text distributed with this package is available at
 `vendor/babylon/LICENSE-BABYLONJS-9.16.1.md`.
