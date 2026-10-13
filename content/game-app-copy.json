@@ -1267,6 +1267,18 @@
     "updates": [
       {
         "platform": "Browser and Android tester builds",
+        "title": "Briarhold Alpha.103",
+        "kind": "release",
+        "id": "alpha-103-october-2026",
+        "sources": [
+          "https://github.com/Samfa12-tech/samfa12-website/releases/tag/briarhold-alpha.103"
+        ],
+        "dateMeaning": "GitHub prerelease publication date (UTC)",
+        "date": "2026-10-13",
+        "summary": "Alpha.103 adds authored field defences, mechanical ballista controls and upgrade choices, a directional gate rack, and daytime reclaim/replacement. Short taps on Fire perform active cooling; prepared medicine automatically helps a living Warden at 10% Health or below, once per night. Co-op recovery and guest defence choices are corrected, with improved compact touch layouts and release asset identities. Both co-op players should update. The intermittent Android WebView crash and separate earlier Night5 freeze remain unresolved; physical and cross-network playtesting continues."
+      },
+      {
+        "platform": "Browser and Android tester builds",
         "title": "Briarhold Alpha.102",
         "kind": "release",
         "id": "alpha-102-october-2026",
