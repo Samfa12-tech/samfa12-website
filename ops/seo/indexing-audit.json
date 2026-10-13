@@ -8,7 +8,7 @@
     "explicitlyExcluded": 5,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 17,
+    "oneContextualIncoming": 16,
     "relationshipEdges": 71
   },
   "excluded": [
@@ -3272,7 +3272,8 @@
         "/updates/"
       ],
       "incomingMain": [
-        "/join/"
+        "/join/",
+        "/stats/"
       ],
       "localAssetCount": 8,
       "jsonLdStatus": "parsed",
@@ -3282,9 +3283,7 @@
         "WebPage"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/stats/",
@@ -3366,7 +3365,7 @@
       "incomingMain": [
         "/"
       ],
-      "localAssetCount": 8,
+      "localAssetCount": 10,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",

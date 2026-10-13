@@ -48,6 +48,7 @@ jobs:
           npm run verify:breakfast-beat-down
           npm run test:content
           npm run test:analytics
+          npm run test:game-starts
           npm run test:marketplace
           npm run test:handoff-relay
       - name: Setup Pages
