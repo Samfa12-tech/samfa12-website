@@ -1,0 +1,23 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import vm from 'node:vm';
+import crypto from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const html=fs.readFileSync(path.join(root,'Reef-Sweep.html'),'utf8');
+const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(x=>x[1].trim());
+test('hosted changing assets carry the exact package version',()=>{
+ const version=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8')).version;
+ const page=fs.readFileSync(path.join(root,'dist/index.html'),'utf8');
+ assert.ok(page.includes(`href="style.css?v=${version}"`));
+ assert.ok(page.includes(`src="game.js?v=${version}"`));
+ assert.ok(!page.includes('href="style.css"')&&!page.includes('src="game.js"'));
+});
+test('standalone contains exactly the two locally bundled scripts',()=>assert.equal(scripts.length,2));
+for(const [i,name] of ['babylon.js','game.js'].entries())test(`standalone preserves ${name} including dollar replacement syntax`,()=>assert.equal(scripts[i],fs.readFileSync(path.join(root,'public',name),'utf8').replace(/<\/script/gi,'<\\/script').trim()));
+test('standalone scripts parse as JavaScript',()=>scripts.forEach(s=>new vm.Script(s)));
+test('standalone has embedded styling and no external script/stylesheet',()=>{assert.ok(html.includes('<style>'));assert.ok(!/<script\s+src=/.test(html));assert.ok(!/<link[^>]+rel="stylesheet"/.test(html));});
+test('Babylon notice and complete Apache license accompany standalone',()=>{assert.ok(html.includes('Apache License'));assert.ok(html.includes('TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION'));});
+test('distribution manifest hashes match bytes including music',()=>{const m=JSON.parse(fs.readFileSync(path.join(root,'dist/build-manifest.json'),'utf8'));assert.ok(m.files['music/room-for-life.pcs.json']);for(const [n,e]of Object.entries(m.files)){const b=fs.readFileSync(path.join(root,'dist',n));assert.equal(b.length,e.bytes,n);assert.equal(crypto.createHash('sha256').update(b).digest('hex'),e.sha256,n);}});

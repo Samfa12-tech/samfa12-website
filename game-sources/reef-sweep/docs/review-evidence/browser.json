@@ -1,0 +1,549 @@
+{
+  "version": "0.4.0-preview.1",
+  "checks": [
+    {
+      "test": "Five sites and only achievable initial contracts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Lesson does not advance on elapsed time",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual look and movement advance separate lessons",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Lesson survives saved-game reload",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Draw/release and manual collection advance lesson",
+      "pass": true,
+      "detail": {
+        "hit": true,
+        "secured": true,
+        "value": 19
+      }
+    },
+    {
+      "test": "First field task advances lesson",
+      "pass": true,
+      "detail": {
+        "exists": true,
+        "done": true,
+        "progress": 0,
+        "aim": {
+          "kind": "none",
+          "id": "",
+          "distance": 0,
+          "label": "",
+          "hint": "",
+          "valid": false
+        },
+        "id": "debris-0"
+      }
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Boarding completes the action-driven lesson",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "One cut is persisted",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Partial filleting survives reload",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Result grade and exact sale uplift are visible",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Completed fillet cannot be replaced",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "First successful dive enables a modest upgrade",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "First fins purchase succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Campaign manual hunt and secure",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Productive loop reaches research threshold without a cash grant fixture",
+      "pass": true,
+      "detail": [
+        {
+          "day": 3,
+          "cash": 128,
+          "reputation": 3,
+          "removed": 5
+        },
+        {
+          "day": 4,
+          "cash": 266,
+          "reputation": 7,
+          "removed": 9
+        },
+        {
+          "day": 5,
+          "cash": 403,
+          "reputation": 9,
+          "removed": 13
+        }
+      ]
+    },
+    {
+      "test": "University approach offers funded assignment",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Research acceptance unlocks actual interaction",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Survey enabled only after acceptance",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Second distinct survey records once",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Holding completed survey cannot repeat rewards",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "First research settlement totals $65 inclusive",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Resume rebinds simulation, camera and Gardens world after Passage preview",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Same-site preview cannot leave a stale run",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Reloaded suspended world also matches the active run",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Replay changes no campaign/save contents",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Pre-launch event registration survives reload",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Event registration does not leak into another slot",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Registered outing has visible event objective/score",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Event score visible during the dive",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night gardens has correct world, torch and High depth maps",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night shark home is finite for gardens",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night watch remains readable in gardens",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Torch can switch off in gardens",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night passage has correct world, torch and High depth maps",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night shark home is finite for passage",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night watch remains readable in passage",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Torch can switch off in passage",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night mangrove has correct world, torch and High depth maps",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night shark home is finite for mangrove",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night watch remains readable in mangrove",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Torch can switch off in mangrove",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night cenote has correct world, torch and High depth maps",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night shark home is finite for cenote",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night watch remains readable in cenote",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Torch can switch off in cenote",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night harbour has correct world, torch and High depth maps",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night shark home is finite for harbour",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Night watch remains readable in harbour",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Torch can switch off in harbour",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Actual ascent/swim/boarding safely lands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Settlement shows explicit full account",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Scooter motor responds to real thrust",
+      "pass": true,
+      "detail": {
+        "idle": {
+          "active": true,
+          "thrust": 0,
+          "gain": 0.025,
+          "pitchHz": 62,
+          "voices": 2
+        },
+        "thrust": {
+          "active": true,
+          "thrust": 1,
+          "gain": 0.1,
+          "pitchHz": 104,
+          "voices": 2
+        }
+      }
+    },
+    {
+      "test": "Scooter motor stops on pause",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Scooter motor stops on stow",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Scooter motor stops on depleted battery",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Readable tutorial and 44px touch targets (320, 600)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Wrist view hides optional objective overlay (320, 600)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Rotation retains active play (320, 600)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Readable tutorial and 44px touch targets (390, 844)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Wrist view hides optional objective overlay (390, 844)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Rotation retains active play (390, 844)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Readable tutorial and 44px touch targets (844, 390)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Wrist view hides optional objective overlay (844, 390)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Rotation retains active play (844, 390)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "No runtime errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "progressionHistory": [
+    {
+      "day": 3,
+      "cash": 128,
+      "reputation": 3,
+      "removed": 5
+    },
+    {
+      "day": 4,
+      "cash": 266,
+      "reputation": 7,
+      "removed": 9
+    },
+    {
+      "day": 5,
+      "cash": 403,
+      "reputation": 9,
+      "removed": 13
+    }
+  ],
+  "placementFixtures": true,
+  "acceleratedSimulationActions": true,
+  "physicalDevices": false,
+  "transmissionEnabled": false,
+  "reviewCandidate": "0.4.0-preview.1",
+  "gameBundleSha256": "133a47a6dc95ff48a07c7f0238f189a645ed2f02efe020fd70c0c6041cf73162",
+  "scope": "Controlled browser fixtures, not natural or physical-device playtests"
+}

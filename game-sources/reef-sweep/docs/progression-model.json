@@ -1,0 +1,291 @@
+{
+  "boundary": "Economic fixture: all three stations reached, all available fish landed up to capacity, 75% fillet quality, no rescues/failed outings or purchased funds. Not a human playthrough.",
+  "totalCostToMax": 6815,
+  "days": [
+    {
+      "day": 1,
+      "site": "gardens",
+      "night": false,
+      "caught": 8,
+      "net": 538,
+      "cash": 3,
+      "levels": {
+        "fins": 0,
+        "tube": 0,
+        "spear": 0,
+        "scooter": 0,
+        "air": 2,
+        "camera": 0,
+        "kit": 0,
+        "battery": 0,
+        "torch": 1
+      }
+    },
+    {
+      "day": 2,
+      "site": "passage",
+      "night": true,
+      "caught": 8,
+      "net": 595,
+      "cash": 38,
+      "levels": {
+        "fins": 5,
+        "tube": 0,
+        "spear": 0,
+        "scooter": 0,
+        "air": 2,
+        "camera": 0,
+        "kit": 2,
+        "battery": 0,
+        "torch": 1
+      }
+    },
+    {
+      "day": 3,
+      "site": "gardens",
+      "night": true,
+      "caught": 8,
+      "net": 698,
+      "cash": 81,
+      "levels": {
+        "fins": 5,
+        "tube": 4,
+        "spear": 0,
+        "scooter": 0,
+        "air": 2,
+        "camera": 0,
+        "kit": 5,
+        "battery": 0,
+        "torch": 1
+      }
+    },
+    {
+      "day": 4,
+      "site": "passage",
+      "night": true,
+      "caught": 16,
+      "net": 846,
+      "cash": 67,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 0,
+        "air": 3,
+        "camera": 0,
+        "kit": 5,
+        "battery": 0,
+        "torch": 1
+      }
+    },
+    {
+      "day": 5,
+      "site": "gardens",
+      "night": true,
+      "caught": 8,
+      "net": 612,
+      "cash": 39,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 0,
+        "air": 4,
+        "camera": 4,
+        "kit": 5,
+        "battery": 0,
+        "torch": 1
+      }
+    },
+    {
+      "day": 6,
+      "site": "passage",
+      "night": true,
+      "caught": 0,
+      "net": 357,
+      "cash": 56,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 0,
+        "air": 4,
+        "camera": 5,
+        "kit": 5,
+        "battery": 0,
+        "torch": 2
+      }
+    },
+    {
+      "day": 7,
+      "site": "gardens",
+      "night": true,
+      "caught": 0,
+      "net": 367,
+      "cash": 223,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 0,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 0,
+        "torch": 2
+      }
+    },
+    {
+      "day": 8,
+      "site": "passage",
+      "night": true,
+      "caught": 0,
+      "net": 357,
+      "cash": 85,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 0,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 0,
+        "torch": 4
+      }
+    },
+    {
+      "day": 9,
+      "site": "gardens",
+      "night": true,
+      "caught": 3,
+      "net": 510,
+      "cash": 145,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 2,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 0,
+        "torch": 4
+      }
+    },
+    {
+      "day": 10,
+      "site": "passage",
+      "night": true,
+      "caught": 3,
+      "net": 455,
+      "cash": 55,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 3,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 2,
+        "torch": 4
+      }
+    },
+    {
+      "day": 11,
+      "site": "gardens",
+      "night": true,
+      "caught": 0,
+      "net": 367,
+      "cash": 82,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 3,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 4,
+        "torch": 4
+      }
+    },
+    {
+      "day": 12,
+      "site": "passage",
+      "night": true,
+      "caught": 0,
+      "net": 357,
+      "cash": 209,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 3,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 5,
+        "torch": 4
+      }
+    },
+    {
+      "day": 13,
+      "site": "gardens",
+      "night": true,
+      "caught": 0,
+      "net": 367,
+      "cash": 26,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 5,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 5,
+        "torch": 4
+      }
+    },
+    {
+      "day": 14,
+      "site": "passage",
+      "night": true,
+      "caught": 0,
+      "net": 357,
+      "cash": 48,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 5,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 5,
+        "torch": 5
+      }
+    },
+    {
+      "day": 15,
+      "site": "gardens",
+      "night": true,
+      "caught": 0,
+      "net": 367,
+      "cash": 415,
+      "levels": {
+        "fins": 5,
+        "tube": 5,
+        "spear": 5,
+        "scooter": 5,
+        "air": 5,
+        "camera": 5,
+        "kit": 5,
+        "battery": 5,
+        "torch": 5
+      }
+    }
+  ]
+}

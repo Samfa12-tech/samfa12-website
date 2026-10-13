@@ -1,0 +1,261 @@
+{
+  "viewport": [
+    1280,
+    800
+  ],
+  "quality": "high",
+  "camera": [
+    0,
+    12,
+    -44
+  ],
+  "sites": {
+    "gardens": {
+      "baseline": {
+        "samples": [
+          {
+            "medianMs": 7.699999999999818,
+            "p95Ms": 8.5,
+            "frames": 180
+          },
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.5,
+            "frames": 180
+          },
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.600000000000364,
+            "frames": 180
+          }
+        ],
+        "renderer": {
+          "engine": "9.26.1",
+          "fps": 128,
+          "drawCalls": 114,
+          "meshes": 139,
+          "vertices": 1669207,
+          "renderSize": [
+            1280,
+            800
+          ],
+          "watch": {
+            "raised": false,
+            "textureUpdates": 30,
+            "secured": 0,
+            "exposed": false
+          },
+          "watchRaised": false,
+          "recoveryStage": 0,
+          "shadows": {
+            "enabled": true,
+            "sunResolution": 2048,
+            "torchResolution": 1024,
+            "sunRenders": 88,
+            "torchRenders": 0,
+            "depthDraws": 0
+          },
+          "bubbles": 0,
+          "bubbleEmissions": 8,
+          "environmentCounts": {
+            "coral": 1760,
+            "seaweedClumps": 1000,
+            "seaweedFronds": 6573,
+            "nativeFish": 180,
+            "nativeSchools": 10,
+            "shipwrecks": 1,
+            "pipeMouths": 1,
+            "coastlinePieces": 12
+          }
+        },
+        "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5050 Laptop GPU (0x00002D98) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "candidate": {
+        "samples": [
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.5,
+            "frames": 180
+          },
+          {
+            "medianMs": 7.599999999999909,
+            "p95Ms": 8.200000000000728,
+            "frames": 180
+          },
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.200000000000728,
+            "frames": 180
+          }
+        ],
+        "renderer": {
+          "engine": "9.26.1",
+          "fps": 129,
+          "drawCalls": 114,
+          "meshes": 139,
+          "vertices": 1669207,
+          "renderSize": [
+            1280,
+            800
+          ],
+          "watch": {
+            "raised": false,
+            "textureUpdates": 28,
+            "secured": 0,
+            "exposed": false
+          },
+          "watchRaised": false,
+          "recoveryStage": 0,
+          "shadows": {
+            "enabled": true,
+            "sunResolution": 2048,
+            "torchResolution": 1024,
+            "sunRenders": 85,
+            "torchRenders": 0,
+            "depthDraws": 0
+          },
+          "bubbles": 0,
+          "bubbleEmissions": 8,
+          "environmentCounts": {
+            "coral": 1760,
+            "seaweedClumps": 1000,
+            "seaweedFronds": 6573,
+            "nativeFish": 180,
+            "nativeSchools": 10,
+            "shipwrecks": 1,
+            "pipeMouths": 1,
+            "coastlinePieces": 12
+          },
+          "encounterMeshCount": 0
+        },
+        "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5050 Laptop GPU (0x00002D98) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      }
+    },
+    "passage": {
+      "baseline": {
+        "samples": [
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.399999999999636,
+            "frames": 180
+          },
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.5,
+            "frames": 180
+          },
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.399999999999636,
+            "frames": 180
+          }
+        ],
+        "renderer": {
+          "engine": "9.26.1",
+          "fps": 130,
+          "drawCalls": 233,
+          "meshes": 142,
+          "vertices": 1694721,
+          "renderSize": [
+            1280,
+            800
+          ],
+          "watch": {
+            "raised": false,
+            "textureUpdates": 30,
+            "secured": 0,
+            "exposed": false
+          },
+          "watchRaised": false,
+          "recoveryStage": 0,
+          "shadows": {
+            "enabled": true,
+            "sunResolution": 2048,
+            "torchResolution": 1024,
+            "sunRenders": 93,
+            "torchRenders": 0,
+            "depthDraws": 118
+          },
+          "bubbles": 8,
+          "bubbleEmissions": 16,
+          "environmentCounts": {
+            "coral": 1793,
+            "seaweedClumps": 1000,
+            "seaweedFronds": 6493,
+            "nativeFish": 180,
+            "nativeSchools": 10,
+            "shipwrecks": 1,
+            "pipeMouths": 1,
+            "coastlinePieces": 12
+          }
+        },
+        "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5050 Laptop GPU (0x00002D98) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "candidate": {
+        "samples": [
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.5,
+            "frames": 180
+          },
+          {
+            "medianMs": 7.699999999999818,
+            "p95Ms": 8.200000000000728,
+            "frames": 180
+          },
+          {
+            "medianMs": 7.600000000000364,
+            "p95Ms": 8.300000000000182,
+            "frames": 180
+          }
+        ],
+        "renderer": {
+          "engine": "9.26.1",
+          "fps": 130,
+          "drawCalls": 113,
+          "meshes": 140,
+          "vertices": 1702568,
+          "renderSize": [
+            1280,
+            800
+          ],
+          "watch": {
+            "raised": false,
+            "textureUpdates": 31,
+            "secured": 0,
+            "exposed": false
+          },
+          "watchRaised": false,
+          "recoveryStage": 0,
+          "shadows": {
+            "enabled": true,
+            "sunResolution": 2048,
+            "torchResolution": 1024,
+            "sunRenders": 95,
+            "torchRenders": 0,
+            "depthDraws": 0
+          },
+          "bubbles": 8,
+          "bubbleEmissions": 16,
+          "environmentCounts": {
+            "coral": 1804,
+            "seaweedClumps": 1000,
+            "seaweedFronds": 6519,
+            "nativeFish": 180,
+            "nativeSchools": 10,
+            "shipwrecks": 1,
+            "pipeMouths": 1,
+            "coastlinePieces": 12
+          },
+          "encounterMeshCount": 0
+        },
+        "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5050 Laptop GPU (0x00002D98) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      }
+    }
+  },
+  "physicalPhone": false,
+  "sustained": false,
+  "reviewCandidate": "0.4.0-preview.1",
+  "gameBundleSha256": "133a47a6dc95ff48a07c7f0238f189a645ed2f02efe020fd70c0c6041cf73162",
+  "scope": "Controlled browser fixtures, not natural or physical-device playtests"
+}

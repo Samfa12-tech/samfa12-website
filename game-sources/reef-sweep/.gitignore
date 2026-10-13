@@ -1,0 +1,13 @@
+node_modules/
+build/
+dist/
+Reef-Sweep.html
+vendor/babylon/modules.generated.json
+__pycache__/
+*.pyc
+.DS_Store
+release/
+
+public/game.js
+
+qa-output/
