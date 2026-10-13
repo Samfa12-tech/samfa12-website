@@ -200,7 +200,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     fs.mkdirSync(path.dirname(reportFile),{recursive:true});
     fs.writeFileSync(reportFile,result);
   } else if (process.argv.includes("--check")) {
-    if (!fs.existsSync(reportFile) || fs.readFileSync(reportFile,"utf8") !== result) {
+    if (!fs.existsSync(reportFile) || fs.readFileSync(reportFile,"utf8").replace(/\r\n?/g,"\n") !== result) {
       console.error("Indexing audit snapshot is stale; run npm run audit:indexing -- --write and review the diff.");
       process.exitCode = 1;
     }

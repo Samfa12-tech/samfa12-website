@@ -1,6 +1,6 @@
 # v0.4 campaign review validation
 
-Prepared on 14 October 2026, with no merge or publication. Baseline is website commit `d5f5531ab8a262253370f4f3f9a5072292a06f3b` (v0.3.0-preview.1), freshly fetched before edits. The dirty primary website checkout was left intact; implementation used `codex/reef-sweep-campaign-polish` in a separate managed worktree. The retained authoring project reproduced the baseline public game.js exactly before changes, then became `game-sources/reef-sweep/`.
+Prepared on 14 October 2026, with no merge or publication. Shared analytics main commit bdb3a45 was merged into the review branch after it landed concurrently; its assets, Stats/privacy changes and disabled service configuration are preserved. The game client is byte-exact with its shared asset. Baseline game code is website commit `d5f5531ab8a262253370f4f3f9a5072292a06f3b` (v0.3.0-preview.1), freshly fetched before edits. The dirty primary website checkout was left intact; implementation used `codex/reef-sweep-campaign-polish` in a separate managed worktree. The retained authoring project reproduced the baseline public game.js exactly before changes, then became `game-sources/reef-sweep/`.
 
 Candidate game.js SHA-256: `133a47a6dc95ff48a07c7f0238f189a645ed2f02efe020fd70c0c6041cf73162` (474239 bytes). All ten hosted files, including the manifest, match the canonical generated dist byte for byte. The engine, icons, original score and save schema remain pinned. Vendored Babylon source and engine retain their original whitespace/bytes; authored files pass the whitespace check.
 
@@ -35,7 +35,7 @@ The update adds seven action-driven tutorial stages with Skip and isolated Repla
 | Full early campaign and five-site night loop | 93/93 controlled browser assertions; `review-evidence/browser.json`. |
 | Boats, recognition, controller API, cancellation and disabled transport | 42/42; `review-evidence/extra-browser.json`. |
 | Website desktop/phone and JavaScript-disabled content | 7 page checks, no runtime errors/overflow; `review-evidence/page-browser.json`. |
-| Portal tests | Content 55, existing analytics 6, marketplace 22, handoff relay 4 all pass. Catalogue/site/content/SEO and indexing checks pass; the baseline indexing finding remains unchanged. |
+| Portal tests | Content 55, existing analytics 6, shared game-starts 24, marketplace 22, handoff relay 4 all pass. Catalogue/site/content/SEO and indexing checks pass; the baseline indexing finding remains unchanged. |
 | Guarded export + public staging | Exact ten-file Reef runtime; authoring sources excluded. SEO/What Would Win/Briarhold staging verification pass. Protected unrelated release tree is Git-equivalent across 439 tracked files, accounting for Windows text filters; individual hosted release guards also pass. |
 
 Browser fixtures use actual Babylon/WebGL, actual draw/secure/work/boarding rules with controlled placement and accelerated time, native keyboard events, CDP touch cancellation and a synthetic browser Gamepad API. Phone viewports are 320×600, 390×844 and 844×390. Screenshots were reviewed. These do not establish physical touch/controller feel, a human economy route or sustained performance.

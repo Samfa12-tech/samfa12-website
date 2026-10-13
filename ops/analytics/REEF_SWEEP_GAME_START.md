@@ -7,3 +7,5 @@ After successful renderer setup, markReady is called. A campaign Begin or saved 
 The shared client owns exact consent, reload deduplication, the 30-minute inactive session boundary, delivery-only random receipt tokens, immutable bounded retries and revocation. Future approved activation must use the shared same-origin route; gameplay contributes no personal/save/slot/score/device data. Its network request omits credentials and referrer. Stats aggregation and coverage certification remain the shared analytics task's responsibility.
 
 Regression tests use mocked transport and clocks, including disabled/unset/denied/storage-failure paths, first-ready gating, reload/session boundaries, retry deduplication and revocation. Production transmission remains unverified and held. The user supplied the shared contract directly; no cross-task message or deployment is necessary to prepare this adapter.
+
+Shared review implementation #27 subsequently landed on main as bdb3a45 and was merged into this review branch. The game copy is byte-exact with the shared main asset; all 24 shared backend/client fixture tests pass. Service activation remains held.
