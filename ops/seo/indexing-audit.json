@@ -2,14 +2,14 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 75,
-    "indexableRoutes": 71,
-    "sitemapRoutes": 71,
-    "explicitlyExcluded": 4,
+    "htmlPages": 77,
+    "indexableRoutes": 72,
+    "sitemapRoutes": 72,
+    "explicitlyExcluded": 5,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 16,
-    "relationshipEdges": 70
+    "oneContextualIncoming": 17,
+    "relationshipEdges": 71
   },
   "excluded": [
     {
@@ -22,6 +22,10 @@
     },
     {
       "route": "/games/breakfast-beat-down/play/",
+      "reason": "explicit noindex"
+    },
+    {
+      "route": "/games/reef-sweep/play/",
       "reason": "explicit noindex"
     },
     {
@@ -247,6 +251,11 @@
       "kind": "editorial-related"
     },
     {
+      "from": "/games/reef-sweep/",
+      "to": "/pocket-audio/pocket-chordsmith/",
+      "kind": "editorial-related"
+    },
+    {
       "from": "/games/ship-blockade/",
       "to": "/games/td-pack/",
       "kind": "editorial-related"
@@ -435,6 +444,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -497,6 +507,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -576,6 +587,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -661,6 +673,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -875,6 +888,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -1492,6 +1506,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -1539,6 +1554,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -1547,7 +1563,7 @@
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/"
       ],
-      "localAssetCount": 36,
+      "localAssetCount": 37,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -2264,6 +2280,36 @@
       ]
     },
     {
+      "route": "/games/reef-sweep/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/reef-sweep/",
+      "title": "Reef Sweep first-person reef-conservation game preview | Samfa12",
+      "description": "Reef Sweep is an in-development first-person reef-conservation game. Dive Lantern Bay to remove invasive lionfish, restore nursery coral, survey a deeper wreck and outfall, and build a small diving business. Its v0.2 preview adds five-rank equipment upgrades, optional night dives and a careful filleting activity.",
+      "h1": [
+        "Reef Sweep"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
       "route": "/games/ship-blockade/",
       "kind": "product",
       "canonical": "https://samfa12.com/games/ship-blockade/",
@@ -2540,6 +2586,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -2630,6 +2677,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -2722,6 +2770,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -2949,6 +2998,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -3044,6 +3094,7 @@
         "/apps/pocket-audio-handoff/",
         "/games/breakfast-beat-down/",
         "/games/pocket-pattern/",
+        "/games/reef-sweep/",
         "/pocket-audio/",
         "/pocket-audio/godot-addon/",
         "/pocket-audio/pocket-daw/",
@@ -3056,6 +3107,7 @@
         "/apps/pocket-audio-handoff/",
         "/games/breakfast-beat-down/",
         "/games/pocket-pattern/",
+        "/games/reef-sweep/",
         "/pocket-audio/",
         "/pocket-audio/godot-addon/",
         "/pocket-audio/pocket-daw/",
@@ -3195,6 +3247,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -3286,6 +3339,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",
@@ -3405,6 +3459,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
         "/games/td-pack/",

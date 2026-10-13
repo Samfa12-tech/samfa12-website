@@ -862,7 +862,7 @@
             "Breakfast-Beat-down-v0.2-itch.zip"
           ],
           "releaseSha256": "a2b61eed4248a4daafa6b6012073ea83c46cc5959e064e9038eade837d9ac5d9",
-          "notes": "All three HTML releases match. README, source modules and supplied screenshots reviewed. No itch URL or Android inclusion asserted; package provenance is not an independent rights audit. The promotional icon is a new original imagegen illustration based on inspected game art, not a supplied screenshot; PNG master 1254x1254, local WebP 960x960, generated 2026-10-03 at the owner’s request."
+          "notes": "All three HTML releases match. README, source modules and supplied screenshots reviewed. No itch URL or Android inclusion asserted; package provenance is not an independent rights audit. The promotional icon is a new original imagegen illustration based on inspected game art, not a supplied screenshot; PNG master 1254x1254, local WebP 960x960, generated 2026-10-03 at the owner\u2019s request."
         }
       ]
     },
@@ -913,6 +913,60 @@
       "limits": [
         "Itch metadata says Released while the description says alpha; public copy uses playable alpha.",
         "No game build or gameplay performance validation was performed for this website addition."
+      ]
+    },
+    "game-reef-sweep": {
+      "disposition": "create",
+      "landingPath": "/games/reef-sweep/",
+      "reviewedAt": "2026-10-13",
+      "dateMeaning": "Owner-supplied source archive and code inspection date, not a public release date",
+      "sources": [
+        {
+          "url": "https://samfa12.com/games/reef-sweep/play/",
+          "identity": "Owner-supplied Reef Sweep source ZIP; SHA-256 14f46fb1a274cac10b64531b9f5f5c1f0672ec148f4fc675bdf54889d8c2bb34; README, feature status and relevant source modules directly inspected",
+          "access": "read-owner-supplied-local-release",
+          "archiveSha256": "14f46fb1a274cac10b64531b9f5f5c1f0672ec148f4fc675bdf54889d8c2bb34",
+          "files": [
+            "README.md",
+            "docs/FEATURE_STATUS.md",
+            "src/input.ts",
+            "src/main.ts",
+            "src/game/simulation.ts",
+            "src/render/renderer.ts",
+            "src/ui/ui.ts"
+          ],
+          "notes": "This owner-supplied source ZIP identifies the v0.1 handoff package. It supports the playable prototype, two sites, conservation loop, adaptive Pocket Chordsmith-derived score, local browser saves and procedural first-pass art. Physical Android and iPhone testing remains outstanding; no public release date or third-party storefront is asserted."
+        },
+        {
+          "url": "https://samfa12.com/games/reef-sweep/play/",
+          "identity": "Owner-maintained local Reef Sweep source tree at output/reef-sweep/source/reef-sweep; package metadata identifies 0.2.0-preview.1. This source produced the owner-approved 0.2.0-preview.1 browser preview; publication was authorized on 2026-10-13. Physical-device acceptance remains outstanding.",
+          "access": "read-owner-maintained-local-source-tree",
+          "files": [
+            "package.json",
+            "README.md",
+            "docs/FEATURE_STATUS.md",
+            "docs/TUNING.md",
+            "docs/SAVES.md",
+            "docs/progression-model.json",
+            "src/game/data.ts",
+            "src/game/profile.ts",
+            "src/game/simulation.ts",
+            "src/game/breathing.ts",
+            "src/render/geometry.ts",
+            "src/render/renderer.ts",
+            "src/render/shaders.ts",
+            "src/audio/audio.ts",
+            "src/ui/ui.ts",
+            "src/main.ts"
+          ],
+          "notes": "The inspected local source implements nine five-rank gear types, a progression fixture, surface breaching, deeper wreck/outfall surveys, an optional night shark, contact injury that drains air, optional three-cut filleting, and simulation-timed breathing/bubbles. These source observations do not establish physical-device performance or a natural-playthrough result; Chromium checks cover audio output and pause/surface timing; owner listening and physical-device acceptance remain outstanding."
+        }
+      ],
+      "limits": [
+        "Physical Android/iPhone, Safari and controller testing has not been completed.",
+        "Artwork remains procedural prototype art.",
+        "The progression model is an economic fixture, not human playtest evidence; owner listening and physical-device acceptance remain outstanding.",
+        "No public release date or third-party storefront is asserted."
       ]
     }
   }

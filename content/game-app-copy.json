@@ -1592,5 +1592,89 @@
     "relatedLabels": {
       "game-wonky-vehicle-lab": "Try another Samfa12 vehicle physics experiment"
     }
+  },
+  "game-reef-sweep": {
+    "seoTitle": "Reef Sweep first-person reef-conservation game preview",
+    "intro": "Reef Sweep is an in-development first-person reef-conservation game. Dive Lantern Bay to remove invasive lionfish, restore nursery coral, survey a deeper wreck and outfall, and build a small diving business. Its v0.2 preview adds five-rank equipment upgrades, optional night dives and a careful filleting activity.",
+    "details": [
+      {
+        "heading": "Two sites and a deliberate conservation loop",
+        "text": "Explore Sunlit Gardens and Tideglass Passage, including the deeper trench, Lantern wreck and old outfall. Approach lionfish at close range, hold to draw the pole spear and release to strike, then hold Interact to secure the exposed catch. Clear fishing gear, plant nursery-grown coral and survey field stations. The research contract asks for any two distinct stations, shallow or deep. A breach above the water lets you look towards the coast; air use pauses there but does not refill. The game separates exposed catch from fish secured in your tube.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "heading": "Five ranks of equipment and optional night dives",
+        "text": "Nine equipment types each have five upgrade ranks. The head torch requires regulator rank 2; night dives also require Tideglass Passage to be unlocked. Moonlit outings add a wary reef shark that warns and retreats. An economic fixture targets mostly maxed equipment around outing 10 and all ranks by outing 15, assuming efficient catches and no failed outings; this is not a human-play result.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "heading": "Optional catch filleting",
+        "text": "After a dive with landed fish, players can make three timed cuts during catch preparation. The mean timing quality can add up to 30% to the value of fish sold. It does not change base catch values or affect meals and donations. Skipping preparation leaves the catch allocation unchanged.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "heading": "Desktop, touch and controller controls",
+        "text": "On desktop, WASD moves, the mouse looks, and holding Mouse 1 draws the spear; release to strike. When mouse capture is unavailable, move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag and R remain alternate controls. Uncaptured look is bounded by the browser window. In landscape touch play, the left stick moves, dragging the scene looks, and holding and dragging Draw aims before release; a Light button toggles the head torch. A standard gamepad mapping is implemented, but physical controller testing remains outstanding.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "heading": "An adaptive score made with Pocket Chordsmith",
+        "text": "The original score, \u201cRoom for Life,\u201d uses instrument configurations adapted from Samfa12\u2019s Pocket Chordsmith. Its adaptive layers respond to the dive, wildlife and danger.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "heading": "An in-development preview with first-pass art",
+        "text": "The game has two authored sites, persistent reef work, four contract types and nine five-rank upgrades. Breaching the surface, deeper field stations, night wildlife, optional filleting, regulator breathing and exhale bubbles are in the v0.2 preview. Pacing and progression remain provisional, and these features do not establish physical-device acceptance. Creatures, equipment and reef dressing use procedural prototype art. Air, currents, restoration and animal behaviour are simplified gameplay systems, not real-world dive training or restoration guidance.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Where can I play Reef Sweep?",
+        "answer": "Reef Sweep is in development as a playable browser prototype. Use the Play Reef Sweep link on this page to open the first-party game route.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "question": "Where are my Reef Sweep saves stored?",
+        "answer": "Saves are stored in the browser for the current device and website origin. The game has three local save slots and supports save export and import; a downloaded local file and a hosted game do not share saves automatically.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "question": "Can I play Reef Sweep on a phone?",
+        "answer": "The prototype includes landscape touch controls and pauses a dive in portrait orientation. Physical Android and iPhone testing has not been completed, so phone compatibility is not yet verified.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "question": "Is Reef Sweep finished, and is its artwork final?",
+        "answer": "No. It is an in-development v0.2 preview with procedural first-pass creature, equipment and reef artwork. The game\u2019s pacing and upgrade balance remain provisional, and physical Android, iPhone and controller testing is outstanding.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "app-pocket-chordsmith"
+    ],
+    "relatedLabels": {
+      "app-pocket-chordsmith": "Explore Pocket Chordsmith, used to create the score"
+    }
   }
 }

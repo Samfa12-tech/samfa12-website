@@ -1756,5 +1756,32 @@
         "url": "https://samfa12.itch.io/towtal-chaos"
       }
     ]
+  },
+  {
+    "title": "Reef Sweep",
+    "category": "Games",
+    "type": "Playable browser prototype",
+    "status": "In Development",
+    "description": "An in-development first-person reef-conservation game. Remove lionfish, restore coral, survey a deep wreck, upgrade nine gear lines and unlock wary night dives in Lantern Bay.",
+    "tags": [
+      "First-person",
+      "Reef conservation",
+      "Browser prototype",
+      "Samfa12"
+    ],
+    "featured": false,
+    "links": [
+      {
+        "label": "Play Reef Sweep",
+        "url": "/games/reef-sweep/play/"
+      }
+    ],
+    "sortOrder": 36,
+    "thumbnail": "assets/thumbnails/reef-sweep-icon-512.webp",
+    "thumbnailAlt": "Striped lionfish with fan fins above a colourful coral reef in turquoise water.",
+    "thumbnailWidth": 512,
+    "thumbnailHeight": 512,
+    "id": "game-reef-sweep",
+    "detailUrl": "/games/reef-sweep/"
   }
 ]
