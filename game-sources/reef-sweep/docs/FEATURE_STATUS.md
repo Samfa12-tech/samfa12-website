@@ -1,6 +1,6 @@
 # Feature status: v0.4 campaign review
 
-This candidate is prepared for review, with no merge or publication authorised. The canonical TypeScript sources regenerate the hosted build through the guarded website workflow.
+Sam subsequently authorised review and publication if ready. See RELEASE_REVIEW.md for the release review and two old-save compatibility corrections. The canonical TypeScript sources regenerate the hosted build through the guarded website workflow.
 
 | System | Current behavior |
 | --- | --- |

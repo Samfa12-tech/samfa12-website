@@ -242,6 +242,38 @@ test('an already saved legacy restaurant outing keeps its promised $65 contract 
  assert.equal(startRun(loaded,'gardens','catch').siteRevision,2,'future outings use current terms');
 });
 
+test('a reloaded legacy Passage simulation uses the saved terrain and mooring for boarding',()=>{
+ const p=freshProfile();p.tutorial=1;p.reputation=5;
+ const r=startRun(p,'passage','none');delete r.siteRevision;
+ const oldSite=siteForRun(r);r.p={...oldSite.landmarks[0].p};r.velocity={x:0,y:0,z:0};
+ const loaded=validateProfile(p),sim=new Simulation(loaded,loaded.active);
+ assert.equal(sim.site,oldSite);assert.equal(sim.site.landmarks[0].p.x,0);
+ for(let i=0;i<90&&!sim.run.finished;i++)sim.update(1/60,{moveX:0,moveZ:0,vertical:0,lookX:0,lookY:0,boost:false,steady:false,draw:false,release:false,cancelDraw:false,interact:true});
+ assert.equal(sim.run.finished,true,'old visible mooring remains boardable');assert.equal(sim.run.rescued,false);
+});
+
+test('legacy research financial promises survive active and pending save reloads',()=>{
+ for(const night of [false,true])for(const pending of [false,true]){
+  const p=freshProfile();p.tutorial=1;
+  if(night){p.upgrades=['air','torch'];p.upgradeLevels={air:2,torch:1};p.reputation=5;}
+  const r=startRun(p,'gardens','none',false,night);r.order='research';r.surveyed=2;
+  delete r.siteRevision;delete r.researchEligible;delete r.researchFunded;
+  if(pending)new Simulation(p,r).finish(false);
+  const store=new SaveStore(new MemoryStorage());store.save(p);
+  const loaded=store.load(1);
+  assert.equal((loaded.active??loaded.pending).researchEligible,true,'migration retains research access');
+  if(!pending)new Simulation(loaded,loaded.active).finish(false);
+  const result=settleRun(loaded,loaded.pending,{sell:0,eat:0,donate:0},[]);
+  assert.equal(result.surveyPay,night?150:110,'old station rate is retained');
+  assert.equal(result.researchTopUp,night?180:140,'old assignment promise is retained');
+  assert.match(result.contractReason,/saved research outing/);
+  assert.equal(loaded.campaign.researchCompleted,true);
+  assert.throws(()=>settleRun(loaded,r,{sell:0,eat:0,donate:0},[]),'settlement stays one-time');
+  const next=startRun(loaded,'gardens','research',false,night);
+  assert.equal(next.siteRevision,2);assert.equal(next.researchFunded,false,'future outings use Monitoring terms');
+ }
+});
+
 test('selected logbook and its event registration survive reload without leaking to another slot',()=>{
  const memory=new MemoryStorage(),store=new SaveStore(memory),p=freshProfile(2);p.day=3;p.eventRegistrationDay=3;store.save(p);store.selectSlot(2);
  const reloaded=new SaveStore(memory);assert.equal(reloaded.selectedSlot(),2);assert.equal(reloaded.load(reloaded.selectedSlot()).eventRegistrationDay,3);assert.equal(reloaded.load(1).eventRegistrationDay,undefined);

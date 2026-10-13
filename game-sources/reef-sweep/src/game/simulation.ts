@@ -62,7 +62,7 @@ export class Simulation {
         r: number;
     }[] = [];
     constructor(public profile: Profile, public run: Run) { }
-    get site() { return SITES[this.run.site]; }
+    get site() { return siteForRun(this.run); }
     emit(type: GameEvent['type'], text?: string, value?: string) { this.events.push({ type, text, value }); }
     notice(text: string, key = '', cooldown = 6) { if (key && this.run.time < (this.run.cooldowns[key] ?? -1))
         return; if (key)
@@ -539,7 +539,9 @@ export function settleRun(p: Profile, run: Run, allocation: {
     const selected = run.clips.filter(c => chosen.includes(c.id)).slice(0, 2);
     const sales = run.cargo.slice(0, allocation.sell).reduce((s, c) => s + c.value, 0);
     const filletBonus = Math.round(sales * (run.filletQuality??0)*.3);
-    const legacy=run.siteRevision===undefined&&run.researchEligible===undefined&&run.researchFunded===undefined;
+    // Save migration supplies researchEligible for old research outings. That
+    // access flag must not replace their already-promised financial terms.
+    const legacy=run.siteRevision===undefined&&run.researchFunded===undefined;
     const progress=contractProgress(run), research=researchSettlement(run,p);
     let contract=0;
     let contractReason=run.order==='none'?'Free exploration: no contract selected.':run.rescued?'Rescue keeps ecological work, but contract bonuses need a safe return.':progress.ready?'Objective complete.':`${progress.label}: ${progress.amount}/${progress.target} completed.`;
