@@ -1,7 +1,7 @@
 [
   {
     "route": "/",
-    "pageModified": "2026-10-09"
+    "pageModified": "2026-10-13"
   },
   {
     "route": "/games/",
@@ -17,11 +17,11 @@
   },
   {
     "route": "/games/briarhold/",
-    "pageModified": "2026-10-02"
+    "pageModified": "2026-10-13"
   },
   {
     "route": "/games/briarhold/play/",
-    "pageModified": "2026-10-02"
+    "pageModified": "2026-10-13"
   },
   {
     "route": "/books/",

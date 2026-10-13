@@ -57,7 +57,7 @@ Seven original sound-effect recordings by **FilmCow** provide the first
 sample-backed footsteps, Arbalest mechanism and release, bolt impact, gate
 break, and menu interaction layers. The supplied bank was authorised for this
 project by the project owner. Exact sources and derivative hashes are recorded
-in `assets/audio/filmcow/provenance.json`.
+in `assets.13d9b2fef9e9e36cdeb5/audio/filmcow/provenance.json`.
 
 ## Poly Haven materials
 

@@ -35,3 +35,17 @@ test("audit compares visible and structured breadcrumbs and excludes noindex HTM
     assert.deepEqual(report.excluded,[{route:"/legacy/",reason:"explicit noindex"}]);
   } finally { fs.rmSync(site,{recursive:true,force:true}); }
 });
+
+test("audit normalizes CRLF and LF in visible headings without changing their text", () => {
+  const sites = ["lf", "crlf"].map((suffix) => fs.mkdtempSync(path.join(os.tmpdir(),`samfa12-line-ending-${suffix}-`)));
+  const body = '<!doctype html><title>Home</title><meta name="description" content="A useful home page"><link rel="canonical" href="https://samfa12.com/"><main><h1>Small games.\n              Strange stories.\n              Pocket-sized tools.</h1></main>';
+  try {
+    for (const [index, site] of sites.entries()) {
+      fs.writeFileSync(path.join(site,"sitemap.xml"),'<loc>https://samfa12.com/</loc>');
+      fs.writeFileSync(path.join(site,"index.html"),index === 0 ? body : body.replace(/\n/g,"\r\n"));
+    }
+    const [lf, crlf] = sites.map((site) => auditIndexing(site).routes[0].h1);
+    assert.deepEqual(crlf, lf);
+    assert.deepEqual(lf, ["Small games.\n              Strange stories.\n              Pocket-sized tools."]);
+  } finally { for (const site of sites) fs.rmSync(site,{recursive:true,force:true}); }
+});
