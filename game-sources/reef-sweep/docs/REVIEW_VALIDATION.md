@@ -30,6 +30,7 @@ The update adds seven action-driven tutorial stages with Skip and isolated Repla
 
 | Check | Evidence |
 | --- | --- |
+| Linux PR CI / export reproduction | Both validate and reef-sweep jobs passed on head57c5103, run38480655661; generated runtime matches source. |
 | TypeScript + domain/regression suite | 163/163 via `npm run test:reef-sweep`. |
 | Package/embedding/local assets/hash inventory | 8/8 via `npm --prefix game-sources/reef-sweep run test:package`. |
 | Full early campaign and five-site night loop | 93/93 controlled browser assertions; `review-evidence/browser.json`. |
@@ -52,4 +53,4 @@ Tests cover consent refusal/revocation, reload/inactivity dedupe, immutable boun
 
 ## Remaining manual checks
 
-Play a fresh career naturally through research, later sites and major upgrades. Review Passage route/arrival and fillet/character timing. Verify the actual USB Backbone and saved calibration. On physical Android Chrome, check portrait/landscape, fullscreen, controls/watch and extended High play; iPhone/Safari remains unverified. Listen to the motor/regulator mix and silence after pause/background/end. Test a production-origin exported older active/pending save and night return with exhausted battery. Production analytics transport, physical acceptance and Linux CI release reproduction are separate release gates before activation/publication.
+Play a fresh career naturally through research, later sites and major upgrades. Review Passage route/arrival and fillet/character timing. Verify the actual USB Backbone and saved calibration. On physical Android Chrome, check portrait/landscape, fullscreen, controls/watch and extended High play; iPhone/Safari remains unverified. Listen to the motor/regulator mix and silence after pause/background/end. Test a production-origin exported older active/pending save and night return with exhausted battery. Production analytics transport and physical acceptance remain separate release gates before activation/publication. Linux source/export reproduction has passed PR CI.
