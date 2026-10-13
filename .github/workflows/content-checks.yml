@@ -43,7 +43,7 @@ jobs:
             --exclude='node_modules' \
             --exclude='.env*' \
             --exclude='/content/' \
-            --exclude='/output/' \
+            --exclude='/output/' --exclude='/game-sources/' \
             --exclude='**/.vite/' \
             --exclude='_site' \
             --exclude='/artifacts/' \
@@ -67,3 +67,15 @@ jobs:
       - run: BREAKFAST_BEAT_DOWN_SITE_ROOT=_site npm run verify:breakfast-beat-down
       - run: SEO_SITE_ROOT=_site npm run validate:seo
       - run: SEO_SITE_ROOT=_site npm run audit:indexing -- --check
+
+  reef-sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm ci --prefix game-sources/reef-sweep
+      - run: npm run test:reef-sweep
+      - run: npm run build:reef-sweep
+      - run: npm run verify:reef-sweep-pages

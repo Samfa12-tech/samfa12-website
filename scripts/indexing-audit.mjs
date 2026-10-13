@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const base = "https://samfa12.com";
 const reportFile = path.join(root, "ops/seo/indexing-audit.json");
-const ignoredDirectories = new Set([".git", ".github", ".playwright-cli", "node_modules", "_site", "content", "ops", "output", "scripts", "tests", "workers", "artifacts"]);
+const ignoredDirectories = new Set([".git", ".github", ".playwright-cli", "node_modules", "_site", "content", "ops", "output", "game-sources", "scripts", "tests", "workers", "artifacts"]);
 const runtimeRoutes = new Set(["/apps/pocket-chordsmith/", "/apps/pocket-dj/", "/apps/what-would-win/", "/games/briarhold/play/", "/games/bug-swarm/", "/games/cursed-cutter/"]);
 
 function attributes(tag) {
@@ -82,7 +82,7 @@ export function auditIndexing(siteRoot = root) {
   const hubRoutes = new Set(hubs.map((item) => item.route));
   const copy = {...JSON.parse(fs.readFileSync(path.join(root,"content/game-app-copy.json"),"utf8")),...JSON.parse(fs.readFileSync(path.join(root,"content/book-music-copy.json"),"utf8"))};
   const relationshipEdges = manifest.products.filter((plan)=>plan.path).flatMap((plan)=>(copy[plan.id]?.relatedIds || []).map((id)=>({from:plan.path,to:productById.get(id)?.path || null,kind:"editorial-related"}))).concat(hubs.flatMap((hub)=>hub.books.map((id)=>({from:hub.route,to:productById.get(id)?.path || null,kind:"reading-order"})))).sort((a,b)=>a.from.localeCompare(b.from)||(a.to || "").localeCompare(b.to || "")||a.kind.localeCompare(b.kind));
-  const pages = htmlFiles(siteRoot).map((file) => ({file, route:routeFor(path.relative(siteRoot,file)), source:fs.readFileSync(file,"utf8")}));
+  const pages = htmlFiles(siteRoot).map((file) => ({file, route:routeFor(path.relative(siteRoot,file)), source:fs.readFileSync(file,"utf8").replace(/\r\n?/g,"\n")}));
   const indexable = [];
   const excluded = [];
   const issues = [];

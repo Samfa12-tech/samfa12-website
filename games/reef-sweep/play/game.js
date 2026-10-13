@@ -1,6 +1,12 @@
 (function(){const modules={"main.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const resume_js_1 = require("./game/resume.js");
+const tutorial_js_1 = require("./game/tutorial.js");
+const campaign_js_1 = require("./game/campaign.js");
+const campaign_ui_js_1 = require("./ui/campaign-ui.js");
+const scooter_js_1 = require("./audio/scooter.js");
+const game_start_js_1 = require("./analytics/game-start.js");
 const profile_js_1 = require("./game/profile.js");
 const simulation_js_1 = require("./game/simulation.js");
 const data_js_1 = require("./game/data.js");
@@ -11,7 +17,7 @@ const audio_js_1 = require("./audio/audio.js");
 const ui_js_1 = require("./ui/ui.js");
 const canvas = document.getElementById('ocean');
 const store = new profile_js_1.SaveStore();
-let profile = store.load(1), settings = store.settings(), sim = null, paused = true, visualDive = false, renderer = null, stack = [], fault = false;
+let profile = store.load(store.selectedSlot()), settings = store.settings(), sim = null, paused = true, visualDive = false, renderer = null, stack = [], fault = false;
 const audio = new audio_js_1.Soundscape(settings);
 const ui = new ui_js_1.UI(() => profile, () => settings, dispatch);
 const input = new input_js_1.InputController(canvas, settings, action => {
@@ -44,9 +50,43 @@ const input = new input_js_1.InputController(canvas, settings, action => {
 });
 input.mountTouch();
 let accum = 0, last = 0, visualTime = 0, hudClock = 0, frameCount = 0;
+let practiceCareer = null;
+let playCandidate = false, audioThrust = 0;
+const gameStarts = (0, game_start_js_1.prepareWebsiteGameStartHook)();
+function endPractice() {
+    profile = practiceCareer ?? profile;
+    practiceCareer = null;
+    sim = null;
+    playCandidate = false;
+    profile.active = profile.active?.practice ? null : profile.active;
+    profile.pending = profile.pending?.practice ? null : profile.pending;
+    visualDive = false;
+    setPause(true);
+    preview(profile.active?.site ?? 'gardens');
+    stack = [];
+    ui.show('dock');
+    ui.toast('Practice complete. Your campaign, catch, money and reef work are unchanged.');
+}
+function showMoment(moment, inDive = false) {
+    if (inDive) {
+        stack = ['play'];
+        setPause(true);
+    }
+    else {
+        stack = ['dock'];
+        show('dock');
+    }
+    ui.moment = moment;
+    ui.show('moment');
+}
+function harbourMoment() { if (practiceCareer || profile.pending || profile.active)
+    return; const m = (0, campaign_ui_js_1.nextCharacterMoment)(profile); if (!m)
+    return; (0, campaign_js_1.recordCharacterFlag)(profile, m.id); if (m.id === 'research-invitation')
+    (0, campaign_js_1.approachResearch)(profile); persist(); showMoment(m); }
 let watchRaised = false;
 const debug = new URLSearchParams(location.search).has('debug') || location.hash.includes('debug') || window.REEF_TEST_MODE === true;
-function persist() { store.save(profile); const w = document.getElementById('storage-warning'); w.hidden = !store.warning; w.textContent = store.warning; }
+function persist() { if (practiceCareer)
+    return; store.save(profile); const w = document.getElementById('storage-warning'); w.hidden = !store.warning; w.textContent = store.warning; }
 function setWatchRaised(value) {
     const raised = value && !paused && visualDive && !!sim;
     watchRaised = raised;
@@ -157,10 +197,9 @@ function resume() {
         ui.toast('There is no suspended dive to resume.');
         return;
     }
-    if (!sim || sim.run !== profile.active) {
-        sim = new simulation_js_1.Simulation(profile, profile.active);
-        renderer.build(profile, sim.run);
-    }
+    sim = (0, resume_js_1.bindSuspendedDive)(profile, sim, renderer, run => new simulation_js_1.Simulation(profile, run));
+    if (!visualDive && !sim.run.practice)
+        playCandidate = true;
     visualDive = true;
     setPause(false);
     stack = [];
@@ -178,7 +217,8 @@ function begin() {
         resume();
         return;
     }
-    const run = (0, simulation_js_1.startRun)(profile, ui.site, ui.order, ui.event && profile.day % 3 === 0, ui.night);
+    const run = (0, simulation_js_1.startRun)(profile, ui.site, ui.order, profile.eventRegistrationDay === profile.day && profile.day % 3 === 0, ui.night);
+    playCandidate = !run.practice;
     sim = new simulation_js_1.Simulation(profile, run);
     renderer.build(profile, run);
     visualDive = true;
@@ -186,8 +226,13 @@ function begin() {
     ui.play();
     void audio.start();
     canvas.focus();
-    input.capture();
     persist();
+    if (run.site === 'passage' && run.siteRevision === 2 && (0, campaign_js_1.recordCharacterFlag)(profile, 'passage-arrival')) {
+        persist();
+        showMoment({ id: 'passage-arrival', speaker: 'Nia · Harbour pilot', title: 'Take the sheltered route.', text: 'Your buoy is on the western shelf. Follow the lee wall to the nursery, then cross the tide race towards Cathedral arch. The two flow gauges mark the research route. There is open water above if the current feels too strong.' }, true);
+    }
+    if (!paused)
+        input.capture();
     ui.toast(run.night ? 'Moonlit dive. Your head torch is on; give wildlife room.' : profile.totalRemoved === 0 ? 'Welcome to Lantern Bay. The first lionfish is below and ahead. J opens your chart.' : 'Back in the water. The reef remembers your last visit.');
 }
 function review() {
@@ -235,9 +280,15 @@ function dispatch(action, data) {
     try {
         switch (action) {
             case 'screen':
+                if (data === 'dock' && practiceCareer) {
+                    endPractice();
+                    break;
+                }
                 if (input.calibration && data !== 'settings')
                     input.cancelCalibration();
                 open(data);
+                if (data === 'dock')
+                    harbourMoment();
                 break;
             case 'close':
                 if (input.calibration)
@@ -268,9 +319,80 @@ function dispatch(action, data) {
                 else
                     ui.toast('That purchase is not available right now.');
                 break;
+            case 'fillet-cut-save':
+                if (profile.pending && profile.pending.filletQuality === undefined)
+                    profile.pending.filletCuts = Array.isArray(data) ? data.slice(0, 3) : [];
+                persist();
+                break;
             case 'fillet':
                 (0, simulation_js_1.prepareFillets)(profile, Number(data));
                 persist();
+                break;
+            case 'tutorial-skip':
+                if (sim) {
+                    (0, tutorial_js_1.skipLesson)(profile, sim.run);
+                    persist();
+                    ui.toast('Lesson skipped. Replay is available in the field guide.');
+                }
+                break;
+            case 'practice':
+                persist();
+                practiceCareer = profile;
+                profile = (0, profile_js_1.freshProfile)(profile.slot);
+                profile.upgrades = [...practiceCareer.upgrades];
+                profile.upgradeLevels = structuredClone(practiceCareer.upgradeLevels);
+                {
+                    const run = (0, simulation_js_1.startRun)(profile, 'gardens', 'none');
+                    run.practice = true;
+                    (0, tutorial_js_1.startLesson)(run);
+                    sim = new simulation_js_1.Simulation(profile, run);
+                    renderer.build(profile, run);
+                    visualDive = true;
+                    setPause(false);
+                    ui.play();
+                    void audio.start();
+                    canvas.focus();
+                    input.capture();
+                    ui.toast('Practice dive. Nothing here changes your campaign.');
+                }
+                break;
+            case 'practice-exit':
+                endPractice();
+                break;
+            case 'research-visit':
+                if (profile.active || profile.pending) {
+                    ui.toast('Finish your current outing before meeting the research team.');
+                    break;
+                }
+                if (profile.campaign?.researchAccepted) {
+                    ui.toast('The research programme is already open. Choose a station assignment at the harbour.');
+                    break;
+                }
+                if (!profile.campaign?.researchInvitationSeen) {
+                    const approach = (0, campaign_js_1.approachResearch)(profile);
+                    if (!approach.ok) {
+                        ui.toast(approach.reason);
+                        break;
+                    }
+                }
+                persist();
+                showMoment({ id: 'research-invitation', speaker: 'Dr Mira Vale · Lantern Bay University', title: 'Will you help us read the reef?', text: 'Your field work has earned our trust. We can fund two station readings: $65 total on your first day assignment, including station pay ($72 at night). Afterwards, two-station monitoring pays $38 by day or $45 at night. In Passage, read the lee-shelf and Cathedral gauges.', research: true });
+                break;
+            case 'research-accept':
+                {
+                    const result = (0, campaign_js_1.acceptResearch)(profile);
+                    persist();
+                    ui.toast(result.reason);
+                    close();
+                }
+                break;
+            case 'opportunity':
+                {
+                    const result = (0, campaign_js_1.acceptMilestoneOpportunity)(profile, data);
+                    persist();
+                    ui.show('dock');
+                    ui.toast(result.reason);
+                }
                 break;
             case 'suspend':
                 setPause(true);
@@ -292,10 +414,12 @@ function dispatch(action, data) {
                 ui.confirm('reset', 'Erase this logbook, including its suspended dive, money, equipment and reef changes? Other save slots are not affected. Export a backup first.');
                 break;
             case 'reset':
+                if (practiceCareer)
+                    endPractice();
                 profile = (0, profile_js_1.freshProfile)(profile.slot);
                 sim = null;
                 persist();
-                ui.event = false;
+                ui.event = profile.eventRegistrationDay === profile.day;
                 ui.site = 'gardens';
                 ui.night = false;
                 preview();
@@ -303,12 +427,15 @@ function dispatch(action, data) {
                 show('dock');
                 break;
             case 'slot':
+                if (practiceCareer)
+                    endPractice();
                 persist();
                 profile = store.load(Number(data));
+                store.selectSlot(profile.slot);
                 sim = null;
                 ui.site = profile.active?.site || 'gardens';
                 ui.night = false;
-                ui.event = false;
+                ui.event = profile.eventRegistrationDay === profile.day;
                 preview(ui.site);
                 stack = [];
                 show('dock');
@@ -408,7 +535,9 @@ function dispatch(action, data) {
                 break;
             case 'event-toggle':
                 if (profile.day % 3 === 0 && !profile.active && !profile.pending) {
-                    ui.event = !ui.event;
+                    profile.eventRegistrationDay = profile.eventRegistrationDay === profile.day ? undefined : profile.day;
+                    ui.event = profile.eventRegistrationDay === profile.day;
+                    persist();
                     ui.show('events');
                     ui.toast(ui.event ? 'Event entered. Your next dive counts towards a local personal best.' : 'Event entry cancelled.');
                 }
@@ -457,6 +586,10 @@ function processEvents() {
         else if (e.type === 'save')
             persist();
         else if (e.type === 'finish') {
+            if (sim?.run.practice) {
+                endPractice();
+                return;
+            }
             persist();
             ui.initDebrief(sim.run);
             stack = [];
@@ -493,11 +626,17 @@ function frame(now) {
                 break;
         }
     }
-    audio.update(sim?.run || null, visualDive);
+    audioThrust = (0, scooter_js_1.sampledThrust)(audioThrust, visualDive && !paused, inputTime > 0, f);
+    audio.update(sim?.run || null, visualDive && !paused, audioThrust);
     hudClock += dt;
     try {
         renderer.setWatchReserve(sim?.reserve ?? 40);
         renderer.render(visualDive ? sim?.run.time ?? visualTime : visualTime, visualDive);
+        if (playCandidate && visualDive && !paused && sim && !sim.run.practice && renderer.run === sim.run) {
+            playCandidate = false;
+            if (!debug)
+                gameStarts.start();
+        }
     }
     catch (e) {
         fault = true;
@@ -508,6 +647,8 @@ function frame(now) {
         console.error(e);
         return;
     }
+    if (!debug && visualDive && !paused && !document.hidden && sim && !sim.run.practice)
+        gameStarts.activity();
     if (!paused && sim && hudClock > .09) {
         hudClock = 0;
         ui.updateHUD(sim, input.gamepad ? 'gamepad' : input.touchMode ? 'touch' : 'keyboard');
@@ -565,7 +706,8 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden)
         persist();
 });
-window.addEventListener('pagehide', persist);
+window.addEventListener('pagehide', event => { persist(); if (!event.persisted)
+    gameStarts.dispose(); });
 function orientation() { document.getElementById('rotate').hidden = true; }
 function resizeViewport() { renderer?.engine.resize(); orientation(); }
 window.addEventListener('resize', resizeViewport);
@@ -583,6 +725,7 @@ try {
     applySettings();
     show('dock');
     document.getElementById('loading').style.display = 'none';
+    gameStarts.markReady();
     requestAnimationFrame(frame);
     orientation();
 }
@@ -617,242 +760,412 @@ if (debug)
         }, save: persist };
 
 },
-"game/profile.ts":function(require,module,exports){
+"game/resume.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SaveStore = exports.MemoryStorage = exports.SAVE_PREFIX = void 0;
-exports.freshProfile = freshProfile;
-exports.validateProfile = validateProfile;
-exports.buy = buy;
-const data_js_1 = require("./data.js");
-const math_js_1 = require("./math.js");
-const reef_recovery_js_1 = require("./reef-recovery.js");
-exports.SAVE_PREFIX = 'reef-sweep:v1:';
-const REEF_IDS = ['gardens', 'passage', 'mangrove', 'cenote', 'harbour'];
-const emptyReef = () => ({ removed: [], cleaned: [], restored: {}, visits: 0, productiveVisits: 0, surveys: 0, lastDay: 0 });
-function freshProfile(slot = 1) { return { version: 1, slot, day: 1, cash: 80, debt: 0, reputation: 0, audience: 12, totalRemoved: 0, totalCleaned: 0, totalRestored: 0, upgrades: [], reefs: { gardens: emptyReef(), passage: emptyReef(), mangrove: emptyReef(), cenote: emptyReef(), harbour: emptyReef() }, records: [], published: [], discoveries: [], tutorial: 0, sponsorPaidDay: 0, lastReport: 'Your boat. Your first reef. A little room to make a difference.', active: null, pending: null }; }
-const numeric = (v, min, max) => typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max;
-const strings = (v, n = 3000) => Array.isArray(v) && v.length <= n && v.every(s => typeof s === 'string' && s.length < 140);
-/** Import is intentionally strict. Invalid data is never allowed to replace a good slot. */
-function validateProfile(v) {
-    const source = v;
-    const p = source && typeof source === 'object' ? structuredClone(source) : source;
-    if (!p || p.version !== 1)
-        throw Error('This is not a supported Reef Sweep save (schema 1).');
-    if (!p.reefs || typeof p.reefs !== 'object' || Array.isArray(p.reefs))
-        throw Error('Invalid reef progress.');
-    const keys = Object.keys(p.reefs);
-    const legacyTwoSiteSave = keys.length === 2 && keys.includes('gardens') && keys.includes('passage');
-    if (legacyTwoSiteSave) {
-        p.reefs = { ...p.reefs, mangrove: emptyReef(), cenote: emptyReef(), harbour: emptyReef() };
-    }
-    else if (keys.length !== REEF_IDS.length || REEF_IDS.some(id => !keys.includes(id)) || keys.some(id => !REEF_IDS.includes(id)))
-        throw Error('Invalid reef-site inventory.');
-    for (const k of ['day', 'cash', 'debt', 'reputation', 'audience', 'totalRemoved', 'totalCleaned', 'totalRestored'])
-        if (!numeric(p[k], 0, 1e8))
-            throw Error('Invalid save field: ' + k);
-    if (!numeric(p.day, 1, 1e6) || !numeric(p.slot, 1, 3))
-        throw Error('Invalid save slot or day.');
-    if (!strings(p.upgrades, 30) || !p.upgrades.every(id => data_js_1.UPGRADES.some(u => u.id === id)))
-        throw Error('Unrecognised equipment in save.');
-    if (new Set(p.upgrades).size !== p.upgrades.length)
-        throw Error('Duplicate equipment in save.');
-    if (p.upgradeLevels !== undefined && (!p.upgradeLevels || typeof p.upgradeLevels !== 'object' || Array.isArray(p.upgradeLevels) || !Object.entries(p.upgradeLevels).every(([id, rank]) => p.upgrades.includes(id) && Number.isInteger(rank) && rank >= 1 && rank <= data_js_1.MAX_UPGRADE_LEVEL)))
-        throw Error('Invalid equipment levels.');
-    if (!strings(p.published, 3000) || !strings(p.discoveries, 200))
-        throw Error('Invalid journal.');
-    if (!Array.isArray(p.records) || p.records.length > 80 || !p.records.every(r => numeric(r.score, 0, 1e8) && REEF_IDS.includes(r.site) && numeric(r.day, 1, 1e6)))
-        throw Error('Invalid event history.');
-    for (const id of REEF_IDS) {
-        const r = p.reefs?.[id];
-        if (!r || !strings(r.removed) || !strings(r.cleaned) || !r.restored || typeof r.restored !== 'object' || Array.isArray(r.restored) || Object.entries(r.restored).length > 100 || !Object.entries(r.restored).every(([k, n]) => /^coral-\d+$/.test(k) && numeric(n, 1, 1e6)))
-            throw Error('Invalid reef progress.');
-        if (!numeric(r.visits, 0, 1e6) || !numeric(r.surveys, 0, 1e6))
-            throw Error('Invalid reef counters.');
-        if (r.productiveVisits !== undefined && (!numeric(r.productiveVisits, 0, 1e6) || !Number.isInteger(r.productiveVisits)))
-            throw Error('Invalid productive-visit counter.');
-    }
-    for (const r of [p.active, p.pending])
-        if (r) {
-            if (!REEF_IDS.includes(r.site) || !numeric(r.seed, 0, 0xffffffff) || typeof r.id !== 'string' || !numeric(r.time, 0, 10000) || !numeric(r.air, 0, (0, data_js_1.airCapacity)(p)) || !numeric(r.health, 0, 100) || !numeric(r.battery, 0, 100) || !numeric(r.yaw, -1e9, 1e9) || !numeric(r.pitch, -2, 2))
-                throw Error('Invalid suspended dive.');
-            if (r.recoveryStage !== undefined && (!Number.isInteger(r.recoveryStage) || r.recoveryStage < 0 || r.recoveryStage > 5))
-                throw Error('Invalid reef recovery snapshot.');
-            if (r.night !== undefined && typeof r.night !== 'boolean' || r.night && (0, data_js_1.upgradeLevel)(p, 'torch') < 1)
-                throw Error('Invalid night dive.');
-            if (r.filletQuality !== undefined && (!numeric(r.filletQuality, 0, 1) || !r.finished || r.rescued || !r.cargo.length))
-                throw Error('Invalid fillet preparation.');
-            for (const v of [r.p, r.velocity])
-                if (!v || !['x', 'y', 'z'].every(k => numeric(v[k], -10000, 10000)))
-                    throw Error('Invalid diver position.');
-            if (!Array.isArray(r.fish) || r.fish.length > 40 || !Array.isArray(r.jobs) || r.jobs.length > 32 || !Array.isArray(r.animals) || r.animals.length > 8 || !Array.isArray(r.cargo) || r.cargo.length > 20 || !Array.isArray(r.clips) || r.clips.length > 8)
-                throw Error('Invalid dive contents.');
-            for (const f of r.fish) {
-                if (!f.p || !f.home || typeof f.id !== 'string' || !numeric(f.weight, .01, 10) || !numeric(f.size, .1, 3) || !numeric(f.phase, -1e9, 1e9) || !numeric(f.flee, 0, 100) || typeof f.alive !== 'boolean' || ![f.p, f.home].every(v => ['x', 'y', 'z'].every(k => numeric(v[k], -1000, 1000))))
-                    throw Error('Invalid fish record.');
-            }
-            for (const c of r.clips)
-                if (typeof c.title !== 'string' || c.title.length > 200 || !numeric(c.quality, 0, 100) || c.image && (!c.image.startsWith('data:image/jpeg;base64,') || c.image.length > 200000))
-                    throw Error('Invalid highlight card.');
-            if (r.exposed && (!numeric(r.exposed.weight, .01, 10) || !numeric(r.exposed.value, 0, 500)))
-                throw Error('Invalid exposed catch.');
-            for (const c of r.cargo)
-                if (!numeric(c.weight, .01, 10) || !numeric(c.value, 0, 500) || typeof c.id !== 'string')
-                    throw Error('Invalid catch.');
-            if (!r.cooldowns || typeof r.cooldowns !== 'object')
-                throw Error('Invalid timers.');
-        }
-    if (p.active && p.pending)
-        throw Error('A save cannot contain both an active dive and a pending settlement.');
-    if (typeof p.lastReport !== 'string' || p.lastReport.length > 1000 || !numeric(p.tutorial, 0, 100) || !numeric(p.sponsorPaidDay, 0, 1e6))
-        throw Error('Invalid career metadata.');
-    const isVec = (v) => v && ['x', 'y', 'z'].every(k => numeric(v[k], -10000, 10000));
-    const text = (v, max = 200) => typeof v === 'string' && v.length <= max;
-    for (const r of [p.active, p.pending])
-        if (r) {
-            for (const k of ['removed', 'cleaned', 'restored', 'surveyed', 'nativeHits', 'coralHits', 'stolen', 'distance', 'fragments', 'charge', 'strikeCooldown', 'hurtCooldown', 'interaction'])
-                if (!numeric(r[k], 0, 1e6))
-                    throw Error('Invalid dive counter: ' + k);
-            if (!['catch', 'cleanup', 'restore', 'research'].includes(r.order) || !['scooter', 'light', 'returnWarn', 'lowWarn', 'finished', 'rescued', 'event'].every(k => typeof r[k] === 'boolean') || !text(r.interactionId) || !strings(r.seen, 100) || !numeric(r.day, 1, 1e6))
-                throw Error('Invalid dive state.');
-            if (r.charge > 1 || r.interaction > 1.1 || r.fragments > 3 + (0, data_js_1.upgradeLevel)(p, 'kit') * 2 || r.cargo.length > (0, data_js_1.capacity)(p) || r.jobs.some(j => !text(j.id) || !['debris', 'coral', 'survey'].includes(j.kind) || !isVec(j.p) || typeof j.done !== 'boolean' || !numeric(j.progress, 0, 1) || !numeric(j.stage, 0, 5)))
-                throw Error('Invalid work or capacity.');
-            if (r.animals.some(a => !['marlow', 'moray', 'turtle', 'ray', 'shark'].includes(a.id) || a.id === 'shark' && !r.night || !isVec(a.p) || !isVec(a.home) || !numeric(a.heading, -1e9, 1e9) || !numeric(a.phase, 0, 1e9) || !numeric(a.timer, 0, 1e6) || !numeric(a.cooldown, 0, 100) || !['roam', 'watch', 'approach', 'warn', 'lunge', 'retreat'].includes(a.state)))
-                throw Error('Invalid wildlife record.');
-            if (r.clips.some(c => !text(c.id) || !text(c.kind) || !text(c.detail, 600) || typeof c.chosen !== 'boolean'))
-                throw Error('Invalid highlight metadata.');
-            if (Array.isArray(r.cooldowns) || Object.entries(r.cooldowns).length > 100 || !Object.entries(r.cooldowns).every(([k, v]) => text(k, 60) && k !== '__proto__' && k !== 'constructor' && numeric(v, -100, 1e8)))
-                throw Error('Invalid cooldown map.');
-            if (new Set(r.fish.map(f => f.id)).size !== r.fish.length || new Set(r.jobs.map(j => j.id)).size !== r.jobs.length)
-                throw Error('Duplicate persistent identities.');
-        }
-    if (p.active?.finished || p.pending && !p.pending.finished)
-        throw Error('Invalid outing lifecycle.');
-    for (const id of REEF_IDS) {
-        const reef = p.reefs[id];
-        if (reef.productiveVisits === undefined) {
-            const outing = p.active?.site === id ? p.active : p.pending?.site === id ? p.pending : null;
-            const currentClearances = outing ? Math.min(reef.removed.length, Math.max(0, Math.floor(outing.removed))) : 0;
-            const priorClearances = reef.removed.length - currentClearances;
-            reef.productiveVisits = Math.min(Math.floor(reef.visits), Math.floor(priorClearances / 2));
-        }
-    }
-    for (const r of [p.active, p.pending])
-        if (r && r.recoveryStage === undefined)
-            r.recoveryStage = (0, reef_recovery_js_1.recoveryForRun)(r, p.reefs[r.site]);
-    return p;
+exports.bindSuspendedDive = bindSuspendedDive;
+/** The renderer may have been rebound to a harbour preview while simulation is suspended. */
+function bindSuspendedDive(profile, current, renderer, create) {
+    if (!profile.active)
+        throw Error('There is no suspended dive to resume.');
+    const sim = current?.run === profile.active ? current : create(profile.active);
+    if (renderer.run !== sim.run)
+        renderer.build(profile, sim.run);
+    return sim;
 }
-function buy(p, id) {
-    const u = data_js_1.UPGRADES.find(x => x.id === id), cost = (0, data_js_1.upgradeCost)(p, id);
-    if (!u || p.active || p.pending || (0, data_js_1.upgradeLevel)(p, id) >= data_js_1.MAX_UPGRADE_LEVEL || p.cash < cost || u.requires && (0, data_js_1.upgradeLevel)(p, u.requires) < (u.requiredLevel ?? 1))
+
+},
+"game/tutorial.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LESSON_STEPS = void 0;
+exports.startLesson = startLesson;
+exports.lessonActive = lessonActive;
+exports.advanceLesson = advanceLesson;
+exports.skipLesson = skipLesson;
+exports.lessonPrompt = lessonPrompt;
+exports.LESSON_STEPS = 7;
+function startLesson(run) { run.lesson = { step: 0, look: 0, move: 0, drawn: false }; }
+function lessonActive(run) { return !!run.lesson && !run.lesson.skipped && run.lesson.step < exports.LESSON_STEPS; }
+/** Accumulate intentional inputs; currents and elapsed time cannot complete a lesson. */
+function advanceLesson(profile, run, input, dt, aimedAtFish) {
+    const lesson = run.lesson;
+    if (!lessonActive(run) || !lesson)
         return false;
-    p.cash -= cost;
-    p.upgradeLevels ?? (p.upgradeLevels = {});
-    p.upgradeLevels[id] = (0, data_js_1.upgradeLevel)(p, id) + 1;
-    if (!p.upgrades.includes(id))
-        p.upgrades.push(id);
+    lesson.look = Math.min(10, lesson.look + Math.abs(input.lookX) + Math.abs(input.lookY));
+    if (Math.abs(input.moveX) + Math.abs(input.moveZ) + Math.abs(input.vertical) > .1)
+        lesson.move = Math.min(100, lesson.move + dt);
+    if (input.cancelDraw)
+        lesson.drawn = false;
+    else if (input.draw && run.charge >= .65)
+        lesson.drawn = true;
+    const complete = [lesson.look >= .15, lesson.move >= .8, aimedAtFish, run.removed > 0, run.cargo.length > 0, run.cleaned + run.restored > 0, run.finished && !run.rescued][lesson.step];
+    if (!complete)
+        return false;
+    lesson.step++;
+    if (lesson.step >= exports.LESSON_STEPS)
+        profile.tutorial = Math.max(profile.tutorial, 1);
     return true;
 }
-class MemoryStorage {
-    constructor() {
-        this.values = new Map();
-    }
-    get length() { return this.values.size; }
-    clear() { this.values.clear(); }
-    getItem(k) { return this.values.get(k) ?? null; }
-    key(i) { return [...this.values.keys()][i] ?? null; }
-    removeItem(k) { this.values.delete(k); }
-    setItem(k, v) { this.values.set(k, String(v)); }
+function skipLesson(profile, run) { if (run.lesson)
+    run.lesson.skipped = true; profile.tutorial = Math.max(profile.tutorial, 1); }
+function lessonPrompt(run, mode, settings) {
+    const k = (name) => settings.keys[name].replace('Key', '').replace('Left', '');
+    const look = mode === 'touch' ? 'Drag the water to look around.' : mode === 'gamepad' ? 'Move the right stick to look around.' : 'Move the mouse to look around.';
+    const move = mode === 'touch' ? 'Use the left thumb stick to swim.' : mode === 'gamepad' ? 'Use the left stick to swim.' : `${k('forward')}${k('left')}${k('back')}${k('right')} swims. Try moving a little.`;
+    const draw = mode === 'touch' ? 'Hold Draw, aim, then release to strike.' : mode === 'gamepad' ? 'Hold your mapped spear control, then release to strike.' : 'Hold the mouse button to draw, then release to strike.';
+    const interact = mode === 'touch' ? 'Hold Interact' : mode === 'gamepad' ? 'Hold your mapped Interact control' : `Hold ${k('interact')}`;
+    const messages = [look, move, 'Approach a lionfish slowly. Get the aiming reticle within spear range.', draw, `${interact} to secure the fish in your tube.`, `${interact} beside discarded fishing gear or a nursery plot.`, `Follow HOME, ascend beside your buoy, then ${interact.toLowerCase()} to board.`];
+    return messages[run.lesson?.step ?? 0] ?? 'First dive complete. The reef is yours to explore.';
 }
-exports.MemoryStorage = MemoryStorage;
-class SaveStore {
-    constructor(storage) {
-        this.warning = '';
-        this.volatile = false;
-        try {
-            this.storage = storage || localStorage;
-        }
-        catch {
-            this.storage = new MemoryStorage();
-            this.volatile = true;
-            this.warning = 'Persistent storage is unavailable. Export your save before closing.';
-        }
+
+},
+"game/campaign.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CAREER_MILESTONES = void 0;
+exports.validateCampaign = validateCampaign;
+exports.normalizeCampaign = normalizeCampaign;
+exports.researchEligibility = researchEligibility;
+exports.approachResearch = approachResearch;
+exports.acceptResearch = acceptResearch;
+exports.contractOptions = contractOptions;
+exports.recordSurveyStation = recordSurveyStation;
+exports.surveyPayout = surveyPayout;
+exports.researchSettlement = researchSettlement;
+exports.completeResearch = completeResearch;
+exports.acceptMilestoneOpportunity = acceptMilestoneOpportunity;
+exports.milestoneObjectiveStatus = milestoneObjectiveStatus;
+exports.milestoneStatus = milestoneStatus;
+exports.claimMilestone = claimMilestone;
+exports.recordCharacterFlag = recordCharacterFlag;
+exports.nextUpgradeBenefit = nextUpgradeBenefit;
+const data_js_1 = require("./data.js");
+const RESEARCH_REPUTATION = 8;
+const RESEARCH_DAY_TOTAL = 65;
+const RESEARCH_NIGHT_TOTAL = 72;
+const MONITORING_DAY_TOTAL = 38;
+const MONITORING_NIGHT_TOTAL = 45;
+const REQUIRED_CAMPAIGN_FIELDS = ['researchInvitationSeen', 'researchAccepted', 'researchCompleted', 'characterFlags', 'milestoneFlags'];
+const OPTIONAL_CAMPAIGN_FIELDS = ['activeOpportunity', 'activeOpportunityDay', 'activeOpportunityPublishedAt', 'activeOpportunityCleanedAt'];
+const emptyCampaign = () => ({
+    researchInvitationSeen: false,
+    researchAccepted: false,
+    researchCompleted: false,
+    characterFlags: [],
+    milestoneFlags: []
+});
+/** Validate the optional schema-1 extension without accepting unbounded or ambiguous state. */
+function validateCampaign(value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value))
+        throw Error('Invalid campaign state.');
+    const source = value;
+    const fields = new Set([...REQUIRED_CAMPAIGN_FIELDS, ...OPTIONAL_CAMPAIGN_FIELDS]);
+    if (REQUIRED_CAMPAIGN_FIELDS.some(key => !(key in source)) || Object.keys(source).some(key => !fields.has(key)))
+        throw Error('Invalid campaign fields.');
+    for (const key of ['researchInvitationSeen', 'researchAccepted', 'researchCompleted']) {
+        if (typeof source[key] !== 'boolean')
+            throw Error('Invalid campaign flag: ' + key);
     }
-    save(p) {
-        try {
-            const key = exports.SAVE_PREFIX + p.slot;
-            const json = JSON.stringify(p);
-            const old = this.storage.getItem(key);
-            if (old)
-                this.storage.setItem(key + ':backup', old);
-            this.storage.setItem(key, json);
-            this.warning = this.volatile ? 'Persistent storage is unavailable. Export your save before closing.' : '';
-            return true;
-        }
-        catch {
-            this.warning = 'Browser storage is full or unavailable. Export a backup before closing.';
-            return false;
-        }
+    const validFlags = (v) => Array.isArray(v) && v.length <= 100 && v.every(flag => typeof flag === 'string' && flag.length > 0 && flag.length <= 80 && /^[a-z0-9][a-z0-9-]*$/i.test(flag)) && new Set(v).size === v.length;
+    if (!validFlags(source.characterFlags) || !validFlags(source.milestoneFlags))
+        throw Error('Invalid campaign recognition flags.');
+    if (source.researchAccepted && !source.researchInvitationSeen)
+        throw Error('Research cannot be accepted before its invitation.');
+    if (source.researchCompleted && !source.researchAccepted)
+        throw Error('Research cannot be completed before acceptance.');
+    const hasOpportunity = source.activeOpportunity !== undefined;
+    const snapshots = ['activeOpportunityDay', 'activeOpportunityPublishedAt', 'activeOpportunityCleanedAt'];
+    if (hasOpportunity) {
+        if (!['recognition-80', 'recognition-160', 'recognition-300'].includes(String(source.activeOpportunity)) || !Number.isInteger(source.activeOpportunityDay) || !Number.isInteger(source.activeOpportunityPublishedAt) || !Number.isInteger(source.activeOpportunityCleanedAt) || Number(source.activeOpportunityDay) < 1 || Number(source.activeOpportunityDay) > 1e6 || Number(source.activeOpportunityPublishedAt) < 0 || Number(source.activeOpportunityPublishedAt) > 1000 || Number(source.activeOpportunityCleanedAt) < 0 || Number(source.activeOpportunityCleanedAt) > 1e8)
+            throw Error('Invalid active career opportunity.');
     }
-    load(slot) {
-        for (const key of [exports.SAVE_PREFIX + slot, exports.SAVE_PREFIX + slot + ':backup'])
-            try {
-                const raw = this.storage.getItem(key);
-                if (raw)
-                    return validateProfile(JSON.parse(raw));
-            }
-            catch {
-                this.warning = 'A damaged save was ignored; a backup is used when available.';
-            }
-        return freshProfile(slot);
+    else if (snapshots.some(key => source[key] !== undefined))
+        throw Error('Career opportunity snapshots need an active opportunity.');
+    return structuredClone(source);
+}
+/** Supply campaign defaults and grandfather careers that already used research. */
+function normalizeCampaign(profile) {
+    const existingResearch = [profile.active, profile.pending].some(run => run?.order === 'research');
+    if (profile.campaign !== undefined) {
+        const state = validateCampaign(profile.campaign);
+        if (existingResearch && !state.researchCompleted) {
+            state.researchInvitationSeen = true;
+            state.researchAccepted = true;
+        }
+        return state;
     }
-    settings() {
-        try {
-            const s = JSON.parse(this.storage.getItem(exports.SAVE_PREFIX + 'settings') || '{}');
-            const q = ['high', 'balanced', 'low'].includes(s.quality) ? s.quality : 'balanced';
-            const gamepads = {};
-            if (s.gamepads && typeof s.gamepads === 'object' && !Array.isArray(s.gamepads))
-                for (const [key, raw] of Object.entries(s.gamepads).slice(0, 16)) {
-                    const p = raw;
-                    if (!p || typeof p !== 'object' || p.key !== key || typeof p.id !== 'string' || typeof p.mapping !== 'string' || !Number.isInteger(p.axisCount) || p.axisCount < 0 || p.axisCount > 64 || !Number.isInteger(p.buttonCount) || p.buttonCount < 0 || p.buttonCount > 128 || !Array.isArray(p.centers) || p.centers.length > 64 || !p.centers.every((n) => typeof n === 'number' && Number.isFinite(n) && n >= -1 && n <= 1))
-                        continue;
-                    const validAxis = (v) => v && Number.isInteger(v.index) && v.index >= 0 && v.index < p.axisCount && (v.sign === 1 || v.sign === -1);
-                    if (!p.axes || !['moveX', 'moveZ', 'lookX', 'lookY'].every(k => validAxis(p.axes[k])))
-                        continue;
-                    const validButtons = p.buttons && typeof p.buttons === 'object' && Object.entries(p.buttons).every(([action, index]) => /^[a-zA-Z]+$/.test(action) && Number.isInteger(index) && index >= 0 && index < p.buttonCount);
-                    const validAxisButtons = p.axisButtons && typeof p.axisButtons === 'object' && Object.entries(p.axisButtons).every(([action, binding]) => /^[a-zA-Z]+$/.test(action) && binding && Number.isInteger(binding.index) && binding.index >= 0 && binding.index < p.axisCount && typeof binding.value === 'number' && Number.isFinite(binding.value) && binding.value >= -1 && binding.value <= 1);
-                    if (!validButtons || !validAxisButtons)
-                        continue;
-                    gamepads[key] = { key, id: p.id.slice(0, 200), mapping: p.mapping.slice(0, 40), axisCount: p.axisCount, buttonCount: p.buttonCount, axes: p.axes, centers: p.centers, buttons: p.buttons, axisButtons: p.axisButtons, moveDeadzone: (0, math_js_1.clamp)(Number(p.moveDeadzone) || .14, .05, .4), lookDeadzone: (0, math_js_1.clamp)(Number(p.lookDeadzone) || .2, .05, .45) };
-                }
-            return { ...data_js_1.DEFAULT_SETTINGS, ...s, quality: q, music: (0, math_js_1.clamp)(Number(s.music ?? .42) || 0, 0, 1), ambience: (0, math_js_1.clamp)(Number(s.ambience ?? .6) || 0, 0, 1), effects: (0, math_js_1.clamp)(Number(s.effects ?? .7) || 0, 0, 1), sensitivity: (0, math_js_1.clamp)(Number(s.sensitivity ?? 1) || 1, .25, 2.5), fov: (0, math_js_1.clamp)(Number(s.fov ?? 78) || 78, 60, 100), touchScale: (0, math_js_1.clamp)(Number(s.touchScale ?? 1) || 1, .8, 1.3), instrumentHud: typeof s.instrumentHud === 'boolean' ? s.instrumentHud : true, keys: { ...data_js_1.DEFAULT_SETTINGS.keys, ...s.keys }, gamepads };
-        }
-        catch {
-            return structuredClone(data_js_1.DEFAULT_SETTINGS);
-        }
+    const priorSurvey = Object.values(profile.reefs ?? {}).some(reef => (reef?.surveys ?? 0) > 0 || (reef?.surveyedStations?.length ?? 0) > 0);
+    const state = emptyCampaign();
+    if (priorSurvey || existingResearch) {
+        state.researchInvitationSeen = true;
+        state.researchAccepted = true;
     }
-    saveSettings(s) {
-        try {
-            this.storage.setItem(exports.SAVE_PREFIX + 'settings', JSON.stringify(s));
-        }
-        catch {
-            this.warning = 'Settings could not be saved.';
-        }
+    return state;
+}
+function researchEligibility(profile) {
+    const campaign = profile.campaign ?? normalizeCampaign(profile);
+    if (campaign.researchAccepted && campaign.researchCompleted)
+        return { eligible: true, reason: 'The funded assignment is complete; repeat two-station Monitoring remains available.' };
+    if (campaign.researchAccepted)
+        return { eligible: true, reason: 'The funded two-station assignment is ready to choose.' };
+    if (profile.reputation < RESEARCH_REPUTATION)
+        return { eligible: false, reason: `Earn ${RESEARCH_REPUTATION} professional reputation to meet the research team.` };
+    if (!campaign.researchInvitationSeen)
+        return { eligible: false, reason: 'A research invitation is available in person at the harbour.' };
+    return { eligible: false, reason: 'Accept the research invitation at the harbour before selecting the assignment.' };
+}
+function approachResearch(profile) {
+    const campaign = profile.campaign ?? (profile.campaign = normalizeCampaign(profile));
+    if (campaign.researchCompleted)
+        return { ok: false, reason: 'The research team has already funded this assignment.' };
+    if (campaign.researchInvitationSeen)
+        return { ok: false, reason: campaign.researchAccepted ? 'The invitation has already been accepted.' : 'The research invitation is already waiting at the harbour.' };
+    if (profile.reputation < RESEARCH_REPUTATION)
+        return { ok: false, reason: `The research team needs ${RESEARCH_REPUTATION} professional reputation first.` };
+    campaign.researchInvitationSeen = true;
+    return { ok: true, reason: 'The research team invited you to discuss a funded two-station assignment.' };
+}
+function acceptResearch(profile) {
+    const campaign = profile.campaign ?? (profile.campaign = normalizeCampaign(profile));
+    if (campaign.researchCompleted)
+        return { ok: false, reason: 'The funded research assignment is already complete.' };
+    if (campaign.researchAccepted)
+        return { ok: false, reason: 'The funded research assignment is already accepted.' };
+    if (!campaign.researchInvitationSeen)
+        return { ok: false, reason: 'Meet the research team and hear the invitation before accepting.' };
+    campaign.researchAccepted = true;
+    return { ok: true, reason: 'You accepted the funded assignment: record two distinct field stations in one outing.' };
+}
+function remainingLionfish(profile, siteId) {
+    const site = data_js_1.SITES[siteId];
+    const reef = profile.reefs[siteId];
+    const homes = (0, data_js_1.reefFishHomes)(site, site.seed);
+    // On visits four and later, the first four habitat slots are replaced by
+    // the current return cohort; they are not four extra fish on top of the
+    // authored population.
+    const cohort = Math.floor(reef.visits / 4);
+    const ids = homes.map((_, i) => reef.visits >= 4 && i < 4 ? `return-${cohort}-${i}` : `fish-${i}`);
+    return ids.filter(id => !reef.removed.includes(id)).length;
+}
+function contractOptions(profile, siteId) {
+    const site = data_js_1.SITES[siteId];
+    const reef = profile.reefs[siteId];
+    const fish = remainingLionfish(profile, siteId);
+    const cleanup = Math.max(0, (site.worksites?.debris.length ?? 0) - reef.cleaned.length);
+    const restoration = Math.max(0, (site.worksites?.coral.length ?? 0) - Object.keys(reef.restored).length);
+    const research = researchEligibility(profile);
+    const stationCount = (site.worksites?.surveys.length ?? 0) + 2;
+    const researchAvailable = research.eligible && stationCount >= 2;
+    const catchAvailable = fish >= 4;
+    const cleanupAvailable = cleanup >= 2;
+    const restorationAvailable = restoration >= 2;
+    return [
+        { kind: 'catch', available: catchAvailable, remaining: fish, reason: catchAvailable ? `${fish} lionfish remain at this site.` : fish > 0 ? `Only ${fish} lionfish remain; the Kitchen order needs four fish to sell.` : 'No lionfish remain at this site today.' },
+        { kind: 'cleanup', available: cleanupAvailable, remaining: cleanup, reason: cleanupAvailable ? `${cleanup} permanent debris patches remain.` : cleanup > 0 ? `Only ${cleanup} debris patch remains; the cleanup order needs two.` : 'All authored debris has been removed.' },
+        { kind: 'restore', available: restorationAvailable, remaining: restoration, reason: restorationAvailable ? `${restoration} restoration plots remain unplanted.` : restoration > 0 ? `Only ${restoration} restoration plot remains; the planting order needs two.` : 'All restoration plots are planted.' },
+        { kind: 'research', available: researchAvailable, remaining: researchAvailable ? 2 : 0, reason: researchAvailable ? (profile.campaign?.researchCompleted ? 'Record two distinct field stations for a repeat Monitoring contract.' : 'Record two distinct field stations for the funded assignment.') : research.reason },
+        { kind: 'none', available: true, reason: 'Dive without a contract.' }
+    ];
+}
+/** Persist first-ever site visits and the per-run snapshot before calculating payment. */
+function recordSurveyStation(profile, run, stationId) {
+    if (!/^survey-\d+$/.test(stationId))
+        return { ok: false, firstVisit: false, reason: 'Unknown field station.' };
+    const reef = profile.reefs[run.site];
+    reef.surveyedStations ?? (reef.surveyedStations = []);
+    run.surveyFirstVisits ?? (run.surveyFirstVisits = []);
+    run.surveyStations ?? (run.surveyStations = []);
+    if (run.surveyStations.includes(stationId))
+        return { ok: false, firstVisit: false, reason: 'This station has already been surveyed during this outing.' };
+    const firstVisit = !reef.surveyedStations.includes(stationId);
+    run.surveyStations.push(stationId);
+    if (firstVisit) {
+        reef.surveyedStations.push(stationId);
+        run.surveyFirstVisits.push(stationId);
+    }
+    return { ok: true, firstVisit, reason: firstVisit ? 'First survey recorded at this station.' : 'Repeat station survey recorded.' };
+}
+/** Calculate station pay only; a funded assignment's top-up is handled separately. */
+function surveyPayout(run, reef) {
+    const surveyed = Math.max(0, Math.min(3, Math.floor(run.surveyed)));
+    const firstIds = new Set(run.surveyFirstVisits ?? []);
+    const firstVisitPay = Math.min(surveyed, firstIds.size) * 18;
+    const repeatPay = (surveyed - Math.min(surveyed, firstIds.size)) * 6;
+    // For legacy active runs without a first-visit snapshot, assume repeat rate to avoid back-paying unknown history.
+    const nightUplift = run.night ? surveyed * 2 : 0;
+    void reef;
+    return { stationPay: firstVisitPay + repeatPay + nightUplift, firstVisitPay, repeatPay, nightUplift, stationsPaid: surveyed };
+}
+/** The one-time grant tops station earnings up to a fixed inclusive assignment total. */
+function researchSettlement(run, profile) {
+    const station = surveyPayout({ ...run, surveyed: Math.min(2, run.surveyed) }, profile.reefs[run.site]);
+    const campaign = profile.campaign ?? normalizeCampaign(profile);
+    const legacyRun = run.siteRevision === undefined && run.researchFunded === undefined;
+    const distinctStations = run.surveyStations?.length ?? (legacyRun ? run.surveyed : 0);
+    // An older suspended research dive had no funding snapshot. Treat it as the
+    // first assignment only when the profile has not already been paid for it.
+    const funded = run.researchFunded ?? !campaign.researchCompleted;
+    let reason = 'The funded assignment needs two distinct stations in one safely completed outing.';
+    let eligible = false;
+    if (run.order !== 'research')
+        reason = 'This outing was not registered as a research assignment.';
+    else if (run.rescued)
+        reason = 'Rescue preserves reef work but does not settle contract pay.';
+    else if (run.researchEligible === false && !(run.researchEligible === undefined && campaign.researchAccepted))
+        reason = 'The research assignment was not eligible when this outing began.';
+    else if (funded && campaign.researchCompleted)
+        reason = 'The funded research assignment has already been paid; choose Monitoring for repeat work.';
+    else if (run.surveyed < 2 || distinctStations < 2)
+        reason = `Record ${Math.max(0, 2 - Math.min(Math.floor(run.surveyed), distinctStations))} more distinct station${run.surveyed === 1 ? '' : 's'} to complete the assignment.`;
+    else if (!campaign.researchAccepted)
+        reason = 'Accept the research invitation before starting the funded assignment.';
+    else {
+        eligible = true;
+        reason = funded
+            ? 'Two-station funded assignment settled; station pay is included in the $65 day / $72 night total.'
+            : 'Two-station Monitoring settled; repeat station pay is included in the $38 day / $45 night total.';
+    }
+    const target = funded ? (run.night ? RESEARCH_NIGHT_TOTAL : RESEARCH_DAY_TOTAL) : (run.night ? MONITORING_NIGHT_TOTAL : MONITORING_DAY_TOTAL);
+    const assignmentTopUp = eligible ? Math.max(0, target - station.stationPay) : 0;
+    return { ...station, eligible, funded, reason, assignmentTopUp, total: station.stationPay + assignmentTopUp };
+}
+/** Persist the one-time funded-assignment completion after its settlement is applied. */
+function completeResearch(profile, settlement) {
+    if (!settlement.eligible)
+        return { ok: false, reason: settlement.reason };
+    if (!settlement.funded)
+        return { ok: true, reason: 'Monitoring is repeatable and does not change the funded-assignment flag.' };
+    const campaign = profile.campaign ?? (profile.campaign = normalizeCampaign(profile));
+    if (campaign.researchCompleted)
+        return { ok: false, reason: 'The funded research assignment has already been recorded.' };
+    if (!campaign.researchAccepted)
+        return { ok: false, reason: 'The research invitation was not accepted.' };
+    campaign.researchCompleted = true;
+    return { ok: true, reason: 'The funded two-station assignment is complete.' };
+}
+exports.CAREER_MILESTONES = [
+    { id: 'recognition-80', audience: 80, reputation: 4, title: 'Lantern Bay Field Photographer', objective: 'Publish a peaceful wildlife highlight.' },
+    { id: 'recognition-160', audience: 160, reputation: 8, title: 'Reef Storyteller', objective: 'Complete a cleanup and publish its highlight.' },
+    { id: 'recognition-300', audience: 300, reputation: 17, title: 'Lantern Bay Conservation Voice', objective: 'Visit a reef on a later day and publish a new highlight.' }
+];
+function opportunityMissing(profile, milestone) {
+    return [
+        profile.audience < milestone.audience ? `${milestone.audience} followers` : '',
+        profile.reputation < milestone.reputation ? `${milestone.reputation} reputation` : ''
+    ].filter(Boolean);
+}
+function acceptMilestoneOpportunity(profile, id) {
+    const milestone = exports.CAREER_MILESTONES.find(item => item.id === id);
+    const campaign = profile.campaign ?? (profile.campaign = normalizeCampaign(profile));
+    if (campaign.milestoneFlags.includes(id))
+        return { ok: false, reason: 'This recognition has already been earned.' };
+    if (campaign.activeOpportunity)
+        return { ok: false, reason: `Finish ${campaign.activeOpportunity} before taking another assignment.` };
+    const missing = opportunityMissing(profile, milestone);
+    if (missing.length)
+        return { ok: false, reason: 'Still needed: ' + missing.join(', ') + '.' };
+    campaign.activeOpportunity = id;
+    campaign.activeOpportunityDay = profile.day;
+    campaign.activeOpportunityPublishedAt = profile.published.length;
+    campaign.activeOpportunityCleanedAt = profile.totalCleaned;
+    return { ok: true, reason: `Assignment accepted: ${milestone.objective}` };
+}
+function milestoneObjectiveStatus(profile, id) {
+    const campaign = profile.campaign ?? normalizeCampaign(profile);
+    const active = campaign.activeOpportunity === id;
+    const publishedAfterAcceptance = active ? profile.published.slice(campaign.activeOpportunityPublishedAt ?? profile.published.length) : [];
+    let complete = false;
+    let reason = 'Accept this assignment to begin its objective.';
+    if (active && id === 'recognition-80') {
+        complete = publishedAfterAcceptance.some(kind => ['marlow', 'turtle', 'ray'].includes(kind));
+        reason = complete ? 'A peaceful wildlife highlight was published.' : 'Publish a peaceful wildlife highlight (Marlow, turtle or ray).';
+    }
+    else if (active && id === 'recognition-160') {
+        const cleanedSince = profile.totalCleaned - (campaign.activeOpportunityCleanedAt ?? profile.totalCleaned);
+        complete = cleanedSince > 0 && publishedAfterAcceptance.includes('cleanup');
+        reason = complete ? 'Cleanup work and its highlight are complete.' : 'Remove debris and publish a cleanup highlight.';
+    }
+    else if (active && id === 'recognition-300') {
+        const acceptedDay = campaign.activeOpportunityDay ?? profile.day;
+        const recordedLaterVisit = Object.values(profile.reefs).some(reef => reef.lastDay > acceptedDay && reef.lastDay <= profile.day);
+        // Settlement evaluates recognition before it advances ReefProgress.lastDay.
+        // Count the safe outing being settled, but never a same-day visit or rescue.
+        const settlingLaterVisit = profile.pending?.finished === true && !profile.pending.rescued && profile.pending.day > acceptedDay;
+        const visitedLater = recordedLaterVisit || settlingLaterVisit;
+        complete = visitedLater && publishedAfterAcceptance.length > 0;
+        reason = complete ? 'A later reef visit and new published highlight are complete.' : 'Return to a reef on a later day and publish a new highlight.';
+    }
+    return { active, complete, reason };
+}
+function milestoneStatus(profile, id) {
+    const milestone = exports.CAREER_MILESTONES.find(item => item.id === id);
+    const campaign = profile.campaign ?? normalizeCampaign(profile);
+    const achieved = campaign.milestoneFlags.includes(id);
+    const missing = opportunityMissing(profile, milestone);
+    const objective = milestoneObjectiveStatus(profile, id);
+    return { milestone, achieved, available: !achieved && objective.active && objective.complete && missing.length === 0, missing, objective, recognitionOnly: true };
+}
+/** Record a one-time recognition flag. Recognition never changes cash or reputation. */
+function claimMilestone(profile, id) {
+    const campaign = profile.campaign ?? (profile.campaign = normalizeCampaign(profile));
+    const status = milestoneStatus(profile, id);
+    if (status.achieved)
+        return { ok: false, reason: 'This recognition has already been recorded.' };
+    if (!status.available)
+        return { ok: false, reason: status.missing.length ? 'Still needed: ' + status.missing.join(', ') + '.' : status.objective.reason };
+    campaign.milestoneFlags.push(id);
+    campaign.activeOpportunity = undefined;
+    campaign.activeOpportunityDay = undefined;
+    campaign.activeOpportunityPublishedAt = undefined;
+    campaign.activeOpportunityCleanedAt = undefined;
+    return { ok: true, reason: `Recognition awarded: ${status.milestone.title}.` };
+}
+/** Persist a bounded one-time character beat without conflating it with reputation. */
+function recordCharacterFlag(profile, id) {
+    if (!/^[a-z0-9][a-z0-9-]{0,79}$/i.test(id))
+        return false;
+    const campaign = profile.campaign ?? (profile.campaign = normalizeCampaign(profile));
+    if (campaign.characterFlags.includes(id))
+        return false;
+    if (campaign.characterFlags.length >= 100)
+        return false;
+    campaign.characterFlags.push(id);
+    return true;
+}
+/** Numeric next-rank effects for upgrade cards; unknown/non-numeric lines return null. */
+function nextUpgradeBenefit(profile, id) {
+    if (!data_js_1.UPGRADES.some(upgrade => upgrade.id === id))
+        return null;
+    const currentRank = (0, data_js_1.upgradeLevel)(profile, id);
+    if (currentRank >= 5)
+        return null;
+    const nextRank = currentRank + 1;
+    switch (id) {
+        case 'fins': return { currentRank, nextRank, label: 'base fin speed bonus', value: nextRank * 12, unit: '%' };
+        case 'tube': return { currentRank, nextRank, label: 'secured fish capacity', value: 10 + nextRank * 2, unit: 'fish' };
+        case 'spear': return { currentRank, nextRank, label: 'pole-spear reach', value: Number((3 + nextRank * .45).toFixed(2)), unit: 'm' };
+        case 'air': return { currentRank, nextRank, label: 'air capacity', value: 200 + Math.max(0, nextRank - 1) * 30, unit: 'units' };
+        case 'camera': return { currentRank, nextRank, label: 'highlight quality', value: nextRank * 8, unit: 'points' };
+        case 'kit': return { currentRank, nextRank, label: 'nursery fragments', value: 3 + nextRank * 2, unit: 'per dive' };
+        default: return null;
     }
 }
-exports.SaveStore = SaveStore;
 
 },
 "game/data.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MAX_UPGRADE_LEVEL = exports.UPGRADES = exports.DEFAULT_SETTINGS = exports.DEFAULT_KEYS = exports.SITES = void 0;
+exports.siteForRun = siteForRun;
+exports.siteTerrainKey = siteTerrainKey;
 exports.floorHeight = floorHeight;
 exports.currentAt = currentAt;
 exports.freePoint = freePoint;
 exports.groundPoint = groundPoint;
 exports.upgradeLevel = upgradeLevel;
 exports.upgradeCost = upgradeCost;
+exports.upgradeServiceRequirement = upgradeServiceRequirement;
 exports.capacity = capacity;
 exports.airCapacity = airCapacity;
 exports.spearReach = spearReach;
@@ -953,6 +1266,23 @@ exports.SITES = {
     }
 };
 const foundationRocks = [...gardenRocks, ...passageRocks];
+// Preserve the complete old terrain/mooring for already-suspended Passage outings.
+const LEGACY_PASSAGE = structuredClone(exports.SITES.passage);
+Object.assign(exports.SITES.passage, {
+    description: 'Follow the sheltered western shelf, cross the tide race and read the flow beneath Cathedral arch.',
+    shortDescription: 'A sheltered shelf, a deep tide race and two flow gauges.',
+    entry: (0, math_js_1.vec)(-28, 14, -42),
+    landmarks: [
+        { name: 'Western mooring', p: (0, math_js_1.vec)(-28, 24, -46), kind: 'boat' },
+        { name: 'Lee shelf nursery', p: (0, math_js_1.vec)(-28, 3, 10), kind: 'coral' },
+        { name: 'Tide race', p: (0, math_js_1.vec)(0, 8, 8), kind: 'current' },
+        { name: 'Cathedral flow gauge', p: (0, math_js_1.vec)(0, 8, 34), kind: 'landmark' }
+    ],
+    rocks: [...exports.SITES.passage.rocks, rock('lee-breakwater', -36, -10, 5, 9, 14), rock('cathedral-east-rib', 26, 32, 4, 13, 10, 1)],
+    worksites: anchors([[-24, -27], [-27, -5], [-23, 15], [18, 34]], [[-28, 8], [-29, 10], [-26, 12]], [[-25, 14]])
+});
+function siteForRun(run) { return run.site === 'passage' && run.siteRevision !== 2 ? LEGACY_PASSAGE : exports.SITES[run.site]; }
+function siteTerrainKey(site) { const resolved = typeof site === 'string' ? exports.SITES[site] : site; return !resolved ? 'legacy' : resolved === LEGACY_PASSAGE ? 'passage:1' : resolved.id + ':2'; }
 function oldFloorHeight(x, z) {
     const shelf = -.7 + Math.sin(x * .067) * .7 + Math.sin(z * .09 + x * .028) * .55 + Math.cos((z - x) * .036) * .4;
     let foundation = 0;
@@ -972,8 +1302,10 @@ function terrainSite(site) { return typeof site === 'string' ? exports.SITES[sit
 /** Omitted/legacy site terrain exactly preserves Sunlit Gardens and Passage's shared seabed. */
 function floorHeight(x, z, siteArg) {
     const site = terrainSite(siteArg);
-    if (!site || site.id === 'gardens' || site.id === 'passage')
+    if (!site || site.id === 'gardens' || site === LEGACY_PASSAGE)
         return oldFloorHeight(x, z);
+    if (site.id === 'passage')
+        return oldFloorHeight(x, z) - 7 * Math.exp(-(((x - 1) / 9) ** 2) - ((z - 10) / 65) ** 4) + 1.5 * Math.exp(-(((x + 28) / 12) ** 2) - ((z - 6) / 42) ** 4);
     const ripple = Math.sin(x * .071) * .34 + Math.sin(z * .064 + x * .03) * .28 + Math.cos((z - x) * .038) * .22;
     if (site.id === 'mangrove') {
         const channelWest = Math.exp(-Math.pow((x + 13) / 5.8, 2));
@@ -1023,7 +1355,7 @@ exports.UPGRADES = [
     { id: 'fins', name: 'Reefglide fins', cost: 95, tag: 'MOVE', description: 'Each level adds 12% of base fin speed, up to 60% at level 5.', requires: '' },
     { id: 'tube', name: 'Wide-mouth collection tube', cost: 120, tag: 'CAPACITY', description: 'Carry 12 fish at level 1, then 2 more per level, up to 20. Secured catches cannot be stolen.', requires: '' },
     { id: 'spear', name: 'Balanced pole spear', cost: 145, tag: 'HANDLING', description: 'Each level improves draw speed and adds 0.45 m of reach. Precision, not extra damage.', requires: '' },
-    { id: 'scooter', name: 'Minnow underwater scooter', cost: 290, tag: 'EXPLORATION', description: 'Switch between your spear and a battery-powered scooter. Each level adds cruising speed.', requires: '' },
+    { id: 'scooter', name: 'Minnow underwater scooter', cost: 420, tag: 'EXPLORATION', description: 'Switch between your spear and a battery-powered scooter. Each level adds cruising speed.', requires: '' },
     { id: 'air', name: 'Efficient regulator service', cost: 190, tag: 'AIR', description: 'Each level cuts air use by 9% of base. Levels 2–5 also add 30 tank capacity each.', requires: '' },
     { id: 'camera', name: 'Wide-angle camera housing', cost: 155, tag: 'STORIES', description: 'Each level adds 8 highlight quality. All discoveries remain available without it.', requires: '' },
     { id: 'kit', name: 'Coral field kit', cost: 110, tag: 'RESTORATION', description: 'Each level adds 2 nursery fragments and speeds up planting.', requires: '' },
@@ -1032,7 +1364,13 @@ exports.UPGRADES = [
 ];
 exports.MAX_UPGRADE_LEVEL = 5;
 function upgradeLevel(p, id) { return p.upgradeLevels?.[id] ?? (p.upgrades.includes(id) ? 1 : 0); }
-function upgradeCost(p, id) { const u = exports.UPGRADES.find(u => u.id === id), level = upgradeLevel(p, id); return !u || level >= exports.MAX_UPGRADE_LEVEL ? 0 : Math.round(u.cost * [1, .55, .7, .85, 1.05][level] / 5) * 5; }
+function upgradeCost(p, id) { const u = exports.UPGRADES.find(u => u.id === id), level = upgradeLevel(p, id); return !u || level >= exports.MAX_UPGRADE_LEVEL ? 0 : Math.round(u.cost * [1, .2, .25, .3, .4][level] / 5) * 5; }
+/** Service replaces parts of owned gear; advanced work opens as field experience grows. */
+function upgradeServiceRequirement(p, id) {
+    const next = upgradeLevel(p, id) + 1, day = [0, 1, 1, 5, 8, 11][next] ?? 1, rep = [0, 0, 0, 12, 20, 28][next] ?? 0;
+    const available = p.day >= day && p.reputation >= rep;
+    return { available, reason: available ? '' : `Level ${next} service opens on day ${day} with ${rep} conservation reputation.` };
+}
 function capacity(p) { const level = upgradeLevel(p, 'tube'); return level ? 10 + level * 2 : 8; }
 function airCapacity(p) { return 200 + Math.max(0, upgradeLevel(p, 'air') - 1) * 30; }
 function spearReach(p) { return 3 + upgradeLevel(p, 'spear') * .45; }
@@ -1075,7 +1413,7 @@ function siteUnlockText(p, id) {
 }
 const FISH_STARTERS = {
     gardens: [[3, -31], [-4, -23], [7, -15], [-8, -2], [6, 12]],
-    passage: [[3, -32], [-5, -23], [5, -12], [-5, 12], [5, 34]],
+    passage: [[-27, -29], [-29, -14], [-22, 8], [0, 20], [24, 40]],
     mangrove: [[3, -34], [-6, -26], [8, -16], [-4, 4], [7, 27]],
     cenote: [[4, -40], [-7, -26], [10, -13], [-8, 12], [5, 37]],
     harbour: [[3, -43], [-6, -27], [5, -15], [-7, 11], [4, 33]]
@@ -1159,6 +1497,622 @@ const timeText = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().p
 exports.timeText = timeText;
 
 },
+"ui/campaign-ui.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.nextCharacterMoment = nextCharacterMoment;
+exports.momentView = momentView;
+exports.careerView = careerView;
+exports.eventView = eventView;
+exports.contractNote = contractNote;
+exports.eventNote = eventNote;
+exports.receiptView = receiptView;
+exports.upgradeNumbers = upgradeNumbers;
+exports.filletResult = filletResult;
+const campaign_js_1 = require("../game/campaign.js");
+const contracts_js_1 = require("../game/contracts.js");
+const data_js_1 = require("../game/data.js");
+const math_js_1 = require("../game/math.js");
+const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function nextCharacterMoment(p) {
+    const c = p.campaign ?? (0, campaign_js_1.normalizeCampaign)(p), seen = c.characterFlags;
+    if (p.reputation >= 8 && !c.researchInvitationSeen && !seen.includes('research-invitation'))
+        return { id: 'research-invitation', speaker: 'Dr Mira Vale · Lantern Bay University', title: 'We could use a careful pair of eyes.', text: 'We have been following your field work. Read two stations for our first funded assignment: $65 total by day, including station pay. We would like you to learn the reef, then come back and see how it changes.', research: true };
+    if (seen.includes('welcome-grant') && !seen.includes('first-delivery'))
+        return { id: 'first-delivery', speaker: 'Ellie · The Sandbar Kitchen', title: 'Your first catch is on the menu.', text: 'Clean fish, safely landed. That is what we need. There is a $20 welcome payment on your receipt; the next orders are four fish at a time. Spend it on something that makes the next dive easier.' };
+    if (p.totalCleaned > 0 && !seen.includes('trust-thanks'))
+        return { id: 'trust-thanks', speaker: 'Jo · Lantern Bay Trust', title: 'That corner is clear now.', text: 'The fishing gear you brought up stays gone. We do not put it back for another checklist. Try a different shelf tomorrow, or return to see what settles in.' };
+    if (p.campaign?.researchCompleted && !seen.includes('research-thanks'))
+        return { id: 'research-thanks', speaker: 'Dr Mira Vale · Lantern Bay University', title: 'Now we have a starting point.', text: 'Your first station readings are in. Monitoring stays open: $38 for two readings by day, or $45 at night, including the station payments. A familiar station pays less than a first visit.' };
+    return null;
+}
+function momentView(m) { return `<section class="modal narrow character-moment"><div class="character-mark" aria-hidden="true">${esc(m.speaker.split(' ').map(w => w[0]).slice(0, 2).join(''))}</div><p class="eyebrow">${esc(m.speaker)}</p><h2>${esc(m.title)}</h2><p>${esc(m.text)}</p><div class="button-row">${m.research ? '<button class="primary" data-action="research-accept">Accept the assignment</button>' : '<button class="primary" data-close>Back to it</button>'}<button data-close>${m.research ? 'Maybe later' : 'Skip'}</button></div><p class="tiny muted">Short harbour conversation · you can skip it.</p></section>`; }
+function careerView(p) {
+    const c = p.campaign ?? (0, campaign_js_1.normalizeCampaign)(p), research = (0, campaign_js_1.researchEligibility)(p);
+    const offers = campaign_js_1.CAREER_MILESTONES.map(m => { const s = (0, campaign_js_1.milestoneStatus)(p, m.id); return `<li><strong>${esc(m.title)}</strong><span>${m.audience} followers · ${m.reputation} reputation</span><small>${esc(s.achieved ? 'Recognition earned.' : s.objective.active ? s.objective.reason : m.objective)}</small>${!s.achieved && !s.objective.active ? `<button data-action="opportunity" data-value="${m.id}" ${s.missing.length === 0 && !c.activeOpportunity ? '' : 'disabled'}>Take assignment</button>` : ''}</li>`; }).join('');
+    return `${c.milestoneFlags.length ? `<p class="company-recognition">Recognition · ${c.milestoneFlags.map(id => esc(campaign_js_1.CAREER_MILESTONES.find(m => m.id === id)?.title ?? id)).join(' · ')}</p>` : ''}<details class="career-panel"><summary>Reputation &amp; stories · ${p.reputation} reputation / ${p.audience} followers</summary><p class="tiny muted">Reputation comes from careful reef work. Followers come from the highlights you publish. Recognition adds a badge, without another cash payout.</p><p>${esc(research.reason)}</p>${p.reputation >= 8 && !c.researchAccepted ? '<button data-action="research-visit">Meet the university team</button>' : ''}<ul class="recognition-list">${offers}</ul></details>`;
+}
+function eventView(p, site, registered) { const today = p.day % 3 === 0, theme = (0, contracts_js_1.eventTheme)(p, site), objective = theme === 'catch' ? 'Lionfish removal earns 125 points; secure and land your catch.' : theme === 'cleanup' ? 'Cleanup earns 200 points. Loaned field cutters make abandoned-gear work 20% faster.' : 'Station readings earn 120 points. Loaned gauges make readings 20% faster.'; return `<section class="modal narrow"><p class="eyebrow">LANTERN BAY SWEEP · LOCAL EVENT</p><h2>${today ? 'Today is ' + theme + ' day.' : 'The next Sweep is on day ' + (p.day + (3 - p.day % 3)) + '.'}</h2><p>${objective}</p><p>Native-fish and coral hits reduce your score. Safe return is required for a prize.</p><p><strong>250 points: $25 · 650: $50 · 1,200: $80</strong></p><p class="status-note">${registered ? 'Registered for today. This stays with this logbook after reload.' : 'Not registered. Your regular dive remains available.'}</p><div class="button-row"><button class="primary" data-action="event-toggle" ${today && !p.active && !p.pending ? '' : 'disabled'}>${registered ? 'Cancel registration' : 'Register for today'}</button><button data-close>Done</button></div><h3>Your local results</h3>${p.records.slice(-5).reverse().map(r => `<p class="tiny">Day ${r.day} · ${esc(r.site)} · ${r.score} points</p>`).join('') || '<p class="tiny muted">No results yet.</p>'}</section>`; }
+function contractNote(run) { const progress = (0, contracts_js_1.contractProgress)(run); return `${progress.text}${run.order === 'research' && run.site === 'passage' && run.siteRevision === 2 ? ' · lee-shelf + Cathedral gauges' : ''}`; }
+function eventNote(run) { if (!run.event)
+    return ''; const score = (0, contracts_js_1.eventScore)(run), next = score < 250 ? 250 : score < 650 ? 650 : score < 1200 ? 1200 : 0; return `${run.eventTheme ?? 'catch'} day · ${score} points${next ? ' · next prize at ' + next : ' · top prize tier'}`; }
+function receiptView(p, r) {
+    const rows = [['Fish sold', r.sales], ['Filleting bonus', r.filletBonus], ['Kitchen / field contract', r.contract], ['Permanent cleanup work', r.cleanPay], ['Coral restoration', r.restorationPay], ['Station readings', r.surveyPay], ['Research funding / monitoring top-up', r.researchTopUp], ['Community donation payment', r.donationPay], ['First delivery welcome payment', r.starterGrant], ['Overhead debris recovery', r.boatPay], ['Local event prize', r.eventPrize], ...(r.sponsor ? [['Saved-outing sponsor contribution', r.sponsor]] : [])];
+    return `<section class="modal narrow"><p class="eyebrow">THE OUTING'S ACCOUNT</p><h2>The next dive starts here.</h2><table class="summary-table"><tbody>${rows.map(([label, n]) => `<tr><td>${esc(label)}</td><td>${(0, math_js_1.money)(n)}</td></tr>`).join('')}<tr><td><strong>Total earned</strong></td><td><strong>${(0, math_js_1.money)(r.earned)}</strong></td></tr><tr><td>Air, fuel, field supplies / rescue</td><td>−${(0, math_js_1.money)(r.expenses)}</td></tr><tr><td>Outstanding bill paid</td><td>−${(0, math_js_1.money)(r.debtPaid)}</td></tr><tr><td><strong>Available for the next dive</strong></td><td><strong>${(0, math_js_1.money)(p.cash)}</strong></td></tr></tbody></table><p class="receipt-reason">${esc(r.contractReason)}</p><p class="tiny muted">${esc(r.eventReason)}</p><p>+${r.reputation} reputation · +${r.followers} followers</p>${r.recognition.map(t => `<p class="status-note">${esc(t)}</p>`).join('')}${p.debt ? `<p>${(0, math_js_1.money)(p.debt)} remains outstanding. Basic dives stay available.</p>` : ''}<div class="button-row"><button class="primary" data-screen="dock">Back to harbour</button><button data-screen="gear">Browse equipment</button></div></section>`;
+}
+function upgradeNumbers(p, id) {
+    const rank = (0, data_js_1.upgradeLevel)(p, id), next = Math.min(5, rank + 1), arrow = (a, b) => `${a} → ${b}`;
+    switch (id) {
+        case 'fins': return `Fin speed ${arrow((2.2 * (1 + rank * .12)).toFixed(2), (2.2 * (1 + next * .12)).toFixed(2))} m/s.`;
+        case 'tube': return `Secured capacity ${arrow(rank ? 10 + rank * 2 : 8, 10 + next * 2)} fish.`;
+        case 'spear': return `Reach ${arrow((3 + rank * .45).toFixed(2), (3 + next * .45).toFixed(2))} m; draw ${arrow(Math.max(.4, .8 - rank * .08).toFixed(2), Math.max(.4, .8 - next * .08).toFixed(2))} seconds.`;
+        case 'air': return `Tank ${arrow(200 + Math.max(0, rank - 1) * 30, 200 + Math.max(0, next - 1) * 30)} bar; base air use reduced ${arrow(rank * 9, next * 9)}%.`;
+        case 'scooter': return rank ? `Cruise ${arrow((4.4 + rank * .4).toFixed(1), (4.4 + next * .4).toFixed(1))} m/s.` : 'Deploy a 4.8 m/s scooter. Stow it before drawing the spear.';
+        case 'camera': return `Highlight quality bonus ${arrow(rank * 8, next * 8)} points; recorded quality caps at 100.`;
+        case 'kit': return `Planting ${arrow(Math.max(1.3, 3.3 - rank * .4).toFixed(1), Math.max(1.3, 3.3 - next * .4).toFixed(1))} seconds; stock ${arrow(3 + rank * 2, 3 + next * 2)} fragments. Each current site has 3 plots.`;
+        case 'battery': return `Scooter endurance at full thrust ${arrow(Math.round(100 / (.28 / (1 + rank * .35)) / 60), Math.round(100 / (.28 / (1 + next * .35)) / 60))} minutes before torch use.`;
+        case 'torch': {
+            const battery = (0, data_js_1.upgradeLevel)(p, 'battery'), cost = (level) => (.065 / (1 + level * .2 + battery * .15)).toFixed(3);
+            return `Torch battery use ${rank ? cost(rank) : 'off'} → ${cost(next)} units/s. The beam widens at ranks 2–5. Night access needs regulator 2, a torch and Passage unlocked.`;
+        }
+        default: return '';
+    }
+}
+function filletResult(r) { const q = r.filletQuality ?? 0, sales = r.cargo.reduce((n, c) => n + c.value, 0); return `<section class="modal narrow"><p class="eyebrow">CATCH PREPARATION</p><h2>${(0, contracts_js_1.filletGrade)(q)}.</h2><p>${Math.round(q * 100)}% cut accuracy · <strong>${Math.round(q * 300) / 10}% sale bonus</strong></p><p>If you sell this whole catch, filleting adds <strong>${(0, math_js_1.money)(Math.round(sales * q * .3))}</strong>. Meals and donations get no filleting bonus. Your final receipt uses exactly the fish you choose to sell.</p><div class="button-row"><button class="primary" data-action="fillet-cancel">Choose what to sell</button></div></section>`; }
+
+},
+"game/contracts.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.eventTheme = eventTheme;
+exports.contractProgress = contractProgress;
+exports.eventScore = eventScore;
+exports.eventReward = eventReward;
+exports.filletGrade = filletGrade;
+const campaign_js_1 = require("./campaign.js");
+function eventTheme(profile, site) {
+    const preferred = ['catch', 'cleanup', 'research'][(Math.floor(profile.day / 3) - 1) % 3];
+    if (preferred === 'research' && !(0, campaign_js_1.researchEligibility)(profile).eligible)
+        return 'catch';
+    if (preferred === 'cleanup' && !(0, campaign_js_1.contractOptions)(profile, site).find(o => o.kind === 'cleanup')?.available)
+        return (0, campaign_js_1.researchEligibility)(profile).eligible ? 'research' : 'catch';
+    return preferred;
+}
+function contractProgress(run) {
+    const researchRoute = run.site === 'passage' && run.siteRevision === 2;
+    const amount = run.order === 'catch' ? run.cargo.length : run.order === 'cleanup' ? run.cleaned : run.order === 'restore' ? run.restored : run.order === 'research' ? (researchRoute ? ['survey-0', 'survey-1'].filter(id => run.jobs.some(j => j.id === id && j.done)).length : run.surveyed) : 0;
+    const target = run.order === 'catch' ? 4 : run.order === 'none' ? 0 : 2;
+    const label = run.order === 'catch' ? 'Kitchen' : run.order === 'cleanup' ? 'Cleanup' : run.order === 'restore' ? 'Restoration' : run.order === 'research' ? (researchRoute ? 'Flow gauges' : 'Research') : 'Free exploration';
+    return { label, amount, target, ready: target > 0 && amount >= target, text: target ? `${label} ${Math.min(amount, target)}/${target}${run.order === 'catch' ? ' secured · sell 4 at the dock' : ''}` : label };
+}
+function eventScore(run) { if (run.rescued)
+    return 0; return Math.max(0, run.removed * (run.eventTheme === 'catch' ? 125 : 100) + run.cleaned * (run.eventTheme === 'cleanup' ? 200 : 150) + run.restored * 180 + run.surveyed * (run.eventTheme === 'research' ? 120 : 80) - run.nativeHits * 300 - run.coralHits * 40); }
+function eventReward(score) { return score >= 1200 ? 80 : score >= 650 ? 50 : score >= 250 ? 25 : 0; }
+function filletGrade(q) { return q >= .85 ? 'Excellent' : q >= .6 ? 'Good' : q >= .3 ? 'Fair' : 'Rough cuts'; }
+
+},
+"audio/scooter.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ScooterMotor = void 0;
+exports.sampledThrust = sampledThrust;
+/** Render-only frames have no new control sample; retain thrust until the next simulation step. */
+function sampledThrust(previous, playing, sampled, frame) {
+    return !playing ? 0 : sampled ? Math.min(1, Math.hypot(frame.moveX, frame.moveZ, frame.vertical)) : previous;
+}
+/** A fixed two-oscillator voice: silent at rest outside a deployed, powered dive. */
+class ScooterMotor {
+    constructor(ctx, destination) {
+        this.ctx = ctx;
+        this.active = false;
+        this.thrust = 0;
+        this.lastLevel = -1;
+        this.lastPitch = -1;
+        this.gain = ctx.createGain();
+        this.gain.gain.value = 0;
+        this.filter = ctx.createBiquadFilter();
+        this.filter.type = 'lowpass';
+        this.filter.frequency.value = 380;
+        this.low = ctx.createOscillator();
+        this.low.type = 'sine';
+        this.low.frequency.value = 62;
+        this.hum = ctx.createOscillator();
+        this.hum.type = 'triangle';
+        this.hum.frequency.value = 124;
+        this.low.connect(this.filter);
+        this.hum.connect(this.filter);
+        this.filter.connect(this.gain);
+        this.gain.connect(destination);
+        this.low.start();
+        this.hum.start();
+    }
+    update(powered, thrust) {
+        this.active = powered && this.ctx.state === 'running';
+        this.thrust = this.active ? Math.max(0, Math.min(1, thrust)) : 0;
+        const level = this.active ? .025 + this.thrust * .075 : 0, pitch = 62 + this.thrust * 42, t = this.ctx.currentTime;
+        if (Math.abs(level - this.lastLevel) > .001) {
+            this.gain.gain.cancelScheduledValues(t);
+            this.gain.gain.setTargetAtTime(level, t, .035);
+            this.lastLevel = level;
+        }
+        if (Math.abs(pitch - this.lastPitch) > .5) {
+            this.low.frequency.setTargetAtTime(pitch, t, .09);
+            this.hum.frequency.setTargetAtTime(pitch * 2, t, .09);
+            this.filter.frequency.setTargetAtTime(380 + this.thrust * 420, t, .09);
+            this.lastPitch = pitch;
+        }
+    }
+    silence() { this.update(false, 0); }
+    dispose() { this.silence(); this.low.stop(); this.hum.stop(); this.low.disconnect(); this.hum.disconnect(); this.filter.disconnect(); this.gain.disconnect(); }
+    stats() { return { active: this.active, thrust: this.thrust, gain: Math.max(0, this.lastLevel), pitchHz: this.lastPitch, voices: 2 }; }
+}
+exports.ScooterMotor = ScooterMotor;
+
+},
+"analytics/game-start.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createGameStartLifecycle = createGameStartLifecycle;
+exports.prepareWebsiteGameStartHook = prepareWebsiteGameStartHook;
+const shared_game_starts_client_js_1 = require("./shared-game-starts-client.js");
+/** Guard even unexpected adapter errors. Gameplay never waits for telemetry. */
+function createGameStartLifecycle(tracker) {
+    let ready = false;
+    const safely = (call) => { try {
+        Promise.resolve(call()).catch(() => { });
+    }
+    catch { /* Measurement is optional. */ } };
+    return {
+        markReady() { ready = true; safely(() => tracker.markReady()); },
+        start() { if (ready)
+            safely(() => tracker.start()); },
+        activity() { if (ready)
+            safely(() => tracker.activity()); },
+        dispose() { safely(() => tracker.dispose()); },
+    };
+}
+function prepareWebsiteGameStartHook() {
+    // Shared contract b928454. Production activation remains held for approval.
+    return createGameStartLifecycle((0, shared_game_starts_client_js_1.createGameStartTracker)({ gameId: 'reef-sweep', enabled: false, endpoint: '' }));
+}
+
+},
+"analytics/shared-game-starts-client.js":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CONSENT_KEY = void 0;
+exports.createGameStartTracker = createGameStartTracker;
+// Browser-only start measurement. Nothing transmits unless explicitly enabled.
+exports.CONSENT_KEY = 'samfa12:analytics-consent';
+const SESSION_MS = 30 * 60000;
+const RETRY_MS = 24 * 60 * 60000;
+const GAMES = new Set(['briarhold', 'reef-sweep']);
+function createGameStartTracker({ gameId, enabled = false, endpoint = '', windowRef = globalThis.window, now = Date.now, uuid = () => globalThis.crypto.randomUUID(), fetchImpl = globalThis.fetch, timeoutSignal = () => AbortSignal.timeout(5000) } = {}) {
+    if (!GAMES.has(gameId))
+        throw new Error('Unsupported game ID');
+    const key = `samfa12:game-start:v1:${gameId}`;
+    let ready = false, inFlight = null, state = null, suppressed = false, suppressedAt = 0, lastWrite = 0;
+    let controller = null;
+    const consent = () => {
+        try {
+            return windowRef.localStorage.getItem(exports.CONSENT_KEY) === 'granted';
+        }
+        catch {
+            return false;
+        }
+    };
+    const read = () => {
+        try {
+            const value = JSON.parse(windowRef.sessionStorage.getItem(key));
+            if (value && typeof value.eventId === 'string' && Number.isFinite(value.lastActivity)
+                && Number.isFinite(Date.parse(value.startedAt)) && now() - value.lastActivity < SESSION_MS
+                && value.lastActivity <= now() + 300000)
+                return value;
+        }
+        catch { /* In-memory operation remains usable when browser storage fails. */ }
+        return null;
+    };
+    const save = () => {
+        try {
+            if (state)
+                windowRef.sessionStorage.setItem(key, JSON.stringify(state));
+            else
+                windowRef.sessionStorage.removeItem(key);
+        }
+        catch { /* Never interrupt gameplay. Reload deduplication is unavailable. */ }
+    };
+    const allowedEndpoint = () => {
+        if (!enabled || !endpoint || !windowRef)
+            return null;
+        try {
+            const url = new URL(endpoint, windowRef.location.href);
+            const local = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+            if (url.origin !== windowRef.location.origin || (!local && url.protocol !== 'https:')
+                || url.pathname !== '/api/game-starts/v1/start' || url.search || url.hash)
+                return null;
+            return url.href;
+        }
+        catch {
+            return null;
+        }
+    };
+    const syncConsent = () => {
+        if (!consent()) {
+            state = null;
+            suppressed = true;
+            suppressedAt = now();
+            controller?.abort();
+            save();
+        }
+    };
+    async function flush() {
+        syncConsent();
+        const url = allowedEndpoint();
+        if (!url || !state || state.acked || !consent())
+            return { status: 'inactive' };
+        if (now() - Date.parse(state.startedAt) > RETRY_MS)
+            return { status: 'expired' };
+        if (inFlight)
+            return inFlight;
+        if ((state.attempts || 0) >= 4 || now() < (state.nextAttempt || 0))
+            return { status: 'pending' };
+        const event = state;
+        event.attempts = (event.attempts || 0) + 1;
+        event.nextAttempt = now() + 1000 * 2 ** event.attempts;
+        save();
+        controller = new AbortController();
+        inFlight = (async () => {
+            try {
+                const response = await fetchImpl(url, {
+                    method: 'POST', credentials: 'omit', referrerPolicy: 'no-referrer',
+                    headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.any([timeoutSignal(), controller.signal]),
+                    body: JSON.stringify({ schemaVersion: 1, gameId, eventId: event.eventId, startedAt: event.startedAt }),
+                });
+                const ack = await response.json();
+                if (!response.ok || ack.schemaVersion !== 1 || ack.gameId !== gameId
+                    || !['accepted', 'duplicate'].includes(ack.status)
+                    || ack.day !== event.startedAt.slice(0, 10))
+                    return { status: 'pending' };
+                if (state === event && consent()) {
+                    state.acked = true;
+                    save();
+                }
+                return { status: ack.status };
+            }
+            catch {
+                return { status: 'pending' };
+            }
+            finally {
+                inFlight = null;
+            }
+        })();
+        return inFlight;
+    }
+    state = consent() ? read() : null;
+    const storageListener = event => { if (event.key === exports.CONSENT_KEY)
+        syncConsent(); };
+    windowRef?.addEventListener?.('storage', storageListener);
+    windowRef?.addEventListener?.('samfa12:analytics-consent', syncConsent);
+    const onlineListener = () => { void flush(); };
+    windowRef?.addEventListener?.('online', onlineListener);
+    return {
+        markReady() { ready = true; },
+        async start() {
+            if (!ready || !allowedEndpoint())
+                return { status: 'inactive' };
+            if (!consent()) {
+                suppressed = true;
+                suppressedAt = now();
+                return { status: 'consent-required' };
+            }
+            if (suppressed && now() - suppressedAt >= SESSION_MS)
+                suppressed = false;
+            if (state && now() - state.lastActivity >= SESSION_MS) {
+                state = null;
+                suppressed = false;
+            }
+            if (suppressed)
+                return { status: 'suppressed' };
+            if (!state) {
+                try {
+                    state = { eventId: uuid(), startedAt: new Date(now()).toISOString(), lastActivity: now(), acked: false };
+                }
+                catch {
+                    return { status: 'unavailable' };
+                }
+                save();
+            }
+            return flush();
+        },
+        activity() {
+            if (!consent()) {
+                syncConsent();
+                return;
+            }
+            if (state && now() - state.lastActivity < SESSION_MS) {
+                state.lastActivity = now();
+                if (now() - lastWrite >= 60000) {
+                    save();
+                    lastWrite = now();
+                }
+            }
+        },
+        flush, syncConsent,
+        dispose() {
+            windowRef?.removeEventListener?.('storage', storageListener);
+            windowRef?.removeEventListener?.('samfa12:analytics-consent', syncConsent);
+            windowRef?.removeEventListener?.('online', onlineListener);
+            controller?.abort();
+        },
+    };
+}
+
+},
+"game/profile.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SaveStore = exports.MemoryStorage = exports.SAVE_PREFIX = void 0;
+exports.freshProfile = freshProfile;
+exports.validateProfile = validateProfile;
+exports.buy = buy;
+const data_js_1 = require("./data.js");
+const math_js_1 = require("./math.js");
+const reef_recovery_js_1 = require("./reef-recovery.js");
+const campaign_js_1 = require("./campaign.js");
+exports.SAVE_PREFIX = 'reef-sweep:v1:';
+const REEF_IDS = ['gardens', 'passage', 'mangrove', 'cenote', 'harbour'];
+const emptyReef = () => ({ removed: [], cleaned: [], restored: {}, visits: 0, productiveVisits: 0, surveys: 0, lastDay: 0 });
+function freshProfile(slot = 1) { return { version: 1, slot, day: 1, cash: 80, debt: 0, reputation: 0, audience: 12, totalRemoved: 0, totalCleaned: 0, totalRestored: 0, upgrades: [], reefs: { gardens: emptyReef(), passage: emptyReef(), mangrove: emptyReef(), cenote: emptyReef(), harbour: emptyReef() }, records: [], published: [], discoveries: [], tutorial: 0, sponsorPaidDay: 0, lastReport: 'Your boat. Your first reef. A little room to make a difference.', active: null, pending: null }; }
+const numeric = (v, min, max) => typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max;
+const strings = (v, n = 3000) => Array.isArray(v) && v.length <= n && v.every(s => typeof s === 'string' && s.length < 140);
+/** Import is intentionally strict. Invalid data is never allowed to replace a good slot. */
+function validateProfile(v) {
+    const source = v;
+    const p = source && typeof source === 'object' ? structuredClone(source) : source;
+    if (!p || p.version !== 1)
+        throw Error('This is not a supported Reef Sweep save (schema 1).');
+    if (!p.reefs || typeof p.reefs !== 'object' || Array.isArray(p.reefs))
+        throw Error('Invalid reef progress.');
+    const keys = Object.keys(p.reefs);
+    const legacyTwoSiteSave = keys.length === 2 && keys.includes('gardens') && keys.includes('passage');
+    if (legacyTwoSiteSave) {
+        p.reefs = { ...p.reefs, mangrove: emptyReef(), cenote: emptyReef(), harbour: emptyReef() };
+    }
+    else if (keys.length !== REEF_IDS.length || REEF_IDS.some(id => !keys.includes(id)) || keys.some(id => !REEF_IDS.includes(id)))
+        throw Error('Invalid reef-site inventory.');
+    for (const k of ['day', 'cash', 'debt', 'reputation', 'audience', 'totalRemoved', 'totalCleaned', 'totalRestored'])
+        if (!numeric(p[k], 0, 1e8))
+            throw Error('Invalid save field: ' + k);
+    if (!numeric(p.day, 1, 1e6) || !numeric(p.slot, 1, 3))
+        throw Error('Invalid save slot or day.');
+    if (!strings(p.upgrades, 30) || !p.upgrades.every(id => data_js_1.UPGRADES.some(u => u.id === id)))
+        throw Error('Unrecognised equipment in save.');
+    if (new Set(p.upgrades).size !== p.upgrades.length)
+        throw Error('Duplicate equipment in save.');
+    if (p.upgradeLevels !== undefined && (!p.upgradeLevels || typeof p.upgradeLevels !== 'object' || Array.isArray(p.upgradeLevels) || !Object.entries(p.upgradeLevels).every(([id, rank]) => p.upgrades.includes(id) && Number.isInteger(rank) && rank >= 1 && rank <= data_js_1.MAX_UPGRADE_LEVEL)))
+        throw Error('Invalid equipment levels.');
+    if (!strings(p.published, 3000) || !strings(p.discoveries, 200))
+        throw Error('Invalid journal.');
+    if (!Array.isArray(p.records) || p.records.length > 80 || !p.records.every(r => numeric(r.score, 0, 1e8) && REEF_IDS.includes(r.site) && numeric(r.day, 1, 1e6)))
+        throw Error('Invalid event history.');
+    for (const id of REEF_IDS) {
+        const r = p.reefs?.[id];
+        if (!r || !strings(r.removed) || !strings(r.cleaned) || !r.restored || typeof r.restored !== 'object' || Array.isArray(r.restored) || Object.entries(r.restored).length > 100 || !Object.entries(r.restored).every(([k, n]) => /^coral-\d+$/.test(k) && numeric(n, 1, 1e6)))
+            throw Error('Invalid reef progress.');
+        if (!numeric(r.visits, 0, 1e6) || !numeric(r.surveys, 0, 1e6))
+            throw Error('Invalid reef counters.');
+        if (r.surveyedStations !== undefined && (!strings(r.surveyedStations, 16) || !r.surveyedStations.every(id => /^survey-\d+$/.test(id)) || new Set(r.surveyedStations).size !== r.surveyedStations.length))
+            throw Error('Invalid surveyed-station history.');
+        if (r.productiveVisits !== undefined && (!numeric(r.productiveVisits, 0, 1e6) || !Number.isInteger(r.productiveVisits)))
+            throw Error('Invalid productive-visit counter.');
+    }
+    for (const r of [p.active, p.pending])
+        if (r) {
+            if (!REEF_IDS.includes(r.site) || !numeric(r.seed, 0, 0xffffffff) || typeof r.id !== 'string' || !numeric(r.time, 0, 10000) || !numeric(r.air, 0, (0, data_js_1.airCapacity)(p)) || !numeric(r.health, 0, 100) || !numeric(r.battery, 0, 100) || !numeric(r.yaw, -1e9, 1e9) || !numeric(r.pitch, -2, 2))
+                throw Error('Invalid suspended dive.');
+            if (r.recoveryStage !== undefined && (!Number.isInteger(r.recoveryStage) || r.recoveryStage < 0 || r.recoveryStage > 5))
+                throw Error('Invalid reef recovery snapshot.');
+            if (r.siteRevision !== undefined && r.siteRevision !== 1 && r.siteRevision !== 2)
+                throw Error('Invalid site revision.');
+            if (r.night !== undefined && typeof r.night !== 'boolean' || r.night && (0, data_js_1.upgradeLevel)(p, 'torch') < 1)
+                throw Error('Invalid night dive.');
+            if (r.filletQuality !== undefined && (!numeric(r.filletQuality, 0, 1) || !r.finished || r.rescued || !r.cargo.length))
+                throw Error('Invalid fillet preparation.');
+            for (const v of [r.p, r.velocity])
+                if (!v || !['x', 'y', 'z'].every(k => numeric(v[k], -10000, 10000)))
+                    throw Error('Invalid diver position.');
+            if (!Array.isArray(r.fish) || r.fish.length > 40 || !Array.isArray(r.jobs) || r.jobs.length > 32 || !Array.isArray(r.animals) || r.animals.length > 8 || !Array.isArray(r.cargo) || r.cargo.length > 20 || !Array.isArray(r.clips) || r.clips.length > 8)
+                throw Error('Invalid dive contents.');
+            for (const f of r.fish) {
+                if (!f.p || !f.home || typeof f.id !== 'string' || !numeric(f.weight, .01, 10) || !numeric(f.size, .1, 3) || !numeric(f.phase, -1e9, 1e9) || !numeric(f.flee, 0, 100) || typeof f.alive !== 'boolean' || ![f.p, f.home].every(v => ['x', 'y', 'z'].every(k => numeric(v[k], -1000, 1000))))
+                    throw Error('Invalid fish record.');
+            }
+            for (const c of r.clips)
+                if (typeof c.title !== 'string' || c.title.length > 200 || !numeric(c.quality, 0, 100) || c.image && (!c.image.startsWith('data:image/jpeg;base64,') || c.image.length > 200000))
+                    throw Error('Invalid highlight card.');
+            if (r.exposed && (!numeric(r.exposed.weight, .01, 10) || !numeric(r.exposed.value, 0, 500)))
+                throw Error('Invalid exposed catch.');
+            for (const c of r.cargo)
+                if (!numeric(c.weight, .01, 10) || !numeric(c.value, 0, 500) || typeof c.id !== 'string')
+                    throw Error('Invalid catch.');
+            if (!r.cooldowns || typeof r.cooldowns !== 'object')
+                throw Error('Invalid timers.');
+        }
+    if (p.active && p.pending)
+        throw Error('A save cannot contain both an active dive and a pending settlement.');
+    if (typeof p.lastReport !== 'string' || p.lastReport.length > 1000 || !numeric(p.tutorial, 0, 100) || !numeric(p.sponsorPaidDay, 0, 1e6))
+        throw Error('Invalid career metadata.');
+    if (p.eventRegistrationDay !== undefined && (!Number.isInteger(p.eventRegistrationDay) || !numeric(p.eventRegistrationDay, 1, p.day)))
+        throw Error('Invalid event registration day.');
+    if (p.campaign !== undefined)
+        p.campaign = (0, campaign_js_1.validateCampaign)(p.campaign);
+    const isVec = (v) => v && ['x', 'y', 'z'].every(k => numeric(v[k], -10000, 10000));
+    const text = (v, max = 200) => typeof v === 'string' && v.length <= max;
+    for (const r of [p.active, p.pending])
+        if (r) {
+            for (const k of ['removed', 'cleaned', 'restored', 'surveyed', 'nativeHits', 'coralHits', 'stolen', 'distance', 'fragments', 'charge', 'strikeCooldown', 'hurtCooldown', 'interaction'])
+                if (!numeric(r[k], 0, 1e6))
+                    throw Error('Invalid dive counter: ' + k);
+            if (!['catch', 'cleanup', 'restore', 'research', 'none'].includes(r.order) || !['scooter', 'light', 'returnWarn', 'lowWarn', 'finished', 'rescued', 'event'].every(k => typeof r[k] === 'boolean') || !text(r.interactionId) || !strings(r.seen, 100) || !numeric(r.day, 1, 1e6))
+                throw Error('Invalid dive state.');
+            if (r.charge > 1 || r.interaction > 1.1 || r.fragments > 3 + (0, data_js_1.upgradeLevel)(p, 'kit') * 2 || r.cargo.length > (0, data_js_1.capacity)(p) || r.jobs.some(j => !text(j.id) || !['debris', 'coral', 'survey'].includes(j.kind) || !isVec(j.p) || typeof j.done !== 'boolean' || !numeric(j.progress, 0, 1) || !numeric(j.stage, 0, 5)))
+                throw Error('Invalid work or capacity.');
+            if (r.practice !== undefined && typeof r.practice !== 'boolean' || r.contractReadyNotified !== undefined && typeof r.contractReadyNotified !== 'boolean' || r.researchEligible !== undefined && typeof r.researchEligible !== 'boolean' || r.researchFunded !== undefined && typeof r.researchFunded !== 'boolean')
+                throw Error('Invalid outing options.');
+            if (r.lesson !== undefined && (!r.lesson || typeof r.lesson !== 'object' || !Number.isInteger(r.lesson.step) || !numeric(r.lesson.step, 0, 12) || !numeric(r.lesson.look, 0, 1e6) || !numeric(r.lesson.move, 0, 1e6) || typeof r.lesson.drawn !== 'boolean' || r.lesson.skipped !== undefined && typeof r.lesson.skipped !== 'boolean'))
+                throw Error('Invalid lesson progress.');
+            if (r.eventTheme !== undefined && !['catch', 'cleanup', 'research'].includes(r.eventTheme) || r.eventRegistrationDay !== undefined && (!Number.isInteger(r.eventRegistrationDay) || !numeric(r.eventRegistrationDay, 1, r.day)))
+                throw Error('Invalid event registration.');
+            if (r.surveyFirstVisits !== undefined && (!strings(r.surveyFirstVisits, 3) || !r.surveyFirstVisits.every(id => /^survey-\d+$/.test(id)) || new Set(r.surveyFirstVisits).size !== r.surveyFirstVisits.length || r.surveyFirstVisits.length > r.surveyed))
+                throw Error('Invalid survey payout snapshot.');
+            if (r.surveyStations !== undefined && (!strings(r.surveyStations, 3) || !r.surveyStations.every(id => /^survey-\d+$/.test(id)) || new Set(r.surveyStations).size !== r.surveyStations.length || r.surveyStations.length > r.surveyed))
+                throw Error('Invalid surveyed-station snapshot.');
+            if (r.filletCuts !== undefined && (!Array.isArray(r.filletCuts) || r.filletCuts.length > 3 || !r.filletCuts.every(value => numeric(value, 0, 1))))
+                throw Error('Invalid filleting progress.');
+            if (r.encounter !== undefined && (!r.encounter || typeof r.encounter !== 'object' || !['rubbish', 'fishing'].includes(r.encounter.kind) || !['warning', 'active', 'abandoned', 'cleared', 'passed'].includes(r.encounter.phase) || !numeric(r.encounter.start, 0, 1e6) || !isVec(r.encounter.p) || !numeric(r.encounter.cleanProgress, 0, 1) || typeof r.encounter.rewarded !== 'boolean'))
+                throw Error('Invalid boat encounter.');
+            if (r.animals.some(a => !['marlow', 'moray', 'turtle', 'ray', 'shark'].includes(a.id) || a.id === 'shark' && !r.night || !isVec(a.p) || !isVec(a.home) || !numeric(a.heading, -1e9, 1e9) || !numeric(a.phase, 0, 1e9) || !numeric(a.timer, 0, 1e6) || !numeric(a.cooldown, 0, 100) || !['roam', 'watch', 'approach', 'warn', 'lunge', 'retreat'].includes(a.state)))
+                throw Error('Invalid wildlife record.');
+            if (r.clips.some(c => !text(c.id) || !text(c.kind) || !text(c.detail, 600) || typeof c.chosen !== 'boolean'))
+                throw Error('Invalid highlight metadata.');
+            if (Array.isArray(r.cooldowns) || Object.entries(r.cooldowns).length > 100 || !Object.entries(r.cooldowns).every(([k, v]) => text(k, 60) && k !== '__proto__' && k !== 'constructor' && numeric(v, -100, 1e8)))
+                throw Error('Invalid cooldown map.');
+            if (new Set(r.fish.map(f => f.id)).size !== r.fish.length || new Set(r.jobs.map(j => j.id)).size !== r.jobs.length)
+                throw Error('Duplicate persistent identities.');
+        }
+    if (p.active?.finished || p.pending && !p.pending.finished)
+        throw Error('Invalid outing lifecycle.');
+    for (const id of REEF_IDS) {
+        const reef = p.reefs[id];
+        if (reef.productiveVisits === undefined) {
+            const outing = p.active?.site === id ? p.active : p.pending?.site === id ? p.pending : null;
+            const currentClearances = outing ? Math.min(reef.removed.length, Math.max(0, Math.floor(outing.removed))) : 0;
+            const priorClearances = reef.removed.length - currentClearances;
+            reef.productiveVisits = Math.min(Math.floor(reef.visits), Math.floor(priorClearances / 2));
+        }
+    }
+    for (const r of [p.active, p.pending])
+        if (r && r.recoveryStage === undefined)
+            r.recoveryStage = (0, reef_recovery_js_1.recoveryForRun)(r, p.reefs[r.site]);
+    p.campaign = (0, campaign_js_1.normalizeCampaign)(p);
+    for (const r of [p.active, p.pending])
+        if (r?.order === 'research' && r.researchEligible === undefined)
+            r.researchEligible = true;
+    return p;
+}
+function buy(p, id) {
+    const u = data_js_1.UPGRADES.find(x => x.id === id), cost = (0, data_js_1.upgradeCost)(p, id);
+    if (!u || p.active || p.pending || (0, data_js_1.upgradeLevel)(p, id) >= data_js_1.MAX_UPGRADE_LEVEL || p.cash < cost || !(0, data_js_1.upgradeServiceRequirement)(p, id).available || u.requires && (0, data_js_1.upgradeLevel)(p, u.requires) < (u.requiredLevel ?? 1))
+        return false;
+    p.cash -= cost;
+    p.upgradeLevels ?? (p.upgradeLevels = {});
+    p.upgradeLevels[id] = (0, data_js_1.upgradeLevel)(p, id) + 1;
+    if (!p.upgrades.includes(id))
+        p.upgrades.push(id);
+    return true;
+}
+class MemoryStorage {
+    constructor() {
+        this.values = new Map();
+    }
+    get length() { return this.values.size; }
+    clear() { this.values.clear(); }
+    getItem(k) { return this.values.get(k) ?? null; }
+    key(i) { return [...this.values.keys()][i] ?? null; }
+    removeItem(k) { this.values.delete(k); }
+    setItem(k, v) { this.values.set(k, String(v)); }
+}
+exports.MemoryStorage = MemoryStorage;
+class SaveStore {
+    constructor(storage) {
+        this.warning = '';
+        this.volatile = false;
+        try {
+            this.storage = storage || localStorage;
+        }
+        catch {
+            this.storage = new MemoryStorage();
+            this.volatile = true;
+            this.warning = 'Persistent storage is unavailable. Export your save before closing.';
+        }
+    }
+    save(p) {
+        try {
+            const key = exports.SAVE_PREFIX + p.slot;
+            const json = JSON.stringify(p);
+            const old = this.storage.getItem(key);
+            if (old)
+                this.storage.setItem(key + ':backup', old);
+            this.storage.setItem(key, json);
+            this.warning = this.volatile ? 'Persistent storage is unavailable. Export your save before closing.' : '';
+            return true;
+        }
+        catch {
+            this.warning = 'Browser storage is full or unavailable. Export a backup before closing.';
+            return false;
+        }
+    }
+    selectedSlot() { try {
+        const value = Number(this.storage.getItem(exports.SAVE_PREFIX + 'selected-slot'));
+        return Number.isInteger(value) && value >= 1 && value <= 3 ? value : 1;
+    }
+    catch {
+        return 1;
+    } }
+    selectSlot(slot) { if (!Number.isInteger(slot) || slot < 1 || slot > 3)
+        return; try {
+        this.storage.setItem(exports.SAVE_PREFIX + 'selected-slot', String(slot));
+    }
+    catch { /* Failure to remember a choice never prevents using a logbook. */ } }
+    load(slot) {
+        for (const key of [exports.SAVE_PREFIX + slot, exports.SAVE_PREFIX + slot + ':backup'])
+            try {
+                const raw = this.storage.getItem(key);
+                if (raw)
+                    return validateProfile(JSON.parse(raw));
+            }
+            catch {
+                this.warning = 'A damaged save was ignored; a backup is used when available.';
+            }
+        return freshProfile(slot);
+    }
+    settings() {
+        try {
+            const s = JSON.parse(this.storage.getItem(exports.SAVE_PREFIX + 'settings') || '{}');
+            const q = ['high', 'balanced', 'low'].includes(s.quality) ? s.quality : 'balanced';
+            const gamepads = {};
+            if (s.gamepads && typeof s.gamepads === 'object' && !Array.isArray(s.gamepads))
+                for (const [key, raw] of Object.entries(s.gamepads).slice(0, 16)) {
+                    const p = raw;
+                    if (!p || typeof p !== 'object' || p.key !== key || typeof p.id !== 'string' || typeof p.mapping !== 'string' || !Number.isInteger(p.axisCount) || p.axisCount < 0 || p.axisCount > 64 || !Number.isInteger(p.buttonCount) || p.buttonCount < 0 || p.buttonCount > 128 || !Array.isArray(p.centers) || p.centers.length > 64 || !p.centers.every((n) => typeof n === 'number' && Number.isFinite(n) && n >= -1 && n <= 1))
+                        continue;
+                    const validAxis = (v) => v && Number.isInteger(v.index) && v.index >= 0 && v.index < p.axisCount && (v.sign === 1 || v.sign === -1);
+                    if (!p.axes || !['moveX', 'moveZ', 'lookX', 'lookY'].every(k => validAxis(p.axes[k])))
+                        continue;
+                    const validButtons = p.buttons && typeof p.buttons === 'object' && Object.entries(p.buttons).every(([action, index]) => /^[a-zA-Z]+$/.test(action) && Number.isInteger(index) && index >= 0 && index < p.buttonCount);
+                    const validAxisButtons = p.axisButtons && typeof p.axisButtons === 'object' && Object.entries(p.axisButtons).every(([action, binding]) => /^[a-zA-Z]+$/.test(action) && binding && Number.isInteger(binding.index) && binding.index >= 0 && binding.index < p.axisCount && typeof binding.value === 'number' && Number.isFinite(binding.value) && binding.value >= -1 && binding.value <= 1);
+                    if (!validButtons || !validAxisButtons)
+                        continue;
+                    gamepads[key] = { key, id: p.id.slice(0, 200), mapping: p.mapping.slice(0, 40), axisCount: p.axisCount, buttonCount: p.buttonCount, axes: p.axes, centers: p.centers, buttons: p.buttons, axisButtons: p.axisButtons, moveDeadzone: (0, math_js_1.clamp)(Number(p.moveDeadzone) || .14, .05, .4), lookDeadzone: (0, math_js_1.clamp)(Number(p.lookDeadzone) || .2, .05, .45) };
+                }
+            return { ...data_js_1.DEFAULT_SETTINGS, ...s, quality: q, music: (0, math_js_1.clamp)(Number(s.music ?? .42) || 0, 0, 1), ambience: (0, math_js_1.clamp)(Number(s.ambience ?? .6) || 0, 0, 1), effects: (0, math_js_1.clamp)(Number(s.effects ?? .7) || 0, 0, 1), sensitivity: (0, math_js_1.clamp)(Number(s.sensitivity ?? 1) || 1, .25, 2.5), fov: (0, math_js_1.clamp)(Number(s.fov ?? 78) || 78, 60, 100), touchScale: (0, math_js_1.clamp)(Number(s.touchScale ?? 1) || 1, .8, 1.3), instrumentHud: typeof s.instrumentHud === 'boolean' ? s.instrumentHud : true, keys: { ...data_js_1.DEFAULT_SETTINGS.keys, ...s.keys }, gamepads };
+        }
+        catch {
+            return structuredClone(data_js_1.DEFAULT_SETTINGS);
+        }
+    }
+    saveSettings(s) {
+        try {
+            this.storage.setItem(exports.SAVE_PREFIX + 'settings', JSON.stringify(s));
+        }
+        catch {
+            this.warning = 'Settings could not be saved.';
+        }
+    }
+}
+exports.SaveStore = SaveStore;
+
+},
 "game/reef-recovery.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -1222,6 +2176,10 @@ exports.Simulation = exports.EMPTY_INPUT = void 0;
 exports.startRun = startRun;
 exports.prepareFillets = prepareFillets;
 exports.settleRun = settleRun;
+const tutorial_js_1 = require("./tutorial.js");
+const campaign_js_1 = require("./campaign.js");
+const contracts_js_1 = require("./contracts.js");
+const boat_encounters_js_1 = require("./boat-encounters.js");
 const data_js_1 = require("./data.js");
 const math_js_1 = require("./math.js");
 const navigation_js_1 = require("./navigation.js");
@@ -1235,9 +2193,12 @@ function startRun(p, id, order = 'catch', event = false, night = false) {
         throw Error('Dive site locked.');
     if (night && ((0, data_js_1.upgradeLevel)(p, 'torch') < 1 || !(0, data_js_1.siteUnlocked)(p, 'passage')))
         throw Error('Night dives need a head torch and Passage experience.');
+    const offer = (0, campaign_js_1.contractOptions)(p, id).find(o => o.kind === order);
+    if (!offer?.available)
+        throw Error(offer?.reason ?? 'That contract is not available.');
     const site = data_js_1.SITES[id], reef = p.reefs[id], seed = (site.seed + reef.visits * 37) >>> 0, random = (0, math_js_1.rng)(seed), recoveryStage = (0, reef_recovery_js_1.recoveryFromProgress)(reef);
     const homes = (0, data_js_1.reefFishHomes)(site, site.seed);
-    const fish = homes.map((home, i) => { const fid = `fish-${i}`; const returned = reef.visits >= 4 && i < 3 ? `return-${Math.floor(reef.visits / 4)}-${i}` : fid; const alive = !reef.removed.includes(returned); const size = .72 + random() * .44; return { id: returned, p: { ...home }, home: { ...home }, size, weight: Math.round((.3 + size * random() * .8) * 100) / 100, alive, phase: random() * 6.28, flee: 0 }; });
+    const fish = homes.map((home, i) => { const fid = `fish-${i}`; const returned = reef.visits >= 4 && i < 4 ? `return-${Math.floor(reef.visits / 4)}-${i}` : fid; const alive = !reef.removed.includes(returned); const size = .72 + random() * .44; return { id: returned, p: { ...home }, home: { ...home }, size, weight: Math.round((.3 + size * random() * .8) * 100) / 100, alive, phase: random() * 6.28, flee: 0 }; });
     for (const f of fish)
         f.p = (0, fish_motion_js_1.clearFishPosition)(site, f.p, f.size * 1.5 + .15);
     const jobAt = (jobId, kind, x, z) => ({ id: jobId, kind, p: (0, data_js_1.groundPoint)(x, z, kind === 'survey' ? 2.5 : .5, site), done: kind === 'debris' ? reef.cleaned.includes(jobId) : kind === 'coral' ? jobId in reef.restored : false, progress: 0, stage: kind === 'coral' && jobId in reef.restored ? (0, math_js_1.clamp)(p.day - reef.restored[jobId], 1, 5) : 0 });
@@ -1248,7 +2209,7 @@ function startRun(p, id, order = 'catch', event = false, night = false) {
         ...worksites.surveys.map((point, i) => jobAt(`survey-${i}`, 'survey', point.x, point.z))
     ];
     const wreck = (0, data_js_1.wreckAnchor)(site), pipe = (0, data_js_1.pipeAnchor)(site);
-    jobs.push(jobAt('survey-1', 'survey', wreck.x - 5, wreck.z), jobAt('survey-2', 'survey', pipe.x, pipe.z - 7));
+    jobs.push(id === 'passage' ? { ...jobAt('survey-1', 'survey', 0, 34), p: (0, data_js_1.groundPoint)(0, 34, 12, site) } : jobAt('survey-1', 'survey', wreck.x - 5, wreck.z), jobAt('survey-2', 'survey', pipe.x, pipe.z - 7));
     const animal = (animalId, point) => ({ id: animalId, p: { ...point }, home: { ...point }, heading: 0, state: 'roam', timer: 0, cooldown: 0, phase: random() * 6.28 });
     const wildlife = id === 'gardens'
         ? [animal('marlow', (0, math_js_1.vec)(-10, 5.5, 15)), animal('moray', (0, math_js_1.vec)(28, 5, 8)), animal('turtle', (0, math_js_1.vec)(-4, 11, 2)), animal('ray', (0, math_js_1.vec)(15, 2.4, 25))]
@@ -1259,13 +2220,20 @@ function startRun(p, id, order = 'catch', event = false, night = false) {
                 : id === 'cenote'
                     ? [animal('marlow', (0, data_js_1.groundPoint)(-10, 2, 5, site)), animal('moray', (0, data_js_1.groundPoint)(12, 8, 4, site)), animal('turtle', (0, data_js_1.groundPoint)(0, -23, 4, site)), animal('ray', (0, data_js_1.groundPoint)(7, 28, 4, site))]
                     : [animal('marlow', (0, data_js_1.groundPoint)(-21, 4, 4, site)), animal('moray', (0, data_js_1.groundPoint)(-7, 18, 3, site)), animal('turtle', (0, data_js_1.groundPoint)(4, -20, 4, site)), animal('ray', (0, data_js_1.groundPoint)(-12, 28, 3, site))];
-    const run = { id: `${p.slot}-${p.day}-${seed}`, site: id, recoveryStage, seed, day: p.day, time: 0, p: { ...site.entry }, velocity: (0, math_js_1.vec)(), yaw: .08, pitch: .12, air: 200, health: 100, battery: 100, cargo: [], exposed: null, fish, jobs, animals: wildlife, clips: [], removed: 0, cleaned: 0, restored: 0, surveyed: 0, nativeHits: 0, coralHits: 0, stolen: 0, distance: 0, fragments: p.upgrades.includes('kit') ? 5 : 3, charge: 0, strikeCooldown: 0, hurtCooldown: 0, interaction: 0, interactionId: '', scooter: false, light: false, returnWarn: false, lowWarn: false, finished: false, rescued: false, order, event, notices: [], seen: [], cooldowns: {} };
+    const run = { id: `${p.slot}-${p.day}-${seed}`, site: id, siteRevision: 2, recoveryStage, seed, day: p.day, time: 0, p: { ...site.entry }, velocity: (0, math_js_1.vec)(), yaw: .08, pitch: .12, air: 200, health: 100, battery: 100, cargo: [], exposed: null, fish, jobs, animals: wildlife, clips: [], removed: 0, cleaned: 0, restored: 0, surveyed: 0, nativeHits: 0, coralHits: 0, stolen: 0, distance: 0, fragments: p.upgrades.includes('kit') ? 5 : 3, charge: 0, strikeCooldown: 0, hurtCooldown: 0, interaction: 0, interactionId: '', scooter: false, light: false, returnWarn: false, lowWarn: false, finished: false, rescued: false, order, event, notices: [], seen: [], cooldowns: {} };
     run.air = (0, data_js_1.airCapacity)(p);
     run.fragments = 3 + (0, data_js_1.upgradeLevel)(p, 'kit') * 2;
     run.night = night;
     run.light = night;
     if (night)
-        run.animals.push(animal('shark', (0, data_js_1.groundPoint)(wreck.x + 10, wreck.z - 12, 6)));
+        run.animals.push(animal('shark', (0, data_js_1.groundPoint)(wreck.x + 10, wreck.z - 12, 6, site)));
+    run.researchEligible = (0, campaign_js_1.researchEligibility)(p).eligible;
+    run.researchFunded = run.researchEligible && !(p.campaign ?? (0, campaign_js_1.normalizeCampaign)(p)).researchCompleted;
+    if (event)
+        run.eventTheme = (0, contracts_js_1.eventTheme)(p, id);
+    if (id === 'gardens' && p.tutorial < 1)
+        (0, tutorial_js_1.startLesson)(run);
+    (0, boat_encounters_js_1.scheduleBoat)(run, site);
     p.active = run;
     return run;
 }
@@ -1363,7 +2331,8 @@ class Simulation {
             if ((0, math_js_1.distance)(f.p, r.p) < .35 + f.size * 1.5)
                 this.hurt(9, 'Lionfish spines! Air lost. Back away and steady your breathing.');
         }
-        this.updateAnimals(dt);
+        if (!(0, tutorial_js_1.lessonActive)(r))
+            this.updateAnimals(dt);
         this.updateAim();
         this.work(dt, input.interact);
         this.routeTimer -= dt;
@@ -1384,8 +2353,23 @@ class Simulation {
         }
         if (r.air <= 0 || r.health <= 0)
             this.finish(true);
-        if (r.time > 25 && this.profile.tutorial < 1)
-            this.profile.tutorial = 1;
+        if ((0, tutorial_js_1.advanceLesson)(this.profile, r, input, dt, this.aim.kind === 'fish' && this.aim.valid)) {
+            this.emit('save');
+            if (!(0, tutorial_js_1.lessonActive)(r))
+                this.notice('First-dive lesson complete. Replay is available in the field guide.');
+        }
+        if ((0, tutorial_js_1.lessonActive)(r)) {
+            r.air = Math.max(r.air, 80);
+            r.health = Math.max(r.health, 35);
+        }
+        const progress = (0, contracts_js_1.contractProgress)(r);
+        if (progress.ready && !r.contractReadyNotified) {
+            r.contractReadyNotified = true;
+            this.notice(r.order === 'catch' ? 'Four fish secured. Sell at least four at the dock to fill the Kitchen order.' : progress.label + ' objective complete. Return safely to settle it.');
+            this.emit('save');
+        }
+        if ((0, boat_encounters_js_1.updateBoat)(r, this.site, t => this.notice(t), () => this.emit('sound', undefined, 'boat-engine')))
+            this.emit('save');
         if (Math.floor(r.time) % 30 === 0 && r.time - (r.cooldowns.autosave ?? -30) > 29) {
             r.cooldowns.autosave = r.time;
             this.emit('save');
@@ -1494,6 +2478,11 @@ class Simulation {
             }
             this.aim = { kind: 'boat', id: 'ascent', distance: (0, math_js_1.distance)(r.p, boat), label: 'Home buoy overhead', hint: 'Ascend beside the mooring to board', valid: false };
         }
+        const overhead = (0, boat_encounters_js_1.boatAim)(r, this.site, navigation_js_1.clearSegment);
+        if (overhead) {
+            this.aim = overhead;
+            return;
+        }
         let best = Infinity;
         for (const j of r.jobs) {
             if (j.done && j.kind !== 'survey')
@@ -1503,7 +2492,7 @@ class Simulation {
             const d = (0, math_js_1.distance)(r.p, j.p), alignment = (0, math_js_1.dot)((0, math_js_1.norm)((0, math_js_1.sub)(j.p, r.p)), dir);
             if (d < 4 && alignment > .65 && (0, navigation_js_1.clearSegment)(r.p, j.p, this.site) && d < best) {
                 best = d;
-                this.aim = { kind: 'job', id: j.id, distance: d, label: j.kind === 'debris' ? 'Discarded fishing gear' : j.kind === 'coral' ? 'Nursery restoration plot' : 'Reef survey station', hint: j.kind === 'debris' ? 'Hold Interact to remove' : j.kind === 'coral' ? (r.fragments ? 'Hold Interact to plant a fragment' : 'No nursery fragments remaining') : 'Hold Interact to record a survey', valid: j.kind !== 'coral' || r.fragments > 0 };
+                this.aim = { kind: 'job', id: j.id, distance: d, label: j.kind === 'debris' ? 'Discarded fishing gear' : j.kind === 'coral' ? 'Nursery restoration plot' : 'Reef survey station', hint: j.kind === 'debris' ? 'Hold Interact to remove' : j.kind === 'coral' ? (r.fragments ? 'Hold Interact to plant a fragment' : 'No nursery fragments remaining') : ((r.researchEligible ?? (0, campaign_js_1.researchEligibility)(this.profile).eligible) ? (r.site === 'passage' && r.siteRevision === 2 && ['survey-0', 'survey-1'].includes(j.id) ? 'Hold Interact to read the flow gauge' : 'Hold Interact to record a survey') : 'Research unlocks after a university invitation at 8 reputation'), valid: (j.kind !== 'coral' || r.fragments > 0) && (j.kind !== 'survey' || (r.researchEligible ?? (0, campaign_js_1.researchEligibility)(this.profile).eligible)) };
             }
         }
         for (const f of r.fish)
@@ -1528,7 +2517,7 @@ class Simulation {
             r.interactionId = a.id;
         }
         const duration = a.id === 'held' ? .65 : a.kind === 'boat' ? 1.1 : a.id.startsWith('debris') ? 2.2 : a.id.startsWith('coral') ? Math.max(1.3, 3.3 - (0, data_js_1.upgradeLevel)(this.profile, 'kit') * .4) : 2.8;
-        r.interaction += dt / duration;
+        r.interaction += dt / (r.event && ((r.eventTheme === 'cleanup' && a.id.startsWith('debris')) || (r.eventTheme === 'research' && a.id.startsWith('survey'))) ? duration * .8 : duration);
         if (r.interaction < 1)
             return;
         r.interaction = 0;
@@ -1544,8 +2533,18 @@ class Simulation {
             this.finish(false);
             return;
         }
+        if (a.id === 'boat-cleanup') {
+            if ((0, boat_encounters_js_1.clearBoat)(r)) {
+                this.notice('Recovered safely. A $5 recovery fee is recorded; this does not count as permanent site cleanup.');
+                this.emit('sound', undefined, 'work');
+                this.emit('save');
+            }
+            return;
+        }
         const j = r.jobs.find(j => j.id === a.id);
         if (!j || j.done)
+            return;
+        if (j.kind === 'survey' && !(0, campaign_js_1.recordSurveyStation)(this.profile, r, j.id).ok)
             return;
         j.done = true;
         const reef = this.profile.reefs[r.site];
@@ -1806,6 +2805,8 @@ function prepareFillets(p, quality) {
     r.filletQuality = quality;
 }
 function settleRun(p, run, allocation, chosen) {
+    if (run.practice)
+        throw Error('Practice has no campaign settlement.');
     if (p.pending?.id !== run.id)
         throw Error('This outing has already been settled.');
     const available = run.rescued ? 0 : run.cargo.length;
@@ -1815,17 +2816,34 @@ function settleRun(p, run, allocation, chosen) {
     const selected = run.clips.filter(c => chosen.includes(c.id)).slice(0, 2);
     const sales = run.cargo.slice(0, allocation.sell).reduce((s, c) => s + c.value, 0);
     const filletBonus = Math.round(sales * (run.filletQuality ?? 0) * .3);
+    const legacy = run.siteRevision === undefined && run.researchEligible === undefined && run.researchFunded === undefined;
+    const progress = (0, contracts_js_1.contractProgress)(run), research = (0, campaign_js_1.researchSettlement)(run, p);
     let contract = 0;
+    let contractReason = run.order === 'none' ? 'Free exploration: no contract selected.' : run.rescued ? 'Rescue keeps ecological work, but contract bonuses need a safe return.' : progress.ready ? 'Objective complete.' : `${progress.label}: ${progress.amount}/${progress.target} completed.`;
     if (!run.rescued) {
         if (run.order === 'catch' && allocation.sell >= 4)
-            contract = 65;
+            contract = legacy ? 65 : 45;
+        if (run.order === 'catch' && allocation.sell < 4)
+            contractReason = `${allocation.sell} fish sold; the Kitchen order needs 4. Secured fish donated or kept as meals do not fill a sale order.`;
         if (run.order === 'cleanup' && run.cleaned >= 2)
-            contract = 70;
+            contract = legacy ? 70 : 40;
         if (run.order === 'restore' && run.restored >= 2)
-            contract = 80;
-        if (run.order === 'research' && run.surveyed >= 2)
-            contract = run.night ? 180 : 140;
+            contract = legacy ? 80 : 45;
     }
+    const survey = run.order === 'research' ? research : (0, campaign_js_1.surveyPayout)(run, p.reefs[run.site]);
+    let researchTopUp = run.order === 'research' ? (legacy && !run.rescued && run.surveyed >= 2 ? (run.night ? 180 : 140) : research.assignmentTopUp) : 0;
+    if (run.order === 'research' && run.site === 'passage' && run.siteRevision === 2 && !progress.ready) {
+        researchTopUp = 0;
+        contractReason = 'Read both the lee-shelf and Cathedral flow gauges to complete this route assignment.';
+    }
+    else if (run.order === 'research')
+        contractReason = legacy ? 'The terms of your saved research outing are honoured for this settlement. Future assignments use the new inclusive rates.' : research.reason;
+    if (run.order === 'research' && researchTopUp > 0)
+        (0, campaign_js_1.completeResearch)(p, research);
+    const campaign = p.campaign ?? (p.campaign = (0, campaign_js_1.normalizeCampaign)(p));
+    const starterGrant = !run.rescued && allocation.sell > 0 && !campaign.characterFlags.includes('welcome-grant') ? 20 : 0;
+    if (starterGrant)
+        campaign.characterFlags.push('welcome-grant');
     const care = Math.max(0, run.removed * 2 + run.cleaned * 3 + run.restored * 4 + run.surveyed * 2 - run.nativeHits * 8 - run.coralHits);
     const rep = Math.max(0, Math.floor(care / 4) + allocation.donate);
     p.reputation += rep;
@@ -1835,26 +2853,36 @@ function settleRun(p, run, allocation, chosen) {
         followers += Math.round(c.quality / (3 + prior * 2));
         p.published.push(c.kind);
     }
+    const droppedPublications = Math.max(0, p.published.length - 1000);
+    if (p.campaign?.activeOpportunityPublishedAt !== undefined)
+        p.campaign.activeOpportunityPublishedAt = Math.max(0, p.campaign.activeOpportunityPublishedAt - droppedPublications);
     p.published = p.published.slice(-1000);
     p.audience += followers;
-    let sponsor = 0;
-    if (p.sponsorPaidDay !== p.day) {
-        if (p.reputation >= 12 && (run.restored + run.cleaned) >= 2) {
+    let sponsor = 0; // New recognition creates opportunities, not another cash stack.
+    if (legacy && p.sponsorPaidDay !== p.day) {
+        if (p.reputation >= 12 && run.restored + run.cleaned >= 2)
             sponsor = 50;
-            p.sponsorPaidDay = p.day;
-        }
-        else if (p.audience >= 80 && selected.some(c => ['marlow', 'turtle', 'ray'].includes(c.kind))) {
+        else if (p.audience >= 80 && selected.some(c => ['marlow', 'turtle', 'ray'].includes(c.kind)))
             sponsor = 35;
+        if (sponsor)
             p.sponsorPaidDay = p.day;
-        }
     }
-    const score = run.rescued ? 0 : Math.max(0, run.removed * 100 + run.cleaned * 150 + run.restored * 180 + run.surveyed * 80 - run.nativeHits * 300 - run.coralHits * 40);
-    const eventPrize = run.event && !run.rescued ? (score >= 1200 ? 120 : score >= 650 ? 65 : score >= 250 ? 25 : 0) : 0;
+    const recognition = [];
+    const opportunity = campaign.activeOpportunity;
+    if (opportunity && (0, campaign_js_1.milestoneStatus)(p, opportunity).available) {
+        const awarded = (0, campaign_js_1.claimMilestone)(p, opportunity);
+        if (awarded.ok)
+            recognition.push(awarded.reason);
+    }
+    const score = (0, contracts_js_1.eventScore)(run);
+    const eventPrize = run.event && !run.rescued ? (legacy ? (score >= 1200 ? 120 : score >= 650 ? 65 : score >= 250 ? 25 : 0) : (0, contracts_js_1.eventReward)(score)) : 0;
     if (run.event) {
         p.records.push({ day: p.day, site: run.site, score, catch: run.removed, clean: run.cleaned });
         p.records = p.records.slice(-60);
     }
-    const earned = sales + filletBonus + contract + run.cleaned * 12 + run.restored * 15 + run.surveyed * (run.night ? 75 : 55) + allocation.donate * 3 + sponsor + eventPrize;
+    const cleanPay = run.cleaned * 12, restorationPay = run.restored * 15, surveyPay = legacy ? run.surveyed * (run.night ? 75 : 55) : survey.stationPay, donationPay = allocation.donate * 3, boatPay = run.encounter?.rewarded ? 5 : 0;
+    const earned = sales + filletBonus + contract + cleanPay + restorationPay + surveyPay + researchTopUp + donationPay + starterGrant + boatPay + eventPrize + sponsor;
+    const eventReason = !run.event ? 'Not registered for this outing.' : run.rescued ? 'Rescue: event score and prize are forfeited.' : `Local ${run.eventTheme ?? 'catch'} day: ${score} points; ${eventPrize ? 'prize earned.' : '250 points needed for the first prize.'}`;
     const expenses = run.rescued ? 85 : Math.max(8, 28 + (run.site === 'passage' ? 10 : 0) + (run.night ? 10 : 0) + run.restored * 6 - (allocation.eat > 0 ? 8 : 0));
     const balance = p.cash + earned - expenses;
     if (balance < 0) {
@@ -1873,12 +2901,78 @@ function settleRun(p, run, allocation, chosen) {
     if (run.removed > 0)
         reef.productiveVisits = (reef.productiveVisits ?? 0) + 1;
     reef.lastDay = p.day;
+    p.eventRegistrationDay = undefined;
     p.day++;
     p.pending = null;
     p.active = null;
     p.lastReport = run.rescued ? 'A difficult outing. The reef work remains; tomorrow is another dive.' : `${run.removed} lionfish removed · ${run.cleaned} cleanup jobs · ${run.restored} corals planted.`;
-    return { earned, expenses, debtPaid, followers, reputation: rep, contract, eventPrize, sponsor, score, filletBonus };
+    return { earned, expenses, debtPaid, followers, reputation: rep, contract, eventPrize, sponsor, score, filletBonus, sales, cleanPay, restorationPay, surveyPay, researchTopUp, donationPay, starterGrant, boatPay, contractReason, eventReason, filletGrade: (0, contracts_js_1.filletGrade)(run.filletQuality ?? 0), recognition };
 }
+
+},
+"game/boat-encounters.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.scheduleBoat = scheduleBoat;
+exports.updateBoat = updateBoat;
+exports.boatAim = boatAim;
+exports.clearBoat = clearBoat;
+const data_js_1 = require("./data.js");
+const math_js_1 = require("./math.js");
+/** One optional encounter, never in Gardens. No collider can trap the diver. */
+function scheduleBoat(run, site) {
+    if (run.site === 'gardens' || run.practice || run.day < 4 || (run.seed + run.day) % 3 !== 0)
+        return;
+    const candidates = [(0, math_js_1.vec)(30, 0, 20), (0, math_js_1.vec)(-30, 0, 25), (0, math_js_1.vec)(8, 0, 34), (0, math_js_1.vec)(-8, 0, 20)];
+    const home = site.landmarks[0].p;
+    const point = candidates.find(p => { p.y = Math.min(site.surface - 5, (0, data_js_1.floorHeight)(p.x, p.z, site) + 5); return (0, data_js_1.freePoint)(p, site, 3) && Math.hypot(p.x - home.x, p.z - home.z) > 24; });
+    if (!point)
+        return;
+    run.encounter = { kind: run.day % 2 ? 'rubbish' : 'fishing', phase: 'warning', start: 180 + (run.seed % 40), p: point, cleanProgress: 0, rewarded: false };
+}
+function updateBoat(run, site, notice, sound) {
+    const e = run.encounter;
+    if (!e || run.time < e.start || ['cleared', 'passed'].includes(e.phase))
+        return false;
+    const elapsed = run.time - e.start;
+    if (e.phase === 'warning' && !run.cooldowns.boatWarned) {
+        if ((0, math_js_1.distance)(run.p, e.p) < 18) {
+            if (e.start >= 260) {
+                e.phase = 'passed';
+                return true;
+            }
+            e.start += 10;
+            return false;
+        }
+        run.cooldowns.boatWarned = 1;
+        notice(e.kind === 'rubbish' ? 'Boat overhead. Watch for rubbish; keep clear of the amber marker.' : 'Fishing boat overhead. A line is going down at the amber marker; keep clear.');
+        sound();
+        return true;
+    }
+    if (e.phase === 'warning' && elapsed >= 12) {
+        e.phase = 'active';
+        return true;
+    }
+    if (e.phase === 'active' && e.kind === 'fishing' && !run.cooldowns.boatContact && (0, math_js_1.distance)(run.p, e.p) < 2.5) {
+        run.cooldowns.boatContact = 1;
+        run.air = Math.max(0, run.air - 2);
+        notice('Line snag: 2 bar lost disentangling. Swim away; your route is clear.');
+    }
+    if (e.phase === 'active' && elapsed >= 32) {
+        e.phase = 'abandoned';
+        notice(e.kind === 'rubbish' ? 'The boat has gone. Bag the dropped rubbish if your return reserve allows.' : 'The boat has gone. Its abandoned line is now safe to recover.');
+        return true;
+    }
+    return false;
+}
+function boatAim(run, site, clear) {
+    const e = run.encounter;
+    if (!e || !['active', 'abandoned'].includes(e.phase) || (0, math_js_1.distance)(run.p, e.p) > 3.5 || !clear(run.p, e.p, site) || (0, math_js_1.dot)((0, math_js_1.norm)((0, math_js_1.sub)(e.p, run.p)), (0, math_js_1.direction)(run.yaw, run.pitch)) < .6)
+        return null;
+    return { kind: 'job', id: 'boat-cleanup', distance: (0, math_js_1.distance)(run.p, e.p), label: e.kind === 'rubbish' ? 'Dropped rubbish' : 'Abandoned fishing line', hint: e.phase === 'abandoned' ? 'Hold Interact to bag it · $5 recovery fee' : e.kind === 'rubbish' ? 'Rubbish is falling · Keep clear until the boat leaves' : 'Active fishing gear · Keep clear until the boat leaves', valid: e.phase === 'abandoned' };
+}
+function clearBoat(run) { const e = run.encounter; if (!e || e.phase !== 'abandoned' || e.rewarded)
+    return false; e.phase = 'cleared'; e.rewarded = true; e.cleanProgress = 1; return true; }
 
 },
 "game/navigation.ts":function(require,module,exports){
@@ -2151,6 +3245,7 @@ class ReefRenderer {
         this.pose = { left: (0, math_js_1.vec)(), right: (0, math_js_1.vec)(), leftRoll: 0, rightRoll: 0, reach: 0, thrust: 0 };
         this.site = data_js_1.SITES.gardens;
         this.run = null;
+        this.encounterMeshes = null;
         this.profile = null;
         this.fps = 0;
         this.draws = 0;
@@ -2235,7 +3330,8 @@ class ReefRenderer {
         this.bubblePool = new breathing_js_1.BubblePool();
         this.profile = profile;
         this.run = run;
-        this.site = data_js_1.SITES[run.site];
+        this.encounterMeshes = null;
+        this.site = (0, data_js_1.siteForRun)(run);
         const site = this.site, random = (0, math_js_1.rng)(site.seed), B = BABYLON;
         this.environmentCounts = { coral: 0, seaweedClumps: 0, seaweedFronds: 0, nativeFish: 0, nativeSchools: 0, shipwrecks: 0, pipeMouths: 0, coastlinePieces: 0 };
         for (const m of this.materials) {
@@ -2390,6 +3486,28 @@ class ReefRenderer {
         boat.rod((0, math_js_1.vec)(home.x, site.surface + 3.45, home.z - .45), (0, math_js_1.vec)(home.x + 1.0, site.surface + 3.05, home.z - .45), .014, .014, (0, geometry_js_1.rgb)('#f2dfaf'), 5);
         boat.rod((0, math_js_1.vec)(home.x + 2.5, site.surface, home.z), (0, math_js_1.vec)(home.x + 2.5, site.surface + 1.3, home.z), .018, .018, (0, geometry_js_1.rgb)('#d6d8c0'));
         this.staticMeshes.push(this.mesh('home-mooring', boat, 1));
+        if (run.encounter) {
+            const e = run.encounter, hull = new geometry_js_1.Geometry(), object = new geometry_js_1.Geometry(), line = new geometry_js_1.Geometry();
+            hull.ellipsoid((0, math_js_1.vec)(0, .15, 0), (0, math_js_1.vec)(1.4, .55, 3.6), (0, geometry_js_1.rgb)('#ca9970'), 12, 7);
+            hull.box((0, math_js_1.vec)(0, .72, .2), (0, math_js_1.vec)(1.8, .8, 1.6), (0, geometry_js_1.rgb)('#e5d1a7'));
+            hull.rod((0, math_js_1.vec)(.8, 1.2, -.8), (0, math_js_1.vec)(.8, 2.9, -.8), .035, .03, (0, geometry_js_1.rgb)('#e9c684'), 6);
+            if (e.kind === 'rubbish') {
+                object.ellipsoid((0, math_js_1.vec)(), (0, math_js_1.vec)(.45, .32, .6), (0, geometry_js_1.rgb)('#d9b16b'), 8, 5);
+                object.box((0, math_js_1.vec)(.3, .2, 0), (0, math_js_1.vec)(.15, .42, .15), (0, geometry_js_1.rgb)('#eee1b9'));
+            }
+            else {
+                for (let i = -2; i <= 2; i++) {
+                    object.rod((0, math_js_1.vec)(i * .38, -.8, -.1), (0, math_js_1.vec)(i * .38, .8, .1), .014, .014, (0, geometry_js_1.rgb)('#e3c88e'), 5);
+                    object.rod((0, math_js_1.vec)(-.8, i * .38, -.1), (0, math_js_1.vec)(.8, i * .38, .1), .014, .014, (0, geometry_js_1.rgb)('#e3c88e'), 5);
+                }
+            }
+            line.rod((0, math_js_1.vec)(0, site.surface - e.p.y - .25, 0), (0, math_js_1.vec)(), .018, .018, (0, geometry_js_1.rgb)('#dfb86d'), 6);
+            const meshes = { boat: this.mesh('overhead-boat', hull, 1), object: this.mesh('overhead-debris', object, 1), line: this.mesh('overhead-line', line, 1) };
+            this.encounterMeshes = meshes;
+            this.staticMeshes.push(meshes.boat, meshes.object, meshes.line);
+            for (const m of Object.values(meshes))
+                m.setEnabled(false);
+        }
         const coast = new geometry_js_1.Geometry();
         for (let i = 0; i < 12; i++) {
             const angle = i / 12 * Math.PI * 2 + .12 + Math.sin(i * 2.7) * .07;
@@ -2664,6 +3782,17 @@ class ReefRenderer {
         }
         this.engine.beginFrame();
         this.engine._drawCalls?.fetchNewFrame();
+        const encounter = r.encounter, encMeshes = this.encounterMeshes;
+        if (encounter && encMeshes) {
+            const t = r.time - encounter.start, visible = playing && t >= 0 && !['cleared', 'passed'].includes(encounter.phase), aboard = visible && ['warning', 'active'].includes(encounter.phase);
+            encMeshes.boat.setEnabled(aboard);
+            encMeshes.boat.position.set(encounter.p.x + Math.sin(Math.max(0, t) * .11) * 1.5, this.site.surface + .1, encounter.p.z);
+            const inWater = visible && ['active', 'abandoned'].includes(encounter.phase), drop = Math.max(0, Math.min(1, (t - 12) / 20));
+            encMeshes.object.setEnabled(inWater);
+            encMeshes.object.position.set(encounter.p.x, this.site.surface - 1 + (encounter.p.y - this.site.surface + 1) * drop, encounter.p.z);
+            encMeshes.line.setEnabled(inWater && encounter.kind === 'fishing');
+            encMeshes.line.position.set(encounter.p.x, encounter.p.y, encounter.p.z);
+        }
         this.shadows.render(r, this.site, this.settings.reducedMotion, !!torchActive, this.camera);
         for (const m of this.materials) {
             m.setMatrix('uSunMatrix', this.shadows.sunMatrix);
@@ -2705,7 +3834,7 @@ class ReefRenderer {
         return { x: (0, math_js_1.clamp)(v.x / this.engine.getRenderWidth() * 100, 7, 93), y: (0, math_js_1.clamp)(v.y / this.engine.getRenderHeight() * 100, 12, 78), behind: false };
     }
     screenshot() { this.scene.render(); return this.canvas.toDataURL('image/png'); }
-    stats() { return { engine: BABYLON.Engine.Version, fps: Math.round(this.fps), drawCalls: this.draws, meshes: this.scene.meshes.length, vertices: this.scene.getTotalVertices(), renderSize: [this.engine.getRenderWidth(), this.engine.getRenderHeight()], watch: this.watch?.stats(), watchRaised: this.watchRaised, recoveryStage: this.run && this.profile ? (0, reef_recovery_js_1.recoveryForRun)(this.run, this.profile.reefs[this.run.site]) : 0, shadows: this.shadows.stats(), bubbles: this.bubblePool.active(this.run?.time ?? 0), bubbleEmissions: this.bubblePool.emitted, environmentCounts: { ...this.environmentCounts } }; }
+    stats() { return { engine: BABYLON.Engine.Version, fps: Math.round(this.fps), drawCalls: this.draws, meshes: this.scene.meshes.length, vertices: this.scene.getTotalVertices(), renderSize: [this.engine.getRenderWidth(), this.engine.getRenderHeight()], watch: this.watch?.stats(), watchRaised: this.watchRaised, recoveryStage: this.run && this.profile ? (0, reef_recovery_js_1.recoveryForRun)(this.run, this.profile.reefs[this.run.site]) : 0, shadows: this.shadows.stats(), bubbles: this.bubblePool.active(this.run?.time ?? 0), bubbleEmissions: this.bubblePool.emitted, environmentCounts: { ...this.environmentCounts }, encounterMeshCount: this.encounterMeshes ? 3 : 0 }; }
 }
 exports.ReefRenderer = ReefRenderer;
 
@@ -3971,7 +5100,7 @@ exports.SEABED_SIZE = 170;
 exports.SEABED_STEPS = 90;
 const samples = new Map();
 function sampleHeight(ix, iz, site) {
-    const key = typeof site === 'string' ? site : site?.id ?? 'legacy';
+    const key = (0, data_js_1.siteTerrainKey)(site);
     if (!samples.has(key))
         samples.set(key, new Float64Array((exports.SEABED_STEPS + 1) ** 2).fill(NaN));
     const sandSamples = samples.get(key);
@@ -4128,6 +5257,7 @@ class InputController {
         this.canvas = canvas;
         this.settings = settings;
         this.command = command;
+        this.menuValueAt = 0;
         this.active = false;
         this.keys = new Set();
         this.blockedKeys = new Set();
@@ -4289,6 +5419,10 @@ class InputController {
         });
         window.addEventListener('blur', () => this.clear());
         document.addEventListener('pointerlockchange', () => {
+            if (!this.active && document.pointerLockElement === this.canvas) {
+                document.exitPointerLock();
+                return;
+            }
             if (this.active && !document.pointerLockElement && !this.touchMode) {
                 this.clear();
                 this.command('pause');
@@ -4314,7 +5448,8 @@ class InputController {
         try {
             const p = this.canvas.requestPointerLock();
             if (p && typeof p.catch === 'function')
-                p.catch(() => { });
+                p.then(() => { if (!this.active && document.pointerLockElement === this.canvas)
+                    document.exitPointerLock(); }).catch(() => { });
         }
         catch { }
     }
@@ -4658,6 +5793,33 @@ class InputController {
                     const controls = Array.from(document.querySelectorAll('#panel button:not(:disabled), #panel select, #panel input')).filter(e => e.offsetParent !== null), idx = controls.indexOf(document.activeElement);
                     controls[(idx + (edge('menuPrevious') ? -1 : 1) + controls.length) % controls.length]?.focus();
                 }
+                const focused = document.activeElement;
+                const axisX = rawAxis(pad.axes[profile.axes.moveX.index]) * profile.axes.moveX.sign;
+                const now = performance.now();
+                if (Math.abs(axisX) < .4)
+                    this.menuValueAt = 0;
+                else if (now >= this.menuValueAt && focused) {
+                    const sign = axisX > 0 ? 1 : -1;
+                    let changed = false;
+                    if (focused.tagName === 'SELECT') {
+                        const select = focused, options = Array.from(select.options), next = options.map((o, i) => ({ o, i })).filter(v => !v.o.disabled && (sign > 0 ? v.i > select.selectedIndex : v.i < select.selectedIndex));
+                        const option = sign > 0 ? next[0] : next[next.length - 1];
+                        if (option) {
+                            select.selectedIndex = option.i;
+                            changed = true;
+                        }
+                    }
+                    else if (focused.tagName === 'INPUT' && focused.type === 'range') {
+                        const range = focused, step = Number(range.step) || 1, value = Math.min(Number(range.max), Math.max(Number(range.min), Number(range.value) + sign * step));
+                        changed = value !== Number(range.value);
+                        range.value = String(value);
+                    }
+                    if (changed) {
+                        focused.dispatchEvent(new Event('input', { bubbles: true }));
+                        focused.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                    this.menuValueAt = now + 220;
+                }
                 if (edge('menuConfirm'))
                     document.activeElement?.click();
                 if (edge('menuBack'))
@@ -4681,6 +5843,7 @@ exports.InputController = InputController;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Soundscape = void 0;
+const scooter_js_1 = require("./scooter.js");
 const breathing_js_1 = require("../game/breathing.js");
 const data_js_1 = require("../game/data.js");
 const score_js_1 = require("./score.js");
@@ -4690,6 +5853,7 @@ const freq = (m) => 440 * Math.pow(2, (m - 69) / 12);
 class Soundscape {
     constructor(s) {
         this.ctx = null;
+        this.motor = null;
         this.timer = null;
         this.noise = null;
         this.voices = [];
@@ -4720,6 +5884,7 @@ class Soundscape {
                 this.music = gain(this.settings.music * .32, limiter);
                 this.ambience = gain(this.settings.ambience * .23, limiter);
                 this.effects = gain(this.settings.effects * .55, limiter);
+                this.motor = new scooter_js_1.ScooterMotor(ctx, this.effects);
                 this.pad = gain(.6, this.music);
                 this.lead = gain(.65, this.music);
                 this.bass = gain(.12, this.music);
@@ -4751,9 +5916,12 @@ class Soundscape {
     setMood(m) { this.pending = m; }
     setPaused(p) {
         this.paused = p;
+        if (p)
+            this.motor?.silence();
         if (this.ctx) {
             this.music.gain.setTargetAtTime(p ? this.settings.music * .08 : this.settings.music * .32, this.ctx.currentTime, .15);
             this.ambience.gain.setTargetAtTime(p ? 0 : this.settings.ambience * .23, this.ctx.currentTime, .15);
+            this.effects.gain.setTargetAtTime(p ? 0 : this.settings.effects * .55, this.ctx.currentTime, .035);
         }
     }
     register(source, gain, end) {
@@ -4885,6 +6053,10 @@ class Soundscape {
             return;
         const t = ctx.currentTime;
         switch (name) {
+            case 'boat-engine':
+                this.tone(32, t, 3, 'triangle', this.effects, .10, { sustain: .35, release: 1, filter: 'lowpass', freq: 260 });
+                this.noiseHit(t, 3, this.effects, .08, 180);
+                break;
             case 'strike':
                 this.noiseHit(t, .18, this.effects, .75, 400);
                 break;
@@ -4909,7 +6081,8 @@ class Soundscape {
             default: this.tone(42, t, .07, 'triangle', this.effects, .12);
         }
     }
-    update(r, active) {
+    update(r, active, thrust = 0) {
+        this.motor?.update(!!r && active && !this.paused && !r.finished && r.scooter && r.battery > 0 && this.settings.effects > 0, thrust);
         this.submerged = !!r && active && !this.paused && !r.finished && r.p.y < data_js_1.SITES[r.site].surface - .12;
         const breath = this.breathClock.sample(r?.time ?? 0, this.submerged && this.ctx?.state === 'running', this.paused);
         if (breath && this.ctx) {
@@ -4945,7 +6118,7 @@ class Soundscape {
         else
             this.setMood(r.restored > 0 && r.time % 55 < 12 ? 'recovery' : 'explore');
     }
-    stats() { return { context: this.ctx?.state ?? 'not-started', mood: this.mood, voices: this.voices.length, step: this.step, submerged: this.submerged, breathCount: this.breathCount }; }
+    stats() { return { context: this.ctx?.state ?? 'not-started', mood: this.mood, voices: this.voices.length, step: this.step, submerged: this.submerged, breathCount: this.breathCount, motor: this.motor?.stats() ?? null }; }
 }
 exports.Soundscape = Soundscape;
 
@@ -5036,12 +6209,15 @@ function leadInstrumentConfig(name) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UI = void 0;
+const campaign_js_1 = require("../game/campaign.js");
+const tutorial_js_1 = require("../game/tutorial.js");
+const campaign_ui_js_1 = require("./campaign-ui.js");
 const data_js_1 = require("../game/data.js");
 const math_js_1 = require("../game/math.js");
 const reef_recovery_js_1 = require("../game/reef-recovery.js");
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const key = (s) => s.replace('Key', '').replace('Left', '').replace('Mouse0', 'Mouse 1');
-const orderText = { catch: 'The Sandbar Kitchen · Land and sell 4 fish for a $65 order bonus.', cleanup: 'Lantern Bay Trust · Remove 2 pieces of fishing gear for a $70 contract bonus.', restore: 'Coral Commons · Plant 2 nursery-grown fragments for an $80 contract bonus.', research: 'Lantern Bay Field Archive · Survey 2 different field stations. Bonus: $140 by day or $180 at night.' };
+const orderText = { none: 'Explore at your own pace. No contract bonus is promised.', catch: 'The Sandbar Kitchen · Land and sell 4 fish for a $45 order bonus.', cleanup: 'Lantern Bay Trust · Remove 2 pieces of fishing gear for a $40 contract bonus.', restore: 'Coral Commons · Plant 2 nursery-grown fragments for a $45 contract bonus.', research: 'Lantern Bay Field Archive · Survey 2 different field stations. First assignment: $65 by day / $72 at night, including station pay. Later Monitoring: $38 / $45.' };
 function reefRecoveryText(p, site) { const stage = (0, reef_recovery_js_1.recoveryFromProgress)(p.reefs[site]); return stage === 0 ? 'Reef life returns between productive visits. Revisit over 3–5 outings to see more fish.' : stage < 5 ? 'Fish are returning between visits. Each productive outing helps the reef grow livelier.' : 'Fish and reef life are returning between visits. Keep revisiting to see the change.'; }
 const upgradeIcon = (id) => {
     const drawings = {
@@ -5064,6 +6240,8 @@ class UI {
         this.getSettings = getSettings;
         this.dispatch = dispatch;
         this.screen = 'dock';
+        this.moment = null;
+        this.filletReadyAt = 0;
         this.back = 'dock';
         this.site = 'gardens';
         this.order = 'catch';
@@ -5249,11 +6427,16 @@ class UI {
     show(screen) {
         this.stopFilleting();
         this.screen = screen;
+        document.getElementById('toast').classList.remove('visible');
         document.body.classList.remove('game');
         this.hud.hidden = true;
         this.panel.hidden = false;
         document.getElementById('menu-backdrop').hidden = false;
         const p = this.getProfile(), s = this.getSettings();
+        this.event = p.eventRegistrationDay === p.day;
+        document.body.classList.toggle('story-recognised', !!p.campaign?.milestoneFlags.length);
+        if (screen === 'dock' && !p.active && !p.pending && !(0, campaign_js_1.contractOptions)(p, this.site).find(o => o.kind === this.order)?.available)
+            this.order = (0, campaign_js_1.contractOptions)(p, this.site).find(o => o.available && o.kind !== 'none')?.kind ?? 'none';
         let html = '';
         switch (screen) {
             case 'dock':
@@ -5277,8 +6460,11 @@ class UI {
             case 'saves':
                 html = `<section class="modal narrow">${this.header('Your logbooks.', 'THREE LOCAL SAVE SLOTS')}<p class="tiny muted">Saved in this browser on this device. Export a backup before clearing browser data or changing hosts.</p><div id="slots"></div><div class="button-row"><button data-action="export">Export current save</button><button data-action="import">Import JSON backup</button></div><div class="rule"></div><button class="link-button danger" data-action="reset-confirm">Start this slot again</button></section>`;
                 break;
+            case 'moment':
+                html = this.moment ? (0, campaign_ui_js_1.momentView)(this.moment) : this.dock(p);
+                break;
             case 'events':
-                html = `<section class="modal">${this.header('The Lantern Bay Sweep.', 'LOCAL EVENT / DAY ' + p.day)}<p class="muted">A friendly conservation challenge on every third in-game day. No real-world deadline.</p><div class="row-stats"><div><strong>250</strong>points · $25 prize</div><div><strong>650</strong>points · $65 prize</div><div><strong>1,200</strong>points · $120 prize</div></div><p class="tiny muted">+100 per lionfish, +150 per cleanup, +180 per fragment, +80 per survey. Native-fish injuries cost 300 points; reef contacts cost 40. Land safely to qualify.</p><div class="button-row"><button class="primary" data-action="event-toggle" ${p.day % 3 !== 0 || p.active || p.pending ? 'disabled' : ''}>${this.event ? 'Leave event entry' : 'Enter next dive'}</button><span class="tiny muted">${p.day % 3 === 0 ? 'The event is open today.' : `Next event: day ${p.day + (3 - p.day % 3)}`}</span></div><div class="rule"></div><h3>Your personal bests</h3><p class="tiny muted">Local to this save. No online players or global leaderboard.</p><table class="table"><thead><tr><th>Day</th><th>Site</th><th>Score</th><th>Removals</th></tr></thead><tbody>${p.records.length ? p.records.slice().sort((a, b) => b.score - a.score).slice(0, 8).map(r => `<tr><td>${r.day}</td><td>${data_js_1.SITES[r.site].name}</td><td>${r.score}</td><td>${r.catch}</td></tr>`).join('') : '<tr><td colspan="4">Your first event result belongs here.</td></tr>'}</tbody></table></section>`;
+                html = (0, campaign_ui_js_1.eventView)(p, this.site, this.event);
                 break;
             case 'debrief':
                 html = this.debrief(p);
@@ -5286,24 +6472,37 @@ class UI {
             case 'filleting':
                 html = this.filleting(p);
                 break;
-            case 'receipt': {
-                const r = this.receipt;
-                html = `<section class="modal narrow">${this.header('Room for another day.', 'OUTING SETTLED')}<p class="muted">${esc(p.lastReport)}</p><div class="row-stats"><div><strong>${(0, math_js_1.money)(r.earned)}</strong>earned</div><div><strong>−${(0, math_js_1.money)(r.expenses)}</strong>operating costs</div><div><strong>+${r.followers}</strong>new followers</div></div><table class="table"><tbody><tr><td>Restaurant / field contract bonus</td><td>${(0, math_js_1.money)(r.contract)}</td></tr><tr><td>Sponsor contribution</td><td>${(0, math_js_1.money)(r.sponsor)}</td></tr><tr><td>Event prize</td><td>${(0, math_js_1.money)(r.eventPrize)}</td></tr><tr><td>Professional reputation</td><td>+${r.reputation}</td></tr>${r.debtPaid ? `<tr><td>Outstanding bill paid</td><td>${(0, math_js_1.money)(r.debtPaid)}</td></tr>` : ''}<tr><td>Available for the next dive</td><td><strong>${(0, math_js_1.money)(p.cash)}</strong></td></tr></tbody></table>${p.debt ? `<p class="status-note">${(0, math_js_1.money)(p.debt)} outstanding. Basic dives remain available; a portion of future earnings pays this down.</p>` : ''}<div class="button-row"><button class="primary" data-screen="dock">Back to harbour</button><button data-screen="gear">Browse equipment</button></div></section>`;
+            case 'receipt':
+                html = this.receipt ? (0, campaign_ui_js_1.receiptView)(p, this.receipt) : this.dock(p);
                 break;
-            }
             case 'confirm':
                 html = `<section class="modal narrow">${this.header('Just checking.')}<p class="muted">${esc(this.confirmText)}</p><div class="button-row"><button class="danger" data-action="${this.confirmAction}">Confirm</button><button data-close>Cancel</button></div></section>`;
                 break;
         }
         this.panel.innerHTML = html;
+        if (screen === 'gear')
+            for (const button of this.panel.querySelectorAll('[data-buy]'))
+                button.insertAdjacentHTML('beforebegin', `<p class="tiny upgrade-benefit">${esc((0, campaign_ui_js_1.upgradeNumbers)(p, button.dataset.buy))}</p>`);
+        if (screen === 'pause' && p.active) {
+            this.panel.querySelector('.button-row')?.insertAdjacentHTML('beforeend', p.active.practice ? '<button data-action="practice-exit">End practice</button>' : (0, tutorial_js_1.lessonActive)(p.active) ? '<button data-action="tutorial-skip">Skip tutorial</button>' : '');
+        }
         if (screen === 'settings' && this.qualityReloadPending)
             this.panel.querySelector('[data-setting="quality"]')?.closest('.setting')?.insertAdjacentHTML('afterend', '<div class="quality-reload-note" role="status"><p>High graphics saved. Reload to apply full reef detail and shadows.</p><div class="button-row"><button class="primary" data-action="quality-reload">Reload now</button><button data-action="quality-later">Later</button></div></div>');
         if (screen === 'dock') {
             this.panel.querySelector('.launch-row')?.insertAdjacentHTML('beforebegin', this.nightControl(p));
             const orderSelect = this.panel.querySelector('#order-choice');
+            const offers = (0, campaign_js_1.contractOptions)(p, this.site), labels = { catch: 'Kitchen · Sell 4 fish', cleanup: 'Cleanup · Remove 2 pieces of gear', restore: 'Restoration · Plant 2 fragments', research: 'Research · Read 2 stations', none: 'Free exploration · No contract' };
             if (orderSelect)
-                orderSelect.insertAdjacentHTML('beforeend', `<option value="research" ${this.order === 'research' ? 'selected' : ''}>Research · Survey the reef stations</option>`);
+                orderSelect.innerHTML = offers.map(o => `<option value="${o.kind}" ${this.order === o.kind ? 'selected' : ''} ${o.available ? '' : 'disabled'}>${labels[o.kind]}${o.available ? '' : ' — unavailable'}</option>`).join('');
+            const unavailable = offers.filter(o => !o.available);
+            this.panel.querySelector('.dock-card')?.insertAdjacentHTML('beforeend', `${unavailable.length ? `<details class="offer-notes"><summary>Why some offers are unavailable</summary>${unavailable.map(o => `<p class="tiny">${labels[o.kind]}: ${esc(o.reason)}</p>`).join('')}</details>` : ''}${(0, campaign_ui_js_1.careerView)(p)}`);
+            if (p.day % 3 === 0)
+                this.panel.querySelector('.dock-card')?.insertAdjacentHTML('afterbegin', `<p class="event-banner">Lantern Bay Sweep today · ${this.event ? 'Registered' : 'Register in Events'} · safe return needed</p>`);
         }
+        if (screen === 'debrief')
+            this.panel.querySelector('.modal')?.insertAdjacentHTML('beforeend', '<p id="fillet-sale-bonus" class="status-note"></p>');
+        if (screen === 'help')
+            this.panel.querySelector('.button-row')?.insertAdjacentHTML('afterbegin', '<button data-action="practice">Replay first-dive practice</button>');
         if (screen === 'help')
             this.panel.querySelector('.help-copy .two-col>div')?.insertAdjacentHTML('beforeend', '<p><b>Research contract:</b> record surveys at the shallow reef and one deep wreck or pipe field station.</p>');
         this.panel.setAttribute('aria-label', screen === 'dock' ? 'Harbour' : 'Game ' + screen);
@@ -5320,9 +6519,9 @@ class UI {
         this.updateFullscreenState(!!document.fullscreenElement || !!document.webkitFullscreenElement);
         requestAnimationFrame(() => (screen === 'filleting' ? this.panel.querySelector('[data-action="fillet-cut"]') : this.panel.querySelector('button:not(:disabled),select'))?.focus({ preventScroll: true }));
     }
-    dock(p) { const site = data_js_1.SITES[this.site]; return `<header class="topbar"><div class="wordmark">Reef Sweep<span>DIVING CO.</span></div><nav class="toplinks" aria-label="Harbour"><span class="wallet"><strong>${(0, math_js_1.money)(p.cash)}</strong> Day ${p.day} · ${p.audience} followers</span><button data-screen="gear">Equipment</button><button data-screen="events">Events${p.day % 3 === 0 ? ' •' : ''}</button><button data-screen="settings" aria-label="Settings">⚙</button><button data-screen="saves" aria-label="Save slots">Saves</button><button data-action="fullscreen" data-fullscreen-label aria-label="Enter full screen">Full screen</button></nav></header><div class="dock-main"><section class="hero"><div class="eyebrow overline">A SAMFA12 GAME · LANTERN BAY</div><h1>A little room<br>for <em>life.</em></h1><p>Follow the light. Learn the reef.<br>Build a diving company that leaves<br>something better behind.</p><div class="hero-progress"><div><strong>${p.totalRemoved}</strong><span>lionfish removed</span></div><div><strong>${p.totalRestored}</strong><span>fragments planted</span></div><div><strong>${p.reputation}</strong><span>reputation</span></div></div><button class="link-button" data-screen="help" style="margin-top:18px;font-size:12px">Your first dive? Start here ↗</button></section><section class="dock-card"><div class="eyebrow">THE NEXT OUTING</div><h2>The reef is waiting.</h2><div class="site-selector">${Object.values(data_js_1.SITES).map((t, index) => `<button class="site-choice ${this.site === t.id ? 'selected' : ''}" data-site="${t.id}" ${!(0, data_js_1.siteUnlocked)(p, t.id) ? 'disabled' : ''}><span class="micro">${String(index + 1).padStart(2, '0')} / ${esc(t.label ?? t.name)}</span><strong>${esc(t.name)}</strong><span class="tiny">${(0, data_js_1.siteUnlocked)(p, t.id) ? esc(t.shortDescription ?? t.description) : esc((0, data_js_1.siteUnlockText)(p, t.id))}</span></button>`).join('')}</div><p class="site-copy">${esc(site.description)}</p><p class="recovery-note">${reefRecoveryText(p, this.site)}</p><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, this.site)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, this.site)}%"></i></div><label class="field" for="order-choice">Take a field contract</label><select id="order-choice" ${p.active || p.pending ? 'disabled' : ''}><option value="catch" ${this.order === 'catch' ? 'selected' : ''}>Restaurant · Sell 4 lionfish</option><option value="cleanup" ${this.order === 'cleanup' ? 'selected' : ''}>Cleanup · Remove 2 pieces of gear</option><option value="restore" ${this.order === 'restore' ? 'selected' : ''}>Restoration · Plant 2 fragments</option></select><p id="order-detail" class="contract-note">${orderText[this.order]}</p><div class="launch-row"><button class="primary" data-action="${p.pending ? 'review' : p.active ? 'resume' : 'dive'}">${p.pending ? 'Review landed catch' : p.active ? 'Resume suspended dive' : 'Begin dive'} <span aria-hidden="true">↗</span></button><button data-screen="journal" title="Reef chart">Chart</button></div><p class="status-note">${p.pending ? 'Your last outing is ready to settle.' : p.active ? 'Saved mid-dive. Air and wildlife have been paused.' : this.event ? 'Event entered · Land safely to record your score.' : 'Air filled · Nursery fragments stocked · Pole spear ready'}</p></section></div><footer class="bottomline"><span>Reef Sweep · v0.3 preview · Local saves</span><button class="link-button" data-screen="help" style="font-size:10px">Credits & controls</button></footer>`; }
-    nightControl(p) { const available = (0, data_js_1.upgradeLevel)(p, 'torch') >= 1 && (0, data_js_1.siteUnlocked)(p, 'passage'), lockedReason = (0, data_js_1.upgradeLevel)(p, 'torch') < 1 ? 'Install a head torch and unlock Tideglass Passage to open night dives.' : 'Unlock Tideglass Passage to open night dives.'; return `<label class="night-option"><span><strong>Night dive</strong><small>${available ? 'Challenge conditions · torch and wildlife adapt to the dark.' : lockedReason}</small></span><input type="checkbox" aria-label="Night dive" data-night ${this.night ? 'checked' : ''} ${available && !p.active && !p.pending ? '' : 'disabled'}></label>`; }
-    gearCard(u, p) { const level = (0, data_js_1.upgradeLevel)(p, u.id), maxed = level >= data_js_1.MAX_UPGRADE_LEVEL, cost = (0, data_js_1.upgradeCost)(p, u.id), blockedBy = u.requires && (0, data_js_1.upgradeLevel)(p, u.requires) < (u.requiredLevel ?? 1), prerequisiteName = u.requires ? data_js_1.UPGRADES.find(item => item.id === u.requires)?.name || u.requires : '', requirement = u.requires === 'air' ? `Regulator level ${u.requiredLevel ?? 1} needed` : `${prerequisiteName} needed`, disabled = maxed || p.cash < cost || !!p.active || !!p.pending || !!blockedBy; return `<article class="gear-card"><div class="gear-art" aria-hidden="true">${upgradeIcon(u.id)}</div><div class="eyebrow">${u.tag}</div><h3>${u.name}</h3><div class="gear-rank">Level ${level} <span>/ ${data_js_1.MAX_UPGRADE_LEVEL}</span></div><p>${u.description}</p><div class="price"><strong>${maxed ? 'MAX LEVEL' : (0, math_js_1.money)(cost)}</strong><button data-buy="${u.id}" ${disabled ? 'disabled' : ''}>${maxed ? 'Maxed' : blockedBy ? requirement : `Upgrade to ${level + 1}`}</button></div></article>`; }
+    dock(p) { const site = data_js_1.SITES[this.site]; return `<header class="topbar"><div class="wordmark">Reef Sweep<span>DIVING CO.</span></div><nav class="toplinks" aria-label="Harbour"><span class="wallet"><strong>${(0, math_js_1.money)(p.cash)}</strong> Day ${p.day} · ${p.audience} followers</span><button data-screen="gear">Equipment</button><button data-screen="events">Events${p.day % 3 === 0 ? ' •' : ''}</button><button data-screen="settings" aria-label="Settings">⚙</button><button data-screen="saves" aria-label="Save slots">Saves</button><button data-action="fullscreen" data-fullscreen-label aria-label="Enter full screen">Full screen</button></nav></header><div class="dock-main"><section class="hero"><div class="eyebrow overline">A SAMFA12 GAME · LANTERN BAY</div><h1>A little room<br>for <em>life.</em></h1><p>Follow the light. Learn the reef.<br>Build a diving company that leaves<br>something better behind.</p><div class="hero-progress"><div><strong>${p.totalRemoved}</strong><span>lionfish removed</span></div><div><strong>${p.totalRestored}</strong><span>fragments planted</span></div><div><strong>${p.reputation}</strong><span>reputation</span></div></div><button class="link-button" data-screen="help" style="margin-top:18px;font-size:12px">Your first dive? Start here ↗</button></section><section class="dock-card"><div class="eyebrow">THE NEXT OUTING</div><h2>The reef is waiting.</h2><div class="site-selector">${Object.values(data_js_1.SITES).map((t, index) => `<button class="site-choice ${this.site === t.id ? 'selected' : ''}" data-site="${t.id}" ${!(0, data_js_1.siteUnlocked)(p, t.id) ? 'disabled' : ''}><span class="micro">${String(index + 1).padStart(2, '0')} / ${esc(t.label ?? t.name)}</span><strong>${esc(t.name)}</strong><span class="tiny">${(0, data_js_1.siteUnlocked)(p, t.id) ? esc(t.shortDescription ?? t.description) : esc((0, data_js_1.siteUnlockText)(p, t.id))}</span></button>`).join('')}</div><p class="site-copy">${esc(site.description)}</p><p class="recovery-note">${reefRecoveryText(p, this.site)}</p><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, this.site)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, this.site)}%"></i></div><label class="field" for="order-choice">Take a field contract</label><select id="order-choice" ${p.active || p.pending ? 'disabled' : ''}><option value="catch" ${this.order === 'catch' ? 'selected' : ''}>Restaurant · Sell 4 lionfish</option><option value="cleanup" ${this.order === 'cleanup' ? 'selected' : ''}>Cleanup · Remove 2 pieces of gear</option><option value="restore" ${this.order === 'restore' ? 'selected' : ''}>Restoration · Plant 2 fragments</option></select><p id="order-detail" class="contract-note">${orderText[this.order]}</p><div class="launch-row"><button class="primary" data-action="${p.pending ? 'review' : p.active ? 'resume' : 'dive'}">${p.pending ? 'Review landed catch' : p.active ? 'Resume suspended dive' : 'Begin dive'} <span aria-hidden="true">↗</span></button><button data-screen="journal" title="Reef chart">Chart</button></div><p class="status-note">${p.pending ? 'Your last outing is ready to settle.' : p.active ? 'Saved mid-dive. Air and wildlife have been paused.' : this.event ? 'Event entered · Land safely to record your score.' : 'Air filled · Nursery fragments stocked · Pole spear ready'}</p></section></div><footer class="bottomline"><span>Reef Sweep · v0.4 preview · Local saves</span><button class="link-button" data-screen="help" style="font-size:10px">Credits & controls</button></footer>`; }
+    nightControl(p) { const available = (0, data_js_1.upgradeLevel)(p, 'torch') >= 1 && (0, data_js_1.siteUnlocked)(p, 'passage'), lockedReason = (0, data_js_1.upgradeLevel)(p, 'torch') < 1 ? 'Regulator level 2 → fit a head torch → unlock Tideglass Passage.' : 'Unlock Tideglass Passage to open night dives.'; return `<label class="night-option"><span><strong>Night dive</strong><small>${available ? 'Challenge conditions · torch and wildlife adapt to the dark.' : lockedReason}</small></span><input type="checkbox" aria-label="Night dive" data-night ${this.night ? 'checked' : ''} ${available && !p.active && !p.pending ? '' : 'disabled'}></label>`; }
+    gearCard(u, p) { const level = (0, data_js_1.upgradeLevel)(p, u.id), maxed = level >= data_js_1.MAX_UPGRADE_LEVEL, cost = (0, data_js_1.upgradeCost)(p, u.id), blockedBy = u.requires && (0, data_js_1.upgradeLevel)(p, u.requires) < (u.requiredLevel ?? 1), prerequisiteName = u.requires ? data_js_1.UPGRADES.find(item => item.id === u.requires)?.name || u.requires : '', requirement = u.requires === 'air' ? `Regulator level ${u.requiredLevel ?? 1} needed` : `${prerequisiteName} needed`, service = (0, data_js_1.upgradeServiceRequirement)(p, u.id), disabled = !service.available || maxed || p.cash < cost || !!p.active || !!p.pending || !!blockedBy; return `<article class="gear-card"><div class="gear-art" aria-hidden="true">${upgradeIcon(u.id)}</div><div class="eyebrow">${u.tag}</div><h3>${u.name}</h3><div class="gear-rank">Level ${level} <span>/ ${data_js_1.MAX_UPGRADE_LEVEL}</span></div><p>${u.description}</p>${!service.available ? `<p class="tiny status-note">${esc(service.reason)}</p>` : ""}<div class="price"><strong>${maxed ? 'MAX LEVEL' : (0, math_js_1.money)(cost)}</strong><button data-buy="${u.id}" ${disabled ? 'disabled' : ''}>${maxed ? 'Maxed' : blockedBy ? requirement : `Upgrade to ${level + 1}`}</button></div></article>`; }
     help(s) { return `<section class="modal help-copy">${this.header('Work gently. Come home.', 'DIVER’S FIELD GUIDE')}<p><b>Find the striped, fan-finned lionfish.</b> Move close, settle your aim, hold to draw the pole spear and release to strike. A fish stays exposed until you hold Interact to secure it in your tube.</p><div class="control-sheet"><div><b>Keyboard & mouse</b><p>${key(s.keys.forward)}${key(s.keys.left)}${key(s.keys.back)}${key(s.keys.right)} swim · mouse look<br>${key(s.keys.up)} ascend · ${key(s.keys.down)} descend<br>${key(s.keys.boost)} stronger fin kick · ${key(s.keys.steady)} steady<br>Mouse 1 draw / release · ${key(s.keys.interact)} hold to interact<br>${key(s.keys.scooter)} scooter · ${key(s.keys.light)} light · ${key(s.keys.journal)} chart · ${key(s.keys.watch)} raise/lower watch · Esc pause</p></div><div><b>Touch & controller</b><p>Touch (portrait or landscape): left stick moves; drag the scene to look. Hold and drag Draw to aim, then release. Hold Interact to secure catches or work. Use the Watch button in the upper HUD to check your instruments.<br>Controller: sticks move / look. Click the left stick for the dive computer by default. Button meanings vary by browser and device; open Settings → Controller calibration to see live readings and set your own map. The standard browser layout has a ready-to-use fallback.</p></div></div><p>Aim with the centre reticle. Hold Mouse 1 to draw, then release to strike. This also requests mouse capture. If capture is unavailable, simply move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag also looks. Hold <b>R</b> as an alternate spear input. Uncaptured look is bounded by the browser window. Releasing or cancelling a pointer outside the canvas will not leave the controls stuck.</p><div class="rule"></div><div class="two-col"><div><h3>A living reef</h3><p><b>Cleanup:</b> hold Interact near discarded nets or crates.<br><b>Restore:</b> plant nursery-grown fragments at the marked nursery plots. Growth happens between game days.<br><b>Survey:</b> record the site at the teal survey sign. The chart marks all work areas.</p><p><b>Marlow:</b> this grouper may watch, approach and then steal an exposed fish. Secure it or move away. Your tube is safe.<br><b>Moray:</b> give its crevice room. If it moves towards you and a warning appears, back away.</p></div><div><h3>Leave a reserve</h3><p>The home marker points towards the mooring. Return to it, ascend alongside the rope, and hold Interact to board. The chart shows a route around major rocks.</p><p>Rescue costs $85 and forfeits the day’s catch, but equipment and completed reef work remain. Loan gear is always available. Pause or suspend at any time.</p><p>After the dive, sell, keep a meal or donate. Choose two highlight <b>image cards</b> to publish. They represent footage in the fiction; this build does not record playable video.</p></div></div><div class="rule"></div><h3>Inspiration, not instruction.</h3><p>Inspired by the underwater storytelling and conservation work of <b>Lionfish Extermination Corp</b>; art and loop inspiration from <b>Dave the Diver</b>. This is an independent fictional game, not affiliated with or endorsed by either. Marlow, the companies and the island are fictional. Music is an original composition using <b>Samfa12’s Pocket Chordsmith</b> instruments.</p><p>Lionfish are native in the Indo-Pacific and invasive in the Atlantic/Caribbean setting used here. Do not feed wild predators. Morays normally open their mouths to breathe; mouth opening alone is not a warning. Coral recovery is time-compressed. Air, ascent, currents, handling and restoration are simplified gameplay—not dive training, medical advice or permission to undertake real restoration.</p><p class="tiny">Babylon.js 9.26.1 · Apache-2.0. Original procedural art and game code. Source details and third-party notices are included in the handoff package.</p><div class="button-row"><button class="primary" data-close>Ready for the reef</button><button data-screen="settings">Adjust controls</button></div></section>`; }
     gamepadSettings() {
         const state = this.controllerReadout, selected = state.selectedKey || '';
@@ -5330,7 +6529,7 @@ class UI {
         return `<div class="settings-section">CONTROLLER CALIBRATION</div><p class="tiny muted">Select the USB controller the game should use. Scan and calibration require a click; the controller profile stays in this browser on this device.</p><label class="setting">Active controller<select id="gamepad-choice">${options}</select></label><p id="gamepad-status" class="tiny muted" aria-live="polite"></p><pre id="gamepad-raw" class="gamepad-raw" aria-label="Live raw controller axes and buttons">Waiting for controller readings…</pre><p id="gamepad-step" class="status-note" aria-live="polite"></p><p id="gamepad-test" class="tiny muted" aria-live="polite">Live test · Connect a controller to test it.</p><div class="button-row controller-actions"><button data-action="gamepad-scan">Scan controllers</button><button id="gamepad-start" data-action="gamepad-start" ${state.connected && state.calibration.phase === 'idle' ? '' : 'disabled'}>Start guided calibration</button><button id="gamepad-cancel" data-action="gamepad-cancel" ${state.calibration.phase === 'idle' ? 'hidden' : ''}>Cancel setup</button><button id="gamepad-use" class="primary" data-action="gamepad-use" ${state.calibration.completed ? '' : 'hidden'}>Use this calibration</button><button id="gamepad-restore" data-action="gamepad-restore" ${state.connected && state.saved ? '' : 'disabled'}>Restore controller defaults</button></div><p class="tiny muted">Keep still for the neutral sample. Move each stick when prompted, then release it. For each action, press or move only that control and release before the next prompt. Trigger axes are supported. Resume your dive only after selecting Use or Cancel.</p>`;
     }
     settings(s) { const slider = (id, label, min, max, step) => `<label class="setting">${label}<span id="read-${id}" class="tiny muted">${id === 'fov' ? s[id] + '°' : id === 'sensitivity' ? Number(s[id]).toFixed(2) : Math.round(Number(s[id]) * 100) + '%'}</span><input aria-label="${label}" data-setting="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${s[id]}"></label>`; const check = (id, label, detail) => `<label class="setting"><span>${label}<small>${detail}</small></span><input type="checkbox" data-setting="${id}" ${(id === 'instrumentHud' ? s.instrumentHud !== false : s[id]) ? 'checked' : ''}></label>`; return `<section class="modal">${this.header('Make yourself comfortable.', 'SETTINGS')}<div class="two-col"><div><div class="settings-section">SOUND</div>${slider('music', 'Pocket Chordsmith music', 0, 1, .01)}${slider('ambience', 'Breathing & ambience', 0, 1, .01)}${slider('effects', 'Equipment & warnings', 0, 1, .01)}<div class="settings-section">WATER & DISPLAY</div><label class="setting">Render quality<select data-setting="quality"><option value="high" ${s.quality === 'high' ? 'selected' : ''}>High</option><option value="balanced" ${s.quality === 'balanced' ? 'selected' : ''}>Balanced</option><option value="low" ${s.quality === 'low' ? 'selected' : ''}>Performance</option></select></label><p class="tiny muted">Resolution changes immediately; decorative population changes on the next site load. Targets, wildlife and rules are unchanged.</p>${slider('fov', 'Field of view', 60, 100, 1)}${check('reducedMotion', 'Steady camera & reduced motion', 'Suppresses equipment sway and coral animation.')}${check('assist', 'Target identification', 'Names visible targets in the aiming reticle.')}${check('instrumentHud', 'Show air and timer HUD', 'Keeps air and elapsed time in view while the wrist computer is lowered.')}</div><div><div class="settings-section">CONTROLS</div>${slider('sensitivity', 'Look sensitivity', .25, 2.5, .05)}${check('invertY', 'Invert vertical look', 'Mouse, touch and controller.')}${check('toggleDraw', 'Toggle spear draw', 'Press once to draw; press again to strike.')}${slider('touchScale', 'Touch control size', .8, 1.3, .05)}<div class="settings-section">KEY BINDINGS · SELECT TO REASSIGN</div><div class="bindings">${['forward', 'back', 'left', 'right', 'up', 'down', 'boost', 'steady', 'interact', 'scooter', 'journal', 'light', 'watch'].map(a => `<div class="bind"><span>${a}</span><button data-bind="${a}">${key(s.keys[a])}</button></div>`).join('')}</div><button class="link-button tiny" data-action="defaults" style="margin-top:12px">Restore default settings</button>${this.gamepadSettings()}</div></div><div class="button-row"><button class="primary" data-close>Done</button><button data-action="fullscreen" data-fullscreen-label>Full screen</button></div></section>`; }
-    journal(p) { const run = p.active || p.pending, id = run?.site || this.site, site = data_js_1.SITES[id], reef = p.reefs[id]; return `<section class="modal">${this.header(site.name, 'CHART / FIELD NOTES')}<div class="chart-layout"><div><canvas id="chart" width="660" height="660" class="chart" aria-label="Top-down reef chart: home buoy, player, obstacles, work sites and return route"></canvas><p class="tiny muted" style="margin-top:8px">Gold: you · cream: mooring · teal: work sites<br>Line: estimated return route · North is up</p></div><div><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, id)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, id)}%"></i></div><div class="row-stats"><div><strong>${reef.removed.length}</strong>removals recorded</div><div><strong>${reef.cleaned.length}</strong>cleanup sites</div><div><strong>${Object.keys(reef.restored).length}</strong>coral plots</div></div><p class="recovery-note">${reefRecoveryText(p, id)}</p>${run ? `<div class="field-note"><b>Your contract</b><p>${orderText[run.order]}</p><p>This outing: ${run.removed} removed · ${run.cleaned} cleaned · ${run.restored} planted · ${run.fragments} fragments left.</p></div>` : ''}<div class="field-note"><b>The nursery</b><p>Plant fragments at gold-tagged plots, remove nearby rubbish and record a survey. Revisit on later days to see growth.</p></div><div class="field-note"><b>${p.discoveries.includes('marlow') ? 'Marlow’s ledge' : 'A large shadow beneath the ledge'}</b><p>A broad mottled grouper sometimes follows working divers. Not a pet. Secure your catch and respect its space.</p></div><div class="field-note"><b>Company support</b><p>Lantern Bay Trust: reputation 12 + two cleanup/restoration jobs earns $50 support.<br>Tideframe Cameras: audience 80 + a published grouper, turtle or ray highlight earns $35. At most one sponsor contribution per day.</p></div></div></div><div class="button-row"><button class="primary" data-close>${run && !run.finished ? 'Back to the dive' : 'Back to harbour'}</button></div></section>`; }
+    journal(p) { const run = p.active || p.pending, id = run?.site || this.site, site = run ? (0, data_js_1.siteForRun)(run) : data_js_1.SITES[id], reef = p.reefs[id]; return `<section class="modal">${this.header(site.name, 'CHART / FIELD NOTES')}<div class="chart-layout"><div><canvas id="chart" width="660" height="660" class="chart" aria-label="Top-down reef chart: home buoy, player, obstacles, work sites and return route"></canvas><p class="tiny muted" style="margin-top:8px">Gold: you · cream: mooring · teal: work sites<br>Line: estimated return route · North is up</p></div><div><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, id)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, id)}%"></i></div><div class="row-stats"><div><strong>${reef.removed.length}</strong>removals recorded</div><div><strong>${reef.cleaned.length}</strong>cleanup sites</div><div><strong>${Object.keys(reef.restored).length}</strong>coral plots</div></div><p class="recovery-note">${reefRecoveryText(p, id)}</p>${run ? `<div class="field-note"><b>Your contract</b><p>${orderText[run.order]}</p><p>This outing: ${run.removed} removed · ${run.cleaned} cleaned · ${run.restored} planted · ${run.surveyed} surveyed · ${run.fragments} fragments left. ${esc((0, campaign_ui_js_1.contractNote)(run))}</p></div>` : ''}<div class="field-note"><b>The nursery</b><p>Plant fragments at gold-tagged plots, remove nearby rubbish and record a survey. Revisit on later days to see growth.</p></div><div class="field-note"><b>${p.discoveries.includes('marlow') ? 'Marlow’s ledge' : 'A large shadow beneath the ledge'}</b><p>A broad mottled grouper sometimes follows working divers. Not a pet. Secure your catch and respect its space.</p></div><div class="field-note"><b>Company support</b><p>Stories earn followers; careful field work earns reputation. At 80, 160 and 300 followers, eligible divers can take camera and conservation story assignments. Completing them earns recognition and a gold highlight frame, without extra cash.</p></div></div></div><div class="button-row"><button class="primary" data-close>${run && !run.finished ? 'Back to the dive' : 'Back to harbour'}</button></div></section>`; }
     initDebrief(r) { const n = r.rescued ? 0 : r.cargo.length; this.allocation = { sell: n, eat: 0, donate: 0 }; this.chosen = new Set(r.clips.slice().sort((a, b) => b.quality - a.quality).slice(0, 2).map(c => c.id)); }
     debrief(p) {
         const r = p.pending;
@@ -5345,7 +6544,9 @@ class UI {
     }
     filleting(p) {
         const r = p.pending;
-        if (!r || r.rescued || !r.cargo.length || typeof r.filletQuality === 'number')
+        if (r?.filletQuality !== undefined)
+            return (0, campaign_ui_js_1.filletResult)(r);
+        if (!r || r.rescued || !r.cargo.length)
             return `<section class="modal narrow">${this.header('Catch preparation')}<p class="muted">There is no catch waiting to be filleted.</p><div class="button-row"><button class="primary" data-action="fillet-cancel">Return to the debrief</button></div></section>`;
         return `<section class="modal fillet-modal">${this.header('A careful hand.', 'CATCH PREPARATION / OPTIONAL')}<p class="muted">Line up three guided cuts with the highlighted bands. The knife moves continuously; press the button or Enter when it crosses a band. Careful timing improves the sale value.</p><div class="fillet-illustration" aria-hidden="true"><svg viewBox="0 0 360 160" role="presentation"><defs><linearGradient id="fish-body" x1="0" x2="1"><stop offset="0" stop-color="#83bdb0"/><stop offset=".52" stop-color="#d5c99f"/><stop offset="1" stop-color="#f0c58c"/></linearGradient></defs><path class="fillet-water" d="M0 112c50-18 87 15 136 0s80-11 113 0 65 4 111-10v58H0z"/><path class="fillet-fish" d="M35 79 12 57l3 45 20-16c29 31 104 36 174 13 36-12 61-29 80-34-19-6-44-22-80-34-70-23-145-18-174 13zm253-14 47-25-8 40 8 40-47-25"/><circle class="fillet-eye" cx="280" cy="75" r="3"/><path class="fillet-detail" d="M97 44c19 18 20 45 0 66M128 39c21 19 22 53 0 75M158 39c20 20 21 52 0 73M81 72c-9 4-12 10-12 15M52 53l8 49"/><g class="fillet-band" data-fillet-band="0"><rect x="99" y="51" width="20" height="54" rx="8"/><path d="M109 54v48"/></g><g class="fillet-band" data-fillet-band="1"><rect x="166" y="47" width="20" height="61" rx="8"/><path d="M176 50v55"/></g><g class="fillet-band" data-fillet-band="2"><rect x="232" y="50" width="20" height="55" rx="8"/><path d="M242 53v49"/></g><g id="fillet-knife"><path d="m0 0 31 12-25 5z"/><path d="m7 14-14 15"/><path d="m-15 34 11-11 8 8-11 11z"/></g></svg></div><div class="fillet-steps" aria-label="Filleting steps"><span data-step="0">01 · Gill</span><span data-step="1">02 · Belly</span><span data-step="2">03 · Tail</span></div><p id="fillet-cue" class="fillet-cue" aria-live="polite">Cut 1 of 3 · Behind the gill</p><p id="fillet-feedback" class="tiny muted" aria-live="polite">Wait for the moving knife to cross the glowing band.</p><div class="fillet-actions"><button class="primary" data-action="fillet-cut" aria-keyshortcuts="Enter">Make cut 1 of 3</button><button data-action="fillet-cancel">Skip preparation</button></div><p class="tiny muted fillet-footnote">The catch allocation remains yours to choose. Filleting adds a quality bonus at settlement.</p></section>`;
     }
@@ -5354,14 +6555,27 @@ class UI {
     startFilleting() {
         if (!document.getElementById('fillet-knife'))
             return;
-        this.filletStage = 0;
-        this.filletScores = [];
+        this.filletScores = [...(this.getProfile().pending?.filletCuts ?? [])];
+        this.filletStage = this.filletScores.length;
+        if (this.filletStage === 3 && this.getProfile().pending?.filletQuality === undefined) {
+            this.dispatch('fillet', this.filletScores.reduce((a, b) => a + b, 0) / 3);
+            this.show('filleting');
+            return;
+        }
+        this.filletReadyAt = 0;
+        this.filletScores.forEach((score, i) => { this.panel.querySelector(`[data-fillet-band="${i}"]`)?.classList.add(score >= .55 ? 'clean-cut' : 'rough-cut'); this.panel.querySelector(`[data-step="${i}"]`)?.classList.add('done'); });
+        const nextButton = this.panel.querySelector('[data-action="fillet-cut"]');
+        if (nextButton)
+            nextButton.textContent = `Make cut ${this.filletStage + 1} of 3`;
+        const nextCue = document.getElementById('fillet-cue');
+        if (nextCue)
+            nextCue.textContent = `Cut ${this.filletStage + 1} of 3 · ${['Behind the gill', 'Along the belly', 'Release the tail'][this.filletStage]}`;
         this.filletStarted = performance.now();
         const targets = [109, 176, 242];
         const animate = (now) => {
             if (this.screen !== 'filleting')
                 return;
-            const phase = ((now - this.filletStarted) % 2350) / 2350;
+            const phase = ((now - this.filletStarted) % 3100) / 3100;
             this.filletBladeX = 62 + phase * 236;
             document.getElementById('fillet-knife')?.setAttribute('transform', `translate(${this.filletBladeX} 30)`);
             for (let i = 0; i < targets.length; i++)
@@ -5371,17 +6585,20 @@ class UI {
         this.filletFrame = requestAnimationFrame(animate);
     }
     tryFilletCut() {
-        if (this.screen !== 'filleting' || this.filletStage > 2)
+        if (this.screen !== 'filleting' || this.filletStage > 2 || performance.now() < this.filletReadyAt)
             return;
+        this.filletReadyAt = performance.now() + 500;
         const targets = [109, 176, 242], target = targets[this.filletStage], score = (0, math_js_1.clamp)(1 - Math.abs(this.filletBladeX - target) / 46, 0, 1);
         this.filletScores.push(score);
+        this.dispatch('fillet-cut-save', [...this.filletScores]);
+        this.panel.querySelector(`[data-fillet-band="${this.filletStage}"]`)?.classList.add(score >= .55 ? 'clean-cut' : 'rough-cut');
         const feedback = score >= .82 ? 'Beautifully placed.' : score >= .55 ? 'A clean, useful cut.' : score > 0 ? 'A little rough, but the catch is prepared.' : 'You missed the line; the cut still counts.';
         this.filletStage++;
         if (this.filletStage === 3) {
             const quality = this.filletScores.reduce((sum, value) => sum + value, 0) / this.filletScores.length;
             this.stopFilleting();
             this.dispatch('fillet', quality);
-            this.dispatch('close');
+            this.show('filleting');
             return;
         }
         this.filletStarted = performance.now();
@@ -5414,10 +6631,31 @@ class UI {
             el.textContent = total === n ? `${n} fish allocated. Ready to settle.` : `Allocate exactly ${n} fish. Currently allocated: ${total}.`;
             el.style.color = total === n ? 'var(--muted)' : 'var(--red)';
         }
+        const fillet = document.getElementById('fillet-sale-bonus');
+        if (fillet && r) {
+            const base = r.cargo.slice(0, this.allocation.sell).reduce((n, c) => n + c.value, 0);
+            fillet.textContent = `Filleting sale bonus: ${(0, math_js_1.money)(Math.round(base * (r.filletQuality ?? 0) * .3))} on ${this.allocation.sell} fish sold.`;
+        }
         document.getElementById('settle')?.toggleAttribute('disabled', total !== n);
     }
     play() { this.panel.hidden = true; this.hud.hidden = false; document.body.classList.add('game'); document.getElementById('menu-backdrop').hidden = true; }
-    toast(text) { const el = document.getElementById('toast'); el.textContent = text; el.classList.add('visible'); clearTimeout(this.toastTimer); this.toastTimer = window.setTimeout(() => el.classList.remove('visible'), 4500); }
+    toast(text) {
+        const el = document.getElementById('toast');
+        el.textContent = text;
+        el.classList.add('visible');
+        clearTimeout(this.toastTimer);
+        this.panel.querySelector('#menu-message')?.remove();
+        let message = null;
+        if (!this.panel.hidden) {
+            message = document.createElement('p');
+            message.id = 'menu-message';
+            message.className = 'menu-message';
+            message.setAttribute('role', 'status');
+            message.textContent = text;
+            (this.panel.querySelector('.modal,.dock-card') ?? this.panel).prepend(message);
+        }
+        this.toastTimer = window.setTimeout(() => { el.classList.remove('visible'); message?.remove(); }, 4500);
+    }
     slots(profiles) {
         const parent = document.getElementById('slots');
         if (!parent)
@@ -5425,12 +6663,56 @@ class UI {
         parent.innerHTML = profiles.map(p => `<article class="save-card ${p.slot === this.getProfile().slot ? 'current' : ''}"><div><h3>Logbook ${p.slot}</h3><p>Day ${p.day} · ${(0, math_js_1.money)(p.cash)} · ${p.totalRemoved} removals${p.active ? ' · dive suspended' : ''}${p.pending ? ' · ready to settle' : ''}</p></div><button data-action="slot" data-value="${p.slot}">${p.slot === this.getProfile().slot ? 'Current' : 'Open'}</button></article>`).join('');
     }
     confirm(action, text) { this.confirmAction = action; this.confirmText = text; this.show('confirm'); }
-    updateHUD(sim, control) { const r = sim.run, p = sim.profile, s = this.getSettings(); document.getElementById('air').textContent = Math.ceil(r.air).toString(); const fill = document.getElementById('air-fill'); fill.style.width = String(Math.min(100, r.air / (0, data_js_1.airCapacity)(p) * 100)) + '%'; fill.style.background = r.air < sim.reserve ? 'var(--sand)' : 'var(--teal)'; const depth = Math.max(0, sim.site.surface - r.p.y), depthEl = document.getElementById('depth'); depthEl.textContent = depth === 0 ? 'SURFACE' : depth.toFixed(1) + ' m'; depthEl.setAttribute('aria-label', depth === 0 ? 'At the surface' : `${depth.toFixed(1)} metres deep`); depthEl.classList.toggle('surface-state', depth === 0); document.getElementById('bag').textContent = `${r.cargo.length} / ${(0, data_js_1.capacity)(p)} secured${r.exposed ? ' + 1 exposed' : ''}`; document.getElementById('clock').textContent = (0, math_js_1.timeText)(r.time); document.getElementById('condition').textContent = [r.health < 100 ? `Condition ${Math.ceil(r.health)}%` : '', r.scooter || r.light ? `Battery ${Math.ceil(r.battery)}%` : ''].filter(Boolean).join(' · '); const ret = document.getElementById('reticle'); ret.classList.toggle('charging', r.charge > .01); ret.classList.toggle('valid', sim.aim.valid); document.getElementById('charge-ring').style.strokeDashoffset = String(157 * (1 - r.charge)); const aim = sim.aim, inter = document.getElementById('interaction'); const show = !!aim.label && (s.assist || aim.kind !== 'fish' || aim.id === 'held'); inter.style.opacity = show ? '1' : '0'; document.getElementById('aim-label').textContent = aim.label; let hint = aim.hint; const interactKey = control === 'touch' ? 'Interact' : control === 'gamepad' ? 'your mapped Interact control' : key(s.keys.interact); hint = hint.replace(/Interact/g, interactKey); document.getElementById('aim-hint').textContent = hint + (aim.distance > 0 ? ` · ${aim.distance.toFixed(1)} m` : ''); const work = document.getElementById('work-meter'); work.style.opacity = r.interaction > 0 ? '1' : '0'; work.firstElementChild.style.width = r.interaction * 100 + '%'; document.getElementById('return-warning').hidden = !r.returnWarn; document.getElementById('dive-caption').textContent = r.scooter ? 'MINNOW / CRUISING · Stow to use the spear' : `LANTERN BAY / ${sim.site.name.toUpperCase()}${r.time < 45 ? ' · The chart marks the nursery and cleanup sites.' : ''}`; document.getElementById('controls-hint').textContent = control === 'gamepad' ? 'Controller · map controls in Settings' : `${key(s.keys.steady)} steady · Hold ${key(s.keys.interact)} interact · ${key(s.keys.up)} up / ${key(s.keys.down)} down · ${key(s.keys.journal)} chart`; }
+    updateHUD(sim, control) {
+        const objective = document.getElementById('campaign-progress'), lesson = document.getElementById('lesson-text'), skip = document.getElementById('lesson-skip');
+        if (objective) {
+            objective.hidden = false;
+            objective.textContent = (0, campaign_ui_js_1.contractNote)(sim.run) + (sim.run.event ? ' · ' + (0, campaign_ui_js_1.eventNote)(sim.run) : '');
+        }
+        if (lesson) {
+            lesson.hidden = !(0, tutorial_js_1.lessonActive)(sim.run);
+            lesson.textContent = (0, tutorial_js_1.lessonActive)(sim.run) ? `First dive ${1 + (sim.run.lesson?.step ?? 0)}/7 · ${(0, tutorial_js_1.lessonPrompt)(sim.run, control, this.getSettings())}` : '';
+        }
+        if (skip) {
+            skip.hidden = !(0, tutorial_js_1.lessonActive)(sim.run);
+            skip.onclick = () => this.dispatch('tutorial-skip');
+        }
+        const r = sim.run, p = sim.profile, s = this.getSettings();
+        document.getElementById('air').textContent = Math.ceil(r.air).toString();
+        const fill = document.getElementById('air-fill');
+        fill.style.width = String(Math.min(100, r.air / (0, data_js_1.airCapacity)(p) * 100)) + '%';
+        fill.style.background = r.air < sim.reserve ? 'var(--sand)' : 'var(--teal)';
+        const depth = Math.max(0, sim.site.surface - r.p.y), depthEl = document.getElementById('depth');
+        depthEl.textContent = depth === 0 ? 'SURFACE' : depth.toFixed(1) + ' m';
+        depthEl.setAttribute('aria-label', depth === 0 ? 'At the surface' : `${depth.toFixed(1)} metres deep`);
+        depthEl.classList.toggle('surface-state', depth === 0);
+        document.getElementById('bag').textContent = `${r.cargo.length} / ${(0, data_js_1.capacity)(p)} secured${r.exposed ? ' + 1 exposed' : ''}`;
+        document.getElementById('clock').textContent = (0, math_js_1.timeText)(r.time);
+        document.getElementById('condition').textContent = [r.health < 100 ? `Condition ${Math.ceil(r.health)}%` : '', r.scooter || r.light ? `Battery ${Math.ceil(r.battery)}%` : ''].filter(Boolean).join(' · ');
+        const ret = document.getElementById('reticle');
+        ret.classList.toggle('charging', r.charge > .01);
+        ret.classList.toggle('valid', sim.aim.valid);
+        document.getElementById('charge-ring').style.strokeDashoffset = String(157 * (1 - r.charge));
+        const aim = sim.aim, inter = document.getElementById('interaction');
+        const show = !!aim.label && (s.assist || aim.kind !== 'fish' || aim.id === 'held');
+        inter.style.opacity = show ? '1' : '0';
+        document.getElementById('aim-label').textContent = aim.label;
+        let hint = aim.hint;
+        const interactKey = control === 'touch' ? 'Interact' : control === 'gamepad' ? 'your mapped Interact control' : key(s.keys.interact);
+        hint = hint.replace(/Interact/g, interactKey);
+        document.getElementById('aim-hint').textContent = hint + (aim.distance > 0 ? ` · ${aim.distance.toFixed(1)} m` : '');
+        const work = document.getElementById('work-meter');
+        work.style.opacity = r.interaction > 0 ? '1' : '0';
+        work.firstElementChild.style.width = r.interaction * 100 + '%';
+        document.getElementById('return-warning').hidden = !r.returnWarn;
+        document.getElementById('dive-caption').textContent = r.scooter ? 'MINNOW / CRUISING · Stow to use the spear' : `LANTERN BAY / ${sim.site.name.toUpperCase()}${r.time < 45 ? ' · The chart marks the nursery and cleanup sites.' : ''}`;
+        document.getElementById('controls-hint').textContent = control === 'gamepad' ? 'Controller · map controls in Settings' : `${key(s.keys.steady)} steady · Hold ${key(s.keys.interact)} interact · ${key(s.keys.up)} up / ${key(s.keys.down)} down · ${key(s.keys.journal)} chart`;
+    }
     chart(sim) {
         const el = document.getElementById('chart');
         if (!el)
             return;
-        const p = this.getProfile(), id = sim?.run.site || this.site, site = data_js_1.SITES[id], ctx = el.getContext('2d'), w = el.width, scale = w / (site.radius * 2 + 20), to = (x, z) => [w / 2 + x * scale, w / 2 - z * scale];
+        const p = this.getProfile(), currentRun = sim?.run || p.active || p.pending, id = currentRun?.site || this.site, site = currentRun ? (0, data_js_1.siteForRun)(currentRun) : data_js_1.SITES[id], ctx = el.getContext('2d'), w = el.width, scale = w / (site.radius * 2 + 20), to = (x, z) => [w / 2 + x * scale, w / 2 - z * scale];
         ctx.fillStyle = '#123a42';
         ctx.fillRect(0, 0, w, w);
         ctx.strokeStyle = '#94c9b31b';
@@ -5498,4 +6780,4 @@ class UI {
 }
 exports.UI = UI;
 
-}};const cache={};function norm(p){const out=[];for(const s of p.split('/')){if(s==='..')out.pop();else if(s!=='.'&&s)out.push(s);}return out.join('/');}function load(id){if(cache[id])return cache[id].exports;const m={exports:{}};cache[id]=m;modules[id](s=>load(norm(id.slice(0,id.lastIndexOf('/')+1)+s).replace(/\.js$/,'.ts')),m,m.exports);return m.exports;}load("main.ts");})();
+}};const cache={};function norm(p){const out=[];for(const s of p.split('/')){if(s==='..')out.pop();else if(s!=='.'&&s)out.push(s);}return out.join('/');}function load(id){if(cache[id])return cache[id].exports;const m={exports:{}};cache[id]=m;modules[id](s=>load(norm(id.slice(0,id.lastIndexOf('/')+1)+s).replace(/\.js$/,'.ts') in modules ? norm(id.slice(0,id.lastIndexOf('/')+1)+s).replace(/\.js$/,'.ts') : norm(id.slice(0,id.lastIndexOf('/')+1)+s)),m,m.exports);return m.exports;}load("main.ts");})();

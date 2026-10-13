@@ -1,0 +1,1724 @@
+{
+  "engine": "Babylon.js",
+  "version": "9.26.1",
+  "license": "Apache-2.0",
+  "upstreamRepository": "https://github.com/BabylonJS/Babylon.js",
+  "sourceCarrierRepository": "https://github.com/RaananW/babylonjs-webpack-es6",
+  "sourceCarrierCommit": "f4bd75f6bc11a77b55b74b9e011e1f395fa9d4fa",
+  "sourceCarrierRun": 38030515343,
+  "sourceCarrierArtifact": 11661344454,
+  "sourceCarrierArchiveSha256": "8bba82420f1d86ee43ce6c069cba50b6e23a64f4aaca2ab50c6a2632aa9387aa",
+  "method": "Original dev/core TypeScript sources recovered from source-map sourcesContent. Only the runtime dependency closure is included. Four inlined const-enum definitions verified against the official 9.26.1 tag. Declaration-only missing modules are empty runtime stubs. Registration wrappers and entrypoint are generated for this closure. No carrier application code, models, textures, audio, or binaries included.",
+  "files": [
+    {
+      "path": "vendor/babylon/src/entry.ts",
+      "sha256": "d3ef77245b9ddf0862c71e63f33b5031cd09033c486c5bf55830dd4758174ce8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/engine.pure.ts",
+      "sha256": "7d5c5cee9779c150218ef5bbde82402cd3a09bff4db6904d1ec92bd6edfceb09",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/Textures/internalTexture.ts",
+      "sha256": "62a425e4d6dbdc9f9961cdbf825334d468b3e7a129a816a6c7d42b35f522871e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/observable.ts",
+      "sha256": "6e5eeca2711659c5c0998fce5aafe73216234cd7af3f70c289aebbb24f3c72ca",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Misc/observable.pure.ts",
+      "sha256": "4233da8c96a95123593fe859eebcb1f74d5f78a9d29a100c07ffd44e36e91d99",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/Textures/textureSampler.ts",
+      "sha256": "a7e49c177d8688f2044bd572804164e610a954a823804edd55db9382fbe64901",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/constants.ts",
+      "sha256": "5be860b6dfca7110259f2af647d58faf23a3987f712b2e842c94d2edd85e62db",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/engineStore.ts",
+      "sha256": "3dad65b237a12944f51125b0677ad3e09924e73dde44369547e30a2b2fd8d0ea",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/thinEngine.pure.ts",
+      "sha256": "b6c4c6feca906ec58d9f5561126a8cd4215f347bd880f72e192557116c681637",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/effect.pure.ts",
+      "sha256": "6cec27ec53e6d6b981636170fc649e5c7f5e33845fa91108c2967ec211d968c9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/logger.ts",
+      "sha256": "dc6157a193aca9a3f80170f6e9f86dd112e8f9ac9aa79115254d5f97bfa82677",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/shaderStore.ts",
+      "sha256": "b600c0d63e6d5475916e6745b53030196417e3c31ca1572fceff353484ed2a0e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/shaderLanguage.ts",
+      "sha256": "9a70aa80b8bd38f66f015f8a93e752e6777610aa7b68272d375ee5eae61eff01",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/effect.functions.ts",
+      "sha256": "0b8b4bea95f7cd5a01d3e972797b2a409cdaefe2fca2f6d1786cbb7f26aab79c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/domManagement.ts",
+      "sha256": "d4dcbc61b27b9e5de3740ec1599882865ff865b9b57d83328982f71db67023f6",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/thinEngine.functions.ts",
+      "sha256": "58d67a5a5ec3de56cb831afbffd0c64c9a842c2347b788c2b4b6644c174b89dd",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/WebGL/webGLPipelineContext.ts",
+      "sha256": "e2112e445ad72985d828011e89e708930af9336171bd685f62b4e37642b01c24",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/abstractEngine.functions.ts",
+      "sha256": "cdef50019d02d5bba5c4c258f9964aa634cf27c4e44e5a80dcac4770d924d584",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/devTools.ts",
+      "sha256": "9c69ebcb179287bc10a1e5d9ae239b5fc6a6362fb973b793bc325a4a78f05bf1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/shaderProcessor.ts",
+      "sha256": "47998d9aa7b4b6cbf86728fecbc546fdd2ce0cf7e1ea814be897916b10787970",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/shaderCodeNode.ts",
+      "sha256": "1e787ff6ed2f4263e0e1b04171a3de20e1172d6e3e375a97f7ef3b65a5c69b2c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/shaderCodeCursor.ts",
+      "sha256": "749961b07c781fc8d14dcac87e138a2c82b11ce1bdf62c93b1222c7d3333a0fa",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/shaderCodeConditionNode.ts",
+      "sha256": "bdccf98153af8009dff50cd3bac22db2eaf0cdcebeef8c506da33b5e57f165b6",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/shaderCodeTestNode.ts",
+      "sha256": "aaeb35f56502a1af74b8ce4739830cb1bd0879a7a16d97ecfcec1d705107ba2d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/Expressions/Operators/shaderDefineIsDefinedOperator.ts",
+      "sha256": "9e87e5c9970dd1a2ade8f8680c9c0e353e8dbfd61c9f367e67d8761c726286ce",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/Expressions/shaderDefineExpression.ts",
+      "sha256": "b500b208c896ac8242079a83098af3fc26c8fcf4283bab3476164858a6c3dd67",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/Expressions/Operators/shaderDefineOrOperator.ts",
+      "sha256": "6da5e06059d3ac83e87618e18fa7175c7841e5007a686aac0cbe55af82f3c879",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/Expressions/Operators/shaderDefineAndOperator.ts",
+      "sha256": "8484fc22a9883cc886ecc400c197a5987fcb5af7a9e37bef06206647ce7b9c8d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Processors/Expressions/Operators/shaderDefineArithmeticOperator.ts",
+      "sha256": "6e24e0877a189454f701f0a09176253d842df847b807877ee8ae0be87d9e0e19",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/timingTools.ts",
+      "sha256": "76d428c6b974519a8da63250131604c95e73a4f487179d4858581a8db9394ca5",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/abstractEngine.pure.ts",
+      "sha256": "2a125ab70bc18ca06857ceab8485ef75cd1bf824f1ba7e84a4a096d6a5f876f1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/performanceConfigurator.ts",
+      "sha256": "11fb7d4e19b37b5fb607e7a1d1249bb4409f9f870511cb85d07cfddec00da852",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/precisionDate.ts",
+      "sha256": "1add048be06f93661b961aa1e53022602ae2937b766b9b7f4475d5c8db1a84d4",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/States/depthCullingState.ts",
+      "sha256": "b5159edb4c1a42d1da4316785c39a02b1f8359233c2c0f1cbe25104c0812b350",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/States/stencilStateComposer.ts",
+      "sha256": "9722d79a417d6d61ce1e64d0850d034712a6014a5e313acad4088a1ea96e386b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/States/stencilState.ts",
+      "sha256": "2330c4f3e5b56c0b13e60c3d951826802b4ae35859bdab78946a5dfb7faaf755",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/States/alphaCullingState.ts",
+      "sha256": "7dd2c3ebf667f3ad094b3fd973b18e6c4ec09977fd1a4869e731c0d69c74c4ff",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/drawWrapper.functions.ts",
+      "sha256": "567d4fc5fddc3de432a6670a1525b8086526713c6d12c8027132cbd73f941685",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/WebGL/webGLShaderProcessors.ts",
+      "sha256": "a6d9f76d4ef07ee7af3ec10a9f496e942dedb8c9e5e130d21423f3f762cb3dc0",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/WebGL/webGL2ShaderProcessors.ts",
+      "sha256": "cc8e723aeea2de366198af676f414acac4d7dddec5bf229c0bb7dc46d9c86609",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/WebGL/webGLDataBuffer.ts",
+      "sha256": "e3ffcfdcf61faaf9108d6619fdc5a17543a06212e122a220bc3279f5d9ed9526",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Buffers/dataBuffer.ts",
+      "sha256": "94d9a66a0e3643d3691dd7bd776f35af88e40836571630e7c3c660b3a5b691d8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/tools.functions.ts",
+      "sha256": "995e859e1d9332b890cb1ac51928fe26c58a3418371002b9ef77150cffc0c766",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/WebGL/webGLHardwareTexture.ts",
+      "sha256": "cdd0d7589acda6f08f45e224e5285a56aed1dc06e09bcb5bd9737ad1d76631c8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/Textures/textureHelper.functions.ts",
+      "sha256": "03a985f1c4b34dc04333ef6942cefa27e7199711500222ecd839a0edffe0e9da",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/performanceMonitor.ts",
+      "sha256": "203d47eb2ec9bca85b750b181ffec5feb38134a0d4024c88ce0335498019bb76",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/engine.common.ts",
+      "sha256": "7642c8908bb444f8c1b4e6c48fa35c0008991f795693801f44a53a0efbccce32",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/abstractEngine.ts",
+      "sha256": "59cc3e935071a6d5473c38ab68233535a30bc371e50833c50c4cc204fece1fcb",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Misc/perfCounter.ts",
+      "sha256": "f7a1d081fbb951a8977ea987f28f231a55de305b765dfd0616b76f2d12ad7519",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/AbstractEngine/abstractEngine.dom.pure.ts",
+      "sha256": "87af63c60cca7b256c4d1f20bb583e3de33c6994776b9ee241f94020703a58a3",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/AbstractEngine/abstractEngine.renderPass.pure.ts",
+      "sha256": "ccdad20a7461c0ef95d6a593bccaae08145f668d6a1cb9e7b9bdaa19e5aac9cf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/scene.ts",
+      "sha256": "46ab8552e085599e2acf613167f88fe6b79d7b869eed9184a449b8cf99034af0",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/scene.pure.ts",
+      "sha256": "4a9820110b6238eb528a049e99b38ce82ea24e60ed42425d844dc068ebab16ea",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/tools.pure.ts",
+      "sha256": "7b782f5e7d70b199ef39d223c24eea2432267d718d744cec17cfa8030f6d90ad",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/deepCopier.ts",
+      "sha256": "2b9abedb8319bd25d4baa55bfec4b066087cec2d63724d44418f3d3f03b9722c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/webRequest.ts",
+      "sha256": "ffeed3c536929b1d1c4ea9a5d2ab075ad7e06927f6eb8669d06f5ee94adf3d67",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/fileTools.pure.ts",
+      "sha256": "fd544cd21eadd18104af68de6347f4d1b10a9bde9d8f9a56f345bd7c99cf4ff1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/filesInputStore.ts",
+      "sha256": "0cec2c69691943d5e126040ad4e2f1f7b8831c3f862b47c8c8efe472bc4c2317",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/retryStrategy.ts",
+      "sha256": "c07c5ccedc37afd605e02a6ca784a07eb67a07d9ffa622d67adb1be86cc1b93f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/error.ts",
+      "sha256": "4e740926516897038c0ef061b11cdc439644fd20d6e2e07e5d5563c094854aaf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/stringTools.ts",
+      "sha256": "46fc5335d9fcc39695c4e0bfc642ba262d0fac963a4bc61467efee63d1f284ef",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Buffers/bufferUtils.ts",
+      "sha256": "871a366a3ce94e4812889b3b0ef37c84bca76f58123313727a16ad1d580cabfa",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/halfFloat.ts",
+      "sha256": "6f74d801439cc1cd4311626ef658a3f37c20264da2c0879acc82e3851b548040",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/instantiationTools.ts",
+      "sha256": "99e2a6734829efd6a723063b8b7c526a811e8a6474714590b5073b8f25600ab3",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/typeStore.ts",
+      "sha256": "64bc3fa5bde6680ca76fdd18c5c6beb9bf5836dfd25c73661cd4b47268686bc0",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/guid.ts",
+      "sha256": "a969f908b4e2b4403178f46600d86b3ef7fbc580b49b73cf037036e467545624",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Native/nativeInterfaces.ts",
+      "sha256": "65d595171d998ecf787343ad1d2d223074eb64f99ac71216a76f4cf0c7cd5e9d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/smartArray.ts",
+      "sha256": "dce5942116d5689bd92ef020d120ad8e65c9666c675cd7f9f56e1ce848ebb7bb",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/stringDictionary.ts",
+      "sha256": "cb79e2e120e68354b26c332715d2f65403135891f56863cddc7acd8d9eb5e934",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/tags.ts",
+      "sha256": "16f1a9a2b711ea31e0327176dd3a04e0ed2324cb60f668d4ce2fe09c47ba6894",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/andOrNotEvaluator.ts",
+      "sha256": "b73d305fbcf4b13f9810ccb733a9118e59b8f86fb4423727a9e87276bf0c3273",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.vector.pure.ts",
+      "sha256": "f6c0c18b6b7c84fc0d6ef108518a46cd50f6d94a8bb8161c7ebd2684cfae07fb",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.constants.ts",
+      "sha256": "96059f81746e5b862eb8baad70e390364c6aa03cabcc2495e446660fcae39172",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/arrayTools.ts",
+      "sha256": "6da39590feeba59d2993df4b4e4cc93b63531ce50a8ebaca6657c17cb1d1f594",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.scalar.functions.ts",
+      "sha256": "69dfc5b93c89eca7a594c6db1aae7a58b3199c5689df270054d213088b5ed553",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/ThinMaths/thinMath.matrix.functions.ts",
+      "sha256": "63ab969d68ff071f76a656a2421c5505f5e7b73416ddb055232a1636525c88a9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/imageProcessingConfiguration.pure.ts",
+      "sha256": "79013b21cb78b82054be7ccfc3318e6ca32caa1d021572704a00a9b36be0c8ad",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/decorators.ts",
+      "sha256": "5c0b46a1072388aa00b3539e9d81697aaa2381689eef4ebf6e9f16b61e7d9bab",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/decorators.functions.ts",
+      "sha256": "989feff3848dd36955bccbdd6e4a153cc4bc7d7325aa42499fe3318c5de9d44f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/decorators.serializationUtilities.ts",
+      "sha256": "3f0aedc365ae7e456717fd64b660cdcf8b13f22207ca12f4b5461fa2fb5d00fb",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.color.pure.ts",
+      "sha256": "fc96912ab5fa512816d62c0a8b8afbd56286a93b8b7c9f0631076661e951f9e2",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/colorTemperature.functions.ts",
+      "sha256": "b9f36f03b892d27dd9ba24b5256d658a702b5dec480fda7a5bca4030d12a65e1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/colorCurves.pure.ts",
+      "sha256": "a1caa3970cb70952e97401a4047916ce35a9df62496a303fc620f5b910bdc85f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/decorators.serialization.ts",
+      "sha256": "08a2d36dd73ec9c70c0f93b46591f44ad7df827114af5a8c402cf89ee0769b85",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/colorCurves.functions.ts",
+      "sha256": "598dc36251e7a373ac6a99eccf4be6cbb307a210dae76e48df4974f60b77a346",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/imageProcessingConfiguration.functions.ts",
+      "sha256": "e32b29e94fc093df8e0e32724e6ee42b38fd15f2ff5b378a50a6ec459f92aa56",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/uniformBuffer.ts",
+      "sha256": "10ec9fbc4473e1c38832741fd67cd3c62465e5d613be734e88032f33ce045a02",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Collisions/pickingInfo.ts",
+      "sha256": "7d5c21c9084a200ba263084857630b52eb301a88f16ab2c0d8b155cc951b8ef0",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Buffers/buffer.pure.ts",
+      "sha256": "41fe05713c888070ac25a7ed7b52d39111ec5279d9c7fac589c88c80fee786cf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.dynamicBuffer.pure.ts",
+      "sha256": "c8bbbd741977dd898a9498af64343ab7a6db5179631792bd63339d18298f1499",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Actions/actionEvent.ts",
+      "sha256": "fefc6a2d3a242d6d4bf5b7311f155f6e59b326e3ca10efd6d4496a8b060b53d8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/PostProcesses/postProcessManager.ts",
+      "sha256": "239ae6034528e68bdacebf36f757ba52d2a8d67e13ede30b26a1a426fc80aa9e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/floatingOriginMatrixOverrides.ts",
+      "sha256": "985f7700216e9273d75464a86c8dc91048b37febf32b4d7d7868ca6fa747c30a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/effect.ts",
+      "sha256": "884e4be6ccdbe541ebfb7b29e1527bbf5aaeb3ec1f581e597166331b385fe1ea",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Rendering/renderingManager.ts",
+      "sha256": "4a7ed64313f2e3e1fc8d615ba6a3e9c89189c7d3f3289659c054e4cfc9b91a68",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Rendering/renderingGroup.ts",
+      "sha256": "004937ef88edb8c4bf3d39a7eeb77ec69ad133005c65b980a958b3f39b48716d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/sceneComponent.ts",
+      "sha256": "36e61c1d21a1aede1fe2a824fdc901ca5a46108faa9b8cf6c784e55853ef3580",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Inputs/scene.inputManager.ts",
+      "sha256": "8e64fd333be6bd7577ce522f4e9aecd3ed67e4deb41c8a1f31f4ee14eb64e644",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Events/pointerEvents.ts",
+      "sha256": "c11516b2efccc26e25859a50c868ad1f16dd889e27b43044f20dbdb30d89edf7",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Actions/abstractActionManager.ts",
+      "sha256": "6a2dcfb15634c7cb5c7ef21d49964d7c6927c60bd1effedc4c4f6578d4d459fb",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Events/keyboardEvents.ts",
+      "sha256": "b893a0235d9ae37099ee6b9b3cc424fb99e9dbbe263f2575639fd35a7f70567e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/DeviceInput/InputDevices/deviceEnums.ts",
+      "sha256": "231bf829bf935d2bcd1792a80ebfac27eb9acc0aab02a409f51930db2e9e1daa",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/DeviceInput/InputDevices/deviceSourceManager.ts",
+      "sha256": "55c9280c2a4dd289295670851854781c93d336d1fa4c9bef74aedf053530fbf0",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/DeviceInput/internalDeviceSourceManager.ts",
+      "sha256": "3302af5be6e4606b5f9de05952b6edeb2223a1c487d4d710a03ed7c8ece1de21",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/DeviceInput/internalDeviceSourceManager.pure.ts",
+      "sha256": "975e226233f3a5c7d728ea6bda1704b6d81efc5ce39c4b3073fb3051c9a41bfe",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/DeviceInput/nativeDeviceInputSystem.ts",
+      "sha256": "e22f40a60beadee5b424f748eb471dd642ef7fd2a9a38da21b59c8f3f3d36de9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/DeviceInput/eventFactory.ts",
+      "sha256": "c37d2257ed5ab3011cd7348b3282438e16277ef48252e09feabb9dc6c293d7d1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Events/deviceInputEvents.ts",
+      "sha256": "b797594305024dc7bc1d47a2aa4ceb38ae3c670ba76cac6052117c04a9111e34",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/DeviceInput/webDeviceInputSystem.ts",
+      "sha256": "4cca4092d2786d3f7fbc2a44c72d66de0ba737149dab3b2305711c718714166f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/DeviceInput/InputDevices/deviceSource.ts",
+      "sha256": "2f26c8155a2f78d7d0232c158d1b2c8133fa2ffa45831a647aac3a2245da9aa9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/import.helper.ts",
+      "sha256": "ffd098f68263c75452352f43b47acec574501478196090ea099ba0db145cd24a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.frustum.ts",
+      "sha256": "493970721ac3023bfc13abde404894ea1106032c87541e463e8fb30575b87e40",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.plane.ts",
+      "sha256": "f32a258975c3576c508766596a4781984ec25417bdb3750a01192f669c46d30b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/uniqueIdGenerator.ts",
+      "sha256": "1c89d4c7dfd7d3629107cbd6c572ec402dad5fab6ee042682c7d9f5ca7787019",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Lights/lightConstants.ts",
+      "sha256": "ed80864d8fef2401522d917b8ffa864aac89a468675e37831a11e75bc84f265b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Inputs/pointerPickingConfiguration.ts",
+      "sha256": "bbeb4e5aa8338a8d116a896c9c87bb4ef1c786d0a571d13053cee47fb5b85173",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/freeCamera.ts",
+      "sha256": "389ee75b96092490a2385631d609990cd9b0105071f6d965126672ca292ea8bf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/freeCamera.pure.ts",
+      "sha256": "628dbd6b77d386fe1481678c5f5e1c0a94193eea8152818cedae30c8e8a9789a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/targetCamera.pure.ts",
+      "sha256": "966c3f9907b15d9d8c50ad8a20988a1f64e971b67df713df8418bef335bf4d04",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/camera.pure.ts",
+      "sha256": "69168bb4cd5458a491551e8a97d1e14767b230808ea235157f01f51710ff0acf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/node.ts",
+      "sha256": "cf49839a19df9b8ef16e6fd97278142e0dc41532a7932f86dc3660c13e6f989d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.viewport.ts",
+      "sha256": "ef11bd22e96235ad1d9d5ccbb807b07c07aa6878eca5f6b192f206fb39a0c3e1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.axis.ts",
+      "sha256": "6e4171ad4f36d8f3922a7f14112106168a2f041c08f7c965f01d627bb0e62d2e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/targetCameraMovement.ts",
+      "sha256": "65b5e46592f6c85a8c7def56a850de8c53c78f8ce21c3d05c99ed0aec353cc8c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/cameraMovement.ts",
+      "sha256": "c3c2875f71422eac63d3cfae15c6b627f9f073d927a635335a5b98560324c4ab",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/inputMapper.ts",
+      "sha256": "7a923148580a6c4202de0e503f2698c13e9655dd27c9a6ad2fd5bb42cc2d0757",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/freeCameraInputsManager.pure.ts",
+      "sha256": "a4a5998e6f51a44a9fa7572af6c2b4799256f158c761c448f58e5af334c6fe15",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/cameraInputsManager.ts",
+      "sha256": "7e9dc242a6e8010adc1a8375d092f8ebd85399b86ac106964495af6b70773d1f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/Inputs/freeCameraKeyboardMoveInput.ts",
+      "sha256": "8c53d531fb7dfc967f2de4a06f0b754570a6e22c67847148a60fcfcd8d13a9d0",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/Inputs/freeCameraMouseInput.ts",
+      "sha256": "6652f490f99b83fc3252a98ce6063f0a9f3ce4c4c0599252e5e86c99990f4c54",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/Inputs/freeCameraMouseWheelInput.ts",
+      "sha256": "f7e0cd94d87777e0403993556fdbadd290a0d4ef9e7151c92df2dbb8fa367504",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/Inputs/BaseCameraMouseWheelInput.ts",
+      "sha256": "70048c1631148e186b0e30f6c9a905d368195319283b4846ebce3e9aada97433",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Cameras/Inputs/freeCameraTouchInput.ts",
+      "sha256": "2402920a0a145d28b662f2b2545a365a64fa188e52da38bfb18a8fb6e52a14e2",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.vector.ts",
+      "sha256": "423cf53fcaf30307336243f5e4be74b2524cd96228f951998c31c25fcbed54e2",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.color.ts",
+      "sha256": "b2ef494d9a2fccc02895237736effdaf48c0c90e84df12f0259ebedfcb706006",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/mesh.ts",
+      "sha256": "4308922213637c1e617f5e1637f1974f93e653a509dea056fc3bc1c175d84fad",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/mesh.pure.ts",
+      "sha256": "1c5c7f6778fac1846a38f83ef277de0309d8ddc30e7dca13307333f54f2aea62",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/coroutine.ts",
+      "sha256": "3e22bfdb8e1a196f61c60a1a18d0f516e633facda9aeea8a872a9fccf95edb92",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/mesh.vertexData.ts",
+      "sha256": "d693a0474e35bb298a4b1d28e74c404506a3d7dcb730a261e0ef943ce207f9cf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/subMesh.ts",
+      "sha256": "6dd73b7ab3f5f71cfdc819ef9bbdc4f583da9b023e63d0281a440422fd9d3187",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/subMesh.pure.ts",
+      "sha256": "890c92918e84b1d609eba6374870863970e1bb0c77f5c1bf465f527f34a9baf9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Collisions/intersectionInfo.ts",
+      "sha256": "c3cb7204d0284ef7088f99368a4a1a5f3f75106749aae88906104e008b3d30d7",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Culling/boundingInfo.ts",
+      "sha256": "ccfa36ff90ec2ecb01b2c8a388240d9ca88efbe6392933b7ce1b2a357dbc776c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Culling/boundingBox.ts",
+      "sha256": "fba24960d2c60ca80382abd27c1f7cef609d161a0d3245c46ecd429576efe749",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Culling/boundingSphere.ts",
+      "sha256": "ebd4f29412ccd56443643448dc3000346e2e3b6a9282df98ad166722946c739a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.functions.ts",
+      "sha256": "720c43fc52d106d4b19997ab35b0b2560510bf9403d5aa3a12822fa80ee5c0e5",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/drawWrapper.ts",
+      "sha256": "28f177fc6e3618d63caab1a12e37e2e5e185fd90de333af06f155b5a2a135b40",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/geometry.ts",
+      "sha256": "83b188a702e30fc3002cff97bcb674df9914f39c548539d3f38f795d99f6a766",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Loading/sceneLoaderFlags.ts",
+      "sha256": "4212f31801f26f03ff457a215c8bb31b83c5dfa2df14a7b1dd16aad503582c8d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Compat/compatibilityOptions.ts",
+      "sha256": "b106f1e653393d443f8e771452e38b011e588e3cbaf4680542026d2c79feb118",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/abstractMesh.pure.ts",
+      "sha256": "8a7282db906641db0960eb091e4c2a0c41878fef2bb23ddd9ee23d64508418f7",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/transformNode.pure.ts",
+      "sha256": "a735890b6fad3ba29c9fcf594c24f54a947a72c4ffc0104319408ffb4aa3effe",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Collisions/meshCollisionData.ts",
+      "sha256": "7bf5384dc7a7d3c5af81cda908a2894b6426d885a9b9fb36aadf90dc048e29e3",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/mesh.vertexData.functions.ts",
+      "sha256": "bcfece9bb0ea82b57c168a9fbea664ef5a4d2f6fade43ddbb9e657b7e9e1841b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/bitArray.ts",
+      "sha256": "970e9dfcc7a3cb9f4cd2b6ba81e1abe25731060cf8d9657c16df0f9d06674fa5",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/material.pure.ts",
+      "sha256": "818d43e63040bf032143ed592c2df2bf767761fe8fe35cc949bff7666dd7582a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/materialStencilState.ts",
+      "sha256": "0a865b91c5789367ff14e041be5270505e29ea3a7a7e9eee53064d5dcf8fb05a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/materialPluginEvent.ts",
+      "sha256": "82fad9e425804503f2bccbf39a8cb9b4e0b2d32b0a7f846a63e8cc2d32b27f1f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/materialHelper.functions.ts",
+      "sha256": "aa97f871b393199a89405e6d89fd5bc0dc18f627456837a6aea39b3c9a11a4cc",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/clipPlaneMaterialHelper.ts",
+      "sha256": "f2ae4497ce50e300c9527cd8954e423e63efb4345112dccdae22bbb9232bc7f8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/materialFlags.ts",
+      "sha256": "b1850ed05aa7c1dbb184b49bb5d52e505fd828e83019b4f31ecfe9993701c33e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/multiMaterial.pure.ts",
+      "sha256": "de7364e81e311b927d56b69ff0813296106cb305901fc6a2669f1e7e59e4b051",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/meshLODLevel.ts",
+      "sha256": "5389c2c54a1f809b60d902fdfaeb6c5ae4ca2a52c8e575049363d46ca7740b5a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/shaderMaterial.ts",
+      "sha256": "b2a7e2bcf9ef30ed09363c652f817daec13dd4b17d6c08f768e4bbc14bea1cf9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/shaderMaterial.pure.ts",
+      "sha256": "d315c61d72c4b4af6bbc018686120fdb51d6b3c54fd3a0aa94264b57dbf5b0f3",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/Textures/texture.pure.ts",
+      "sha256": "e8e8fa4e473616532d155f712267a6e46f8998fb2b14af040edb47f5b093544d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/Textures/baseTexture.pure.ts",
+      "sha256": "26c28d725da6b368039e39d0920daaecfd50b3a3b9baca239c623c12048b85bd",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/Textures/thinTexture.ts",
+      "sha256": "7ee04e889ddd3f6116462b38d6ab7667babb9d011f3d0774525658022d5a3aec",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Maths/math.size.ts",
+      "sha256": "e3c5fa2129528246a4e31941d709a02d2323741907e65fff49081a9fe0066d7c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/copyTools.ts",
+      "sha256": "2e6f61341693c501c61895aca3fea56649390d35f258aaa863e559c4b8a1ec7c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/effectFallbacks.ts",
+      "sha256": "5cc2547413758bada8a5b0267110ec45045c70b63a7ced061d25d8cacd5dc2e9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/pushMaterial.ts",
+      "sha256": "73c428e36e7818533efb818e7f9ea76e7da7f903f4cd1c122b3c5dbddad7aafc",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/material.ts",
+      "sha256": "cbbe8e55bf738f9f505fc5b177f9521a14890d6a80da6e56a685ec25974b4bcb",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Materials/vertexPullingHelper.functions.ts",
+      "sha256": "b1b543aef8c865952839dbba5e74e459666d792eb4903779de226170f88a2c1c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/shaderMaterial.types.ts",
+      "sha256": "75f7e5f1745c86eec11525153b4c5b862847c9834e555ee3bcbf07a704282a8b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/thinInstanceMesh.ts",
+      "sha256": "8b3bca3ee4c71ae9e0741b0dac4a01c914645cdf1b2d49e1b779b1e533fa8868",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Meshes/thinInstanceMesh.pure.ts",
+      "sha256": "337686309f3204a697633546be83ebc15e5e34134150adcf8960a09f8c561523",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.alpha.ts",
+      "sha256": "be0efe41871d86f0458fca1043dba20fea5fc5dc0d1435cd9f48c6a72f69abd7",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.alpha.pure.ts",
+      "sha256": "d03d78f973ccfed9c074956a3a30b8dab0a402b01941e9999816b0deb3f9d008",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.rawTexture.ts",
+      "sha256": "4eefd03cc8a446d3b319e11f33d109d43c60fee621f35aa741ba7497e1fb9232",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.rawTexture.types.ts",
+      "sha256": "75f7e5f1745c86eec11525153b4c5b862847c9834e555ee3bcbf07a704282a8b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.rawTexture.pure.ts",
+      "sha256": "bf97145ae192c19e057205a58163daddc4df1eeb78a833d48e23f32fd7d16da6",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/Textures/rawTexture.ts",
+      "sha256": "d18b859fe9ed5874e13d99dee0295b40a3bada828c3d9a013ea2185368f5cb56",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/Textures/texture.ts",
+      "sha256": "02f8c2d3bc7119d17928f1cf29fb23bd4cac81f6019f8ffaa22064bb0f39deeb",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/standardMaterial.ts",
+      "sha256": "d60f2d5be06438e09ce3c8433ecf524bc83627341a60b029e49e1b25a2c1f5a2",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Materials/standardMaterial.pure.ts",
+      "sha256": "797da119051ee2226e7aad0379ee266fe5e8045f45faa382c84d7eba407a189c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/prePassConfiguration.ts",
+      "sha256": "a3c1b25f463777d0c86e5292047d3f376fa78813e4b3a1c33146a9ff4b7ca8e0",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/imageProcessingConfiguration.defines.ts",
+      "sha256": "3a57188e04ad3af20a38c2c03c3b241e012490dbd96bb83f25b356702e2a5eb3",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/materialDefines.ts",
+      "sha256": "a01c59b49267831a894e7d3378234b3023f27d483e2f3e10522eba719de2d1b1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/material.detailMapConfiguration.ts",
+      "sha256": "ceebabe2ee72bf589156338d84c90e09aee2fb1e60bcb5319db86db648c59251",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/materialPluginBase.pure.ts",
+      "sha256": "c54efcef317fc05e58c96bb6d8aacca9aaf1a0b03cdb14ebb66db01c6c500f11",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/materialPluginManager.pure.ts",
+      "sha256": "e6904d6bc80fc86ae9fb503cd57fe830378b2077d618ec0b68b0b092014345b2",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Misc/shaderImportLoader.ts",
+      "sha256": "3c4081a48d1d9f14666a9e2c7f3b8824a7127111492f3164277cd5180f39eb39",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/materialHelper.geometryrendering.ts",
+      "sha256": "50b4f64ea9cb977da4f5ee578edbd36ad6bf3ab0bfc2c8d482a080eef7797a0d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/uv.defines.ts",
+      "sha256": "9b410c4936a494474a11370ac314fb2e85445de3a92540501fac5e9044b3f94d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/prepass.defines.ts",
+      "sha256": "e5013a8a86650ece2626a01aa5b03c85282c22fbfa3ff36a5c724c0a33050a84",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Materials/imageProcessing.ts",
+      "sha256": "e19eed32c1b28e177a693d30561db23029c494d1eba1708a879fd5dac9a0f3c2",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/default.vertex.ts",
+      "sha256": "2540fb157c079838ee4bb881c4b13e75e4811eff6307baddfe3434fe26d459df",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/decalVertexDeclaration.ts",
+      "sha256": "f5648dfbf329611b05322e0f1eedcbe358399ec0642441724c68daae105f2992",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/defaultVertexDeclaration.ts",
+      "sha256": "fad134b92b3823ee05889c125b3466efd120b471903290b2cb56a4bd66f80015",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/sceneUboDeclaration.ts",
+      "sha256": "0f772d4912024f1930a1330dc6a89260ff09435632f8d4900e6fdd4b99593f9f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/meshUboDeclaration.ts",
+      "sha256": "3b3d104cab062b351203c0290994f6493c3961148558402d54ca56dff52c224d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/defaultUboDeclaration.ts",
+      "sha256": "26a5939318661f43ee085238e6b4ce6363a0e087d8e28bd649c58af36518c5ec",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/uvAttributeDeclaration.ts",
+      "sha256": "7707732e36c40a5bfaf560ed39eb935c989dc74b74467b062091225c6988ba83",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/helperFunctions.ts",
+      "sha256": "323b5c3acf1bf455ef0adc5f5cb26fcd5ac66605e141a172b1b293fe92a223fc",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bonesDeclaration.ts",
+      "sha256": "82ae8707c7f4f625ae79b89dd36194ac7f98cc35e7748b5aec2680224ac22538",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bakedVertexAnimationDeclaration.ts",
+      "sha256": "b5c14874c6c7cbc2348c06353e80ba55e7d8485b7bdff364673851c4692008bb",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/instancesDeclaration.ts",
+      "sha256": "a635793de67c05144a9ee95bd915ea5bf45929eea191fc84b685c017cc2e8756",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/prePassVertexDeclaration.ts",
+      "sha256": "6c53a28a8ba475bdfe9f905cf46886e474f0345e47c4dc95ae6d39eb8fdd4539",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/mainUVVaryingDeclaration.ts",
+      "sha256": "969e946112259b092fe5ce52ca029e974079a6d75ed49a098ac4f8069ad1a5a9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/samplerVertexDeclaration.ts",
+      "sha256": "95dc84d2776fca9e9457401e966044c66a41d021a36eaad8134b97d5ef087347",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bumpVertexDeclaration.ts",
+      "sha256": "08275fbd9a14dde6f7e112707ec287f3cc4ca5b8077649e4b6e7b0e785650c00",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/clipPlaneVertexDeclaration.ts",
+      "sha256": "b6b973d663462161183dad8a639b9cdb7065d8f1899cbef14d557e69665c2c7b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/fogVertexDeclaration.ts",
+      "sha256": "61017c0a73e6d19b9dd6deb54caef2f8a425f0595a829943b68b39bb7564a856",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/lightVxFragmentDeclaration.ts",
+      "sha256": "aa6ad6aaab831301e1ed78e2107c2dd03cf482d737dd699e9a2c194c677f8429",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/lightVxUboDeclaration.ts",
+      "sha256": "66c258ac68c50fee8d8e246bc7ce6b4d08751e92a1ed5bb42d80d9c6e32316ea",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/morphTargetsVertexGlobalDeclaration.ts",
+      "sha256": "366be153f6c6ec6cdcb37c8629b43e16294120cfc95901985fa919e78305289e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/morphTargetsVertexDeclaration.ts",
+      "sha256": "6a37a707b3f70b1c9973d626c8cd38f91d58096b9aba6043f2053aefa73b2a89",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/logDepthDeclaration.ts",
+      "sha256": "9e145217cf8f1a8fb0069752d93ad717e6bbdc57940178dd1c6b262e40e57eb4",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/morphTargetsVertexGlobal.ts",
+      "sha256": "ec615ac8000a44be8142d610b2750225a019b98be3eca777d6eb98d8ee76830d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/morphTargetsVertex.ts",
+      "sha256": "6f34422843d6cc2c9b553d1a51400bdcd8fdb81acf75512255ebdd3f0b2e0144",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/instancesVertex.ts",
+      "sha256": "f180c71267d4df48f95ce048e02601f671e598bd1cd40f575fa1b821c2b7eb37",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bonesVertex.ts",
+      "sha256": "544d6cf0e9b1958e0c012084a70d039cc505abf658830ef4762fc7af78397857",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bakedVertexAnimation.ts",
+      "sha256": "a0308d46542a6885325ed99b232f69b75da532b198b35b833c14f822a27811b1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/prePassVertex.ts",
+      "sha256": "43bf9f43a58fbbec21299ab854fda8c147bb5ac40a78fb7e23fb3d3f7cae5fb8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/uvVariableDeclaration.ts",
+      "sha256": "1125faf92339180fa93684f2d612d7466aac3e74cd81ba609cba296a7674bd21",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/samplerVertexImplementation.ts",
+      "sha256": "1bf067af1ee7729b6dc4f89ef0c4e253488cec010308dfa08762cef357ff1fa8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bumpVertex.ts",
+      "sha256": "703c00fb6cd8cc8ba0dcae600d6fc769d3395aee94451db6775cf25801dd3641",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/clipPlaneVertex.ts",
+      "sha256": "d59b49756ac38d86009a4952a4fe68af4d0a0c6a1130904d42a82ae9ff1e974a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/fogVertex.ts",
+      "sha256": "aa1068fffb0f5902b56cc9ceb94d04cb1c2496672f94d11104c74155b2735850",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/shadowsVertex.ts",
+      "sha256": "3fa3a6c31671badd3cb31e22770a6d5bd1e4976f874b1437e651817b43359316",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/vertexColorMixing.ts",
+      "sha256": "4670d2723c88ac522e6062daa3dd52615fb6c0445fc2ca6621e35572db167b35",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/pointCloudVertex.ts",
+      "sha256": "70d605137634868be93ef11813062353484d5c9ab21b366c49f340b487f65c3c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/logDepthVertex.ts",
+      "sha256": "4578cf37bc49208755748f79e779e8e74cd43e278e4fae1a85adf8def4ac7aef",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/default.fragment.ts",
+      "sha256": "d598808246ff965920bf0ced07b1d0d9f57cc4eb65749efdf16388c1d0d6736f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/decalFragmentDeclaration.ts",
+      "sha256": "b2371123b6b831e30c9ff8c8b92455e647cc6de9421cb26bbcac6165a0309365",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/defaultFragmentDeclaration.ts",
+      "sha256": "b20b6cd796e0d8cdaa2ea54551f931a3540757f60d8a29d97687a54f7c9b8bed",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/objectIdFunctions.ts",
+      "sha256": "7f8d80625fbca8e9eff72e47edeca66f41e66c71c4711d59622140058cb6a8bc",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/prePassDeclaration.ts",
+      "sha256": "1e829d81ac5602180e96ead3b50be48b342b00b73d8c2758f0570691f25fc565",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/oitDeclaration.ts",
+      "sha256": "979e499d14b4d90b52440885d614d265257be430057b491ce95e1bf471fb6268",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/lightFragmentDeclaration.ts",
+      "sha256": "6595311630f20ea19a647d7ade4a56a0bf57a28dd9350bf759dae1dfa7a01b09",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/lightUboDeclaration.ts",
+      "sha256": "990fe572c5a6b54e84d30e72dc93f0b66ebe8c979c85164c84adfe890e2500da",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/ltcHelperFunctions.ts",
+      "sha256": "986db392dd1adf82911458fbd8dcb33e14e6b54acd077171a176354600d0954d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/clusteredLightingFunctions.ts",
+      "sha256": "6d83a615a5799d961faf3832a4b101a20db20328fde316aaff8569b01e43c4bf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/lightsFragmentFunctions.ts",
+      "sha256": "2e099903fd5e2a8b3cf8d6ec1d5917a440e9fa33bc26594a2981328ae9b0d627",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/shadowsFragmentFunctions.ts",
+      "sha256": "e772a98d56fd9cb4292a8f7c04b5557f7d8072b7c7c12e8aea74d4ae06da221c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/samplerFragmentDeclaration.ts",
+      "sha256": "75b2cd65bcc0b750f7e591c654ac64e5cdcc8c02342d83b70f57b1b525e2e5ae",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/fresnelFunction.ts",
+      "sha256": "6a8dd2acf675fccb91c613016ab432b1289cef91699dadd2790a7edd6db534ce",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/reflectionFunction.ts",
+      "sha256": "8b0834a9b6a478ec6717f2640564664a38de06df7aacec4c32a8af8ed1ce190c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/imageProcessingDeclaration.ts",
+      "sha256": "703ea39b9fea3b6a333156648b754dfc41d781746e9d99039ad3c95417f6bb10",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/imageProcessingFunctions.ts",
+      "sha256": "777b9b0a9ab073768b6fd4be0c879bb5d6555f69f502802c24dab89d36f0b906",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/textureRepetitionFunctions.ts",
+      "sha256": "258548ccd4be5024a8030fe26356f26d7931b198a877448989601e5823be2b46",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bumpFragmentMainFunctions.ts",
+      "sha256": "c9ef59d814b0e5d2223486edb2b80a683403c30c298fac83badcc3fec36ca8c9",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bumpFragmentFunctions.ts",
+      "sha256": "07d034c3c234780e51c81dc1632143c6fa378dc794b669a31aff3e90a1fcda6b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/clipPlaneFragmentDeclaration.ts",
+      "sha256": "cf1743c586bff6e24d0c5967831a50c2a4c65cf229393f77a5fe61c33d17268e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/fogFragmentDeclaration.ts",
+      "sha256": "8456281b351660c9cbbadf1a7044d6d68594ed7ac7e6456e7b293d2b3be2444b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/clipPlaneFragment.ts",
+      "sha256": "36f0150f05b47abbf2216606dcf4dc1f735a0de490ae9bd0e644fd231b8701f3",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/bumpFragment.ts",
+      "sha256": "a2a22d09565a5199336340ed0cd47ede04a3fb4b505547ddbe028deb79339175",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/decalFragment.ts",
+      "sha256": "a59be46bd6f4629451063979320e39978b250b2bf17172101b248e60c89df86b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/depthPrePass.ts",
+      "sha256": "b7f1d33d4705f6e77d2ca09113ee2ef65cddf3a0e7cf5067f48abf1a5e61c866",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/lightFragment.ts",
+      "sha256": "93e6384239b0016bfa038181d96801fe7a175183b836bac657e0bac31ddff5da",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/logDepthFragment.ts",
+      "sha256": "829305da3030a115458a778249789547ecc5002e50421357e928254b93edf935",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/fogFragment.ts",
+      "sha256": "8be2fce6a386ec1609990e4112f20251ad166cb5d28f832fc041ab820f27ccae",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Shaders/ShadersInclude/oitFragment.ts",
+      "sha256": "daf3ab5fdc041d4ee12fcc0ec841c906684dc6a43c1adbfcba18f127035650fa",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/default.vertex.ts",
+      "sha256": "89d0d0bd5823277512306228d8246a924c56f7ee598955587d8330657d15b10e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/sceneUboDeclaration.ts",
+      "sha256": "6e525ad6c0602a970275eeaaf4166dbaceeb84c2454c39330c73523bb35c36e4",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/meshUboDeclaration.ts",
+      "sha256": "4a69e10724da6887a9d7a53780b0a4f60e7ce475ce30d56ac41e855ea533dcd7",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/defaultUboDeclaration.ts",
+      "sha256": "842867f202cffcbdd06698f561392c0be7e62c48fb3dd66d8c7a10ddc4055b42",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/uvAttributeDeclaration.ts",
+      "sha256": "524aefce729787f4315d25f7ae2a32d7f0255f0dc52004307ca23ac74b7cefdf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/helperFunctions.ts",
+      "sha256": "391e22bd00d5f5ae893228c7e9869ec881face7828ef38247f4f4db13ee18bc8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bonesDeclaration.ts",
+      "sha256": "875ad08459190eaa917493f50ca216b73dda1b26d1d3c6aaa29f58f7a38fa42b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bakedVertexAnimationDeclaration.ts",
+      "sha256": "d3a487d68867ef53787822d21d02cdd9f4dc911f9d3242b934acceeb5825eeab",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/instancesDeclaration.ts",
+      "sha256": "d47405435214370f3728bb16463cf20d70062b4137374efd52795104b19d5ed8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/prePassVertexDeclaration.ts",
+      "sha256": "5e8bb11fa21c7b7e7e0a8aacf27b618a8edc1464d90d05c3d150b4ade1664089",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/mainUVVaryingDeclaration.ts",
+      "sha256": "47a4f1cb3eed17afe98f725477bef6f0c9629e11cafb792a9c76686a58380ab7",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/samplerVertexDeclaration.ts",
+      "sha256": "1138eb200b4cc95dfa20257916be3281c0a54d08fbd4c049d22823e3968b30cc",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bumpVertexDeclaration.ts",
+      "sha256": "0afc95cf474d74d7193a8a2ab3c73086c49a6bb64843a8406dd48f98826503b5",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/clipPlaneVertexDeclaration.ts",
+      "sha256": "1db9b539038a4e19890fca7dae0a27a07a42d7b2757f6b95450ea9b0e754522d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/fogVertexDeclaration.ts",
+      "sha256": "db8ca55e79751caf2f0934078bf0f7a9ae2e83b48e977823105bb5ccc1d1983c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/lightVxFragmentDeclaration.ts",
+      "sha256": "f66fcc8972b5f060c2185891b1c173330126b734811587c4772da27c5e4873c5",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/lightVxUboDeclaration.ts",
+      "sha256": "3e1a98427ecf32a57b65a1841219287fd6a05bbd6c6f1b35676e8e242628cfa2",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/morphTargetsVertexGlobalDeclaration.ts",
+      "sha256": "f5440648d38616d1abbbbd08126e55083736d1a500e915926b47175e8524990e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/morphTargetsVertexDeclaration.ts",
+      "sha256": "f8382143fddf330d9bc472c86fec5f1f427f1052a550f576a13acf27d9bf4502",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/logDepthDeclaration.ts",
+      "sha256": "1c3ab33f55235ad1f88d528fdb1517ae964ed6630b73e5841148e0d56ff9879f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/vertexPullingDeclaration.ts",
+      "sha256": "1c77336ca76778426ca040911adeed27136adece0ce3679d6f7c798cd2447a67",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/vertexPullingVertex.ts",
+      "sha256": "6f82c417ee416f4cfe3421b2be286f84b5ad8ce4eda52b9288c0beb8c34d8fb4",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/morphTargetsVertexGlobal.ts",
+      "sha256": "81403ac55cb6371a889c95cc7932d520a8f2c93a543ccdfdeff660aaa9ab4149",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/morphTargetsVertex.ts",
+      "sha256": "a9c07676eb88000445187ad2717ba0c209028093ffbf07192ce302adb248d038",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/instancesVertex.ts",
+      "sha256": "cba2df5f8e1ce1c9de9da562762ca58a0a2a65680b9f81b2f855042957e46ced",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bonesVertex.ts",
+      "sha256": "0aef2f87070593e0a24c2e2793be4194241ebf237371f8f83e6f31080a747651",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bakedVertexAnimation.ts",
+      "sha256": "2c957960ae0fd53b315daa107b9d313edd74c89a638968964caac56c6ca2ab5a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/prePassVertex.ts",
+      "sha256": "d080fbbe90952ba1b686e307394581c3054eb1aa73a73b82647e739274cccae8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/uvVariableDeclaration.ts",
+      "sha256": "0103e295e96210399df0bf8b2b0f61806b691e49455fc39f8c7803a9232e5af5",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/samplerVertexImplementation.ts",
+      "sha256": "e61ca9144c1f311d8b23bcab45b4726e3475753c8a146da445c7c0207a69c7c4",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bumpVertex.ts",
+      "sha256": "d2f6ad3a8ec5d66870565aed119e815674fd551c170a96b53a2122c3c194591f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/clipPlaneVertex.ts",
+      "sha256": "3d422b11f4b8231b36a1304addc99477626b34f15900d3d2095ae23db4175dcf",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/fogVertex.ts",
+      "sha256": "4a21dbf61891a98d976e89292a445a431bcd0299a8388cfb6446d30be3808702",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/shadowsVertex.ts",
+      "sha256": "5e02e31a66b225d87be148af3046cb542c7d838b34621044044aac391f85bf08",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/vertexColorMixing.ts",
+      "sha256": "f5c0883d99cf0686b2651291c0ae99a5e24940e21334d0e9166645ef39ca91f5",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/logDepthVertex.ts",
+      "sha256": "a82711ecb6403c6acd1aac404ca8ca48d515d85c22ee4709dd67ae225d24edd4",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/default.fragment.ts",
+      "sha256": "f1b9695beb1d48a167630fbe9785feae8c76b0aa4ae3421e7a4f3f659432647c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/objectIdFunctions.ts",
+      "sha256": "ce9035be116f4ead2a42532e8d5d98cef37e713486aac0bc31b0974564b4dafe",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/prePassDeclaration.ts",
+      "sha256": "79d4561d8496f333601393733b2959931e968aa7fad61e92e09c5e05932830ed",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/oitDeclaration.ts",
+      "sha256": "c05349ce33384a08ce345344ca0295291cce1e3747e3c3d7f868c53325b9f131",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/lightUboDeclaration.ts",
+      "sha256": "8144225603346fcce42a84bbd2bd09915eedd23faeb608d3fb3edc3b1261c195",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/ltcHelperFunctions.ts",
+      "sha256": "079b04c3b6b79d8addeb5987ade7d418b120b753023e04aa072b9ec64ebc7fff",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/clusteredLightingFunctions.ts",
+      "sha256": "9cafce16c280b189c7bd0da43d454003fa0d70161b998b076f4bebe698ef9d92",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/clusteredLightingCompute.ts",
+      "sha256": "b7bd1d6e352e3fc007997b4ca5776f37e918ac7b7ed39dba319c049c010ffa11",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/lightsFragmentFunctions.ts",
+      "sha256": "bd7472c1de31659da6ad543b1c28fd14aba03a66073f9ed5dc06d0af8c6d7f97",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/shadowsFragmentFunctions.ts",
+      "sha256": "420f26d91e88624b7ab4d05b342eaa11f849b1718b77005d5ad6066575f3c58e",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/samplerFragmentDeclaration.ts",
+      "sha256": "33ff7d4cf3ad643151eeed479733121555dd73b7f0c78e8cd231fda3cf19e74f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/fresnelFunction.ts",
+      "sha256": "9f53711d0bc484afcbbffbd37205775dbdbf593535127b440a20b1d62e1a421a",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/reflectionFunction.ts",
+      "sha256": "a8c9dd85691512e9977f2cb895fa4dfd25f969ccc5a5f359d400517c42bbc13b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/imageProcessingDeclaration.ts",
+      "sha256": "1f72ca6ac03437559477ea556ba5e8ae415d85563bb2ddc5eca3df05616608d2",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/imageProcessingFunctions.ts",
+      "sha256": "34033c503a00df2ba82904d1e3088279d142405a8b0c4b7bf69cb73153d00f4c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/textureRepetitionFunctions.ts",
+      "sha256": "e950f1a21b48f3f779ab73ad89f4fb3953280cb2a8b080449c8e1eaa926abba7",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bumpFragmentMainFunctions.ts",
+      "sha256": "486032a0ddc2bbd6078151ff89a462c49d60caa916c2e9b7d12a20f037a73ff8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bumpFragmentFunctions.ts",
+      "sha256": "508e757351caa212768aa01577f2766fc491010ffcef05ed92ec7f985edab5f1",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/clipPlaneFragmentDeclaration.ts",
+      "sha256": "f49f487741ae7ec818dd535ba2607a065e7ae829fd7e5588330fb11aa8491b45",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/fogFragmentDeclaration.ts",
+      "sha256": "630791fc1769f85d90c032f521c985647e4fc2136a4de96e5133ca36e3c0aeed",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/clipPlaneFragment.ts",
+      "sha256": "dcc11f263802850ea5e7d75ec344c575ecab24eef40c5f5213cd5a52b587d581",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/bumpFragment.ts",
+      "sha256": "76edb8c6fbdb0fa716dedc0296220347a22db82755fb1ff367c16d8b96d1515b",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/decalFragment.ts",
+      "sha256": "061ad02e38b0e89dbfa1f8502d0f48cd8b66bb74f29939b62025b9ff18a486e8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/depthPrePass.ts",
+      "sha256": "440f1d6cba3eb73cb59c438f256dd499849e07acec220f0363f4d338a9300853",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/lightFragment.ts",
+      "sha256": "91af56483d1e334a8ae7e08d497041dcf8708ff67ca56b1558142f10114a314c",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/logDepthFragment.ts",
+      "sha256": "c7e020d518c65aff9c4805dd62c2ee5c356ca9bf0c1df0500b40905be5686ef8",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/fogFragment.ts",
+      "sha256": "a27b1e8a80f54f8dcb68be03d675ee3c9437a3c7535bab2444f08ad6ff3fb74d",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/ShadersWGSL/ShadersInclude/oitFragment.ts",
+      "sha256": "2e90cc28c8a5cb9b15e18d21ebd81425a740a8e3f97522252735f07d2e16e914",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.uniformBuffer.ts",
+      "sha256": "bca173f281b64af8b0926e8257478a7ee70730df7b7d179fbd43a8641f6d5b2c",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.uniformBuffer.pure.ts",
+      "sha256": "451e4fd6868ff7f536d757320e38df55c8a8121880a1a4d0328c30fc99a09447",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.dynamicBuffer.ts",
+      "sha256": "e56306905ed5a778f27c32acfa9ea92419705826ee1f75d85ab4557b29ffdf12",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.dynamicBuffer.types.ts",
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.renderTarget.ts",
+      "sha256": "1c1900d1642553ad83b66c3ff1a7de7d86a785c4960b78f39b2ea9cb392df37b",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.renderTarget.pure.ts",
+      "sha256": "206b0eb3e48a34417e873ca41593262af0142334a212c780d94ec3467ffd3e57",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/WebGL/webGLRenderTargetWrapper.ts",
+      "sha256": "ce8a181f0566d5ed8c6385c09ed3509799e4a5fc0eed4d45ff125d7cab354307",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/renderTargetWrapper.ts",
+      "sha256": "d39bce0862afa7e166444c224339057ab56e47c5d397f2a330bfa62240d0fc4f",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.readTexture.ts",
+      "sha256": "c25491d7fd3ddc5106139ce55d82fb32e2c612d727801144490d910896bc8fd5",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Engines/Extensions/engine.readTexture.pure.ts",
+      "sha256": "61db629d81442049de1f78fcb0caff0c675bd9a4c0a79e0a4c2aaa812680a2ba",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/AbstractEngine/abstractEngine.stencil.ts",
+      "sha256": "6d92c8c3be7daabdb1a131b1b6f82bb42b6ddce3ea7229f58964f91aec9876c6",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Engines/AbstractEngine/abstractEngine.stencil.pure.ts",
+      "sha256": "569db0e70c0ce977e31c78353c8d6ca8eebd9122890956ffda57f15be99486d4",
+      "generatedRegistrationWrapper": false
+    },
+    {
+      "path": "vendor/babylon/src/Engines/AbstractEngine/abstractEngine.states.ts",
+      "sha256": "9cd20905e79f332e5d2ef9e7afa1f343b6c109d18329c83e5e43d63f312cca59",
+      "generatedRegistrationWrapper": true
+    },
+    {
+      "path": "vendor/babylon/src/Engines/AbstractEngine/abstractEngine.states.pure.ts",
+      "sha256": "4d8f4341648f746843ca4bd70389f64176e22599aa1abf441d7f4b844ede7ca6",
+      "generatedRegistrationWrapper": false
+    }
+  ]
+}

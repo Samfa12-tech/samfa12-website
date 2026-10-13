@@ -38,7 +38,11 @@
     "verify:handoff-live": "node scripts/verify-pocket-handoff-live.mjs",
     "sync:breakfast-beat-down": "node scripts/breakfast-beat-down-release.mjs",
     "verify:breakfast-beat-down": "node scripts/breakfast-beat-down-release.mjs --verify",
-    "verify:banana-banana-ducky": "node scripts/banana-banana-ducky-release.mjs"
+    "verify:banana-banana-ducky": "node scripts/banana-banana-ducky-release.mjs",
+    "build:reef-sweep": "npm --prefix game-sources/reef-sweep run build",
+    "sync:reef-sweep": "node scripts/reef-sweep-release.mjs",
+    "verify:reef-sweep-pages": "node scripts/reef-sweep-release.mjs --verify",
+    "test:reef-sweep": "npm --prefix game-sources/reef-sweep test"
   },
   "dependencies": {
     "@google-cloud/storage": "^8.0.1",
