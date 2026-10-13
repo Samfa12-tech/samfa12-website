@@ -935,11 +935,11 @@
             "src/render/renderer.ts",
             "src/ui/ui.ts"
           ],
-          "notes": "This owner-supplied source ZIP identifies the v0.1 handoff package. It supports the playable prototype, two sites, conservation loop, adaptive Pocket Chordsmith-derived score, local browser saves and procedural first-pass art. Physical Android and iPhone testing remains outstanding; no public release date or third-party storefront is asserted."
+          "notes": "This owner-supplied source ZIP identifies the original v0.1 handoff package. Its inspection did not include physical Android or iPhone testing; that limitation applies to this historical archive and is superseded for landscape touch feel by later owner play in Android Chrome. The ZIP supports the playable prototype, two sites, conservation loop, adaptive Pocket Chordsmith-derived score, local browser saves and procedural first-pass art. No public release date or third-party storefront is asserted."
         },
         {
           "url": "https://samfa12.com/games/reef-sweep/play/",
-          "identity": "Owner-maintained local Reef Sweep source tree at output/reef-sweep/source/reef-sweep; package metadata identifies 0.2.0-preview.1. This source produced the owner-approved 0.2.0-preview.1 browser preview; publication was authorized on 2026-10-13. Physical-device acceptance remains outstanding.",
+          "identity": "Owner-maintained local Reef Sweep source tree at output/reef-sweep/source/reef-sweep; package metadata identifies 0.2.0-preview.2. The owner approved the local High shadow build and continued publication on 2026-10-13.",
           "access": "read-owner-maintained-local-source-tree",
           "files": [
             "package.json",
@@ -959,13 +959,15 @@
             "src/ui/ui.ts",
             "src/main.ts"
           ],
-          "notes": "The inspected local source implements nine five-rank gear types, a progression fixture, surface breaching, deeper wreck/outfall surveys, an optional night shark, contact injury that drains air, optional three-cut filleting, and simulation-timed breathing/bubbles. These source observations do not establish physical-device performance or a natural-playthrough result; Chromium checks cover audio output and pause/surface timing; owner listening and physical-device acceptance remain outstanding."
+          "notes": "The current source implements nine five-rank gear types, a progression fixture, surface breaching, deeper wreck/outfall surveys, an optional night shark, contact injury that drains air, optional three-cut filleting, simulation-timed breathing/bubbles, High-only 2048 sun and 1024 torch depth-map shadows, a saved Now/Later quality choice that reapplies after reload, compact mobile footer and fullscreen control, portrait controls without forced pause, and the knownSpinVector Backbone One preset with saved calibration. Automated Chromium validation covers the implemented source behavior; owner physical-play evidence confirms landscape touch feel in Android Chrome and approval of the local High shadow build. The owner also physically tested and approved the USB Backbone controls in Windows Chrome. Physical acceptance of revised portrait and fullscreen behavior remains pending. iPhone/Safari compatibility, sustained performance, and a natural campaign result are unverified; audible timing and mix need validation."
         }
       ],
       "limits": [
-        "Physical Android/iPhone, Safari and controller testing has not been completed.",
+        "Landscape touch feel has owner approval from physical Android Chrome play. USB Backbone controls have owner approval in Windows Chrome. Physical acceptance of the revised portrait layout and fullscreen control remains outstanding; iPhone/Safari compatibility is unverified.",
+        "High-only 2048 sun/1024 torch depth-map shadows and saved/reapplied High quality are implemented and covered by automated Chromium validation, and the local High shadow build has owner approval; sustained performance has not been demonstrated.",
+        "Natural campaign pacing remains unverified by a complete owner playthrough.",
         "Artwork remains procedural prototype art.",
-        "The progression model is an economic fixture, not human playtest evidence; owner listening and physical-device acceptance remain outstanding.",
+        "The progression model is an economic fixture, not human playtest evidence; audio timing and mix remain to be reviewed.",
         "No public release date or third-party storefront is asserted."
       ]
     }

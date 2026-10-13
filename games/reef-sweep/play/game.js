@@ -157,13 +157,46 @@ function review() {
 }
 function download(name, text, type = 'application/json') { const blob = new Blob([text], { type }), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 10000); }
 function applySettings() { input.settings = settings; renderer?.configure(settings); audio.setSettings(settings); store.saveSettings(settings); document.body.classList.toggle('reduced', settings.reducedMotion); document.querySelector('#chart-button kbd').textContent = settings.keys.journal.replace('Key', ''); document.documentElement.style.setProperty('--touch-scale', String(settings.touchScale)); }
+async function toggleFullscreen() {
+    const doc = document, root = document.documentElement;
+    const active = !!(doc.fullscreenElement || doc.webkitFullscreenElement);
+    try {
+        if (active) {
+            const exit = doc.exitFullscreen || doc.webkitExitFullscreen;
+            if (!exit) {
+                ui.toast('This browser cannot exit fullscreen from the page.');
+                return;
+            }
+            await exit.call(doc);
+            return;
+        }
+        if (typeof root.requestFullscreen === 'function')
+            await root.requestFullscreen({ navigationUI: 'hide' });
+        else if (typeof root.webkitRequestFullscreen === 'function')
+            await root.webkitRequestFullscreen();
+        else {
+            ui.toast('Fullscreen is unavailable in this browser.');
+            return;
+        }
+        if (!(doc.fullscreenElement || doc.webkitFullscreenElement))
+            ui.toast('The browser did not enter fullscreen.');
+    }
+    catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        ui.toast(`Fullscreen was denied: ${message}`);
+    }
+}
 function dispatch(action, data) {
     try {
         switch (action) {
             case 'screen':
+                if (input.calibration && data !== 'settings')
+                    input.cancelCalibration();
                 open(data);
                 break;
             case 'close':
+                if (input.calibration)
+                    input.cancelCalibration();
                 close();
                 break;
             case 'site':
@@ -245,8 +278,68 @@ function dispatch(action, data) {
                 document.getElementById('import-file').click();
                 break;
             case 'setting':
-                settings[data.name] = data.value;
+                {
+                    const previousQuality = settings.quality;
+                    settings[data.name] = data.value;
+                    applySettings();
+                    if (data.name === 'quality' && data.value !== previousQuality) {
+                        if (data.value === 'high') {
+                            persist();
+                            ui.qualityReloadPending = true;
+                            ui.show('settings');
+                        }
+                        else if (ui.qualityReloadPending) {
+                            ui.qualityReloadPending = false;
+                            ui.show('settings');
+                        }
+                    }
+                }
+                break;
+            case 'fullscreen':
+                void toggleFullscreen();
+                break;
+            case 'quality-reload':
+                persist();
+                window.location.reload();
+                break;
+            case 'quality-later':
+                ui.qualityReloadPending = false;
+                ui.show('settings');
+                break;
+            case 'gamepad-scan':
+                input.selectPad(null);
+                input.pads();
+                ui.updateControllerStatus(input.controllerStatus());
+                ui.show('settings');
+                break;
+            case 'gamepad-select':
+                input.selectPad(data || null);
+                ui.updateControllerStatus(input.controllerStatus());
+                ui.show('settings');
+                break;
+            case 'gamepad-start':
+                if (!input.startCalibration())
+                    ui.toast('No connected controller is available. Click Scan, then press a button on the controller.');
+                ui.updateControllerStatus(input.controllerStatus());
+                ui.show('settings');
+                break;
+            case 'gamepad-cancel':
+                input.cancelCalibration();
+                ui.updateControllerStatus(input.controllerStatus());
+                ui.show('settings');
+                break;
+            case 'gamepad-use':
+                if (input.useCalibration()) {
+                    applySettings();
+                    ui.updateControllerStatus(input.controllerStatus());
+                    ui.show('settings');
+                }
+                break;
+            case 'gamepad-restore':
+                input.restorePadDefaults();
                 applySettings();
+                ui.updateControllerStatus(input.controllerStatus());
+                ui.show('settings');
                 break;
             case 'binding': {
                 const old = settings.keys[data.action];
@@ -258,6 +351,8 @@ function dispatch(action, data) {
                 break;
             }
             case 'defaults':
+                input.cancelCalibration();
+                ui.qualityReloadPending = false;
                 settings = structuredClone(data_js_1.DEFAULT_SETTINGS);
                 applySettings();
                 ui.show('settings');
@@ -330,6 +425,10 @@ function frame(now) {
     // Controller look uses the simulation time actually covered by this sample.
     const inputTime = Math.min(5, Math.floor((accum + dt) * 60)) / 60;
     const f = paused || !sim ? input.sample(dt) : inputTime > 0 ? input.sample(inputTime) : simulation_js_1.EMPTY_INPUT;
+    if (ui.screen === 'settings' && hudClock > .09) {
+        hudClock = 0;
+        ui.updateControllerStatus(input.controllerStatus());
+    }
     document.body.classList.toggle('touch', input.touchMode && !input.gamepad);
     if (!paused && sim) {
         accum += dt;
@@ -412,13 +511,11 @@ document.addEventListener('visibilitychange', () => {
         persist();
 });
 window.addEventListener('pagehide', persist);
-function orientation() {
-    const portrait = innerHeight > innerWidth && input.touchMode;
-    if (portrait && !paused && profile.active)
-        open('pause');
-    document.getElementById('rotate').hidden = !(portrait && !!profile.active && visualDive);
-}
-window.addEventListener('resize', orientation);
+function orientation() { document.getElementById('rotate').hidden = true; }
+function resizeViewport() { renderer?.engine.resize(); orientation(); }
+window.addEventListener('resize', resizeViewport);
+window.visualViewport?.addEventListener('resize', resizeViewport);
+document.addEventListener('fullscreenchange', () => { input.clear(); resizeViewport(); ui.updateFullscreenState(!!document.fullscreenElement); });
 canvas.addEventListener('webglcontextrestored', () => ui.toast('Graphics restored. Resume when you are ready.'));
 try {
     renderer = new renderer_js_1.ReefRenderer(canvas, settings);
@@ -629,7 +726,22 @@ class SaveStore {
         try {
             const s = JSON.parse(this.storage.getItem(exports.SAVE_PREFIX + 'settings') || '{}');
             const q = ['high', 'balanced', 'low'].includes(s.quality) ? s.quality : 'balanced';
-            return { ...data_js_1.DEFAULT_SETTINGS, ...s, quality: q, music: (0, math_js_1.clamp)(Number(s.music ?? .42) || 0, 0, 1), ambience: (0, math_js_1.clamp)(Number(s.ambience ?? .6) || 0, 0, 1), effects: (0, math_js_1.clamp)(Number(s.effects ?? .7) || 0, 0, 1), sensitivity: (0, math_js_1.clamp)(Number(s.sensitivity ?? 1) || 1, .25, 2.5), fov: (0, math_js_1.clamp)(Number(s.fov ?? 78) || 78, 60, 100), touchScale: (0, math_js_1.clamp)(Number(s.touchScale ?? 1) || 1, .8, 1.3), keys: { ...data_js_1.DEFAULT_SETTINGS.keys, ...s.keys } };
+            const gamepads = {};
+            if (s.gamepads && typeof s.gamepads === 'object' && !Array.isArray(s.gamepads))
+                for (const [key, raw] of Object.entries(s.gamepads).slice(0, 16)) {
+                    const p = raw;
+                    if (!p || typeof p !== 'object' || p.key !== key || typeof p.id !== 'string' || typeof p.mapping !== 'string' || !Number.isInteger(p.axisCount) || p.axisCount < 0 || p.axisCount > 64 || !Number.isInteger(p.buttonCount) || p.buttonCount < 0 || p.buttonCount > 128 || !Array.isArray(p.centers) || p.centers.length > 64 || !p.centers.every((n) => typeof n === 'number' && Number.isFinite(n) && n >= -1 && n <= 1))
+                        continue;
+                    const validAxis = (v) => v && Number.isInteger(v.index) && v.index >= 0 && v.index < p.axisCount && (v.sign === 1 || v.sign === -1);
+                    if (!p.axes || !['moveX', 'moveZ', 'lookX', 'lookY'].every(k => validAxis(p.axes[k])))
+                        continue;
+                    const validButtons = p.buttons && typeof p.buttons === 'object' && Object.entries(p.buttons).every(([action, index]) => /^[a-zA-Z]+$/.test(action) && Number.isInteger(index) && index >= 0 && index < p.buttonCount);
+                    const validAxisButtons = p.axisButtons && typeof p.axisButtons === 'object' && Object.entries(p.axisButtons).every(([action, binding]) => /^[a-zA-Z]+$/.test(action) && binding && Number.isInteger(binding.index) && binding.index >= 0 && binding.index < p.axisCount && typeof binding.value === 'number' && Number.isFinite(binding.value) && binding.value >= -1 && binding.value <= 1);
+                    if (!validButtons || !validAxisButtons)
+                        continue;
+                    gamepads[key] = { key, id: p.id.slice(0, 200), mapping: p.mapping.slice(0, 40), axisCount: p.axisCount, buttonCount: p.buttonCount, axes: p.axes, centers: p.centers, buttons: p.buttons, axisButtons: p.axisButtons, moveDeadzone: (0, math_js_1.clamp)(Number(p.moveDeadzone) || .14, .05, .4), lookDeadzone: (0, math_js_1.clamp)(Number(p.lookDeadzone) || .2, .05, .45) };
+                }
+            return { ...data_js_1.DEFAULT_SETTINGS, ...s, quality: q, music: (0, math_js_1.clamp)(Number(s.music ?? .42) || 0, 0, 1), ambience: (0, math_js_1.clamp)(Number(s.ambience ?? .6) || 0, 0, 1), effects: (0, math_js_1.clamp)(Number(s.effects ?? .7) || 0, 0, 1), sensitivity: (0, math_js_1.clamp)(Number(s.sensitivity ?? 1) || 1, .25, 2.5), fov: (0, math_js_1.clamp)(Number(s.fov ?? 78) || 78, 60, 100), touchScale: (0, math_js_1.clamp)(Number(s.touchScale ?? 1) || 1, .8, 1.3), keys: { ...data_js_1.DEFAULT_SETTINGS.keys, ...s.keys }, gamepads };
         }
         catch {
             return structuredClone(data_js_1.DEFAULT_SETTINGS);
@@ -1582,8 +1694,10 @@ function nativeFishMotion(site, center, radius, seed, time, scale = exports.NATI
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReefRenderer = void 0;
+const shadows_js_1 = require("./shadows.js");
 const breathing_js_1 = require("../game/breathing.js");
 const geometry_js_1 = require("./geometry.js");
+const terrain_js_1 = require("./terrain.js");
 const shaders_js_1 = require("./shaders.js");
 const math_js_1 = require("../game/math.js");
 const data_js_1 = require("../game/data.js");
@@ -1642,17 +1756,18 @@ class ReefRenderer {
         this.nativeTransform = new B.Matrix();
         this.forwardVector = new B.Vector3();
         this.torchVector = { x: 16, y: .05 };
+        this.shadows = new shadows_js_1.ReefShadows(this.scene, this.engine);
         this.configure(settings);
         canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); this.onLost(); });
         window.addEventListener('resize', () => this.engine.resize());
     }
-    configure(settings) { this.settings = settings; const scale = settings.quality === 'high' ? 1 / Math.min(devicePixelRatio || 1, 1.5) : settings.quality === 'low' ? 1.45 : 1; this.engine.setHardwareScalingLevel(scale); this.engine.resize(); this.camera.fov = settings.fov * Math.PI / 180; }
+    configure(settings) { this.settings = settings; const scale = settings.quality === 'high' ? 1 / Math.min(devicePixelRatio || 1, 1.5) : settings.quality === 'low' ? 1.45 : 1; this.engine.setHardwareScalingLevel(scale); this.engine.resize(); this.camera.fov = settings.fov * Math.PI / 180; this.shadows?.configure(settings.quality === 'high'); }
     material(mode) {
         let m = this.materials.find(m => m._reefMode === mode);
         if (m)
             return m;
         const B = BABYLON;
-        m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uNight', 'uCurrent', 'uTorch'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 });
+        m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow', 'uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 });
         m._reefMode = mode;
         m.backFaceCulling = false;
         m.setFloat('uMode', mode);
@@ -1667,6 +1782,12 @@ class ReefRenderer {
             m.disableDepthWrite = true;
             m.alphaMode = B.Engine.ALPHA_COMBINE;
         }
+        m.setMatrix('uSunMatrix', this.shadows.sunMatrix);
+        m.setMatrix('uTorchMatrix', this.shadows.torchMatrix);
+        m.setFloat('uShadows', 0);
+        m.setFloat('uTorchShadows', 0);
+        m.setTexture('uSunShadow', this.shadows.white);
+        m.setTexture('uTorchShadow', this.shadows.white);
         this.materials.push(m);
         return m;
     }
@@ -1683,6 +1804,7 @@ class ReefRenderer {
     }
     build(profile, run) {
         this.disposeWorld();
+        this.shadows.reset();
         this.bubblePool = new breathing_js_1.BubblePool();
         this.profile = profile;
         this.run = run;
@@ -1694,18 +1816,7 @@ class ReefRenderer {
             m.setVector2('uCurrent', { x: site.current, y: site.id === 'gardens' ? 18 : 0 });
         }
         // Ground is authored topography, not a regenerated collision surface.
-        const ground = new geometry_js_1.Geometry(), size = 170, steps = 90;
-        for (let iz = 0; iz <= steps; iz++)
-            for (let ix = 0; ix <= steps; ix++) {
-                const x = -size / 2 + ix * size / steps, z = -size / 2 + iz * size / steps, y = (0, data_js_1.floorHeight)(x, z), eps = .08, n = (0, math_js_1.norm)((0, math_js_1.vec)((0, data_js_1.floorHeight)(x - eps, z) - (0, data_js_1.floorHeight)(x + eps, z), 2 * eps, (0, data_js_1.floorHeight)(x, z - eps) - (0, data_js_1.floorHeight)(x, z + eps)));
-                const grain = .92 + .06 * Math.sin(x * 5 + z * 6) + .035 * Math.sin(z * 19);
-                ground.v((0, math_js_1.vec)(x, y, z), n, (0, geometry_js_1.tint)((0, geometry_js_1.rgb)('#c5ceaf'), grain));
-            }
-        for (let iz = 0; iz < steps; iz++)
-            for (let ix = 0; ix < steps; ix++) {
-                const a = iz * (steps + 1) + ix, b = a + steps + 1;
-                ground.indices.push(a, b, a + 1, b, b + 1, a + 1);
-            }
+        const ground = (0, terrain_js_1.seabedGeometry)();
         this.staticMeshes.push(this.mesh('rippled-sand', ground, 0));
         const chunks = new Map(), seaweedChunks = new Map();
         const chunk = (x, z) => {
@@ -1757,11 +1868,11 @@ class ReefRenderer {
             const x = (random() - .5) * 95, z = -38 + random() * 95;
             if (!clearDecoration(x, z, site, run, 1.1))
                 continue;
-            const p = (0, math_js_1.vec)(x, (0, data_js_1.floorHeight)(x, z), z);
+            const p = (0, math_js_1.vec)(x, (0, terrain_js_1.sandHeight)(x, z), z);
             if (!(0, data_js_1.freePoint)({ ...p, y: p.y + 1 }, site, 1))
                 continue;
             const s = .25 + random() * .55;
-            chunk(x, z).merge(templates[Math.floor(random() * 6)], p, (0, math_js_1.vec)(s, s, s), random() * 6.28);
+            (0, terrain_js_1.mergeGrounded)(chunk(x, z), templates[Math.floor(random() * 6)], p, (0, math_js_1.vec)(s, s, s), random() * 6.28);
             this.environmentCounts.coral++;
         }
         const seaweedCount = this.settings.quality === 'high' ? 1000 : this.settings.quality === 'low' ? 500 : 760;
@@ -1790,11 +1901,11 @@ class ReefRenderer {
             }
             if (!clearDecoration(x, z, site, run, 1.1))
                 continue;
-            const y = (0, data_js_1.floorHeight)(x, z), p = (0, math_js_1.vec)(x, y + .2, z);
+            const y = (0, terrain_js_1.sandHeight)(x, z), p = (0, math_js_1.vec)(x, y, z);
             if (!(0, data_js_1.freePoint)((0, math_js_1.vec)(x, y + .6, z), site, .4))
                 continue;
             const fronds = (0, geometry_js_1.seaweedGeometry)(site.seed + seaweedAttempts * 53, .8 + random() * .75);
-            seaweedChunk(x, z).merge(fronds, p, (0, math_js_1.vec)(.9 + random() * .32, 1, .9 + random() * .32), random() * Math.PI * 2);
+            (0, terrain_js_1.mergeGrounded)(seaweedChunk(x, z), fronds, p, (0, math_js_1.vec)(.9 + random() * .32, 1, .9 + random() * .32), random() * Math.PI * 2);
             this.environmentCounts.seaweedClumps++;
             this.environmentCounts.seaweedFronds += fronds.positions.length / 60;
         }
@@ -2077,6 +2188,15 @@ class ReefRenderer {
         }
         this.engine.beginFrame();
         this.engine._drawCalls?.fetchNewFrame();
+        this.shadows.render(r, this.site, this.settings.reducedMotion, !!torchActive, this.camera);
+        for (const m of this.materials) {
+            m.setMatrix('uSunMatrix', this.shadows.sunMatrix);
+            m.setMatrix('uTorchMatrix', this.shadows.torchMatrix);
+            m.setFloat('uShadows', this.shadows.enabled ? 1 : 0);
+            m.setFloat('uTorchShadows', this.shadows.enabled && torchActive ? 1 : 0);
+            m.setTexture('uSunShadow', this.shadows.sunTexture);
+            m.setTexture('uTorchShadow', this.shadows.torchTexture);
+        }
         this.scene.render();
         this.engine.endFrame();
         this.fps = this.engine.getFps();
@@ -2109,9 +2229,308 @@ class ReefRenderer {
         return { x: (0, math_js_1.clamp)(v.x / this.engine.getRenderWidth() * 100, 7, 93), y: (0, math_js_1.clamp)(v.y / this.engine.getRenderHeight() * 100, 12, 78), behind: false };
     }
     screenshot() { this.scene.render(); return this.canvas.toDataURL('image/png'); }
-    stats() { return { engine: BABYLON.Engine.Version, fps: Math.round(this.fps), drawCalls: this.draws, meshes: this.scene.meshes.length, vertices: this.scene.getTotalVertices(), renderSize: [this.engine.getRenderWidth(), this.engine.getRenderHeight()], bubbles: this.bubblePool.active(this.run?.time ?? 0), bubbleEmissions: this.bubblePool.emitted, environmentCounts: { ...this.environmentCounts } }; }
+    stats() { return { engine: BABYLON.Engine.Version, fps: Math.round(this.fps), drawCalls: this.draws, meshes: this.scene.meshes.length, vertices: this.scene.getTotalVertices(), renderSize: [this.engine.getRenderWidth(), this.engine.getRenderHeight()], shadows: this.shadows.stats(), bubbles: this.bubblePool.active(this.run?.time ?? 0), bubbleEmissions: this.bubblePool.emitted, environmentCounts: { ...this.environmentCounts } }; }
 }
 exports.ReefRenderer = ReefRenderer;
+
+},
+"render/shadows.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ReefShadows = void 0;
+const shaders_js_1 = require("./shaders.js");
+const depthFragment = `precision highp float;
+void main(){
+ vec4 packed=fract(min(gl_FragCoord.z,.999999)*vec4(1.0,255.0,65025.0,16581375.0));
+ packed-=packed.yzww*vec4(1.0/255.0,1.0/255.0,1.0/255.0,0.0);
+ gl_FragColor=packed;
+}`;
+/** Geometry-based depth maps: shared deformation shaders keep caster silhouettes
+ * aligned with animated coral, seaweed and thin-instanced fish. High only. */
+class ReefShadows {
+    constructor(scene, engine) {
+        this.scene = scene;
+        this.engine = engine;
+        this.sun = null;
+        this.torch = null;
+        this.depthMaterials = new Map();
+        this.lastSun = -99;
+        this.sunRenders = 0;
+        this.torchRenders = 0;
+        this.lastDraws = 0;
+        this.passReady = true;
+        this.enabled = false;
+        const B = BABYLON;
+        this.white = B.RawTexture.CreateRGBATexture(new Uint8Array([255, 255, 255, 255]), 1, 1, scene, false, false, B.Texture.NEAREST_SAMPLINGMODE);
+        this.sunMatrix = B.Matrix.Identity();
+        this.torchMatrix = B.Matrix.Identity();
+        this.sunDirection = new B.Vector3(-.4, 1, -.23).normalize();
+        this.sunPass = engine.createRenderPassId('reef-sun-shadow');
+        this.torchPass = engine.createRenderPassId('reef-torch-shadow');
+        B.Effect.ShadersStore['reefShadowVertexShader'] = shaders_js_1.reefVertex;
+        B.Effect.ShadersStore['reefShadowFragmentShader'] = depthFragment;
+    }
+    target(size) {
+        const B = BABYLON;
+        const wrapper = this.engine.createRenderTargetTexture(size, { generateMipMaps: false, generateDepthBuffer: true, generateStencilBuffer: false, type: B.Constants.TEXTURETYPE_UNSIGNED_BYTE, format: B.Constants.TEXTUREFORMAT_RGBA, samplingMode: B.Texture.NEAREST_SAMPLINGMODE });
+        const texture = new B.Texture(null, this.scene, true, false, B.Texture.NEAREST_SAMPLINGMODE);
+        texture._texture = wrapper.texture;
+        texture.wrapU = B.Texture.CLAMP_ADDRESSMODE;
+        texture.wrapV = B.Texture.CLAMP_ADDRESSMODE;
+        return { wrapper, texture };
+    }
+    configure(high) {
+        this.enabled = high;
+        if (high && !this.sun) {
+            this.sun = this.target(2048);
+            this.torch = this.target(1024);
+            this.lastSun = -99;
+        }
+        if (!high && this.sun) {
+            for (const target of [this.sun, this.torch]) {
+                target.texture._texture = null;
+                target.texture.dispose();
+                target.wrapper.dispose();
+            }
+            this.sun = this.torch = null;
+        }
+        this.sunTexture = this.sun?.texture || this.white;
+        this.torchTexture = this.torch?.texture || this.white;
+    }
+    reset() { this.lastSun = -99; }
+    depth(mode) {
+        let material = this.depthMaterials.get(mode);
+        if (material)
+            return material;
+        const B = BABYLON;
+        material = new B.ShaderMaterial('reef-shadow-' + mode, this.scene, { vertex: 'reefShadow', fragment: 'reefShadow' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uMotion', 'uSurface', 'uNight', 'uCurrent'] });
+        material.backFaceCulling = false;
+        material.setFloat('uMode', mode);
+        material.setFloat('uMotion', 1);
+        this.depthMaterials.set(mode, material);
+        return material;
+    }
+    pass(target, passId, view, projection, run, site, reducedMotion) {
+        const B = BABYLON, oldView = this.scene.activeCamera.getViewMatrix(), oldProjection = this.scene.activeCamera.getProjectionMatrix(), oldPass = this.engine.currentRenderPassId;
+        let draws = 0;
+        this.passReady = true;
+        try {
+            this.engine.currentRenderPassId = passId;
+            this.scene.setTransformMatrix(view, projection);
+            this.scene.resetCachedMaterial();
+            this.engine.bindFramebuffer(target.wrapper, undefined, undefined, undefined, true);
+            this.engine.setAlphaMode(B.Engine.ALPHA_DISABLE);
+            this.engine.setDepthBuffer(true);
+            this.engine.setDepthWrite(true);
+            this.engine.clear(new B.Color4(1, 1, 1, 1), true, true, false);
+            for (const mesh of this.scene.meshes) {
+                const mode = mesh.material?._reefMode;
+                if (![0, 1, 2, 7].includes(mode) || !mesh.isEnabled() || !mesh.isVisible)
+                    continue;
+                const material = this.depth(mode);
+                material.setFloat('uTime', run.time);
+                material.setFloat('uSurface', site.surface);
+                material.setFloat('uMotion', reducedMotion ? 0 : 1);
+                material.setVector2('uCurrent', { x: site.current, y: site.id === 'gardens' ? 18 : 0 });
+                mesh.setMaterialForRenderPass(passId, material);
+                mesh.computeWorldMatrix(true);
+                if (!material.isReady(mesh, mesh.hasThinInstances)) {
+                    this.passReady = false;
+                    continue;
+                }
+                for (const sub of mesh.subMeshes || []) {
+                    mesh.render(sub, false);
+                    draws++;
+                }
+            }
+        }
+        finally {
+            this.engine.restoreDefaultFramebuffer();
+            this.engine.currentRenderPassId = oldPass;
+            this.scene.setTransformMatrix(oldView, oldProjection);
+            this.scene.resetCachedMaterial();
+        }
+        return draws;
+    }
+    render(run, site, reducedMotion, torchActive, camera) {
+        if (!this.enabled || !this.sun)
+            return;
+        const B = BABYLON;
+        this.lastDraws = 0;
+        if (run.time - this.lastSun >= .05 || run.time < this.lastSun) {
+            const center = new B.Vector3(0, -3, 0), eye = center.add(this.sunDirection.scale(100));
+            const view = B.Matrix.LookAtLH(eye, center, new B.Vector3(0, 1, 0)), projection = B.Matrix.OrthoLH(160, 160, 1, 190);
+            view.multiplyToRef(projection, this.sunMatrix);
+            this.lastDraws += this.pass(this.sun, this.sunPass, view, projection, run, site, reducedMotion);
+            if (this.passReady)
+                this.lastSun = run.time;
+            this.sunRenders++;
+        }
+        if (torchActive) {
+            const view = camera.getViewMatrix(), projection = B.Matrix.PerspectiveFovLH(1.35, 1, .08, 70);
+            view.multiplyToRef(projection, this.torchMatrix);
+            this.lastDraws += this.pass(this.torch, this.torchPass, view, projection, run, site, reducedMotion);
+            this.torchRenders++;
+        }
+    }
+    stats() { return { enabled: this.enabled, sunResolution: this.sun ? 2048 : 0, torchResolution: this.torch ? 1024 : 0, sunRenders: this.sunRenders, torchRenders: this.torchRenders, depthDraws: this.lastDraws }; }
+}
+exports.ReefShadows = ReefShadows;
+
+},
+"render/shaders.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reefFragment = exports.reefVertex = void 0;
+exports.reefVertex = `precision highp float;
+attribute vec3 position;
+attribute vec3 normal;
+attribute vec4 color;
+attribute vec2 uv;
+uniform mat4 world;
+uniform mat4 viewProjection;
+uniform float uTime;
+uniform float uMode;
+uniform float uMotion;
+uniform float uSurface;
+uniform float uNight;
+uniform vec2 uCurrent;
+uniform mat4 uSunMatrix;
+uniform mat4 uTorchMatrix;
+#ifdef INSTANCES
+attribute vec4 world0;
+attribute vec4 world1;
+attribute vec4 world2;
+attribute vec4 world3;
+#endif
+varying vec3 vWorld;
+varying vec3 vNormal;
+varying vec4 vColor;
+varying vec2 vUV;
+varying vec4 vSunCoord;
+varying vec4 vTorchCoord;
+void main(){
+ vec3 p=position;
+ if(uMode==1.0){
+  p.x+=sin(uTime*.75+p.z*.7+p.x*.5)*uv.y*.08*uMotion;
+  p.z+=sin(uTime*.54+p.x*.6)*uv.y*.04*uMotion;
+ }
+ if(uMode==2.0){float tail=max(0.0,-p.z);p.x+=sin(uTime*4.3+p.z*7.0)*tail*tail*.12;}
+ if(uMode==3.0){p.y+=sin(p.x*.30+uTime*.48)*.14+sin(p.z*.28-uTime*.3)*.09;}
+ if(uMode==6.0){p.x+=sin(uTime*.17+p.y)*.35;p.y+=sin(uTime*.34+p.z)*.20;p.z+=mod(uTime*.23,6.0);}
+ if(uMode==7.0){
+  float channel=exp(-pow((p.x-uCurrent.y)/12.0,2.0));
+  float current=uCurrent.x*(.45+channel*1.8)*(1.0+.12*sin(uTime*.023));
+  float tip=uv.y*uv.y*uMotion;
+  float phase=uTime*(.72+current*.55)+uv.x*6.28318+p.x*.31+p.z*.19;
+  p.x+=(sin(phase)*.14+current*.48*.16)*tip;
+  p.z+=(sin(phase-1.1)*.16+current*.48)*tip;
+ }
+ mat4 w=world;
+ #ifdef INSTANCES
+ w=mat4(world0,world1,world2,world3);
+ #endif
+ vec4 pos=w*vec4(p,1.0);
+ vWorld=pos.xyz;
+ vSunCoord=uSunMatrix*vec4(pos.xyz+normalize(mat3(w)*normal)*.10,1.0);
+ vTorchCoord=uTorchMatrix*vec4(pos.xyz+normalize(mat3(w)*normal)*.025,1.0);
+ vNormal=normalize(mat3(w)*normal);
+ vColor=color;
+ vUV=uv;
+ gl_Position=viewProjection*pos;
+}`;
+exports.reefFragment = `precision highp float;
+varying vec3 vWorld;
+varying vec3 vNormal;
+varying vec4 vColor;
+varying vec2 vUV;
+varying vec4 vSunCoord;
+varying vec4 vTorchCoord;
+uniform vec3 uEye;
+uniform vec3 uForward;
+uniform float uTime;
+uniform float uMode;
+uniform float uSurface;
+uniform float uFog;
+uniform float uLight;
+uniform float uNight;
+uniform vec2 uTorch;
+uniform float uShadows;
+uniform float uTorchShadows;
+uniform sampler2D uSunShadow;
+uniform sampler2D uTorchShadow;
+float shadowVisibility(sampler2D shadowMap,vec4 coordinate,float texel,float bias,float depthSpan){
+ if(coordinate.w<=0.0)return 1.0;
+ vec3 q=coordinate.xyz/coordinate.w*.5+.5;
+ if(q.x<.002||q.x>.998||q.y<.002||q.y>.998||q.z<0.0||q.z>1.0)return 1.0;
+ vec4 blockerPacked=texture2D(shadowMap,q.xy);
+ float blockerDepth=dot(blockerPacked,vec4(1.0,1.0/255.0,1.0/65025.0,1.0/16581375.0));
+ float radius=1.0+clamp((q.z-blockerDepth)*depthSpan*.2,0.0,.5);
+ float visible=0.0;
+ for(int x=0;x<4;x++)for(int y=0;y<4;y++){
+  vec4 packed=texture2D(shadowMap,q.xy+(vec2(float(x),float(y))-1.5)*texel*radius);
+  float depth=dot(packed,vec4(1.0,1.0/255.0,1.0/65025.0,1.0/16581375.0));
+  visible+=step(q.z-bias,depth);
+ }
+ return visible/16.0;
+}
+float caustic(vec2 p){
+ float a=sin(p.x*1.47+uTime*.33+sin(p.y*.82-uTime*.23));
+ float b=sin(p.y*1.42-uTime*.29+cos(p.x*.71+uTime*.17));
+ return pow(max(0.0,1.0-abs(a+b)*.87),11.0);
+}
+void main(){
+ vec3 n=normalize(vNormal);
+ float dist=length(vWorld-uEye);
+ float depth=max(0.0,uSurface-vWorld.y);
+ vec3 col=vColor.rgb;
+ float alpha=1.0;
+ if(uMode==3.0){
+  vec2 p=vWorld.xz;
+  float w=sin(p.x*.62+uTime*.44+sin(p.y*.26))+sin(p.y*.49-uTime*.3);
+  float threads=pow(max(0.0,1.0-abs(w)*.6),5.0);
+  vec3 to=normalize(vWorld-uEye);
+  float sun=pow(max(0.0,dot(to,normalize(vec3(-.35,1.0,.25)))),120.0);
+  vec3 daylight=mix(vec3(.12,.53,.60),vec3(.44,.78,.73),.48+w*.11)+threads*.055+sun*vec3(.66,.73,.57);
+  vec3 moonlight=vec3(.025,.105,.17)+threads*.025+sun*vec3(.15,.24,.34);
+  col=mix(daylight,moonlight,uNight);
+ }
+ else if(uMode==5.0){alpha=(1.0-vUV.y)*.075*pow(max(0.0,sin(vUV.x*3.14159)),1.5);if(uShadows>.5)alpha*=shadowVisibility(uSunShadow,vSunCoord,1.0/2048.0,.00055,190.0);col=mix(vec3(.62,.87,.76),vec3(.15,.39,.56),uNight);}
+ else if(uMode==8.0){float rim=pow(1.0-abs(dot(n,normalize(uEye-vWorld))),2.0);col=vec3(.58,.86,.91);alpha=.10+rim*.50;}
+ else if(uMode==6.0){col=mix(vec3(.54,.82,.78),vec3(.24,.47,.66),uNight);alpha=.34;}
+ else {
+  float sunNormal=max(0.0,dot(n,normalize(vec3(-.4,1.0,-.23))));
+  float sunShadow=uShadows>.5?shadowVisibility(uSunShadow,vSunCoord,1.0/2048.0,.00055+.00055*(1.0-sunNormal),190.0):1.0;
+  float light=.65+.52*sunNormal*sunShadow;
+  float side=.08*max(0.0,dot(n,normalize(vec3(.7,.2,.5))));
+  col*=mix(light+side,.25+.18*max(0.0,n.y),uNight);
+  col*=mix(vec3(.82,.93,1.0),vec3(1.0),mix(1.0,sunShadow,smoothstep(.05,.4,sunNormal)*(1.0-uNight)));
+  if(uMode!=4.0){
+   float c=(caustic(vWorld.xz)+caustic(vWorld.xz*.51+.3)*.35)*(1.0-step(uSurface+.03,vWorld.y));
+   col+=mix(vec3(.30,.47,.35),vec3(.10,.20,.30),uNight)*c*max(.10,n.y)*exp(-depth*.037)*(1.0-uNight)*sunShadow;
+   col*=vec3(exp(-depth*.008),1.0,1.0);
+   float alignment=max(0.0,dot(normalize(vWorld-uEye),uForward));
+   float cone=pow(alignment,max(5.0,uTorch.x))*uLight*exp(-dist*max(.001,uTorch.y));
+   float core=pow(alignment,40.0)*uLight*exp(-dist*.12);
+   float torchShadow=uTorchShadows>.5?shadowVisibility(uTorchShadow,vTorchCoord,1.0/1024.0,.000015,0.0):1.0;
+   col+=vColor.rgb*(cone*.82+core*.45)*torchShadow;
+  }
+  else col=col*.85+vColor.rgb*.3;
+ }
+ if(uMode!=4.0&&uMode!=3.0&&uMode!=6.0){
+  float underwater=1.0-step(uSurface,vWorld.y);
+  float submergedFog=(1.0-exp(-dist*uFog))*underwater;
+  vec3 deepFog=mix(vec3(.035,.31,.39),vec3(.012,.047,.085),uNight);
+  vec3 farFog=mix(vec3(.15,.51,.55),vec3(.035,.12,.20),uNight);
+  vec3 waterFog=mix(deepFog,farFog,clamp((vWorld.y+2.0)/uSurface,0.0,1.0));
+  col=mix(col,waterFog,clamp(submergedFog,0.0,.985));
+  float aboveFog=(1.0-exp(-dist*uFog*(uMode==9.0?.09:.34)))*(1.0-underwater);
+  vec3 skyFog=mix(vec3(.58,.77,.80),vec3(.018,.045,.10),uNight);
+  col=mix(col,skyFog,clamp(aboveFog,0.0,.8));
+ }
+ col=pow(max(col,vec3(0.0)),vec3(.96));
+ gl_FragColor=vec4(col,alpha);
+}`;
 
 },
 "game/breathing.ts":function(require,module,exports){
@@ -2261,7 +2680,7 @@ class Geometry {
 }
 exports.Geometry = Geometry;
 /** Shore-connected terrain with angular ridges, sand and rock bands. */
-function islandGeometry(seed) {
+function islandGeometry(seed, foundationDepth = 45) {
     const g = new Geometry(), random = (0, math_js_1.rng)(seed), phase = random() * Math.PI * 2;
     const width = 28, depth = 20;
     const terrain = (x, z) => {
@@ -2278,16 +2697,93 @@ function islandGeometry(seed) {
         }
         return { point: (0, math_js_1.vec)(x * 24, height, z * 16), radius };
     };
+    const occupied = Array.from({ length: depth }, () => Array(width).fill(false));
     for (let iz = 0; iz < depth; iz++)
         for (let ix = 0; ix < width; ix++) {
             const x = -1.2 + ix * 2.4 / width, z = -1.2 + iz * 2.4 / depth;
             const a = terrain(x, z), b = terrain(x, z + 2.4 / depth), c = terrain(x + 2.4 / width, z + 2.4 / depth), d = terrain(x + 2.4 / width, z);
             if ([a, b, c, d].every(p => p.radius > 1.12))
                 continue;
+            occupied[iz][ix] = true;
             const height = (a.point.y + b.point.y + c.point.y + d.point.y) / 4;
             const color = (0, exports.rgb)(height < .8 ? '#b9ad82' : height < 3 ? '#7c8170' : '#395b3c');
             g.quad(a.point, b.point, c.point, d.point, (0, exports.tint)(color, .9 + random() * .15));
         }
+    // Trace the exact outline of the clipped terrain cells. Extruding these
+    // boundary edges makes the submerged rock meet the original shore without
+    // a floating lip or a gap around its irregular grid edge.
+    const bottom = -Math.max(45, Number.isFinite(foundationDepth) ? foundationDepth : 45);
+    const boundaryEdges = [];
+    const isOccupied = (ix, iz) => iz >= 0 && iz < depth && ix >= 0 && ix < width && occupied[iz][ix];
+    for (let iz = 0; iz < depth; iz++)
+        for (let ix = 0; ix < width; ix++) {
+            if (!occupied[iz][ix])
+                continue;
+            const nw = { x: ix, z: iz }, ne = { x: ix + 1, z: iz }, se = { x: ix + 1, z: iz + 1 }, sw = { x: ix, z: iz + 1 };
+            if (!isOccupied(ix, iz - 1))
+                boundaryEdges.push({ a: nw, b: ne });
+            if (!isOccupied(ix + 1, iz))
+                boundaryEdges.push({ a: ne, b: se });
+            if (!isOccupied(ix, iz + 1))
+                boundaryEdges.push({ a: se, b: sw });
+            if (!isOccupied(ix - 1, iz))
+                boundaryEdges.push({ a: sw, b: nw });
+        }
+    const gridKey = (point) => `${point.x},${point.z}`;
+    const edgeFrom = new Map(boundaryEdges.map(edge => [gridKey(edge.a), edge]));
+    const perimeter = [];
+    if (boundaryEdges.length) {
+        const first = boundaryEdges[0];
+        let edge = first;
+        do {
+            perimeter.push(edge.a);
+            const next = edgeFrom.get(gridKey(edge.b));
+            if (!next)
+                throw new Error('Island terrain boundary is not a closed loop');
+            edge = next;
+        } while (edge !== first && perimeter.length <= boundaryEdges.length);
+        if (edge !== first)
+            throw new Error('Island terrain boundary contains multiple or open loops');
+    }
+    const levels = [
+        { y: -1.4, growth: 0 },
+        { y: -5, growth: .08 },
+        { y: -12, growth: .28 },
+        { y: -22, growth: .58 },
+        { y: bottom * .76, growth: .88 },
+        { y: bottom, growth: 1.02 },
+    ];
+    const rings = [];
+    for (let level = 0; level < levels.length; level++) {
+        const { y, growth } = levels[level];
+        const previous = levels[Math.max(0, level - 1)], next = levels[Math.min(levels.length - 1, level + 1)];
+        const drdy = (next.growth - previous.growth) / (next.y - previous.y || 1);
+        const ring = [];
+        for (let pointIndex = 0; pointIndex < perimeter.length; pointIndex++) {
+            const point = perimeter[pointIndex];
+            const x = -1.2 + point.x * 2.4 / width, z = -1.2 + point.z * 2.4 / depth;
+            const shore = terrain(x, z).point, angle = Math.atan2(shore.z / 16, shore.x / 24);
+            const shoreRadius = Math.hypot(shore.x / 24, shore.z / 16);
+            const organic = growth * (.025 * Math.sin(angle * 3 + phase) + .018 * Math.cos(angle * 5 - phase));
+            const r = shoreRadius + growth + organic;
+            const normal = (0, math_js_1.norm)((0, math_js_1.vec)(Math.cos(angle) / 24, -drdy, Math.sin(angle) / 16));
+            const position = level === 0 ? shore : (0, math_js_1.vec)(Math.cos(angle) * r * 24, y, Math.sin(angle) * r * 16);
+            ring.push(g.v(position, normal, level < 2 ? (0, exports.rgb)('#8b8775') : level < 4 ? (0, exports.rgb)('#625f56') : (0, exports.rgb)('#484a45'), pointIndex / perimeter.length, level / (levels.length - 1)));
+        }
+        rings.push(ring);
+    }
+    for (let level = 0; level < rings.length - 1; level++) {
+        const upper = rings[level], lower = rings[level + 1];
+        for (let segment = 0; segment < upper.length; segment++) {
+            const next = (segment + 1) % upper.length;
+            g.indices.push(upper[segment], upper[next], lower[segment], upper[next], lower[next], lower[segment]);
+        }
+    }
+    // Close the seabed end so the rock has no visible underside opening.
+    const bottomCenter = g.v((0, math_js_1.vec)(0, bottom, 0), (0, math_js_1.vec)(0, -1, 0), (0, exports.rgb)('#41443f'));
+    const bottomRing = rings[rings.length - 1];
+    for (let segment = 0; segment < bottomRing.length; segment++)
+        g.indices.push(bottomCenter, bottomRing[segment], bottomRing[(segment + 1) % bottomRing.length]);
     return g;
 }
 function coral(kind, seed) {
@@ -2594,136 +3090,153 @@ function equipment(kind) {
 }
 
 },
-"render/shaders.ts":function(require,module,exports){
+"render/terrain.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reefFragment = exports.reefVertex = void 0;
-exports.reefVertex = `precision highp float;
-attribute vec3 position;
-attribute vec3 normal;
-attribute vec4 color;
-attribute vec2 uv;
-uniform mat4 world;
-uniform mat4 viewProjection;
-uniform float uTime;
-uniform float uMode;
-uniform float uMotion;
-uniform float uSurface;
-uniform float uNight;
-uniform vec2 uCurrent;
-#ifdef INSTANCES
-attribute vec4 world0;
-attribute vec4 world1;
-attribute vec4 world2;
-attribute vec4 world3;
-#endif
-varying vec3 vWorld;
-varying vec3 vNormal;
-varying vec4 vColor;
-varying vec2 vUV;
-void main(){
- vec3 p=position;
- if(uMode==1.0){
-  p.x+=sin(uTime*.75+p.z*.7+p.x*.5)*uv.y*.08*uMotion;
-  p.z+=sin(uTime*.54+p.x*.6)*uv.y*.04*uMotion;
- }
- if(uMode==2.0){float tail=max(0.0,-p.z);p.x+=sin(uTime*4.3+p.z*7.0)*tail*tail*.12;}
- if(uMode==3.0){p.y+=sin(p.x*.30+uTime*.48)*.14+sin(p.z*.28-uTime*.3)*.09;}
- if(uMode==6.0){p.x+=sin(uTime*.17+p.y)*.35;p.y+=sin(uTime*.34+p.z)*.20;p.z+=mod(uTime*.23,6.0);}
- if(uMode==7.0){
-  float channel=exp(-pow((p.x-uCurrent.y)/12.0,2.0));
-  float current=uCurrent.x*(.45+channel*1.8)*(1.0+.12*sin(uTime*.023));
-  float tip=uv.y*uv.y*uMotion;
-  float phase=uTime*(.72+current*.55)+uv.x*6.28318+p.x*.31+p.z*.19;
-  p.x+=(sin(phase)*.14+current*.48*.16)*tip;
-  p.z+=(sin(phase-1.1)*.16+current*.48)*tip;
- }
- mat4 w=world;
- #ifdef INSTANCES
- w=mat4(world0,world1,world2,world3);
- #endif
- vec4 pos=w*vec4(p,1.0);
- vWorld=pos.xyz;
- vNormal=normalize(mat3(w)*normal);
- vColor=color;
- vUV=uv;
- gl_Position=viewProjection*pos;
-}`;
-exports.reefFragment = `precision highp float;
-varying vec3 vWorld;
-varying vec3 vNormal;
-varying vec4 vColor;
-varying vec2 vUV;
-uniform vec3 uEye;
-uniform vec3 uForward;
-uniform float uTime;
-uniform float uMode;
-uniform float uSurface;
-uniform float uFog;
-uniform float uLight;
-uniform float uNight;
-uniform vec2 uTorch;
-float caustic(vec2 p){
- float a=sin(p.x*1.47+uTime*.33+sin(p.y*.82-uTime*.23));
- float b=sin(p.y*1.42-uTime*.29+cos(p.x*.71+uTime*.17));
- return pow(max(0.0,1.0-abs(a+b)*.87),11.0);
+exports.SEABED_STEPS = exports.SEABED_SIZE = void 0;
+exports.sandHeight = sandHeight;
+exports.seabedGeometry = seabedGeometry;
+exports.mergeGrounded = mergeGrounded;
+const data_js_1 = require("../game/data.js");
+const math_js_1 = require("../game/math.js");
+const geometry_js_1 = require("./geometry.js");
+exports.SEABED_SIZE = 170;
+exports.SEABED_STEPS = 90;
+const sandSamples = new Float64Array((exports.SEABED_STEPS + 1) ** 2).fill(NaN);
+function sampleHeight(ix, iz) {
+    const index = iz * (exports.SEABED_STEPS + 1) + ix;
+    if (Number.isNaN(sandSamples[index]))
+        sandSamples[index] = (0, data_js_1.floorHeight)(-exports.SEABED_SIZE / 2 + ix * exports.SEABED_SIZE / exports.SEABED_STEPS, -exports.SEABED_SIZE / 2 + iz * exports.SEABED_SIZE / exports.SEABED_STEPS);
+    return sandSamples[index];
 }
-void main(){
- vec3 n=normalize(vNormal);
- float dist=length(vWorld-uEye);
- float depth=max(0.0,uSurface-vWorld.y);
- vec3 col=vColor.rgb;
- float alpha=1.0;
- if(uMode==3.0){
-  vec2 p=vWorld.xz;
-  float w=sin(p.x*.62+uTime*.44+sin(p.y*.26))+sin(p.y*.49-uTime*.3);
-  float threads=pow(max(0.0,1.0-abs(w)*.6),5.0);
-  vec3 to=normalize(vWorld-uEye);
-  float sun=pow(max(0.0,dot(to,normalize(vec3(-.35,1.0,.25)))),120.0);
-  vec3 daylight=mix(vec3(.12,.53,.60),vec3(.44,.78,.73),.48+w*.11)+threads*.055+sun*vec3(.66,.73,.57);
-  vec3 moonlight=vec3(.025,.105,.17)+threads*.025+sun*vec3(.15,.24,.34);
-  col=mix(daylight,moonlight,uNight);
- }
- else if(uMode==5.0){alpha=(1.0-vUV.y)*.075*pow(max(0.0,sin(vUV.x*3.14159)),1.5);col=mix(vec3(.62,.87,.76),vec3(.15,.39,.56),uNight);}
- else if(uMode==8.0){float rim=pow(1.0-abs(dot(n,normalize(uEye-vWorld))),2.0);col=vec3(.58,.86,.91);alpha=.10+rim*.50;}
- else if(uMode==6.0){col=mix(vec3(.54,.82,.78),vec3(.24,.47,.66),uNight);alpha=.34;}
- else {
-  float light=.65+.52*max(0.0,dot(n,normalize(vec3(-.4,1.0,-.23))));
-  float side=.08*max(0.0,dot(n,normalize(vec3(.7,.2,.5))));
-  col*=mix(light+side,.25+.18*max(0.0,n.y),uNight);
-  if(uMode!=4.0){
-   float c=(caustic(vWorld.xz)+caustic(vWorld.xz*.51+.3)*.35)*(1.0-step(uSurface+.03,vWorld.y));
-   col+=mix(vec3(.30,.47,.35),vec3(.10,.20,.30),uNight)*c*max(.10,n.y)*exp(-depth*.037)*(1.0-uNight);
-   col*=vec3(exp(-depth*.008),1.0,1.0);
-   float alignment=max(0.0,dot(normalize(vWorld-uEye),uForward));
-   float cone=pow(alignment,max(5.0,uTorch.x))*uLight*exp(-dist*max(.001,uTorch.y));
-   float core=pow(alignment,40.0)*uLight*exp(-dist*.12);
-   col+=vColor.rgb*(cone*.82+core*.45);
-  }
-  else col=col*.85+vColor.rgb*.3;
- }
- if(uMode!=4.0&&uMode!=3.0&&uMode!=6.0){
-  float underwater=1.0-step(uSurface,vWorld.y);
-  float submergedFog=(1.0-exp(-dist*uFog))*underwater;
-  vec3 deepFog=mix(vec3(.035,.31,.39),vec3(.012,.047,.085),uNight);
-  vec3 farFog=mix(vec3(.15,.51,.55),vec3(.035,.12,.20),uNight);
-  vec3 waterFog=mix(deepFog,farFog,clamp((vWorld.y+2.0)/uSurface,0.0,1.0));
-  col=mix(col,waterFog,clamp(submergedFog,0.0,.985));
-  float aboveFog=(1.0-exp(-dist*uFog*(uMode==9.0?.09:.34)))*(1.0-underwater);
-  vec3 skyFog=mix(vec3(.58,.77,.80),vec3(.018,.045,.10),uNight);
-  col=mix(col,skyFog,clamp(aboveFog,0.0,.8));
- }
- col=pow(max(col,vec3(0.0)),vec3(.96));
- gl_FragColor=vec4(col,alpha);
-}`;
+/** Height of the visible sand triangles, rather than the curved authoring function. */
+function sandHeight(x, z) {
+    const half = exports.SEABED_SIZE / 2, cell = exports.SEABED_SIZE / exports.SEABED_STEPS;
+    if (Math.abs(x) >= half || Math.abs(z) >= half)
+        return (0, data_js_1.floorHeight)(x, z);
+    const ix = Math.floor((x + half) / cell), iz = Math.floor((z + half) / cell);
+    const x0 = -half + ix * cell, z0 = -half + iz * cell;
+    const tx = (x - x0) / cell, tz = (z - z0) / cell;
+    const a = sampleHeight(ix, iz), b = sampleHeight(ix, iz + 1), c = sampleHeight(ix + 1, iz), d = sampleHeight(ix + 1, iz + 1);
+    return tx + tz <= 1 ? a + (c - a) * tx + (b - a) * tz : d + (b - d) * (1 - tx) + (c - d) * (1 - tz);
+}
+function seabedGeometry() {
+    const ground = new geometry_js_1.Geometry(), half = exports.SEABED_SIZE / 2;
+    const vertex = (x, z) => {
+        const eps = .08, n = (0, math_js_1.norm)((0, math_js_1.vec)((0, data_js_1.floorHeight)(x - eps, z) - (0, data_js_1.floorHeight)(x + eps, z), 2 * eps, (0, data_js_1.floorHeight)(x, z - eps) - (0, data_js_1.floorHeight)(x, z + eps)));
+        const grain = .92 + .06 * Math.sin(x * 5 + z * 6) + .035 * Math.sin(z * 19);
+        ground.v((0, math_js_1.vec)(x, (0, data_js_1.floorHeight)(x, z), z), n, (0, geometry_js_1.tint)((0, geometry_js_1.rgb)('#c5ceaf'), grain));
+    };
+    for (let iz = 0; iz <= exports.SEABED_STEPS; iz++)
+        for (let ix = 0; ix <= exports.SEABED_STEPS; ix++)
+            vertex(-half + ix * exports.SEABED_SIZE / exports.SEABED_STEPS, -half + iz * exports.SEABED_SIZE / exports.SEABED_STEPS);
+    for (let iz = 0; iz < exports.SEABED_STEPS; iz++)
+        for (let ix = 0; ix < exports.SEABED_STEPS; ix++) {
+            const a = iz * (exports.SEABED_STEPS + 1) + ix, b = a + exports.SEABED_STEPS + 1;
+            ground.indices.push(a, b, a + 1, b, b + 1, a + 1);
+        }
+    // Coarse outer rings meet the exact inner boundary and continue beneath the islands.
+    // Gameplay and collision retain the authored dive area.
+    const radii = [half, 110, 160, 240, 340, 450], ringSize = exports.SEABED_STEPS * 4, start = ground.positions.length / 3;
+    for (const radius of radii)
+        for (let side = 0; side < 4; side++)
+            for (let i = 0; i < exports.SEABED_STEPS; i++) {
+                const t = -radius + i * 2 * radius / exports.SEABED_STEPS;
+                vertex(side === 0 ? t : side === 1 ? radius : side === 2 ? -t : -radius, side === 0 ? -radius : side === 1 ? t : side === 2 ? radius : -t);
+            }
+    for (let ring = 0; ring < radii.length - 1; ring++)
+        for (let i = 0; i < ringSize; i++) {
+            const j = (i + 1) % ringSize, a = start + ring * ringSize + i, b = a + ringSize, c = start + ring * ringSize + j, d = c + ringSize;
+            ground.indices.push(a, c, b, c, d, b);
+        }
+    return ground;
+}
+/** Embed each root footprint in the actual sand, including steep trench slopes. */
+function mergeGrounded(destination, source, p, s, yaw) {
+    const start = destination.positions.length;
+    destination.merge(source, (0, math_js_1.vec)(p.x, sandHeight(p.x, p.z) - .035, p.z), s, yaw);
+    const center = sandHeight(p.x, p.z);
+    for (let i = start; i < destination.positions.length; i += 3)
+        destination.positions[i + 1] += sandHeight(destination.positions[i], destination.positions[i + 2]) - center;
+}
 
 },
 "input.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InputController = void 0;
+exports.gamepadKey = gamepadKey;
+exports.gamepadSelectionKey = gamepadSelectionKey;
+exports.knownBackboneProfile = knownBackboneProfile;
 const simulation_js_1 = require("./game/simulation.js");
 const math_js_1 = require("./game/math.js");
+const PAD_AXES = ['moveX', 'moveZ', 'lookX', 'lookY'];
+const PAD_BUTTONS = [
+    { action: 'spear', prompt: 'Press and hold the control you want to draw the spear (RT or another trigger works).' },
+    { action: 'interact', prompt: 'Press the control you want to hold for interaction.' },
+    { action: 'up', prompt: 'Press the control you want to use to ascend.' },
+    { action: 'down', prompt: 'Press the control you want to use to descend.' },
+    { action: 'scooter', prompt: 'Press the control that toggles your scooter.' },
+    { action: 'steady', prompt: 'Press the control that steadies the camera.' },
+    { action: 'boost', prompt: 'Press the control that gives a stronger fin kick.' },
+    { action: 'pause', prompt: 'Press the control that pauses the dive.' },
+    { action: 'light', prompt: 'Press the control that toggles your head torch.' },
+    { action: 'journal', prompt: 'Press the control that opens the reef chart.' },
+    { action: 'menuConfirm', prompt: 'Press the menu confirm control.' },
+    { action: 'menuBack', prompt: 'Press the menu back or cancel control.' },
+    { action: 'menuPrevious', prompt: 'Press the menu up / previous control.' },
+    { action: 'menuNext', prompt: 'Press the menu down / next control.' },
+];
+const finiteAxis = (n) => Number.isFinite(n) ? (0, math_js_1.clamp)(n, -1, 1) : 0;
+const rawAxis = (n) => Number.isFinite(n) ? n : 0;
+const median = (xs) => { const a = [...xs].sort((x, y) => x - y); return a.length ? a[Math.floor(a.length / 2)] : 0; };
+function gamepadKey(pad) { return `${String(pad.id || 'Unknown gamepad').trim().replace(/\s+/g, ' ')}::${pad.mapping || 'raw'}::a${pad.axes.length}::b${pad.buttons.length}`; }
+function gamepadSelectionKey(pad) { return `${gamepadKey(pad)}::slot${pad.index}`; }
+function standardProfile(pad) {
+    const standard = pad.mapping === 'standard';
+    return { key: gamepadKey(pad), id: pad.id || 'Unknown gamepad', mapping: pad.mapping || '', axisCount: pad.axes.length, buttonCount: pad.buttons.length,
+        axes: { moveX: { index: 0, sign: 1 }, moveZ: { index: 1, sign: -1 }, lookX: { index: 2, sign: 1 }, lookY: { index: 3, sign: 1 } },
+        centers: Array.from(pad.axes, () => 0),
+        buttons: { spear: 7, interact: 0, up: 3, down: 1, scooter: 2, steady: 4, boost: 5, pause: standard ? 9 : 9, light: 6, journal: standard ? 8 : 8, menuConfirm: 0, menuBack: 1, menuPrevious: 12, menuNext: 13 },
+        axisButtons: {}, moveDeadzone: .14, lookDeadzone: .2 };
+}
+/** Narrow known-good preset from Spin Vector's exact Windows USB capture. */
+function knownBackboneProfile(pad) {
+    const id = String(pad.id || '').toLowerCase();
+    if (!/backbone/.test(id) || !/vendor:\s*358a/.test(id) || !/product:\s*0204/.test(id) || pad.mapping === 'standard' || pad.axes.length < 6 || pad.buttons.length < 12)
+        return null;
+    const profile = standardProfile(pad);
+    profile.axes = { moveX: { index: 0, sign: 1 }, moveZ: { index: 1, sign: -1 }, lookX: { index: 2, sign: 1 }, lookY: { index: 5, sign: 1 } };
+    profile.centers = Array.from(pad.axes, () => 0);
+    profile.centers[3] = -1;
+    profile.centers[4] = -1;
+    if (profile.centers.length > 9)
+        profile.centers[9] = 1;
+    profile.axisButtons = { spear: { index: 3, value: 1 }, light: { index: 4, value: 1 } };
+    profile.buttons = { spear: 9, interact: 0, up: 3, down: 1, scooter: 2, steady: 4, boost: 5, pause: 11, light: 6, journal: 8, menuConfirm: 0, menuBack: 1, menuPrevious: 12, menuNext: 13 };
+    return profile;
+}
+function profileFor(settings, pad) { return settings.gamepads?.[gamepadKey(pad)] || knownBackboneProfile(pad) || standardProfile(pad); }
+function mappedAxis(pad, profile, axis) {
+    const binding = profile.axes[axis], center = finiteAxis(profile.centers[binding.index]);
+    const raw = finiteAxis(pad.axes[binding.index]), delta = raw - center;
+    const range = delta < 0 ? center + 1 : 1 - center;
+    return (0, math_js_1.clamp)((range > .001 ? delta / range : 0) * binding.sign, -1, 1);
+}
+function mappedButton(pad, profile, action) {
+    const index = profile.buttons[action];
+    if (index !== undefined) {
+        const b = pad.buttons[index];
+        if (b && (b.pressed || b.value >= .5))
+            return true;
+    }
+    const bind = profile.axisButtons[action];
+    if (bind) {
+        const v = finiteAxis(pad.axes[bind.index]), travel = Math.abs(bind.value - finiteAxis(profile.centers[bind.index]));
+        return travel > .1 && Math.abs(v - bind.value) <= Math.max(.07, travel * .24);
+    }
+    return false;
+}
 class InputController {
     constructor(canvas, settings, command) {
         this.canvas = canvas;
@@ -2740,6 +3253,13 @@ class InputController {
         this.joyX = 0;
         this.joyZ = 0;
         this.previousPad = [];
+        this.previousPadActions = {};
+        this.blockedPadActions = new Set();
+        this.selectedPadKey = null;
+        this.selectedPadIndex = null;
+        this.currentPad = null;
+        this.calibration = null;
+        this.padDisconnected = false;
         this.lookPointer = -1;
         this.lastX = 0;
         this.lastY = 0;
@@ -2748,6 +3268,8 @@ class InputController {
         this.touchMode = matchMedia('(pointer:coarse)').matches;
         this.gamepad = false;
         window.addEventListener('keydown', e => {
+            if (this.calibration)
+                return;
             if (e.target?.matches('input,select,textarea'))
                 return;
             const action = this.actionFor(e.code);
@@ -2888,8 +3410,130 @@ class InputController {
     setActive(v) {
         this.active = v;
         this.clear();
+        if (v) {
+            const pad = this.selectedGamepad();
+            if (pad) {
+                const profile = profileFor(this.settings, pad);
+                for (const item of PAD_BUTTONS)
+                    if (mappedButton(pad, profile, item.action))
+                        this.blockedPadActions.add(item.action);
+            }
+        }
         if (!v && document.pointerLockElement)
             document.exitPointerLock();
+    }
+    pads() { try {
+        return Array.from(navigator.getGamepads?.() || []).filter((p) => !!p?.connected);
+    }
+    catch {
+        return [];
+    } }
+    padChoices() { return this.pads().map(p => ({ key: gamepadSelectionKey(p), profileKey: gamepadKey(p), index: p.index, id: p.id || 'Unknown gamepad', mapping: p.mapping || 'raw', axes: Array.from(p.axes, rawAxis), buttons: Array.from(p.buttons, b => Number(b.value.toFixed(2))) })); }
+    selectPad(selectionKey) { const pad = selectionKey ? this.pads().find(p => gamepadSelectionKey(p) === selectionKey) : null; this.selectedPadKey = pad ? gamepadKey(pad) : null; this.selectedPadIndex = pad?.index ?? null; this.previousPad = []; this.previousPadActions = {}; this.calibration = null; this.cancelDraw = true; this.release = false; }
+    selectedGamepad() { const pads = this.pads(); if (!this.selectedPadKey)
+        return pads[0] || null; return pads.find(p => gamepadKey(p) === this.selectedPadKey && p.index === this.selectedPadIndex) || pads.find(p => gamepadKey(p) === this.selectedPadKey) || null; }
+    startCalibration() {
+        const pad = this.selectedGamepad();
+        if (!pad) {
+            this.calibration = null;
+            return false;
+        }
+        this.selectedPadKey = gamepadKey(pad);
+        this.selectedPadIndex = pad.index;
+        this.calibration = { key: gamepadKey(pad), phase: 'neutral', neutral: [], centers: [], axisStep: 0, buttonStep: 0, waitingRelease: false, axes: {}, buttons: {}, axisButtons: {} };
+        this.previousPad = Array.from(pad.buttons, b => b.pressed || b.value >= .5);
+        this.previousPadActions = {};
+        this.cancelDraw = true;
+        this.release = false;
+        this.drawToggle = false;
+        return true;
+    }
+    cancelCalibration() { this.calibration = null; this.previousPad = []; this.previousPadActions = {}; this.cancelDraw = true; this.release = false; this.drawToggle = false; }
+    useCalibration() { var _a; if (!this.calibration?.profile)
+        return false; (_a = this.settings).gamepads ?? (_a.gamepads = {}); this.settings.gamepads[this.calibration.key] = this.calibration.profile; this.calibration = null; this.previousPad = []; this.previousPadActions = {}; this.cancelDraw = true; this.release = false; return true; }
+    restorePadDefaults() { const pad = this.selectedGamepad(); if (pad && this.settings.gamepads)
+        delete this.settings.gamepads[gamepadKey(pad)]; this.cancelCalibration(); }
+    calibrationStatus() {
+        const c = this.calibration;
+        const prompts = ['Push LEFT stick fully RIGHT', 'Push LEFT stick fully FORWARD', 'Push RIGHT stick fully RIGHT', 'Push RIGHT stick fully DOWN'];
+        if (!c)
+            return { phase: 'idle', prompt: '', step: 0, total: PAD_BUTTONS.length + PAD_AXES.length, completed: false };
+        if (c.phase === 'neutral')
+            return { phase: c.phase, prompt: 'Let go of both sticks and every button. Hold neutral while the center is sampled.', step: 0, total: PAD_BUTTONS.length + PAD_AXES.length, completed: false };
+        if (c.phase === 'axes')
+            return { phase: c.phase, prompt: c.waitingRelease ? 'Return the stick to neutral before continuing.' : prompts[c.axisStep], step: c.axisStep + 1, total: PAD_BUTTONS.length + PAD_AXES.length, completed: false };
+        if (c.phase === 'buttons')
+            return { phase: c.phase, prompt: c.waitingRelease ? 'Release all controls and return the sticks to neutral.' : PAD_BUTTONS[c.buttonStep].prompt, step: PAD_AXES.length + c.buttonStep + 1, total: PAD_BUTTONS.length + PAD_AXES.length, completed: false };
+        return { phase: c.phase, prompt: 'Calibration captured. Test it, then choose Use or cancel to discard it.', step: PAD_BUTTONS.length + PAD_AXES.length, total: PAD_BUTTONS.length + PAD_AXES.length, completed: true };
+    }
+    controllerStatus() {
+        const pads = this.padChoices(), pad = this.selectedGamepad(), c = this.calibrationStatus();
+        const key = pad ? gamepadKey(pad) : this.selectedPadKey;
+        const staged = this.calibration?.profile;
+        const activeProfile = staged || (pad ? profileFor(this.settings, pad) : null);
+        const test = pad && activeProfile ? `Move ${mappedAxis(pad, activeProfile, 'moveX').toFixed(2)} / ${mappedAxis(pad, activeProfile, 'moveZ').toFixed(2)} · Look ${mappedAxis(pad, activeProfile, 'lookX').toFixed(2)} / ${mappedAxis(pad, activeProfile, 'lookY').toFixed(2)} · Spear ${mappedButton(pad, activeProfile, 'spear') ? 'pressed' : 'released'} · Interact ${mappedButton(pad, activeProfile, 'interact') ? 'pressed' : 'released'} · Ascend ${mappedButton(pad, activeProfile, 'up') ? 'pressed' : 'released'} · Descend ${mappedButton(pad, activeProfile, 'down') ? 'pressed' : 'released'} · Deadzone move ${activeProfile.moveDeadzone.toFixed(2)} / look ${activeProfile.lookDeadzone.toFixed(2)}${staged ? ' · staged' : ' · active'}` : 'Connect a controller to test it.';
+        return { pads, selectedKey: pad ? gamepadSelectionKey(pad) : null, profileKey: key, connected: !!pad, rawAxes: pad ? Array.from(pad.axes, rawAxis) : [], rawButtons: pad ? Array.from(pad.buttons, b => Number(b.value.toFixed(2))) : [],
+            saved: !!(key && this.settings.gamepads?.[key]), preset: !!pad && !this.settings.gamepads?.[gamepadKey(pad)] && !!knownBackboneProfile(pad), calibration: c, scanning: !pads.length, test };
+    }
+    updateCalibration(pad) {
+        const c = this.calibration;
+        if (!c || c.phase === 'complete' || gamepadKey(pad) !== c.key)
+            return;
+        const axes = Array.from(pad.axes, finiteAxis), pressed = Array.from(pad.buttons, b => b.pressed || b.value >= .5);
+        const usedAxes = new Set(Object.values(c.axes).map(x => x?.index));
+        const centered = () => axes.every((v, i) => Math.abs(v - finiteAxis(c.centers[i])) < .24);
+        if (c.phase === 'neutral') {
+            if (pressed.some(Boolean)) {
+                c.neutral = [];
+                return;
+            }
+            c.neutral.push(axes);
+            if (c.neutral.length >= 12) {
+                c.centers = Array.from({ length: Math.max(pad.axes.length, ...c.neutral.map(x => x.length)) }, (_, i) => median(c.neutral.map(x => finiteAxis(x[i]))));
+                c.phase = 'axes';
+            }
+            return;
+        }
+        if (c.waitingRelease) {
+            if (!pressed.some(Boolean) && centered())
+                c.waitingRelease = false;
+            return;
+        }
+        if (c.phase === 'axes') {
+            const ranked = axes.map((v, index) => ({ index, delta: v - finiteAxis(c.centers[index]) })).filter(x => !usedAxes.has(x.index)).sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+            if (!ranked.length || Math.abs(ranked[0].delta) < .52)
+                return;
+            const axis = PAD_AXES[c.axisStep];
+            c.axes[axis] = { index: ranked[0].index, sign: ranked[0].delta < 0 ? -1 : 1 };
+            c.axisStep++;
+            c.waitingRelease = true;
+            if (c.axisStep >= PAD_AXES.length) {
+                c.phase = 'buttons';
+                c.waitingRelease = true;
+            }
+            return;
+        }
+        const action = PAD_BUTTONS[c.buttonStep].action;
+        const buttonIndex = pressed.findIndex(Boolean);
+        if (buttonIndex >= 0)
+            c.buttons[action] = buttonIndex;
+        else {
+            const candidate = axes.map((value, index) => ({ index, value, delta: value - finiteAxis(c.centers[index]) })).filter(x => !usedAxes.has(x.index)).sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))[0];
+            if (!candidate || Math.abs(candidate.delta) < .12)
+                return;
+            c.axisButtons[action] = { index: candidate.index, value: candidate.value };
+        }
+        c.buttonStep++;
+        c.waitingRelease = true;
+        if (c.buttonStep >= PAD_BUTTONS.length) {
+            const noise = (axis) => { const index = c.axes[axis].index; return Math.max(0, ...c.neutral.map(row => Math.abs(finiteAxis(row[index]) - finiteAxis(c.centers[index])))); };
+            const moveDeadzone = (0, math_js_1.clamp)(Math.max(noise('moveX'), noise('moveZ')) + .06, .12, .35);
+            const lookDeadzone = (0, math_js_1.clamp)(Math.max(noise('lookX'), noise('lookY')) + .08, .17, .4);
+            const profile = { key: c.key, id: pad.id || 'Unknown gamepad', mapping: pad.mapping || '', axisCount: pad.axes.length, buttonCount: pad.buttons.length, axes: c.axes, centers: c.centers, buttons: c.buttons, axisButtons: c.axisButtons, moveDeadzone, lookDeadzone };
+            c.profile = profile;
+            c.phase = 'complete';
+            c.waitingRelease = false;
+        }
     }
     clear() {
         this.keys.clear();
@@ -2901,6 +3545,18 @@ class InputController {
         this.drawToggle = false;
         this.lookPointer = -1;
         this.hoverX = null;
+        this.previousPad = [];
+        this.previousPadActions = {};
+        this.blockedPadActions.clear();
+        if (this.active) {
+            const pad = this.selectedGamepad();
+            if (pad) {
+                const profile = profileFor(this.settings, pad);
+                for (const item of PAD_BUTTONS)
+                    if (mappedButton(pad, profile, item.action))
+                        this.blockedPadActions.add(item.action);
+            }
+        }
         const knob = document.getElementById('joy-knob');
         if (knob)
             knob.style.transform = 'translate(0,0)';
@@ -2982,55 +3638,85 @@ class InputController {
         return this.keys.has(this.settings.keys[a]) || this.touch.has(a);
     }
     sample(dt) {
-        let pads = [];
-        try {
-            pads = Array.from(navigator.getGamepads?.() || []);
-        }
-        catch { }
-        const pad = pads.find(p => p?.connected);
+        const pad = this.selectedGamepad();
+        this.padDisconnected = !!this.currentPad && !pad;
         this.gamepad = !!pad;
         let px = 0, pz = 0, py = 0, draw = false, interact = false, steady = false, boost = false;
+        if (this.padDisconnected && this.currentPad) {
+            this.cancelDraw = true;
+            this.drawToggle = false;
+            this.release = false;
+            this.previousPad = [];
+            this.previousPadActions = {};
+        }
         if (pad) {
-            const axes = pad.axes.map(x => Math.abs(x) > .16 ? x : 0), pressed = pad.buttons.map(b => b.pressed), edge = (n) => pressed[n] && !this.previousPad[n];
-            if (this.active) {
-                px = axes[0] || 0;
-                pz = -(axes[1] || 0);
-                py = (pressed[3] ? 1 : 0) - (pressed[1] ? 1 : 0);
-                this.lookX += (axes[2] || 0) * dt * 570;
-                this.lookY += (axes[3] || 0) * dt * 570;
-                draw = pressed[7];
-                if (this.settings.toggleDraw && edge(7))
+            const key = gamepadKey(pad), priorKey = this.currentPad ? gamepadKey(this.currentPad) : null;
+            if (priorKey && priorKey !== key) {
+                this.cancelDraw = true;
+                this.release = false;
+                this.previousPad = [];
+                this.previousPadActions = {};
+            }
+            this.currentPad = pad;
+            this.updateCalibration(pad);
+        }
+        else
+            this.currentPad = null;
+        if (pad) {
+            const profile = profileFor(this.settings, pad);
+            const pressed = pad.buttons.map(b => b.pressed || b.value >= .5);
+            const held = (a) => mappedButton(pad, profile, a) && !this.blockedPadActions.has(a);
+            const rawActions = Object.fromEntries(PAD_BUTTONS.map(x => [x.action, mappedButton(pad, profile, x.action)]));
+            for (const item of PAD_BUTTONS)
+                if (!rawActions[item.action])
+                    this.blockedPadActions.delete(item.action);
+            const actionNow = Object.fromEntries(PAD_BUTTONS.map(x => [x.action, rawActions[x.action] && !this.blockedPadActions.has(x.action)]));
+            const edge = (a) => actionNow[a] && !this.previousPadActions[a];
+            if (this.active && !this.calibration) {
+                const dz = profile.moveDeadzone;
+                const axis = (a, deadzone) => { const value = mappedAxis(pad, profile, a); return Math.abs(value) < deadzone ? 0 : Math.sign(value) * (Math.abs(value) - deadzone) / (1 - deadzone); };
+                px = axis('moveX', dz);
+                pz = axis('moveZ', dz);
+                py = (held('up') ? 1 : 0) - (held('down') ? 1 : 0);
+                const lookX = axis('lookX', profile.lookDeadzone), lookY = axis('lookY', profile.lookDeadzone);
+                this.lookX += lookX * dt * 570;
+                this.lookY += lookY * dt * 570;
+                draw = held('spear');
+                if (this.settings.toggleDraw && edge('spear'))
                     this.toggle();
-                if (!this.settings.toggleDraw && !draw && this.previousPad[7])
+                if (!this.settings.toggleDraw && !draw && this.previousPadActions.spear)
                     this.release = true;
-                interact = pressed[0];
-                steady = pressed[4];
-                boost = pressed[5];
-                if (edge(2))
+                interact = held('interact');
+                steady = held('steady');
+                boost = held('boost');
+                if (edge('scooter'))
                     this.command('scooter');
-                if (edge(9))
+                if (edge('light'))
+                    this.command('light');
+                if (edge('pause'))
                     this.command('pause');
-                if (edge(8))
+                if (edge('journal'))
                     this.command('journal');
             }
-            else {
-                if (edge(12) || edge(13)) {
+            else if (!this.calibration) {
+                if (edge('menuPrevious') || edge('menuNext')) {
                     const controls = Array.from(document.querySelectorAll('#panel button:not(:disabled), #panel select, #panel input')).filter(e => e.offsetParent !== null), idx = controls.indexOf(document.activeElement);
-                    controls[(idx + (edge(12) ? -1 : 1) + controls.length) % controls.length]?.focus();
+                    controls[(idx + (edge('menuPrevious') ? -1 : 1) + controls.length) % controls.length]?.focus();
                 }
-                if (edge(0))
+                if (edge('menuConfirm'))
                     document.activeElement?.click();
-                if (edge(1))
+                if (edge('menuBack'))
                     document.querySelector('#panel [data-close]')?.click();
             }
             this.previousPad = pressed;
+            this.previousPadActions = actionNow;
         }
         const factor = .0025 * this.settings.sensitivity;
         const frame = { ...simulation_js_1.EMPTY_INPUT, moveX: (0, math_js_1.clamp)((this.down('right') ? 1 : 0) - (this.down('left') ? 1 : 0) + this.joyX + px, -1, 1), moveZ: (0, math_js_1.clamp)((this.down('forward') ? 1 : 0) - (this.down('back') ? 1 : 0) + this.joyZ + pz, -1, 1), vertical: (0, math_js_1.clamp)((this.down('up') ? 1 : 0) - (this.down('down') ? 1 : 0) + py, -1, 1), lookX: this.lookX * factor, lookY: this.lookY * factor * (this.settings.invertY ? -1 : 1), boost: this.down('boost') || boost, steady: this.down('steady') || steady, draw: this.settings.toggleDraw ? this.drawToggle : this.down('spear') || draw, release: this.release, cancelDraw: this.cancelDraw, interact: this.down('interact') || interact };
         this.lookX = this.lookY = 0;
         this.release = false;
         this.cancelDraw = false;
-        return this.active ? frame : { ...simulation_js_1.EMPTY_INPUT };
+        return this.active && !this.calibration ? frame : this.padDisconnected && this.active ? { ...simulation_js_1.EMPTY_INPUT, cancelDraw: frame.cancelDraw } : { ...simulation_js_1.EMPTY_INPUT };
     }
 }
 exports.InputController = InputController;
@@ -3438,6 +4124,9 @@ class UI {
         this.allocation = { sell: 0, eat: 0, donate: 0 };
         this.confirmAction = '';
         this.confirmText = '';
+        this.controllerInventory = '';
+        this.qualityReloadPending = false;
+        this.controllerReadout = { pads: [], selectedKey: null, connected: false, rawAxes: [], rawButtons: [], saved: false, calibration: { phase: 'idle', prompt: '', step: 0, total: 17, completed: false }, scanning: true };
         this.panel = document.getElementById('panel');
         this.hud = document.getElementById('hud');
         this.panel.addEventListener('click', e => {
@@ -3501,6 +4190,9 @@ class UI {
             if (el.dataset.night !== undefined) {
                 this.night = el.checked;
             }
+            if (el.id === 'gamepad-choice') {
+                this.dispatch('gamepad-select', el.value || null);
+            }
             if (el.dataset.setting) {
                 const name = el.dataset.setting;
                 const value = el.type === 'checkbox' ? el.checked : el.type === 'range' ? Number(el.value) : el.value;
@@ -3549,8 +4241,53 @@ class UI {
         }, true);
         document.getElementById('pause-button').onclick = () => this.dispatch('screen', 'pause');
         document.getElementById('chart-button').onclick = () => this.dispatch('screen', 'journal');
+        document.getElementById('fullscreen-button').onclick = () => this.dispatch('fullscreen');
+    }
+    updateControllerStatus(status) {
+        this.controllerReadout = status;
+        if (this.screen !== 'settings')
+            return;
+        const select = document.getElementById('gamepad-choice');
+        const inventory = status.pads.map((p) => p.key).join('|');
+        if (select && inventory !== this.controllerInventory) {
+            const hadFocus = document.activeElement === select;
+            select.innerHTML = status.pads.length ? status.pads.map((p) => `<option value="${esc(p.key)}">Gamepad ${p.index + 1} · ${esc(p.id)} · ${esc(p.mapping)} · ${p.axes.length} axes / ${p.buttons.length} buttons</option>`).join('') : '<option value="">No controller detected</option>';
+            if (status.selectedKey)
+                select.value = status.selectedKey;
+            this.controllerInventory = inventory;
+            if (hadFocus)
+                select.focus({ preventScroll: true });
+        }
+        const statusEl = document.getElementById('gamepad-status'), rawEl = document.getElementById('gamepad-raw'), stepEl = document.getElementById('gamepad-step'), testEl = document.getElementById('gamepad-test');
+        if (statusEl)
+            statusEl.textContent = status.connected ? `${status.pads.find((p) => p.key === status.selectedKey)?.id || 'Controller'} · ${status.pads.find((p) => p.key === status.selectedKey)?.mapping || 'raw'} · ${status.pads.find((p) => p.key === status.selectedKey)?.axes.length ?? 0} axes / ${status.pads.find((p) => p.key === status.selectedKey)?.buttons.length ?? 0} buttons · ${status.saved ? 'saved calibration active' : status.preset ? 'known Backbone USB preset active' : 'standard fallback active'}` : 'Waiting for a controller. Click Scan after plugging it in, then press any controller button if the browser needs a wake gesture.';
+        if (rawEl)
+            rawEl.textContent = `Axes: [${status.rawAxes.map((v, i) => `${i}:${v.toFixed(2)}`).join('  ')}]\nButtons: [${status.rawButtons.map((v, i) => `${i}:${v.toFixed(2)}`).join('  ')}]`;
+        if (stepEl)
+            stepEl.textContent = status.calibration.phase === 'idle' ? '' : `${status.calibration.step}/${status.calibration.total} · ${status.calibration.prompt}`;
+        if (testEl)
+            testEl.textContent = `Live test · ${status.test}`;
+        const start = document.getElementById('gamepad-start'), use = document.getElementById('gamepad-use');
+        const cancel = document.getElementById('gamepad-cancel'), restore = document.getElementById('gamepad-restore');
+        if (start)
+            start.disabled = !status.connected || status.calibration.phase !== 'idle';
+        if (use)
+            use.hidden = !status.calibration.completed;
+        if (cancel)
+            cancel.hidden = status.calibration.phase === 'idle';
+        if (restore)
+            restore.disabled = !status.connected || !status.saved;
     }
     header(title, eyebrow = 'REEF SWEEP / LANTERN BAY') { return `<div class="modal-header"><div><div class="eyebrow">${eyebrow}</div><h2>${title}</h2></div><button class="close" data-close aria-label="Close">×</button></div>`; }
+    updateFullscreenState(active) { for (const button of document.querySelectorAll('[data-fullscreen-label]')) {
+        button.textContent = active ? 'Exit full screen' : 'Full screen';
+        button.setAttribute('aria-label', active ? 'Exit full screen' : 'Enter full screen');
+        button.title = active ? 'Exit full screen' : 'Enter full screen';
+    } const hud = document.getElementById('fullscreen-button'); if (hud) {
+        hud.textContent = active ? '×' : '⛶';
+        hud.setAttribute('aria-label', active ? 'Exit full screen' : 'Enter full screen');
+        hud.title = active ? 'Exit full screen' : 'Enter full screen';
+    } }
     show(screen) {
         this.stopFilleting();
         this.screen = screen;
@@ -3571,7 +4308,7 @@ class UI {
                 html = this.help(s);
                 break;
             case 'pause':
-                html = `<section class="modal narrow">${this.header('Take a breath.', 'DIVE PAUSED')}<p class="muted">Your air, wildlife and work are paused.</p><div class="button-row"><button class="primary" data-action="resume">Back to the reef</button><button data-screen="journal">Chart & field notes</button><button data-screen="settings">Settings</button><button data-screen="help">How to dive</button></div><div class="rule"></div><p class="tiny muted">Save and return to the harbour without ending this outing. Resume from this position later.</p><div class="button-row"><button data-action="suspend">Suspend dive</button><button class="danger" data-action="rescue-confirm">Request rescue</button></div><p class="tiny muted" style="margin-top:15px">A rescue forfeits this outing’s catch and costs $85. Completed conservation work remains.</p></section>`;
+                html = `<section class="modal narrow">${this.header('Take a breath.', 'DIVE PAUSED')}<p class="muted">Your air, wildlife and work are paused.</p><div class="button-row"><button class="primary" data-action="resume">Back to the reef</button><button data-screen="journal">Chart & field notes</button><button data-screen="settings">Settings</button><button data-screen="help">How to dive</button><button data-action="fullscreen" data-fullscreen-label>Full screen</button></div><div class="rule"></div><p class="tiny muted">Save and return to the harbour without ending this outing. Resume from this position later.</p><div class="button-row"><button data-action="suspend">Suspend dive</button><button class="danger" data-action="rescue-confirm">Request rescue</button></div><p class="tiny muted" style="margin-top:15px">A rescue forfeits this outing’s catch and costs $85. Completed conservation work remains.</p></section>`;
                 break;
             case 'settings':
                 html = this.settings(s);
@@ -3601,6 +4338,8 @@ class UI {
                 break;
         }
         this.panel.innerHTML = html;
+        if (screen === 'settings' && this.qualityReloadPending)
+            this.panel.querySelector('[data-setting="quality"]')?.closest('.setting')?.insertAdjacentHTML('afterend', '<div class="quality-reload-note" role="status"><p>High graphics saved. Reload to apply full reef detail and shadows.</p><div class="button-row"><button class="primary" data-action="quality-reload">Reload now</button><button data-action="quality-later">Later</button></div></div>');
         if (screen === 'dock') {
             this.panel.querySelector('.launch-row')?.insertAdjacentHTML('beforebegin', this.nightControl(p));
             const orderSelect = this.panel.querySelector('#order-choice');
@@ -3620,13 +4359,19 @@ class UI {
         }
         if (screen === 'filleting')
             this.startFilleting();
+        this.updateFullscreenState(!!document.fullscreenElement || !!document.webkitFullscreenElement);
         requestAnimationFrame(() => (screen === 'filleting' ? this.panel.querySelector('[data-action="fillet-cut"]') : this.panel.querySelector('button:not(:disabled),select'))?.focus({ preventScroll: true }));
     }
-    dock(p) { const site = data_js_1.SITES[this.site]; return `<header class="topbar"><div class="wordmark">Reef Sweep<span>DIVING CO.</span></div><nav class="toplinks" aria-label="Harbour"><span class="wallet"><strong>${(0, math_js_1.money)(p.cash)}</strong> Day ${p.day} · ${p.audience} followers</span><button data-screen="gear">Equipment</button><button data-screen="events">Events${p.day % 3 === 0 ? ' •' : ''}</button><button data-screen="settings" aria-label="Settings">⚙</button><button data-screen="saves" aria-label="Save slots">Saves</button></nav></header><div class="dock-main"><section class="hero"><div class="eyebrow overline">A SAMFA12 GAME · LANTERN BAY</div><h1>A little room<br>for <em>life.</em></h1><p>Follow the light. Learn the reef.<br>Build a diving company that leaves<br>something better behind.</p><div class="hero-progress"><div><strong>${p.totalRemoved}</strong><span>lionfish removed</span></div><div><strong>${p.totalRestored}</strong><span>fragments planted</span></div><div><strong>${p.reputation}</strong><span>reputation</span></div></div><button class="link-button" data-screen="help" style="margin-top:18px;font-size:12px">Your first dive? Start here ↗</button></section><section class="dock-card"><div class="eyebrow">THE NEXT OUTING</div><h2>The reef is waiting.</h2><div class="site-selector">${Object.values(data_js_1.SITES).map(t => `<button class="site-choice ${this.site === t.id ? 'selected' : ''}" data-site="${t.id}" ${!(0, data_js_1.siteUnlocked)(p, t.id) ? 'disabled' : ''}><span class="micro">${t.id === 'gardens' ? '01 / SHALLOWS' : '02 / CHANNEL'}</span><strong>${t.name}</strong><span class="tiny">${(0, data_js_1.siteUnlocked)(p, t.id) ? t.id === 'gardens' ? 'Gentle drift · nursery' : 'Stronger current · tall arches' : '6 removals or 5 reputation'}</span></button>`).join('')}</div><p class="site-copy">${site.description}</p><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, this.site)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, this.site)}%"></i></div><label class="field" for="order-choice">Take a field contract</label><select id="order-choice" ${p.active || p.pending ? 'disabled' : ''}><option value="catch" ${this.order === 'catch' ? 'selected' : ''}>Restaurant · Sell 4 lionfish</option><option value="cleanup" ${this.order === 'cleanup' ? 'selected' : ''}>Cleanup · Remove 2 pieces of gear</option><option value="restore" ${this.order === 'restore' ? 'selected' : ''}>Restoration · Plant 2 fragments</option></select><p id="order-detail" class="contract-note">${orderText[this.order]}</p><div class="launch-row"><button class="primary" data-action="${p.pending ? 'review' : p.active ? 'resume' : 'dive'}">${p.pending ? 'Review landed catch' : p.active ? 'Resume suspended dive' : 'Begin dive'} <span aria-hidden="true">↗</span></button><button data-screen="journal" title="Reef chart">Chart</button></div><p class="status-note">${p.pending ? 'Your last outing is ready to settle.' : p.active ? 'Saved mid-dive. Air and wildlife have been paused.' : this.event ? 'Event entered · Land safely to record your score.' : 'Air filled · Nursery fragments stocked · Pole spear ready'}</p></section></div><footer class="bottomline"><span class="credit">Inspired by Lionfish Extermination Corp. Independent and unaffiliated.</span><span>First chapter · v0.2 preview · Local saves · <button class="link-button" data-screen="help" style="font-size:10px">Credits & controls</button></span></footer>`; }
+    dock(p) { const site = data_js_1.SITES[this.site]; return `<header class="topbar"><div class="wordmark">Reef Sweep<span>DIVING CO.</span></div><nav class="toplinks" aria-label="Harbour"><span class="wallet"><strong>${(0, math_js_1.money)(p.cash)}</strong> Day ${p.day} · ${p.audience} followers</span><button data-screen="gear">Equipment</button><button data-screen="events">Events${p.day % 3 === 0 ? ' •' : ''}</button><button data-screen="settings" aria-label="Settings">⚙</button><button data-screen="saves" aria-label="Save slots">Saves</button><button data-action="fullscreen" data-fullscreen-label aria-label="Enter full screen">Full screen</button></nav></header><div class="dock-main"><section class="hero"><div class="eyebrow overline">A SAMFA12 GAME · LANTERN BAY</div><h1>A little room<br>for <em>life.</em></h1><p>Follow the light. Learn the reef.<br>Build a diving company that leaves<br>something better behind.</p><div class="hero-progress"><div><strong>${p.totalRemoved}</strong><span>lionfish removed</span></div><div><strong>${p.totalRestored}</strong><span>fragments planted</span></div><div><strong>${p.reputation}</strong><span>reputation</span></div></div><button class="link-button" data-screen="help" style="margin-top:18px;font-size:12px">Your first dive? Start here ↗</button></section><section class="dock-card"><div class="eyebrow">THE NEXT OUTING</div><h2>The reef is waiting.</h2><div class="site-selector">${Object.values(data_js_1.SITES).map(t => `<button class="site-choice ${this.site === t.id ? 'selected' : ''}" data-site="${t.id}" ${!(0, data_js_1.siteUnlocked)(p, t.id) ? 'disabled' : ''}><span class="micro">${t.id === 'gardens' ? '01 / SHALLOWS' : '02 / CHANNEL'}</span><strong>${t.name}</strong><span class="tiny">${(0, data_js_1.siteUnlocked)(p, t.id) ? t.id === 'gardens' ? 'Gentle drift · nursery' : 'Stronger current · tall arches' : '6 removals or 5 reputation'}</span></button>`).join('')}</div><p class="site-copy">${site.description}</p><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, this.site)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, this.site)}%"></i></div><label class="field" for="order-choice">Take a field contract</label><select id="order-choice" ${p.active || p.pending ? 'disabled' : ''}><option value="catch" ${this.order === 'catch' ? 'selected' : ''}>Restaurant · Sell 4 lionfish</option><option value="cleanup" ${this.order === 'cleanup' ? 'selected' : ''}>Cleanup · Remove 2 pieces of gear</option><option value="restore" ${this.order === 'restore' ? 'selected' : ''}>Restoration · Plant 2 fragments</option></select><p id="order-detail" class="contract-note">${orderText[this.order]}</p><div class="launch-row"><button class="primary" data-action="${p.pending ? 'review' : p.active ? 'resume' : 'dive'}">${p.pending ? 'Review landed catch' : p.active ? 'Resume suspended dive' : 'Begin dive'} <span aria-hidden="true">↗</span></button><button data-screen="journal" title="Reef chart">Chart</button></div><p class="status-note">${p.pending ? 'Your last outing is ready to settle.' : p.active ? 'Saved mid-dive. Air and wildlife have been paused.' : this.event ? 'Event entered · Land safely to record your score.' : 'Air filled · Nursery fragments stocked · Pole spear ready'}</p></section></div><footer class="bottomline"><span>Reef Sweep · v0.2 preview · Local saves</span><button class="link-button" data-screen="help" style="font-size:10px">Credits & controls</button></footer>`; }
     nightControl(p) { const available = (0, data_js_1.upgradeLevel)(p, 'torch') >= 1 && (0, data_js_1.siteUnlocked)(p, 'passage'), lockedReason = (0, data_js_1.upgradeLevel)(p, 'torch') < 1 ? 'Install a head torch and unlock Tideglass Passage to open night dives.' : 'Unlock Tideglass Passage to open night dives.'; return `<label class="night-option"><span><strong>Night dive</strong><small>${available ? 'Challenge conditions · torch and wildlife adapt to the dark.' : lockedReason}</small></span><input type="checkbox" aria-label="Night dive" data-night ${this.night ? 'checked' : ''} ${available && !p.active && !p.pending ? '' : 'disabled'}></label>`; }
     gearCard(u, p) { const level = (0, data_js_1.upgradeLevel)(p, u.id), maxed = level >= data_js_1.MAX_UPGRADE_LEVEL, cost = (0, data_js_1.upgradeCost)(p, u.id), blockedBy = u.requires && (0, data_js_1.upgradeLevel)(p, u.requires) < (u.requiredLevel ?? 1), prerequisiteName = u.requires ? data_js_1.UPGRADES.find(item => item.id === u.requires)?.name || u.requires : '', requirement = u.requires === 'air' ? `Regulator level ${u.requiredLevel ?? 1} needed` : `${prerequisiteName} needed`, disabled = maxed || p.cash < cost || !!p.active || !!p.pending || !!blockedBy; return `<article class="gear-card"><div class="gear-art" aria-hidden="true">${upgradeIcon(u.id)}</div><div class="eyebrow">${u.tag}</div><h3>${u.name}</h3><div class="gear-rank">Level ${level} <span>/ ${data_js_1.MAX_UPGRADE_LEVEL}</span></div><p>${u.description}</p><div class="price"><strong>${maxed ? 'MAX LEVEL' : (0, math_js_1.money)(cost)}</strong><button data-buy="${u.id}" ${disabled ? 'disabled' : ''}>${maxed ? 'Maxed' : blockedBy ? requirement : `Upgrade to ${level + 1}`}</button></div></article>`; }
-    help(s) { return `<section class="modal help-copy">${this.header('Work gently. Come home.', 'DIVER’S FIELD GUIDE')}<p><b>Find the striped, fan-finned lionfish.</b> Move close, settle your aim, hold to draw the pole spear and release to strike. A fish stays exposed until you hold Interact to secure it in your tube.</p><div class="control-sheet"><div><b>Keyboard & mouse</b><p>${key(s.keys.forward)}${key(s.keys.left)}${key(s.keys.back)}${key(s.keys.right)} swim · mouse look<br>${key(s.keys.up)} ascend · ${key(s.keys.down)} descend<br>${key(s.keys.boost)} stronger fin kick · ${key(s.keys.steady)} steady<br>Mouse 1 draw / release · ${key(s.keys.interact)} hold to interact<br>${key(s.keys.scooter)} scooter · ${key(s.keys.light)} light · ${key(s.keys.journal)} chart · Esc pause</p></div><div><b>Touch & controller</b><p>Landscape touch: left stick moves; drag the scene to look. Hold and drag Draw to aim, then release. Hold Interact to secure catches or work.<br>Controller: sticks move / look, RT draw, A interact, Y / B rise / descend, X gear, LB steady, RB kick, Start pause. D-pad and A navigate menus.</p></div></div><p>Aim with the centre reticle. Hold Mouse 1 to draw, then release to strike. This also requests mouse capture. If capture is unavailable, simply move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag also looks. Hold <b>R</b> as an alternate spear input. Uncaptured look is bounded by the browser window. Releasing or cancelling a pointer outside the canvas will not leave the controls stuck.</p><div class="rule"></div><div class="two-col"><div><h3>A living reef</h3><p><b>Cleanup:</b> hold Interact near discarded nets or crates.<br><b>Restore:</b> plant nursery-grown fragments at the marked nursery plots. Growth happens between game days.<br><b>Survey:</b> record the site at the teal survey sign. The chart marks all work areas.</p><p><b>Marlow:</b> this grouper may watch, approach and then steal an exposed fish. Secure it or move away. Your tube is safe.<br><b>Moray:</b> give its crevice room. If it moves towards you and a warning appears, back away.</p></div><div><h3>Leave a reserve</h3><p>The home marker points towards the mooring. Return to it, ascend alongside the rope, and hold Interact to board. The chart shows a route around major rocks.</p><p>Rescue costs $85 and forfeits the day’s catch, but equipment and completed reef work remain. Loan gear is always available. Pause or suspend at any time.</p><p>After the dive, sell, keep a meal or donate. Choose two highlight <b>image cards</b> to publish. They represent footage in the fiction; this build does not record playable video.</p></div></div><div class="rule"></div><h3>Inspiration, not instruction.</h3><p>Inspired by the underwater storytelling and conservation work of <b>Lionfish Extermination Corp</b>; art and loop inspiration from <b>Dave the Diver</b>. This is an independent fictional game, not affiliated with or endorsed by either. Marlow, the companies and the island are fictional. Music is an original composition using <b>Samfa12’s Pocket Chordsmith</b> instruments.</p><p>Lionfish are native in the Indo-Pacific and invasive in the Atlantic/Caribbean setting used here. Do not feed wild predators. Morays normally open their mouths to breathe; mouth opening alone is not a warning. Coral recovery is time-compressed. Air, ascent, currents, handling and restoration are simplified gameplay—not dive training, medical advice or permission to undertake real restoration.</p><p class="tiny">Babylon.js 9.26.1 · Apache-2.0. Original procedural art and game code. Source details and third-party notices are included in the handoff package.</p><div class="button-row"><button class="primary" data-close>Ready for the reef</button><button data-screen="settings">Adjust controls</button></div></section>`; }
-    settings(s) { const slider = (id, label, min, max, step) => `<label class="setting">${label}<span id="read-${id}" class="tiny muted">${id === 'fov' ? s[id] + '°' : id === 'sensitivity' ? Number(s[id]).toFixed(2) : Math.round(Number(s[id]) * 100) + '%'}</span><input aria-label="${label}" data-setting="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${s[id]}"></label>`; const check = (id, label, detail) => `<label class="setting"><span>${label}<small>${detail}</small></span><input type="checkbox" data-setting="${id}" ${s[id] ? 'checked' : ''}></label>`; return `<section class="modal">${this.header('Make yourself comfortable.', 'SETTINGS')}<div class="two-col"><div><div class="settings-section">SOUND</div>${slider('music', 'Pocket Chordsmith music', 0, 1, .01)}${slider('ambience', 'Breathing & ambience', 0, 1, .01)}${slider('effects', 'Equipment & warnings', 0, 1, .01)}<div class="settings-section">WATER & DISPLAY</div><label class="setting">Render quality<select data-setting="quality"><option value="high" ${s.quality === 'high' ? 'selected' : ''}>High</option><option value="balanced" ${s.quality === 'balanced' ? 'selected' : ''}>Balanced</option><option value="low" ${s.quality === 'low' ? 'selected' : ''}>Performance</option></select></label><p class="tiny muted">Resolution changes immediately; decorative population changes on the next site load. Targets, wildlife and rules are unchanged.</p>${slider('fov', 'Field of view', 60, 100, 1)}${check('reducedMotion', 'Steady camera & reduced motion', 'Suppresses equipment sway and coral animation.')}${check('assist', 'Target identification', 'Names visible targets in the aiming reticle.')}</div><div><div class="settings-section">CONTROLS</div>${slider('sensitivity', 'Look sensitivity', .25, 2.5, .05)}${check('invertY', 'Invert vertical look', 'Mouse, touch and controller.')}${check('toggleDraw', 'Toggle spear draw', 'Press once to draw; press again to strike.')}${slider('touchScale', 'Touch control size', .8, 1.3, .05)}<div class="settings-section">KEY BINDINGS · SELECT TO REASSIGN</div><div class="bindings">${['forward', 'back', 'left', 'right', 'up', 'down', 'boost', 'steady', 'interact', 'scooter', 'journal', 'light'].map(a => `<div class="bind"><span>${a}</span><button data-bind="${a}">${key(s.keys[a])}</button></div>`).join('')}</div><button class="link-button tiny" data-action="defaults" style="margin-top:12px">Restore default settings</button></div></div><div class="button-row"><button class="primary" data-close>Done</button></div></section>`; }
+    help(s) { return `<section class="modal help-copy">${this.header('Work gently. Come home.', 'DIVER’S FIELD GUIDE')}<p><b>Find the striped, fan-finned lionfish.</b> Move close, settle your aim, hold to draw the pole spear and release to strike. A fish stays exposed until you hold Interact to secure it in your tube.</p><div class="control-sheet"><div><b>Keyboard & mouse</b><p>${key(s.keys.forward)}${key(s.keys.left)}${key(s.keys.back)}${key(s.keys.right)} swim · mouse look<br>${key(s.keys.up)} ascend · ${key(s.keys.down)} descend<br>${key(s.keys.boost)} stronger fin kick · ${key(s.keys.steady)} steady<br>Mouse 1 draw / release · ${key(s.keys.interact)} hold to interact<br>${key(s.keys.scooter)} scooter · ${key(s.keys.light)} light · ${key(s.keys.journal)} chart · Esc pause</p></div><div><b>Touch & controller</b><p>Touch (portrait or landscape): left stick moves; drag the scene to look. Hold and drag Draw to aim, then release. Hold Interact to secure catches or work.<br>Controller: sticks move / look. Button meanings vary by browser and device; open Settings → Controller calibration to see live readings and set your own map. The standard browser layout has a ready-to-use fallback.</p></div></div><p>Aim with the centre reticle. Hold Mouse 1 to draw, then release to strike. This also requests mouse capture. If capture is unavailable, simply move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag also looks. Hold <b>R</b> as an alternate spear input. Uncaptured look is bounded by the browser window. Releasing or cancelling a pointer outside the canvas will not leave the controls stuck.</p><div class="rule"></div><div class="two-col"><div><h3>A living reef</h3><p><b>Cleanup:</b> hold Interact near discarded nets or crates.<br><b>Restore:</b> plant nursery-grown fragments at the marked nursery plots. Growth happens between game days.<br><b>Survey:</b> record the site at the teal survey sign. The chart marks all work areas.</p><p><b>Marlow:</b> this grouper may watch, approach and then steal an exposed fish. Secure it or move away. Your tube is safe.<br><b>Moray:</b> give its crevice room. If it moves towards you and a warning appears, back away.</p></div><div><h3>Leave a reserve</h3><p>The home marker points towards the mooring. Return to it, ascend alongside the rope, and hold Interact to board. The chart shows a route around major rocks.</p><p>Rescue costs $85 and forfeits the day’s catch, but equipment and completed reef work remain. Loan gear is always available. Pause or suspend at any time.</p><p>After the dive, sell, keep a meal or donate. Choose two highlight <b>image cards</b> to publish. They represent footage in the fiction; this build does not record playable video.</p></div></div><div class="rule"></div><h3>Inspiration, not instruction.</h3><p>Inspired by the underwater storytelling and conservation work of <b>Lionfish Extermination Corp</b>; art and loop inspiration from <b>Dave the Diver</b>. This is an independent fictional game, not affiliated with or endorsed by either. Marlow, the companies and the island are fictional. Music is an original composition using <b>Samfa12’s Pocket Chordsmith</b> instruments.</p><p>Lionfish are native in the Indo-Pacific and invasive in the Atlantic/Caribbean setting used here. Do not feed wild predators. Morays normally open their mouths to breathe; mouth opening alone is not a warning. Coral recovery is time-compressed. Air, ascent, currents, handling and restoration are simplified gameplay—not dive training, medical advice or permission to undertake real restoration.</p><p class="tiny">Babylon.js 9.26.1 · Apache-2.0. Original procedural art and game code. Source details and third-party notices are included in the handoff package.</p><div class="button-row"><button class="primary" data-close>Ready for the reef</button><button data-screen="settings">Adjust controls</button></div></section>`; }
+    gamepadSettings() {
+        const state = this.controllerReadout, selected = state.selectedKey || '';
+        const options = state.pads.length ? state.pads.map((p) => `<option value="${esc(p.key)}" ${p.key === selected ? 'selected' : ''}>Gamepad ${p.index + 1} · ${esc(p.id)} · ${esc(p.mapping)} · ${p.axes.length} axes / ${p.buttons.length} buttons</option>`).join('') : '<option value="">No controller detected</option>';
+        return `<div class="settings-section">CONTROLLER CALIBRATION</div><p class="tiny muted">Select the USB controller the game should use. Scan and calibration require a click; the controller profile stays in this browser on this device.</p><label class="setting">Active controller<select id="gamepad-choice">${options}</select></label><p id="gamepad-status" class="tiny muted" aria-live="polite"></p><pre id="gamepad-raw" class="gamepad-raw" aria-label="Live raw controller axes and buttons">Waiting for controller readings…</pre><p id="gamepad-step" class="status-note" aria-live="polite"></p><p id="gamepad-test" class="tiny muted" aria-live="polite">Live test · Connect a controller to test it.</p><div class="button-row controller-actions"><button data-action="gamepad-scan">Scan controllers</button><button id="gamepad-start" data-action="gamepad-start" ${state.connected && state.calibration.phase === 'idle' ? '' : 'disabled'}>Start guided calibration</button><button id="gamepad-cancel" data-action="gamepad-cancel" ${state.calibration.phase === 'idle' ? 'hidden' : ''}>Cancel setup</button><button id="gamepad-use" class="primary" data-action="gamepad-use" ${state.calibration.completed ? '' : 'hidden'}>Use this calibration</button><button id="gamepad-restore" data-action="gamepad-restore" ${state.connected && state.saved ? '' : 'disabled'}>Restore controller defaults</button></div><p class="tiny muted">Keep still for the neutral sample. Move each stick when prompted, then release it. For each action, press or move only that control and release before the next prompt. Trigger axes are supported. Resume your dive only after selecting Use or Cancel.</p>`;
+    }
+    settings(s) { const slider = (id, label, min, max, step) => `<label class="setting">${label}<span id="read-${id}" class="tiny muted">${id === 'fov' ? s[id] + '°' : id === 'sensitivity' ? Number(s[id]).toFixed(2) : Math.round(Number(s[id]) * 100) + '%'}</span><input aria-label="${label}" data-setting="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${s[id]}"></label>`; const check = (id, label, detail) => `<label class="setting"><span>${label}<small>${detail}</small></span><input type="checkbox" data-setting="${id}" ${s[id] ? 'checked' : ''}></label>`; return `<section class="modal">${this.header('Make yourself comfortable.', 'SETTINGS')}<div class="two-col"><div><div class="settings-section">SOUND</div>${slider('music', 'Pocket Chordsmith music', 0, 1, .01)}${slider('ambience', 'Breathing & ambience', 0, 1, .01)}${slider('effects', 'Equipment & warnings', 0, 1, .01)}<div class="settings-section">WATER & DISPLAY</div><label class="setting">Render quality<select data-setting="quality"><option value="high" ${s.quality === 'high' ? 'selected' : ''}>High</option><option value="balanced" ${s.quality === 'balanced' ? 'selected' : ''}>Balanced</option><option value="low" ${s.quality === 'low' ? 'selected' : ''}>Performance</option></select></label><p class="tiny muted">Resolution changes immediately; decorative population changes on the next site load. Targets, wildlife and rules are unchanged.</p>${slider('fov', 'Field of view', 60, 100, 1)}${check('reducedMotion', 'Steady camera & reduced motion', 'Suppresses equipment sway and coral animation.')}${check('assist', 'Target identification', 'Names visible targets in the aiming reticle.')}</div><div><div class="settings-section">CONTROLS</div>${slider('sensitivity', 'Look sensitivity', .25, 2.5, .05)}${check('invertY', 'Invert vertical look', 'Mouse, touch and controller.')}${check('toggleDraw', 'Toggle spear draw', 'Press once to draw; press again to strike.')}${slider('touchScale', 'Touch control size', .8, 1.3, .05)}<div class="settings-section">KEY BINDINGS · SELECT TO REASSIGN</div><div class="bindings">${['forward', 'back', 'left', 'right', 'up', 'down', 'boost', 'steady', 'interact', 'scooter', 'journal', 'light'].map(a => `<div class="bind"><span>${a}</span><button data-bind="${a}">${key(s.keys[a])}</button></div>`).join('')}</div><button class="link-button tiny" data-action="defaults" style="margin-top:12px">Restore default settings</button>${this.gamepadSettings()}</div></div><div class="button-row"><button class="primary" data-close>Done</button><button data-action="fullscreen" data-fullscreen-label>Full screen</button></div></section>`; }
     journal(p) { const run = p.active || p.pending, id = run?.site || this.site, site = data_js_1.SITES[id], reef = p.reefs[id]; return `<section class="modal">${this.header(site.name, 'CHART / FIELD NOTES')}<div class="chart-layout"><div><canvas id="chart" width="660" height="660" class="chart" aria-label="Top-down reef chart: home buoy, player, obstacles, work sites and return route"></canvas><p class="tiny muted" style="margin-top:8px">Gold: you · cream: mooring · teal: work sites<br>Line: estimated return route · North is up</p></div><div><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_1.healthOfReef)(p, id)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_1.healthOfReef)(p, id)}%"></i></div><div class="row-stats"><div><strong>${reef.removed.length}</strong>removals recorded</div><div><strong>${reef.cleaned.length}</strong>cleanup sites</div><div><strong>${Object.keys(reef.restored).length}</strong>coral plots</div></div>${run ? `<div class="field-note"><b>Your contract</b><p>${orderText[run.order]}</p><p>This outing: ${run.removed} removed · ${run.cleaned} cleaned · ${run.restored} planted · ${run.fragments} fragments left.</p></div>` : ''}<div class="field-note"><b>The nursery</b><p>Plant fragments at gold-tagged plots, remove nearby rubbish and record a survey. Revisit on later days to see growth.</p></div><div class="field-note"><b>${p.discoveries.includes('marlow') ? 'Marlow’s ledge' : 'A large shadow beneath the ledge'}</b><p>A broad mottled grouper sometimes follows working divers. Not a pet. Secure your catch and respect its space.</p></div><div class="field-note"><b>Company support</b><p>Lantern Bay Trust: reputation 12 + two cleanup/restoration jobs earns $50 support.<br>Tideframe Cameras: audience 80 + a published grouper, turtle or ray highlight earns $35. At most one sponsor contribution per day.</p></div></div></div><div class="button-row"><button class="primary" data-close>${run && !run.finished ? 'Back to the dive' : 'Back to harbour'}</button></div></section>`; }
     initDebrief(r) { const n = r.rescued ? 0 : r.cargo.length; this.allocation = { sell: n, eat: 0, donate: 0 }; this.chosen = new Set(r.clips.slice().sort((a, b) => b.quality - a.quality).slice(0, 2).map(c => c.id)); }
     debrief(p) {
@@ -3722,7 +4467,7 @@ class UI {
         parent.innerHTML = profiles.map(p => `<article class="save-card ${p.slot === this.getProfile().slot ? 'current' : ''}"><div><h3>Logbook ${p.slot}</h3><p>Day ${p.day} · ${(0, math_js_1.money)(p.cash)} · ${p.totalRemoved} removals${p.active ? ' · dive suspended' : ''}${p.pending ? ' · ready to settle' : ''}</p></div><button data-action="slot" data-value="${p.slot}">${p.slot === this.getProfile().slot ? 'Current' : 'Open'}</button></article>`).join('');
     }
     confirm(action, text) { this.confirmAction = action; this.confirmText = text; this.show('confirm'); }
-    updateHUD(sim, control) { const r = sim.run, p = sim.profile, s = this.getSettings(); document.getElementById('air').textContent = Math.ceil(r.air).toString(); const fill = document.getElementById('air-fill'); fill.style.width = String(Math.min(100, r.air / (0, data_js_1.airCapacity)(p) * 100)) + '%'; fill.style.background = r.air < sim.reserve ? 'var(--sand)' : 'var(--teal)'; const depth = Math.max(0, sim.site.surface - r.p.y), depthEl = document.getElementById('depth'); depthEl.textContent = depth === 0 ? 'SURFACE' : depth.toFixed(1) + ' m'; depthEl.setAttribute('aria-label', depth === 0 ? 'At the surface' : `${depth.toFixed(1)} metres deep`); depthEl.classList.toggle('surface-state', depth === 0); document.getElementById('bag').textContent = `${r.cargo.length} / ${(0, data_js_1.capacity)(p)} secured${r.exposed ? ' + 1 exposed' : ''}`; document.getElementById('clock').textContent = (0, math_js_1.timeText)(r.time); document.getElementById('condition').textContent = [r.health < 100 ? `Condition ${Math.ceil(r.health)}%` : '', r.scooter || r.light ? `Battery ${Math.ceil(r.battery)}%` : ''].filter(Boolean).join(' · '); const ret = document.getElementById('reticle'); ret.classList.toggle('charging', r.charge > .01); ret.classList.toggle('valid', sim.aim.valid); document.getElementById('charge-ring').style.strokeDashoffset = String(157 * (1 - r.charge)); const aim = sim.aim, inter = document.getElementById('interaction'); const show = !!aim.label && (s.assist || aim.kind !== 'fish' || aim.id === 'held'); inter.style.opacity = show ? '1' : '0'; document.getElementById('aim-label').textContent = aim.label; let hint = aim.hint; const interactKey = control === 'touch' ? 'Interact' : control === 'gamepad' ? 'A' : key(s.keys.interact); hint = hint.replace(/Interact/g, interactKey); document.getElementById('aim-hint').textContent = hint + (aim.distance > 0 ? ` · ${aim.distance.toFixed(1)} m` : ''); const work = document.getElementById('work-meter'); work.style.opacity = r.interaction > 0 ? '1' : '0'; work.firstElementChild.style.width = r.interaction * 100 + '%'; document.getElementById('return-warning').hidden = !r.returnWarn; document.getElementById('dive-caption').textContent = r.scooter ? 'MINNOW / CRUISING · Stow to use the spear' : `LANTERN BAY / ${sim.site.name.toUpperCase()}${r.time < 45 ? ' · The chart marks the nursery and cleanup sites.' : ''}`; document.getElementById('controls-hint').textContent = control === 'gamepad' ? 'RT draw / release · A interact · X gear · Start pause' : `${key(s.keys.steady)} steady · Hold ${key(s.keys.interact)} interact · ${key(s.keys.up)} up / ${key(s.keys.down)} down · ${key(s.keys.journal)} chart`; }
+    updateHUD(sim, control) { const r = sim.run, p = sim.profile, s = this.getSettings(); document.getElementById('air').textContent = Math.ceil(r.air).toString(); const fill = document.getElementById('air-fill'); fill.style.width = String(Math.min(100, r.air / (0, data_js_1.airCapacity)(p) * 100)) + '%'; fill.style.background = r.air < sim.reserve ? 'var(--sand)' : 'var(--teal)'; const depth = Math.max(0, sim.site.surface - r.p.y), depthEl = document.getElementById('depth'); depthEl.textContent = depth === 0 ? 'SURFACE' : depth.toFixed(1) + ' m'; depthEl.setAttribute('aria-label', depth === 0 ? 'At the surface' : `${depth.toFixed(1)} metres deep`); depthEl.classList.toggle('surface-state', depth === 0); document.getElementById('bag').textContent = `${r.cargo.length} / ${(0, data_js_1.capacity)(p)} secured${r.exposed ? ' + 1 exposed' : ''}`; document.getElementById('clock').textContent = (0, math_js_1.timeText)(r.time); document.getElementById('condition').textContent = [r.health < 100 ? `Condition ${Math.ceil(r.health)}%` : '', r.scooter || r.light ? `Battery ${Math.ceil(r.battery)}%` : ''].filter(Boolean).join(' · '); const ret = document.getElementById('reticle'); ret.classList.toggle('charging', r.charge > .01); ret.classList.toggle('valid', sim.aim.valid); document.getElementById('charge-ring').style.strokeDashoffset = String(157 * (1 - r.charge)); const aim = sim.aim, inter = document.getElementById('interaction'); const show = !!aim.label && (s.assist || aim.kind !== 'fish' || aim.id === 'held'); inter.style.opacity = show ? '1' : '0'; document.getElementById('aim-label').textContent = aim.label; let hint = aim.hint; const interactKey = control === 'touch' ? 'Interact' : control === 'gamepad' ? 'your mapped Interact control' : key(s.keys.interact); hint = hint.replace(/Interact/g, interactKey); document.getElementById('aim-hint').textContent = hint + (aim.distance > 0 ? ` · ${aim.distance.toFixed(1)} m` : ''); const work = document.getElementById('work-meter'); work.style.opacity = r.interaction > 0 ? '1' : '0'; work.firstElementChild.style.width = r.interaction * 100 + '%'; document.getElementById('return-warning').hidden = !r.returnWarn; document.getElementById('dive-caption').textContent = r.scooter ? 'MINNOW / CRUISING · Stow to use the spear' : `LANTERN BAY / ${sim.site.name.toUpperCase()}${r.time < 45 ? ' · The chart marks the nursery and cleanup sites.' : ''}`; document.getElementById('controls-hint').textContent = control === 'gamepad' ? 'Controller · map controls in Settings' : `${key(s.keys.steady)} steady · Hold ${key(s.keys.interact)} interact · ${key(s.keys.up)} up / ${key(s.keys.down)} down · ${key(s.keys.journal)} chart`; }
     chart(sim) {
         const el = document.getElementById('chart');
         if (!el)

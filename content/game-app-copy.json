@@ -1595,7 +1595,7 @@
   },
   "game-reef-sweep": {
     "seoTitle": "Reef Sweep first-person reef-conservation game preview",
-    "intro": "Reef Sweep is an in-development first-person reef-conservation game. Dive Lantern Bay to remove invasive lionfish, restore nursery coral, survey a deeper wreck and outfall, and build a small diving business. Its v0.2 preview adds five-rank equipment upgrades, optional night dives and a careful filleting activity.",
+    "intro": "Reef Sweep is an in-development first-person reef-conservation game. Dive Lantern Bay to remove invasive lionfish, restore nursery coral, survey a deeper wreck and outfall, and build a small diving business. Its current preview adds five-rank equipment upgrades, optional night dives and a careful filleting activity.",
     "details": [
       {
         "heading": "Two sites and a deliberate conservation loop",
@@ -1620,21 +1620,21 @@
       },
       {
         "heading": "Desktop, touch and controller controls",
-        "text": "On desktop, WASD moves, the mouse looks, and holding Mouse 1 draws the spear; release to strike. When mouse capture is unavailable, move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag and R remain alternate controls. Uncaptured look is bounded by the browser window. In landscape touch play, the left stick moves, dragging the scene looks, and holding and dragging Draw aims before release; a Light button toggles the head torch. A standard gamepad mapping is implemented, but physical controller testing remains outstanding.",
+        "text": "On desktop, WASD moves, the mouse looks, and holding Mouse 1 draws the spear; release to strike. When mouse capture is unavailable, move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag and R remain alternate controls. Uncaptured look is bounded by the browser window. In landscape touch play, the left stick moves, dragging the scene looks, and holding and dragging Draw aims before release; a Light button toggles the head torch. The owner has confirmed that landscape touch controls feel great after playing in Android Chrome. A Backbone One preset and saved calibration are included. The owner has tested and approved the USB Backbone controls in Windows Chrome.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
       },
       {
         "heading": "An adaptive score made with Pocket Chordsmith",
-        "text": "The original score, \u201cRoom for Life,\u201d uses instrument configurations adapted from Samfa12\u2019s Pocket Chordsmith. Its adaptive layers respond to the dive, wildlife and danger.",
+        "text": "The original score, “Room for Life,” uses instrument configurations adapted from Samfa12’s Pocket Chordsmith. Its adaptive layers respond to the dive, wildlife and danger.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
       },
       {
         "heading": "An in-development preview with first-pass art",
-        "text": "The game has two authored sites, persistent reef work, four contract types and nine five-rank upgrades. Breaching the surface, deeper field stations, night wildlife, optional filleting, regulator breathing and exhale bubbles are in the v0.2 preview. Pacing and progression remain provisional, and these features do not establish physical-device acceptance. Creatures, equipment and reef dressing use procedural prototype art. Air, currents, restoration and animal behaviour are simplified gameplay systems, not real-world dive training or restoration guidance.",
+        "text": "The game has two authored sites, persistent reef work, four contract types and nine five-rank upgrades. Breaching the surface, deeper field stations, night wildlife, optional filleting, regulator breathing and exhale bubbles are in the current preview. High graphics adds shadows from reef scenery, plants and fish, with a shadow-casting head torch for night dives. Choosing High saves the setting and offers Reload now or Later. Mobile play has a compact footer, a fullscreen button and a portrait layout with separated controls that does not force a pause. The Backbone One preset and saved calibration are implemented. Current source and automated Chromium validation cover these changes; the owner has approved the local High shadows and USB Backbone controls in Windows Chrome; physical acceptance of the revised portrait and fullscreen behavior is pending. Pacing and progression remain provisional. Creatures, equipment and reef dressing use procedural prototype art. Air, currents, restoration and animal behaviour are simplified gameplay systems, not real-world dive training or restoration guidance.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
@@ -1657,14 +1657,14 @@
       },
       {
         "question": "Can I play Reef Sweep on a phone?",
-        "answer": "The prototype includes landscape touch controls and pauses a dive in portrait orientation. Physical Android and iPhone testing has not been completed, so phone compatibility is not yet verified.",
+        "answer": "Landscape touch controls have been physically played and approved by the owner in Android Chrome. The preview also includes portrait controls without forced pause and a mobile fullscreen button; physical acceptance of those features is pending. iPhone and Safari compatibility remain unverified.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
       },
       {
         "question": "Is Reef Sweep finished, and is its artwork final?",
-        "answer": "No. It is an in-development v0.2 preview with procedural first-pass creature, equipment and reef artwork. The game\u2019s pacing and upgrade balance remain provisional, and physical Android, iPhone and controller testing is outstanding.",
+        "answer": "No. It is an in-development preview with procedural first-pass creature, equipment and reef artwork. The game’s pacing and upgrade balance remain provisional. Landscape touch feel has owner approval on Android Chrome; iPhone/Safari compatibility and physical acceptance of the revised portrait and fullscreen controls remain outstanding. USB Backbone controls have owner approval in Windows Chrome.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
