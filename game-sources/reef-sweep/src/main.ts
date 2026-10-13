@@ -49,7 +49,7 @@ const gameStarts=prepareWebsiteGameStartHook();
 function endPractice() {
     profile=practiceCareer ?? profile;practiceCareer=null;sim=null;playCandidate=false;
     profile.active=profile.active?.practice?null:profile.active;profile.pending=profile.pending?.practice?null:profile.pending;
-    visualDive=false;setPause(true);preview(profile.active?.site ?? 'gardens');stack=[];ui.show('dock');ui.toast('Practice complete. Your campaign, catch, money and reef work are unchanged.');
+    visualDive=false;setPause(true);preview(profile.active?.site ?? ui.site);stack=[];ui.show('dock');ui.toast('Practice complete. Your campaign, catch, money and reef work are unchanged.');
 }
 function showMoment(moment: CharacterMoment, inDive=false) {
     if(inDive){stack=['play'];setPause(true);}else{stack=['dock'];show('dock');}
@@ -195,6 +195,7 @@ function dispatch(action: string, data?: any) {
             case 'tutorial-skip':
                 if(sim){skipLesson(profile,sim.run);persist();ui.toast('Lesson skipped. Replay is available in the field guide.');}break;
             case 'practice':
+                if(practiceCareer)endPractice();
                 persist();practiceCareer=profile;profile=freshProfile(profile.slot);profile.upgrades=[...practiceCareer.upgrades];profile.upgradeLevels=structuredClone(practiceCareer.upgradeLevels);
                 {const run=startRun(profile,'gardens','none');run.practice=true;startLesson(run);sim=new Simulation(profile,run);renderer!.build(profile,run);visualDive=true;setPause(false);ui.play();void audio.start();canvas.focus();input.capture();ui.toast('Practice dive. Nothing here changes your campaign.');}break;
             case 'practice-exit':endPractice();break;
@@ -207,6 +208,7 @@ function dispatch(action: string, data?: any) {
             case 'opportunity':
                 {const result=acceptMilestoneOpportunity(profile,data);persist();ui.show('dock');ui.toast(result.reason);}break;
             case 'suspend':
+                if(practiceCareer){endPractice();break;}
                 setPause(true);
                 visualDive = false;
                 stack = [];

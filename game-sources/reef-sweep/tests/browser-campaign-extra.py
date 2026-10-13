@@ -35,6 +35,11 @@ with sync_playwright() as pw:
   check('Assignment recognized at actual settlement without extra cash '+milestone,raw(p,"__REEF__.profile.campaign.milestoneFlags.includes("+json.dumps(milestone)+")&&__REEF__.ui.receipt.sponsor===0&&__REEF__.ui.receipt.recognition.length===1"));raw(p,"__REEF__.dispatch('screen','dock')")
   if raw(p,'__REEF__.ui.screen')=='moment':p.locator('[data-close]').last.click()
  c.close()
+ # Replay from within practice must keep the original backup, and Suspend must end practice.
+ c,p=boot(b);raw(p,"__REEF__.profile.cash=1234;__REEF__.profile.day=9;__REEF__.profile.totalRemoved=40;__REEF__.save()");career=raw(p,'JSON.stringify(__REEF__.profile)')
+ p.locator('[data-screen=help]').first.click();p.locator('[data-action=practice]').click();raw(p,"__REEF__.dispatch('screen','help')");p.locator('[data-action=practice]').click();tick(p,1,{'moveZ':1});p.keyboard.press('Escape');p.locator('[data-action=suspend]').click()
+ check('Nested Replay and Suspend preserve the original career exactly',raw(p,'JSON.stringify(__REEF__.profile)')==career)
+ check('Suspending practice returns to the real harbour without a practice save',raw(p,"__REEF__.ui.screen==='dock'&&!__REEF__.profile.active&&JSON.parse(localStorage.getItem('reef-sweep:v1:1')).cash===1234"));c.close()
  # Browser Gamepad API input, not a claim about the physical USB controller.
  c,p=boot(b);raw(p,"window.qaPad={id:'QA standard pad',mapping:'standard',index:0,connected:true,axes:[0,0,0,0],buttons:Array.from({length:17},()=>({pressed:false,value:0}))};navigator.getGamepads=()=>[qaPad];__REEF__.dispatch('screen','settings')");p.wait_for_timeout(150)
  p.locator('[data-setting=effects]').focus();value=float(p.locator('[data-setting=effects]').input_value());raw(p,'qaPad.axes[0]=-1');p.wait_for_timeout(90);raw(p,'qaPad.axes[0]=0');check('Controller adjusts native settings range',float(p.locator('[data-setting=effects]').input_value())<value)

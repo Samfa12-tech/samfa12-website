@@ -62,7 +62,7 @@ function endPractice() {
     profile.pending = profile.pending?.practice ? null : profile.pending;
     visualDive = false;
     setPause(true);
-    preview(profile.active?.site ?? 'gardens');
+    preview(profile.active?.site ?? ui.site);
     stack = [];
     ui.show('dock');
     ui.toast('Practice complete. Your campaign, catch, money and reef work are unchanged.');
@@ -336,6 +336,8 @@ function dispatch(action, data) {
                 }
                 break;
             case 'practice':
+                if (practiceCareer)
+                    endPractice();
                 persist();
                 practiceCareer = profile;
                 profile = (0, profile_js_1.freshProfile)(profile.slot);
@@ -395,6 +397,10 @@ function dispatch(action, data) {
                 }
                 break;
             case 'suspend':
+                if (practiceCareer) {
+                    endPractice();
+                    break;
+                }
                 setPause(true);
                 visualDive = false;
                 stack = [];
