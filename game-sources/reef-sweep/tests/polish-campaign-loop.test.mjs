@@ -181,7 +181,7 @@ test('event registration day stays isolated by save slot through reload', () => 
 
 test('new night Passage runs use revision-two terrain for safe entry and flow-gauge work', () => {
   const p = freshProfile(); p.tutorial = 1; p.totalRemoved = 6; p.cash = 3000;
-  assert.ok(buy(p, 'air')); assert.ok(buy(p, 'air')); assert.ok(buy(p, 'torch'));
+  p.day=Math.max(p.day,4);p.reputation=Math.max(p.reputation,6);assert.ok(buy(p, 'air')); assert.ok(buy(p, 'air')); assert.ok(buy(p, 'torch'));
   const run = startRun(p, 'passage', 'none', false, true);
   const site = siteForRun(run);
   assert.equal(run.siteRevision, 2);
@@ -263,4 +263,11 @@ test('advanced service waits for field experience, retains old gear and is affor
  p.day=8;p.reputation=20;assert.equal(buy(p,'fins'),true);p.day=11;p.reputation=28;assert.equal(buy(p,'fins'),true);
  const legacy=freshProfile();legacy.upgrades=['scooter'];legacy.upgradeLevels={scooter:5};assert.equal(upgradeLevel(validateProfile(legacy),'scooter'),5);
  assert.equal(upgradeCost(freshProfile(),'scooter'),420);
+});
+
+test('a rich first outing cannot buy major travel/night gear, while legacy ownership stays usable',()=>{
+ const p=freshProfile();p.cash=10000;p.reputation=100;
+ assert.equal(buy(p,'scooter'),false);p.day=3;assert.equal(buy(p,'scooter'),true);
+ p.upgrades.push('air');p.upgradeLevels.air=2;assert.equal(buy(p,'torch'),false);p.day=4;assert.equal(buy(p,'torch'),true);
+ const legacy=freshProfile();legacy.upgrades=['air','torch','scooter'];legacy.upgradeLevels={air:2,torch:1,scooter:1};assert.equal(upgradeLevel(validateProfile(legacy),'torch'),1);assert.equal(upgradeLevel(validateProfile(legacy),'scooter'),1);
 });

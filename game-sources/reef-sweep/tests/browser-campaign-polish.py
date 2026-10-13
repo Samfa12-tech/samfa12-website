@@ -93,7 +93,7 @@ with sync_playwright() as pw:
  raw(p,"__REEF__.dispatch('slot',2);__REEF__.profile.day=3;__REEF__.save();__REEF__.dispatch('event-toggle')");p.reload();p.wait_for_function('window.__REEF__');check('Pre-launch event registration survives reload',raw(p,'__REEF__.ui.event&&__REEF__.profile.eventRegistrationDay===3'))
  raw(p,"__REEF__.dispatch('slot',3)");check('Event registration does not leak into another slot',not raw(p,'__REEF__.ui.event'));raw(p,"__REEF__.dispatch('slot',2);__REEF__.dispatch('dive')");check('Registered outing has visible event objective/score',raw(p,'__REEF__.sim.run.event&&__REEF__.sim.run.eventTheme==="catch"'));p.wait_for_timeout(150);check('Event score visible during the dive','points' in p.locator('#campaign-progress').inner_text());c.close()
  # Controlled high/night/encounter fixtures are separate from earned progression above.
- c,p=boot(b);raw(p,"__REEF__.profile.cash=100000;__REEF__.profile.totalRemoved=50;__REEF__.profile.reputation=30;__REEF__.profile.tutorial=1;__REEF__.dispatch('research-visit')");p.locator('[data-action=research-accept]').click()
+ c,p=boot(b);raw(p,"__REEF__.profile.cash=100000;__REEF__.profile.day=4;__REEF__.profile.totalRemoved=50;__REEF__.profile.reputation=30;__REEF__.profile.tutorial=1;__REEF__.dispatch('research-visit')");p.locator('[data-action=research-accept]').click()
  for gear in ['air','air','torch','scooter']:raw(p,"__REEF__.dispatch('buy',"+json.dumps(gear)+")")
  raw(p,"__REEF__.dispatch('setting',{name:'quality',value:'high'});__REEF__.dispatch('screen','dock')")
  for site in ['gardens','passage','mangrove','cenote','harbour']:

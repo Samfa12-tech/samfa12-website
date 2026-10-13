@@ -185,7 +185,7 @@ export function upgradeLevel(p: Profile, id: string) { return p.upgradeLevels?.[
 export function upgradeCost(p: Profile, id: string) { const u = UPGRADES.find(u => u.id === id), level = upgradeLevel(p, id); return !u || level >= MAX_UPGRADE_LEVEL ? 0 : Math.round(u.cost * [1, .2, .25, .3, .4][level] / 5) * 5; }
 /** Service replaces parts of owned gear; advanced work opens as field experience grows. */
 export function upgradeServiceRequirement(p:Profile,id:string){
-    const next=upgradeLevel(p,id)+1,day=[0,1,1,5,8,11][next]??1,rep=[0,0,0,12,20,28][next]??0;
+    const next=upgradeLevel(p,id)+1,day=next===1&&id==='scooter'?3:next===1&&id==='torch'?4:[0,1,1,5,8,11][next]??1,rep=next===1&&id==='scooter'?4:next===1&&id==='torch'?6:[0,0,0,12,20,28][next]??0;
     const available=p.day>=day&&p.reputation>=rep;
     return {available,reason:available?'':`Level ${next} service opens on day ${day} with ${rep} conservation reputation.`};
 }

@@ -205,6 +205,9 @@ export const CAREER_MILESTONES: readonly CareerMilestone[] = [
     { id: 'recognition-300', audience: 300, reputation: 17, title: 'Lantern Bay Conservation Voice', objective: 'Visit a reef on a later day and publish a new highlight.' }
 ];
 
+function allDebrisCleared(profile:Profile){return Object.values(SITES).every(site=>profile.reefs[site.id].cleaned.length>=(site.worksites?.debris.length??0));}
+function recognitionDescription(profile:Profile,milestone:CareerMilestone){return milestone.id==='recognition-160'&&allDebrisCleared(profile)?'The debris is already cleared. Publish a peaceful wildlife highlight to show what that work made possible.':milestone.objective;}
+
 function opportunityMissing(profile: Profile, milestone: CareerMilestone) {
     return [
         profile.audience < milestone.audience ? `${milestone.audience} followers` : '',
@@ -223,7 +226,7 @@ export function acceptMilestoneOpportunity(profile: Profile, id: CareerMilestone
     campaign.activeOpportunityDay = profile.day;
     campaign.activeOpportunityPublishedAt = profile.published.length;
     campaign.activeOpportunityCleanedAt = profile.totalCleaned;
-    return { ok: true, reason: `Assignment accepted: ${milestone.objective}` };
+    return { ok: true, reason: `Assignment accepted: ${recognitionDescription(profile,milestone)}` };
 }
 
 export function milestoneObjectiveStatus(profile: Profile, id: CareerMilestone['id']) {
@@ -237,8 +240,9 @@ export function milestoneObjectiveStatus(profile: Profile, id: CareerMilestone['
         reason = complete ? 'A peaceful wildlife highlight was published.' : 'Publish a peaceful wildlife highlight (Marlow, turtle or ray).';
     } else if (active && id === 'recognition-160') {
         const cleanedSince = profile.totalCleaned - (campaign.activeOpportunityCleanedAt ?? profile.totalCleaned);
-        complete = cleanedSince > 0 && publishedAfterAcceptance.includes('cleanup');
-        reason = complete ? 'Cleanup work and its highlight are complete.' : 'Remove debris and publish a cleanup highlight.';
+        const clearReefStory=allDebrisCleared(profile)&&publishedAfterAcceptance.some(kind=>['marlow','turtle','ray'].includes(kind));
+        complete = (cleanedSince > 0 && publishedAfterAcceptance.includes('cleanup')) || clearReefStory;
+        reason = complete ? 'Your cleared reef and new highlight have been recognised.' : allDebrisCleared(profile)?'The debris stays cleared. Publish a peaceful wildlife highlight from the recovering reef.':'Remove debris and publish a cleanup highlight.';
     } else if (active && id === 'recognition-300') {
         const acceptedDay = campaign.activeOpportunityDay ?? profile.day;
         const recordedLaterVisit = Object.values(profile.reefs).some(reef => reef.lastDay > acceptedDay && reef.lastDay <= profile.day);
@@ -258,7 +262,7 @@ export function milestoneStatus(profile: Profile, id: CareerMilestone['id']) {
     const achieved = campaign.milestoneFlags.includes(id);
     const missing = opportunityMissing(profile, milestone);
     const objective = milestoneObjectiveStatus(profile, id);
-    return { milestone, achieved, available: !achieved && objective.active && objective.complete && missing.length === 0, missing, objective, recognitionOnly: true as const };
+    return { milestone, description:recognitionDescription(profile,milestone), achieved, available: !achieved && objective.active && objective.complete && missing.length === 0, missing, objective, recognitionOnly: true as const };
 }
 
 /** Record a one-time recognition flag. Recognition never changes cash or reputation. */

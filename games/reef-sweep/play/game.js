@@ -1055,6 +1055,8 @@ exports.CAREER_MILESTONES = [
     { id: 'recognition-160', audience: 160, reputation: 8, title: 'Reef Storyteller', objective: 'Complete a cleanup and publish its highlight.' },
     { id: 'recognition-300', audience: 300, reputation: 17, title: 'Lantern Bay Conservation Voice', objective: 'Visit a reef on a later day and publish a new highlight.' }
 ];
+function allDebrisCleared(profile) { return Object.values(data_js_1.SITES).every(site => profile.reefs[site.id].cleaned.length >= (site.worksites?.debris.length ?? 0)); }
+function recognitionDescription(profile, milestone) { return milestone.id === 'recognition-160' && allDebrisCleared(profile) ? 'The debris is already cleared. Publish a peaceful wildlife highlight to show what that work made possible.' : milestone.objective; }
 function opportunityMissing(profile, milestone) {
     return [
         profile.audience < milestone.audience ? `${milestone.audience} followers` : '',
@@ -1075,7 +1077,7 @@ function acceptMilestoneOpportunity(profile, id) {
     campaign.activeOpportunityDay = profile.day;
     campaign.activeOpportunityPublishedAt = profile.published.length;
     campaign.activeOpportunityCleanedAt = profile.totalCleaned;
-    return { ok: true, reason: `Assignment accepted: ${milestone.objective}` };
+    return { ok: true, reason: `Assignment accepted: ${recognitionDescription(profile, milestone)}` };
 }
 function milestoneObjectiveStatus(profile, id) {
     const campaign = profile.campaign ?? normalizeCampaign(profile);
@@ -1089,8 +1091,9 @@ function milestoneObjectiveStatus(profile, id) {
     }
     else if (active && id === 'recognition-160') {
         const cleanedSince = profile.totalCleaned - (campaign.activeOpportunityCleanedAt ?? profile.totalCleaned);
-        complete = cleanedSince > 0 && publishedAfterAcceptance.includes('cleanup');
-        reason = complete ? 'Cleanup work and its highlight are complete.' : 'Remove debris and publish a cleanup highlight.';
+        const clearReefStory = allDebrisCleared(profile) && publishedAfterAcceptance.some(kind => ['marlow', 'turtle', 'ray'].includes(kind));
+        complete = (cleanedSince > 0 && publishedAfterAcceptance.includes('cleanup')) || clearReefStory;
+        reason = complete ? 'Your cleared reef and new highlight have been recognised.' : allDebrisCleared(profile) ? 'The debris stays cleared. Publish a peaceful wildlife highlight from the recovering reef.' : 'Remove debris and publish a cleanup highlight.';
     }
     else if (active && id === 'recognition-300') {
         const acceptedDay = campaign.activeOpportunityDay ?? profile.day;
@@ -1110,7 +1113,7 @@ function milestoneStatus(profile, id) {
     const achieved = campaign.milestoneFlags.includes(id);
     const missing = opportunityMissing(profile, milestone);
     const objective = milestoneObjectiveStatus(profile, id);
-    return { milestone, achieved, available: !achieved && objective.active && objective.complete && missing.length === 0, missing, objective, recognitionOnly: true };
+    return { milestone, description: recognitionDescription(profile, milestone), achieved, available: !achieved && objective.active && objective.complete && missing.length === 0, missing, objective, recognitionOnly: true };
 }
 /** Record a one-time recognition flag. Recognition never changes cash or reputation. */
 function claimMilestone(profile, id) {
@@ -1373,7 +1376,7 @@ function upgradeLevel(p, id) { return p.upgradeLevels?.[id] ?? (p.upgrades.inclu
 function upgradeCost(p, id) { const u = exports.UPGRADES.find(u => u.id === id), level = upgradeLevel(p, id); return !u || level >= exports.MAX_UPGRADE_LEVEL ? 0 : Math.round(u.cost * [1, .2, .25, .3, .4][level] / 5) * 5; }
 /** Service replaces parts of owned gear; advanced work opens as field experience grows. */
 function upgradeServiceRequirement(p, id) {
-    const next = upgradeLevel(p, id) + 1, day = [0, 1, 1, 5, 8, 11][next] ?? 1, rep = [0, 0, 0, 12, 20, 28][next] ?? 0;
+    const next = upgradeLevel(p, id) + 1, day = next === 1 && id === 'scooter' ? 3 : next === 1 && id === 'torch' ? 4 : [0, 1, 1, 5, 8, 11][next] ?? 1, rep = next === 1 && id === 'scooter' ? 4 : next === 1 && id === 'torch' ? 6 : [0, 0, 0, 12, 20, 28][next] ?? 0;
     const available = p.day >= day && p.reputation >= rep;
     return { available, reason: available ? '' : `Level ${next} service opens on day ${day} with ${rep} conservation reputation.` };
 }
@@ -1535,7 +1538,7 @@ function nextCharacterMoment(p) {
 function momentView(m) { return `<section class="modal narrow character-moment"><div class="character-mark" aria-hidden="true">${esc(m.speaker.split(' ').map(w => w[0]).slice(0, 2).join(''))}</div><p class="eyebrow">${esc(m.speaker)}</p><h2>${esc(m.title)}</h2><p>${esc(m.text)}</p><div class="button-row">${m.research ? '<button class="primary" data-action="research-accept">Accept the assignment</button>' : '<button class="primary" data-close>Back to it</button>'}<button data-close>${m.research ? 'Maybe later' : 'Skip'}</button></div><p class="tiny muted">Short harbour conversation · you can skip it.</p></section>`; }
 function careerView(p) {
     const c = p.campaign ?? (0, campaign_js_1.normalizeCampaign)(p), research = (0, campaign_js_1.researchEligibility)(p);
-    const offers = campaign_js_1.CAREER_MILESTONES.map(m => { const s = (0, campaign_js_1.milestoneStatus)(p, m.id); return `<li><strong>${esc(m.title)}</strong><span>${m.audience} followers · ${m.reputation} reputation</span><small>${esc(s.achieved ? 'Recognition earned.' : s.objective.active ? s.objective.reason : m.objective)}</small>${!s.achieved && !s.objective.active ? `<button data-action="opportunity" data-value="${m.id}" ${s.missing.length === 0 && !c.activeOpportunity ? '' : 'disabled'}>Take assignment</button>` : ''}</li>`; }).join('');
+    const offers = campaign_js_1.CAREER_MILESTONES.map(m => { const s = (0, campaign_js_1.milestoneStatus)(p, m.id); return `<li><strong>${esc(m.title)}</strong><span>${m.audience} followers · ${m.reputation} reputation</span><small>${esc(s.achieved ? 'Recognition earned.' : s.objective.active ? s.objective.reason : s.description)}</small>${!s.achieved && !s.objective.active ? `<button data-action="opportunity" data-value="${m.id}" ${s.missing.length === 0 && !c.activeOpportunity ? '' : 'disabled'}>Take assignment</button>` : ''}</li>`; }).join('');
     return `${c.milestoneFlags.length ? `<p class="company-recognition">Recognition · ${c.milestoneFlags.map(id => esc(campaign_js_1.CAREER_MILESTONES.find(m => m.id === id)?.title ?? id)).join(' · ')}</p>` : ''}<details class="career-panel"><summary>Reputation &amp; stories · ${p.reputation} reputation / ${p.audience} followers</summary><p class="tiny muted">Reputation comes from careful reef work. Followers come from the highlights you publish. Recognition adds a badge, without another cash payout.</p><p>${esc(research.reason)}</p>${p.reputation >= 8 && !c.researchAccepted ? '<button data-action="research-visit">Meet the university team</button>' : ''}<ul class="recognition-list">${offers}</ul></details>`;
 }
 function eventView(p, site, registered) { const today = p.day % 3 === 0, theme = (0, contracts_js_1.eventTheme)(p, site), objective = theme === 'catch' ? 'Lionfish removal earns 125 points; secure and land your catch.' : theme === 'cleanup' ? 'Cleanup earns 200 points. Loaned field cutters make abandoned-gear work 20% faster.' : 'Station readings earn 120 points. Loaned gauges make readings 20% faster.'; return `<section class="modal narrow"><p class="eyebrow">LANTERN BAY SWEEP · LOCAL EVENT</p><h2>${today ? 'Today is ' + theme + ' day.' : 'The next Sweep is on day ' + (p.day + (3 - p.day % 3)) + '.'}</h2><p>${objective}</p><p>Native-fish and coral hits reduce your score. Safe return is required for a prize.</p><p><strong>250 points: $25 · 650: $50 · 1,200: $80</strong></p><p class="status-note">${registered ? 'Registered for today. This stays with this logbook after reload.' : 'Not registered. Your regular dive remains available.'}</p><div class="button-row"><button class="primary" data-action="event-toggle" ${today && !p.active && !p.pending ? '' : 'disabled'}>${registered ? 'Cancel registration' : 'Register for today'}</button><button data-close>Done</button></div><h3>Your local results</h3>${p.records.slice(-5).reverse().map(r => `<p class="tiny">Day ${r.day} · ${esc(r.site)} · ${r.score} points</p>`).join('') || '<p class="tiny muted">No results yet.</p>'}</section>`; }

@@ -179,3 +179,11 @@ test('optional campaign, registration, lesson, encounter and progress fields are
   const revisioned = freshProfile(); revisioned.totalRemoved = 6; revisioned.active = startRun(revisioned, 'passage'); revisioned.active.siteRevision = 2;
   assert.equal(validateProfile(revisioned).active.siteRevision, 2);
 });
+
+test('a fully cleaned legacy career can earn storytelling recognition without respawning ecological work',()=>{
+ const p=freshProfile();p.audience=160;p.reputation=8;
+ for(const site of Object.values(SITES))p.reefs[site.id].cleaned=site.worksites.debris.map((_,i)=>'debris-'+i);
+ const work=JSON.stringify(p.reefs),cash=p.cash;assert.match(milestoneStatus(p,'recognition-160').description,/already cleared/);
+ assert.equal(acceptMilestoneOpportunity(p,'recognition-160').ok,true);assert.equal(milestoneStatus(p,'recognition-160').available,false);
+ p.published.push('ray');assert.equal(claimMilestone(p,'recognition-160').ok,true);assert.equal(p.cash,cash);assert.equal(JSON.stringify(p.reefs),work);assert.equal(claimMilestone(p,'recognition-160').ok,false);
+});
