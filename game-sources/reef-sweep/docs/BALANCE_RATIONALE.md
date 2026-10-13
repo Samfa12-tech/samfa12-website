@@ -75,3 +75,6 @@ Production now returns four fish at the existing four-visit interval. The regres
 +
 +Existing schema-1 gear, ranks, cash and ecological work are retained. Old active/pending outings keep their original contract, survey, sponsor and event promises for one settlement; subsequent launches use the new rates. Prior research history continues to qualify without repeating the invitation. Actual browser actions earned reputation8 in the early productive loop, but its controlled positioning and accelerated time are not a natural pacing test.
 +
++
++Major first purchases also need field experience: scooter day3/reputation4, head torch day4/reputation6 (plus regulator2). This protects the opening from a very thorough guided outing buying travel/night gear immediately. Owned legacy gear stays usable. If every permanent debris patch is already cleared, the 160-follower assignment accepts a new peaceful wildlife story from the recovering reef, preserving completed ecological work without respawning litter or paying cash.
++

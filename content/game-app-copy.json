@@ -785,7 +785,9 @@
         "sources": ["https://samfa12.itch.io/pocket-pattern"]
       }
     ],
-    "relatedIds": ["app-pocket-chordsmith"],
+    "relatedIds": [
+      "app-pocket-chordsmith"
+    ],
     "relatedLabels": {"app-pocket-chordsmith": "Explore Pocket Chordsmith, used to create the music"}
   },
   "game-reckless-dentist": {
@@ -1589,9 +1591,7 @@
     "relatedIds": [
       "game-wonky-vehicle-lab"
     ],
-    "relatedLabels": {
-      "game-wonky-vehicle-lab": "Try another Samfa12 vehicle physics experiment"
-    }
+    "relatedLabels": {"game-wonky-vehicle-lab": "Try another Samfa12 vehicle physics experiment"}
   },
   "game-reef-sweep": {
     "seoTitle": "Reef Sweep first-person diving game",
@@ -1599,21 +1599,28 @@
     "details": [
       {
         "heading": "Explore Lantern Bay",
-        "text": "Start in the warm shallows of Sunlit Gardens, then unlock the currents of Tideglass Passage. Further out, Mangrove Reach has root channels and a bright sandbar, Azure Cenote opens into deep limestone basins, and Rusted Harbour shelters fish among wreck ribs and old cargo containers. Seaweed sways with the current, your regulator keeps you breathing, and bubbles rise towards the surface. Swim up for a look at the coast, though surfacing won't refill your tank.",
+        "text": "Start in the warm shallows of Sunlit Gardens, then follow Tideglass Passage’s sheltered nursery route across the tide race to Cathedral arch. Further out, Mangrove Reach has root channels and a bright sandbar, Azure Cenote opens into deep limestone basins, and Rusted Harbour shelters fish among wreck ribs and old cargo containers. Seaweed sways with the current, your regulator keeps you breathing, and bubbles rise towards the surface. Swim up for a look at the coast, though surfacing won't refill your tank.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
       },
       {
         "heading": "Hunt lionfish and restore the reef",
-        "text": "Get close, settle your aim, hold to draw the pole spear and release to strike. Hold Interact to secure the fish in your collection tube before moving on. Lionfish spines hurt and drain your air, so give them room. Between hunts, clear abandoned fishing gear, plant nursery-grown coral and survey field stations. Take on restaurant orders and conservation contracts, and return to a reef that remembers your work. Fish return between dives as you keep clearing lionfish. Come back for three, four or five productive outings and the reef starts to bustle with larger, more colourful schools.",
+        "text": "Get close, settle your aim, hold to draw the pole spear and release to strike. Hold Interact to secure the fish in your collection tube before moving on. Lionfish spines hurt and drain your air, so give them room. Between hunts, clear abandoned fishing gear, plant nursery-grown coral and build your conservation reputation. After earning eight reputation, meet the university research team to take on a funded field survey. Take on restaurant orders and conservation contracts, and return to a reef that remembers your work. Fish return between dives as you keep clearing lionfish. Come back for three, four or five productive outings and the reef starts to bustle with larger, more colourful schools.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "heading": "A reason to come back",
+        "text": "Take on achievable contracts and see your progress during the dive. Every third game day brings a local Sweep event with its own objective and score. Publish wildlife and cleanup highlights to build an audience and earn recognition. On later outings, listen for boats overhead and keep clear of active fishing lines; abandoned gear can be recovered once the boat has gone.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
       },
       {
         "heading": "Better gear and night dives",
-        "text": "Spend your earnings on fins, a better spear, more air and a battery-powered scooter. Nine equipment types have five upgrade levels each, giving you more room to explore as your diving business grows. Upgrade your regulator to level 2, fit a head torch and unlock Tideglass Passage to try a night dive. Keep an eye out for the reef shark. High graphics adds shadows across the reef, including those cast by your torch; reload when prompted to apply the full detail.",
+        "text": "Spend your earnings on fins, a better spear, more air and a battery-powered scooter. Nine equipment types have five upgrade levels each, giving you more room to explore as your diving business grows. Later equipment service gets cheaper as you gain field experience. The scooter’s motor rises with your thrust and quietens when you stow it. Upgrade your regulator to level 2. Head torches become available on game day 4 with six conservation reputation; fit one and unlock Tideglass Passage to try a night dive. Keep an eye out for the reef shark. High graphics adds shadows across the reef, including those cast by your torch; reload when prompted to apply the full detail.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
@@ -1627,7 +1634,7 @@
       },
       {
         "heading": "Prepare your catch",
-        "text": "Back at the harbour, try the optional filleting activity. Time three careful cuts to earn up to 30% more when you sell your fish. You can skip it and go straight to deciding what to sell, donate or serve as meals.",
+        "text": "Back at the harbour, try the optional filleting activity. Time three careful cuts, see your grade and check the exact bonus before you sell. Careful preparation adds up to 30% to the value of fish sold. You can skip it and go straight to deciding what to sell, donate or serve as meals.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]

@@ -24,7 +24,7 @@ Five sites unlock through conservation work. Tideglass Passage now starts at a s
 
 Survey work opens after eight conservation reputation and accepting Dr Mira Vale's university invitation. The first funded two-station assignment pays $65 total by day or $72 at night, including station pay. Repeat monitoring pays $38/$45 total. Unavailable contracts explain what is missing. Audience milestones offer recognition assignments; followers do not replace conservation reputation.
 
-Nine equipment types have five ranks. Major first purchases remain substantial; later service is cheaper and ranks 3–5 open with logged days and reputation. See `docs/BALANCE_RATIONALE.md` for costs, fixtures and assumptions. Regulator rank 2, a head torch and unlocked Passage are needed for night dives. Give the shark room and return safely.
+Nine equipment types have five ranks. The scooter opens on day3/reputation4 and the torch on day4/reputation6; major first purchases remain substantial; later service is cheaper and ranks 3–5 open with logged days and reputation. See `docs/BALANCE_RATIONALE.md` for costs, fixtures and assumptions. Regulator rank 2, a head torch and unlocked Passage are needed for night dives. Give the shark room and return safely.
 
 Optional three-cut filleting shows a grade and exact sale bonus, up to 30% on fish sold. Each cut and final preparation persist, and a catch can be prepared once. Later sites occasionally have clearly warned overhead boats; avoid active fishing lines and recover abandoned gear for one $5 fee.
 

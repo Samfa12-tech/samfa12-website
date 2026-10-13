@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "page": "Reef landing",
+      "js": true,
+      "width": 1280,
+      "headings": 1,
+      "research": true,
+      "playVersion": true,
+      "overflow": false
+    },
+    {
+      "page": "Games catalogue",
+      "reefLink": true
+    },
+    {
+      "page": "Homepage",
+      "title": true
+    },
+    {
+      "page": "Reef landing",
+      "js": true,
+      "width": 390,
+      "headings": 1,
+      "research": true,
+      "playVersion": true,
+      "overflow": false
+    },
+    {
+      "page": "Games catalogue",
+      "reefLink": true
+    },
+    {
+      "page": "Homepage",
+      "title": true
+    },
+    {
+      "page": "Reef landing",
+      "js": false,
+      "width": 390,
+      "headings": 1,
+      "research": true,
+      "playVersion": true,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "reviewCandidate": "0.4.0-preview.1",
+  "gameBundleSha256": "133a47a6dc95ff48a07c7f0238f189a645ed2f02efe020fd70c0c6041cf73162",
+  "scope": "Controlled browser fixtures, not natural or physical-device playtests"
+}
