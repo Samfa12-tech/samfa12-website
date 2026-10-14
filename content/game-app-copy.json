@@ -1669,9 +1669,10 @@
     "faqs": [
       {
         "question": "Where can I play Reef Sweep?",
-        "answer": "Play it here in your browser using the Play Reef Sweep button. The game is still in development.",
+        "answer": "Play it here in your browser using the Play Reef Sweep button, or choose Play on Wavedash. The game is still in development.",
         "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
+          "https://samfa12.com/games/reef-sweep/play/",
+          "https://wavedash.com/games/reef-sweep"
         ]
       },
       {
