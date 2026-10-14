@@ -1774,6 +1774,10 @@
       {
         "label": "Play Reef Sweep",
         "url": "/games/reef-sweep/play/?v=0.4.0-preview.1"
+      },
+      {
+        "label": "Play on Wavedash",
+        "url": "https://wavedash.com/games/reef-sweep"
       }
     ],
     "sortOrder": 36,

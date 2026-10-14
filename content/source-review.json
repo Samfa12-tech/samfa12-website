@@ -978,6 +978,13 @@
           "buildManifestSha256": "40e46c5f49b6e052b2fb21920b04deb2c7b9b3c5898bf68c0ad910a562e80ae4",
           "handoffSha256": "072ed45f47982d066e5e0a65edcd243e426da202322d71220e49af31fa419575",
           "notes": "Five sites, delayed productive-return reef recovery, animated wildlife/arms and functioning dive watch; 118 source and 8 package tests, plus campaign, terrain, shadow and responsive Chromium evidence. No within-outing population gain. Previous physical approval belongs to v0.2; current phone/controller watch and new-site acceptance, sustained performance and natural campaign pacing remain outstanding. Original eel geometry, controller mapping and schema-1 saves preserved."
+        },
+        {
+          "url": "https://wavedash.com/games/reef-sweep",
+          "identity": "Reef Sweep public Wavedash game listing",
+          "access": "read-public-source",
+          "reviewedAt": "2026-10-14",
+          "notes": "HTTP 200 public page identifies Reef Sweep and offers browser play. Verified listing availability only; no version parity, save transfer or revenue claim."
         }
       ],
       "limits": [
