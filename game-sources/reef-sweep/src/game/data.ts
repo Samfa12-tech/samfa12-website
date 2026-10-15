@@ -123,6 +123,8 @@ function oldFloorHeight(x: number, z: number) {
     return shelf - trench * (1 - foundation);
 }
 function terrainSite(site?: Site | SiteId): Site | undefined { return typeof site === 'string' ? SITES[site] : site; }
+for (const s of Object.values(SITES)) { const work=s.worksites!; work.debris.push(...work.coral.map((p,i)=>vec(p.x+(i===1?4:-3),0,p.z-4))); }
+
 /** Omitted/legacy site terrain exactly preserves Sunlit Gardens and Passage's shared seabed. */
 export function floorHeight(x: number, z: number, siteArg?: Site | SiteId) {
     const site = terrainSite(siteArg);
@@ -168,7 +170,7 @@ export function freePoint(p: Vec, site: Site, padding = .8) {
 export function groundPoint(x: number, z: number, lift = 1, site?: Site | SiteId) { return vec(x, floorHeight(x, z, site) + lift, z); }
 
 export const DEFAULT_KEYS: Settings['keys'] = { forward: 'KeyW', back: 'KeyS', left: 'KeyA', right: 'KeyD', up: 'Space', down: 'ControlLeft', boost: 'ShiftLeft', steady: 'KeyF', interact: 'KeyE', spear: 'Mouse0', scooter: 'KeyQ', pause: 'Escape', journal: 'KeyJ', light: 'KeyL', watch: 'KeyV' };
-export const DEFAULT_SETTINGS: Settings = { quality: 'balanced', music: .42, ambience: .6, effects: .7, sensitivity: 1, invertY: false, reducedMotion: false, assist: true, toggleDraw: false, fov: 78, touchScale: 1, instrumentHud: true, keys: { ...DEFAULT_KEYS } };
+export const DEFAULT_SETTINGS: Settings = { quality: 'high', music: .42, ambience: .6, effects: .7, sensitivity: 1, invertY: false, reducedMotion: false, assist: true, toggleDraw: false, fov: 78, touchScale: 1, instrumentHud: true, keys: { ...DEFAULT_KEYS } };
 export const UPGRADES: { id: string; name: string; cost: number; tag: string; description: string; requires: string; requiredLevel?: number }[] = [
     { id: 'fins', name: 'Reefglide fins', cost: 95, tag: 'MOVE', description: 'Each level adds 12% of base fin speed, up to 60% at level 5.', requires: '' },
     { id: 'tube', name: 'Wide-mouth collection tube', cost: 120, tag: 'CAPACITY', description: 'Carry 12 fish at level 1, then 2 more per level, up to 20. Secured catches cannot be stolen.', requires: '' },

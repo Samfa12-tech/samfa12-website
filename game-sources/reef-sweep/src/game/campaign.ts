@@ -1,3 +1,4 @@
+import { fishSize } from './expedition.js';
 import type { CampaignState, Profile, ReefProgress, Run, SiteId } from './types.js';
 import { SITES, UPGRADES, reefFishHomes, upgradeLevel } from './data.js';
 
@@ -96,14 +97,14 @@ function remainingLionfish(profile: Profile, siteId: SiteId): number {
     // authored population.
     const cohort = Math.floor(reef.visits / 4);
     const ids = homes.map((_, i) => reef.visits >= 4 && i < 4 ? `return-${cohort}-${i}` : `fish-${i}`);
-    return ids.filter(id => !reef.removed.includes(id)).length;
+    return ids.filter((id,i) => !reef.removed.includes(id) && fishSize(site.seed,i)>=.84).length;
 }
 
 export function contractOptions(profile: Profile, siteId: SiteId): ContractOption[] {
     const site = SITES[siteId];
     const reef = profile.reefs[siteId];
     const fish = remainingLionfish(profile, siteId);
-    const cleanup = Math.max(0, (site.worksites?.debris.length ?? 0) - reef.cleaned.length);
+    const cleanup = Math.max(0, (site.worksites?.debris.length ?? 0) - reef.cleaned.filter(id=>id.startsWith('debris-')).length);
     const restoration = Math.max(0, (site.worksites?.coral.length ?? 0) - Object.keys(reef.restored).length);
     const research = researchEligibility(profile);
     const stationCount = (site.worksites?.surveys.length ?? 0) + 2;

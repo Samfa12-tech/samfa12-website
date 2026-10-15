@@ -30,3 +30,15 @@ Publication gate: full implementation, tests/build/package, browser visual revie
 Settlement currently mutates the profile, then calls `preview()` before showing the receipt. Preview starts a real-contract run on a clone using the default catch order. When permanent removals leave fewer than four available fish, contract validation throws after payment but before screen transition. This is independent of day three. Fix preview to use free exploration and make cosmetic rendering unable to block an already committed receipt.
 
 Physical Android/iPhone are unavailable. Browser emulation evidence will be reported separately from device acceptance. Blender 5.2 is installed. Local Windows sandbox blocks Git helper/network processes; authorized clone/fetch succeeded with reviewed escalation.
+
+## Implementation checkpoint 2026-10-15
+
+The candidate is now v0.5.0-preview.1. Domain/input tests: **177/177 pass**. First controlled Chrome desktop/touch flow: **16 checks pass, zero page errors**. Further all-site/carry/boat/performance review is in progress. No publication and no rate-limit interruption.
+
+Implemented: touch/selection/reticle/HUD; chart packing; host fullscreen; receipt-preview fix; actual mesh/two catches and existing photo event; size pricing and two-distance fuel; one-home Marlow; open pipe and authored marine props; five keepsakes; mask water/clearing; boat driving, recipes and 3D scaling/filleting; later treatment sequence; High default and consent performance suggestion; version-derived packaging. Existing five distinct site terrain/collision routes are retained; new habitat groups reinforce their authored route landmarks. Sand puffs deliberately omitted pending convincing local effect work, as authorized by the brief.
+
+Blender 5.2 authored the 6,774-triangle skiff; editable blend, GLB, generation script and two studio render views retained. Runtime uses a deterministic colour-mesh bake (one draw, no textures) because the existing pinned offline engine closure has no GLTF loader. No engine or external runtime dependency migration. Boat wave/roll/wake presentation has been visually revised after actual gameplay captures.
+
+QA caught and fixed: unbundled preparation light type; fillet-result return stack; full-tube legacy boarding; dense chart packing; tube near-plane intrusion; overlapping landscape objective/buttons. Deep browser collection fixture is being changed from separated debug ticks (idle frames reset a held interaction) to actual held keyboard input; domain two-catch transfer already passes.
+
+Parent progress messaging was attempted once via the available app tool, but the durable source thread ID returned `thread not found`. The parent can inspect this checkpoint and commentary; no message was delivered through that tool.

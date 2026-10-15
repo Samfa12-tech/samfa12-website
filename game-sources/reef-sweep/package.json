@@ -1,13 +1,13 @@
 {
   "name": "reef-sweep",
-  "version": "0.4.0-preview.1",
+  "version": "0.5.0-preview.1",
   "private": true,
   "type": "module",
   "description": "Reef Sweep \u2014 Lantern Bay. First-person reef conservation adventure.",
   "scripts": {
     "build": "node scripts/sync-music.mjs && tsc && node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "tsc && node --test tests/domain.test.mjs tests/campaign.test.mjs tests/input.test.mjs tests/fish-motion.test.mjs tests/surface.test.mjs tests/progression.test.mjs tests/environment.test.mjs tests/terrain.test.mjs tests/breathing.test.mjs tests/presentation.test.mjs tests/campaign-rules.test.mjs tests/tutorial-audio.test.mjs tests/sites-boats.test.mjs tests/polish-campaign-loop.test.mjs tests/game-start.test.mjs tests/economic-pacing.test.mjs",
+    "test": "tsc && node --test tests/domain.test.mjs tests/campaign.test.mjs tests/input.test.mjs tests/fish-motion.test.mjs tests/surface.test.mjs tests/progression.test.mjs tests/environment.test.mjs tests/terrain.test.mjs tests/breathing.test.mjs tests/presentation.test.mjs tests/campaign-rules.test.mjs tests/tutorial-audio.test.mjs tests/sites-boats.test.mjs tests/polish-campaign-loop.test.mjs tests/game-start.test.mjs tests/economic-pacing.test.mjs tests/expedition.test.mjs",
     "dev": "npm run build && node scripts/serve.mjs",
     "preview": "node scripts/serve.mjs dist",
     "vendor": "node scripts/vendor.cjs",

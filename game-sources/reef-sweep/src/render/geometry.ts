@@ -257,7 +257,11 @@ export function shipwreckGeometry() {
 export function sewagePipeGeometry(length = 10, radius = 1.2) {
     const g = new Geometry(), iron = rgb('#765747'), rust = rgb('#a36d4d'), dark = rgb('#1d3033');
     const startZ = -length / 2, endZ = length / 2;
-    g.ellipsoid(vec(0, 0, startZ + .025), vec(radius * .78, radius * .78, .035), dark, 18, 10);
+    // Open bore: real inner wall and annular lips, no black mouth plate.
+    for(let i=0;i<28;i++){const a=i/28*Math.PI*2,b=(i+1)/28*Math.PI*2,p=(q:number,z:number,r:number)=>vec(Math.cos(q)*r,Math.sin(q)*r,z);
+        g.quad(p(a,startZ,radius-.11),p(b,startZ,radius-.11),p(b,endZ,radius-.11),p(a,endZ,radius-.11),tint(iron,.58));
+        for(const z of [startZ,endZ])g.quad(p(a,z,radius),p(b,z,radius),p(b,z,radius-.11),p(a,z,radius-.11),rust);
+    }
     for (let band = 0; band < 6; band++) {
         const z = startZ + (length - 1.5) * band / 5;
         for (let i = 0; i < 16; i++) {
@@ -438,6 +442,7 @@ export function fishGeometry(kind: 'lionfish' | 'marlow' | 'moray' | 'turtle' | 
         }
         g.ellipsoid(vec(0,-height*.12,length*.92),vec(.026,.018,.025),tint(c,.62),8,5);
     }
+    if(kind==='lionfish')for(let i=0;i<g.positions.length;i++)g.positions[i]*=.65;
     // UV metadata: creature family and a fin weight. One shared material and
     // one deformation shader are reused by regular meshes and shadow passes.
     const family = kind === 'turtle' ? 2 : kind === 'ray' ? 3 : kind === 'moray' ? 4 : kind === 'lionfish' ? 5 : kind === 'shark' ? 6 : kind === 'marlow' ? 7 : 1;
@@ -467,9 +472,15 @@ export function equipment(kind: 'arms' | 'spear' | 'tube' | 'scooter') {
             g.rod(vec(.025 + s * .025, -.015, 2.28), vec(.007 + s * .04, 0, 2.63), .008, .0015, metal, 5);
     }
     if (kind === 'tube') {
-        g.rod(vec(-.60, -.7, .45), vec(-.60, -.29, .55), .17, .18, teal, 16);
-        g.rod(vec(-.60, -.32, .54), vec(-.60, -.27, .553), .189, .189, orange, 16);
-        g.ellipsoid(vec(-.60, -.255, .553), vec(.15, .015, .15), rubber, 14, 5);
+        // Open upward-facing mouth; the barrel runs down beside the diver,
+        // never back through the near plane. Fish and prongs follow this axis.
+        const axis=vec(0,-.94,-.34),u=vec(1,0,0),v=vec(0,-.34,.94);
+        const p=(q:number,t:number,r:number)=>vec(-.64+Math.cos(q)*r,-.55+axis.y*t+v.y*Math.sin(q)*r,1.10+axis.z*t+v.z*Math.sin(q)*r);
+        for(let i=0;i<32;i++){const a=i/32*Math.PI*2,b=(i+1)/32*Math.PI*2;
+            g.quad(p(a,.95,.26),p(b,.95,.26),p(b,0,.26),p(a,0,.26),teal);
+            g.quad(p(a,.93,.235),p(b,.93,.235),p(b,0,.235),p(a,0,.235),tint(teal,.42));
+            g.quad(p(a,0,.26),p(b,0,.26),p(b,0,.235),p(a,0,.235),orange);
+        }
     }
     if (kind === 'scooter') {
         g.ellipsoid(vec(0, -.38, 1.04), vec(.34, .25, .62), teal, 20, 12);

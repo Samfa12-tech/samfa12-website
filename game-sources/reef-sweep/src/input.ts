@@ -294,7 +294,7 @@ export class InputController {
         const joy = document.getElementById('joystick')!, knob = document.getElementById('joy-knob')!;
         let pointer = -1, originX = 0, originY = 0;
         const update = (e: PointerEvent) => { const dx = clamp(e.clientX - originX, -44, 44), dy = clamp(e.clientY - originY, -44, 44); const len = Math.hypot(dx, dy), d = Math.max(44, len); this.joyX = dx / d; this.joyZ = -dy / d; knob.style.transform = `translate(${dx}px,${dy}px)`; };
-        joy.addEventListener('pointerdown', e => { if (!this.active)
+        joy.addEventListener('pointerdown', e => { if (!this.active || pointer !== -1)
             return; this.touchMode = true; e.preventDefault(); pointer = e.pointerId; const box = joy.getBoundingClientRect(); originX = box.left + box.width / 2; originY = box.top + box.height / 2; joy.setPointerCapture(pointer); update(e); });
         joy.addEventListener('pointermove', e => { if (pointer === e.pointerId)
             update(e); });
@@ -302,10 +302,11 @@ export class InputController {
             return; pointer = -1; this.joyX = this.joyZ = 0; knob.style.transform = 'translate(0,0)'; };
         joy.addEventListener('pointerup', end);
         joy.addEventListener('pointercancel', end);
+        joy.addEventListener('lostpointercapture', end);
         for (const btn of document.querySelectorAll<HTMLElement>('[data-touch]')) {
             const action = btn.dataset.touch!;
             let id = -1;
-            btn.addEventListener('pointerdown', e => { if (!this.active)
+            btn.addEventListener('pointerdown', e => { if (!this.active || id !== -1)
                 return; e.preventDefault(); this.touchMode = true; id = e.pointerId; btn.setPointerCapture(id); btn.classList.add('pressed'); if (['scooter', 'light', 'pause', 'journal', 'watch'].includes(action)) {
                 this.command(action as Action);
                 return;
@@ -327,7 +328,9 @@ export class InputController {
                 this.release = true; this.touch.delete(action); if (this.lookPointer === e.pointerId)
                 this.lookPointer = -1; };
             btn.addEventListener('pointerup', up);
-            btn.addEventListener('pointercancel', e => { this.cancelDraw = true; up(e); this.release = false; });
+            const cancel = (e: PointerEvent) => { if(e.pointerId !== id)return; this.cancelDraw = true; this.drawToggle = false; up(e); this.release = false; };
+            btn.addEventListener('pointercancel', cancel);
+            btn.addEventListener('lostpointercapture', cancel);
         }
     }
     down(a: Action) { if (a === 'spear' && this.keys.has('KeyR') && !Object.values(this.settings.keys).includes('KeyR'))

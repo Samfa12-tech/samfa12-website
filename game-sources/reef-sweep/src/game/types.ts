@@ -25,6 +25,7 @@ export interface GamepadProfile {
 }
 export interface Settings {
     quality: 'high' | 'balanced' | 'low';
+    performancePromptDismissed?: boolean;
     music: number;
     ambience: number;
     effects: number;
@@ -87,6 +88,8 @@ export interface Profile {
     }[];
     published: string[];
     discoveries: string[];
+    charms?: string[];
+    equippedCharm?: string;
     tutorial: number;
     sponsorPaidDay: number;
     lastReport: string;
@@ -117,7 +120,7 @@ export interface Fish {
 }
 export interface Job {
     id: string;
-    kind: 'debris' | 'coral' | 'survey';
+    kind: 'debris' | 'coral' | 'survey' | 'charm' | 'outbreak';
     p: Vec;
     done: boolean;
     progress: number;
@@ -134,6 +137,10 @@ export interface Animal {
     phase: number;
 }
 export interface Catch {
+    size?: number;
+    phase?: number;
+    struckAt?: number;
+    struckPosition?: Vec;
     id: string;
     weight: number;
     value: number;
@@ -166,6 +173,15 @@ export interface Run {
     battery: number;
     cargo: Catch[];
     exposed: Catch | null;
+    skewered?: Catch[];
+    transfer?: { catches: Catch[]; started: number };
+    expedition?: boolean;
+    boatDistance?: number;
+    maskFlood?: number;
+    droplets?: number;
+    scalingPasses?: number[];
+    cooking?: {recipe: string; quality: number; complete: boolean};
+    treated?: number;
     fish: Fish[];
     jobs: Job[];
     animals: Animal[];

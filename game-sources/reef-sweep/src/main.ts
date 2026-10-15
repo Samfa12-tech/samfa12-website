@@ -1,3 +1,6 @@
+import { BoatTravelRenderer } from './render/boat-travel.js';
+import { newBoat, updateBoatTravel, arrivalSite, travelCosts, completeCooking, equipCharm, type BoatState } from './game/expedition.js';
+import { PerformanceSuggestion } from './host.js';
 import { bindSuspendedDive } from './game/resume.js';
 import { startLesson, lessonActive, skipLesson } from './game/tutorial.js';
 import { approachResearch, acceptResearch, normalizeCampaign, researchEligibility, recordCharacterFlag, acceptMilestoneOpportunity } from './game/campaign.js';
@@ -16,6 +19,7 @@ import { UI, Screen } from './ui/ui.js';
 const canvas = document.getElementById('ocean') as HTMLCanvasElement;
 const store = new SaveStore();
 let profile = store.load(store.selectedSlot()), settings = store.settings(), sim: Simulation | null = null, paused = true, visualDive = false, renderer: ReefRenderer | null = null, stack: (Screen | 'play')[] = [], fault = false;
+let boat: BoatState|null=null, boatRenderer: BoatTravelRenderer|null=null, travelledDistance=0;
 const audio = new Soundscape(settings);
 const ui = new UI(() => profile, () => settings, dispatch);
 const input = new InputController(canvas, settings, action => { if (action === 'pause') {
@@ -25,6 +29,7 @@ const input = new InputController(canvas, settings, action => { if (action === '
         close();
 }
 else if (action === 'journal') {
+    if(boat){ui.toast('Use the bay navigation chart and slow beside a gold buoy to dive.');return;}
     if (paused && ui.screen === 'journal')
         close();
     else
@@ -42,6 +47,7 @@ else if (action === 'light' && sim) {
     sim.notice(sim.run.light ? 'Dive light on. Battery use is shared with the scooter.' : 'Dive light off.');
 } });
 input.mountTouch();
+const performanceSuggestion = new PerformanceSuggestion();
 let accum = 0, last = 0, visualTime = 0, hudClock = 0, frameCount = 0;
 let practiceCareer: Profile|null=null;
 let playCandidate=false, audioThrust=0;
@@ -87,8 +93,8 @@ function setPause(v: boolean) { if (v) setWatchRaised(false); paused = v; input.
 } audio.setPaused(v && visualDive); if (v)
     persist(); }
 function preview(id: SiteId = ui.site) { if (!renderer)
-    return; const copy = structuredClone(profile); copy.active = null; copy.pending = null; const run = startRun(copy, siteUnlocked(copy, id) ? id : 'gardens'); renderer.build(profile, run); visualDive = false; }
-function show(screen: Screen) { setPause(true); ui.show(screen); if (screen === 'saves')
+    return; const copy = structuredClone(profile); copy.active = null; copy.pending = null; const run = startRun(copy, siteUnlocked(copy, id) ? id : 'gardens', 'none'); renderer.build(profile, run); visualDive = false; }
+function show(screen: Screen) { setPause(true); if(boat&&screen==='pause')screen='boat-pause'; ui.show(screen); if (screen === 'saves')
     ui.slots([store.load(1), store.load(2), store.load(3)]); if (screen === 'journal')
     ui.chart(sim && visualDive ? sim : null); if (screen === 'dock')
     visualDive = false; }
@@ -97,7 +103,7 @@ function open(screen: Screen) { if (screen === 'dock') {
     show('dock');
     return;
 } stack.push(paused ? ui.screen : 'play'); show(screen); }
-function close() { if (['debrief', 'receipt'].includes(ui.screen)) {
+function close() { if(boat){resumeBoat();return;} if (['debrief', 'receipt'].includes(ui.screen)) {
     if (profile.pending) {
         ui.toast('Allocate the catch and settle this outing first.');
         return;
@@ -120,6 +126,8 @@ function resume() { if (!profile.active) {
     return;
 } sim=bindSuspendedDive(profile,sim,renderer!,run=>new Simulation(profile,run));
     if(!visualDive&&!sim.run.practice)playCandidate=true; visualDive = true; setPause(false); stack = []; ui.play(); void audio.start(); canvas.focus(); input.capture(); }
+function resumeBoat(){setPause(false);ui.playBoat();}
+function launchBoat(){if(profile.active||profile.pending){begin();return;}sim=null;visualDive=false;boat=newBoat();boatRenderer=new BoatTravelRenderer(renderer!,profile,settings);stack=[];resumeBoat();}
 function begin() { if (profile.pending) {
     review();
     return;
@@ -127,6 +135,7 @@ function begin() { if (profile.pending) {
     resume();
     return;
 } const run = startRun(profile, ui.site, ui.order, profile.eventRegistrationDay===profile.day && profile.day % 3 === 0, ui.night);
+    run.boatDistance=travelledDistance;travelledDistance=0;boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');
     playCandidate=!run.practice; sim = new Simulation(profile, run); renderer!.build(profile, run); visualDive = true; setPause(false); ui.play(); void audio.start(); canvas.focus(); persist(); if(run.site==='passage'&&run.siteRevision===2&&recordCharacterFlag(profile,'passage-arrival')){persist();showMoment({id:'passage-arrival',speaker:'Nia · Harbour pilot',title:'Take the sheltered route.',text:'Your buoy is on the western shelf. Follow the lee wall to the nursery, then cross the tide race towards Cathedral arch. The two flow gauges mark the research route. There is open water above if the current feels too strong.'},true);}
     if(!paused)input.capture();
     ui.toast(run.night?'Moonlit dive. Your head torch is on; give wildlife room.':profile.totalRemoved === 0 ? 'Welcome to Lantern Bay. The first lionfish is below and ahead. J opens your chart.' : 'Back in the water. The reef remembers your last visit.'); }
@@ -163,6 +172,14 @@ function dispatch(action: string, data?: any) {
                 if (input.calibration) input.cancelCalibration();
                 close();
                 break;
+            case 'boat-launch':launchBoat();break;
+            case 'boat-resume':resumeBoat();break;
+            case 'boat-harbour':boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');preview();stack=[];show('dock');break;
+            case 'boat-dive':{const id=boat&&arrivalSite(boat);if(!id||!siteUnlocked(profile,id)){ui.toast('Stop beside an unlocked gold dive buoy first.');break;}ui.site=id;travelledDistance=boat!.distance;try{begin();}catch(error){ui.toast(String(error));}break;}
+            case 'prep-return':stack=[];show('debrief');break;
+            case 'cook-save':if(profile.pending){completeCooking(profile,data.recipe,data.scores);persist();}break;
+            case 'scaling-save':if(profile.pending&&!profile.pending.filletQuality){profile.pending.scalingPasses=data;persist();}break;
+            case 'charm-equip':equipCharm(profile,data);persist();ui.show('gear');break;
             case 'site':
                 ui.site = data;
                 preview(data);
@@ -172,7 +189,7 @@ function dispatch(action: string, data?: any) {
                 begin();
                 break;
             case 'resume':
-                resume();
+                if(boat)resumeBoat();else resume();
                 break;
             case 'review':
                 review();
@@ -271,6 +288,10 @@ function dispatch(action: string, data?: any) {
                 }
                 }
                 break;
+            case 'clear-mask':if(sim&&(sim.run.maskFlood??0)>0&&sim.run.air>=2){sim.run.air-=2;sim.run.maskFlood=0;persist();ui.toast('Mask clear · 2 bar used.');}break;
+            case 'performance-apply':
+                settings.quality = settings.quality === 'high' ? 'balanced' : 'low'; applySettings(); close(); break;
+            case 'performance-dismiss': close(); break;
             case 'fullscreen':
                 setWatchRaised(false);
                 void toggleFullscreen();
@@ -346,9 +367,9 @@ function dispatch(action: string, data?: any) {
                     persist();
                     ui.event = false;
                     sim = null;
-                    preview();
                     stack = [];
                     show('receipt');
+                    try { preview(); } catch (error) { console.error('Harbour preview failed after settlement', error); }
                     audio.sfx('work');
                 }
                 break;
@@ -391,6 +412,7 @@ function processEvents() {
 function frame(now: number) {
     if (fault)
         return;
+    const actualFrameSeconds = (now - last) / 1000;
     const dt = Math.min(.083, Math.max(0, (now - last) / 1000 || .016));
     last = now;
     visualTime += dt;
@@ -401,6 +423,7 @@ function frame(now: number) {
     if (input.padDisconnected && watchRaised) setWatchRaised(false);
     if (ui.screen === 'settings' && hudClock > .09) { hudClock = 0; ui.updateControllerStatus(input.controllerStatus()); }
     document.body.classList.toggle('touch', input.touchMode && !input.gamepad);
+    if(boat&&!paused){updateBoatTravel(boat,dt,f.moveZ,f.moveX);const arrived=arrivalSite(boat);ui.updateBoat(boat,arrived&&siteUnlocked(profile,arrived)?arrived:null);}
     if (!paused && sim) {
         accum += dt;
         let n = 0;
@@ -413,12 +436,16 @@ function frame(now: number) {
                 break;
         }
     }
+    if (performanceSuggestion.update(actualFrameSeconds, visualDive && !paused && !document.hidden && !!sim && !sim.run.practice && sim.run.time > 30, !!settings.performancePromptDismissed, settings.quality)) {
+        settings.performancePromptDismissed = true; store.saveSettings(settings); open('performance');
+    }
     audioThrust=sampledThrust(audioThrust,visualDive&&!paused, inputTime>0,f);
     audio.update(sim?.run || null, visualDive && !paused, audioThrust);
     hudClock += dt;
     try {
         renderer!.setWatchReserve(sim?.reserve ?? 40);
-        renderer!.render(visualDive ? sim?.run.time ?? visualTime : visualTime, visualDive);
+        if(boat&&boatRenderer){boatRenderer.render(boat);const chart=document.getElementById('bay-chart') as HTMLCanvasElement|null;if(chart)boatRenderer.drawChart(chart,boat);}
+        else renderer!.render(visualDive ? sim?.run.time ?? visualTime : visualTime, visualDive);
         if(playCandidate&&visualDive&&!paused&&sim&&!sim.run.practice&&renderer!.run===sim.run){playCandidate=false;if(!debug)gameStarts.start();}
     }
     catch (e) {
@@ -436,6 +463,8 @@ function frame(now: number) {
         ui.updateHUD(sim, input.gamepad ? 'gamepad' : input.touchMode ? 'touch' : 'keyboard');
         if (watchRaised && !input.touchMode) document.getElementById('controls-hint')!.textContent = 'Watch raised · Movement and looking remain available · Lower watch before drawing the spear';
         updateWatchReadout();
+        const mask=document.getElementById('mask-water')!;mask.style.setProperty('--flood',String(sim.run.maskFlood??0));mask.style.setProperty('--droplets',String(sim.run.droplets??0));
+        document.getElementById('clear-mask')!.hidden=!(sim.run.maskFlood&&sim.run.maskFlood>0);
         const mark = renderer!.homeMarker(), el = document.getElementById('home-marker')!;
         el.style.left = mark.x + '%';
         el.style.top = mark.y + '%';
@@ -475,14 +504,14 @@ catch (e) {
 finally {
     file.value = '';
 } });
-window.addEventListener('blur', () => { if (!paused && profile.active)
+window.addEventListener('blur', () => {     if (!paused && (profile.active||boat))
     open('pause'); });
-document.addEventListener('visibilitychange', () => { if (document.hidden && !paused && profile.active)
+document.addEventListener('visibilitychange', () => { if (document.hidden && !paused && (profile.active||boat))
     open('pause'); if (document.hidden)
     persist(); });
 window.addEventListener('pagehide', event => {persist();if(!event.persisted)gameStarts.dispose();});
 function orientation() { document.getElementById('rotate')!.hidden = true; }
-function resizeViewport() { renderer?.engine.resize(); orientation(); }
+function resizeViewport() { renderer?.engine.resize(); orientation(); if (ui.screen === 'journal') ui.chart(sim && visualDive ? sim : null); }
 window.addEventListener('resize', resizeViewport);
 window.visualViewport?.addEventListener('resize', resizeViewport);
 document.addEventListener('fullscreenchange', () => { setWatchRaised(false); input.clear(); resizeViewport(); ui.updateFullscreenState(!!document.fullscreenElement); });
@@ -506,7 +535,7 @@ catch (e) {
 }
 (window as any).render_game_to_text = () => JSON.stringify({ screen: paused ? ui.screen : 'dive', day: profile.day, site: sim?.run.site, position: sim?.run.p, air: sim?.run.air, catch: sim?.run.cargo.length, exposed: sim?.run.exposed?.id, aim: sim?.aim, renderer: renderer?.stats(), audio: audio.stats() });
 if (debug)
-    (window as any).__REEF__ = { get profile() { return profile; }, get sim() { return sim; }, get ui() { return ui; }, get renderer() { return renderer; }, get input() { return input; }, get audio() { return audio; }, get paused() { return paused; }, dispatch, store, tick(seconds: number, frame: Partial<InputFrame> = {}) { if (!sim)
+    (window as any).__REEF__ = { get boat() { return boat; }, get profile() { return profile; }, get sim() { return sim; }, get ui() { return ui; }, get renderer() { return renderer; }, get input() { return input; }, get audio() { return audio; }, get paused() { return paused; }, dispatch, store, tick(seconds: number, frame: Partial<InputFrame> = {}) { if (!sim)
             return; for (let i = 0; i < seconds * 60 && !sim.run.finished; i++)
             sim.update(1 / 60, { ...EMPTY_INPUT, ...frame }); processEvents(); }, aimAt(p: {
             x: number;

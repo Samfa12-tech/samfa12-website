@@ -10,6 +10,9 @@ uniform float uMode;
 uniform float uMotion;
 uniform float uSurface;
 uniform float uNight;
+uniform float uFold;
+uniform float uSea;
+uniform float uRadius;
 uniform vec2 uCurrent;
 uniform mat4 uSunMatrix;
 uniform mat4 uTorchMatrix;
@@ -46,7 +49,12 @@ void main(){
    p.y+=sin(phase*6.0+p.z*3.0)*fin*.26;
   }
  }
- if(uMode==3.0){p.y+=sin(p.x*.30+uTime*.48)*.14+sin(p.z*.28-uTime*.3)*.09;}
+ if(uMode==12.0){p.x-=sign(p.x)*max(0.0,abs(p.x)-.12)*uFold*.84;p.y-=sign(p.y)*max(0.0,abs(p.y)-.20)*uFold*.70;}
+ if(uMode==3.0||uMode==10.0){
+  vec2 q=(w*vec4(p,1.0)).xz;
+  float swell=sin(q.x*.065+q.y*.028+uTime*.9)*.38+sin(q.y*.09-q.x*.026-uTime*.72)*.20+sin(q.x*.22+q.y*.14+uTime*1.3)*.055;
+  p.y+=uSea*swell+(1.0-uSea)*(sin(p.x*.30+uTime*.48)*.14+sin(p.z*.28-uTime*.3)*.09);
+ }
  if(uMode==6.0){p.x+=sin(uTime*.17+p.y)*.35;p.y+=sin(uTime*.34+p.z)*.20;p.z+=mod(uTime*.23,6.0);}
  if(uMode==7.0){
   float channel=exp(-pow((p.x-uCurrent.y)/12.0,2.0));
@@ -82,6 +90,9 @@ uniform float uSurface;
 uniform float uFog;
 uniform float uLight;
 uniform float uNight;
+uniform float uFold;
+uniform float uSea;
+uniform float uRadius;
 uniform vec2 uTorch;
 uniform float uShadows;
 uniform float uTorchShadows;
@@ -107,6 +118,8 @@ float caustic(vec2 p){
  float b=sin(p.y*1.42-uTime*.29+cos(p.x*.71+uTime*.17));
  return pow(max(0.0,1.0-abs(a+b)*.87),11.0);
 }
+float foamHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float foamNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(foamHash(i),foamHash(i+vec2(1,0)),f.x),mix(foamHash(i+vec2(0,1)),foamHash(i+vec2(1,1)),f.x),f.y);}
 void main(){
  vec3 n=normalize(vNormal);
  float dist=length(vWorld-uEye);
@@ -117,12 +130,18 @@ void main(){
   vec2 p=vWorld.xz;
   float w=sin(p.x*.62+uTime*.44+sin(p.y*.26))+sin(p.y*.49-uTime*.3);
   float threads=pow(max(0.0,1.0-abs(w)*.6),5.0);
+  vec3 waveNormal=normalize(vec3(-cos(p.x*.065+p.y*.028+uTime*.9)*.025+cos(p.y*.09-p.x*.026-uTime*.72)*.005,1.0,-cos(p.x*.065+p.y*.028+uTime*.9)*.011-cos(p.y*.09-p.x*.026-uTime*.72)*.018));
   vec3 to=normalize(vWorld-uEye);
   float sun=pow(max(0.0,dot(to,normalize(vec3(-.35,1.0,.25)))),120.0);
   vec3 daylight=mix(vec3(.12,.53,.60),vec3(.44,.78,.73),.48+w*.11)+threads*.055+sun*vec3(.66,.73,.57);
   vec3 moonlight=vec3(.025,.105,.17)+threads*.025+sun*vec3(.15,.24,.34);
+  float fresnel=pow(1.0-max(0.0,dot(waveNormal,-to)),3.0);
+  float glitter=pow(max(0.0,dot(reflect(to,waveNormal),normalize(vec3(-.35,1.0,.25)))),120.0);
+  daylight=mix(daylight,vec3(.60,.79,.82),fresnel*.72)+glitter*vec3(.9,.80,.56)*uSea;
+  if(uSea>.5){vec3 rippleN=normalize(waveNormal+vec3(sin(p.x*1.7+p.y*.8+uTime*1.4)*.035,0.0,cos(p.y*1.4-p.x*.7-uTime*1.1)*.032));float sky=pow(1.0-max(0.0,dot(rippleN,-to)),3.4);float glint=pow(max(0.0,dot(reflect(to,rippleN),normalize(vec3(-.35,1.0,.25)))),95.0);daylight=mix(vec3(.028,.30,.36),vec3(.58,.76,.80),sky*.85)+vec3(.07,.20,.18)*(sin(p.x*.18+p.y*.12+uTime*.8)*.5+.5)*.16+glint*vec3(.95,.86,.65);}
   col=mix(daylight,moonlight,uNight);
  }
+ else if(uMode==10.0){float foam=foamNoise(vWorld.xz*3.7+vec2(uTime*.8,-uTime*1.2))*.65+foamNoise(vWorld.xz*8.4-uTime)*.35;col=vec3(.82,.97,.93);alpha=(1.0-vUV.x)*smoothstep(1.0,.48,abs(vUV.y))*(.08+.62*smoothstep(.32,.75,foam));}
  else if(uMode==5.0){alpha=(1.0-vUV.y)*.075*pow(max(0.0,sin(vUV.x*3.14159)),1.5);if(uShadows>.5)alpha*=shadowVisibility(uSunShadow,vSunCoord,1.0/2048.0,.00055,190.0);col=mix(vec3(.62,.87,.76),vec3(.15,.39,.56),uNight);}
  else if(uMode==8.0){float rim=pow(1.0-abs(dot(n,normalize(uEye-vWorld))),2.0);col=vec3(.58,.86,.91);alpha=.10+rim*.50;}
  else if(uMode==6.0){col=mix(vec3(.54,.82,.78),vec3(.24,.47,.66),uNight);alpha=.34;}
@@ -133,7 +152,7 @@ void main(){
   float side=.08*max(0.0,dot(n,normalize(vec3(.7,.2,.5))));
   col*=mix(light+side,.25+.18*max(0.0,n.y),uNight);
   col*=mix(vec3(.82,.93,1.0),vec3(1.0),mix(1.0,sunShadow,smoothstep(.05,.4,sunNormal)*(1.0-uNight)));
-  if(uMode!=4.0){
+  if(uMode!=4.0&&uMode!=12.0){
    float c=(caustic(vWorld.xz)+caustic(vWorld.xz*.51+.3)*.35)*(1.0-step(uSurface+.03,vWorld.y));
    col+=mix(vec3(.30,.47,.35),vec3(.10,.20,.30),uNight)*c*max(.10,n.y)*exp(-depth*.037)*(1.0-uNight)*sunShadow;
    col*=vec3(exp(-depth*.008),1.0,1.0);
@@ -145,9 +164,10 @@ void main(){
   }
   else col=col*.85+vColor.rgb*.3;
  }
- if(uMode!=4.0&&uMode!=3.0&&uMode!=6.0){
+ if(uMode!=4.0&&uMode!=12.0&&uMode!=3.0&&uMode!=6.0){
   float underwater=1.0-step(uSurface,vWorld.y);
-  float submergedFog=(1.0-exp(-dist*uFog))*underwater;
+  float outer=smoothstep(uRadius+3.0,uRadius+55.0,length(vWorld.xz));
+  float submergedFog=(1.0-exp(-dist*uFog-max(0.0,length(vWorld.xz)-uRadius)*.045))*underwater;
   vec3 deepFog=mix(uWaterColor,vec3(.012,.047,.085),uNight);
   vec3 farFog=mix(uWaterColor*1.20+vec3(.09,.09,.06),vec3(.035,.12,.20),uNight);
   vec3 waterFog=mix(deepFog,farFog,clamp((vWorld.y+2.0)/uSurface,0.0,1.0));

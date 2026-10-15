@@ -47,13 +47,13 @@ test('per-site contract options expose finite work, research unlock and an alway
   const p = freshProfile();
   const first = contractOptions(p, 'gardens');
   assert.equal(first.find(option => option.kind === 'catch').available, true);
-  assert.equal(first.find(option => option.kind === 'cleanup').remaining, 5);
+  assert.equal(first.find(option => option.kind === 'cleanup').remaining, SITES.gardens.worksites.debris.length);
   assert.equal(first.find(option => option.kind === 'restore').remaining, 3);
   assert.equal(first.find(option => option.kind === 'research').available, false);
   assert.equal(first.find(option => option.kind === 'none').available, true);
   for (let i = 0; i < reefFishHomes(SITES.gardens, SITES.gardens.seed).length; i++) p.reefs.gardens.removed.push(`fish-${i}`);
   assert.equal(contractOptions(p, 'gardens').find(option => option.kind === 'catch').available, false);
-  p.reefs.gardens.cleaned = ['debris-0', 'debris-1', 'debris-2', 'debris-3', 'debris-4'];
+  p.reefs.gardens.cleaned = SITES.gardens.worksites.debris.map((_,i)=>`debris-${i}`);
   p.reefs.gardens.restored = { 'coral-0': 1, 'coral-1': 1, 'coral-2': 1 };
   assert.equal(contractOptions(p, 'gardens').find(option => option.kind === 'cleanup').available, false);
   assert.equal(contractOptions(p, 'gardens').find(option => option.kind === 'restore').available, false);
