@@ -37,7 +37,7 @@ write_zip(web, [(p, p.relative_to(ROOT / 'dist').as_posix()) for p in (ROOT / 'd
 base_files = ['README.md', 'AGENTS.md', 'package.json', 'package-lock.json', 'tsconfig.json', '.gitignore',
               'index.html', 'style.css', 'THIRD_PARTY_NOTICES.md', 'LICENSE-BABYLON.txt', 'Reef-Sweep.html']
 paths = [ROOT / name for name in base_files]
-for directory in ['src', 'scripts', 'tests', 'docs', 'public', 'vendor', 'reference', 'screenshots', 'dist']:
+for directory in ['src', 'scripts', 'tests', 'docs', 'public', 'vendor', 'art', 'reference', 'screenshots', 'dist']:
     paths.extend(p for p in (ROOT / directory).rglob('*') if p.is_file() and '__pycache__' not in p.parts
                  and p.name != 'modules.generated.json')
 handoff = OUT / f'reef-sweep-{VERSION}-handoff.zip'

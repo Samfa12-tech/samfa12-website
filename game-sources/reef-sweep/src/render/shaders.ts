@@ -49,6 +49,7 @@ void main(){
    p.y+=sin(phase*6.0+p.z*3.0)*fin*.26;
   }
  }
+ if(uMode==11.0){float age=fract(uTime*1.8+uv.x);p.y+=age*.9-age*age*1.6;p.x+=sign(p.x)*age*.6;p.z-=age*1.8;}
  if(uMode==12.0){p.x-=sign(p.x)*max(0.0,abs(p.x)-.12)*uFold*.84;p.y-=sign(p.y)*max(0.0,abs(p.y)-.20)*uFold*.70;}
  if(uMode==3.0||uMode==10.0){
   vec2 q=(w*vec4(p,1.0)).xz;
@@ -140,7 +141,9 @@ void main(){
   daylight=mix(daylight,vec3(.60,.79,.82),fresnel*.72)+glitter*vec3(.9,.80,.56)*uSea;
   if(uSea>.5){vec3 rippleN=normalize(waveNormal+vec3(sin(p.x*1.7+p.y*.8+uTime*1.4)*.035,0.0,cos(p.y*1.4-p.x*.7-uTime*1.1)*.032));float sky=pow(1.0-max(0.0,dot(rippleN,-to)),3.4);float glint=pow(max(0.0,dot(reflect(to,rippleN),normalize(vec3(-.35,1.0,.25)))),95.0);daylight=mix(vec3(.028,.30,.36),vec3(.58,.76,.80),sky*.85)+vec3(.07,.20,.18)*(sin(p.x*.18+p.y*.12+uTime*.8)*.5+.5)*.16+glint*vec3(.95,.86,.65);}
   col=mix(daylight,moonlight,uNight);
+  if(uSea<.5&&uEye.y<uSurface){vec3 horizon=mix(mix(uWaterColor,vec3(.012,.047,.085),uNight),mix(uWaterColor*1.20+vec3(.09,.09,.06),vec3(.035,.12,.20),uNight),clamp((uEye.y+2.0)/uSurface,0.0,1.0));col=mix(col,horizon,smoothstep(uRadius+4.0,uRadius+70.0,length(vWorld.xz)));}
  }
+ else if(uMode==11.0){float age=fract(uTime*1.8+vUV.x);col=vec3(.85,.98,.96);alpha=(1.0-age)*.55;}
  else if(uMode==10.0){float foam=foamNoise(vWorld.xz*3.7+vec2(uTime*.8,-uTime*1.2))*.65+foamNoise(vWorld.xz*8.4-uTime)*.35;col=vec3(.82,.97,.93);alpha=(1.0-vUV.x)*smoothstep(1.0,.48,abs(vUV.y))*(.08+.62*smoothstep(.32,.75,foam));}
  else if(uMode==5.0){alpha=(1.0-vUV.y)*.075*pow(max(0.0,sin(vUV.x*3.14159)),1.5);if(uShadows>.5)alpha*=shadowVisibility(uSunShadow,vSunCoord,1.0/2048.0,.00055,190.0);col=mix(vec3(.62,.87,.76),vec3(.15,.39,.56),uNight);}
  else if(uMode==8.0){float rim=pow(1.0-abs(dot(n,normalize(uEye-vWorld))),2.0);col=vec3(.58,.86,.91);alpha=.10+rim*.50;}
@@ -171,6 +174,7 @@ void main(){
   vec3 deepFog=mix(uWaterColor,vec3(.012,.047,.085),uNight);
   vec3 farFog=mix(uWaterColor*1.20+vec3(.09,.09,.06),vec3(.035,.12,.20),uNight);
   vec3 waterFog=mix(deepFog,farFog,clamp((vWorld.y+2.0)/uSurface,0.0,1.0));
+  vec3 horizonFog=mix(deepFog,farFog,clamp((uEye.y+2.0)/uSurface,0.0,1.0));waterFog=mix(waterFog,horizonFog,outer);
   col=mix(col,waterFog,clamp(submergedFog,0.0,.985));
   float aboveFog=(1.0-exp(-dist*uFog*(uMode==9.0?.09:.34)))*(1.0-underwater);
   vec3 skyFog=mix(vec3(.58,.77,.80),vec3(.018,.045,.10),uNight);

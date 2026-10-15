@@ -62,3 +62,9 @@ Schema stays 1. Optional campaign flags hold research invitations/funding, chara
 New runs use siteRevision 2. Old Passage runs without this revision rebuild their original world; previews and sand caches cannot replace its terrain. Legacy in-flight contracts, survey rates, sponsors and event tiers are paid under their saved release rules. New launches use revised rates. Existing money, gear/ranks and completed ecological work are not removed or repriced. Practice operates on a detached profile and never writes career storage.
 
 Start measurement is separate from saves. The shared client is disabled; a future approved adapter uses its own consented tab-session storage and never transmits a save, slot or device identifier.
+
+## v0.5 optional schema-1 extensions
+
+Profiles add bounded unique charm IDs and an optional equipped charm. Runs may retain a second skewered catch, appearance/strike metadata, short tube-transfer state, trip distance and expense-rule marker, mask flood/droplet levels, scaling passes, completed recipe and treatment count. New fields are validated; old careers and pending financial promises remain accepted. New work kinds are charm and outbreak. Stable outbreak cohort IDs are recorded in reef cleaned IDs, while cleanup contracts count debris IDs only. Suspended legacy wildlife is preserved; newly generated Marlow belongs to Gardens only.
+
+Settings default to High only when quality is unset/invalid. Existing high/balanced/low values remain. performancePromptDismissed persists both Apply and Not now suppression. No save-schema bump, account, cloud save, analytics activation or anti-cheat system was introduced.

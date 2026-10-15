@@ -11,7 +11,10 @@
     "dev": "npm run build && node scripts/serve.mjs",
     "preview": "node scripts/serve.mjs dist",
     "vendor": "node scripts/vendor.cjs",
-    "test:package": "npm run build && node --test tests/package.test.mjs"
+    "test:package": "npm run build && node --test tests/package.test.mjs",
+    "test:expedition-balance": "tsc && node scripts/expedition-balance.mjs",
+    "package:wavedash": "npm run build && node scripts/prepare-wavedash.mjs",
+    "test:wavedash": "node --test tests/wavedash.test.mjs"
   },
   "devDependencies": {
     "typescript": "5.8.3"

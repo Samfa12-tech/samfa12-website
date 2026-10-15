@@ -9,6 +9,7 @@ import { fishSize, restaurantValue, travelCosts, outingExpenses, heldCatches, CH
 import { EMPTY_INPUT } from '../build/game/simulation.js';
 import { contractOptions } from '../build/game/campaign.js';
 import { skiffGeometry } from '../build/render/boat-travel.js';
+import { collectionMotion } from '../build/render/collection-motion.js';
 const tick=(s,t,input={})=>{for(let i=0;i<t*60;i++)s.update(1/60,{...EMPTY_INPUT,...input});};
 
 test('exhausted-reef settlement on any day commits once and permits a harbour preview', () => {
@@ -95,4 +96,17 @@ test('boat steering and stopping govern all five buoy arrivals; analytic swell i
  const b=newBoat();for(let i=0;i<600;i++)updateBoatTravel(b,1/60,1,.2);assert.ok(b.distance>80);assert.notEqual(b.yaw,.4);assert.ok(Math.abs(oceanHeight(2,3,4.001)-oceanHeight(2,3,4))<.01);
  for(const [id,point] of Object.entries(BAY_SITES)){Object.assign(b,{x:point.x,z:point.z,speed:8});assert.equal(arrivalSite(b),null);b.speed=0;assert.equal(arrivalSite(b),id);}
  const boat=skiffGeometry();assert.ok(boat.indices.length/3<10000&&boat.indices.length/3>4000);assert.ok(boat.positions.every(Number.isFinite));
+});
+test('collection motion joins insertion to withdrawal continuously and keeps the tube in portrait',()=>{
+ const p=freshProfile(),r=startRun(p,'gardens','none');r.exposed={id:'f',weight:1,value:20};r.interactionId='held';r.interaction=1;
+ const inserted=collectionMotion(r),portrait=collectionMotion(r,.46);assert.ok(portrait.mouth.x>inserted.mouth.x);assert.equal(inserted.insert,.8);
+ r.transfer={catches:[r.exposed],started:r.time};r.exposed=null;
+ const committed=collectionMotion(r);assert.deepEqual(committed.spear,inserted.spear);assert.equal(committed.approach,inserted.approach);
+ r.time+=1.35;const withdrawn=collectionMotion(r);assert.ok(Math.hypot(...Object.values(withdrawn.spear))<1e-8);
+});
+test('an exposed fish near the home buoy can be stashed before ascending',()=>{
+ const p=freshProfile();p.tutorial=1;const r=startRun(p,'gardens','none'),s=new Simulation(p,r);r.exposed={id:'fish-0',weight:1,value:20};r.p={...SITES.gardens.entry};s.updateAim();assert.equal(s.aim.id,'held');tick(s,1.5,{interact:true});assert.equal(r.cargo.length,1);
+});
+test('Shishkabob retains its automatic capture trigger even after eight earlier photos',()=>{
+ const p=freshProfile(),r=startRun(p,'gardens','none'),s=new Simulation(p,r);for(let i=0;i<8;i++)s.highlight('prior-'+i,'Earlier moment','fixture',40+i);s.highlight('shishkabob','Shishkabob','two catches',95);assert.equal(r.clips.length,8);assert.ok(r.clips.some(c=>c.kind==='shishkabob'));assert.ok(s.events.some(e=>e.type==='highlight'&&e.text==='Shishkabob'));
 });

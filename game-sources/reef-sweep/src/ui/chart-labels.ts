@@ -1,13 +1,13 @@
 export interface ChartLabel { name: string; x: number; y: number }
 export interface PlacedLabel extends ChartLabel { left: number; top: number; width: number; height: number; lines: string[] }
 /** Deterministic label packing in chart pixels; leaders retain marker identity. */
-export function layoutChartLabels(labels: ChartLabel[], size: number, measure: (text: string) => number): PlacedLabel[] {
+export function layoutChartLabels(labels: ChartLabel[], size: number, measure: (text: string) => number, lineHeight=20): PlacedLabel[] {
     const placed: PlacedLabel[] = [], margin = 12, bottom = size - 42;
     for (const label of labels) {
         const lines: string[] = []; let line = '';
         for (const word of label.name.split(/\s+/)) { const next = line ? `${line} ${word}` : word; if (measure(next) > Math.min(200, size * .4) && line) { lines.push(line); line = word; } else line = next; }
         if (line) lines.push(line);
-        const width = Math.min(size - margin * 2, Math.max(...lines.map(measure)) + 12), height = lines.length * 20 + 6;
+        const width = Math.min(size - margin * 2, Math.max(...lines.map(measure)) + 12), height = lines.length * lineHeight + 6;
         const candidates = [];
         for (let ring = 0; ring < 12; ring++) for (const side of [1, -1]) for (const dy of [0, -1, 1]) {
             const left = Math.max(margin, Math.min(size - margin - width, side === 1 ? label.x + 12 + ring * 12 : label.x - width - 12 - ring * 12));

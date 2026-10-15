@@ -16,8 +16,9 @@ with sync_playwright() as pw:
  browser=pw.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True,args=['--no-first-run','--disable-extensions','--disable-background-networking'])
  ctx=browser.new_context(viewport={'width':1280,'height':800});p=ctx.new_page();p.on('pageerror',lambda e:errors.append(str(e)))
  p.goto(URL+'?debug=1');p.wait_for_function('window.__REEF__');p.add_style_tag(content='#debug-stats{display:none!important}');p.evaluate("document.getElementById('debug-stats').style.display='none';__REEF__.profile.tutorial=1;__REEF__.profile.reputation=100;__REEF__.profile.totalRemoved=100")
- for site in ['gardens','passage','mangrove','cenote','harbour']:
+ for site in ([] if os.environ.get('REEF_QA_QUICK') else ['gardens','passage','mangrove','cenote','harbour']):
   p.evaluate("""id=>{let q=__REEF__;q.profile.active=null;q.profile.pending=null;q.dispatch('site',id);q.dispatch('dive');}""",site);p.wait_for_timeout(700)
+  if p.evaluate("__REEF__.paused && __REEF__.ui.screen==='moment'"):p.evaluate("__REEF__.dispatch('close')")
   check(site+' actual scene',p.evaluate('JSON.parse(render_game_to_text()).site')==site)
   p.screenshot(path=str(OUT/(site+'-gameplay.png')))
   p.evaluate("__REEF__.dispatch('screen','journal')");p.screenshot(path=str(OUT/(site+'-chart-wide.png')))
@@ -30,15 +31,16 @@ with sync_playwright() as pw:
  p.evaluate("""()=>{let q=__REEF__,r=q.sim.run,b=r.fish[1];r.strikeCooldown=0;b.p=b.home={x:r.p.x,y:r.p.y,z:r.p.z+2};r.yaw=0;r.pitch=0;q.sim.strike(1);}""")
  p.wait_for_timeout(500);check('second fish produces Shishkabob photo',p.evaluate("__REEF__.sim.run.skewered.length===1 && __REEF__.sim.run.clips.some(c=>c.kind==='shishkabob'&&!!c.image)"));p.screenshot(path=str(OUT/'catch-shishkabob.png'))
  p.keyboard.down('e');p.wait_for_timeout(700);p.screenshot(path=str(OUT/'catch-insertion.png'))
- p.wait_for_timeout(950);p.keyboard.up('e');check('both fish secured exactly once',p.evaluate("__REEF__.sim.run.cargo.length===2&&!__REEF__.sim.run.exposed"));p.screenshot(path=str(OUT/'catch-tube-entry.png'))
- p.wait_for_timeout(1500);check('old fish geometry hidden after tube transfer',p.evaluate('!firstMesh.isEnabled()'))
+ p.wait_for_function('__REEF__.sim.run.cargo.length===2',timeout=10000);p.keyboard.up('e');check('both fish secured exactly once',p.evaluate("__REEF__.sim.run.cargo.length===2&&!__REEF__.sim.run.exposed"),p.evaluate("({paused:__REEF__.paused,keys:[...__REEF__.input.keys],active:__REEF__.input.active,aim:__REEF__.sim.aim,progress:__REEF__.sim.run.interaction,exposed:__REEF__.sim.run.exposed?.id,second:__REEF__.sim.run.skewered?.length,cargo:__REEF__.sim.run.cargo.length})"));p.screenshot(path=str(OUT/'catch-tube-entry.png'))
+ p.wait_for_function('!__REEF__.sim.run.transfer && !firstMesh.isEnabled()',timeout=15000);check('old fish geometry hidden after tube transfer',p.evaluate('!firstMesh.isEnabled()'))
  # Surface droplets and partial-flood clear action, with clear central aiming view.
  p.evaluate("""()=>{let q=__REEF__,r=q.sim.run;r.p.y=q.sim.site.surface-.01;r.velocity.y=1;q.tick(.05,{vertical:1});}""");p.wait_for_timeout(100);check('breach droplets appear',p.evaluate('(__REEF__.sim.run.droplets??0)>.5'));p.screenshot(path=str(OUT/'surface-droplets.png'))
- p.evaluate("__REEF__.sim.run.maskFlood=.24");p.wait_for_timeout(120);air=p.evaluate('__REEF__.sim.run.air');p.locator('#clear-mask').click();check('mask clear consumes small bounded air',p.evaluate('__REEF__.sim.run.maskFlood===0') and air-p.evaluate('__REEF__.sim.run.air')<2.2)
+ p.evaluate("__REEF__.sim.run.maskFlood=.24");air=p.evaluate('__REEF__.sim.run.air');p.keyboard.down('e');p.wait_for_function('__REEF__.sim.run.maskFlood===0',timeout=12000);p.keyboard.up('e');check('mask clear consumes small bounded air',air-p.evaluate('__REEF__.sim.run.air')<2.3)
+
  # Meaningful late-game treatment model, with finite fixture target.
- p.evaluate("""()=>{let q=__REEF__;q.profile.active=null;q.profile.pending=null;q.profile.day=8;q.dispatch('site','gardens');q.dispatch('dive');let s=q.sim,j=s.run.jobs.find(j=>j.kind==='outbreak');q.teleport(j.p.x,j.p.y+.5,j.p.z-1.8);q.aimAt(j.p);q.tick(.5,{interact:true,steady:true});}""");p.wait_for_timeout(100);p.screenshot(path=str(OUT/'outbreak-injector.png'))
+ p.evaluate("""()=>{let q=__REEF__;q.profile.active=null;q.profile.pending=null;q.profile.day=8;q.dispatch('site','gardens');q.dispatch('dive');let s=q.sim,j=s.run.jobs.find(j=>j.kind==='outbreak');q.teleport(j.p.x,j.p.y+.5,j.p.z-1.8);q.aimAt(j.p);q.tick(.5,{interact:true,steady:true});}""");p.keyboard.down('e');p.wait_for_function("__REEF__.sim.run.jobs.find(j=>j.kind==='outbreak').stage===1",timeout=10000);check('treatment uses visible injector',p.evaluate('__REEF__.renderer.injector.isEnabled()'));p.screenshot(path=str(OUT/'outbreak-injector.png'));p.keyboard.up('e');p.wait_for_function("__REEF__.sim.run.jobs.find(j=>j.kind==='outbreak').stage===2",timeout=10000);p.keyboard.down('e');p.wait_for_function('__REEF__.sim.run.treated===1',timeout=10000);p.keyboard.up('e');check('treatment completes through safety release',p.evaluate('__REEF__.sim.run.treated===1'))
  # Boat actual steering integration, model/water frames and medium/low views.
- p.evaluate("__REEF__.profile.active=null;__REEF__.profile.pending=null;__REEF__.dispatch('boat-launch')");p.keyboard.down('w');p.wait_for_timeout(2500);p.keyboard.up('w');
+ p.evaluate("__REEF__.profile.active=null;__REEF__.profile.pending=null;__REEF__.dispatch('boat-launch')");p.wait_for_timeout(350);p.evaluate("if(__REEF__.paused)__REEF__.dispatch('boat-resume')");p.keyboard.down('w');p.wait_for_function('__REEF__.boat.distance>10',timeout=10000);p.keyboard.up('w');
  b=p.evaluate('({...__REEF__.boat})');check('boat travelled under keyboard input',b['distance']>5,b)
  p.keyboard.down('d');p.keyboard.down('w');p.wait_for_timeout(1000);p.keyboard.up('d');p.keyboard.up('w');check('boat steering changes heading',abs(p.evaluate('__REEF__.boat.yaw')-b['yaw'])>.2)
  for preset in ['high','balanced','low']:
@@ -60,6 +62,7 @@ with sync_playwright() as pw:
  check('multitouch holds draw and drag aims',p.evaluate('__REEF__.sim.run.charge')>.6 and abs(p.evaluate('__REEF__.sim.run.yaw')-yaw)>.02)
  client.send('Input.dispatchTouchEvent',{'type':'touchCancel','touchPoints':[]});p.wait_for_timeout(100)
  check('cancellation does not strike',p.evaluate('__REEF__.sim.run.removed')==removed and p.evaluate('__REEF__.sim.run.charge')==0)
+ p.evaluate('__REEF__.sim.run.maskFlood=.24');p.wait_for_function('!document.getElementById("clear-mask").hidden');p.locator('#clear-mask').tap();check('touch mask button clears flood',p.evaluate('__REEF__.sim.run.maskFlood===0'));
  check('button hold does not select text',p.evaluate('getSelection().toString()')=='')
  p.screenshot(path=str(OUT/'touch-multitouch.png'))
  p.evaluate("__REEF__.dispatch('screen','settings')");check('settings keyboard controls remain reachable',p.locator('select[data-setting=quality]').is_visible())

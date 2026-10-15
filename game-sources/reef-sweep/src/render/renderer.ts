@@ -1,3 +1,4 @@
+import { collectionMotion } from './collection-motion.js';
 import { skiffGeometry } from './boat-travel.js';
 import { seaStar, lobster, sponge, habitatChair, charmGeometry } from './marine-life.js';
 import { CHARMS, heldCatches } from '../game/expedition.js';
@@ -97,7 +98,7 @@ export class ReefRenderer {
     constructor(public canvas: HTMLCanvasElement, settings: Settings) { this.settings = settings; const B = BABYLON; this.engine = new B.Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance' }, false); this.scene = new B.Scene(this.engine); this.scene.clearColor = new B.Color4(.035, .31, .37, 1); this.scene.autoClear = true; this.camera = new B.FreeCamera('diver', new B.Vector3(0, 8, -41), this.scene); this.camera.minZ = .045; this.camera.maxZ = 500; this.camera.fov = settings.fov * Math.PI / 180; this.scene.activeCamera = this.camera; this.scene.skipPointerMovePicking = true; this.scene.setRenderingAutoClearDepthStencil(1, true, true, true); B.Effect.ShadersStore['reefVertexShader'] = reefVertex; B.Effect.ShadersStore['reefFragmentShader'] = reefFragment; this.nativeScale = new B.Vector3(1, 1, 1); this.nativeRotation = new B.Quaternion(0, 0, 0, 1); this.nativeTranslation = new B.Vector3(); this.nativeTransform = new B.Matrix(); this.forwardVector = new B.Vector3(); this.torchVector = {x:16,y:.05}; this.shadows = new ReefShadows(this.scene,this.engine); this.configure(settings); canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); this.onLost(); }); window.addEventListener('resize', () => this.engine.resize()); }
     configure(settings: Settings) { this.settings = settings; const scale = settings.quality === 'high' ? 1 / Math.min(devicePixelRatio || 1, 1.5) : settings.quality === 'low' ? 1.45 : 1; this.engine.setHardwareScalingLevel(scale); this.engine.resize(); this.camera.fov = settings.fov * Math.PI / 180; this.shadows?.configure(settings.quality === 'high'); }
     material(mode: number) { let m = this.materials.find(m => m._reefMode === mode); if (m)
-        return m; const B = BABYLON; m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uSea', 'uRadius', 'uFold', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uWaterColor', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow','uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 || mode === 10 }); m._reefMode = mode; m.backFaceCulling = false; m.setFloat('uMode', mode); m.setFloat('uSea',0);m.setFloat('uFold',0);m.setFloat('uRadius',this.site.radius); m.setFloat('uSurface', this.site.surface); m.setFloat('uMotion', 1); m.setVector3('uWaterColor',new B.Vector3(.035,.31,.39)); m.setFloat('uFog', .030); m.setFloat('uLight', 0); m.setFloat('uNight', 0); m.setVector2('uCurrent', {x:this.site.current,y:this.site.channelX ?? (this.site.id === 'gardens' ? 18 : 0)}); m.setVector2('uTorch', {x:24,y:.10}); if (mode === 5 || mode === 6 || mode === 8 || mode === 10) {
+        return m; const B = BABYLON; m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uSea', 'uRadius', 'uFold', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uWaterColor', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow','uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 || mode === 10 || mode === 11 }); m._reefMode = mode; m.backFaceCulling = false; m.setFloat('uMode', mode); m.setFloat('uSea',0);m.setFloat('uFold',0);m.setFloat('uRadius',this.site.radius); m.setFloat('uSurface', this.site.surface); m.setFloat('uMotion', 1); m.setVector3('uWaterColor',new B.Vector3(.035,.31,.39)); m.setFloat('uFog', .030); m.setFloat('uLight', 0); m.setFloat('uNight', 0); m.setVector2('uCurrent', {x:this.site.current,y:this.site.channelX ?? (this.site.id === 'gardens' ? 18 : 0)}); m.setVector2('uTorch', {x:24,y:.10}); if (mode === 5 || mode === 6 || mode === 8 || mode === 10 || mode === 11) {
         m.disableDepthWrite = true;
         m.alphaMode = B.Engine.ALPHA_COMBINE;
     } m.setMatrix('uSunMatrix',this.shadows.sunMatrix);m.setMatrix('uTorchMatrix',this.shadows.torchMatrix);m.setFloat('uShadows',0);m.setFloat('uTorchShadows',0);m.setTexture('uSunShadow',this.shadows.white);m.setTexture('uTorchShadow',this.shadows.white);this.materials.push(m); return m; }
@@ -106,6 +107,7 @@ export class ReefRenderer {
         m.dispose(false, false); this.staticMeshes = []; this.fishMeshes.clear(); this.animalMeshes.clear(); this.jobMeshes.clear(); this.nativeSchools = []; this.captureQueue = []; }
     build(profile: Profile, run: Run) {
         this.disposeWorld();
+        this.camera.maxZ=500;
         this.shadows.reset();
         this.bubblePool = new BubblePool();
         this.profile = profile;
@@ -409,7 +411,7 @@ export class ReefRenderer {
     render(time: number, playing: boolean) {
         if (!this.run)
             return;
-        const r = this.run, B = BABYLON;
+        const r = this.run, B = BABYLON, collection=collectionMotion(r,this.engine.getRenderWidth()/this.engine.getRenderHeight());
         const p = playing ? r.p : vec(5 + Math.sin(time * .045) * 1.3, 7.2 + Math.sin(time * .12) * .15, -35);
         const yaw = playing ? r.yaw : -.16 + Math.sin(time * .05) * .08, pitch = playing ? r.pitch : .06;
         const night = !!r.night, torchLevel = this.profile ? upgradeLevel(this.profile, 'torch') : 0;
@@ -422,13 +424,18 @@ export class ReefRenderer {
             this.atmosphere = view;
             this.scene.clearColor = view === 'night' ? new B.Color4(.008, .025, .052, 1) : view === 'surface' ? new B.Color4(.48, .70, .76, 1) : (()=>{const c=rgb('#'+(this.site.waterColor??0x09505f).toString(16).padStart(6,'0'));return new B.Color4(c[0]*.65,c[1]*.70,c[2]*.80,1);})();
         }
+        if(p.y<this.site.surface){
+            const c=this.site.waterColor,base=c===undefined?[.035,.31,.39]:[((c>>16)&255)/255*.42,((c>>8)&255)/255*.60,(c&255)/255*.70],blend=clamp((p.y+2)/this.site.surface,0,1);
+            const near=night?[.012,.047,.085]:base,far=night?[.035,.12,.20]:[base[0]*1.2+.09,base[1]*1.2+.09,base[2]*1.2+.06];
+            this.scene.clearColor.r=Math.pow(near[0]+(far[0]-near[0])*blend,.96);this.scene.clearColor.g=Math.pow(near[1]+(far[1]-near[1])*blend,.96);this.scene.clearColor.b=Math.pow(near[2]+(far[2]-near[2])*blend,.96);
+        }
         this.camera.position.set(p.x, p.y, p.z);
         this.camera.rotation.set(pitch, yaw, 0);
         const dir = direction(yaw, pitch);
         this.forwardVector.set(dir.x, dir.y, dir.z);
         this.torchVector.x=torchCone; this.torchVector.y=torchFalloff;
         for (const m of this.materials) {
-            m.setFloat('uTime', time);m.setFloat('uFold',r.transfer?1:r.interactionId==='held'?clamp((r.interaction-.35)/.55,0,1):0);
+            m.setFloat('uTime', time);m.setFloat('uFold',r.transfer?1:collection.approach);
             m.setFloat('uSurface', this.site.surface);
             m.setVector3('uEye', this.camera.position);
             m.setVector3('uForward', this.forwardVector);
@@ -454,12 +461,12 @@ export class ReefRenderer {
                 const lift=clamp((r.time-(c.struckAt??-10))/.45,0,1),ease=lift*lift*(3-2*lift);
                 const origin=B.Vector3.TransformCoordinates(new B.Vector3((c.struckPosition??f.p).x,(c.struckPosition??f.p).y,(c.struckPosition??f.p).z),this.camera.getViewMatrix());
                 const tip={x:heldCatches(r).length===2&&index===0?.12:.02,y:heldCatches(r).length===2&&index===0?-.11:-.02,z:heldCatches(r).length===2&&index===0?1.88:2.38}, start=caught?clamp(r.interaction,.0,1):1;
-                const transfer=caught?start*start*(3-2*start):1, slide=transferring?clamp((r.time-r.transfer!.started)/1.35,0,1):0;
+                const transfer=caught?collection.approach:1, slide=caught?collection.insert:.8;
                 // Approach mouth along the spear, insert along tube axis, then empty prongs withdraw.
-                const mouth={x:-.64,y:-.55,z:1.10}, z=tip.z+(mouth.z-tip.z)*transfer-slide*.27;
-                m.position.set(origin.x+(tip.x-origin.x)*ease+(mouth.x-tip.x)*transfer,origin.y+(tip.y-origin.y)*ease+(mouth.y-tip.y)*transfer-slide*.75,z+(origin.z-tip.z)*(1-ease));
-                m.rotation.set(1.91*transfer,1.57*(1-transfer),.18*(1-transfer));
-                if(slide>.98)m.setEnabled(false);
+                const mouth=collection.mouth, z=tip.z+(mouth.z-tip.z)*transfer+slide*collection.axis.z;
+                m.position.set(origin.x+(tip.x-origin.x)*ease+(mouth.x-tip.x)*transfer,origin.y+(tip.y-origin.y)*ease+(mouth.y-tip.y)*transfer+slide*collection.axis.y,z+(origin.z-tip.z)*(1-ease));
+                m.rotation.set(.357*transfer,1.57*(1-transfer),.18*(1-transfer));
+                if(transferring&&r.time-r.transfer!.started>.2)m.setEnabled(false);
             } else {m.parent=null;m.renderingGroupId=0;m.material=this.material(2);m.position.set(f.p.x,f.p.y,f.p.z);m.rotation.set(0,Math.sin(f.phase*.6)*.4+f.phase*.07,Math.sin(f.phase)*.04);}
         }
         for (const a of r.animals) {
@@ -497,7 +504,7 @@ export class ReefRenderer {
         const visible = playing;
         for (const m of [this.arms, this.tube])
             m.setEnabled(visible);
-        const treating=r.jobs.some(j=>j.kind==='outbreak'&&!j.done&&j.id===r.interactionId);this.injector.setEnabled(visible&&treating);
+        const treating=r.jobs.some(j=>j.kind==='outbreak'&&!j.done&&(j.id===r.interactionId||j.stage>0&&distance(j.p,r.p)<4));this.injector.setEnabled(visible&&treating);
         this.spear.setEnabled(visible && !treating && !r.scooter && !this.watchRequested && this.watchBlend<.1);
         this.scooter.setEnabled(visible && r.scooter);
         this.held.setEnabled(false);
@@ -515,15 +522,16 @@ export class ReefRenderer {
         this.spear.position.z = -r.charge * .25 + thrust - stow;
         this.spear.position.y = sway - stow;
         this.spear.rotation.x = stow * .8;
-        const securing=r.exposed&&r.interactionId==='held'?r.interaction:0,withdrawing=r.transfer?clamp((r.time-r.transfer.started)/1.35,0,1):0;
-        const transfer=securing?securing*securing*(3-2*securing):r.transfer?1-withdrawing:0;
-        this.spear.position.x=-.66*transfer;this.spear.position.y-=.54*transfer;this.spear.position.z-=1.20*transfer;
-
+        this.tube.position.x=collection.mouth.x+.64;
+        this.spear.position.x=collection.spear.x;this.spear.position.y+=collection.spear.y;this.spear.position.z+=collection.spear.z;
+        const transfer=collection.approach;
         const watchTarget=this.watchRequested && !r.scooter && r.charge === 0 ? 1 : 0;
         const poseDt=Math.max(0,Math.min(.083,time-this.lastPoseTime));this.lastPoseTime=time;
         this.watchBlend=this.settings.reducedMotion?watchTarget:this.watchBlend+(watchTarget-this.watchBlend)*(1-Math.exp(-poseDt*11));
         if(Math.abs(this.watchBlend-watchTarget)<.001)this.watchBlend=watchTarget;
         const pose=diverPose(r,time,this.watchBlend,this.settings.reducedMotion,this.pose);
+        pose.right.x+=collection.spear.x*.85;pose.right.y+=collection.spear.y*.8;pose.right.z=Math.max(.25,pose.right.z+collection.spear.z*.45);
+        pose.left.x-=transfer*.15;
         // In portrait the raised instrument sits to the right of ascent controls.
         pose.left.x+=this.watchBlend*Math.max(0,1-this.engine.getRenderWidth()/this.engine.getRenderHeight())*.21;
         this.leftArm.position.set(pose.left.x,pose.left.y,pose.left.z);

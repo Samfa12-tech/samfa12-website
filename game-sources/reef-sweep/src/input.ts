@@ -100,6 +100,7 @@ export class InputController {
     touchMode = matchMedia('(pointer:coarse)').matches;
     gamepad = false;
     watchRaised = false;
+    boatMode = false;
     constructor(public canvas: HTMLCanvasElement, public settings: Settings, public command: (action: Action) => void) {
         window.addEventListener('keydown', e => { if (this.calibration) return; if ((e.target as HTMLElement)?.matches('input,select,textarea'))
             return; const action = this.actionFor(e.code); if (!action)
@@ -121,7 +122,7 @@ export class InputController {
         canvas.addEventListener('contextmenu', e => e.preventDefault());
         canvas.addEventListener('pointerleave', () => { this.hoverX = null; });
         canvas.addEventListener('pointerdown', e => { if (!this.active)
-            return; canvas.focus({ preventScroll: true }); if (e.pointerType === 'touch') {
+            return; canvas.focus({ preventScroll: true }); if(this.boatMode)return; if (e.pointerType === 'touch') {
             this.touchMode = true;
             this.lookPointer = e.pointerId;
             this.lastX = e.clientX;
@@ -202,7 +203,7 @@ export class InputController {
     }
     else
         this.drawToggle = true; }
-    capture() { if (!this.active || this.touchMode)
+    capture() { if(this.boatMode)return; if (!this.active || this.touchMode)
         return; try {
         const p = this.canvas.requestPointerLock();
         if (p && typeof p.catch === 'function')

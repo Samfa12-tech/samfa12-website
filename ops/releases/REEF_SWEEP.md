@@ -17,3 +17,9 @@ The source build also generates ignored `game-sources/reef-sweep/Reef-Sweep.html
 Source, tooling, test fixtures and evidence stay excluded from Pages. Changes require source regressions, actual browser/render checks and generated-artifact verification. High keeps the same resolution cap and shadows; compare matched settings rather than lower quality to claim performance.
 
 Campaign review v0.4 is an unpublished draft. Merge/publication requires separate user approval. Existing website content/stats and protected hosted app/game copies must be preserved. Source changes and generated route files belong together in the review PR.
+
+## Expedition release candidate (2026-10-15)
+
+v0.5.0-preview.1 has the owner's publication authorization after quality review. The implementation and generated hosted route must travel together. Parent review is still required before merge/deploy or Wavedash publication. See game-sources/reef-sweep/docs/EXPEDITION_UPDATE.md for candidate evidence and scope. Do not duplicate the earlier v0.4 upload.
+
+After review, use the canonical source build/sync/verify workflow above for Pages. npm --prefix game-sources/reef-sweep run package:wavedash prepares only release/wavedash with the pinned existing game ID and current commit. npm --prefix game-sources/reef-sweep run test:wavedash checks bytes, disabled analytics and startup readiness. Upload/publication remain explicit CLI operations; the preparation script never sends a build or publishes it. Official workflow: https://docs.wavedash.com/cli/commands .

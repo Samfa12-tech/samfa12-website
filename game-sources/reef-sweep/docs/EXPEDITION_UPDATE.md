@@ -6,22 +6,22 @@ Publication gate: full implementation, tests/build/package, browser visual revie
 
 ## Scope checklist
 
-- [ ] Comfortable portrait/landscape touch targets, drag aim, multitouch/cancellation, selection boundaries, HUD and reticle.
-- [ ] Host/capability fullscreen and contextual audio hint.
-- [ ] End-of-day rewards, receipt transition, idempotence and reload across days.
-- [ ] Collision-free chart labels on all five maps.
-- [ ] Actual struck fish retained through spear/tube motion; two-fish Shishkabob photo/popularity event.
-- [ ] Size-aware restaurant sales, conservation and distance-based towing/boat fuel.
-- [ ] Five distinct authored exploration routes; Marlow home; clear playable water and outer haze.
-- [ ] Open pipe; ordinary stars/lobsters/sponges; more trash; overgrown habitat objects.
-- [ ] Finite authored discoverable/saveable/equippable charms and restrained motion.
-- [ ] Breach droplets, occasional impact flooding/air-cost clearing; convincing local sand only if suitable.
-- [ ] Different cooking recipes; 3D filleting/scaling; navigable boat site selection.
-- [ ] Later crown-of-thorns treatment/bounty interaction, distinct from ambient stars.
-- [ ] High default, saved choices retained, sustained-performance consent prompt/suppression.
-- [ ] Generic catch tube naming; reproducible versioned packaging and analytics unchanged.
-- [ ] Blender-authored finished dive boat, editable .blend and efficient export; Blender and gameplay views inspected.
-- [ ] Full tests, saves/economics/progression and responsive gameplay screenshots reviewed.
+- [x] Comfortable portrait/landscape touch targets, drag aim, multitouch/cancellation, selection boundaries, HUD and reticle.
+- [x] Host/capability fullscreen and contextual audio hint.
+- [x] End-of-day rewards, receipt transition, idempotence and reload across days.
+- [x] Collision-free chart labels on all five maps.
+- [x] Actual struck fish retained through spear/tube motion; two-fish Shishkabob photo/popularity event.
+- [x] Size-aware restaurant sales, conservation and distance-based towing/boat fuel.
+- [x] Five distinct authored exploration routes; Marlow home; clear playable water and outer haze.
+- [x] Open pipe; ordinary stars/lobsters/sponges; more trash; overgrown habitat objects.
+- [x] Finite authored discoverable/saveable/equippable charms and restrained motion.
+- [x] Breach droplets, occasional impact flooding/air-cost clearing; convincing local sand only if suitable.
+- [x] Different cooking recipes; 3D filleting/scaling; navigable boat site selection.
+- [x] Later crown-of-thorns treatment/bounty interaction, distinct from ambient stars.
+- [x] High default, saved choices retained, sustained-performance consent prompt/suppression.
+- [x] Generic catch tube naming; reproducible versioned packaging and analytics unchanged.
+- [x] Blender-authored finished dive boat, editable .blend and efficient export; Blender and gameplay views inspected.
+- [x] Full tests, saves/economics/progression and responsive gameplay screenshots reviewed.
 - [ ] Ready candidate commit/PR reviewed by parent.
 - [ ] Website and existing Wavedash release published and separately verified.
 
@@ -42,3 +42,19 @@ Blender 5.2 authored the 6,774-triangle skiff; editable blend, GLB, generation s
 QA caught and fixed: unbundled preparation light type; fillet-result return stack; full-tube legacy boarding; dense chart packing; tube near-plane intrusion; overlapping landscape objective/buttons. Deep browser collection fixture is being changed from separated debug ticks (idle frames reset a held interaction) to actual held keyboard input; domain two-catch transfer already passes.
 
 Parent progress messaging was attempted once via the available app tool, but the durable source thread ID returned `thread not found`. The parent can inspect this checkpoint and commentary; no message was delivered through that tool.
+
+## Final review validation checkpoint
+
+- Version: v0.5.0-preview.1. Source/build, render, input, saves, expenses and settlement reviewed; publication still pending parent review.
+- 182/182 automated domain/input/render-contract tests; typecheck and build pass.
+- 8/8 standalone package/hash tests pass; package.py now derives version and includes art source.
+- 16/16 preparation/settlement/reload/responsive browser checks; 29/29 deeper all-site/catch/mask/treatment/boat/native-multitouch checks. Zero page errors. Arrival conversation dismissed for actual Passage render capture.
+- Short desktop Chrome boat samples: High median 7.6 ms, p95 8.4 ms (160 sampled frames); Balanced 7.6 / 8.4; Low 7.6 / 8.3. This is not sustained phone or thermal proof.
+- Fifteen-outing injected production-price fixtures remain debt-free for careful Kitchen and conservation-only play. Kitchen buys fins day 1 and scooter day 4. These are economic fixtures, not human campaign acceptance.
+- Website source/host ten-file identity verified; content reproduction, SEO, catalogue, site, indexing, 56 content tests and 24 shared disabled-analytics tests pass. The one existing indexing route finding is unchanged; audit diff only updates Reef Sweep's description.
+- Rendered review evidence and machine receipts: docs/review-evidence/expedition/. Blender bow/stern studio evidence and editable source: art/dive-skiff/.
+- Main refreshed again to 14d2f26 (only concurrent Briarhold stats changed); preserve that work when rebasing/merging. Other saved checkouts remain untouched.
+
+Resolved review issues include depleted-site settlement preview, near-buoy catch priority, legacy full tube, dense chart labels, camera-plane tube intrusion, coherent joined collection coordinates, supported preparation shading, recipe return stack, cursor-safe boat controls, and real injector safety release. Keyboard/touch capture tests use state-based waits; idle debug ticks are not presented as continuous held input.
+
+Physical Android, iPhone Safari, sustained thermal play, subjective natural campaign pacing and extended listening remain unverified. Optional sand puffs were deliberately omitted under the user's quality condition. No known serious regression remains in exercised paths. High underwater lighting/shadows, offline engine/music, old saves, disabled analytics and existing game identity are preserved.

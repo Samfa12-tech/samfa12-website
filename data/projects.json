@@ -1762,7 +1762,7 @@
     "category": "Games",
     "type": "Playable browser prototype",
     "status": "In Development",
-    "description": "Explore five dive sites, clear invasive lionfish and return to reefs growing with life. Upgrade your equipment, check your dive watch and try night dives.",
+    "description": "Drive the bay, dive five reefs and restore habitat. Spear lionfish, find keepsakes and prepare the catch in a growing diving company.",
     "tags": [
       "First-person",
       "Reef conservation",
@@ -1773,7 +1773,7 @@
     "links": [
       {
         "label": "Play Reef Sweep",
-        "url": "/games/reef-sweep/play/?v=0.4.0-preview.1"
+        "url": "/games/reef-sweep/play/?v=0.5.0-preview.1"
       },
       {
         "label": "Play on Wavedash",

@@ -474,7 +474,7 @@ export function equipment(kind: 'arms' | 'spear' | 'tube' | 'scooter') {
     if (kind === 'tube') {
         // Open upward-facing mouth; the barrel runs down beside the diver,
         // never back through the near plane. Fish and prongs follow this axis.
-        const axis=vec(0,-.94,-.34),u=vec(1,0,0),v=vec(0,-.34,.94);
+        const axis=vec(0,-.35,.94),u=vec(1,0,0),v=vec(0,.94,.35);
         const p=(q:number,t:number,r:number)=>vec(-.64+Math.cos(q)*r,-.55+axis.y*t+v.y*Math.sin(q)*r,1.10+axis.z*t+v.z*Math.sin(q)*r);
         for(let i=0;i<32;i++){const a=i/32*Math.PI*2,b=(i+1)/32*Math.PI*2;
             g.quad(p(a,.95,.26),p(b,.95,.26),p(b,0,.26),p(a,0,.26),teal);

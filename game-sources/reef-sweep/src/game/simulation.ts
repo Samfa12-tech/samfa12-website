@@ -1,4 +1,4 @@
-import { fishSize, restaurantValue, outingExpenses, heldCatches, CHARMS, discoverCharm, outbreakAvailable } from './expedition.js';
+import { fishSize, restaurantValue, outingExpenses, travelCosts, heldCatches, CHARMS, discoverCharm, outbreakAvailable } from './expedition.js';
 import { lessonActive, advanceLesson, startLesson } from './tutorial.js';
 import { contractOptions, researchEligibility, recordSurveyStation, surveyPayout, researchSettlement, completeResearch, normalizeCampaign, claimMilestone, milestoneStatus } from './campaign.js';
 import { contractProgress, eventTheme, eventScore, eventReward, filletGrade } from './contracts.js';
@@ -70,8 +70,7 @@ export class Simulation {
     notice(text: string, key = '', cooldown = 6) { if (key && this.run.time < (this.run.cooldowns[key] ?? -1))
         return; if (key)
         this.run.cooldowns[key] = this.run.time + cooldown; this.emit('notice', text); }
-    highlight(kind: string, title: string, detail: string, quality = 60) { const r = this.run; if (r.clips.some(c => c.kind === kind) || r.clips.length >= 8)
-        return; const c = { id: r.id + '-' + kind, kind, title, detail, quality: clamp(quality + upgradeLevel(this.profile,'camera')*8, 0, 100), chosen: false }; r.clips.push(c); this.events.push({ type: 'highlight', text: title, id: c.id }); }
+    highlight(kind: string, title: string, detail: string, quality = 60) { const r = this.run; if (r.clips.some(c => c.kind === kind)) return; if(r.clips.length>=8){if(kind!=='shishkabob')return;const lowest=r.clips.reduce((a,b)=>a.quality<b.quality?a:b);r.clips.splice(r.clips.indexOf(lowest),1);} const c = { id: r.id + '-' + kind, kind, title, detail, quality: clamp(quality + upgradeLevel(this.profile,'camera')*8, 0, 100), chosen: false }; r.clips.push(c); this.events.push({ type: 'highlight', text: title, id: c.id }); }
     update(dt: number, input: InputFrame) {
         const r = this.run;
         if (r.finished)
@@ -144,7 +143,7 @@ export class Simulation {
         }
         if(!lessonActive(r))this.updateAnimals(dt);
         this.updateAim();
-        if(input.interact&&r.exposed&&this.aim.kind!=='boat')this.aim={kind:'fish',id:'held',distance:0,label:'Lionfish on spear',hint:'Hold Interact to secure',valid:true};
+        if(input.interact&&r.exposed&&this.aim.id!=='boat')this.aim={kind:'fish',id:'held',distance:0,label:'Lionfish on spear',hint:'Hold Interact to secure',valid:true};
         this.work(dt, input.interact);
         this.routeTimer -= dt;
         if (this.routeTimer <= 0) {
@@ -264,14 +263,14 @@ export class Simulation {
         if(heldAim)this.aim=heldAim;
         if((r.maskFlood??0)>.01&&!r.exposed){this.aim={kind:'job',id:'clear-mask',distance:0,label:'Mask partly flooded',hint:'Hold Interact to clear · 2 bar air',valid:r.air>2};return;}
         const boat = this.site.landmarks[0].p;
-        if (Math.hypot(r.p.x - boat.x, r.p.z - boat.z) < 7) {
+        if (!r.exposed && Math.hypot(r.p.x - boat.x, r.p.z - boat.z) < 7) {
             if (r.p.y > this.site.surface - 4) {
                 this.aim = { kind: 'boat', id: 'boat', distance: distance(r.p, boat), label: 'Your boat', hint: 'Hold Interact to finish this dive', valid: true };
                 return;
             }
             this.aim = { kind: 'boat', id: 'ascent', distance: distance(r.p, boat), label: 'Home buoy overhead', hint: 'Ascend beside the mooring to board', valid: false };
         }
-        const overhead=boatAim(r,this.site,clearSegment);if(overhead){this.aim=overhead;return;}
+        const overhead=r.exposed?null:boatAim(r,this.site,clearSegment);if(overhead){this.aim=overhead;return;}
         let best = Infinity;
         for (const j of r.jobs) {
             if (r.exposed) continue;
@@ -529,6 +528,7 @@ export class Simulation {
         return; r.finished = true; r.rescued = rescued; r.charge = 0; r.interaction = 0; this.profile.active = null; this.profile.pending = r; this.events.push({ type: 'finish' }); }
 }
 export interface Settlement {
+    towingFuel:number;boatFuel:number;
     earned: number;
     expenses: number;
     debtPaid: number;
@@ -609,6 +609,7 @@ export function settleRun(p: Profile, run: Run, allocation: {
     const cleanPay=run.cleaned*12,restorationPay=run.restored*15,surveyPay=legacy?run.surveyed*(run.night?75:55):survey.stationPay,donationPay=allocation.donate*3,boatPay=(run.encounter?.rewarded?5:0)+(run.treated??0)*14;
     const earned=sales+filletBonus+contract+cleanPay+restorationPay+surveyPay+researchTopUp+donationPay+starterGrant+boatPay+eventPrize+sponsor;
     const eventReason=!run.event?'Not registered for this outing.':run.rescued?'Rescue: event score and prize are forfeited.':`Local ${run.eventTheme ?? 'catch'} day: ${score} points; ${eventPrize?'prize earned.':'250 points needed for the first prize.'}`;
+    const fuel=run.expedition&&!run.rescued?travelCosts(run.site,run.boatDistance):{tow:0,boat:0};
     const expenses = outingExpenses(run,allocation.eat);
     const balance = p.cash + earned - expenses;
     if (balance < 0) {
@@ -631,5 +632,5 @@ export function settleRun(p: Profile, run: Run, allocation: {
     p.pending = null;
     p.active = null;
     p.lastReport = run.rescued ? 'A difficult outing. The reef work remains; tomorrow is another dive.' : `${run.removed} lionfish removed · ${run.cleaned} cleanup jobs · ${run.restored} corals planted.`;
-    return { earned, expenses, debtPaid, followers, reputation: rep, contract, eventPrize, sponsor, score, filletBonus, sales,cleanPay,restorationPay,surveyPay,researchTopUp,donationPay,starterGrant,boatPay,contractReason,eventReason,filletGrade:filletGrade(run.filletQuality??0),recognition };
+    return { towingFuel:fuel.tow,boatFuel:fuel.boat,earned, expenses, debtPaid, followers, reputation: rep, contract, eventPrize, sponsor, score, filletBonus, sales,cleanPay,restorationPay,surveyPay,researchTopUp,donationPay,starterGrant,boatPay,contractReason,eventReason,filletGrade:filletGrade(run.filletQuality??0),recognition };
 }

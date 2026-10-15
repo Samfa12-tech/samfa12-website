@@ -8,7 +8,7 @@ import { vec } from '../game/math.js';
 export function skiffGeometry() { return Object.assign(new Geometry(),diveSkiff); }
 /** Lightweight authored bay around a shared swell function. One boat draw, no physics meshes. */
 export class BoatTravelRenderer {
- boat:any; wake:any; surface:any;
+ boat:any; wake:any; surface:any; spray:any;
  constructor(public renderer:ReefRenderer,public profile:Profile,public settings:Settings) {
   const r=renderer;r.disposeWorld();r.shadows.reset();r.camera.maxZ=900;
   const water=new Geometry(),steps=settings.quality==='high'?120:settings.quality==='low'?60:90;
@@ -19,6 +19,11 @@ export class BoatTravelRenderer {
    wake.quad(vec(-w,0,z),vec(w,0,z),vec(w+.085,0,z-.5),vec(-w-.085,0,z-.5),rgb('#d2efe6'));
    for(let k=start;k<wake.positions.length;k+=3){const age=(-wake.positions[k+2]-3)/20,width=.40+age*3.4;wake.uvs[k/3*2]=age;wake.uvs[k/3*2+1]=wake.positions[k]/width;}
   }this.wake=r.mesh('moving-foam-wake',wake,10);
+  const spray=new Geometry(),sprayCount=settings.quality==='high'?40:settings.quality==='low'?12:24;
+  for(let i=0;i<sprayCount;i++){const side=i%2?1:-1,x=side*(.78+(i%5)*.05),z=2.1+(i%4)*.15,start=spray.uvs.length;
+    spray.tri(vec(x-.022,.32,z),vec(x+.022,.32,z),vec(x,.39,z),rgb('#d7f5eb'));
+    for(let k=start;k<spray.uvs.length;k+=2)spray.uvs[k]=(i*.61803)%1;
+  }this.spray=r.mesh('pooled-bow-spray',spray,11);
   for(const [id,point] of Object.entries(BAY_SITES)){
    const g=new Geometry(),colour=rgb(siteUnlocked(profile,id as any)?'#f0bf69':'#829c9a');
    g.ellipsoid(vec(),vec(.8,.5,.8),colour,14,7);g.rod(vec(),vec(0,2.4,0),.045,.025,rgb('#e9dbaf'),7);g.box(vec(.28,2.15,0),vec(.6,.32,.025),colour);
@@ -31,6 +36,7 @@ export class BoatTravelRenderer {
   const r=this.renderer,B=(globalThis as any).BABYLON,t=b.time,height=oceanHeight(b.x,b.z,t),forward={x:Math.sin(b.yaw),z:Math.cos(b.yaw)},side={x:Math.cos(b.yaw),z:-Math.sin(b.yaw)};
   const pitch=-Math.atan2(oceanHeight(b.x+forward.x*2,b.z+forward.z*2,t)-oceanHeight(b.x-forward.x*2,b.z-forward.z*2,t),4),roll=Math.atan2(oceanHeight(b.x+side.x,b.z+side.z,t)-oceanHeight(b.x-side.x,b.z-side.z,t),2);
   this.boat.position.set(b.x,height+.20,b.z);this.boat.rotation.set(pitch,b.yaw,roll*.7);
+  this.spray.setEnabled(Math.abs(b.speed)>6);this.spray.position.copyFrom(this.boat.position);this.spray.rotation.copyFrom(this.boat.rotation);
   this.wake.position.set(b.x,.06,b.z);this.wake.rotation.y=b.yaw;this.wake.setEnabled(Math.abs(b.speed)>1);this.wake.scaling.set(1,1,Math.min(1,Math.abs(b.speed)/10));
   const distance=10.5;r.camera.position.set(b.x-forward.x*distance,5.7+(this.settings.reducedMotion?0:height*.18),b.z-forward.z*distance);r.camera.rotation.set(.30,b.yaw,0);
   r.scene.clearColor=new B.Color4(.53,.75,.81,1);

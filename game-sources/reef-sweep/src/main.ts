@@ -19,7 +19,7 @@ import { UI, Screen } from './ui/ui.js';
 const canvas = document.getElementById('ocean') as HTMLCanvasElement;
 const store = new SaveStore();
 let profile = store.load(store.selectedSlot()), settings = store.settings(), sim: Simulation | null = null, paused = true, visualDive = false, renderer: ReefRenderer | null = null, stack: (Screen | 'play')[] = [], fault = false;
-let boat: BoatState|null=null, boatRenderer: BoatTravelRenderer|null=null, travelledDistance=0;
+let boat: BoatState|null=null, boatRenderer: BoatTravelRenderer|null=null, travelledDistance=0,boatInteract=false;
 const audio = new Soundscape(settings);
 const ui = new UI(() => profile, () => settings, dispatch);
 const input = new InputController(canvas, settings, action => { if (action === 'pause') {
@@ -127,7 +127,7 @@ function resume() { if (!profile.active) {
 } sim=bindSuspendedDive(profile,sim,renderer!,run=>new Simulation(profile,run));
     if(!visualDive&&!sim.run.practice)playCandidate=true; visualDive = true; setPause(false); stack = []; ui.play(); void audio.start(); canvas.focus(); input.capture(); }
 function resumeBoat(){setPause(false);ui.playBoat();}
-function launchBoat(){if(profile.active||profile.pending){begin();return;}sim=null;visualDive=false;boat=newBoat();boatRenderer=new BoatTravelRenderer(renderer!,profile,settings);stack=[];resumeBoat();}
+function launchBoat(){if(profile.active||profile.pending){begin();return;}setPause(true);input.boatMode=true;sim=null;visualDive=false;boat=newBoat();boatInteract=false;playCandidate=true;boatRenderer=new BoatTravelRenderer(renderer!,profile,settings);stack=[];resumeBoat();}
 function begin() { if (profile.pending) {
     review();
     return;
@@ -135,7 +135,7 @@ function begin() { if (profile.pending) {
     resume();
     return;
 } const run = startRun(profile, ui.site, ui.order, profile.eventRegistrationDay===profile.day && profile.day % 3 === 0, ui.night);
-    run.boatDistance=travelledDistance;travelledDistance=0;boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');
+    input.boatMode=false;run.boatDistance=travelledDistance;travelledDistance=0;boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');
     playCandidate=!run.practice; sim = new Simulation(profile, run); renderer!.build(profile, run); visualDive = true; setPause(false); ui.play(); void audio.start(); canvas.focus(); persist(); if(run.site==='passage'&&run.siteRevision===2&&recordCharacterFlag(profile,'passage-arrival')){persist();showMoment({id:'passage-arrival',speaker:'Nia · Harbour pilot',title:'Take the sheltered route.',text:'Your buoy is on the western shelf. Follow the lee wall to the nursery, then cross the tide race towards Cathedral arch. The two flow gauges mark the research route. There is open water above if the current feels too strong.'},true);}
     if(!paused)input.capture();
     ui.toast(run.night?'Moonlit dive. Your head torch is on; give wildlife room.':profile.totalRemoved === 0 ? 'Welcome to Lantern Bay. The first lionfish is below and ahead. J opens your chart.' : 'Back in the water. The reef remembers your last visit.'); }
@@ -174,7 +174,7 @@ function dispatch(action: string, data?: any) {
                 break;
             case 'boat-launch':launchBoat();break;
             case 'boat-resume':resumeBoat();break;
-            case 'boat-harbour':boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');preview();stack=[];show('dock');break;
+            case 'boat-harbour':input.boatMode=false;boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');preview();stack=[];show('dock');break;
             case 'boat-dive':{const id=boat&&arrivalSite(boat);if(!id||!siteUnlocked(profile,id)){ui.toast('Stop beside an unlocked gold dive buoy first.');break;}ui.site=id;travelledDistance=boat!.distance;try{begin();}catch(error){ui.toast(String(error));}break;}
             case 'prep-return':stack=[];show('debrief');break;
             case 'cook-save':if(profile.pending){completeCooking(profile,data.recipe,data.scores);persist();}break;
@@ -423,7 +423,7 @@ function frame(now: number) {
     if (input.padDisconnected && watchRaised) setWatchRaised(false);
     if (ui.screen === 'settings' && hudClock > .09) { hudClock = 0; ui.updateControllerStatus(input.controllerStatus()); }
     document.body.classList.toggle('touch', input.touchMode && !input.gamepad);
-    if(boat&&!paused){updateBoatTravel(boat,dt,f.moveZ,f.moveX);const arrived=arrivalSite(boat);ui.updateBoat(boat,arrived&&siteUnlocked(profile,arrived)?arrived:null);}
+    if(boat&&!paused){updateBoatTravel(boat,dt,f.moveZ,f.moveX);const arrived=arrivalSite(boat);ui.updateBoat(boat,arrived&&siteUnlocked(profile,arrived)?arrived:null);if(f.interact&&!boatInteract&&arrived&&siteUnlocked(profile,arrived))dispatch('boat-dive');boatInteract=f.interact;}
     if (!paused && sim) {
         accum += dt;
         let n = 0;
@@ -444,7 +444,7 @@ function frame(now: number) {
     hudClock += dt;
     try {
         renderer!.setWatchReserve(sim?.reserve ?? 40);
-        if(boat&&boatRenderer){boatRenderer.render(boat);const chart=document.getElementById('bay-chart') as HTMLCanvasElement|null;if(chart)boatRenderer.drawChart(chart,boat);}
+        if(boat&&boatRenderer){boatRenderer.render(boat);if(playCandidate&&!paused&&boat.distance>2){playCandidate=false;if(!debug)gameStarts.start();}const chart=document.getElementById('bay-chart') as HTMLCanvasElement|null;if(chart)boatRenderer.drawChart(chart,boat);}
         else renderer!.render(visualDive ? sim?.run.time ?? visualTime : visualTime, visualDive);
         if(playCandidate&&visualDive&&!paused&&sim&&!sim.run.practice&&renderer!.run===sim.run){playCandidate=false;if(!debug)gameStarts.start();}
     }
@@ -457,7 +457,7 @@ function frame(now: number) {
         console.error(e);
         return;
     }
-    if(!debug&&visualDive&&!paused&&!document.hidden&&sim&&!sim.run.practice)gameStarts.activity();
+    if(!debug&&!paused&&!document.hidden&&(boat&&boat.distance>2||visualDive&&sim&&!sim.run.practice))gameStarts.activity();
     if (!paused && sim && hudClock > .09) {
         hudClock = 0;
         ui.updateHUD(sim, input.gamepad ? 'gamepad' : input.touchMode ? 'touch' : 'keyboard');
@@ -533,7 +533,7 @@ catch (e) {
     document.querySelector('#loading pre')!.textContent = String(e);
     console.error(e);
 }
-(window as any).render_game_to_text = () => JSON.stringify({ screen: paused ? ui.screen : 'dive', day: profile.day, site: sim?.run.site, position: sim?.run.p, air: sim?.run.air, catch: sim?.run.cargo.length, exposed: sim?.run.exposed?.id, aim: sim?.aim, renderer: renderer?.stats(), audio: audio.stats() });
+(window as any).render_game_to_text = () => JSON.stringify({ screen: paused ? ui.screen : boat ? 'boat' : 'dive', day: profile.day, site: sim?.run.site, position: sim?.run.p, air: sim?.run.air, catch: sim?.run.cargo.length, exposed: sim?.run.exposed?.id, aim: sim?.aim, renderer: renderer?.stats(), audio: audio.stats() });
 if (debug)
     (window as any).__REEF__ = { get boat() { return boat; }, get profile() { return profile; }, get sim() { return sim; }, get ui() { return ui; }, get renderer() { return renderer; }, get input() { return input; }, get audio() { return audio; }, get paused() { return paused; }, dispatch, store, tick(seconds: number, frame: Partial<InputFrame> = {}) { if (!sim)
             return; for (let i = 0; i < seconds * 60 && !sim.run.finished; i++)
