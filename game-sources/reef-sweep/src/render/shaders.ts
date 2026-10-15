@@ -51,6 +51,11 @@ void main(){
    p.y+=sin(phase*6.0+p.z*3.0)*fin*.26;
   }
  }
+ if(uMode==13.0){
+  float phase=dot(w[3].xz,vec2(.19,.07));
+  float bout=smoothstep(.72,.94,.5+.5*sin(uTime*.23+phase*.3));
+  p.y+=sin(uTime*3.5+phase)*(.10+.30*bout)*uv.y*uMotion;
+ }
  if(uMode==11.0){float age=fract(uTime*1.8+uv.x);p.y+=age*.9-age*age*1.6;p.x+=sign(p.x)*age*.6;p.z-=age*1.8;}
  if(uMode==12.0){p.x-=sign(p.x)*max(0.0,abs(p.x)-.12)*uFold*.84;p.y-=sign(p.y)*max(0.0,abs(p.y)-.20)*uFold*.70;}
  if(uMode==3.0||uMode==10.0){

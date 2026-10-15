@@ -1,4 +1,5 @@
-import { collectionMotion } from './collection-motion.js';
+import { Seagulls } from './seagulls.js';
+import { CollectionRig } from './collection-motion.js';
 import { skiffGeometry } from './boat-travel.js';
 import { seaStar, lobster, sponge, habitatChair, charmGeometry } from './marine-life.js';
 import { CHARMS, heldCatches } from '../game/expedition.js';
@@ -77,12 +78,14 @@ export class ReefRenderer {
     setWatchRaised(value: boolean) { this.watchRequested = value; }
     setWatchReserve(value: number) { if (Number.isFinite(value)) this.watchReserve = Math.max(0,value); }
     get watchRaised() { return this.watchRequested; }
+    private collectionRig=new CollectionRig();
     tube: any;
     scooter: any;
     injector:any;
     injectorPlunger:any;
     held: any;
     charm: any;
+    seagulls:Seagulls|null=null;
     site: Site = SITES.gardens;
     run: Run | null = null;
     encounterMeshes: {boat:any;object:any;line:any}|null=null;
@@ -104,11 +107,12 @@ export class ReefRenderer {
         m.alphaMode = B.Engine.ALPHA_COMBINE;
     } m.setMatrix('uSunMatrix',this.shadows.sunMatrix);m.setMatrix('uTorchMatrix',this.shadows.torchMatrix);m.setFloat('uShadows',0);m.setFloat('uTorchShadows',0);m.setTexture('uSunShadow',this.shadows.white);m.setTexture('uTorchShadow',this.shadows.white);this.materials.push(m); return m; }
     mesh(name: string, g: Geometry, mode = 1) { const B = BABYLON, m = new B.Mesh(name, this.scene), v = new B.VertexData(); v.positions = g.positions; v.normals = g.normals; v.colors = g.colors; v.uvs = g.uvs; v.indices = g.indices; v.applyToMesh(m, false); m.material = this.material(mode); m.isPickable = false; return m; }
-    disposeWorld() { this.watch?.dispose();this.watch=null;this.watchRequested=false;this.watchBlend=0; for (const m of this.scene.meshes.slice())
+    disposeWorld() { this.seagulls=null; this.watch?.dispose();this.watch=null;this.watchRequested=false;this.watchBlend=0; for (const m of this.scene.meshes.slice())
         m.dispose(false, false); this.staticMeshes = []; this.fishMeshes.clear(); this.animalMeshes.clear(); this.jobMeshes.clear(); this.nativeSchools = []; this.captureQueue = []; }
     build(profile: Profile, run: Run) {
         this.disposeWorld();
         this.camera.maxZ=500;
+        this.collectionRig=new CollectionRig();this.lastPoseTime=run.time;
         this.shadows.reset();
         this.bubblePool = new BubblePool();
         this.profile = profile;
@@ -277,6 +281,7 @@ export class ReefRenderer {
         const [cx,cz,yaw]=h.chair,chair=workPoint(cx,cz,.5,site);chair.y=sandHeight(chair.x,chair.z,site)-.04;
         habitat.merge(habitatChair(),chair,vec(1,1,1),yaw);
         this.staticMeshes.push(this.mesh('authored-habitat-life',habitat,1));
+        this.seagulls=new Seagulls(this,this.settings);
         const coast = new Geometry();
         for (let i = 0; i < 12; i++) {
             const angle = i / 12 * Math.PI * 2 + .12 + Math.sin(i * 2.7) * .07;
@@ -424,7 +429,8 @@ export class ReefRenderer {
     render(time: number, playing: boolean) {
         if (!this.run)
             return;
-        const r = this.run, B = BABYLON, collection=collectionMotion(r,this.engine.getRenderWidth()/this.engine.getRenderHeight());
+        const r = this.run, B = BABYLON, poseDt=Math.max(0,Math.min(.083,time-this.lastPoseTime));this.lastPoseTime=time;
+        const collection=this.collectionRig.update(r,this.engine.getRenderWidth()/this.engine.getRenderHeight(),poseDt);
         const p = playing ? r.p : vec(5 + Math.sin(time * .045) * 1.3, 7.2 + Math.sin(time * .12) * .15, -35);
         const yaw = playing ? r.yaw : -.16 + Math.sin(time * .05) * .08, pitch = playing ? r.pitch : .06;
         const night = !!r.night, torchLevel = this.profile ? upgradeLevel(this.profile, 'torch') : 0;
@@ -442,6 +448,7 @@ export class ReefRenderer {
             const near=night?[.012,.047,.085]:base,far=night?[.035,.12,.20]:[base[0]*1.2+.09,base[1]*1.2+.09,base[2]*1.2+.06];
             this.scene.clearColor.r=Math.pow(near[0]+(far[0]-near[0])*blend,.96);this.scene.clearColor.g=Math.pow(near[1]+(far[1]-near[1])*blend,.96);this.scene.clearColor.b=Math.pow(near[2]+(far[2]-near[2])*blend,.96);
         }
+        this.seagulls?.update(time,p,this.site.surface,playing&&!night&&p.y>this.site.surface-.15);
         this.camera.position.set(p.x, p.y, p.z);
         this.camera.rotation.set(pitch, yaw, 0);
         const dir = direction(yaw, pitch);
@@ -540,11 +547,10 @@ export class ReefRenderer {
         this.spear.position.z = -r.charge * .25 + thrust - stow;
         this.spear.position.y = sway - stow;
         this.spear.rotation.x = stow * .8;
-        this.tube.position.x=collection.mouth.x+.64;
+        this.tube.position.set(collection.tubePosition.x,collection.tubePosition.y,collection.tubePosition.z);this.tube.rotation.x=collection.tubeAngle;
         this.spear.position.x=collection.spear.x;this.spear.position.y+=collection.spear.y;this.spear.position.z+=collection.spear.z;
         const transfer=collection.approach;
         const watchTarget=this.watchRequested && !r.scooter && r.charge === 0 ? 1 : 0;
-        const poseDt=Math.max(0,Math.min(.083,time-this.lastPoseTime));this.lastPoseTime=time;
         this.watchBlend=this.settings.reducedMotion?watchTarget:this.watchBlend+(watchTarget-this.watchBlend)*(1-Math.exp(-poseDt*11));
         if(Math.abs(this.watchBlend-watchTarget)<.001)this.watchBlend=watchTarget;
         const pose=diverPose(r,time,this.watchBlend,this.settings.reducedMotion,this.pose);

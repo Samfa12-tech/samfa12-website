@@ -1,3 +1,4 @@
+import { Seagulls } from './seagulls.js';
 import { Geometry, rgb, islandGeometry } from './geometry.js';
 import { diveSkiff } from './assets/dive-skiff.js';
 import { BAY_SITES, oceanHeight, type BoatState } from '../game/expedition.js';
@@ -8,7 +9,7 @@ import { vec } from '../game/math.js';
 export function skiffGeometry() { return Object.assign(new Geometry(),diveSkiff); }
 /** Lightweight authored bay around a shared swell function. One boat draw, no physics meshes. */
 export class BoatTravelRenderer {
- boat:any; wake:any; surface:any; spray:any;
+ boat:any; wake:any; surface:any; spray:any; birds:Seagulls;
  constructor(public renderer:ReefRenderer,public profile:Profile,public settings:Settings) {
   const r=renderer;r.disposeWorld();r.shadows.reset();r.camera.maxZ=900;
   const water=new Geometry(),steps=settings.quality==='high'?120:settings.quality==='low'?60:90;
@@ -29,6 +30,7 @@ export class BoatTravelRenderer {
    g.ellipsoid(vec(),vec(.8,.5,.8),colour,14,7);g.rod(vec(),vec(0,2.4,0),.045,.025,rgb('#e9dbaf'),7);g.box(vec(.28,2.15,0),vec(.6,.32,.025),colour);
    const buoy=r.mesh('dive-buoy-'+id,g,1);buoy.position.set(point.x,0,point.z);
   }
+  this.birds=new Seagulls(r,settings);
   // Low rocky islands frame the navigable bay; site coordinates remain open water.
   for(let i=0;i<18;i++){const a=i/18*Math.PI*2,d=260+Math.sin(i*3)*35,g=islandGeometry(7426+i*173,7);const m=r.mesh('bay-islet-'+i,g,1);m.position.set(Math.cos(a)*d,0,Math.sin(a)*d);}
  }
@@ -38,9 +40,10 @@ export class BoatTravelRenderer {
   this.boat.position.set(b.x,height+.20,b.z);this.boat.rotation.set(pitch,b.yaw,roll*.7);
   this.spray.setEnabled(Math.abs(b.speed)>6);this.spray.position.copyFrom(this.boat.position);this.spray.rotation.copyFrom(this.boat.rotation);
   this.wake.position.set(b.x,.06,b.z);this.wake.rotation.y=b.yaw;this.wake.setEnabled(Math.abs(b.speed)>1);this.wake.scaling.set(1,1,Math.min(1,Math.abs(b.speed)/10));
+  this.birds.update(t,vec(b.x,0,b.z),0,true);
   const distance=10.5;r.camera.position.set(b.x-forward.x*distance,5.7+(this.settings.reducedMotion?0:height*.18),b.z-forward.z*distance);r.camera.rotation.set(.30,b.yaw,0);
   r.scene.clearColor=new B.Color4(.53,.75,.81,1);
-  for(const m of r.materials){m.setFloat('uTime',t);m.setFloat('uSurface',0);m.setFloat('uSea',1);m.setFloat('uRadius',220);m.setFloat('uFog',.002);m.setFloat('uMotion',1);m.setFloat('uNight',0);m.setFloat('uLight',0);m.setFloat('uShadows',0);m.setFloat('uTorchShadows',0);m.setVector3('uEye',r.camera.position);m.setVector3('uForward',new B.Vector3(forward.x,0,forward.z));}
+  for(const m of r.materials){m.setFloat('uTime',t);m.setFloat('uSurface',0);m.setFloat('uSea',1);m.setFloat('uRadius',220);m.setFloat('uFog',.002);m.setFloat('uMotion',this.settings.reducedMotion?0:1);m.setFloat('uNight',0);m.setFloat('uLight',0);m.setFloat('uShadows',0);m.setFloat('uTorchShadows',0);m.setVector3('uEye',r.camera.position);m.setVector3('uForward',new B.Vector3(forward.x,0,forward.z));}
   r.engine.beginFrame();r.engine._drawCalls?.fetchNewFrame();r.scene.render();r.engine.endFrame();
  }
  drawChart(canvas:HTMLCanvasElement,b:BoatState){const c=canvas.getContext('2d')!,w=canvas.width,h=canvas.height,to=(x:number,z:number)=>[w/2+x*.52,h*.60-z*.52];c.fillStyle='#0b3540ed';c.fillRect(0,0,w,h);c.font='11px Trebuchet MS';

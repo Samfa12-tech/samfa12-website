@@ -14,5 +14,6 @@ test('Wavedash build retains source game bytes, analytics and exact version',()=
 test('platform readiness is absent-safe, boot-success-only and idempotent',()=>{
  const source=read('wavedash-ready.js').toString();new vm.Script(source);
  for(const sdkPresent of [false,true])for(const ready of [false,true]){let calls=0;const window=sdkPresent?{Wavedash:{init(){calls++;}}}:{};const context=vm.createContext({window,document:{getElementById(){return {style:{display:ready?'none':'grid'}};}}});vm.runInContext(source,context);vm.runInContext(source,context);assert.equal(calls,sdkPresent&&ready?1:0);}
- assert.match(read('index.html').toString(),/game\.js\?v=0\.5\.0-preview\.1[\s\S]*wavedash-ready\.js/);
+ const html=read('index.html').toString(),version=JSON.parse(read('build-manifest.json')).version;
+ assert.ok(html.includes('game.js?v='+version));assert.match(html,/game\.js\?v=[^"\s]+[\s\S]*wavedash-ready\.js/);
 });

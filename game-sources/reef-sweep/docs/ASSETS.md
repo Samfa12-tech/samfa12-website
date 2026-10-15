@@ -70,3 +70,6 @@ Stars, lobsters, sponges, habitat chairs and the five charm designs are original
 
 ## Crown-of-thorns field-response model
 Original Blender 5.2 asset under art/crown-of-thorns. The 13-arm smooth continuous body, bent arm tips and short angled papillae are authored by scripts/author-crown-of-thorns.py. Editable blend, GLB, studio evidence and manifest retained. Runtime bakes 2,652 triangles, one colour draw, no textures, in src/render/assets/crown-of-thorns.ts. It is separate from the small orange five-arm ambient sea star. No external assets or paid generation.
+
+## Coastal seagulls (v0.5.0-preview.2)
+Original local vertex-colour geometry in src/render/seagulls.ts: pale body/head, swept cambered wings, dark primary tips, small beak/tail and tucked legs. Three to five bounded meshes share one material. Slow elliptical flight and shader wingbeats are render-only, hidden underwater/night; reduced motion suppresses wingbeats. No external assets, textures, paid generation or new runtime services.

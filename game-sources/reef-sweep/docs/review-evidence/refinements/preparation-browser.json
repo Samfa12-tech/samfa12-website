@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "name": "boot renders",
+      "pass": true,
+      "detail": "Reef SweepDIVING CO.Making room for life\u2026"
+    },
+    {
+      "name": "boat launch enabled",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "moving boat readout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "dive entered",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "debrief opens",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "allocation retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "receipt replaces exhausted-reef debrief",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "repeat settle has no payout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reload retains next day",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no page errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": ".interact-touch comfortable",
+      "pass": true,
+      "detail": {
+        "x": 208,
+        "y": 752,
+        "width": 72,
+        "height": 76
+      }
+    },
+    {
+      "name": ".spear-touch comfortable",
+      "pass": true,
+      "detail": {
+        "x": 290,
+        "y": 740,
+        "width": 88,
+        "height": 88
+      }
+    },
+    {
+      "name": "touch keyboard badges hidden",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "portrait dive HUD retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "landscape stats removed",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all page errors empty",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}

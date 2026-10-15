@@ -1,0 +1,144 @@
+{
+  "checks": [
+    {
+      "name": "first caught model is original world mesh",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "second fish produces Shishkabob photo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "both fish secured exactly once",
+      "pass": true,
+      "detail": {
+        "paused": false,
+        "keys": [],
+        "active": true,
+        "aim": {
+          "kind": "fish",
+          "id": "held",
+          "distance": 0,
+          "label": "Lionfish on spear",
+          "hint": "Hold Interact to secure",
+          "valid": true
+        },
+        "progress": 0,
+        "exposed": null,
+        "second": 0,
+        "cargo": 2
+      }
+    },
+    {
+      "name": "old fish geometry hidden after tube transfer",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "breach droplets appear",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "mask clear consumes small bounded air",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "treatment uses visible injector",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "treatment completes through safety release",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "boat travelled under keyboard input",
+      "pass": true,
+      "detail": {
+        "x": 3.917586859198518,
+        "z": 9.265964271826947,
+        "yaw": 0.4,
+        "speed": 10.696023351218974,
+        "distance": 10.060098443163382,
+        "time": 1.5612999999999986
+      }
+    },
+    {
+      "name": "boat steering changes heading",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "fast boat cannot start dive",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "buoy selects correct dive",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no desktop page errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "multitouch holds draw and drag aims",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cancellation does not strike",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "touch mask button clears flood",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "button hold does not select text",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "settings keyboard controls remain reachable",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no touch page errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "timings": {
+    "high": {
+      "medianMs": 7.7,
+      "p95Ms": 8.3,
+      "frames": 160,
+      "scope": "short desktop Chrome boat sample; not sustained phone/thermal proof"
+    },
+    "balanced": {
+      "medianMs": 7.6,
+      "p95Ms": 8.4,
+      "frames": 160,
+      "scope": "short desktop Chrome boat sample; not sustained phone/thermal proof"
+    },
+    "low": {
+      "medianMs": 7.7,
+      "p95Ms": 8.6,
+      "frames": 160,
+      "scope": "short desktop Chrome boat sample; not sustained phone/thermal proof"
+    }
+  },
+  "fixture": "Controlled local debug placements; Chromium touch emulation; not physical Android/iPhone"
+}

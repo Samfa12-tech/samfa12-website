@@ -1,0 +1,670 @@
+{
+  "checks": [
+    {
+      "name": "1280 harbour has launch without redundant selectors",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 assignments await actual buoy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 responsive chart default",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 navigation fits",
+      "pass": true,
+      "detail": {
+        "x": 970,
+        "y": 398.859375,
+        "width": 292,
+        "height": 383.140625
+      }
+    },
+    {
+      "name": "1280 chart disclosure works",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 few bounded local gull meshes",
+      "pass": true,
+      "detail": [
+        {
+          "enabled": true,
+          "position": [
+            5.513547124597142,
+            8.615023461512772,
+            39.06910633487807
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            23.027334496953436,
+            10.973941833528512,
+            6.4457878912799025
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            -37.70880807828339,
+            12.671544381505212,
+            15.033477286016872
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            13.028396537447426,
+            9.098108029070369,
+            52.88151280288716
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            35.67639290448893,
+            10.150702867147254,
+            -5.436026402688508
+          ],
+          "vertices": 315
+        }
+      ]
+    },
+    {
+      "name": "1280 actual throttle and steering",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 buoy shows assignment and fuel",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 native assignment select usable",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 selected assignment starts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 correct resting tube pose",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 original fish mesh and Shishkabob retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 tube raises before insertion",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 cancel retains fish without cargo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 cancel restores tube pose",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 both fish secure once and original mesh hides",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 tube lowers after empty prongs withdraw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 resume remains available without selector",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 reload resume retains two catches",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 surface gulls visible",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 submerged birds hidden",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "1280 rebuild has no duplicate flock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 harbour has launch without redundant selectors",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 assignments await actual buoy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 responsive chart default",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 navigation fits",
+      "pass": true,
+      "detail": {
+        "x": 12,
+        "y": 74,
+        "width": 366,
+        "height": 106
+      }
+    },
+    {
+      "name": "390 chart disclosure works",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 few bounded local gull meshes",
+      "pass": true,
+      "detail": [
+        {
+          "enabled": true,
+          "position": [
+            5.322547622478955,
+            8.611015937742522,
+            39.098787633489025
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            23.18943268352126,
+            10.977607858681898,
+            6.564242688158977
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            -37.64005985049899,
+            12.668883954959112,
+            14.853624115615094
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            12.749468110546129,
+            9.099386432560584,
+            52.93850385555355
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            35.90364884697997,
+            10.150850437427982,
+            -5.2903777867154
+          ],
+          "vertices": 315
+        }
+      ]
+    },
+    {
+      "name": "390 actual throttle and steering",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 buoy shows assignment and fuel",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 native assignment select usable",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 selected assignment starts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 correct resting tube pose",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 original fish mesh and Shishkabob retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 tube raises before insertion",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 cancel retains fish without cargo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 cancel restores tube pose",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 both fish secure once and original mesh hides",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 tube lowers after empty prongs withdraw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 resume remains available without selector",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 reload resume retains two catches",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 orientation change settles tube",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 surface gulls visible",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 submerged birds hidden",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "390 rebuild has no duplicate flock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 harbour has launch without redundant selectors",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 assignments await actual buoy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 responsive chart default",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 navigation fits",
+      "pass": true,
+      "detail": {
+        "x": 594,
+        "y": 145,
+        "width": 232,
+        "height": 233
+      }
+    },
+    {
+      "name": "844 chart disclosure works",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 few bounded local gull meshes",
+      "pass": true,
+      "detail": [
+        {
+          "enabled": true,
+          "position": [
+            5.232572123568806,
+            8.609128951036624,
+            39.112390031673215
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            23.265267495387175,
+            10.9793305603517,
+            6.620260376054487
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            -37.60710920728613,
+            12.667636703714258,
+            14.769120719793829
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            12.61806037306948,
+            9.099982606966734,
+            52.96489029023954
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            36.01014961266478,
+            10.150924724168368,
+            -5.221533226253332
+          ],
+          "vertices": 315
+        }
+      ]
+    },
+    {
+      "name": "844 actual throttle and steering",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 buoy shows assignment and fuel",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 native assignment select usable",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 selected assignment starts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 correct resting tube pose",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 original fish mesh and Shishkabob retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 tube raises before insertion",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 cancel retains fish without cargo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 cancel restores tube pose",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 both fish secure once and original mesh hides",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 tube lowers after empty prongs withdraw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 resume remains available without selector",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 reload resume retains two catches",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 orientation change settles tube",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 surface gulls visible",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 submerged birds hidden",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "844 rebuild has no duplicate flock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 harbour has launch without redundant selectors",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 assignments await actual buoy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 responsive chart default",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 navigation fits",
+      "pass": true,
+      "detail": {
+        "x": 12,
+        "y": 74,
+        "width": 296,
+        "height": 106
+      }
+    },
+    {
+      "name": "320 chart disclosure works",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 few bounded local gull meshes",
+      "pass": true,
+      "detail": [
+        {
+          "enabled": true,
+          "position": [
+            5.264738876512285,
+            8.609803496933369,
+            39.10755496952878
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            23.23819470402553,
+            10.978714997649197,
+            6.600217846348546
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            -37.618930721419375,
+            12.668082162617546,
+            14.799314951009574
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            12.665040255189867,
+            9.099769914902685,
+            52.95549079103522
+          ],
+          "vertices": 315
+        },
+        {
+          "enabled": true,
+          "position": [
+            35.97211559569421,
+            10.150897816112007,
+            -5.246162680078573
+          ],
+          "vertices": 315
+        }
+      ]
+    },
+    {
+      "name": "320 actual throttle and steering",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 buoy shows assignment and fuel",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 native assignment select usable",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 selected assignment starts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 correct resting tube pose",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 original fish mesh and Shishkabob retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 tube raises before insertion",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 cancel retains fish without cargo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 cancel restores tube pose",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 both fish secure once and original mesh hides",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 tube lowers after empty prongs withdraw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 resume remains available without selector",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 reload resume retains two catches",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 orientation change settles tube",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 surface gulls visible",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 submerged birds hidden",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "320 rebuild has no duplicate flock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no page errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "scope": "Local Chrome; controlled buoy/catch placements, native touch emulation.\nNot physical iPhone/Android proof or a complete human playthrough.\n"
+}

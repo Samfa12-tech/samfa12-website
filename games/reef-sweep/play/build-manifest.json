@@ -1,6 +1,6 @@
 {
   "game": "Reef Sweep",
-  "version": "0.5.0-preview.1",
+  "version": "0.5.0-preview.2",
   "engine": "Babylon.js 9.26.1 custom source closure",
   "saveSchema": 1,
   "musicSchema": 16,
@@ -18,8 +18,8 @@
       "sha256": "a5ce75ff6a93c618961d5af3dc66c4cc80aff8e9b609acad1aa3b4c2c37afc2a"
     },
     "game.js": {
-      "bytes": 3769840,
-      "sha256": "790ccbf305100a12715a569108098562825d9aec8397d879e7ef86496005df19"
+      "bytes": 3776209,
+      "sha256": "75c81aa6e8a8184504035bff22dea95cc7f41ecb88f401ede01af32da8983e4b"
     },
     "icon-192.png": {
       "bytes": 83333,
@@ -31,15 +31,15 @@
     },
     "index.html": {
       "bytes": 3823,
-      "sha256": "a76720e195d71a168bcd75af83414d0beda14860837cc888ff8f552d0f4ac8b9"
+      "sha256": "e84eddc069ce3facf3b609707526113d4b4f319f306a830c3ef70a8d0ef4bb2b"
     },
     "music/room-for-life.pcs.json": {
       "bytes": 104769,
       "sha256": "63f72668f8dbadbf70b5b843d4c965d6a08b36154a20cec7268e8151d10b0b17"
     },
     "style.css": {
-      "bytes": 38529,
-      "sha256": "91699c8b8780e75416d698ed145564b8a94aff28efde1a430c465d26febd5d86"
+      "bytes": 39778,
+      "sha256": "32549d62afc29c814ffeb56aab8557d45b116836a5646a26cef7254c8adba64b"
     }
   }
 }
