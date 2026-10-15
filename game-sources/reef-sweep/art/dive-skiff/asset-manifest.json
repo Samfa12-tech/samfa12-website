@@ -1,0 +1,10 @@
+{
+  "name": "Lantern dive skiff",
+  "origin": "Samfa12 original Blender model",
+  "units": "metres",
+  "runtimeAxes": "+Y up, +Z bow",
+  "triangles": 6774,
+  "draws": 1,
+  "textures": 0,
+  "collision": "XZ capsule, half width 1.3, half length 3.7; navigation simulation owns collision"
+}

@@ -1,0 +1,2557 @@
+{
+  "domain": {
+    "passed": 188,
+    "total": 188
+  },
+  "package": {
+    "passed": 8,
+    "total": 8
+  },
+  "wavedash": {
+    "passed": 2,
+    "total": 2
+  },
+  "browser": {
+    "checks": [
+      {
+        "name": "boot renders",
+        "pass": true,
+        "detail": "Reef SweepDIVING CO.Making room for life\u2026"
+      },
+      {
+        "name": "boat launch enabled",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "moving boat readout",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "dive entered",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "debrief opens",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "allocation retained",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "receipt replaces exhausted-reef debrief",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "repeat settle has no payout",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "reload retains next day",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      },
+      {
+        "name": ".interact-touch comfortable",
+        "pass": true,
+        "detail": {
+          "x": 208,
+          "y": 752,
+          "width": 72,
+          "height": 76
+        }
+      },
+      {
+        "name": ".spear-touch comfortable",
+        "pass": true,
+        "detail": {
+          "x": 290,
+          "y": 740,
+          "width": 88,
+          "height": 88
+        }
+      },
+      {
+        "name": "touch keyboard badges hidden",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "portrait dive HUD retained",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "landscape stats removed",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "all page errors empty",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": []
+  },
+  "deep": {
+    "checks": [
+      {
+        "name": "gardens actual scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "gardens chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "passage actual scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "passage chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "mangrove actual scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "mangrove chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "cenote actual scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "cenote chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "harbour actual scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "harbour chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "first caught model is original world mesh",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "second fish produces Shishkabob photo",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "both fish secured exactly once",
+        "pass": true,
+        "detail": {
+          "paused": false,
+          "keys": [],
+          "active": true,
+          "aim": {
+            "kind": "fish",
+            "id": "held",
+            "distance": 0,
+            "label": "Lionfish on spear",
+            "hint": "Hold Interact to secure",
+            "valid": true
+          },
+          "progress": 0,
+          "exposed": null,
+          "second": 0,
+          "cargo": 2
+        }
+      },
+      {
+        "name": "old fish geometry hidden after tube transfer",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "breach droplets appear",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "mask clear consumes small bounded air",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "treatment uses visible injector",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "treatment completes through safety release",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "boat travelled under keyboard input",
+        "pass": true,
+        "detail": {
+          "x": 3.906335002762507,
+          "z": 9.239351128717423,
+          "yaw": 0.4,
+          "speed": 10.690080295047807,
+          "distance": 10.031204435836173,
+          "time": 1.5611999999999973
+        }
+      },
+      {
+        "name": "boat steering changes heading",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "fast boat cannot start dive",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "buoy selects correct dive",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "no desktop page errors",
+        "pass": true,
+        "detail": []
+      },
+      {
+        "name": "multitouch holds draw and drag aims",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "cancellation does not strike",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "touch mask button clears flood",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "button hold does not select text",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "settings keyboard controls remain reachable",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "no touch page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "timings": {
+      "high": {
+        "medianMs": 7.6,
+        "p95Ms": 8.4,
+        "frames": 160,
+        "scope": "short desktop Chrome boat sample; not sustained phone/thermal proof"
+      },
+      "balanced": {
+        "medianMs": 7.6,
+        "p95Ms": 8.5,
+        "frames": 160,
+        "scope": "short desktop Chrome boat sample; not sustained phone/thermal proof"
+      },
+      "low": {
+        "medianMs": 7.6,
+        "p95Ms": 8.6,
+        "frames": 160,
+        "scope": "short desktop Chrome boat sample; not sustained phone/thermal proof"
+      }
+    },
+    "fixture": "Controlled local debug placements; Chromium touch emulation; not physical Android/iPhone"
+  },
+  "review": {
+    "scope": "Local Chromium; debug route start placement and simulation steering; touch emulation, not physical device",
+    "checks": [
+      {
+        "name": "gardens revision-three scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "gardens actual simulation swims authored route",
+        "pass": true,
+        "detail": {
+          "name": 11,
+          "reached": [
+            {
+              "waypoint": 1,
+              "frames": 327,
+              "position": {
+                "x": 0.031046715742667628,
+                "y": 3.538463863972191,
+                "z": -30.098271300141576
+              }
+            },
+            {
+              "waypoint": 2,
+              "frames": 495,
+              "position": {
+                "x": 0.03874934978566502,
+                "y": 2.0941988009215886,
+                "z": -11.217569071749457
+              }
+            },
+            {
+              "waypoint": 3,
+              "frames": 178,
+              "position": {
+                "x": 5.7893316379140645,
+                "y": 2.82915838793693,
+                "z": -9.882279806981673
+              }
+            },
+            {
+              "waypoint": 4,
+              "frames": 250,
+              "position": {
+                "x": 14.765482393012713,
+                "y": 3.3340491822463,
+                "z": -6.896049609610223
+              }
+            },
+            {
+              "waypoint": 5,
+              "frames": 262,
+              "position": {
+                "x": 16.019043199512293,
+                "y": 3.3948962840040546,
+                "z": 3.7816660877570634
+              }
+            },
+            {
+              "waypoint": 6,
+              "frames": 303,
+              "position": {
+                "x": 16.981810737468482,
+                "y": 4.768511524550599,
+                "z": 16.81125247956025
+              }
+            },
+            {
+              "waypoint": 7,
+              "frames": 485,
+              "position": {
+                "x": 1.2277124849799383,
+                "y": 5.923628566785763,
+                "z": 24.924531599742927
+              }
+            },
+            {
+              "waypoint": 8,
+              "frames": 346,
+              "position": {
+                "x": -6.319405763853743,
+                "y": 5.99690078588816,
+                "z": 16.032202710431605
+              }
+            },
+            {
+              "waypoint": 9,
+              "frames": 601,
+              "position": {
+                "x": -6.003346636908071,
+                "y": 5.999928179276569,
+                "z": -4.7728375216269034
+              }
+            },
+            {
+              "waypoint": 10,
+              "frames": 1023,
+              "position": {
+                "x": -0.12269609123921446,
+                "y": 7.945638719631064,
+                "z": -39.77991435877602
+              }
+            }
+          ],
+          "failed": null
+        }
+      },
+      {
+        "name": "gardens five-POI chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "passage revision-three scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "passage actual simulation swims authored route",
+        "pass": true,
+        "detail": {
+          "name": 13,
+          "reached": [
+            {
+              "waypoint": 1,
+              "frames": 397,
+              "position": {
+                "x": -27.942969909501233,
+                "y": 8.578943399610825,
+                "z": -28.090920433409742
+              }
+            },
+            {
+              "waypoint": 2,
+              "frames": 627,
+              "position": {
+                "x": -27.927939901263453,
+                "y": 8.019389716072746,
+                "z": -3.234746316825706
+              }
+            },
+            {
+              "waypoint": 3,
+              "frames": 428,
+              "position": {
+                "x": -27.025919111489035,
+                "y": 8.000916013312324,
+                "z": 13.756614128257796
+              }
+            },
+            {
+              "waypoint": 4,
+              "frames": 1083,
+              "position": {
+                "x": -27.90874737790066,
+                "y": 8.000010570541313,
+                "z": -20.76078535081632
+              }
+            },
+            {
+              "waypoint": 5,
+              "frames": 700,
+              "position": {
+                "x": -3.4052184015624194,
+                "y": 6.047274288013493,
+                "z": -20.831985431897273
+              }
+            },
+            {
+              "waypoint": 6,
+              "frames": 541,
+              "position": {
+                "x": 0.029618818594648093,
+                "y": 3.403582329726998,
+                "z": 6.859873239673238
+              }
+            },
+            {
+              "waypoint": 7,
+              "frames": 340,
+              "position": {
+                "x": 0.3673408653135392,
+                "y": 5.5021693124662825,
+                "z": 24.924727847446825
+              }
+            },
+            {
+              "waypoint": 8,
+              "frames": 283,
+              "position": {
+                "x": 6.028372774475451,
+                "y": 4.321651253375552,
+                "z": 38.3241071549008
+              }
+            },
+            {
+              "waypoint": 9,
+              "frames": 297,
+              "position": {
+                "x": 16.826967179378038,
+                "y": 4.906402365457315,
+                "z": 43.33131348594866
+              }
+            },
+            {
+              "waypoint": 10,
+              "frames": 195,
+              "position": {
+                "x": 22.977676823371976,
+                "y": 8.328209269548593,
+                "z": 44.23736298985026
+              }
+            },
+            {
+              "waypoint": 11,
+              "frames": 338,
+              "position": {
+                "x": 29.508957984218586,
+                "y": 15.382759515636675,
+                "z": 37.94900564178988
+              }
+            },
+            {
+              "waypoint": 12,
+              "frames": 486,
+              "position": {
+                "x": 35.724119542778915,
+                "y": 16.93105782648714,
+                "z": 23.1898838632727
+              }
+            }
+          ],
+          "failed": null
+        }
+      },
+      {
+        "name": "passage five-POI chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "mangrove revision-three scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "mangrove actual simulation swims authored route",
+        "pass": true,
+        "detail": {
+          "name": 13,
+          "reached": [
+            {
+              "waypoint": 1,
+              "frames": 419,
+              "position": {
+                "x": -7.987039112973434,
+                "y": 2.573263127094901,
+                "z": -34.38095023582009
+              }
+            },
+            {
+              "waypoint": 2,
+              "frames": 232,
+              "position": {
+                "x": -7.9490787630433655,
+                "y": 2.0530695780192687,
+                "z": -24.211948027967377
+              }
+            },
+            {
+              "waypoint": 3,
+              "frames": 201,
+              "position": {
+                "x": -8.6413168105901,
+                "y": 2.00579190693185,
+                "z": -15.173156464665883
+              }
+            },
+            {
+              "waypoint": 4,
+              "frames": 223,
+              "position": {
+                "x": -9.62247502694655,
+                "y": 2.000583289644726,
+                "z": -5.153297757019613
+              }
+            },
+            {
+              "waypoint": 5,
+              "frames": 353,
+              "position": {
+                "x": -7.2102957061047075,
+                "y": 2.000043441795834,
+                "z": 10.80936208131038
+              }
+            },
+            {
+              "waypoint": 6,
+              "frames": 262,
+              "position": {
+                "x": -6.857225022796246,
+                "y": 2.0000040474872693,
+                "z": 22.782701769028073
+              }
+            },
+            {
+              "waypoint": 7,
+              "frames": 229,
+              "position": {
+                "x": -4.419163366860896,
+                "y": 2.805507804886846,
+                "z": 32.86760093207693
+              }
+            },
+            {
+              "waypoint": 8,
+              "frames": 335,
+              "position": {
+                "x": 6.791683557868928,
+                "y": 3.88242506846841,
+                "z": 39.886350116628456
+              }
+            },
+            {
+              "waypoint": 9,
+              "frames": 608,
+              "position": {
+                "x": 21.33623283396061,
+                "y": 2.093662661932009,
+                "z": 25.021726587425302
+              }
+            },
+            {
+              "waypoint": 10,
+              "frames": 757,
+              "position": {
+                "x": 21.05295120701997,
+                "y": 1.9648411649576303,
+                "z": 4.231945570175858
+              }
+            },
+            {
+              "waypoint": 11,
+              "frames": 976,
+              "position": {
+                "x": 15.298318223665776,
+                "y": 1.9975108982699663,
+                "z": -16.79067223551374
+              }
+            },
+            {
+              "waypoint": 12,
+              "frames": 1038,
+              "position": {
+                "x": 0.37468978480804277,
+                "y": 7.890390659804595,
+                "z": -46.82831438442754
+              }
+            }
+          ],
+          "failed": null
+        }
+      },
+      {
+        "name": "mangrove five-POI chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "cenote revision-three scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "cenote actual simulation swims authored route",
+        "pass": true,
+        "detail": {
+          "name": 9,
+          "reached": [
+            {
+              "waypoint": 1,
+              "frames": 861,
+              "position": {
+                "x": -4.680366446122454,
+                "y": -5.923322476588312,
+                "z": -27.48089167028598
+              }
+            },
+            {
+              "waypoint": 2,
+              "frames": 484,
+              "position": {
+                "x": -6.751146742090699,
+                "y": -15.231539189034018,
+                "z": -10.92147942821854
+              }
+            },
+            {
+              "waypoint": 3,
+              "frames": 396,
+              "position": {
+                "x": -5.116532729436608,
+                "y": -15.96101210065876,
+                "z": 4.790856190672787
+              }
+            },
+            {
+              "waypoint": 4,
+              "frames": 272,
+              "position": {
+                "x": -4.9396754772004,
+                "y": -15.997249415275343,
+                "z": 15.773281143799341
+              }
+            },
+            {
+              "waypoint": 5,
+              "frames": 373,
+              "position": {
+                "x": 5.870501253501234,
+                "y": -15.999858995992419,
+                "z": 25.530930655437583
+              }
+            },
+            {
+              "waypoint": 6,
+              "frames": 319,
+              "position": {
+                "x": 11.412809742847768,
+                "y": -21.308888653387918,
+                "z": 35.14962788407534
+              }
+            },
+            {
+              "waypoint": 7,
+              "frames": 310,
+              "position": {
+                "x": 20.021398718022542,
+                "y": -16.612731946503377,
+                "z": 40.57816340656295
+              }
+            },
+            {
+              "waypoint": 8,
+              "frames": 2023,
+              "position": {
+                "x": 29.616454394861176,
+                "y": -6.492052726746891,
+                "z": 21.06894878669362
+              }
+            }
+          ],
+          "failed": null
+        }
+      },
+      {
+        "name": "cenote five-POI chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "harbour revision-three scene",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "harbour actual simulation swims authored route",
+        "pass": true,
+        "detail": {
+          "name": 9,
+          "reached": [
+            {
+              "waypoint": 1,
+              "frames": 599,
+              "position": {
+                "x": 1.019171740402443,
+                "y": -5.000400974869324,
+                "z": -31.72983579384578
+              }
+            },
+            {
+              "waypoint": 2,
+              "frames": 338,
+              "position": {
+                "x": 7.224250684659342,
+                "y": -8.554561916115066,
+                "z": -19.85883391760007
+              }
+            },
+            {
+              "waypoint": 3,
+              "frames": 354,
+              "position": {
+                "x": 8.974419927517898,
+                "y": -9.831067154079177,
+                "z": -4.210732175849226
+              }
+            },
+            {
+              "waypoint": 4,
+              "frames": 419,
+              "position": {
+                "x": 0.9641089722434018,
+                "y": -9.991435482719034,
+                "z": 11.243611059874635
+              }
+            },
+            {
+              "waypoint": 5,
+              "frames": 354,
+              "position": {
+                "x": -4.356581776740781,
+                "y": -8.212583214402597,
+                "z": 23.949744660268056
+              }
+            },
+            {
+              "waypoint": 6,
+              "frames": 395,
+              "position": {
+                "x": -15.909878919929385,
+                "y": -12.583514805752221,
+                "z": 31.619167404747465
+              }
+            },
+            {
+              "waypoint": 7,
+              "frames": 324,
+              "position": {
+                "x": -23.175162645186706,
+                "y": -19.246363520705476,
+                "z": 38.483662409312494
+              }
+            },
+            {
+              "waypoint": 8,
+              "frames": 246,
+              "position": {
+                "x": -26.48376615434329,
+                "y": -18.234418964043535,
+                "z": 46.90573134440382
+              }
+            }
+          ],
+          "failed": null
+        }
+      },
+      {
+        "name": "harbour five-POI chart fits portrait",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "no terrain page errors",
+        "pass": true,
+        "detail": []
+      },
+      {
+        "name": "boat driving moved and steered",
+        "pass": true,
+        "detail": {
+          "x": 33.15393803517411,
+          "z": 27.18581514591808,
+          "yaw": 1.2936639999999995,
+          "speed": 14.522039684679331,
+          "distance": 46.352587191141545,
+          "time": 4.3378999999999985
+        }
+      },
+      {
+        "name": "unaffordable touch mask clear disabled",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "touch Interact still offers boarding",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "flooded low-air touch boarding returns safely",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "routes": {
+      "gardens": {
+        "name": 11,
+        "reached": [
+          {
+            "waypoint": 1,
+            "frames": 327,
+            "position": {
+              "x": 0.031046715742667628,
+              "y": 3.538463863972191,
+              "z": -30.098271300141576
+            }
+          },
+          {
+            "waypoint": 2,
+            "frames": 495,
+            "position": {
+              "x": 0.03874934978566502,
+              "y": 2.0941988009215886,
+              "z": -11.217569071749457
+            }
+          },
+          {
+            "waypoint": 3,
+            "frames": 178,
+            "position": {
+              "x": 5.7893316379140645,
+              "y": 2.82915838793693,
+              "z": -9.882279806981673
+            }
+          },
+          {
+            "waypoint": 4,
+            "frames": 250,
+            "position": {
+              "x": 14.765482393012713,
+              "y": 3.3340491822463,
+              "z": -6.896049609610223
+            }
+          },
+          {
+            "waypoint": 5,
+            "frames": 262,
+            "position": {
+              "x": 16.019043199512293,
+              "y": 3.3948962840040546,
+              "z": 3.7816660877570634
+            }
+          },
+          {
+            "waypoint": 6,
+            "frames": 303,
+            "position": {
+              "x": 16.981810737468482,
+              "y": 4.768511524550599,
+              "z": 16.81125247956025
+            }
+          },
+          {
+            "waypoint": 7,
+            "frames": 485,
+            "position": {
+              "x": 1.2277124849799383,
+              "y": 5.923628566785763,
+              "z": 24.924531599742927
+            }
+          },
+          {
+            "waypoint": 8,
+            "frames": 346,
+            "position": {
+              "x": -6.319405763853743,
+              "y": 5.99690078588816,
+              "z": 16.032202710431605
+            }
+          },
+          {
+            "waypoint": 9,
+            "frames": 601,
+            "position": {
+              "x": -6.003346636908071,
+              "y": 5.999928179276569,
+              "z": -4.7728375216269034
+            }
+          },
+          {
+            "waypoint": 10,
+            "frames": 1023,
+            "position": {
+              "x": -0.12269609123921446,
+              "y": 7.945638719631064,
+              "z": -39.77991435877602
+            }
+          }
+        ],
+        "failed": null
+      },
+      "passage": {
+        "name": 13,
+        "reached": [
+          {
+            "waypoint": 1,
+            "frames": 397,
+            "position": {
+              "x": -27.942969909501233,
+              "y": 8.578943399610825,
+              "z": -28.090920433409742
+            }
+          },
+          {
+            "waypoint": 2,
+            "frames": 627,
+            "position": {
+              "x": -27.927939901263453,
+              "y": 8.019389716072746,
+              "z": -3.234746316825706
+            }
+          },
+          {
+            "waypoint": 3,
+            "frames": 428,
+            "position": {
+              "x": -27.025919111489035,
+              "y": 8.000916013312324,
+              "z": 13.756614128257796
+            }
+          },
+          {
+            "waypoint": 4,
+            "frames": 1083,
+            "position": {
+              "x": -27.90874737790066,
+              "y": 8.000010570541313,
+              "z": -20.76078535081632
+            }
+          },
+          {
+            "waypoint": 5,
+            "frames": 700,
+            "position": {
+              "x": -3.4052184015624194,
+              "y": 6.047274288013493,
+              "z": -20.831985431897273
+            }
+          },
+          {
+            "waypoint": 6,
+            "frames": 541,
+            "position": {
+              "x": 0.029618818594648093,
+              "y": 3.403582329726998,
+              "z": 6.859873239673238
+            }
+          },
+          {
+            "waypoint": 7,
+            "frames": 340,
+            "position": {
+              "x": 0.3673408653135392,
+              "y": 5.5021693124662825,
+              "z": 24.924727847446825
+            }
+          },
+          {
+            "waypoint": 8,
+            "frames": 283,
+            "position": {
+              "x": 6.028372774475451,
+              "y": 4.321651253375552,
+              "z": 38.3241071549008
+            }
+          },
+          {
+            "waypoint": 9,
+            "frames": 297,
+            "position": {
+              "x": 16.826967179378038,
+              "y": 4.906402365457315,
+              "z": 43.33131348594866
+            }
+          },
+          {
+            "waypoint": 10,
+            "frames": 195,
+            "position": {
+              "x": 22.977676823371976,
+              "y": 8.328209269548593,
+              "z": 44.23736298985026
+            }
+          },
+          {
+            "waypoint": 11,
+            "frames": 338,
+            "position": {
+              "x": 29.508957984218586,
+              "y": 15.382759515636675,
+              "z": 37.94900564178988
+            }
+          },
+          {
+            "waypoint": 12,
+            "frames": 486,
+            "position": {
+              "x": 35.724119542778915,
+              "y": 16.93105782648714,
+              "z": 23.1898838632727
+            }
+          }
+        ],
+        "failed": null
+      },
+      "mangrove": {
+        "name": 13,
+        "reached": [
+          {
+            "waypoint": 1,
+            "frames": 419,
+            "position": {
+              "x": -7.987039112973434,
+              "y": 2.573263127094901,
+              "z": -34.38095023582009
+            }
+          },
+          {
+            "waypoint": 2,
+            "frames": 232,
+            "position": {
+              "x": -7.9490787630433655,
+              "y": 2.0530695780192687,
+              "z": -24.211948027967377
+            }
+          },
+          {
+            "waypoint": 3,
+            "frames": 201,
+            "position": {
+              "x": -8.6413168105901,
+              "y": 2.00579190693185,
+              "z": -15.173156464665883
+            }
+          },
+          {
+            "waypoint": 4,
+            "frames": 223,
+            "position": {
+              "x": -9.62247502694655,
+              "y": 2.000583289644726,
+              "z": -5.153297757019613
+            }
+          },
+          {
+            "waypoint": 5,
+            "frames": 353,
+            "position": {
+              "x": -7.2102957061047075,
+              "y": 2.000043441795834,
+              "z": 10.80936208131038
+            }
+          },
+          {
+            "waypoint": 6,
+            "frames": 262,
+            "position": {
+              "x": -6.857225022796246,
+              "y": 2.0000040474872693,
+              "z": 22.782701769028073
+            }
+          },
+          {
+            "waypoint": 7,
+            "frames": 229,
+            "position": {
+              "x": -4.419163366860896,
+              "y": 2.805507804886846,
+              "z": 32.86760093207693
+            }
+          },
+          {
+            "waypoint": 8,
+            "frames": 335,
+            "position": {
+              "x": 6.791683557868928,
+              "y": 3.88242506846841,
+              "z": 39.886350116628456
+            }
+          },
+          {
+            "waypoint": 9,
+            "frames": 608,
+            "position": {
+              "x": 21.33623283396061,
+              "y": 2.093662661932009,
+              "z": 25.021726587425302
+            }
+          },
+          {
+            "waypoint": 10,
+            "frames": 757,
+            "position": {
+              "x": 21.05295120701997,
+              "y": 1.9648411649576303,
+              "z": 4.231945570175858
+            }
+          },
+          {
+            "waypoint": 11,
+            "frames": 976,
+            "position": {
+              "x": 15.298318223665776,
+              "y": 1.9975108982699663,
+              "z": -16.79067223551374
+            }
+          },
+          {
+            "waypoint": 12,
+            "frames": 1038,
+            "position": {
+              "x": 0.37468978480804277,
+              "y": 7.890390659804595,
+              "z": -46.82831438442754
+            }
+          }
+        ],
+        "failed": null
+      },
+      "cenote": {
+        "name": 9,
+        "reached": [
+          {
+            "waypoint": 1,
+            "frames": 861,
+            "position": {
+              "x": -4.680366446122454,
+              "y": -5.923322476588312,
+              "z": -27.48089167028598
+            }
+          },
+          {
+            "waypoint": 2,
+            "frames": 484,
+            "position": {
+              "x": -6.751146742090699,
+              "y": -15.231539189034018,
+              "z": -10.92147942821854
+            }
+          },
+          {
+            "waypoint": 3,
+            "frames": 396,
+            "position": {
+              "x": -5.116532729436608,
+              "y": -15.96101210065876,
+              "z": 4.790856190672787
+            }
+          },
+          {
+            "waypoint": 4,
+            "frames": 272,
+            "position": {
+              "x": -4.9396754772004,
+              "y": -15.997249415275343,
+              "z": 15.773281143799341
+            }
+          },
+          {
+            "waypoint": 5,
+            "frames": 373,
+            "position": {
+              "x": 5.870501253501234,
+              "y": -15.999858995992419,
+              "z": 25.530930655437583
+            }
+          },
+          {
+            "waypoint": 6,
+            "frames": 319,
+            "position": {
+              "x": 11.412809742847768,
+              "y": -21.308888653387918,
+              "z": 35.14962788407534
+            }
+          },
+          {
+            "waypoint": 7,
+            "frames": 310,
+            "position": {
+              "x": 20.021398718022542,
+              "y": -16.612731946503377,
+              "z": 40.57816340656295
+            }
+          },
+          {
+            "waypoint": 8,
+            "frames": 2023,
+            "position": {
+              "x": 29.616454394861176,
+              "y": -6.492052726746891,
+              "z": 21.06894878669362
+            }
+          }
+        ],
+        "failed": null
+      },
+      "harbour": {
+        "name": 9,
+        "reached": [
+          {
+            "waypoint": 1,
+            "frames": 599,
+            "position": {
+              "x": 1.019171740402443,
+              "y": -5.000400974869324,
+              "z": -31.72983579384578
+            }
+          },
+          {
+            "waypoint": 2,
+            "frames": 338,
+            "position": {
+              "x": 7.224250684659342,
+              "y": -8.554561916115066,
+              "z": -19.85883391760007
+            }
+          },
+          {
+            "waypoint": 3,
+            "frames": 354,
+            "position": {
+              "x": 8.974419927517898,
+              "y": -9.831067154079177,
+              "z": -4.210732175849226
+            }
+          },
+          {
+            "waypoint": 4,
+            "frames": 419,
+            "position": {
+              "x": 0.9641089722434018,
+              "y": -9.991435482719034,
+              "z": 11.243611059874635
+            }
+          },
+          {
+            "waypoint": 5,
+            "frames": 354,
+            "position": {
+              "x": -4.356581776740781,
+              "y": -8.212583214402597,
+              "z": 23.949744660268056
+            }
+          },
+          {
+            "waypoint": 6,
+            "frames": 395,
+            "position": {
+              "x": -15.909878919929385,
+              "y": -12.583514805752221,
+              "z": 31.619167404747465
+            }
+          },
+          {
+            "waypoint": 7,
+            "frames": 324,
+            "position": {
+              "x": -23.175162645186706,
+              "y": -19.246363520705476,
+              "z": 38.483662409312494
+            }
+          },
+          {
+            "waypoint": 8,
+            "frames": 246,
+            "position": {
+              "x": -26.48376615434329,
+              "y": -18.234418964043535,
+              "z": 46.90573134440382
+            }
+          }
+        ],
+        "failed": null
+      }
+    }
+  },
+  "funReview": {
+    "scope": "Local Chrome touch emulation; fixtures establish career and positions, actual UI performs actions",
+    "checks": [
+      {
+        "name": "default mixed allocation sells adults and keeps juvenile",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "scaling 844x390 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 775,
+              "top": 21,
+              "right": 819,
+              "bottom": 65
+            },
+            {
+              "name": "preparation-3d",
+              "left": 25,
+              "top": 78.09375,
+              "right": 493,
+              "bottom": 327
+            },
+            {
+              "name": "mini-stage",
+              "left": 25,
+              "top": 333,
+              "right": 493,
+              "bottom": 369
+            },
+            {
+              "name": "prep-instruction",
+              "left": 507,
+              "top": 160.171875,
+              "right": 819,
+              "bottom": 208.734375
+            },
+            {
+              "name": "mini-cue",
+              "left": 507,
+              "top": 216.734375,
+              "right": 819,
+              "bottom": 234.921875
+            },
+            {
+              "name": "primary",
+              "left": 507,
+              "top": 242.921875,
+              "right": 659,
+              "bottom": 286.921875
+            },
+            {
+              "name": "BUTTON",
+              "left": 667,
+              "top": 242.921875,
+              "right": 819,
+              "bottom": 286.921875
+            }
+          ],
+          "scrollHeight": 372,
+          "clientHeight": 372,
+          "fit": true
+        }
+      },
+      {
+        "name": "scaling 667x375 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 598,
+              "top": 21,
+              "right": 642,
+              "bottom": 65
+            },
+            {
+              "name": "preparation-3d",
+              "left": 25,
+              "top": 78.09375,
+              "right": 386.796875,
+              "bottom": 312
+            },
+            {
+              "name": "mini-stage",
+              "left": 25,
+              "top": 318,
+              "right": 386.796875,
+              "bottom": 354
+            },
+            {
+              "name": "prep-instruction",
+              "left": 400.796875,
+              "top": 134.578125,
+              "right": 641.984375,
+              "bottom": 199.328125
+            },
+            {
+              "name": "mini-cue",
+              "left": 400.796875,
+              "top": 207.328125,
+              "right": 641.984375,
+              "bottom": 225.515625
+            },
+            {
+              "name": "primary",
+              "left": 400.796875,
+              "top": 233.515625,
+              "right": 517.390625,
+              "bottom": 297.515625
+            },
+            {
+              "name": "BUTTON",
+              "left": 525.390625,
+              "top": 233.515625,
+              "right": 641.984375,
+              "bottom": 297.515625
+            }
+          ],
+          "scrollHeight": 357,
+          "clientHeight": 357,
+          "fit": true
+        }
+      },
+      {
+        "name": "scaling 568x320 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 499,
+              "top": 21,
+              "right": 543,
+              "bottom": 65
+            },
+            {
+              "name": "preparation-3d",
+              "left": 25,
+              "top": 78.09375,
+              "right": 294,
+              "bottom": 257
+            },
+            {
+              "name": "mini-stage",
+              "left": 25,
+              "top": 263,
+              "right": 294,
+              "bottom": 299
+            },
+            {
+              "name": "prep-instruction",
+              "left": 308,
+              "top": 107.078125,
+              "right": 543,
+              "bottom": 171.828125
+            },
+            {
+              "name": "mini-cue",
+              "left": 308,
+              "top": 179.828125,
+              "right": 543,
+              "bottom": 198.015625
+            },
+            {
+              "name": "primary",
+              "left": 308,
+              "top": 206.015625,
+              "right": 421.5,
+              "bottom": 270.015625
+            },
+            {
+              "name": "BUTTON",
+              "left": 429.5,
+              "top": 206.015625,
+              "right": 543,
+              "bottom": 270.015625
+            }
+          ],
+          "scrollHeight": 302,
+          "clientHeight": 302,
+          "fit": true
+        }
+      },
+      {
+        "name": "scaling 740x320 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 671,
+              "top": 21,
+              "right": 715,
+              "bottom": 65
+            },
+            {
+              "name": "preparation-3d",
+              "left": 25,
+              "top": 78.09375,
+              "right": 430.59375,
+              "bottom": 257
+            },
+            {
+              "name": "mini-stage",
+              "left": 25,
+              "top": 263,
+              "right": 430.59375,
+              "bottom": 299
+            },
+            {
+              "name": "prep-instruction",
+              "left": 444.59375,
+              "top": 125.171875,
+              "right": 714.984375,
+              "bottom": 173.734375
+            },
+            {
+              "name": "mini-cue",
+              "left": 444.59375,
+              "top": 181.734375,
+              "right": 714.984375,
+              "bottom": 199.921875
+            },
+            {
+              "name": "primary",
+              "left": 444.59375,
+              "top": 207.921875,
+              "right": 575.78125,
+              "bottom": 251.921875
+            },
+            {
+              "name": "BUTTON",
+              "left": 583.78125,
+              "top": 207.921875,
+              "right": 714.984375,
+              "bottom": 251.921875
+            }
+          ],
+          "scrollHeight": 302,
+          "clientHeight": 302,
+          "fit": true
+        }
+      },
+      {
+        "name": "scaling 390x844 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 319,
+              "top": 57,
+              "right": 361,
+              "bottom": 101
+            },
+            {
+              "name": "preparation-3d",
+              "left": 29,
+              "top": 132.796875,
+              "right": 361,
+              "bottom": 567
+            },
+            {
+              "name": "mini-stage",
+              "left": 29,
+              "top": 577,
+              "right": 361,
+              "bottom": 625
+            },
+            {
+              "name": "prep-instruction",
+              "left": 29,
+              "top": 639,
+              "right": 361,
+              "bottom": 702
+            },
+            {
+              "name": "mini-cue",
+              "left": 29,
+              "top": 712,
+              "right": 361,
+              "bottom": 733
+            },
+            {
+              "name": "primary",
+              "left": 29,
+              "top": 743,
+              "right": 191,
+              "bottom": 787
+            },
+            {
+              "name": "BUTTON",
+              "left": 199,
+              "top": 743,
+              "right": 361,
+              "bottom": 787
+            }
+          ],
+          "scrollHeight": 758,
+          "clientHeight": 758,
+          "fit": true
+        }
+      },
+      {
+        "name": "filleting 844x390 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 775,
+              "top": 21,
+              "right": 819,
+              "bottom": 65
+            },
+            {
+              "name": "preparation-3d",
+              "left": 25,
+              "top": 78.09375,
+              "right": 493,
+              "bottom": 327
+            },
+            {
+              "name": "fillet-illustration prep-meter",
+              "left": 25,
+              "top": 333,
+              "right": 493,
+              "bottom": 369
+            },
+            {
+              "name": "prep-instruction",
+              "left": 507,
+              "top": 136.9375,
+              "right": 819,
+              "bottom": 169.3125
+            },
+            {
+              "name": "fillet-steps",
+              "left": 507,
+              "top": 177.3125,
+              "right": 819,
+              "bottom": 203.8125
+            },
+            {
+              "name": "fillet-cue",
+              "left": 507,
+              "top": 211.8125,
+              "right": 819,
+              "bottom": 231.3125
+            },
+            {
+              "name": "fillet-feedback",
+              "left": 507,
+              "top": 243.3125,
+              "right": 819,
+              "bottom": 258.15625
+            },
+            {
+              "name": "primary",
+              "left": 507,
+              "top": 266.15625,
+              "right": 660,
+              "bottom": 310.15625
+            },
+            {
+              "name": "BUTTON",
+              "left": 666,
+              "top": 266.15625,
+              "right": 819,
+              "bottom": 310.15625
+            }
+          ],
+          "scrollHeight": 372,
+          "clientHeight": 372,
+          "fit": true
+        }
+      },
+      {
+        "name": "filleting 667x375 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 598,
+              "top": 21,
+              "right": 642,
+              "bottom": 65
+            },
+            {
+              "name": "preparation-3d",
+              "left": 25,
+              "top": 78.09375,
+              "right": 386.796875,
+              "bottom": 312
+            },
+            {
+              "name": "fillet-illustration prep-meter",
+              "left": 25,
+              "top": 318,
+              "right": 386.796875,
+              "bottom": 354
+            },
+            {
+              "name": "prep-instruction",
+              "left": 400.796875,
+              "top": 113.921875,
+              "right": 641.984375,
+              "bottom": 162.484375
+            },
+            {
+              "name": "fillet-steps",
+              "left": 400.796875,
+              "top": 170.484375,
+              "right": 641.984375,
+              "bottom": 196.984375
+            },
+            {
+              "name": "fillet-cue",
+              "left": 400.796875,
+              "top": 204.984375,
+              "right": 641.984375,
+              "bottom": 224.484375
+            },
+            {
+              "name": "fillet-feedback",
+              "left": 400.796875,
+              "top": 236.484375,
+              "right": 641.984375,
+              "bottom": 266.171875
+            },
+            {
+              "name": "primary",
+              "left": 400.796875,
+              "top": 274.171875,
+              "right": 518.390625,
+              "bottom": 318.171875
+            },
+            {
+              "name": "BUTTON",
+              "left": 524.390625,
+              "top": 274.171875,
+              "right": 641.984375,
+              "bottom": 318.171875
+            }
+          ],
+          "scrollHeight": 357,
+          "clientHeight": 357,
+          "fit": true
+        }
+      },
+      {
+        "name": "filleting 568x320 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 499,
+              "top": 21,
+              "right": 543,
+              "bottom": 65
+            },
+            {
+              "name": "preparation-3d",
+              "left": 25,
+              "top": 78.09375,
+              "right": 294,
+              "bottom": 257
+            },
+            {
+              "name": "fillet-illustration prep-meter",
+              "left": 25,
+              "top": 263,
+              "right": 294,
+              "bottom": 299
+            },
+            {
+              "name": "prep-instruction",
+              "left": 308,
+              "top": 86.421875,
+              "right": 543,
+              "bottom": 134.984375
+            },
+            {
+              "name": "fillet-steps",
+              "left": 308,
+              "top": 142.984375,
+              "right": 543,
+              "bottom": 169.484375
+            },
+            {
+              "name": "fillet-cue",
+              "left": 308,
+              "top": 177.484375,
+              "right": 543,
+              "bottom": 196.984375
+            },
+            {
+              "name": "fillet-feedback",
+              "left": 308,
+              "top": 208.984375,
+              "right": 543,
+              "bottom": 238.671875
+            },
+            {
+              "name": "primary",
+              "left": 308,
+              "top": 246.671875,
+              "right": 422.5,
+              "bottom": 290.671875
+            },
+            {
+              "name": "BUTTON",
+              "left": 428.5,
+              "top": 246.671875,
+              "right": 543,
+              "bottom": 290.671875
+            }
+          ],
+          "scrollHeight": 302,
+          "clientHeight": 302,
+          "fit": true
+        }
+      },
+      {
+        "name": "filleting 740x320 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 671,
+              "top": 21,
+              "right": 715,
+              "bottom": 65
+            },
+            {
+              "name": "preparation-3d",
+              "left": 25,
+              "top": 78.09375,
+              "right": 430.59375,
+              "bottom": 257
+            },
+            {
+              "name": "fillet-illustration prep-meter",
+              "left": 25,
+              "top": 263,
+              "right": 430.59375,
+              "bottom": 299
+            },
+            {
+              "name": "prep-instruction",
+              "left": 444.59375,
+              "top": 93.84375,
+              "right": 714.984375,
+              "bottom": 142.40625
+            },
+            {
+              "name": "fillet-steps",
+              "left": 444.59375,
+              "top": 150.40625,
+              "right": 714.984375,
+              "bottom": 176.90625
+            },
+            {
+              "name": "fillet-cue",
+              "left": 444.59375,
+              "top": 184.90625,
+              "right": 714.984375,
+              "bottom": 204.40625
+            },
+            {
+              "name": "fillet-feedback",
+              "left": 444.59375,
+              "top": 216.40625,
+              "right": 714.984375,
+              "bottom": 231.25
+            },
+            {
+              "name": "primary",
+              "left": 444.59375,
+              "top": 239.25,
+              "right": 576.78125,
+              "bottom": 283.25
+            },
+            {
+              "name": "BUTTON",
+              "left": 582.78125,
+              "top": 239.25,
+              "right": 714.984375,
+              "bottom": 283.25
+            }
+          ],
+          "scrollHeight": 302,
+          "clientHeight": 302,
+          "fit": true
+        }
+      },
+      {
+        "name": "filleting 390x844 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 319,
+              "top": 57,
+              "right": 361,
+              "bottom": 101
+            },
+            {
+              "name": "preparation-3d",
+              "left": 29,
+              "top": 132.796875,
+              "right": 361,
+              "bottom": 489.5
+            },
+            {
+              "name": "fillet-illustration prep-meter",
+              "left": 29,
+              "top": 499.5,
+              "right": 361,
+              "bottom": 547.5
+            },
+            {
+              "name": "prep-instruction",
+              "left": 29,
+              "top": 561.5,
+              "right": 361,
+              "bottom": 624.5
+            },
+            {
+              "name": "fillet-steps",
+              "left": 29,
+              "top": 634.5,
+              "right": 361,
+              "bottom": 666.5
+            },
+            {
+              "name": "fillet-cue",
+              "left": 29,
+              "top": 676.5,
+              "right": 361,
+              "bottom": 699
+            },
+            {
+              "name": "fillet-feedback",
+              "left": 29,
+              "top": 713,
+              "right": 361,
+              "bottom": 733
+            },
+            {
+              "name": "primary",
+              "left": 29,
+              "top": 743,
+              "right": 190,
+              "bottom": 787
+            },
+            {
+              "name": "BUTTON",
+              "left": 200,
+              "top": 743,
+              "right": 361,
+              "bottom": 787
+            }
+          ],
+          "scrollHeight": 758,
+          "clientHeight": 758,
+          "fit": true
+        }
+      },
+      {
+        "name": "cooking 844x390 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 775,
+              "top": 21,
+              "right": 819,
+              "bottom": 65
+            },
+            {
+              "name": "cooking-canvas",
+              "left": 25,
+              "top": 78.09375,
+              "right": 493,
+              "bottom": 327
+            },
+            {
+              "name": "mini-stage",
+              "left": 25,
+              "top": 333,
+              "right": 493,
+              "bottom": 369
+            },
+            {
+              "name": "prep-instruction",
+              "left": 507,
+              "top": 142.265625,
+              "right": 819,
+              "bottom": 174.640625
+            },
+            {
+              "name": "BUTTON",
+              "left": 507,
+              "top": 182.640625,
+              "right": 660,
+              "bottom": 226.640625
+            },
+            {
+              "name": "BUTTON",
+              "left": 666,
+              "top": 182.640625,
+              "right": 819,
+              "bottom": 226.640625
+            },
+            {
+              "name": "mini-cue",
+              "left": 507,
+              "top": 234.640625,
+              "right": 819,
+              "bottom": 252.828125
+            },
+            {
+              "name": "primary",
+              "left": 507,
+              "top": 260.828125,
+              "right": 659,
+              "bottom": 304.828125
+            },
+            {
+              "name": "BUTTON",
+              "left": 667,
+              "top": 260.828125,
+              "right": 819,
+              "bottom": 304.828125
+            }
+          ],
+          "scrollHeight": 372,
+          "clientHeight": 372,
+          "fit": true
+        }
+      },
+      {
+        "name": "cooking 667x375 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 598,
+              "top": 21,
+              "right": 642,
+              "bottom": 65
+            },
+            {
+              "name": "cooking-canvas",
+              "left": 25,
+              "top": 78.09375,
+              "right": 386.796875,
+              "bottom": 312
+            },
+            {
+              "name": "mini-stage",
+              "left": 25,
+              "top": 318,
+              "right": 386.796875,
+              "bottom": 354
+            },
+            {
+              "name": "prep-instruction",
+              "left": 400.796875,
+              "top": 116.671875,
+              "right": 641.984375,
+              "bottom": 165.234375
+            },
+            {
+              "name": "BUTTON",
+              "left": 400.796875,
+              "top": 173.234375,
+              "right": 518.390625,
+              "bottom": 217.234375
+            },
+            {
+              "name": "BUTTON",
+              "left": 524.390625,
+              "top": 173.234375,
+              "right": 641.984375,
+              "bottom": 217.234375
+            },
+            {
+              "name": "mini-cue",
+              "left": 400.796875,
+              "top": 225.234375,
+              "right": 641.984375,
+              "bottom": 243.421875
+            },
+            {
+              "name": "primary",
+              "left": 400.796875,
+              "top": 251.421875,
+              "right": 517.390625,
+              "bottom": 315.421875
+            },
+            {
+              "name": "BUTTON",
+              "left": 525.390625,
+              "top": 251.421875,
+              "right": 641.984375,
+              "bottom": 315.421875
+            }
+          ],
+          "scrollHeight": 357,
+          "clientHeight": 357,
+          "fit": true
+        }
+      },
+      {
+        "name": "cooking 568x320 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 499,
+              "top": 21,
+              "right": 543,
+              "bottom": 65
+            },
+            {
+              "name": "cooking-canvas",
+              "left": 25,
+              "top": 78.09375,
+              "right": 294,
+              "bottom": 257
+            },
+            {
+              "name": "mini-stage",
+              "left": 25,
+              "top": 263,
+              "right": 294,
+              "bottom": 299
+            },
+            {
+              "name": "prep-instruction",
+              "left": 308,
+              "top": 89.171875,
+              "right": 543,
+              "bottom": 137.734375
+            },
+            {
+              "name": "BUTTON",
+              "left": 308,
+              "top": 145.734375,
+              "right": 422.5,
+              "bottom": 189.734375
+            },
+            {
+              "name": "BUTTON",
+              "left": 428.5,
+              "top": 145.734375,
+              "right": 543,
+              "bottom": 189.734375
+            },
+            {
+              "name": "mini-cue",
+              "left": 308,
+              "top": 197.734375,
+              "right": 543,
+              "bottom": 215.921875
+            },
+            {
+              "name": "primary",
+              "left": 308,
+              "top": 223.921875,
+              "right": 421.5,
+              "bottom": 287.921875
+            },
+            {
+              "name": "BUTTON",
+              "left": 429.5,
+              "top": 223.921875,
+              "right": 543,
+              "bottom": 287.921875
+            }
+          ],
+          "scrollHeight": 302,
+          "clientHeight": 302,
+          "fit": true
+        }
+      },
+      {
+        "name": "cooking 740x320 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 671,
+              "top": 21,
+              "right": 715,
+              "bottom": 65
+            },
+            {
+              "name": "cooking-canvas",
+              "left": 25,
+              "top": 78.09375,
+              "right": 430.59375,
+              "bottom": 257
+            },
+            {
+              "name": "mini-stage",
+              "left": 25,
+              "top": 263,
+              "right": 430.59375,
+              "bottom": 299
+            },
+            {
+              "name": "prep-instruction",
+              "left": 444.59375,
+              "top": 99.171875,
+              "right": 714.984375,
+              "bottom": 147.734375
+            },
+            {
+              "name": "BUTTON",
+              "left": 444.59375,
+              "top": 155.734375,
+              "right": 576.78125,
+              "bottom": 199.734375
+            },
+            {
+              "name": "BUTTON",
+              "left": 582.78125,
+              "top": 155.734375,
+              "right": 714.984375,
+              "bottom": 199.734375
+            },
+            {
+              "name": "mini-cue",
+              "left": 444.59375,
+              "top": 207.734375,
+              "right": 714.984375,
+              "bottom": 225.921875
+            },
+            {
+              "name": "primary",
+              "left": 444.59375,
+              "top": 233.921875,
+              "right": 575.78125,
+              "bottom": 277.921875
+            },
+            {
+              "name": "BUTTON",
+              "left": 583.78125,
+              "top": 233.921875,
+              "right": 714.984375,
+              "bottom": 277.921875
+            }
+          ],
+          "scrollHeight": 302,
+          "clientHeight": 302,
+          "fit": true
+        }
+      },
+      {
+        "name": "cooking 390x844 whole activity fits",
+        "pass": true,
+        "detail": {
+          "items": [
+            {
+              "name": "close",
+              "left": 319,
+              "top": 57,
+              "right": 361,
+              "bottom": 101
+            },
+            {
+              "name": "cooking-canvas",
+              "left": 29,
+              "top": 132.796875,
+              "right": 361,
+              "bottom": 513
+            },
+            {
+              "name": "mini-stage",
+              "left": 29,
+              "top": 523,
+              "right": 361,
+              "bottom": 571
+            },
+            {
+              "name": "prep-instruction",
+              "left": 29,
+              "top": 585,
+              "right": 361,
+              "bottom": 648
+            },
+            {
+              "name": "BUTTON",
+              "left": 29,
+              "top": 658,
+              "right": 192,
+              "bottom": 702
+            },
+            {
+              "name": "BUTTON",
+              "left": 198,
+              "top": 658,
+              "right": 361,
+              "bottom": 702
+            },
+            {
+              "name": "mini-cue",
+              "left": 29,
+              "top": 712,
+              "right": 361,
+              "bottom": 733
+            },
+            {
+              "name": "primary",
+              "left": 29,
+              "top": 743,
+              "right": 191,
+              "bottom": 787
+            },
+            {
+              "name": "BUTTON",
+              "left": 199,
+              "top": 743,
+              "right": 361,
+              "bottom": 787
+            }
+          ],
+          "scrollHeight": 758,
+          "clientHeight": 758,
+          "fit": true
+        }
+      },
+      {
+        "name": "direct scaling pass saves once",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "cancelled scaling drag never scores",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "direct 3D cut scores once",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "pan interaction completes real recipe",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "mixed-size normal UI Kitchen reward",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "alternate stew recipe completes",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "earned first response harbour briefing",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "harbour keeps response site and bounty visible",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "drive reaches correct buoy",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "first treatment field guide visible",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "chart explains treatment marks",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "look away stows injector",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "spear draw has coherent visible tool",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "treated target remains as quiet completed silhouette",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "debrief names treatment tally",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "receipt separates treatment bounty",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "reload remembers one treatment independently from rubbish",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": []
+  },
+  "website": [
+    "content reproduction",
+    "SEO",
+    "catalogue",
+    "site",
+    "56 content tests",
+    "24 game-start checks",
+    "6 analytics tests",
+    "10-file source/host identity"
+  ],
+  "publication": "Held for parent review; website and Wavedash have not been published",
+  "limits": "Controlled fixtures/touch emulation. No physical Android/iPhone, human campaign enjoyment study or sustained phone/thermal certification.",
+  "responseCharts": {
+    "checks": [
+      {
+        "name": "gardens active response chart fits portrait",
+        "pass": true
+      },
+      {
+        "name": "passage active response chart fits portrait",
+        "pass": true
+      },
+      {
+        "name": "mangrove active response chart fits portrait",
+        "pass": true
+      },
+      {
+        "name": "cenote active response chart fits portrait",
+        "pass": true
+      },
+      {
+        "name": "harbour active response chart fits portrait",
+        "pass": true
+      }
+    ],
+    "errors": []
+  },
+  "chartEvidence": "The response chart was recaptured after final marker-safe label placement using an equivalent late-career active-response fixture."
+}

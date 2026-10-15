@@ -1,22 +1,23 @@
-# Feature status: v0.4 campaign review
+# Feature status: v0.5.0-preview.1 expedition candidate
 
-Sam subsequently authorised review and publication if ready. See RELEASE_REVIEW.md for the release review and two old-save compatibility corrections. The canonical TypeScript sources regenerate the hosted build through the guarded website workflow.
+Local review candidate. User authorized website and existing Wavedash publication after quality review on 2026-10-15. Parent candidate review remains a publication gate. This branch is not already live.
 
-| System | Current behavior |
+| System | Implemented behavior |
 | --- | --- |
-| Suspended dive | Matching simulation, camera and world are rebound even after another site preview. |
-| Contracts | Achievability checked at offer and launch; permanent ecological work is retained. Progress and settlement reasons are visible. |
-| Research | Reputation 8, university approach and acceptance unlock interaction and contracts. Prior research saves are grandfathered. |
-| Rewards | Welcome grant, inclusive research top-up, bounded repeat work and full receipt. Existing pending financial promises retained. |
-| Events | Registration persists by day/slot; activity themes, live score, prize tiers and results are visible. |
-| Followers | Three recognition assignments use separate audience/reputation gates; awards are one-time and add no cash. |
-| Tutorial | Seven action-driven stages, Skip and isolated reward-free Replay. Guided Gardens is forgiving. |
-| Scooter audio | Fixed voice pool follows thrust and respects Effects; fades silent on pause, stow, depletion, background and end. |
-| Filleting | Three persisted cuts, readable sweep/marks, grade and exact sale bonus; optional, no repeat preparation. |
-| Passage | Western mooring, sheltered nursery, tide race, Cathedral gauge route and arrival conversation; legacy terrain retained for old runs. |
-| Character moments | Short skippable university/first-delivery/cleanup/research/Passage moments with persisted one-time flags. |
-| Boats | Bounded later-site encounters, warning interval, proximity deferral, optional safe recovery; no collision trap. |
-| High graphics | Existing Babylon renderer, quality/density and shadow resolutions preserved. Short laptop GPU comparison passes; physical phone thermal performance remains unverified. |
-| Analytics | Exact shared disabled client bundled; real-start readiness hook tested. No production receiver or new provider. |
+| Touch | Portrait Interact 72x76 and Draw 88x88 CSS pixels; drag aim, joystick, cancellation and lost capture; editable text stays native. Touch hides keyboard badges. Landscape uses the watch instead of redundant stat HUD. |
+| Hosts | Capability/host-aware fullscreen; Wavedash SDK/referrer/host suppresses the duplicate button. Unsupported fullscreen stays hidden. Contextual iPhone Silent Mode hint only. |
+| Settlement | Free-exploration preview never promises a depleted-site Kitchen contract. Receipt opens before cosmetic preview. Pending guard prevents repeat payout. Regression fixtures cover days 1, 2, 3, 4, 6 and 21, plus browser preparation/settlement/reload. |
+| Charts | Measured labels, wrapping, leaders and dense-cluster fallback. Font scales with displayed chart size. All five maps checked wide and portrait. |
+| Catches | Original world mesh, size and appearance travel onto spear and into tube. Two-catch capacity, exact Shishkabob moment and priority automatic photo in the existing in-game popularity loop. Shared insertion/withdrawal coordinates; fins fold at the opening without scaling the body. |
+| Economy | Stable small/large fish. Juveniles pay $0 sale value but count fully for removal. Sales choose the highest-value market fish first; meals use juveniles first and donations take the remainder. UI previews and settlement agree. Separate distance-based towing and boat fuel. Legacy pending outings keep their prior expense rule; rescue and basic launch remain recoverable. |
+| Reefs | Revision-three landforms extend the existing structures: lagoon terraces, tide-race fork, braided root creeks, twin cenote bowls/gallery swim-through, and dogleg harbour dredging. Each has a tested swimming route; old suspended outings retain revision-one/two templates. Marlow is generated only in Gardens. Radial outer haze/background matching keeps playable water clear. |
+| Life/scenery | Ordinary five-arm stars, lobsters, hollow large sponges, extra finite debris and overgrown non-collectible chairs. The old outfall has a real open bore and annular lips. |
+| Keepsakes | Five authored charms, one per reef; discovery, validated save/equip and restrained movement below the spear grip. |
+| Goggles | Draining breach droplets; bounded partial impact flood. Interact or accessible button clears using 2 bar. Home boarding takes priority even with a flooded mask and less than 2 bar; an unaffordable clear button is disabled. Optional sand puffs deliberately omitted; no constant dust was added. |
+| Preparation | A whole-screen responsive 3D workbench supports direct drag/release or timed accessible buttons for scaling and fillet cuts, with persisted progress, tool strokes, loose scales and fillets. Animated citrus pan fish and coconut stew recipes with different steps, pan/spoon/ingredient feedback; one modest meal credit, no repeat reward. |
+| Boat | Blender-authored 6,774-triangle skiff; editable blend, GLB and deterministic offline bake. Keyboard/touch/controller steering; slow at a buoy to choose the actual site and assignment. Six shared non-parallel analytic swells, noise-based wind detail with distance fade, buoyancy, pitch/roll, wake and pooled spray; steady chase camera. |
+| Outbreak | Day 8 / reputation 20 / 18 removals unlock a first harbour report and field guide. One reachable site per four-day window, up to three spaced authored targets, amber labelled chart marks/counts and separate receipt tally. Position, release safety, then press the moving injector; looking away/drawing/changing tools stows it. Editable Blender 13-arm organic model, pale feeding scars, quiet completed silhouette. Cohorts persist separately from rubbish; $14 and 1 reputation per logged target. Ordinary orange five-arm stars are separate ambient life. Fictional interaction only. |
+| Graphics | High default for new/unset preferences, saved presets retained. Sustained slow gameplay after warmup offers Apply / Not now. No automatic downgrade or repeat nag. |
+| Offline/platform | Babylon, editable Pocket Chordsmith score, schema-1 careers and disabled analytics retained. Version-derived ZIP names; absent legacy START-HERE dependency removed. Existing Wavedash ID pinned with success-only startup adapter. |
 
-See REVIEW_VALIDATION.md and TESTING.md for current evidence. Natural campaign feel, physical touch/controller acceptance, extended listening and sustained phone performance remain manual checks.
+See EXPEDITION_UPDATE.md and TESTING.md. Chromium touch emulation is not physical Android/iPhone proof. Natural campaign feel, extended listening and sustained phone/thermal acceptance remain manual checks.

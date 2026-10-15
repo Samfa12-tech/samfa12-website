@@ -1,3 +1,7 @@
+import { collectionMotion } from './collection-motion.js';
+import { skiffGeometry } from './boat-travel.js';
+import { seaStar, lobster, sponge, habitatChair, charmGeometry } from './marine-life.js';
+import { CHARMS, heldCatches } from '../game/expedition.js';
 import { DiveWatch } from './dive-watch.js';
 import { diverPose, forearmGeometry, sleeveGeometry, type DiverPose } from './diver-animation.js';
 import { siteObstacleGeometry } from './biome-geometry.js';
@@ -9,7 +13,7 @@ import { Geometry, rgb, tint, coral, fishGeometry, equipment, seaweedGeometry, s
 import { seabedGeometry, sandHeight, mergeGrounded } from './terrain.js';
 import { reefVertex, reefFragment } from './shaders.js';
 import { vec, rng, direction, distance, clamp, norm, sub, dot } from '../game/math.js';
-import { floorHeight, SITES, freePoint, wreckAnchor, pipeAnchor, upgradeLevel, siteForRun } from '../game/data.js';
+import { floorHeight, workPoint, SITES, freePoint, wreckAnchor, pipeAnchor, upgradeLevel, siteForRun } from '../game/data.js';
 import { nativeFishMotion, prepareNativeOrbit, type NativeFishMotion } from '../game/fish-motion.js';
 declare const BABYLON: any;
 type BMesh = any;
@@ -75,7 +79,10 @@ export class ReefRenderer {
     get watchRaised() { return this.watchRequested; }
     tube: any;
     scooter: any;
+    injector:any;
+    injectorPlunger:any;
     held: any;
+    charm: any;
     site: Site = SITES.gardens;
     run: Run | null = null;
     encounterMeshes: {boat:any;object:any;line:any}|null=null;
@@ -92,7 +99,7 @@ export class ReefRenderer {
     constructor(public canvas: HTMLCanvasElement, settings: Settings) { this.settings = settings; const B = BABYLON; this.engine = new B.Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance' }, false); this.scene = new B.Scene(this.engine); this.scene.clearColor = new B.Color4(.035, .31, .37, 1); this.scene.autoClear = true; this.camera = new B.FreeCamera('diver', new B.Vector3(0, 8, -41), this.scene); this.camera.minZ = .045; this.camera.maxZ = 500; this.camera.fov = settings.fov * Math.PI / 180; this.scene.activeCamera = this.camera; this.scene.skipPointerMovePicking = true; this.scene.setRenderingAutoClearDepthStencil(1, true, true, true); B.Effect.ShadersStore['reefVertexShader'] = reefVertex; B.Effect.ShadersStore['reefFragmentShader'] = reefFragment; this.nativeScale = new B.Vector3(1, 1, 1); this.nativeRotation = new B.Quaternion(0, 0, 0, 1); this.nativeTranslation = new B.Vector3(); this.nativeTransform = new B.Matrix(); this.forwardVector = new B.Vector3(); this.torchVector = {x:16,y:.05}; this.shadows = new ReefShadows(this.scene,this.engine); this.configure(settings); canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); this.onLost(); }); window.addEventListener('resize', () => this.engine.resize()); }
     configure(settings: Settings) { this.settings = settings; const scale = settings.quality === 'high' ? 1 / Math.min(devicePixelRatio || 1, 1.5) : settings.quality === 'low' ? 1.45 : 1; this.engine.setHardwareScalingLevel(scale); this.engine.resize(); this.camera.fov = settings.fov * Math.PI / 180; this.shadows?.configure(settings.quality === 'high'); }
     material(mode: number) { let m = this.materials.find(m => m._reefMode === mode); if (m)
-        return m; const B = BABYLON; m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uWaterColor', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow','uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 }); m._reefMode = mode; m.backFaceCulling = false; m.setFloat('uMode', mode); m.setFloat('uSurface', this.site.surface); m.setFloat('uMotion', 1); m.setVector3('uWaterColor',new B.Vector3(.035,.31,.39)); m.setFloat('uFog', .030); m.setFloat('uLight', 0); m.setFloat('uNight', 0); m.setVector2('uCurrent', {x:this.site.current,y:this.site.channelX ?? (this.site.id === 'gardens' ? 18 : 0)}); m.setVector2('uTorch', {x:24,y:.10}); if (mode === 5 || mode === 6 || mode === 8) {
+        return m; const B = BABYLON; m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uSea', 'uRadius', 'uFold', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uWaterColor', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow','uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 || mode === 10 || mode === 11 }); m._reefMode = mode; m.backFaceCulling = false; m.setFloat('uMode', mode); m.setFloat('uSea',0);m.setFloat('uFold',0);m.setFloat('uRadius',this.site.radius); m.setFloat('uSurface', this.site.surface); m.setFloat('uMotion', 1); m.setVector3('uWaterColor',new B.Vector3(.035,.31,.39)); m.setFloat('uFog', .030); m.setFloat('uLight', 0); m.setFloat('uNight', 0); m.setVector2('uCurrent', {x:this.site.current,y:this.site.channelX ?? (this.site.id === 'gardens' ? 18 : 0)}); m.setVector2('uTorch', {x:24,y:.10}); if (mode === 5 || mode === 6 || mode === 8 || mode === 10 || mode === 11) {
         m.disableDepthWrite = true;
         m.alphaMode = B.Engine.ALPHA_COMBINE;
     } m.setMatrix('uSunMatrix',this.shadows.sunMatrix);m.setMatrix('uTorchMatrix',this.shadows.torchMatrix);m.setFloat('uShadows',0);m.setFloat('uTorchShadows',0);m.setTexture('uSunShadow',this.shadows.white);m.setTexture('uTorchShadow',this.shadows.white);this.materials.push(m); return m; }
@@ -101,6 +108,7 @@ export class ReefRenderer {
         m.dispose(false, false); this.staticMeshes = []; this.fishMeshes.clear(); this.animalMeshes.clear(); this.jobMeshes.clear(); this.nativeSchools = []; this.captureQueue = []; }
     build(profile: Profile, run: Run) {
         this.disposeWorld();
+        this.camera.maxZ=500;
         this.shadows.reset();
         this.bubblePool = new BubblePool();
         this.profile = profile;
@@ -110,7 +118,7 @@ export class ReefRenderer {
         const site = this.site, random = rng(site.seed), B = BABYLON;
         this.environmentCounts = { coral: 0, seaweedClumps: 0, seaweedFronds: 0, nativeFish: 0, nativeSchools: 0, shipwrecks: 0, pipeMouths: 0, coastlinePieces: 0 };
         for (const m of this.materials)
-            { m.setFloat('uSurface', site.surface); m.setVector2('uCurrent', {x:site.current,y:site.channelX ?? (site.id === 'gardens' ? 18 : 0)}); }
+            { m.setFloat('uSea',0);m.setFloat('uRadius',site.radius);m.setFloat('uSurface', site.surface); m.setVector2('uCurrent', {x:site.current,y:site.channelX ?? (site.id === 'gardens' ? 18 : 0)}); }
         // Ground is authored topography, not a regenerated collision surface.
         const ground = seabedGeometry(site);
         this.staticMeshes.push(this.mesh('rippled-sand', ground, 0));
@@ -238,16 +246,8 @@ export class ReefRenderer {
         // Boat and mooring are always in the same location; their shadow is a navigational landmark.
         const home = site.landmarks[0].p, boat = new Geometry();
         boat.rod(vec(home.x, floorHeight(home.x, home.z, site), home.z), vec(home.x, site.surface, home.z), .035, .035, rgb('#d6c6a5'), 7);
-        boat.ellipsoid(vec(home.x, site.surface + .38, home.z), vec(1.85, .62, 3.2), rgb('#ccd6bd'), 20, 10);
         boat.ellipsoid(vec(home.x + 2.5, site.surface - .2, home.z), vec(.3, .43, .3), rgb('#f0b16e'), 14, 9);
-        boat.box(vec(home.x, site.surface + .9, home.z), vec(2.5, .22, 4.4), rgb('#b98861'));
-        boat.box(vec(home.x, site.surface + 1.42, home.z + .35), vec(1.65, .92, 1.7), rgb('#d6d1b7'));
-        boat.box(vec(home.x, site.surface + 1.55, home.z + 1.22), vec(1.1, .42, .08), rgb('#42636a'));
-        boat.box(vec(home.x - .82, site.surface + 1.08, home.z - 1.3), vec(.08, .32, 2.1), rgb('#e0c99a'));
-        boat.box(vec(home.x + .82, site.surface + 1.08, home.z - 1.3), vec(.08, .32, 2.1), rgb('#e0c99a'));
-        boat.rod(vec(home.x, site.surface + 1.9, home.z - .45), vec(home.x, site.surface + 3.5, home.z - .45), .035, .018, rgb('#ddd4b4'), 7);
-        boat.rod(vec(home.x, site.surface + 3.45, home.z - .45), vec(home.x + 1.0, site.surface + 3.05, home.z - .45), .014, .014, rgb('#f2dfaf'), 5);
-        boat.rod(vec(home.x + 2.5, site.surface, home.z), vec(home.x + 2.5, site.surface + 1.3, home.z), .018, .018, rgb('#d6d8c0'));
+        const skiff=this.mesh('home-dive-skiff-blender',skiffGeometry(),1);skiff.position.set(home.x,site.surface+.2,home.z);this.staticMeshes.push(skiff);
         this.staticMeshes.push(this.mesh('home-mooring', boat, 1));
         if(run.encounter){
             const e=run.encounter,hull=new Geometry(),object=new Geometry(),line=new Geometry();
@@ -259,6 +259,24 @@ export class ReefRenderer {
             const meshes={boat:this.mesh('overhead-boat',hull,1),object:this.mesh('overhead-debris',object,1),line:this.mesh('overhead-line',line,1)};
             this.encounterMeshes=meshes;this.staticMeshes.push(meshes.boat,meshes.object,meshes.line);for(const m of Object.values(meshes))m.setEnabled(false);
         }
+        const habitat=new Geometry();
+        // Separate authored colonies, crevice residents and sand-flat animals.
+        // Avoid repeating a sponge/star/lobster/chair trio at every site.
+        const habitats:Record<string,{sponges:number[][];stars:number[][];lobsters:number[][];chair:number[]}>={
+            gardens:{sponges:[[-23,-12,1.6],[-25,2,1.2],[-27,5,.85],[27,19,1.1]],stars:[[5,-17,1],[20,17,.8],[-8,23,.7]],lobsters:[[-21,9,1],[-14,17,.85]],chair:[-27,20,.6]},
+            passage:{sponges:[[-31,4,2],[-30,7,1.1],[24,40,1.7]],stars:[[-23,-31,.7],[9,39,1]],lobsters:[[-27,19,1.15],[20,21,.9],[24,42,.8]],chair:[-30,19,-.3]},
+            mangrove:{sponges:[[33,-31,1.5],[31,-34,.9]],stars:[[5,35,.8],[10,38,1],[-5,40,.7],[23,35,.9]],lobsters:[[-9,5,.8],[6,17,.9],[-11,28,.75]],chair:[8,24,1.9]},
+            cenote:{sponges:[[-20,-13,1.9],[-19,-17,1.1],[29,24,1.5]],stars:[[-3,-24,.8],[21,44,.65]],lobsters:[[-11,19,1.1],[5,20,.9]],chair:[-23,23,-.8]},
+            harbour:{sponges:[[-28,-20,1.4],[-27,-18,.8],[22,14,1.6],[-36,29,1.1]],stars:[[4,-17,1],[-14,34,.8]],lobsters:[[-25,-10,1],[-22,23,1.1],[-38,42,1]],chair:[-19,26,.55]}
+        };
+        const h=habitats[site.id];
+        for(const [i,points] of [h.sponges,h.stars,h.lobsters].entries())for(const [j,[x,z,scale]] of points.entries()) {
+            const p=workPoint(x,z,.4,site);p.y=sandHeight(p.x,p.z,site)+(i===0?-.02:.035);
+            habitat.merge(i===0?sponge(j):i===1?seaStar():lobster(),p,vec(scale,scale,scale),j*1.8+i*.4);
+        }
+        const [cx,cz,yaw]=h.chair,chair=workPoint(cx,cz,.5,site);chair.y=sandHeight(chair.x,chair.z,site)-.04;
+        habitat.merge(habitatChair(),chair,vec(1,1,1),yaw);
+        this.staticMeshes.push(this.mesh('authored-habitat-life',habitat,1));
         const coast = new Geometry();
         for (let i = 0; i < 12; i++) {
             const angle = i / 12 * Math.PI * 2 + .12 + Math.sin(i * 2.7) * .07;
@@ -285,7 +303,9 @@ export class ReefRenderer {
         }
         for (const job of run.jobs) {
             const g = new Geometry();
-            if (job.kind === 'debris') {
+            if(job.kind==='charm')g.merge(charmGeometry(job.id),vec(0,.5,0),vec(3,3,3));
+            else if(job.kind==='outbreak'){g.merge(seaStar(true,job.done),vec(0,-.18,0));const scar=coral(4,921);scar.colors=scar.colors.map((c,i)=>i%4===3?c:c*.25+.52);g.merge(scar,vec(.75,-.18,.25),vec(.55,.38,.55));g.merge(scar,vec(-.65,-.18,-.35),vec(.42,.28,.42),1.5);}
+            else if (job.kind === 'debris') {
                 if (Number(job.id.split('-')[1]) % 2 === 0) {
                     for (let i = 0; i < 5; i++)
                         for (let j = 0; j < 5; j++) {
@@ -320,7 +340,7 @@ export class ReefRenderer {
             }
             const m = this.mesh(job.id, g, 1);
             m.position.set(job.p.x, job.p.y, job.p.z);
-            m.setEnabled(!(job.kind === 'debris' && job.done));
+            m.setEnabled(!(['debris','charm'].includes(job.kind) && job.done));
             this.jobMeshes.set(job.id, m);
         }
         const stage = recoveryForRun(run, profile.reefs[site.id]), share = recoveryPopulationShare(stage);
@@ -368,14 +388,20 @@ export class ReefRenderer {
         this.spear = this.mesh('pole-spear', equipment('spear'), 4);
         this.tube = this.mesh('collection-tube', equipment('tube'), 4);
         this.scooter = this.mesh('minnow-scooter', equipment('scooter'), 4);
-        this.held = this.mesh('exposed-lionfish', fishGeometry('lionfish'), 4);
+        const injectorGeometry=new Geometry();injectorGeometry.rod(vec(.18,-.18,.6),vec(.04,-.04,1.7),.038,.028,rgb('#a9c9c1'),10);injectorGeometry.rod(vec(.04,-.04,1.7),vec(0,0,2.3),.009,.002,rgb('#e6dfba'),6);injectorGeometry.box(vec(.18,-.18,.88),vec(.13,.025,.05),rgb('#dba26d'));
+        injectorGeometry.rod(vec(.15,-.15,.9),vec(.08,-.08,1.5),.063,.055,rgb('#88b8b0'),12);injectorGeometry.rod(vec(.12,-.12,1.1),vec(.09,-.09,1.35),.032,.032,rgb('#dab971'),10);
+        this.injector=this.mesh('reef-treatment-injector',injectorGeometry,4);this.injector.parent=this.camera;this.injector.renderingGroupId=1;
+        const thumb=new Geometry();thumb.rod(vec(.24,-.24,.62),vec(.18,-.18,.95),.025,.025,rgb('#d3d9cb'),10);thumb.box(vec(.24,-.24,.62),vec(.11,.025,.055),rgb('#dba26d'));this.injectorPlunger=this.mesh('injector-thumb-plunger',thumb,4);this.injectorPlunger.parent=this.camera;this.injectorPlunger.renderingGroupId=1;
+        this.held = this.mesh('unused-legacy-held', new Geometry(), 4);
+        this.charm = profile.equippedCharm ? this.mesh('equipped-keepsake',charmGeometry(profile.equippedCharm),4) : null;
+        if(this.charm){this.charm.parent=this.camera;this.charm.position.set(.47,-.30,.78);this.charm.renderingGroupId=1;}
         for (const m of [this.arms, this.spear, this.tube, this.scooter, this.held]) {
             m.parent = this.camera;
             m.renderingGroupId = 1;
             m.alwaysSelectAsActiveMesh = true;
         }
 
-        this.tube.position.set(.14, -.20, .35);
+        this.tube.position.set(0,0,0);
         this.held.scaling.setAll(.40);
         this.held.position.set(.02, -.02, 2.25);
         this.held.rotation.z = .5;
@@ -384,8 +410,9 @@ export class ReefRenderer {
         this.render(0, false);
     }
     workChanged(id: string) { const j = this.run?.jobs.find(j => j.id === id), m = this.jobMeshes.get(id); if (!j || !m)
-        return; if (j.kind === 'debris')
-        m.setEnabled(false); if (j.kind === 'coral') {
+        return; if (['debris','charm','outbreak'].includes(j.kind))
+        m.setEnabled(false); if(j.kind==='outbreak'){const g=seaStar(true,true),next=this.mesh(id+'-treated',g,1);next.position.set(j.p.x,j.p.y-.18,j.p.z);this.jobMeshes.set(id,next);}
+        if (j.kind === 'coral') {
         m.dispose();
         const g = new Geometry();
         g.ellipsoid(vec(), vec(.55, .08, .48), rgb('#abc5b6'), 14, 5);
@@ -397,7 +424,7 @@ export class ReefRenderer {
     render(time: number, playing: boolean) {
         if (!this.run)
             return;
-        const r = this.run, B = BABYLON;
+        const r = this.run, B = BABYLON, collection=collectionMotion(r,this.engine.getRenderWidth()/this.engine.getRenderHeight());
         const p = playing ? r.p : vec(5 + Math.sin(time * .045) * 1.3, 7.2 + Math.sin(time * .12) * .15, -35);
         const yaw = playing ? r.yaw : -.16 + Math.sin(time * .05) * .08, pitch = playing ? r.pitch : .06;
         const night = !!r.night, torchLevel = this.profile ? upgradeLevel(this.profile, 'torch') : 0;
@@ -410,13 +437,18 @@ export class ReefRenderer {
             this.atmosphere = view;
             this.scene.clearColor = view === 'night' ? new B.Color4(.008, .025, .052, 1) : view === 'surface' ? new B.Color4(.48, .70, .76, 1) : (()=>{const c=rgb('#'+(this.site.waterColor??0x09505f).toString(16).padStart(6,'0'));return new B.Color4(c[0]*.65,c[1]*.70,c[2]*.80,1);})();
         }
+        if(p.y<this.site.surface){
+            const c=this.site.waterColor,base=c===undefined?[.035,.31,.39]:[((c>>16)&255)/255*.42,((c>>8)&255)/255*.60,(c&255)/255*.70],blend=clamp((p.y+2)/this.site.surface,0,1);
+            const near=night?[.012,.047,.085]:base,far=night?[.035,.12,.20]:[base[0]*1.2+.09,base[1]*1.2+.09,base[2]*1.2+.06];
+            this.scene.clearColor.r=Math.pow(near[0]+(far[0]-near[0])*blend,.96);this.scene.clearColor.g=Math.pow(near[1]+(far[1]-near[1])*blend,.96);this.scene.clearColor.b=Math.pow(near[2]+(far[2]-near[2])*blend,.96);
+        }
         this.camera.position.set(p.x, p.y, p.z);
         this.camera.rotation.set(pitch, yaw, 0);
         const dir = direction(yaw, pitch);
         this.forwardVector.set(dir.x, dir.y, dir.z);
         this.torchVector.x=torchCone; this.torchVector.y=torchFalloff;
         for (const m of this.materials) {
-            m.setFloat('uTime', time);
+            m.setFloat('uTime', time);m.setFloat('uFold',r.transfer?1:collection.approach);
             m.setFloat('uSurface', this.site.surface);
             m.setVector3('uEye', this.camera.position);
             m.setVector3('uForward', this.forwardVector);
@@ -433,10 +465,22 @@ export class ReefRenderer {
         }
         for (const f of r.fish) {
             const m = this.fishMeshes.get(f.id);
-            m.setEnabled(f.alive);
-            m.position.set(f.p.x, f.p.y, f.p.z);
+            const caught=heldCatches(r).find(c=>c.id===f.id), transferring=r.transfer?.catches.find(c=>c.id===f.id);
+            m.setEnabled(f.alive || playing && !!(caught||transferring));
             m.scaling.setAll(f.size);
-            m.rotation.set(0, Math.sin(f.phase * .6) * .4 + f.phase * .07, Math.sin(f.phase) * .04);
+            if(caught||transferring){
+                if(m.parent!==this.camera){m.parent=this.camera;m.renderingGroupId=1;m.alwaysSelectAsActiveMesh=true;m.material=this.material(12);}
+                const c=caught??transferring!,index=caught?heldCatches(r).findIndex(item=>item.id===f.id):r.transfer!.catches.findIndex(item=>item.id===f.id);
+                const lift=clamp((r.time-(c.struckAt??-10))/.45,0,1),ease=lift*lift*(3-2*lift);
+                const origin=B.Vector3.TransformCoordinates(new B.Vector3((c.struckPosition??f.p).x,(c.struckPosition??f.p).y,(c.struckPosition??f.p).z),this.camera.getViewMatrix());
+                const tip={x:heldCatches(r).length===2&&index===0?.12:.02,y:heldCatches(r).length===2&&index===0?-.11:-.02,z:heldCatches(r).length===2&&index===0?1.88:2.38}, start=caught?clamp(r.interaction,.0,1):1;
+                const transfer=caught?collection.approach:1, slide=caught?collection.insert:.8;
+                // Approach mouth along the spear, insert along tube axis, then empty prongs withdraw.
+                const mouth=collection.mouth, z=tip.z+(mouth.z-tip.z)*transfer+slide*collection.axis.z;
+                m.position.set(origin.x+(tip.x-origin.x)*ease+(mouth.x-tip.x)*transfer,origin.y+(tip.y-origin.y)*ease+(mouth.y-tip.y)*transfer+slide*collection.axis.y,z+(origin.z-tip.z)*(1-ease));
+                m.rotation.set(.357*transfer,1.57*(1-transfer),.18*(1-transfer));
+                if(transferring&&r.time-r.transfer!.started>.2)m.setEnabled(false);
+            } else {m.parent=null;m.renderingGroupId=0;m.material=this.material(2);m.position.set(f.p.x,f.p.y,f.p.z);m.rotation.set(0,Math.sin(f.phase*.6)*.4+f.phase*.07,Math.sin(f.phase)*.04);}
         }
         for (const a of r.animals) {
             const m = this.animalMeshes.get(a.id);
@@ -473,9 +517,17 @@ export class ReefRenderer {
         const visible = playing;
         for (const m of [this.arms, this.tube])
             m.setEnabled(visible);
-        this.spear.setEnabled(visible && !r.scooter && !this.watchRequested && this.watchBlend<.1);
+        const treatment=r.jobs.find(j=>j.kind==='outbreak'&&!j.done&&j.id===r.treatmentTarget),settling=Math.max(0,1-(time-(r.cooldowns['treatment-feedback']??-10))/.65);
+        const treating=!r.scooter&&r.charge<.01&&(!!treatment||settling>0);
+        this.injector.setEnabled(visible&&treating);this.injectorPlunger.setEnabled(visible&&treating);
+        const pressure=treatment?.stage===2?r.interaction:settling;
+        this.injector.position.set(0,-settling*.20,settling*-.22);this.injector.rotation.x=settling*.12;
+        this.injectorPlunger.position.set(-pressure*.04,-settling*.20+pressure*.04,pressure*.20-settling*.22);this.injectorPlunger.rotation.x=settling*.12;
+        this.spear.setEnabled(visible && !treating && !r.scooter && !this.watchRequested && this.watchBlend<.1);
         this.scooter.setEnabled(visible && r.scooter);
-        this.held.setEnabled(visible && !!r.exposed);
+        this.held.setEnabled(false);
+        if(this.charm){this.charm.setEnabled(visible&&!r.scooter);this.charm.rotation.z=this.settings.reducedMotion?0:Math.sin(time*1.7)*.10+clamp(r.velocity.x,-2,2)*.045;}
+        const homeBoat=this.staticMeshes.find(m=>m.name==='home-dive-skiff-blender');if(homeBoat){homeBoat.position.y=this.site.surface+.2+Math.sin(time*.5)*.06;homeBoat.rotation.x=Math.sin(time*.42)*.015;}
         let stow = 0;
         for (const rock of this.site.rocks) {
             if (rock.hidden) continue;
@@ -488,11 +540,17 @@ export class ReefRenderer {
         this.spear.position.z = -r.charge * .25 + thrust - stow;
         this.spear.position.y = sway - stow;
         this.spear.rotation.x = stow * .8;
+        this.tube.position.x=collection.mouth.x+.64;
+        this.spear.position.x=collection.spear.x;this.spear.position.y+=collection.spear.y;this.spear.position.z+=collection.spear.z;
+        const transfer=collection.approach;
         const watchTarget=this.watchRequested && !r.scooter && r.charge === 0 ? 1 : 0;
         const poseDt=Math.max(0,Math.min(.083,time-this.lastPoseTime));this.lastPoseTime=time;
         this.watchBlend=this.settings.reducedMotion?watchTarget:this.watchBlend+(watchTarget-this.watchBlend)*(1-Math.exp(-poseDt*11));
         if(Math.abs(this.watchBlend-watchTarget)<.001)this.watchBlend=watchTarget;
         const pose=diverPose(r,time,this.watchBlend,this.settings.reducedMotion,this.pose);
+        pose.right.x+=collection.spear.x*.85;pose.right.y+=collection.spear.y*.8;pose.right.z=Math.max(.25,pose.right.z+collection.spear.z*.45);
+        if(treating){pose.right.x=.19;pose.right.y=-.22-settling*.12;pose.right.z=.65-settling*.1;pose.rightRoll=.04;}
+        pose.left.x-=transfer*.15;
         // In portrait the raised instrument sits to the right of ascent controls.
         pose.left.x+=this.watchBlend*Math.max(0,1-this.engine.getRenderWidth()/this.engine.getRenderHeight())*.21;
         this.leftArm.position.set(pose.left.x,pose.left.y,pose.left.z);

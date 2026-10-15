@@ -11,7 +11,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 OUT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / 'release'
 OUT.mkdir(parents=True, exist_ok=True)
-VERSION = 'v0.3-preview.1'
+VERSION = 'v' + json.loads((ROOT / 'package.json').read_text())['version']
 STAMP = (2026, 10, 14, 0, 0, 0)
 
 
@@ -34,10 +34,10 @@ for required in ['dist/index.html', 'dist/game.js', 'dist/babylon.js', 'Reef-Swe
 web = OUT / f'reef-sweep-{VERSION}-web.zip'
 write_zip(web, [(p, p.relative_to(ROOT / 'dist').as_posix()) for p in (ROOT / 'dist').rglob('*') if p.is_file()])
 
-base_files = ['README.md', 'START-HERE.html', 'AGENTS.md', 'package.json', 'package-lock.json', 'tsconfig.json', '.gitignore',
+base_files = ['README.md', 'AGENTS.md', 'package.json', 'package-lock.json', 'tsconfig.json', '.gitignore',
               'index.html', 'style.css', 'THIRD_PARTY_NOTICES.md', 'LICENSE-BABYLON.txt', 'Reef-Sweep.html']
 paths = [ROOT / name for name in base_files]
-for directory in ['src', 'scripts', 'tests', 'docs', 'public', 'vendor', 'reference', 'screenshots', 'dist']:
+for directory in ['src', 'scripts', 'tests', 'docs', 'public', 'vendor', 'art', 'reference', 'screenshots', 'dist']:
     paths.extend(p for p in (ROOT / directory).rglob('*') if p.is_file() and '__pycache__' not in p.parts
                  and p.name != 'modules.generated.json')
 handoff = OUT / f'reef-sweep-{VERSION}-handoff.zip'

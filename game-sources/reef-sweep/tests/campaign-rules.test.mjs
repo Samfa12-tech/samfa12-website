@@ -47,13 +47,13 @@ test('per-site contract options expose finite work, research unlock and an alway
   const p = freshProfile();
   const first = contractOptions(p, 'gardens');
   assert.equal(first.find(option => option.kind === 'catch').available, true);
-  assert.equal(first.find(option => option.kind === 'cleanup').remaining, 5);
+  assert.equal(first.find(option => option.kind === 'cleanup').remaining, SITES.gardens.worksites.debris.length);
   assert.equal(first.find(option => option.kind === 'restore').remaining, 3);
   assert.equal(first.find(option => option.kind === 'research').available, false);
   assert.equal(first.find(option => option.kind === 'none').available, true);
   for (let i = 0; i < reefFishHomes(SITES.gardens, SITES.gardens.seed).length; i++) p.reefs.gardens.removed.push(`fish-${i}`);
   assert.equal(contractOptions(p, 'gardens').find(option => option.kind === 'catch').available, false);
-  p.reefs.gardens.cleaned = ['debris-0', 'debris-1', 'debris-2', 'debris-3', 'debris-4'];
+  p.reefs.gardens.cleaned = SITES.gardens.worksites.debris.map((_,i)=>`debris-${i}`);
   p.reefs.gardens.restored = { 'coral-0': 1, 'coral-1': 1, 'coral-2': 1 };
   assert.equal(contractOptions(p, 'gardens').find(option => option.kind === 'cleanup').available, false);
   assert.equal(contractOptions(p, 'gardens').find(option => option.kind === 'restore').available, false);
@@ -173,7 +173,7 @@ test('optional campaign, registration, lesson, encounter and progress fields are
     p => { p.active = startRun(p, 'gardens'); p.active.lesson = { step: 99, look: 0, move: 0, drawn: false }; },
     p => { p.active = startRun(p, 'gardens'); p.active.encounter = { kind: 'fishing', phase: 'active', start: 0, p: { x: Infinity, y: 0, z: 0 }, cleanProgress: 0, rewarded: false }; },
     p => { p.active = startRun(p, 'gardens'); p.active.filletCuts = [0, 0, 0, 0]; },
-    p => { p.active = startRun(p, 'gardens'); p.active.siteRevision = 3; }
+    p => { p.active = startRun(p, 'gardens'); p.active.siteRevision = 4; }
   ];
   for (const setup of invalid) { const p = freshProfile(); setup(p); assert.throws(() => validateProfile(p)); }
   const revisioned = freshProfile(); revisioned.totalRemoved = 6; revisioned.active = startRun(revisioned, 'passage'); revisioned.active.siteRevision = 2;

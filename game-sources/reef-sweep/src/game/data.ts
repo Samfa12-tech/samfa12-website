@@ -1,3 +1,4 @@
+import { expeditionFloor, authorExpeditionSite } from './site-authorship.js';
 import type { Profile, Rock, Settings, Site, SiteId, Vec, Run } from './types.js';
 import { clamp, distance, rng, vec } from './math.js';
 
@@ -109,8 +110,8 @@ Object.assign(SITES.passage, {
     rocks: [...SITES.passage.rocks, rock('lee-breakwater', -36, -10, 5, 9, 14), rock('cathedral-east-rib', 26, 32, 4, 13, 10, 1)],
     worksites: anchors([[-24,-27],[-27,-5],[-23,15],[18,34]], [[-28,8],[-29,10],[-26,12]], [[-25,14]])
 });
-export function siteForRun(run: Pick<Run,'site'|'siteRevision'>): Site { return run.site === 'passage' && run.siteRevision !== 2 ? LEGACY_PASSAGE : SITES[run.site]; }
-export function siteTerrainKey(site?:Site|SiteId){const resolved=typeof site==='string'?SITES[site]:site;return !resolved?'legacy':resolved===LEGACY_PASSAGE?'passage:1':resolved.id+':2';}
+export function siteForRun(run: Pick<Run,'site'|'siteRevision'>): Site { return run.siteRevision === 3 ? SITES[run.site] : run.site === 'passage' && run.siteRevision !== 2 ? LEGACY_PASSAGE : PRE_EXPEDITION_SITES[run.site]; }
+export function siteTerrainKey(site?:Site|SiteId){const resolved=typeof site==='string'?SITES[site]:site;return !resolved?'legacy':resolved===LEGACY_PASSAGE?'passage:1':resolved.id+':'+(resolved.terrainRevision??2);}
 function oldFloorHeight(x: number, z: number) {
     const shelf = -.7 + Math.sin(x * .067) * .7 + Math.sin(z * .09 + x * .028) * .55 + Math.cos((z - x) * .036) * .4;
     let foundation = 0;
@@ -123,9 +124,15 @@ function oldFloorHeight(x: number, z: number) {
     return shelf - trench * (1 - foundation);
 }
 function terrainSite(site?: Site | SiteId): Site | undefined { return typeof site === 'string' ? SITES[site] : site; }
-/** Omitted/legacy site terrain exactly preserves Sunlit Gardens and Passage's shared seabed. */
+for (const s of Object.values(SITES)) { const work=s.worksites!; work.debris.push(...work.coral.map((p,i)=>vec(p.x+(i===1?4:-3),0,p.z-4))); }
+
+/** Revisioned terrain keeps suspended outings on their original geometry. */
 export function floorHeight(x: number, z: number, siteArg?: Site | SiteId) {
     const site = terrainSite(siteArg);
+    if(site?.terrainRevision===3)return expeditionFloor(site,x,z,legacyFloorHeight(x,z,site));
+    return legacyFloorHeight(x,z,site);
+}
+function legacyFloorHeight(x:number,z:number,site?:Site) {
     if (!site || site.id === 'gardens' || site === LEGACY_PASSAGE) return oldFloorHeight(x, z);
     if(site.id==='passage') return oldFloorHeight(x,z)-7*Math.exp(-(((x-1)/9)**2)-((z-10)/65)**4)+1.5*Math.exp(-(((x+28)/12)**2)-((z-6)/42)**4);
     const ripple = Math.sin(x * .071) * .34 + Math.sin(z * .064 + x * .03) * .28 + Math.cos((z - x) * .038) * .22;
@@ -156,6 +163,22 @@ for (const site of [SITES.mangrove,SITES.cenote,SITES.harbour]) for(const r of s
     else if(r.p.y-r.s.y>bed){const top=r.p.y+r.s.y;r.p.y=(top+bed)/2;r.s.y=(top-bed)/2;}
 }
 
+// Snapshot revision two after grounding and before authoring new landforms.
+const PRE_EXPEDITION_SITES:Record<SiteId,Site> = structuredClone(SITES);
+for(const site of Object.values(SITES)) {
+    site.terrainRevision=3;
+    const prior=PRE_EXPEDITION_SITES[site.id];
+    for(const r of site.rocks) {
+        const delta=floorHeight(r.p.x,r.p.z,site)-legacyFloorHeight(r.p.x,r.p.z,prior);
+        if(r.form==='root'||r.form==='piling'||r.form==='limestone') {
+            const bottom=r.p.y-r.s.y+delta,top=r.p.y+r.s.y;r.p.y=(top+bottom)/2;r.s.y=(top-bottom)/2;
+        } else r.p.y+=delta;
+    }
+    authorExpeditionSite(site,(x,z)=>floorHeight(x,z,site));
+}
+
+export function debrisIds(id:SiteId){return SITES[id].worksites!.debris.map((_,i)=>'debris-'+i);}
+export function clearedDebris(p:Profile,id:SiteId){const recorded=new Set(p.reefs[id].cleaned);return debrisIds(id).filter(key=>recorded.has(key)).length;}
 export function currentAt(p: Vec, site: Site, time: number): Vec {
     const channel = Math.exp(-Math.pow((p.x - (site.channelX ?? (site.id === 'gardens' ? 18 : 0))) / 12, 2));
     const strength = site.current * (.45 + channel * 1.8) * (1 + .12 * Math.sin(time * .023));
@@ -165,10 +188,19 @@ export function freePoint(p: Vec, site: Site, padding = .8) {
     if (p.y - padding < floorHeight(p.x, p.z, site)) return false;
     return site.rocks.every(r => Math.pow((p.x - r.p.x) / (r.s.x + padding), 2) + Math.pow((p.y - r.p.y) / (r.s.y + padding), 2) + Math.pow((p.z - r.p.z) / (r.s.z + padding), 2) > 1);
 }
+/** Keep a work item on exposed seabed near its authored anchor, never buried
+ * inside a new ledge. Search is deterministic and IDs remain unchanged. */
+export function workPoint(x:number,z:number,lift:number,site:Site) {
+    for(const radius of [0,1.5,3,5,7,10])for(let i=0;i<(radius?16:1);i++) {
+        const p=groundPoint(x+Math.cos(i*Math.PI/8)*radius,z+Math.sin(i*Math.PI/8)*radius,lift,site);
+        if(freePoint(p,site,Math.min(.3,lift*.5)))return p;
+    }
+    throw Error('No exposed work position near '+site.id+':'+x+','+z);
+}
 export function groundPoint(x: number, z: number, lift = 1, site?: Site | SiteId) { return vec(x, floorHeight(x, z, site) + lift, z); }
 
 export const DEFAULT_KEYS: Settings['keys'] = { forward: 'KeyW', back: 'KeyS', left: 'KeyA', right: 'KeyD', up: 'Space', down: 'ControlLeft', boost: 'ShiftLeft', steady: 'KeyF', interact: 'KeyE', spear: 'Mouse0', scooter: 'KeyQ', pause: 'Escape', journal: 'KeyJ', light: 'KeyL', watch: 'KeyV' };
-export const DEFAULT_SETTINGS: Settings = { quality: 'balanced', music: .42, ambience: .6, effects: .7, sensitivity: 1, invertY: false, reducedMotion: false, assist: true, toggleDraw: false, fov: 78, touchScale: 1, instrumentHud: true, keys: { ...DEFAULT_KEYS } };
+export const DEFAULT_SETTINGS: Settings = { quality: 'high', music: .42, ambience: .6, effects: .7, sensitivity: 1, invertY: false, reducedMotion: false, assist: true, toggleDraw: false, fov: 78, touchScale: 1, instrumentHud: true, keys: { ...DEFAULT_KEYS } };
 export const UPGRADES: { id: string; name: string; cost: number; tag: string; description: string; requires: string; requiredLevel?: number }[] = [
     { id: 'fins', name: 'Reefglide fins', cost: 95, tag: 'MOVE', description: 'Each level adds 12% of base fin speed, up to 60% at level 5.', requires: '' },
     { id: 'tube', name: 'Wide-mouth collection tube', cost: 120, tag: 'CAPACITY', description: 'Carry 12 fish at level 1, then 2 more per level, up to 20. Secured catches cannot be stolen.', requires: '' },
@@ -212,7 +244,7 @@ for (const site of Object.values(SITES)) {
     site.rocks.push({ id: 'pipe-back', p: vec(p.x, p.y + 1.2, p.z - 4.95), s: vec(1.2, 1.2, .2), tint: 0, hidden: true, form: 'container' });
     site.landmarks.push({ name: 'Lantern wreck · deep field station', p: vec(w.x, w.y + 2, w.z), kind: 'landmark' }, { name: 'Old outfall · deep field station', p: vec(p.x, p.y + 3, p.z - 6), kind: 'landmark' });
 }
-export function healthOfReef(p: Profile, id: SiteId) { const r = p.reefs[id]; return Math.round(clamp(24 + r.removed.length * 1.25 + r.cleaned.length * 3 + Object.keys(r.restored).length * 5 + r.surveys * 2, 24, 98)); }
+export function healthOfReef(p: Profile, id: SiteId) { const r = p.reefs[id]; return Math.round(clamp(24 + r.removed.length * 1.25 + clearedDebris(p,id) * 3 + Object.keys(r.restored).length * 5 + r.surveys * 2, 24, 98)); }
 const SITE_UNLOCKS: Record<SiteId, { removals: number; reputation: number }> = {
     gardens: { removals: 0, reputation: 0 }, passage: { removals: 6, reputation: 5 }, mangrove: { removals: 12, reputation: 8 }, cenote: { removals: 26, reputation: 17 }, harbour: { removals: 42, reputation: 27 }
 };

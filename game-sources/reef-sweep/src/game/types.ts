@@ -25,6 +25,7 @@ export interface GamepadProfile {
 }
 export interface Settings {
     quality: 'high' | 'balanced' | 'low';
+    performancePromptDismissed?: boolean;
     music: number;
     ambience: number;
     effects: number;
@@ -44,6 +45,8 @@ export interface Settings {
 export interface ReefProgress {
     removed: string[];
     cleaned: string[];
+    /** Treatment cohorts are separate from finite rubbish sites. */
+    treatments?: string[];
     restored: Record<string, number>;
     visits: number;
     /** Completed visits with at least one lionfish removal. Optional in schema-1 legacy saves. */
@@ -87,6 +90,8 @@ export interface Profile {
     }[];
     published: string[];
     discoveries: string[];
+    charms?: string[];
+    equippedCharm?: string;
     tutorial: number;
     sponsorPaidDay: number;
     lastReport: string;
@@ -103,6 +108,8 @@ export interface Rock {
     s: Vec;
     tint: number;
     hidden?: boolean;
+    /** Authored beam/bridge supported by neighbouring collision structures. */
+    suspended?: boolean;
     form?: 'rock' | 'root' | 'limestone' | 'piling' | 'container';
 }
 export interface Fish {
@@ -117,7 +124,7 @@ export interface Fish {
 }
 export interface Job {
     id: string;
-    kind: 'debris' | 'coral' | 'survey';
+    kind: 'debris' | 'coral' | 'survey' | 'charm' | 'outbreak';
     p: Vec;
     done: boolean;
     progress: number;
@@ -134,6 +141,10 @@ export interface Animal {
     phase: number;
 }
 export interface Catch {
+    size?: number;
+    phase?: number;
+    struckAt?: number;
+    struckPosition?: Vec;
     id: string;
     weight: number;
     value: number;
@@ -166,6 +177,17 @@ export interface Run {
     battery: number;
     cargo: Catch[];
     exposed: Catch | null;
+    skewered?: Catch[];
+    transfer?: { catches: Catch[]; started: number };
+    expedition?: boolean;
+    boatDistance?: number;
+    maskFlood?: number;
+    droplets?: number;
+    scalingPasses?: number[];
+    cooking?: {recipe: string; quality: number; complete: boolean};
+    treated?: number;
+    /** Presented tool only; staged jobs survive stowing and reacquisition. */
+    treatmentTarget?: string;
     fish: Fish[];
     jobs: Job[];
     animals: Animal[];
@@ -219,6 +241,8 @@ export interface Run {
     filletCuts?: number[];
 }
 export interface Site {
+    /** Resolved terrain template; outings persist this separately as siteRevision. */
+    terrainRevision?: number;
     id: SiteId;
     name: string;
     /** Short selector-facing name. Legacy sites may omit this and use `name`. */

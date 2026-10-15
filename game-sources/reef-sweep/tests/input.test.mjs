@@ -284,3 +284,13 @@ test('a deferred mouse capture cannot lock a paused conversation',async()=>{
  // Legacy requestPointerLock returns void; its event path must also release.
  doc.pointerLockElement=canvas;doc.send('pointerlockchange');assert.equal(doc.pointerLockElement,null);
 });
+
+
+test('boat mode keeps a usable cursor and cannot begin a spear draw',()=>{
+ const {canvas,input}=setup();let captures=0;canvas.requestPointerLock=()=>{captures++;};input.boatMode=true;canvas.send('pointerdown');input.capture();assert.equal(captures,0);assert.equal(input.sample(1/60).draw,false);
+});
+test('a second touch cannot replace the held action and lost capture cancels without a strike',()=>{
+ const {button,input}=touchSetup();button.send('pointerdown',{pointerId:7,pointerType:'touch'});assert.equal(input.sample(1/60).draw,true);
+ button.send('pointerdown',{pointerId:8,pointerType:'touch'});button.send('pointerup',{pointerId:8,pointerType:'touch'});assert.equal(input.sample(1/60).draw,true);
+ button.send('lostpointercapture',{pointerId:7,pointerType:'touch'});const f=input.sample(1/60);assert.equal(f.draw,false);assert.equal(f.release,false);assert.equal(f.cancelDraw,true);
+});

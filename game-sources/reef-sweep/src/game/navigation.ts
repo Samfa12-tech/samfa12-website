@@ -18,37 +18,33 @@ export function homeRoute(from: Vec, site: Site): Vec[] {
     const target = { ...site.entry, y: Math.max(from.y, site.entry.y) };
     if (clearSegment(from, target, site))
         return [from, target];
-    const step = 6, size = 23, half = 66, y = Math.min(site.surface - 2, Math.max(6, from.y));
-    const cell = (p: Vec) => ({ x: clamp(Math.round((p.x + half) / step), 0, size - 1), z: clamp(Math.round((p.z + half) / step), 0, size - 1) });
-    const pt = (n: number) => vec((n % size) * step - half, y, Math.floor(n / size) * step - half);
-    const start = cell(from), end = cell(target), s = start.z * size + start.x, e = end.z * size + end.x;
-    const queue = [s], prev = new Map<number, number>([[s, -1]]);
-    while (queue.length) {
-        const c = queue.shift()!;
-        if (c === e)
-            break;
-        for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]) {
-            const x = c % size + dx, z = Math.floor(c / size) + dz, n = z * size + x;
-            if (x < 0 || z < 0 || x >= size || z >= size || prev.has(n))
-                continue;
-            const p = pt(n);
-            if (!freePoint(p, site, 1) || !clearSegment(pt(c), p, site))
-                continue;
-            prev.set(n, c);
-            queue.push(n);
+    const step=6,size=23,half=66,plane=size*size;
+    // A low swim-through may have a roof: do not join a deep starting point
+    // directly to a high 2D grid through that roof. Plan lateral and vertical
+    // water segments explicitly, including an under-bridge layer.
+    const levels=[...new Set([Math.min(site.surface-1,from.y),6,site.entry.y,site.surface-1].map(y=>Math.round(y*100)/100))].sort((a,b)=>a-b);
+    const pt=(n:number)=>vec((n%size)*step-half,levels[Math.floor(n/plane)],(Math.floor(n/size)%size)*step-half);
+    const cx=clamp(Math.round((from.x+half)/step),0,size-1),cz=clamp(Math.round((from.z+half)/step),0,size-1);
+    const queue:number[]=[],prev=new Map<number,number>(),valid=new Map<number,boolean>();
+    const open=(n:number)=>{if(!valid.has(n))valid.set(n,freePoint(pt(n),site,.85));return valid.get(n)!;};
+    for(let layer=0;layer<levels.length;layer++)for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){
+        const x=cx+dx,z=cz+dz;if(x<0||z<0||x>=size||z>=size)continue;
+        const n=layer*plane+z*size+x;
+        if(open(n)&&clearSegment(from,pt(n),site)){queue.push(n);prev.set(n,-1);}
+    }
+    let found=-1,head=0;
+    while(head<queue.length){
+        const c=queue[head++],p=pt(c),layer=Math.floor(c/plane),x=c%size,z=Math.floor(c/size)%size;
+        if(Math.hypot(p.x-target.x,p.z-target.z)<step*1.5&&clearSegment(p,target,site)){found=c;break;}
+        for(const [dx,dz,dy] of [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[1,1,0],[-1,-1,0],[1,-1,0],[-1,1,0],[0,0,1],[0,0,-1]]){
+            const nx=x+dx,nz=z+dz,nl=layer+dy,n=nl*plane+nz*size+nx;
+            if(nx<0||nz<0||nx>=size||nz>=size||nl<0||nl>=levels.length||prev.has(n)||!open(n)||!clearSegment(p,pt(n),site))continue;
+            prev.set(n,c);queue.push(n);
         }
     }
-    if (!prev.has(e)) { // A safe high-water fallback is more conservative than claiming a direct route.
-        const high = site.surface - 1;
-        return [from, vec(from.x, high, from.z), vec(target.x, high, target.z), target];
-    }
-    const reverse: Vec[] = [target];
-    let c = e;
-    while (c !== s && c >= 0) {
-        reverse.push(pt(c));
-        c = prev.get(c) ?? -1;
-    }
-    reverse.push(from);
-    return reverse.reverse();
+    if(found<0){const high=site.surface-1;return [from,vec(from.x,high,from.z),vec(target.x,high,target.z),target];}
+    const reverse:Vec[]=[target];let c=found;
+    while(c>=0){reverse.push(pt(c));c=prev.get(c)??-1;}
+    reverse.push(from);return reverse.reverse();
 }
 export const pathLength = (path: Vec[]) => path.slice(1).reduce((n, p, i) => n + distance(p, path[i]), 0);

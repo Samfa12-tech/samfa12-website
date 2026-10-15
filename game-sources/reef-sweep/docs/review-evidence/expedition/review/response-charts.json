@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "name": "gardens active response chart fits portrait",
+      "pass": true
+    },
+    {
+      "name": "passage active response chart fits portrait",
+      "pass": true
+    },
+    {
+      "name": "mangrove active response chart fits portrait",
+      "pass": true
+    },
+    {
+      "name": "cenote active response chart fits portrait",
+      "pass": true
+    },
+    {
+      "name": "harbour active response chart fits portrait",
+      "pass": true
+    }
+  ],
+  "errors": []
+}

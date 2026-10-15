@@ -42,6 +42,9 @@ export function validateProfile(v: unknown): Profile {
         const r = p.reefs?.[id];
         if (!r || !strings(r.removed) || !strings(r.cleaned) || !r.restored || typeof r.restored !== 'object' || Array.isArray(r.restored) || Object.entries(r.restored).length > 100 || !Object.entries(r.restored).every(([k, n]) => /^coral-\d+$/.test(k) && numeric(n, 1, 1e6)))
             throw Error('Invalid reef progress.');
+        if(r.treatments!==undefined&&(!strings(r.treatments)||r.treatments.some(id=>!/^outbreak-\d+-[012]$/.test(id))))throw Error('Invalid treatment history.');
+        const oldTreatments=r.cleaned.filter(id=>/^outbreak-\d+-[012]$/.test(id));
+        if(oldTreatments.length){r.treatments=[...new Set([...(r.treatments??[]),...oldTreatments])];r.cleaned=r.cleaned.filter(id=>!oldTreatments.includes(id));}
         if (!numeric(r.visits, 0, 1e6) || !numeric(r.surveys, 0, 1e6))
             throw Error('Invalid reef counters.');
         if (r.surveyedStations !== undefined && (!strings(r.surveyedStations, 16) || !r.surveyedStations.every(id => /^survey-\d+$/.test(id)) || new Set(r.surveyedStations).size !== r.surveyedStations.length))
@@ -55,7 +58,7 @@ export function validateProfile(v: unknown): Profile {
                 throw Error('Invalid suspended dive.');
             if (r.recoveryStage !== undefined && (!Number.isInteger(r.recoveryStage) || r.recoveryStage < 0 || r.recoveryStage > 5))
                 throw Error('Invalid reef recovery snapshot.');
-            if (r.siteRevision !== undefined && r.siteRevision !== 1 && r.siteRevision !== 2)
+            if (r.siteRevision !== undefined && r.siteRevision !== 1 && r.siteRevision !== 2 && r.siteRevision !== 3)
                 throw Error('Invalid site revision.');
             if (r.night !== undefined && typeof r.night !== 'boolean' || r.night && upgradeLevel(p,'torch')<1) throw Error('Invalid night dive.');
             if (r.filletQuality !== undefined && (!numeric(r.filletQuality,0,1) || !r.finished || r.rescued || !r.cargo.length)) throw Error('Invalid fillet preparation.');
@@ -95,7 +98,7 @@ export function validateProfile(v: unknown): Profile {
                     throw Error('Invalid dive counter: ' + k);
             if (!['catch', 'cleanup', 'restore', 'research', 'none'].includes(r.order) || !['scooter', 'light', 'returnWarn', 'lowWarn', 'finished', 'rescued', 'event'].every(k => typeof (r as any)[k] === 'boolean') || !text(r.interactionId) || !strings(r.seen, 100) || !numeric(r.day, 1, 1e6))
                 throw Error('Invalid dive state.');
-            if (r.charge > 1 || r.interaction > 1.1 || r.fragments > 3+upgradeLevel(p,'kit')*2 || r.cargo.length > capacity(p) || r.jobs.some(j => !text(j.id) || !['debris', 'coral', 'survey'].includes(j.kind) || !isVec(j.p) || typeof j.done !== 'boolean' || !numeric(j.progress, 0, 1) || !numeric(j.stage, 0, 5)))
+            if (r.charge > 1 || r.interaction > 1.1 || r.fragments > 3+upgradeLevel(p,'kit')*2 || r.cargo.length > capacity(p) || r.jobs.some(j => !text(j.id) || !['debris', 'coral', 'survey', 'charm', 'outbreak'].includes(j.kind) || !isVec(j.p) || typeof j.done !== 'boolean' || !numeric(j.progress, 0, 1) || !numeric(j.stage, 0, 5)))
                 throw Error('Invalid work or capacity.');
             if (r.practice !== undefined && typeof r.practice !== 'boolean' || r.contractReadyNotified !== undefined && typeof r.contractReadyNotified !== 'boolean' || r.researchEligible !== undefined && typeof r.researchEligible !== 'boolean' || r.researchFunded !== undefined && typeof r.researchFunded !== 'boolean')
                 throw Error('Invalid outing options.');
@@ -120,6 +123,21 @@ export function validateProfile(v: unknown): Profile {
             if (new Set(r.fish.map(f => f.id)).size !== r.fish.length || new Set(r.jobs.map(j => j.id)).size !== r.jobs.length)
                 throw Error('Duplicate persistent identities.');
         }
+    if(p.charms!==undefined&&(!strings(p.charms,5)||new Set(p.charms).size!==p.charms.length||p.charms.some(id=>!['brass-compass','glass-ray','root-knot','moon-shell','enamel-lantern'].includes(id))))throw Error('Invalid keepsakes.');
+    if(p.equippedCharm!==undefined&&!p.charms?.includes(p.equippedCharm))throw Error('Invalid equipped keepsake.');
+    for(const r of [p.active,p.pending])if(r){
+        if(r.expedition!==undefined&&typeof r.expedition!=='boolean'||r.boatDistance!==undefined&&!numeric(r.boatDistance,0,1e6))throw Error('Invalid travel record.');
+        if(r.skewered!==undefined&&(!Array.isArray(r.skewered)||r.skewered.length>1||r.skewered.length&&!r.exposed||r.skewered.some(c=>typeof c.id!=='string'||!numeric(c.value,0,500)||!numeric(c.weight,.01,10)||!numeric(c.size,.1,3))))throw Error('Invalid skewered catch.');
+        if(r.expedition&&r.cargo.length+(r.exposed?1:0)+(r.skewered?.length??0)>capacity(p))throw Error('Catch tube capacity exceeded.');
+        if(r.transfer!==undefined&&(!r.transfer||!numeric(r.transfer.started,0,r.time)||!Array.isArray(r.transfer.catches)||r.transfer.catches.length>2||r.transfer.catches.some(c=>typeof c.id!=='string'||!numeric(c.value,0,500)||!numeric(c.weight,.01,10)||!r.cargo.some(secured=>secured.id===c.id))))throw Error('Invalid tube transfer.');
+        for(const c of [...r.cargo,...(r.exposed?[r.exposed]:[]),...(r.skewered??[])]){if(c.size!==undefined&&!numeric(c.size,.1,3)||c.struckAt!==undefined&&!numeric(c.struckAt,0,r.time)||c.struckPosition!==undefined&&!isVec(c.struckPosition)||c.phase!==undefined&&!numeric(c.phase,-1e9,1e9))throw Error('Invalid catch appearance.');}
+        if(r.treatmentTarget!==undefined&&(!text(r.treatmentTarget)||!r.jobs.some(j=>j.kind==='outbreak'&&j.id===r.treatmentTarget&&!j.done)))throw Error('Invalid treatment tool.');
+        if(r.treated!==undefined&&(!numeric(r.treated,0,3)||!Number.isInteger(r.treated)))throw Error('Invalid treatment record.');
+
+        if(r.maskFlood!==undefined&&!numeric(r.maskFlood,0,.5)||r.droplets!==undefined&&!numeric(r.droplets,0,1))throw Error('Invalid mask.');
+        if(r.scalingPasses!==undefined&&(!Array.isArray(r.scalingPasses)||r.scalingPasses.length>3||r.scalingPasses.some(n=>!numeric(n,0,1))))throw Error('Invalid scaling.');
+        if(r.cooking!==undefined&&(!r.cooking||!['citrus','stew'].includes(r.cooking.recipe)||!numeric(r.cooking.quality,0,1)||r.cooking.complete!==true))throw Error('Invalid meal.');
+    }
     if (p.active?.finished || p.pending && !p.pending.finished)
         throw Error('Invalid outing lifecycle.');
     for (const id of REEF_IDS) {
@@ -187,7 +205,7 @@ export class SaveStore {
         } return freshProfile(slot); }
     settings(): Settings { try {
         const s = JSON.parse(this.storage.getItem(SAVE_PREFIX + 'settings') || '{}');
-        const q = ['high', 'balanced', 'low'].includes(s.quality) ? s.quality : 'balanced';
+        const q = ['high', 'balanced', 'low'].includes(s.quality) ? s.quality : 'high';
         const gamepads: NonNullable<Settings['gamepads']> = {};
         if (s.gamepads && typeof s.gamepads === 'object' && !Array.isArray(s.gamepads)) for (const [key, raw] of Object.entries(s.gamepads).slice(0, 16)) {
             const p = raw as any;
@@ -199,7 +217,7 @@ export class SaveStore {
             if (!validButtons || !validAxisButtons) continue;
             gamepads[key] = { key, id: p.id.slice(0, 200), mapping: p.mapping.slice(0, 40), axisCount: p.axisCount, buttonCount: p.buttonCount, axes: p.axes, centers: p.centers, buttons: p.buttons, axisButtons: p.axisButtons, moveDeadzone: clamp(Number(p.moveDeadzone) || .14, .05, .4), lookDeadzone: clamp(Number(p.lookDeadzone) || .2, .05, .45) };
         }
-        return { ...DEFAULT_SETTINGS, ...s, quality: q, music: clamp(Number(s.music ?? .42) || 0, 0, 1), ambience: clamp(Number(s.ambience ?? .6) || 0, 0, 1), effects: clamp(Number(s.effects ?? .7) || 0, 0, 1), sensitivity: clamp(Number(s.sensitivity ?? 1) || 1, .25, 2.5), fov: clamp(Number(s.fov ?? 78) || 78, 60, 100), touchScale: clamp(Number(s.touchScale ?? 1) || 1, .8, 1.3), instrumentHud: typeof s.instrumentHud === 'boolean' ? s.instrumentHud : true, keys: { ...DEFAULT_SETTINGS.keys, ...s.keys }, gamepads };
+        return { ...DEFAULT_SETTINGS, ...s, quality: q, performancePromptDismissed: s.performancePromptDismissed === true, music: clamp(Number(s.music ?? .42) || 0, 0, 1), ambience: clamp(Number(s.ambience ?? .6) || 0, 0, 1), effects: clamp(Number(s.effects ?? .7) || 0, 0, 1), sensitivity: clamp(Number(s.sensitivity ?? 1) || 1, .25, 2.5), fov: clamp(Number(s.fov ?? 78) || 78, 60, 100), touchScale: clamp(Number(s.touchScale ?? 1) || 1, .8, 1.3), instrumentHud: typeof s.instrumentHud === 'boolean' ? s.instrumentHud : true, keys: { ...DEFAULT_SETTINGS.keys, ...s.keys }, gamepads };
     }
     catch {
         return structuredClone(DEFAULT_SETTINGS);

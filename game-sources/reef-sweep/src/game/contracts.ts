@@ -7,8 +7,8 @@ export function eventTheme(profile: Profile, site: SiteId): 'catch'|'cleanup'|'r
  return preferred;
 }
 export function contractProgress(run: Run) {
- const researchRoute=run.site==='passage'&&run.siteRevision===2;
- const amount=run.order==='catch'?run.cargo.length:run.order==='cleanup'?run.cleaned:run.order==='restore'?run.restored:run.order==='research'?(researchRoute?['survey-0','survey-1'].filter(id=>run.jobs.some(j=>j.id===id&&j.done)).length:run.surveyed):0;
+ const researchRoute=run.site==='passage'&&(run.siteRevision??1)>=2;
+ const amount=run.order==='catch'?run.cargo.filter(c=>c.value>0).length:run.order==='cleanup'?run.cleaned:run.order==='restore'?run.restored:run.order==='research'?(researchRoute?['survey-0','survey-1'].filter(id=>run.jobs.some(j=>j.id===id&&j.done)).length:run.surveyed):0;
  const target=run.order==='catch'?4:run.order==='none'?0:2;
  const label=run.order==='catch'?'Kitchen':run.order==='cleanup'?'Cleanup':run.order==='restore'?'Restoration':run.order==='research'?(researchRoute?'Flow gauges':'Research'):'Free exploration';
  return {label,amount,target,ready:target>0&&amount>=target,text:target?`${label} ${Math.min(amount,target)}/${target}${run.order==='catch'?' secured · sell 4 at the dock':''}`:label};
