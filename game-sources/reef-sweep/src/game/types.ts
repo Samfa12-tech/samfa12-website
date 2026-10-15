@@ -45,6 +45,8 @@ export interface Settings {
 export interface ReefProgress {
     removed: string[];
     cleaned: string[];
+    /** Treatment cohorts are separate from finite rubbish sites. */
+    treatments?: string[];
     restored: Record<string, number>;
     visits: number;
     /** Completed visits with at least one lionfish removal. Optional in schema-1 legacy saves. */
@@ -106,6 +108,8 @@ export interface Rock {
     s: Vec;
     tint: number;
     hidden?: boolean;
+    /** Authored beam/bridge supported by neighbouring collision structures. */
+    suspended?: boolean;
     form?: 'rock' | 'root' | 'limestone' | 'piling' | 'container';
 }
 export interface Fish {
@@ -182,6 +186,8 @@ export interface Run {
     scalingPasses?: number[];
     cooking?: {recipe: string; quality: number; complete: boolean};
     treated?: number;
+    /** Presented tool only; staged jobs survive stowing and reacquisition. */
+    treatmentTarget?: string;
     fish: Fish[];
     jobs: Job[];
     animals: Animal[];
@@ -235,6 +241,8 @@ export interface Run {
     filletCuts?: number[];
 }
 export interface Site {
+    /** Resolved terrain template; outings persist this separately as siteRevision. */
+    terrainRevision?: number;
     id: SiteId;
     name: string;
     /** Short selector-facing name. Legacy sites may omit this and use `name`. */

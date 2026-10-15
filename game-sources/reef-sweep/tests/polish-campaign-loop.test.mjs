@@ -179,12 +179,12 @@ test('event registration day stays isolated by save slot through reload', () => 
   assert.equal(validateProfile(store.load(1)).eventRegistrationDay, 3);
 });
 
-test('new night Passage runs use revision-two terrain for safe entry and flow-gauge work', () => {
+test('new night Passage runs use revision-three terrain for safe entry and flow-gauge work', () => {
   const p = freshProfile(); p.tutorial = 1; p.totalRemoved = 6; p.cash = 3000;
   p.day=Math.max(p.day,4);p.reputation=Math.max(p.reputation,6);assert.ok(buy(p, 'air')); assert.ok(buy(p, 'air')); assert.ok(buy(p, 'torch'));
   const run = startRun(p, 'passage', 'none', false, true);
   const site = siteForRun(run);
-  assert.equal(run.siteRevision, 2);
+  assert.equal(run.siteRevision, 3);
   assert.equal(run.night, true);
   assert.ok(run.p.y >= floorHeight(run.p.x, run.p.z, site));
   for (const id of ['survey-0', 'survey-1']) assert.ok(run.jobs.some(job => job.id === id), `${id} flow gauge exists`);
@@ -239,7 +239,7 @@ test('an already saved legacy restaurant outing keeps its promised $65 contract 
  const p=freshProfile();p.tutorial=1;const r=startRun(p,'gardens');delete r.siteRevision;delete r.researchEligible;delete r.researchFunded;
  r.cargo=Array.from({length:4},(_,i)=>({id:'legacy-'+i,value:25,weight:1}));r.removed=4;
  const loaded=validateProfile(p);const result=finish(loaded,loaded.active,{sell:4,eat:0,donate:0});assert.equal(result.contract,65);assert.equal(result.sales,100);
- assert.equal(startRun(loaded,'gardens','catch').siteRevision,2,'future outings use current terms');
+ assert.equal(startRun(loaded,'gardens','catch').siteRevision,3,'future outings use current terms');
 });
 
 test('a reloaded legacy Passage simulation uses the saved terrain and mooring for boarding',()=>{
@@ -270,7 +270,7 @@ test('legacy research financial promises survive active and pending save reloads
   assert.equal(loaded.campaign.researchCompleted,true);
   assert.throws(()=>settleRun(loaded,r,{sell:0,eat:0,donate:0},[]),'settlement stays one-time');
   const next=startRun(loaded,'gardens','research',false,night);
-  assert.equal(next.siteRevision,2);assert.equal(next.researchFunded,false,'future outings use Monitoring terms');
+  assert.equal(next.siteRevision,3);assert.equal(next.researchFunded,false,'future outings use Monitoring terms');
  }
 });
 

@@ -42,6 +42,9 @@ export function validateProfile(v: unknown): Profile {
         const r = p.reefs?.[id];
         if (!r || !strings(r.removed) || !strings(r.cleaned) || !r.restored || typeof r.restored !== 'object' || Array.isArray(r.restored) || Object.entries(r.restored).length > 100 || !Object.entries(r.restored).every(([k, n]) => /^coral-\d+$/.test(k) && numeric(n, 1, 1e6)))
             throw Error('Invalid reef progress.');
+        if(r.treatments!==undefined&&(!strings(r.treatments)||r.treatments.some(id=>!/^outbreak-\d+-[012]$/.test(id))))throw Error('Invalid treatment history.');
+        const oldTreatments=r.cleaned.filter(id=>/^outbreak-\d+-[012]$/.test(id));
+        if(oldTreatments.length){r.treatments=[...new Set([...(r.treatments??[]),...oldTreatments])];r.cleaned=r.cleaned.filter(id=>!oldTreatments.includes(id));}
         if (!numeric(r.visits, 0, 1e6) || !numeric(r.surveys, 0, 1e6))
             throw Error('Invalid reef counters.');
         if (r.surveyedStations !== undefined && (!strings(r.surveyedStations, 16) || !r.surveyedStations.every(id => /^survey-\d+$/.test(id)) || new Set(r.surveyedStations).size !== r.surveyedStations.length))
@@ -55,7 +58,7 @@ export function validateProfile(v: unknown): Profile {
                 throw Error('Invalid suspended dive.');
             if (r.recoveryStage !== undefined && (!Number.isInteger(r.recoveryStage) || r.recoveryStage < 0 || r.recoveryStage > 5))
                 throw Error('Invalid reef recovery snapshot.');
-            if (r.siteRevision !== undefined && r.siteRevision !== 1 && r.siteRevision !== 2)
+            if (r.siteRevision !== undefined && r.siteRevision !== 1 && r.siteRevision !== 2 && r.siteRevision !== 3)
                 throw Error('Invalid site revision.');
             if (r.night !== undefined && typeof r.night !== 'boolean' || r.night && upgradeLevel(p,'torch')<1) throw Error('Invalid night dive.');
             if (r.filletQuality !== undefined && (!numeric(r.filletQuality,0,1) || !r.finished || r.rescued || !r.cargo.length)) throw Error('Invalid fillet preparation.');
@@ -128,6 +131,7 @@ export function validateProfile(v: unknown): Profile {
         if(r.expedition&&r.cargo.length+(r.exposed?1:0)+(r.skewered?.length??0)>capacity(p))throw Error('Catch tube capacity exceeded.');
         if(r.transfer!==undefined&&(!r.transfer||!numeric(r.transfer.started,0,r.time)||!Array.isArray(r.transfer.catches)||r.transfer.catches.length>2||r.transfer.catches.some(c=>typeof c.id!=='string'||!numeric(c.value,0,500)||!numeric(c.weight,.01,10)||!r.cargo.some(secured=>secured.id===c.id))))throw Error('Invalid tube transfer.');
         for(const c of [...r.cargo,...(r.exposed?[r.exposed]:[]),...(r.skewered??[])]){if(c.size!==undefined&&!numeric(c.size,.1,3)||c.struckAt!==undefined&&!numeric(c.struckAt,0,r.time)||c.struckPosition!==undefined&&!isVec(c.struckPosition)||c.phase!==undefined&&!numeric(c.phase,-1e9,1e9))throw Error('Invalid catch appearance.');}
+        if(r.treatmentTarget!==undefined&&(!text(r.treatmentTarget)||!r.jobs.some(j=>j.kind==='outbreak'&&j.id===r.treatmentTarget&&!j.done)))throw Error('Invalid treatment tool.');
         if(r.treated!==undefined&&(!numeric(r.treated,0,3)||!Number.isInteger(r.treated)))throw Error('Invalid treatment record.');
 
         if(r.maskFlood!==undefined&&!numeric(r.maskFlood,0,.5)||r.droplets!==undefined&&!numeric(r.droplets,0,1))throw Error('Invalid mask.');

@@ -3,6 +3,7 @@ export interface PlacedLabel extends ChartLabel { left: number; top: number; wid
 /** Deterministic label packing in chart pixels; leaders retain marker identity. */
 export function layoutChartLabels(labels: ChartLabel[], size: number, measure: (text: string) => number, lineHeight=20): PlacedLabel[] {
     const placed: PlacedLabel[] = [], margin = 12, bottom = size - 42;
+    const obscuredMarkers=(left:number,top:number,width:number,height:number)=>labels.filter(p=>p.x>left-9&&p.x<left+width+9&&p.y>top-9&&p.y<top+height+9).length;
     for (const label of labels) {
         const lines: string[] = []; let line = '';
         for (const word of label.name.split(/\s+/)) { const next = line ? `${line} ${word}` : word; if (measure(next) > Math.min(200, size * .4) && line) { lines.push(line); line = word; } else line = next; }
@@ -13,13 +14,13 @@ export function layoutChartLabels(labels: ChartLabel[], size: number, measure: (
             const left = Math.max(margin, Math.min(size - margin - width, side === 1 ? label.x + 12 + ring * 12 : label.x - width - 12 - ring * 12));
             const top = Math.max(margin, Math.min(bottom - height, label.y - height - 8 + dy * (height + 8) * (ring + 1)));
             const collisions = placed.reduce((n, p) => n + (left < p.left + p.width + 5 && left + width + 5 > p.left && top < p.top + p.height + 5 && top + height + 5 > p.top ? 1 : 0), 0);
-            candidates.push({ left, top, cost: collisions * 1e6 + Math.hypot(left + width / 2 - label.x, top + height / 2 - label.y) });
+            candidates.push({ left, top, cost: collisions * 1e6 + obscuredMarkers(left,top,width,height)*1e4 + Math.hypot(left + width / 2 - label.x, top + height / 2 - label.y) });
         }
         // Dense edge clusters need a real free-space fallback, not repeated clamps
         // of the same off-chart candidate. Search the small chart in pixel space.
         for (let top = margin; top + height <= bottom; top += 8) for (let left = margin; left + width <= size - margin; left += 8) {
             if (placed.some(p => left < p.left + p.width + 5 && left + width + 5 > p.left && top < p.top + p.height + 5 && top + height + 5 > p.top)) continue;
-            candidates.push({left,top,cost:Math.hypot(left+width/2-label.x,top+height/2-label.y)});
+            candidates.push({left,top,cost:obscuredMarkers(left,top,width,height)*1e4+Math.hypot(left+width/2-label.x,top+height/2-label.y)});
         }
         const best = candidates.sort((a, b) => a.cost - b.cost)[0];
         placed.push({ ...label, ...best, width, height, lines });

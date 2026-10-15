@@ -101,7 +101,7 @@ test('legacy terrain stays exact while new sites use their own ground profiles',
     const oldPassage = siteForRun({ site: 'passage' });
     const currentPassage = siteForRun({ site: 'passage', siteRevision: 2 });
     for (const [x, z] of [[0, 0], [34, -40], [-27, 18], [41, 52]]) {
-        assert.equal(floorHeight(x, z), floorHeight(x, z, 'gardens'));
+        assert.equal(floorHeight(x, z), floorHeight(x, z, siteForRun({site:'gardens',siteRevision:2})));
         assert.equal(floorHeight(x, z), floorHeight(x, z, oldPassage));
     }
     assert.notEqual(floorHeight(0, 30, oldPassage), floorHeight(0, 30, currentPassage), 'new Passage uses the revision-two shelf and channel terrain');

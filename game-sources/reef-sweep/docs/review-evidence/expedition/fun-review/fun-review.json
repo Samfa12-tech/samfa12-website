@@ -1,0 +1,1141 @@
+{
+  "scope": "Local Chrome touch emulation; fixtures establish career and positions, actual UI performs actions",
+  "checks": [
+    {
+      "name": "default mixed allocation sells adults and keeps juvenile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "scaling 844x390 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 775,
+            "top": 21,
+            "right": 819,
+            "bottom": 65
+          },
+          {
+            "name": "preparation-3d",
+            "left": 25,
+            "top": 78.09375,
+            "right": 493,
+            "bottom": 327
+          },
+          {
+            "name": "mini-stage",
+            "left": 25,
+            "top": 333,
+            "right": 493,
+            "bottom": 369
+          },
+          {
+            "name": "prep-instruction",
+            "left": 507,
+            "top": 160.171875,
+            "right": 819,
+            "bottom": 208.734375
+          },
+          {
+            "name": "mini-cue",
+            "left": 507,
+            "top": 216.734375,
+            "right": 819,
+            "bottom": 234.921875
+          },
+          {
+            "name": "primary",
+            "left": 507,
+            "top": 242.921875,
+            "right": 659,
+            "bottom": 286.921875
+          },
+          {
+            "name": "BUTTON",
+            "left": 667,
+            "top": 242.921875,
+            "right": 819,
+            "bottom": 286.921875
+          }
+        ],
+        "scrollHeight": 372,
+        "clientHeight": 372,
+        "fit": true
+      }
+    },
+    {
+      "name": "scaling 667x375 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 598,
+            "top": 21,
+            "right": 642,
+            "bottom": 65
+          },
+          {
+            "name": "preparation-3d",
+            "left": 25,
+            "top": 78.09375,
+            "right": 386.796875,
+            "bottom": 312
+          },
+          {
+            "name": "mini-stage",
+            "left": 25,
+            "top": 318,
+            "right": 386.796875,
+            "bottom": 354
+          },
+          {
+            "name": "prep-instruction",
+            "left": 400.796875,
+            "top": 134.578125,
+            "right": 641.984375,
+            "bottom": 199.328125
+          },
+          {
+            "name": "mini-cue",
+            "left": 400.796875,
+            "top": 207.328125,
+            "right": 641.984375,
+            "bottom": 225.515625
+          },
+          {
+            "name": "primary",
+            "left": 400.796875,
+            "top": 233.515625,
+            "right": 517.390625,
+            "bottom": 297.515625
+          },
+          {
+            "name": "BUTTON",
+            "left": 525.390625,
+            "top": 233.515625,
+            "right": 641.984375,
+            "bottom": 297.515625
+          }
+        ],
+        "scrollHeight": 357,
+        "clientHeight": 357,
+        "fit": true
+      }
+    },
+    {
+      "name": "scaling 568x320 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 499,
+            "top": 21,
+            "right": 543,
+            "bottom": 65
+          },
+          {
+            "name": "preparation-3d",
+            "left": 25,
+            "top": 78.09375,
+            "right": 294,
+            "bottom": 257
+          },
+          {
+            "name": "mini-stage",
+            "left": 25,
+            "top": 263,
+            "right": 294,
+            "bottom": 299
+          },
+          {
+            "name": "prep-instruction",
+            "left": 308,
+            "top": 107.078125,
+            "right": 543,
+            "bottom": 171.828125
+          },
+          {
+            "name": "mini-cue",
+            "left": 308,
+            "top": 179.828125,
+            "right": 543,
+            "bottom": 198.015625
+          },
+          {
+            "name": "primary",
+            "left": 308,
+            "top": 206.015625,
+            "right": 421.5,
+            "bottom": 270.015625
+          },
+          {
+            "name": "BUTTON",
+            "left": 429.5,
+            "top": 206.015625,
+            "right": 543,
+            "bottom": 270.015625
+          }
+        ],
+        "scrollHeight": 302,
+        "clientHeight": 302,
+        "fit": true
+      }
+    },
+    {
+      "name": "scaling 740x320 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 671,
+            "top": 21,
+            "right": 715,
+            "bottom": 65
+          },
+          {
+            "name": "preparation-3d",
+            "left": 25,
+            "top": 78.09375,
+            "right": 430.59375,
+            "bottom": 257
+          },
+          {
+            "name": "mini-stage",
+            "left": 25,
+            "top": 263,
+            "right": 430.59375,
+            "bottom": 299
+          },
+          {
+            "name": "prep-instruction",
+            "left": 444.59375,
+            "top": 125.171875,
+            "right": 714.984375,
+            "bottom": 173.734375
+          },
+          {
+            "name": "mini-cue",
+            "left": 444.59375,
+            "top": 181.734375,
+            "right": 714.984375,
+            "bottom": 199.921875
+          },
+          {
+            "name": "primary",
+            "left": 444.59375,
+            "top": 207.921875,
+            "right": 575.78125,
+            "bottom": 251.921875
+          },
+          {
+            "name": "BUTTON",
+            "left": 583.78125,
+            "top": 207.921875,
+            "right": 714.984375,
+            "bottom": 251.921875
+          }
+        ],
+        "scrollHeight": 302,
+        "clientHeight": 302,
+        "fit": true
+      }
+    },
+    {
+      "name": "scaling 390x844 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 319,
+            "top": 57,
+            "right": 361,
+            "bottom": 101
+          },
+          {
+            "name": "preparation-3d",
+            "left": 29,
+            "top": 132.796875,
+            "right": 361,
+            "bottom": 567
+          },
+          {
+            "name": "mini-stage",
+            "left": 29,
+            "top": 577,
+            "right": 361,
+            "bottom": 625
+          },
+          {
+            "name": "prep-instruction",
+            "left": 29,
+            "top": 639,
+            "right": 361,
+            "bottom": 702
+          },
+          {
+            "name": "mini-cue",
+            "left": 29,
+            "top": 712,
+            "right": 361,
+            "bottom": 733
+          },
+          {
+            "name": "primary",
+            "left": 29,
+            "top": 743,
+            "right": 191,
+            "bottom": 787
+          },
+          {
+            "name": "BUTTON",
+            "left": 199,
+            "top": 743,
+            "right": 361,
+            "bottom": 787
+          }
+        ],
+        "scrollHeight": 758,
+        "clientHeight": 758,
+        "fit": true
+      }
+    },
+    {
+      "name": "filleting 844x390 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 775,
+            "top": 21,
+            "right": 819,
+            "bottom": 65
+          },
+          {
+            "name": "preparation-3d",
+            "left": 25,
+            "top": 78.09375,
+            "right": 493,
+            "bottom": 327
+          },
+          {
+            "name": "fillet-illustration prep-meter",
+            "left": 25,
+            "top": 333,
+            "right": 493,
+            "bottom": 369
+          },
+          {
+            "name": "prep-instruction",
+            "left": 507,
+            "top": 136.9375,
+            "right": 819,
+            "bottom": 169.3125
+          },
+          {
+            "name": "fillet-steps",
+            "left": 507,
+            "top": 177.3125,
+            "right": 819,
+            "bottom": 203.8125
+          },
+          {
+            "name": "fillet-cue",
+            "left": 507,
+            "top": 211.8125,
+            "right": 819,
+            "bottom": 231.3125
+          },
+          {
+            "name": "fillet-feedback",
+            "left": 507,
+            "top": 243.3125,
+            "right": 819,
+            "bottom": 258.15625
+          },
+          {
+            "name": "primary",
+            "left": 507,
+            "top": 266.15625,
+            "right": 660,
+            "bottom": 310.15625
+          },
+          {
+            "name": "BUTTON",
+            "left": 666,
+            "top": 266.15625,
+            "right": 819,
+            "bottom": 310.15625
+          }
+        ],
+        "scrollHeight": 372,
+        "clientHeight": 372,
+        "fit": true
+      }
+    },
+    {
+      "name": "filleting 667x375 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 598,
+            "top": 21,
+            "right": 642,
+            "bottom": 65
+          },
+          {
+            "name": "preparation-3d",
+            "left": 25,
+            "top": 78.09375,
+            "right": 386.796875,
+            "bottom": 312
+          },
+          {
+            "name": "fillet-illustration prep-meter",
+            "left": 25,
+            "top": 318,
+            "right": 386.796875,
+            "bottom": 354
+          },
+          {
+            "name": "prep-instruction",
+            "left": 400.796875,
+            "top": 113.921875,
+            "right": 641.984375,
+            "bottom": 162.484375
+          },
+          {
+            "name": "fillet-steps",
+            "left": 400.796875,
+            "top": 170.484375,
+            "right": 641.984375,
+            "bottom": 196.984375
+          },
+          {
+            "name": "fillet-cue",
+            "left": 400.796875,
+            "top": 204.984375,
+            "right": 641.984375,
+            "bottom": 224.484375
+          },
+          {
+            "name": "fillet-feedback",
+            "left": 400.796875,
+            "top": 236.484375,
+            "right": 641.984375,
+            "bottom": 266.171875
+          },
+          {
+            "name": "primary",
+            "left": 400.796875,
+            "top": 274.171875,
+            "right": 518.390625,
+            "bottom": 318.171875
+          },
+          {
+            "name": "BUTTON",
+            "left": 524.390625,
+            "top": 274.171875,
+            "right": 641.984375,
+            "bottom": 318.171875
+          }
+        ],
+        "scrollHeight": 357,
+        "clientHeight": 357,
+        "fit": true
+      }
+    },
+    {
+      "name": "filleting 568x320 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 499,
+            "top": 21,
+            "right": 543,
+            "bottom": 65
+          },
+          {
+            "name": "preparation-3d",
+            "left": 25,
+            "top": 78.09375,
+            "right": 294,
+            "bottom": 257
+          },
+          {
+            "name": "fillet-illustration prep-meter",
+            "left": 25,
+            "top": 263,
+            "right": 294,
+            "bottom": 299
+          },
+          {
+            "name": "prep-instruction",
+            "left": 308,
+            "top": 86.421875,
+            "right": 543,
+            "bottom": 134.984375
+          },
+          {
+            "name": "fillet-steps",
+            "left": 308,
+            "top": 142.984375,
+            "right": 543,
+            "bottom": 169.484375
+          },
+          {
+            "name": "fillet-cue",
+            "left": 308,
+            "top": 177.484375,
+            "right": 543,
+            "bottom": 196.984375
+          },
+          {
+            "name": "fillet-feedback",
+            "left": 308,
+            "top": 208.984375,
+            "right": 543,
+            "bottom": 238.671875
+          },
+          {
+            "name": "primary",
+            "left": 308,
+            "top": 246.671875,
+            "right": 422.5,
+            "bottom": 290.671875
+          },
+          {
+            "name": "BUTTON",
+            "left": 428.5,
+            "top": 246.671875,
+            "right": 543,
+            "bottom": 290.671875
+          }
+        ],
+        "scrollHeight": 302,
+        "clientHeight": 302,
+        "fit": true
+      }
+    },
+    {
+      "name": "filleting 740x320 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 671,
+            "top": 21,
+            "right": 715,
+            "bottom": 65
+          },
+          {
+            "name": "preparation-3d",
+            "left": 25,
+            "top": 78.09375,
+            "right": 430.59375,
+            "bottom": 257
+          },
+          {
+            "name": "fillet-illustration prep-meter",
+            "left": 25,
+            "top": 263,
+            "right": 430.59375,
+            "bottom": 299
+          },
+          {
+            "name": "prep-instruction",
+            "left": 444.59375,
+            "top": 93.84375,
+            "right": 714.984375,
+            "bottom": 142.40625
+          },
+          {
+            "name": "fillet-steps",
+            "left": 444.59375,
+            "top": 150.40625,
+            "right": 714.984375,
+            "bottom": 176.90625
+          },
+          {
+            "name": "fillet-cue",
+            "left": 444.59375,
+            "top": 184.90625,
+            "right": 714.984375,
+            "bottom": 204.40625
+          },
+          {
+            "name": "fillet-feedback",
+            "left": 444.59375,
+            "top": 216.40625,
+            "right": 714.984375,
+            "bottom": 231.25
+          },
+          {
+            "name": "primary",
+            "left": 444.59375,
+            "top": 239.25,
+            "right": 576.78125,
+            "bottom": 283.25
+          },
+          {
+            "name": "BUTTON",
+            "left": 582.78125,
+            "top": 239.25,
+            "right": 714.984375,
+            "bottom": 283.25
+          }
+        ],
+        "scrollHeight": 302,
+        "clientHeight": 302,
+        "fit": true
+      }
+    },
+    {
+      "name": "filleting 390x844 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 319,
+            "top": 57,
+            "right": 361,
+            "bottom": 101
+          },
+          {
+            "name": "preparation-3d",
+            "left": 29,
+            "top": 132.796875,
+            "right": 361,
+            "bottom": 489.5
+          },
+          {
+            "name": "fillet-illustration prep-meter",
+            "left": 29,
+            "top": 499.5,
+            "right": 361,
+            "bottom": 547.5
+          },
+          {
+            "name": "prep-instruction",
+            "left": 29,
+            "top": 561.5,
+            "right": 361,
+            "bottom": 624.5
+          },
+          {
+            "name": "fillet-steps",
+            "left": 29,
+            "top": 634.5,
+            "right": 361,
+            "bottom": 666.5
+          },
+          {
+            "name": "fillet-cue",
+            "left": 29,
+            "top": 676.5,
+            "right": 361,
+            "bottom": 699
+          },
+          {
+            "name": "fillet-feedback",
+            "left": 29,
+            "top": 713,
+            "right": 361,
+            "bottom": 733
+          },
+          {
+            "name": "primary",
+            "left": 29,
+            "top": 743,
+            "right": 190,
+            "bottom": 787
+          },
+          {
+            "name": "BUTTON",
+            "left": 200,
+            "top": 743,
+            "right": 361,
+            "bottom": 787
+          }
+        ],
+        "scrollHeight": 758,
+        "clientHeight": 758,
+        "fit": true
+      }
+    },
+    {
+      "name": "cooking 844x390 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 775,
+            "top": 21,
+            "right": 819,
+            "bottom": 65
+          },
+          {
+            "name": "cooking-canvas",
+            "left": 25,
+            "top": 78.09375,
+            "right": 493,
+            "bottom": 327
+          },
+          {
+            "name": "mini-stage",
+            "left": 25,
+            "top": 333,
+            "right": 493,
+            "bottom": 369
+          },
+          {
+            "name": "prep-instruction",
+            "left": 507,
+            "top": 142.265625,
+            "right": 819,
+            "bottom": 174.640625
+          },
+          {
+            "name": "BUTTON",
+            "left": 507,
+            "top": 182.640625,
+            "right": 660,
+            "bottom": 226.640625
+          },
+          {
+            "name": "BUTTON",
+            "left": 666,
+            "top": 182.640625,
+            "right": 819,
+            "bottom": 226.640625
+          },
+          {
+            "name": "mini-cue",
+            "left": 507,
+            "top": 234.640625,
+            "right": 819,
+            "bottom": 252.828125
+          },
+          {
+            "name": "primary",
+            "left": 507,
+            "top": 260.828125,
+            "right": 659,
+            "bottom": 304.828125
+          },
+          {
+            "name": "BUTTON",
+            "left": 667,
+            "top": 260.828125,
+            "right": 819,
+            "bottom": 304.828125
+          }
+        ],
+        "scrollHeight": 372,
+        "clientHeight": 372,
+        "fit": true
+      }
+    },
+    {
+      "name": "cooking 667x375 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 598,
+            "top": 21,
+            "right": 642,
+            "bottom": 65
+          },
+          {
+            "name": "cooking-canvas",
+            "left": 25,
+            "top": 78.09375,
+            "right": 386.796875,
+            "bottom": 312
+          },
+          {
+            "name": "mini-stage",
+            "left": 25,
+            "top": 318,
+            "right": 386.796875,
+            "bottom": 354
+          },
+          {
+            "name": "prep-instruction",
+            "left": 400.796875,
+            "top": 116.671875,
+            "right": 641.984375,
+            "bottom": 165.234375
+          },
+          {
+            "name": "BUTTON",
+            "left": 400.796875,
+            "top": 173.234375,
+            "right": 518.390625,
+            "bottom": 217.234375
+          },
+          {
+            "name": "BUTTON",
+            "left": 524.390625,
+            "top": 173.234375,
+            "right": 641.984375,
+            "bottom": 217.234375
+          },
+          {
+            "name": "mini-cue",
+            "left": 400.796875,
+            "top": 225.234375,
+            "right": 641.984375,
+            "bottom": 243.421875
+          },
+          {
+            "name": "primary",
+            "left": 400.796875,
+            "top": 251.421875,
+            "right": 517.390625,
+            "bottom": 315.421875
+          },
+          {
+            "name": "BUTTON",
+            "left": 525.390625,
+            "top": 251.421875,
+            "right": 641.984375,
+            "bottom": 315.421875
+          }
+        ],
+        "scrollHeight": 357,
+        "clientHeight": 357,
+        "fit": true
+      }
+    },
+    {
+      "name": "cooking 568x320 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 499,
+            "top": 21,
+            "right": 543,
+            "bottom": 65
+          },
+          {
+            "name": "cooking-canvas",
+            "left": 25,
+            "top": 78.09375,
+            "right": 294,
+            "bottom": 257
+          },
+          {
+            "name": "mini-stage",
+            "left": 25,
+            "top": 263,
+            "right": 294,
+            "bottom": 299
+          },
+          {
+            "name": "prep-instruction",
+            "left": 308,
+            "top": 89.171875,
+            "right": 543,
+            "bottom": 137.734375
+          },
+          {
+            "name": "BUTTON",
+            "left": 308,
+            "top": 145.734375,
+            "right": 422.5,
+            "bottom": 189.734375
+          },
+          {
+            "name": "BUTTON",
+            "left": 428.5,
+            "top": 145.734375,
+            "right": 543,
+            "bottom": 189.734375
+          },
+          {
+            "name": "mini-cue",
+            "left": 308,
+            "top": 197.734375,
+            "right": 543,
+            "bottom": 215.921875
+          },
+          {
+            "name": "primary",
+            "left": 308,
+            "top": 223.921875,
+            "right": 421.5,
+            "bottom": 287.921875
+          },
+          {
+            "name": "BUTTON",
+            "left": 429.5,
+            "top": 223.921875,
+            "right": 543,
+            "bottom": 287.921875
+          }
+        ],
+        "scrollHeight": 302,
+        "clientHeight": 302,
+        "fit": true
+      }
+    },
+    {
+      "name": "cooking 740x320 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 671,
+            "top": 21,
+            "right": 715,
+            "bottom": 65
+          },
+          {
+            "name": "cooking-canvas",
+            "left": 25,
+            "top": 78.09375,
+            "right": 430.59375,
+            "bottom": 257
+          },
+          {
+            "name": "mini-stage",
+            "left": 25,
+            "top": 263,
+            "right": 430.59375,
+            "bottom": 299
+          },
+          {
+            "name": "prep-instruction",
+            "left": 444.59375,
+            "top": 99.171875,
+            "right": 714.984375,
+            "bottom": 147.734375
+          },
+          {
+            "name": "BUTTON",
+            "left": 444.59375,
+            "top": 155.734375,
+            "right": 576.78125,
+            "bottom": 199.734375
+          },
+          {
+            "name": "BUTTON",
+            "left": 582.78125,
+            "top": 155.734375,
+            "right": 714.984375,
+            "bottom": 199.734375
+          },
+          {
+            "name": "mini-cue",
+            "left": 444.59375,
+            "top": 207.734375,
+            "right": 714.984375,
+            "bottom": 225.921875
+          },
+          {
+            "name": "primary",
+            "left": 444.59375,
+            "top": 233.921875,
+            "right": 575.78125,
+            "bottom": 277.921875
+          },
+          {
+            "name": "BUTTON",
+            "left": 583.78125,
+            "top": 233.921875,
+            "right": 714.984375,
+            "bottom": 277.921875
+          }
+        ],
+        "scrollHeight": 302,
+        "clientHeight": 302,
+        "fit": true
+      }
+    },
+    {
+      "name": "cooking 390x844 whole activity fits",
+      "pass": true,
+      "detail": {
+        "items": [
+          {
+            "name": "close",
+            "left": 319,
+            "top": 57,
+            "right": 361,
+            "bottom": 101
+          },
+          {
+            "name": "cooking-canvas",
+            "left": 29,
+            "top": 132.796875,
+            "right": 361,
+            "bottom": 513
+          },
+          {
+            "name": "mini-stage",
+            "left": 29,
+            "top": 523,
+            "right": 361,
+            "bottom": 571
+          },
+          {
+            "name": "prep-instruction",
+            "left": 29,
+            "top": 585,
+            "right": 361,
+            "bottom": 648
+          },
+          {
+            "name": "BUTTON",
+            "left": 29,
+            "top": 658,
+            "right": 192,
+            "bottom": 702
+          },
+          {
+            "name": "BUTTON",
+            "left": 198,
+            "top": 658,
+            "right": 361,
+            "bottom": 702
+          },
+          {
+            "name": "mini-cue",
+            "left": 29,
+            "top": 712,
+            "right": 361,
+            "bottom": 733
+          },
+          {
+            "name": "primary",
+            "left": 29,
+            "top": 743,
+            "right": 191,
+            "bottom": 787
+          },
+          {
+            "name": "BUTTON",
+            "left": 199,
+            "top": 743,
+            "right": 361,
+            "bottom": 787
+          }
+        ],
+        "scrollHeight": 758,
+        "clientHeight": 758,
+        "fit": true
+      }
+    },
+    {
+      "name": "direct scaling pass saves once",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cancelled scaling drag never scores",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "direct 3D cut scores once",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "pan interaction completes real recipe",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "mixed-size normal UI Kitchen reward",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "alternate stew recipe completes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "earned first response harbour briefing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "harbour keeps response site and bounty visible",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "drive reaches correct buoy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "first treatment field guide visible",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "chart explains treatment marks",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "look away stows injector",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "spear draw has coherent visible tool",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "treated target remains as quiet completed silhouette",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "debrief names treatment tally",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "receipt separates treatment bounty",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reload remembers one treatment independently from rubbish",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no page errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}

@@ -1,3 +1,4 @@
+import { oceanGLSL } from '../game/ocean.js';
 export const reefVertex = `precision highp float;
 attribute vec3 position;
 attribute vec3 normal;
@@ -28,6 +29,7 @@ varying vec4 vColor;
 varying vec2 vUV;
 varying vec4 vSunCoord;
 varying vec4 vTorchCoord;
+${oceanGLSL}
 void main(){
  mat4 w=world;
  #ifdef INSTANCES
@@ -53,7 +55,7 @@ void main(){
  if(uMode==12.0){p.x-=sign(p.x)*max(0.0,abs(p.x)-.12)*uFold*.84;p.y-=sign(p.y)*max(0.0,abs(p.y)-.20)*uFold*.70;}
  if(uMode==3.0||uMode==10.0){
   vec2 q=(w*vec4(p,1.0)).xz;
-  float swell=sin(q.x*.065+q.y*.028+uTime*.9)*.38+sin(q.y*.09-q.x*.026-uTime*.72)*.20+sin(q.x*.22+q.y*.14+uTime*1.3)*.055;
+  float swell=oceanSurface(q,uTime).x;
   p.y+=uSea*swell+(1.0-uSea)*(sin(p.x*.30+uTime*.48)*.14+sin(p.z*.28-uTime*.3)*.09);
  }
  if(uMode==6.0){p.x+=sin(uTime*.17+p.y)*.35;p.y+=sin(uTime*.34+p.z)*.20;p.z+=mod(uTime*.23,6.0);}
@@ -119,6 +121,7 @@ float caustic(vec2 p){
  float b=sin(p.y*1.42-uTime*.29+cos(p.x*.71+uTime*.17));
  return pow(max(0.0,1.0-abs(a+b)*.87),11.0);
 }
+${oceanGLSL}
 float foamHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float foamNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(foamHash(i),foamHash(i+vec2(1,0)),f.x),mix(foamHash(i+vec2(0,1)),foamHash(i+vec2(1,1)),f.x),f.y);}
 void main(){
@@ -139,7 +142,24 @@ void main(){
   float fresnel=pow(1.0-max(0.0,dot(waveNormal,-to)),3.0);
   float glitter=pow(max(0.0,dot(reflect(to,waveNormal),normalize(vec3(-.35,1.0,.25)))),120.0);
   daylight=mix(daylight,vec3(.60,.79,.82),fresnel*.72)+glitter*vec3(.9,.80,.56)*uSea;
-  if(uSea>.5){vec3 rippleN=normalize(waveNormal+vec3(sin(p.x*1.7+p.y*.8+uTime*1.4)*.035,0.0,cos(p.y*1.4-p.x*.7-uTime*1.1)*.032));float sky=pow(1.0-max(0.0,dot(rippleN,-to)),3.4);float glint=pow(max(0.0,dot(reflect(to,rippleN),normalize(vec3(-.35,1.0,.25)))),95.0);daylight=mix(vec3(.028,.30,.36),vec3(.58,.76,.80),sky*.85)+vec3(.07,.20,.18)*(sin(p.x*.18+p.y*.12+uTime*.8)*.5+.5)*.16+glint*vec3(.95,.86,.65);}
+  if(uSea>.5){
+   vec3 sw=oceanSurface(p,uTime);
+   float detailFade=1.0-smoothstep(22.0,115.0,dist);
+   // Advected, domain-warped wind chop. Noise gradients prevent the old regular
+   // sine stripes, and remove sub-pixel detail before the grazing horizon.
+   vec2 wind=p*.34+vec2(uTime*.29,-uTime*.18);
+   vec2 warp=vec2(foamNoise(wind*.27),foamNoise(wind*.31+17.0))*1.6;
+   float h0=foamNoise(wind+warp),hx=foamNoise(wind+warp+vec2(.17,0)),hz=foamNoise(wind+warp+vec2(0,.17));
+   vec2 chop=vec2(hx-h0,hz-h0)*.31*detailFade;
+   vec3 rippleN=normalize(vec3(-sw.y-chop.x,1.0,-sw.z-chop.y));
+   float sky=pow(1.0-max(0.0,dot(rippleN,-to)),3.2);
+   vec3 sunDirection=normalize(vec3(-.35,1.0,.25));
+   float glint=pow(max(0.0,dot(reflect(to,rippleN),sunDirection)),48.0);
+   float broad=foamNoise(p*.021+vec2(uTime*.018,0.0));
+   daylight=mix(vec3(.035,.32,.38),vec3(.60,.78,.81),sky*.86)
+    +(broad-.5)*vec3(.022,.035,.029)+glint*vec3(.62,.56,.40)*mix(.32,.75,detailFade);
+   daylight=mix(daylight,vec3(.55,.75,.80),smoothstep(160.0,580.0,dist)*.55);
+  }
   col=mix(daylight,moonlight,uNight);
   if(uSea<.5&&uEye.y<uSurface){vec3 horizon=mix(mix(uWaterColor,vec3(.012,.047,.085),uNight),mix(uWaterColor*1.20+vec3(.09,.09,.06),vec3(.035,.12,.20),uNight),clamp((uEye.y+2.0)/uSurface,0.0,1.0));col=mix(col,horizon,smoothstep(uRadius+4.0,uRadius+70.0,length(vWorld.xz)));}
  }

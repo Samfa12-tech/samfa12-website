@@ -173,7 +173,7 @@ test('optional campaign, registration, lesson, encounter and progress fields are
     p => { p.active = startRun(p, 'gardens'); p.active.lesson = { step: 99, look: 0, move: 0, drawn: false }; },
     p => { p.active = startRun(p, 'gardens'); p.active.encounter = { kind: 'fishing', phase: 'active', start: 0, p: { x: Infinity, y: 0, z: 0 }, cleanProgress: 0, rewarded: false }; },
     p => { p.active = startRun(p, 'gardens'); p.active.filletCuts = [0, 0, 0, 0]; },
-    p => { p.active = startRun(p, 'gardens'); p.active.siteRevision = 3; }
+    p => { p.active = startRun(p, 'gardens'); p.active.siteRevision = 4; }
   ];
   for (const setup of invalid) { const p = freshProfile(); setup(p); assert.throws(() => validateProfile(p)); }
   const revisioned = freshProfile(); revisioned.totalRemoved = 6; revisioned.active = startRun(revisioned, 'passage'); revisioned.active.siteRevision = 2;

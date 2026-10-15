@@ -10,7 +10,60 @@ import { EMPTY_INPUT } from '../build/game/simulation.js';
 import { contractOptions } from '../build/game/campaign.js';
 import { skiffGeometry } from '../build/render/boat-travel.js';
 import { collectionMotion } from '../build/render/collection-motion.js';
+import { EXPLORATION_ROUTES } from '../build/game/site-authorship.js';
+import { siteForRun, floorHeight, freePoint, siteTerrainKey, healthOfReef, clearedDebris } from '../build/game/data.js';
+import { clearSegment, homeRoute } from '../build/game/navigation.js';
+import { acceptMilestoneOpportunity, milestoneObjectiveStatus } from '../build/game/campaign.js';
+import { outbreakPlan } from '../build/game/expedition.js';
+import { nextCharacterMoment, receiptView } from '../build/ui/campaign-ui.js';
+import { seaStar } from '../build/render/marine-life.js';
 const tick=(s,t,input={})=>{for(let i=0;i<t*60;i++)s.update(1/60,{...EMPTY_INPUT,...input});};
+
+test('five new terrain layouts have open authored exploration routes, distinct relief and revision-safe saves',()=>{
+ const signatures=[];
+ for(const site of Object.values(SITES)){
+  const old=siteForRun({site:site.id,siteRevision:2});assert.notEqual(siteTerrainKey(old),siteTerrainKey(site));
+  let changed=0;for(let x=-40;x<=40;x+=8)for(let z=-40;z<=48;z+=8)if(Math.abs(floorHeight(x,z,site)-floorHeight(x,z,old))>1)changed++;
+  assert.ok(changed>=10,site.id+' has meaningful new landforms');
+  signatures.push([-30,-15,0,15,30].map(x=>floorHeight(x,12,site).toFixed(1)).join(','));
+  for(const route of EXPLORATION_ROUTES[site.id]){
+   const points=route.points.map(([x,y,z])=>({x,y,z}));
+   points.forEach((point,i)=>{assert.ok(freePoint(point,site,.85),site.id+'/'+i+' swimming clearance');if(i)assert.ok(clearSegment(points[i-1],point,site),site.id+'/'+i+' route segment');});
+   for(const point of points){const home=homeRoute(point,site);for(let i=1;i<home.length;i++)assert.ok(clearSegment(home[i-1],home[i],site),site.id+' return from '+JSON.stringify(point));}
+  }
+  const p=freshProfile();p.reputation=100;p.totalRemoved=100;p.tutorial=1;const r=startRun(p,site.id,'none');
+  assert.equal(r.siteRevision,3);assert.equal(validateProfile(p).active.siteRevision,3);
+  r.siteRevision=2;assert.equal(siteForRun(validateProfile(p).active),old,'old outings retain exact terrain object');
+ }
+ assert.equal(new Set(signatures).size,5);
+});
+test('a flooded mask cannot block home boarding with less than two bar, including affordable boundary',()=>{
+ for(const air of [.01,.2,1.5,2,5]){
+  const p=freshProfile();p.tutorial=1;const r=startRun(p,'gardens','none'),s=new Simulation(p,r);r.p={...s.site.landmarks[0].p,y:s.site.surface+.25};r.air=air;r.maskFlood=.24;r.cargo=[{id:'safe',value:20,weight:1}];
+  s.updateAim();assert.equal(s.aim.kind,'boat');assert.equal(s.aim.valid,true);
+  tick(s,1.3,{interact:true});assert.ok(r.finished);assert.equal(r.rescued,false);assert.equal(r.cargo.length,1);
+ }
+});
+test('treatment cohorts never impersonate rubbish progress or grant accidental reef health',()=>{
+ const p=freshProfile();p.audience=160;p.reputation=8;
+ for(const site of Object.values(SITES))p.reefs[site.id].cleaned=site.worksites.debris.map((_,i)=>'debris-'+i);
+ p.reefs.gardens.cleaned.pop();const health=healthOfReef(p,'gardens');
+ p.reefs.gardens.cleaned.push('outbreak-2-0','outbreak-2-1','outbreak-2-2','debris-999');
+ assert.equal(clearedDebris(p,'gardens'),SITES.gardens.worksites.debris.length-1);assert.equal(healthOfReef(p,'gardens'),health);
+ const loaded=validateProfile(p);assert.equal(loaded.reefs.gardens.treatments.length,3);assert.ok(!loaded.reefs.gardens.cleaned.some(id=>id.startsWith('outbreak')));
+ assert.ok(acceptMilestoneOpportunity(loaded,'recognition-160').ok);loaded.published.push('turtle');assert.equal(milestoneObjectiveStatus(loaded,'recognition-160').complete,false);
+ loaded.reefs.gardens.cleaned.push('debris-'+(SITES.gardens.worksites.debris.length-1));assert.equal(milestoneObjectiveStatus(loaded,'recognition-160').complete,true);
+});
+test('mixed size sales select market fish before juveniles regardless of capture order and reject juvenile sales',async()=>{
+ const {allocateCatch}=await import('../build/game/expedition.js');
+ for(const offset of [0,1,2,3,4]){
+  const p=freshProfile(),r=startRun(p,'gardens','catch');r.cargo=Array.from({length:4},(_,i)=>({id:'adult-'+i,weight:1,value:20}));r.cargo.splice(offset,0,{id:'juvenile',weight:.2,value:0,size:.5});
+  const before=structuredClone(r.cargo),a=allocateCatch(r.cargo,{sell:4,eat:1,donate:0});assert.equal(a.eat[0].id,'juvenile');assert.equal(a.sell.length,4);assert.deepEqual(r.cargo,before);
+  const donations=allocateCatch(r.cargo,{sell:3,eat:1,donate:1});assert.equal(donations.eat[0].id,'juvenile');assert.equal(donations.donate.length,1);
+  assert.throws(()=>allocateCatch(r.cargo,{sell:5,eat:0,donate:0}),/market-size/);
+  new Simulation(p,r).finish(false);const out=settleRun(p,r,{sell:4,eat:1,donate:0},[]);assert.equal(out.sales,80);assert.equal(out.contract,45);
+ }
+});
 
 test('exhausted-reef settlement on any day commits once and permits a harbour preview', () => {
  for(const day of [1,2,3,4,6,21]) {
@@ -28,11 +81,12 @@ test('exhausted-reef settlement on any day commits once and permits a harbour pr
 test('chart labels stay bounded and separated for all maps, clustered long names and repeat layouts',()=>{
  for(const site of Object.values(SITES))for(const size of [360,600]){
   const labels=site.landmarks.map(l=>({name:l.name,x:size/2+l.p.x*size/(site.radius*2+20),y:size/2-l.p.z*size/(site.radius*2+20)}));
+  for(let i=0;i<3;i++)labels.push({name:'T'+(i+1)+' response',x:size*.45+i*6,y:size*.70+i*3});
   labels.push({name:'Long field station beside the offshore drop',x:size-8,y:size-12});
   labels.push({name:'Outfall survey',x:size-9,y:size-14});
   const packed=layoutChartLabels(labels,size,t=>t.length*8);
   assert.deepEqual(packed,layoutChartLabels(labels,size,t=>t.length*8));
-  packed.forEach((l,i)=>{assert.ok(l.left>=0&&l.top>=0&&l.left+l.width<=size&&l.top+l.height<=size-40);for(const other of packed.slice(i+1))assert.ok(l.left+l.width+4<=other.left||other.left+other.width+4<=l.left||l.top+l.height+4<=other.top||other.top+other.height+4<=l.top);});
+  packed.forEach((l,i)=>{assert.ok(!(l.x>l.left&&l.x<l.left+l.width&&l.y>l.top&&l.y<l.top+l.height),'label must not cover its own marker');assert.ok(l.left>=0&&l.top>=0&&l.left+l.width<=size&&l.top+l.height<=size-40);for(const other of packed.slice(i+1))assert.ok(l.left+l.width+4<=other.left||other.left+other.width+4<=l.left||l.top+l.height+4<=other.top||other.top+other.height+4<=l.top);});
  }
 });
 test('fullscreen is host and capability aware',()=>{
@@ -88,6 +142,29 @@ test('outbreak requires later progression and uses a release-safety-inject seque
  for(let i=0;i<90;i++)s.work(1/60,true);assert.equal(j.stage,1);assert.equal(j.done,false);for(let i=0;i<200;i++)s.work(1/60,true);assert.equal(j.done,false);
  s.work(1/60,false);assert.equal(j.stage,2);for(let i=0;i<110;i++)s.work(1/60,true);assert.equal(j.done,true);assert.equal(r.treated,1);
  for(let i=0;i<120;i++)s.work(1/60,true);assert.equal(r.treated,1);new Simulation(p,r).finish(false);const result=settleRun(p,r,{sell:0,eat:0,donate:0},[]);assert.equal(result.boatPay,14);
+});
+test('field reports visit one site per window, use varied terrain anchors and remember completed cohorts',()=>{
+ const p=freshProfile();p.reputation=100;p.totalRemoved=100;p.tutorial=1;const sites=[];
+ for(const day of [8,12,16,20,24]){
+  p.day=day;const report=outbreakPlan(p);sites.push(report.site);
+  for(const id of Object.keys(SITES)){p.active=null;const r=startRun(p,id,'none'),jobs=r.jobs.filter(j=>j.kind==='outbreak');assert.equal(jobs.length,id===report.site?3:0);for(const j of jobs)assert.ok(freePoint(j.p,SITES[id],.15));}
+  p.reefs[report.site].treatments=report.targets.map(t=>t.id);assert.equal(outbreakPlan(p).remaining,0);p.active=null;
+  assert.equal(startRun(p,report.site,'none').jobs.filter(j=>j.kind==='outbreak').length,0);
+ }
+ assert.equal(new Set(sites).size,5);const young=freshProfile();young.day=24;young.reputation=20;young.totalRemoved=18;assert.notEqual(outbreakPlan(young).site,'harbour','reports only ask for reachable sites');p.active=null;p.day=28;assert.equal(outbreakPlan(p).site,'gardens');assert.equal(outbreakPlan(p).remaining,3);assert.notDeepEqual(outbreakPlan(p).targets.map(t=>[t.x,t.z]),[[-6,-17],[23,19],[-27,27]]);
+ assert.equal(nextCharacterMoment(p).id,'outbreak-report');
+ const target=seaStar(true),ambient=seaStar(false);assert.ok(target.indices.length/3<3000);assert.ok(target.indices.length>ambient.indices.length);assert.ok(target.positions.every(Number.isFinite));
+});
+test('staged treatment safely yields to looking away, spear draw and scooter, then resumes without rewards',()=>{
+ const p=freshProfile();p.day=8;p.reputation=20;p.totalRemoved=18;p.tutorial=1;p.upgrades=['scooter'];
+ const r=startRun(p,'gardens','none'),s=new Simulation(p,r),j=r.jobs.find(j=>j.kind==='outbreak');
+ s.aim={kind:'job',id:j.id,distance:2,label:'target',hint:'',valid:true};for(let i=0;i<90;i++)s.work(1/60,true);assert.equal(r.treatmentTarget,j.id);s.work(1/60,false);assert.equal(j.stage,2);
+ s.aim={kind:'none',id:'',distance:0,label:'',hint:'',valid:false};s.work(1/60,false);assert.equal(r.treatmentTarget,undefined);assert.equal(j.stage,2);
+ s.aim={kind:'job',id:j.id,distance:2,label:'target',hint:'',valid:true};s.work(1/60,true);assert.equal(r.treatmentTarget,j.id);
+ r.charge=.4;s.work(1/60,true);assert.equal(r.treatmentTarget,undefined);assert.equal(j.done,false);r.charge=0;
+ s.work(1/60,true);s.toggleScooter();assert.equal(r.treatmentTarget,undefined);assert.equal(r.scooter,true);for(let i=0;i<120;i++)s.work(1/60,true);assert.equal(j.done,false);
+ s.toggleScooter();for(let i=0;i<110;i++)s.work(1/60,true);assert.equal(j.done,true);assert.equal(r.treated,1);assert.equal(r.treatmentTarget,undefined);assert.equal(validateProfile(p).active.treated,1);
+ s.finish(false);const result=settleRun(p,r,{sell:0,eat:0,donate:0},[]);assert.equal(result.treatmentPay,14);assert.match(receiptView(p,result),/1 marked outbreak targets treated/);
 });
 test('cooking each recipe persists once and offsets meals only when a fish is kept',()=>{
  for(const recipe of ['citrus','stew']){const p=freshProfile(),r=startRun(p,'gardens','none');r.cargo=[{id:'one',weight:1,value:20}];new Simulation(p,r).finish(false);completeCooking(p,recipe,[1,.8,.9]);assert.equal(validateProfile(p).pending.cooking.recipe,recipe);assert.throws(()=>completeCooking(p,recipe,[1,1,1]));assert.equal(outingExpenses(r,0)-outingExpenses(r,1),12);}

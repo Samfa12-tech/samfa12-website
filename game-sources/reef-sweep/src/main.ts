@@ -136,7 +136,8 @@ function begin() { if (profile.pending) {
     return;
 } const run = startRun(profile, ui.site, ui.order, profile.eventRegistrationDay===profile.day && profile.day % 3 === 0, ui.night);
     input.boatMode=false;run.boatDistance=travelledDistance;travelledDistance=0;boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');
-    playCandidate=!run.practice; sim = new Simulation(profile, run); renderer!.build(profile, run); visualDive = true; setPause(false); ui.play(); void audio.start(); canvas.focus(); persist(); if(run.site==='passage'&&run.siteRevision===2&&recordCharacterFlag(profile,'passage-arrival')){persist();showMoment({id:'passage-arrival',speaker:'Nia · Harbour pilot',title:'Take the sheltered route.',text:'Your buoy is on the western shelf. Follow the lee wall to the nursery, then cross the tide race towards Cathedral arch. The two flow gauges mark the research route. There is open water above if the current feels too strong.'},true);}
+    playCandidate=!run.practice; sim = new Simulation(profile, run); renderer!.build(profile, run); visualDive = true; setPause(false); ui.play(); void audio.start(); canvas.focus(); persist(); if(run.site==='passage'&&(run.siteRevision??1)>=2&&recordCharacterFlag(profile,'passage-arrival')){persist();showMoment({id:'passage-arrival',speaker:'Nia · Harbour pilot',title:'Take the sheltered route.',text:'Your buoy is on the western shelf. Follow the lee wall to the nursery, then cross the tide race towards Cathedral arch. The two flow gauges mark the research route. There is open water above if the current feels too strong.'},true);}
+    if(run.jobs.some(j=>j.kind==='outbreak')&&recordCharacterFlag(profile,'outbreak-field-guide')){persist();showMoment({id:'outbreak-field-guide',speaker:'Jo — Lantern Bay Trust',title:'A different kind of reef care.',text:'A crown-of-thorns outbreak has been marked on your chart: amber triangles, three targets at most. Look for the purple many-armed spiny stars beside pale feeding scars. The orange five-arm stars are ordinary reef life. Stow your catch, approach slowly and hold Interact to position the field injector. Release to unlock its safety, then hold again to press the injector. Each logged treatment earns $14 and 1 reputation; no catch-tube space needed. This is optional work alongside your usual dive. Keep enough air to get home.'},true);}
     if(!paused)input.capture();
     ui.toast(run.night?'Moonlit dive. Your head torch is on; give wildlife room.':profile.totalRemoved === 0 ? 'Welcome to Lantern Bay. The first lionfish is below and ahead. J opens your chart.' : 'Back in the water. The reef remembers your last visit.'); }
 function review() { if (!profile.pending)
@@ -464,7 +465,7 @@ function frame(now: number) {
         if (watchRaised && !input.touchMode) document.getElementById('controls-hint')!.textContent = 'Watch raised · Movement and looking remain available · Lower watch before drawing the spear';
         updateWatchReadout();
         const mask=document.getElementById('mask-water')!;mask.style.setProperty('--flood',String(sim.run.maskFlood??0));mask.style.setProperty('--droplets',String(sim.run.droplets??0));
-        document.getElementById('clear-mask')!.hidden=!(sim.run.maskFlood&&sim.run.maskFlood>0);
+        const clearMask=document.getElementById('clear-mask') as HTMLButtonElement;clearMask.hidden=!(sim.run.maskFlood&&sim.run.maskFlood>0);clearMask.disabled=sim.run.air<2;clearMask.title=sim.run.air<2?'Clearing needs 2 bar. You can still board at your home buoy.':'Clear mask — uses 2 bar air';
         const mark = renderer!.homeMarker(), el = document.getElementById('home-marker')!;
         el.style.left = mark.x + '%';
         el.style.top = mark.y + '%';

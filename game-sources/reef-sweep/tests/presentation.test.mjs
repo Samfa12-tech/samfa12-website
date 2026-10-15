@@ -25,14 +25,14 @@ test('each new site has a different visible seabed, cached independently',()=>{
   }
 });
 test('authored biome obstacles have finite rendered meshes within a bounded budget',()=>{
-  for(const site of Object.values(SITES).slice(2)) for(const r of site.rocks.filter(r=>!r.hidden)) {
+  for(const site of Object.values(SITES).slice(2)) for(const r of site.rocks.filter(r=>!r.hidden&&!r.suspended)) {
     const g=siteObstacleGeometry(r,site),count=g.positions.length/3;
     assert.ok(count>0&&count<1800);assert.ok(g.positions.every(Number.isFinite));
     assert.ok(g.indices.every(i=>i>=0&&i<count));
   }
 });
 test('new trees, cliffs and cargo boxes meet their own local seabed',()=>{
-  for(const site of Object.values(SITES).slice(2))for(const rock of site.rocks.filter(r=>!r.hidden)){
+  for(const site of Object.values(SITES).slice(2))for(const rock of site.rocks.filter(r=>!r.hidden&&!r.suspended)){
     const g=siteObstacleGeometry(rock,site),ys=g.positions.filter((n,i)=>i%3===1);
     assert.ok(Math.min(...ys)<=floorHeight(rock.p.x,rock.p.z,site)-.03,`${site.id}/${rock.id} floats above sand`);
   }

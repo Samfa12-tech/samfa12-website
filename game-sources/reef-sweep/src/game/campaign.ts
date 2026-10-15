@@ -1,3 +1,4 @@
+import { clearedDebris, debrisIds } from './data.js';
 import { fishSize } from './expedition.js';
 import type { CampaignState, Profile, ReefProgress, Run, SiteId } from './types.js';
 import { SITES, UPGRADES, reefFishHomes, upgradeLevel } from './data.js';
@@ -206,7 +207,7 @@ export const CAREER_MILESTONES: readonly CareerMilestone[] = [
     { id: 'recognition-300', audience: 300, reputation: 17, title: 'Lantern Bay Conservation Voice', objective: 'Visit a reef on a later day and publish a new highlight.' }
 ];
 
-function allDebrisCleared(profile:Profile){return Object.values(SITES).every(site=>profile.reefs[site.id].cleaned.length>=(site.worksites?.debris.length??0));}
+function allDebrisCleared(profile:Profile){return Object.values(SITES).every(site=>clearedDebris(profile,site.id)===debrisIds(site.id).length);}
 function recognitionDescription(profile:Profile,milestone:CareerMilestone){return milestone.id==='recognition-160'&&allDebrisCleared(profile)?'The debris is already cleared. Publish a peaceful wildlife highlight to show what that work made possible.':milestone.objective;}
 
 function opportunityMissing(profile: Profile, milestone: CareerMilestone) {

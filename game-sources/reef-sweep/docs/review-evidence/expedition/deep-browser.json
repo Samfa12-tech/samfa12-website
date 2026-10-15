@@ -110,12 +110,12 @@
       "name": "boat travelled under keyboard input",
       "pass": true,
       "detail": {
-        "x": 3.9105384842558517,
-        "z": 9.249293297387702,
+        "x": 3.906335002762507,
+        "z": 9.239351128717423,
         "yaw": 0.4,
-        "speed": 10.693550716768286,
-        "distance": 10.041998692389242,
-        "time": 1.5622999999999945
+        "speed": 10.690080295047807,
+        "distance": 10.031204435836173,
+        "time": 1.5611999999999973
       }
     },
     {
@@ -179,13 +179,13 @@
     },
     "balanced": {
       "medianMs": 7.6,
-      "p95Ms": 8.4,
+      "p95Ms": 8.5,
       "frames": 160,
       "scope": "short desktop Chrome boat sample; not sustained phone/thermal proof"
     },
     "low": {
       "medianMs": 7.6,
-      "p95Ms": 8.3,
+      "p95Ms": 8.6,
       "frames": 160,
       "scope": "short desktop Chrome boat sample; not sustained phone/thermal proof"
     }

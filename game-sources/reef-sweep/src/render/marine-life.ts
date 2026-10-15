@@ -1,6 +1,9 @@
+import { crownOfThorns } from './assets/crown-of-thorns.js';
 import { Geometry, rgb, tint } from './geometry.js';
 import { vec } from '../game/math.js';
-export function seaStar(outbreak=false) {
+export function seaStar(outbreak=false,treated=false) {
+ if(outbreak){const g=Object.assign(new Geometry(),crownOfThorns);if(treated)g.colors=g.colors.map((v,i)=>i%4===3?v:v*.35+[.37,.48,.42][i%4]);return g;}
+
  const g=new Geometry(), colour=rgb(outbreak?'#804a82':'#d99a69'), arms=outbreak?13:5;
  g.ellipsoid(vec(0,.065,0),vec(outbreak?.38:.16,.11,outbreak?.38:.16),colour,14,7);
  for(let i=0;i<arms;i++){const a=i/arms*Math.PI*2,reach=outbreak?.70:.55;

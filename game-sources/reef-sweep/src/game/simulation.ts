@@ -1,10 +1,10 @@
-import { fishSize, restaurantValue, outingExpenses, travelCosts, heldCatches, CHARMS, discoverCharm, outbreakAvailable } from './expedition.js';
+import { outbreakPlan, allocateCatch, fishSize, restaurantValue, outingExpenses, travelCosts, heldCatches, CHARMS, discoverCharm } from './expedition.js';
 import { lessonActive, advanceLesson, startLesson } from './tutorial.js';
 import { contractOptions, researchEligibility, recordSurveyStation, surveyPayout, researchSettlement, completeResearch, normalizeCampaign, claimMilestone, milestoneStatus } from './campaign.js';
 import { contractProgress, eventTheme, eventScore, eventReward, filletGrade } from './contracts.js';
 import { scheduleBoat, updateBoat, boatAim, clearBoat } from './boat-encounters.js';
 import type { Profile, Run, SiteId, InputFrame, GameEvent, Aim, Vec, Job } from './types.js';
-import { SITES, reefFishHomes, floorHeight, currentAt, groundPoint, capacity, freePoint, siteUnlocked, upgradeLevel, airCapacity, spearReach, wreckAnchor, pipeAnchor, siteForRun } from './data.js';
+import { SITES, workPoint, reefFishHomes, floorHeight, currentAt, groundPoint, capacity, freePoint, siteUnlocked, upgradeLevel, airCapacity, spearReach, wreckAnchor, pipeAnchor, siteForRun } from './data.js';
 import { vec, rng, clamp, distance, sub, norm, scale, add, direction, raySphere, rayEllipsoid, dot, angleLerp, length } from './math.js';
 import { homeRoute, pathLength, clearSegment } from './navigation.js';
 import { clearFishPosition } from './fish-motion.js';
@@ -22,7 +22,7 @@ export function startRun(p: Profile, id: SiteId, order: Run['order'] = 'catch', 
     const homes = reefFishHomes(site, site.seed);
     const fish = homes.map((home, i) => { const fid = `fish-${i}`; const returned = reef.visits >= 4 && i < 4 ? `return-${Math.floor(reef.visits / 4)}-${i}` : fid; const alive = !reef.removed.includes(returned); const size = fishSize(site.seed, i); return { id: returned, p: { ...home }, home: { ...home }, size, weight: Math.round((.16 + size ** 3 * .64) * 100) / 100, alive, phase: random() * 6.28, flee: 0 }; });
     for(const f of fish) f.p=clearFishPosition(site,f.p,f.size*1.5+.15);
-    const jobAt = (jobId: string, kind: Job['kind'], x: number, z: number): Job => ({ id: jobId, kind, p: groundPoint(x, z, kind === 'survey' ? 2.5 : .5, site), done: kind === 'debris' ? reef.cleaned.includes(jobId) : kind === 'coral' ? jobId in reef.restored : false, progress: 0, stage: kind === 'coral' && jobId in reef.restored ? clamp(p.day - reef.restored[jobId], 1, 5) : 0 });
+    const jobAt = (jobId: string, kind: Job['kind'], x: number, z: number): Job => ({ id: jobId, kind, p: workPoint(x, z, kind === 'survey' ? 2.5 : kind==='outbreak'?.2:.5, site), done: kind === 'debris' ? reef.cleaned.includes(jobId) : kind === 'coral' ? jobId in reef.restored : false, progress: 0, stage: kind === 'coral' && jobId in reef.restored ? clamp(p.day - reef.restored[jobId], 1, 5) : 0 });
     const worksites = site.worksites!;
     const jobs: Job[] = [
         ...worksites.debris.map((point, i) => jobAt(`debris-${i}`, 'debris', point.x, point.z)),
@@ -30,7 +30,7 @@ export function startRun(p: Profile, id: SiteId, order: Run['order'] = 'catch', 
         ...worksites.surveys.map((point, i) => jobAt(`survey-${i}`, 'survey', point.x, point.z))
     ];
     for(const charm of CHARMS.filter(c=>c.site===id&&!p.charms?.includes(c.id))) jobs.push({...jobAt(charm.id,'charm',charm.p.x,charm.p.z),done:false});
-    if(outbreakAvailable(p))for(let i=0;i<3;i++){const jid=`outbreak-${Math.floor(p.day/4)}-${i}`;if(!reef.cleaned.includes(jid))jobs.push(jobAt(jid,'outbreak',worksites.coral[i].x+3,worksites.coral[i].z+4));}
+    const response=outbreakPlan(p);if(response?.site===id)for(const target of response.targets)if(!reef.treatments?.includes(target.id))jobs.push(jobAt(target.id,'outbreak',target.x,target.z));
     const wreck=wreckAnchor(site), pipe=pipeAnchor(site);
     jobs.push(id==='passage'?{...jobAt('survey-1','survey',0,34),p:groundPoint(0,34,12,site)}:jobAt('survey-1','survey',wreck.x-5,wreck.z),jobAt('survey-2','survey',pipe.x,pipe.z-7));
     const animal = (animalId: Run['animals'][number]['id'], point: Vec) => ({ id: animalId, p: { ...point }, home: { ...point }, heading: 0, state: 'roam' as const, timer: 0, cooldown: 0, phase: random() * 6.28 });
@@ -43,7 +43,7 @@ export function startRun(p: Profile, id: SiteId, order: Run['order'] = 'catch', 
                 : id === 'cenote'
                     ? [animal('marlow', groundPoint(-10, 2, 5, site)), animal('moray', groundPoint(12, 8, 4, site)), animal('turtle', groundPoint(0, -23, 4, site)), animal('ray', groundPoint(7, 28, 4, site))]
                     : [animal('marlow', groundPoint(-21, 4, 4, site)), animal('moray', groundPoint(-7, 18, 3, site)), animal('turtle', groundPoint(4, -20, 4, site)), animal('ray', groundPoint(-12, 28, 3, site))];
-    const run: Run = { id: `${p.slot}-${p.day}-${seed}`, site: id, siteRevision: 2, recoveryStage, seed, day: p.day, time: 0, p: { ...site.entry }, velocity: vec(), yaw: .08, pitch: .12, air: 200, health: 100, battery: 100, cargo: [], exposed: null, fish, jobs, animals: wildlife.filter(a=>a.id!=='marlow'||id==='gardens'), expedition:true, clips: [], removed: 0, cleaned: 0, restored: 0, surveyed: 0, nativeHits: 0, coralHits: 0, stolen: 0, distance: 0, fragments: p.upgrades.includes('kit') ? 5 : 3, charge: 0, strikeCooldown: 0, hurtCooldown: 0, interaction: 0, interactionId: '', scooter: false, light: false, returnWarn: false, lowWarn: false, finished: false, rescued: false, order, event, notices: [], seen: [], cooldowns: {} };
+    const run: Run = { id: `${p.slot}-${p.day}-${seed}`, site: id, siteRevision: 3, recoveryStage, seed, day: p.day, time: 0, p: { ...site.entry }, velocity: vec(), yaw: .08, pitch: .12, air: 200, health: 100, battery: 100, cargo: [], exposed: null, fish, jobs, animals: wildlife.filter(a=>a.id!=='marlow'||id==='gardens'), expedition:true, clips: [], removed: 0, cleaned: 0, restored: 0, surveyed: 0, nativeHits: 0, coralHits: 0, stolen: 0, distance: 0, fragments: p.upgrades.includes('kit') ? 5 : 3, charge: 0, strikeCooldown: 0, hurtCooldown: 0, interaction: 0, interactionId: '', scooter: false, light: false, returnWarn: false, lowWarn: false, finished: false, rescued: false, order, event, notices: [], seen: [], cooldowns: {} };
     run.air=airCapacity(p);run.fragments=3+upgradeLevel(p,'kit')*2;run.night=night;run.light=night;
     if(night)run.animals.push(animal('shark',groundPoint(wreck.x+10,wreck.z-12,6,site)));
     run.researchEligible=researchEligibility(p).eligible;
@@ -86,6 +86,7 @@ export class Simulation {
         r.pitch = clamp(r.pitch + input.lookY, -1.28, 1.28);
         if (input.cancelDraw)
             r.charge = 0;
+        if(input.draw)delete r.treatmentTarget;
         if (input.draw && heldCatches(r).length < 2 && !r.transfer && !r.scooter && r.strikeCooldown === 0)
             r.charge = clamp(r.charge + dt / Math.max(.4,.8-upgradeLevel(this.profile,'spear')*.08), 0, 1);
         if (input.release && r.charge > 0) {
@@ -191,6 +192,7 @@ export class Simulation {
         t = Math.min(t, rayEllipsoid(o, d, rock.p, rock.s)); return t; }
     strike(charge: number) {
         const r = this.run;
+        delete r.treatmentTarget;
         if (r.cargo.length + heldCatches(r).length >= capacity(this.profile)) {
             this.notice('Collection tube full. Return to the mooring before taking another fish.', 'capacity', 5);
             return;
@@ -261,7 +263,6 @@ export class Simulation {
             return;
         }
         if(heldAim)this.aim=heldAim;
-        if((r.maskFlood??0)>.01&&!r.exposed){this.aim={kind:'job',id:'clear-mask',distance:0,label:'Mask partly flooded',hint:'Hold Interact to clear · 2 bar air',valid:r.air>2};return;}
         const boat = this.site.landmarks[0].p;
         if (!r.exposed && Math.hypot(r.p.x - boat.x, r.p.z - boat.z) < 7) {
             if (r.p.y > this.site.surface - 4) {
@@ -270,6 +271,7 @@ export class Simulation {
             }
             this.aim = { kind: 'boat', id: 'ascent', distance: distance(r.p, boat), label: 'Home buoy overhead', hint: 'Ascend beside the mooring to board', valid: false };
         }
+        if((r.maskFlood??0)>.01&&!r.exposed){this.aim={kind:'job',id:'clear-mask',distance:0,label:'Mask partly flooded',hint:'Hold Interact to clear · 2 bar air',valid:r.air>=2};return;}
         const overhead=r.exposed?null:boatAim(r,this.site,clearSegment);if(overhead){this.aim=overhead;return;}
         let best = Infinity;
         for (const j of r.jobs) {
@@ -281,7 +283,7 @@ export class Simulation {
             const d = distance(r.p, j.p), alignment = dot(norm(sub(j.p, r.p)), dir);
             if (d < 4 && alignment > .65 && clearSegment(r.p, j.p, this.site) && d < best) {
                 best = d;
-                this.aim = { kind: 'job', id: j.id, distance: d, label: j.kind === 'charm' ? CHARMS.find(c=>c.id===j.id)!.name : j.kind === 'outbreak' ? 'Crown-of-thorns outbreak target' : j.kind === 'debris' ? 'Discarded fishing gear' : j.kind === 'coral' ? 'Nursery restoration plot' : 'Reef survey station', hint: j.kind === 'charm' ? 'Hold Interact to recover keepsake' : j.kind === 'outbreak' ? (j.stage===1?'Release Interact to unlock injector safety':j.stage===2?'Hold Interact to apply treatment':'Hold Interact to position the treatment injector') : j.kind === 'debris' ? 'Hold Interact to remove' : j.kind === 'coral' ? (r.fragments ? 'Hold Interact to plant a fragment' : 'No nursery fragments remaining') : ((r.researchEligible ?? researchEligibility(this.profile).eligible)?(r.site==='passage'&&r.siteRevision===2&&['survey-0','survey-1'].includes(j.id)?'Hold Interact to read the flow gauge':'Hold Interact to record a survey'):'Research unlocks after a university invitation at 8 reputation'), valid: (j.kind !== 'coral' || r.fragments > 0) && (j.kind!=='survey'|| (r.researchEligible ?? researchEligibility(this.profile).eligible)) };
+                this.aim = { kind: 'job', id: j.id, distance: d, label: j.kind === 'charm' ? CHARMS.find(c=>c.id===j.id)!.name : j.kind === 'outbreak' ? 'Crown-of-thorns outbreak target' : j.kind === 'debris' ? 'Discarded fishing gear' : j.kind === 'coral' ? 'Nursery restoration plot' : 'Reef survey station', hint: j.kind === 'charm' ? 'Hold Interact to recover keepsake' : j.kind === 'outbreak' ? (r.scooter?'Stow scooter to use the field injector':j.stage===1?'Release Interact to unlock injector safety':j.stage===2?'Hold Interact to press injector — keep a steady aim':'Hold Interact to position the treatment injector') : j.kind === 'debris' ? 'Hold Interact to remove' : j.kind === 'coral' ? (r.fragments ? 'Hold Interact to plant a fragment' : 'No nursery fragments remaining') : ((r.researchEligible ?? researchEligibility(this.profile).eligible)?(r.site==='passage'&&(r.siteRevision??1)>=2&&['survey-0','survey-1'].includes(j.id)?'Hold Interact to read the flow gauge':'Hold Interact to record a survey'):'Research unlocks after a university invitation at 8 reputation'), valid: (j.kind!=='outbreak'||!r.scooter) && (j.kind !== 'coral' || r.fragments > 0) && (j.kind!=='survey'|| (r.researchEligible ?? researchEligibility(this.profile).eligible)) };
             }
         }
         for (const f of r.fish)
@@ -297,6 +299,9 @@ export class Simulation {
     work(dt: number, interact: boolean) {
         const r = this.run, a = this.aim;
         const treatment=r.jobs.find(j=>j.id===a.id&&j.kind==='outbreak'&&!j.done);
+        if(!treatment||r.scooter||r.charge>.01)delete r.treatmentTarget;
+        if(treatment&&(r.scooter||r.charge>.01)){r.interaction=0;return;}
+        if(treatment&&interact)r.treatmentTarget=treatment.id;
         if(treatment?.stage===1&&!interact){treatment.stage=2;this.notice('Safety released. Hold Interact again to inject the marked target.');this.emit('save');}
         if(treatment?.stage===1){r.interaction=0;return;}
         if(treatment&&length(r.velocity)>1.2){r.interaction=0;this.notice('Slow down to keep the injector positioned.','injector-steady',4);return;}
@@ -336,7 +341,7 @@ export class Simulation {
         j.done = true;
         const reef = this.profile.reefs[r.site];
         if(j.kind==='charm'){discoverCharm(this.profile,j.id);this.notice('Keepsake found: '+CHARMS.find(c=>c.id===j.id)!.name);this.highlight('keepsake-'+r.site,'A small treasure.',CHARMS.find(c=>c.id===j.id)!.story,78);}
-        if(j.kind==='outbreak'){reef.cleaned.push(j.id);r.treated=(r.treated??0)+1;this.profile.reputation++;this.notice('Treatment logged. $14 reef-care bounty at settlement.');this.highlight('outbreak','A different kind of reef care.','A marked crown-of-thorns outbreak treated with the field injector.',80);}
+        if(j.kind==='outbreak'){delete r.treatmentTarget;(reef.treatments??=[]).push(j.id);r.treated=(r.treated??0)+1;this.profile.reputation++;r.cooldowns['treatment-feedback']=r.time;this.notice(`Treatment logged — ${r.jobs.filter(j=>j.kind==='outbreak'&&!j.done).length} marked targets remain. $14 bounty + 1 reputation earned.`);this.highlight('outbreak','A different kind of reef care.','A marked crown-of-thorns outbreak treated with the field injector.',80);}
         if (j.kind === 'debris') {
             reef.cleaned.push(j.id);
             r.cleaned++;
@@ -514,7 +519,8 @@ export class Simulation {
             }
         }
     }
-    toggleScooter() { const r = this.run; if (!this.profile.upgrades.includes('scooter')) {
+    toggleScooter() {
+        delete this.run.treatmentTarget; const r = this.run; if (!this.profile.upgrades.includes('scooter')) {
         this.notice('The Minnow scooter is waiting at the equipment shop.');
         return;
     } if (r.exposed) {
@@ -528,6 +534,8 @@ export class Simulation {
         return; r.finished = true; r.rescued = rescued; r.charge = 0; r.interaction = 0; this.profile.active = null; this.profile.pending = r; this.events.push({ type: 'finish' }); }
 }
 export interface Settlement {
+    treatments: number;
+    treatmentPay: number;
     towingFuel:number;boatFuel:number;
     earned: number;
     expenses: number;
@@ -559,8 +567,9 @@ export function settleRun(p: Profile, run: Run, allocation: {
     const n = allocation.sell + allocation.eat + allocation.donate;
     if (![allocation.sell, allocation.eat, allocation.donate].every(x => Number.isInteger(x) && x >= 0) || n !== available)
         throw Error('Allocate each landed fish exactly once.');
+    const allocated=allocateCatch(run.rescued?[]:run.cargo,allocation);
     const selected = run.clips.filter(c => chosen.includes(c.id)).slice(0, 2);
-    const sales = run.cargo.slice(0, allocation.sell).reduce((s, c) => s + c.value, 0);
+    const sales = allocated.sell.reduce((s, c) => s + c.value, 0);
     const filletBonus = Math.round(sales * (run.filletQuality??0)*.3);
     // Save migration supplies researchEligible for old research outings. That
     // access flag must not replace their already-promised financial terms.
@@ -569,14 +578,14 @@ export function settleRun(p: Profile, run: Run, allocation: {
     let contract=0;
     let contractReason=run.order==='none'?'Free exploration: no contract selected.':run.rescued?'Rescue keeps ecological work, but contract bonuses need a safe return.':progress.ready?'Objective complete.':`${progress.label}: ${progress.amount}/${progress.target} completed.`;
     if(!run.rescued){
-        if(run.order==='catch'&&run.cargo.slice(0,allocation.sell).filter(c=>c.value>0).length>=4)contract=legacy?65:45;
-        if(run.order==='catch'&&run.cargo.slice(0,allocation.sell).filter(c=>c.value>0).length<4)contractReason=`${allocation.sell} fish sold; the Kitchen order needs 4. Secured fish donated or kept as meals do not fill a sale order.`;
+        if(run.order==='catch'&&allocated.sell.length>=4)contract=legacy?65:45;
+        if(run.order==='catch'&&allocated.sell.length<4)contractReason=`${allocated.sell.length} market fish sold; the Kitchen order needs 4. Secured fish donated or kept as meals do not fill a sale order.`;
         if(run.order==='cleanup'&&run.cleaned>=2)contract=legacy?70:40;
         if(run.order==='restore'&&run.restored>=2)contract=legacy?80:45;
     }
     const survey=run.order==='research'?research:surveyPayout(run,p.reefs[run.site]);
     let researchTopUp=run.order==='research'?(legacy&&!run.rescued&&run.surveyed>=2?(run.night?180:140):research.assignmentTopUp):0;
-    if(run.order==='research'&&run.site==='passage'&&run.siteRevision===2&&!progress.ready){researchTopUp=0;contractReason='Read both the lee-shelf and Cathedral flow gauges to complete this route assignment.';}
+    if(run.order==='research'&&run.site==='passage'&&(run.siteRevision??1)>=2&&!progress.ready){researchTopUp=0;contractReason='Read both the lee-shelf and Cathedral flow gauges to complete this route assignment.';}
     else if(run.order==='research')contractReason=legacy?'The terms of your saved research outing are honoured for this settlement. Future assignments use the new inclusive rates.':research.reason;
     if(run.order==='research'&&researchTopUp>0)completeResearch(p,research);
     const campaign=p.campaign ?? (p.campaign=normalizeCampaign(p));
@@ -632,5 +641,5 @@ export function settleRun(p: Profile, run: Run, allocation: {
     p.pending = null;
     p.active = null;
     p.lastReport = run.rescued ? 'A difficult outing. The reef work remains; tomorrow is another dive.' : `${run.removed} lionfish removed · ${run.cleaned} cleanup jobs · ${run.restored} corals planted.`;
-    return { towingFuel:fuel.tow,boatFuel:fuel.boat,earned, expenses, debtPaid, followers, reputation: rep, contract, eventPrize, sponsor, score, filletBonus, sales,cleanPay,restorationPay,surveyPay,researchTopUp,donationPay,starterGrant,boatPay,contractReason,eventReason,filletGrade:filletGrade(run.filletQuality??0),recognition };
+    return { treatments:run.treated??0,treatmentPay:(run.treated??0)*14,towingFuel:fuel.tow,boatFuel:fuel.boat,earned, expenses, debtPaid, followers, reputation: rep, contract, eventPrize, sponsor, score, filletBonus, sales,cleanPay,restorationPay,surveyPay,researchTopUp,donationPay,starterGrant,boatPay,contractReason,eventReason,filletGrade:filletGrade(run.filletQuality??0),recognition };
 }

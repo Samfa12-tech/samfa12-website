@@ -18,8 +18,8 @@
       "sha256": "a5ce75ff6a93c618961d5af3dc66c4cc80aff8e9b609acad1aa3b4c2c37afc2a"
     },
     "game.js": {
-      "bytes": 3033752,
-      "sha256": "500d019766bdd5fa8910261f7230c675c07d0c3fe2a702b6ad68ba1ef2844323"
+      "bytes": 3769840,
+      "sha256": "790ccbf305100a12715a569108098562825d9aec8397d879e7ef86496005df19"
     },
     "icon-192.png": {
       "bytes": 83333,
@@ -38,8 +38,8 @@
       "sha256": "63f72668f8dbadbf70b5b843d4c965d6a08b36154a20cec7268e8151d10b0b17"
     },
     "style.css": {
-      "bytes": 35164,
-      "sha256": "b66017dd6fe562d767f238a1990de4ca7edb1f99f2e28de581356bc3d251fab2"
+      "bytes": 38529,
+      "sha256": "91699c8b8780e75416d698ed145564b8a94aff28efde1a430c465d26febd5d86"
     }
   }
 }

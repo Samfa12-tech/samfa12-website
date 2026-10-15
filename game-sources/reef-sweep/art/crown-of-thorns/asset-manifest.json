@@ -1,0 +1,9 @@
+{
+  "origin": "Samfa12 original Blender authoring",
+  "triangles": 2652,
+  "draws": 1,
+  "textures": 0,
+  "maximumRadiusMetres": 0.8,
+  "collision": "Ambient job target; no solid player collider",
+  "ordinarySeaStars": "Separate orange five-arm ambient mesh, never a treatment target"
+}

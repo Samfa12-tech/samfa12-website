@@ -58,3 +58,23 @@ Parent progress messaging was attempted once via the available app tool, but the
 Resolved review issues include depleted-site settlement preview, near-buoy catch priority, legacy full tube, dense chart labels, camera-plane tube intrusion, coherent joined collection coordinates, supported preparation shading, recipe return stack, cursor-safe boat controls, and real injector safety release. Keyboard/touch capture tests use state-based waits; idle debug ticks are not presented as continuous held input.
 
 Physical Android, iPhone Safari, sustained thermal play, subjective natural campaign pacing and extended listening remain unverified. Optional sand puffs were deliberately omitted under the user's quality condition. No known serious regression remains in exercised paths. High underwater lighting/shadows, offline engine/music, old saves, disabled analytics and existing game identity are preserved.
+
+## Revised parent-review candidate
+
+All requested review corrections are implemented; publication remains held for parent review.
+
+- Material terrain work in revision three, five simulation-swum exploration routes and preserved old active/pending templates. Target placement projects deterministically onto exposed seabed; return guidance checks lateral/vertical water paths around the gallery bridge. Habitat colonies are individually composed rather than repeated triples.
+- Six mixed-direction swells shared with hull probes, advected noise wind detail and distance fading replace corrugated ocean striping. Keyboard driving video and three frames retained.
+- Flooded-mask boarding wins at home even below 2 bar; unaffordable touch clear is disabled.
+- Treatment cohorts have separate persisted history; authoritative debris IDs drive cleanup recognition and health. Mixed IDs cannot impersonate cleared trash.
+- Restaurant sales take market fish in value order, meals take juveniles first, donations take the remainder; count UI, preview and settlement agree and cannot sell juveniles.
+- First field-response briefing/guide, one reachable site per window, three spaced authored targets, distinct labelled map glyphs/remaining count, separate bounty/tally, interruption-safe tools, moving plunger and persistent quiet completion. Editable 2,652-triangle Blender crown-of-thorns replaces the old disc/spike mesh.
+- Whole activity fits short landscape for scaling/filleting/cooking; direct manipulation complements accessible buttons, tool strokes/loose scales/fillets give feedback, animated recipe-specific food replaces the empty pan/bar presentation.
+
+Design judgement: the response now supplies a short, optional alternative to spear hunting, with route decisions and no catch-tube congestion, rather than an unexplained task list on all five reefs. Three treatments cover a basic Gardens trip but do not stack a cleanup contract/health windfall. Preparation stays optional and forgiving: every attempted cut counts, quality adds a modest bonus, and the player can return to allocation at any time. Boat travel to the closest buoy was exercised with real keyboard propulsion/braking. Longer campaign pacing, sustained phone performance and subjective human fun still require owner play.
+
+Revised validation receipt: 188/188 automated tests; 8/8 package and 2/2 Wavedash package checks; existing browser suites 16/16 and 29/29; correction matrix 21/21; preparation/response UI review 34/34; zero page errors. Typecheck/build, source/host ten-file identity, content reproduction, SEO, catalogue/site, 56 content tests and 24 game-start checks and 6 analytics tests pass. High short desktop boat sample remains median 7.6 ms / p95 8.4 ms over 160 frames (not phone/thermal proof). See revised-validation.json and the review/fun-review evidence subfolders.
+
+QA fixture corrections: hide the debug stats overlay before native touch hit testing (it intercepted the button in an early probe), replace the existing local video artifact on rerun, allow the timed cooking window adequate observation time under loaded headless rendering, and clear masks away from the home buoy when testing the separate clear action. No failed intermediate run is counted as a passing suite.
+
+Final chart refinement prevents packed text boxes from covering their own marker centres and strongly prefers space clear of all marker glyphs. Five active response charts (wide/portrait) pass; final examples are in review/*-response-chart-*.png. The response-chart image in fun-review was recaptured with the final packing using an equivalent late-career active-response fixture. All 188 automated cases still pass after this change.
