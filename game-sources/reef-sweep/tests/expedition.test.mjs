@@ -9,7 +9,7 @@ import { fishSize, restaurantValue, travelCosts, outingExpenses, heldCatches, CH
 import { EMPTY_INPUT } from '../build/game/simulation.js';
 import { contractOptions } from '../build/game/campaign.js';
 import { skiffGeometry } from '../build/render/boat-travel.js';
-import { collectionMotion } from '../build/render/collection-motion.js';
+import { collectionMotion, CollectionRig } from '../build/render/collection-motion.js';
 import { EXPLORATION_ROUTES } from '../build/game/site-authorship.js';
 import { siteForRun, floorHeight, freePoint, siteTerrainKey, healthOfReef, clearedDebris } from '../build/game/data.js';
 import { clearSegment, homeRoute } from '../build/game/navigation.js';
@@ -17,6 +17,7 @@ import { acceptMilestoneOpportunity, milestoneObjectiveStatus } from '../build/g
 import { outbreakPlan } from '../build/game/expedition.js';
 import { nextCharacterMoment, receiptView } from '../build/ui/campaign-ui.js';
 import { seaStar } from '../build/render/marine-life.js';
+import { equipment } from '../build/render/geometry.js';
 const tick=(s,t,input={})=>{for(let i=0;i<t*60;i++)s.update(1/60,{...EMPTY_INPUT,...input});};
 
 test('five new terrain layouts have open authored exploration routes, distinct relief and revision-safe saves',()=>{
@@ -174,12 +175,23 @@ test('boat steering and stopping govern all five buoy arrivals; analytic swell i
  for(const [id,point] of Object.entries(BAY_SITES)){Object.assign(b,{x:point.x,z:point.z,speed:8});assert.equal(arrivalSite(b),null);b.speed=0;assert.equal(arrivalSite(b),id);}
  const boat=skiffGeometry();assert.ok(boat.indices.length/3<10000&&boat.indices.length/3>4000);assert.ok(boat.positions.every(Number.isFinite));
 });
-test('collection motion joins insertion to withdrawal continuously and keeps the tube in portrait',()=>{
+test('collection motion joins insertion to withdrawal continuously and raises the portrait tube before insertion',()=>{
  const p=freshProfile(),r=startRun(p,'gardens','none');r.exposed={id:'f',weight:1,value:20};r.interactionId='held';r.interaction=1;
  const inserted=collectionMotion(r),portrait=collectionMotion(r,.46);assert.ok(portrait.mouth.x>inserted.mouth.x);assert.equal(inserted.insert,.8);
  r.transfer={catches:[r.exposed],started:r.time};r.exposed=null;
  const committed=collectionMotion(r);assert.deepEqual(committed.spear,inserted.spear);assert.equal(committed.approach,inserted.approach);
  r.time+=1.35;const withdrawn=collectionMotion(r);assert.ok(Math.hypot(...Object.values(withdrawn.spear))<1e-8);
+});
+test('portrait rig stows the entire tube below view, raises before approaching and eases cancelled holds and rotation',()=>{
+ const p=freshProfile(),r=startRun(p,'gardens','none'),rig=new CollectionRig();
+ let pose=rig.update(r,.46,1/60);assert.ok(pose.tubeAngle>1.3);
+ // Project every barrel vertex against the vertical half-FOV, including its rim.
+ const tube=equipment('tube'),co=Math.cos(pose.tubeAngle),si=Math.sin(pose.tubeAngle);
+ for(let i=0;i<tube.positions.length;i+=3){const y=tube.positions[i+1]*co-tube.positions[i+2]*si+pose.tubePosition.y,z=tube.positions[i+1]*si+tube.positions[i+2]*co+pose.tubePosition.z;assert.ok(y/z < -Math.tan(100*Math.PI/360),'tube stays below central portrait view');}
+ r.exposed={id:'one',weight:1,value:1};r.interactionId='held';r.interaction=.24;pose=rig.update(r,.46,1/60);assert.equal(pose.tubeAngle,0);assert.equal(pose.approach,0);
+ r.interaction=.65;pose=rig.update(r,.46,1/60);const before=pose.spear.x;r.interaction=0;r.interactionId='';pose=rig.update(r,.46,1/60);assert.ok(pose.spear.x<0&&pose.spear.x>before,'cancel retracts instead of snapping');assert.equal(r.cargo.length,0);
+ for(let i=0;i<90;i++)pose=rig.update(r,.46,1/60);assert.ok(pose.tubeAngle>1.39);assert.equal(pose.approach,0);
+ pose=rig.update(r,2.16,1/60);assert.ok(pose.tubeAngle>0&&pose.tubeAngle<1.40,'rotation is eased');for(let i=0;i<90;i++)pose=rig.update(r,2.16,1/60);assert.ok(pose.tubeAngle<.001);assert.ok(Math.abs(pose.mouth.x+.64)<.001);
 });
 test('an exposed fish near the home buoy can be stashed before ascending',()=>{
  const p=freshProfile();p.tutorial=1;const r=startRun(p,'gardens','none'),s=new Simulation(p,r);r.exposed={id:'fish-0',weight:1,value:20};r.p={...SITES.gardens.entry};s.updateAim();assert.equal(s.aim.id,'held');tick(s,1.5,{interact:true});assert.equal(r.cargo.length,1);

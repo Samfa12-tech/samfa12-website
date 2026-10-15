@@ -1,6 +1,6 @@
 # Reef Sweep
 
-First-person reef conservation game, v0.5.0-preview.1 expedition candidate. Babylon.js 9.26.1, TypeScript 5.8.3, save schema 1. This is the website repository's canonical authoring source. The public runtime under `games/reef-sweep/play` is generated.
+First-person reef conservation game, v0.5.0-preview.2 portrait refinement candidate. Babylon.js 9.26.1, TypeScript 5.8.3, save schema 1. This is the website repository's canonical authoring source. The public runtime under `games/reef-sweep/play` is generated.
 
 ## Build and preview
 

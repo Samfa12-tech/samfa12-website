@@ -911,6 +911,7 @@ if (debug)
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BoatTravelRenderer = void 0;
 exports.skiffGeometry = skiffGeometry;
+const seagulls_js_1 = require("./seagulls.js");
 const geometry_js_1 = require("./geometry.js");
 const dive_skiff_js_1 = require("./assets/dive-skiff.js");
 const expedition_js_1 = require("../game/expedition.js");
@@ -965,6 +966,7 @@ class BoatTravelRenderer {
             const buoy = r.mesh('dive-buoy-' + id, g, 1);
             buoy.position.set(point.x, 0, point.z);
         }
+        this.birds = new seagulls_js_1.Seagulls(r, settings);
         // Low rocky islands frame the navigable bay; site coordinates remain open water.
         for (let i = 0; i < 18; i++) {
             const a = i / 18 * Math.PI * 2, d = 260 + Math.sin(i * 3) * 35, g = (0, geometry_js_1.islandGeometry)(7426 + i * 173, 7);
@@ -984,6 +986,7 @@ class BoatTravelRenderer {
         this.wake.rotation.y = b.yaw;
         this.wake.setEnabled(Math.abs(b.speed) > 1);
         this.wake.scaling.set(1, 1, Math.min(1, Math.abs(b.speed) / 10));
+        this.birds.update(t, (0, math_js_1.vec)(b.x, 0, b.z), 0, true);
         const distance = 10.5;
         r.camera.position.set(b.x - forward.x * distance, 5.7 + (this.settings.reducedMotion ? 0 : height * .18), b.z - forward.z * distance);
         r.camera.rotation.set(.30, b.yaw, 0);
@@ -994,7 +997,7 @@ class BoatTravelRenderer {
             m.setFloat('uSea', 1);
             m.setFloat('uRadius', 220);
             m.setFloat('uFog', .002);
-            m.setFloat('uMotion', 1);
+            m.setFloat('uMotion', this.settings.reducedMotion ? 0 : 1);
             m.setFloat('uNight', 0);
             m.setFloat('uLight', 0);
             m.setFloat('uShadows', 0);
@@ -1037,6 +1040,72 @@ class BoatTravelRenderer {
     }
 }
 exports.BoatTravelRenderer = BoatTravelRenderer;
+
+},
+"render/seagulls.ts":function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Seagulls = void 0;
+exports.seagullGeometry = seagullGeometry;
+exports.seagullPose = seagullPose;
+const geometry_js_1 = require("./geometry.js");
+const math_js_1 = require("../game/math.js");
+/** Original herring-gull silhouette, metres/+Z forward. Wing UVs identify the
+ * flexible span; body/head stay rigid. No textures, skeleton or simulation state. */
+function seagullGeometry() {
+    const g = new geometry_js_1.Geometry(), white = (0, geometry_js_1.rgb)('#e0e4dd'), grey = (0, geometry_js_1.rgb)('#aebdc0'), dark = (0, geometry_js_1.rgb)('#35474d');
+    g.ellipsoid((0, math_js_1.vec)(0, 0, 0), (0, math_js_1.vec)(.085, .09, .23), white, 12, 7);
+    g.ellipsoid((0, math_js_1.vec)(0, .075, .19), (0, math_js_1.vec)(.075, .075, .085), white, 10, 6);
+    g.tri((0, math_js_1.vec)(-.028, .062, .25), (0, math_js_1.vec)(.028, .062, .25), (0, math_js_1.vec)(0, .052, .34), (0, geometry_js_1.rgb)('#d9b56a'));
+    g.tri((0, math_js_1.vec)(0, -.01, -.14), (0, math_js_1.vec)(-.09, -.025, -.34), (0, math_js_1.vec)(.09, -.025, -.34), white);
+    for (const side of [-1, 1]) {
+        g.ellipsoid((0, math_js_1.vec)(side * .064, .09, .225), (0, math_js_1.vec)(.009, .009, .008), dark, 6, 3);
+        const start = g.positions.length / 3;
+        // Cambered, swept wings: broad shoulder, tapered elbow, black primary tips.
+        const a = (0, math_js_1.vec)(side * .055, .025, .10), b = (0, math_js_1.vec)(side * .30, .065, .025), c = (0, math_js_1.vec)(side * .60, .01, -.18), d = (0, math_js_1.vec)(side * .36, .025, -.13), e = (0, math_js_1.vec)(side * .07, 0, -.10);
+        g.quad(a, b, d, e, grey);
+        g.tri(b, c, d, white);
+        for (let i = 0; i < 4; i++) {
+            const x = .45 + i * .042, z = -.08 - i * .032;
+            g.tri((0, math_js_1.vec)(side * x, .025, z), (0, math_js_1.vec)(side * (x + .09), 0, z - .09), (0, math_js_1.vec)(side * (x - .025), .015, z - .065), i > 1 ? dark : grey);
+        }
+        for (let i = start; i < g.positions.length / 3; i++)
+            g.uvs[i * 2 + 1] = (0, math_js_1.clamp)((Math.abs(g.positions[i * 3]) - .055) / .55, 0, 1);
+        g.rod((0, math_js_1.vec)(side * .025, -.075, -.11), (0, math_js_1.vec)(side * .035, -.09, -.19), .008, .005, (0, geometry_js_1.rgb)('#b89b70'), 5);
+    }
+    return g;
+}
+function seagullPose(index, time, anchor, surface) {
+    const phase = time * (.14 - index * .009) + index * 2.12 + .16, radius = 25 + index * 7;
+    const dx = Math.cos(phase) * radius, dz = -Math.sin(phase) * radius * .70;
+    return { x: anchor.x + Math.sin(phase) * radius, y: surface + 8.5 + (index % 3) * 2.3 + Math.sin(phase * .8 + index) * .65, z: anchor.z + 22 + Math.cos(phase) * radius * .70, yaw: Math.atan2(dx, dz), roll: -.17 * Math.cos(phase), pitch: .035 * Math.sin(phase * .7) };
+}
+/** A few render-only coastal birds; slow centre drift avoids a rigid escort.
+ * All meshes are owned/disposed by the existing world lifecycle. */
+class Seagulls {
+    constructor(renderer, settings) {
+        this.meshes = [];
+        this.centre = (0, math_js_1.vec)();
+        this.lastTime = null;
+        const geometry = seagullGeometry(), count = settings.quality === 'low' ? 3 : settings.quality === 'high' ? 5 : 4;
+        for (let i = 0; i < count; i++)
+            this.meshes.push(renderer.mesh('coastal-seagull-' + i, geometry, 13));
+    }
+    update(time, anchor, surface, visible) {
+        const dt = this.lastTime === null ? 0 : (0, math_js_1.clamp)(time - this.lastTime, 0, .1);
+        if (this.lastTime === null)
+            this.centre = { ...anchor };
+        else {
+            const blend = 1 - Math.exp(-dt * .22);
+            this.centre.x += (anchor.x - this.centre.x) * blend;
+            this.centre.z += (anchor.z - this.centre.z) * blend;
+        }
+        this.lastTime = time;
+        this.meshes.forEach((mesh, i) => { mesh.setEnabled(visible); if (!visible)
+            return; const p = seagullPose(i, time, this.centre, surface); mesh.position.set(p.x, p.y, p.z); mesh.rotation.set(p.pitch, p.yaw, p.roll); });
+    }
+}
+exports.Seagulls = Seagulls;
 
 },
 "render/geometry.ts":function(require,module,exports){
@@ -4470,6 +4539,7 @@ function nativeFishMotion(site, center, radius, seed, time, scale = exports.NATI
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReefRenderer = void 0;
+const seagulls_js_1 = require("./seagulls.js");
 const collection_motion_js_1 = require("./collection-motion.js");
 const boat_travel_js_1 = require("./boat-travel.js");
 const marine_life_js_1 = require("./marine-life.js");
@@ -4521,6 +4591,8 @@ class ReefRenderer {
         this.watchReserve = 40;
         this.lastPoseTime = 0;
         this.pose = { left: (0, math_js_1.vec)(), right: (0, math_js_1.vec)(), leftRoll: 0, rightRoll: 0, reach: 0, thrust: 0 };
+        this.collectionRig = new collection_motion_js_1.CollectionRig();
+        this.seagulls = null;
         this.site = data_js_1.SITES.gardens;
         this.run = null;
         this.encounterMeshes = null;
@@ -4592,6 +4664,7 @@ class ReefRenderer {
     }
     mesh(name, g, mode = 1) { const B = BABYLON, m = new B.Mesh(name, this.scene), v = new B.VertexData(); v.positions = g.positions; v.normals = g.normals; v.colors = g.colors; v.uvs = g.uvs; v.indices = g.indices; v.applyToMesh(m, false); m.material = this.material(mode); m.isPickable = false; return m; }
     disposeWorld() {
+        this.seagulls = null;
         this.watch?.dispose();
         this.watch = null;
         this.watchRequested = false;
@@ -4608,6 +4681,8 @@ class ReefRenderer {
     build(profile, run) {
         this.disposeWorld();
         this.camera.maxZ = 500;
+        this.collectionRig = new collection_motion_js_1.CollectionRig();
+        this.lastPoseTime = run.time;
         this.shadows.reset();
         this.bubblePool = new breathing_js_1.BubblePool();
         this.profile = profile;
@@ -4807,6 +4882,7 @@ class ReefRenderer {
         chair.y = (0, terrain_js_1.sandHeight)(chair.x, chair.z, site) - .04;
         habitat.merge((0, marine_life_js_1.habitatChair)(), chair, (0, math_js_1.vec)(1, 1, 1), yaw);
         this.staticMeshes.push(this.mesh('authored-habitat-life', habitat, 1));
+        this.seagulls = new seagulls_js_1.Seagulls(this, this.settings);
         const coast = new geometry_js_1.Geometry();
         for (let i = 0; i < 12; i++) {
             const angle = i / 12 * Math.PI * 2 + .12 + Math.sin(i * 2.7) * .07;
@@ -4985,7 +5061,9 @@ class ReefRenderer {
     render(time, playing) {
         if (!this.run)
             return;
-        const r = this.run, B = BABYLON, collection = (0, collection_motion_js_1.collectionMotion)(r, this.engine.getRenderWidth() / this.engine.getRenderHeight());
+        const r = this.run, B = BABYLON, poseDt = Math.max(0, Math.min(.083, time - this.lastPoseTime));
+        this.lastPoseTime = time;
+        const collection = this.collectionRig.update(r, this.engine.getRenderWidth() / this.engine.getRenderHeight(), poseDt);
         const p = playing ? r.p : (0, math_js_1.vec)(5 + Math.sin(time * .045) * 1.3, 7.2 + Math.sin(time * .12) * .15, -35);
         const yaw = playing ? r.yaw : -.16 + Math.sin(time * .05) * .08, pitch = playing ? r.pitch : .06;
         const night = !!r.night, torchLevel = this.profile ? (0, data_js_1.upgradeLevel)(this.profile, 'torch') : 0;
@@ -5005,6 +5083,7 @@ class ReefRenderer {
             this.scene.clearColor.g = Math.pow(near[1] + (far[1] - near[1]) * blend, .96);
             this.scene.clearColor.b = Math.pow(near[2] + (far[2] - near[2]) * blend, .96);
         }
+        this.seagulls?.update(time, p, this.site.surface, playing && !night && p.y > this.site.surface - .15);
         this.camera.position.set(p.x, p.y, p.z);
         this.camera.rotation.set(pitch, yaw, 0);
         const dir = (0, math_js_1.direction)(yaw, pitch);
@@ -5133,14 +5212,13 @@ class ReefRenderer {
         this.spear.position.z = -r.charge * .25 + thrust - stow;
         this.spear.position.y = sway - stow;
         this.spear.rotation.x = stow * .8;
-        this.tube.position.x = collection.mouth.x + .64;
+        this.tube.position.set(collection.tubePosition.x, collection.tubePosition.y, collection.tubePosition.z);
+        this.tube.rotation.x = collection.tubeAngle;
         this.spear.position.x = collection.spear.x;
         this.spear.position.y += collection.spear.y;
         this.spear.position.z += collection.spear.z;
         const transfer = collection.approach;
         const watchTarget = this.watchRequested && !r.scooter && r.charge === 0 ? 1 : 0;
-        const poseDt = Math.max(0, Math.min(.083, time - this.lastPoseTime));
-        this.lastPoseTime = time;
         this.watchBlend = this.settings.reducedMotion ? watchTarget : this.watchBlend + (watchTarget - this.watchBlend) * (1 - Math.exp(-poseDt * 11));
         if (Math.abs(this.watchBlend - watchTarget) < .001)
             this.watchBlend = watchTarget;
@@ -5242,22 +5320,50 @@ exports.ReefRenderer = ReefRenderer;
 "render/collection-motion.ts":function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CollectionRig = void 0;
 exports.collectionMotion = collectionMotion;
 const math_js_1 = require("../game/math.js");
 const smooth = (x) => { x = (0, math_js_1.clamp)(x, 0, 1); return x * x * (3 - 2 * x); };
 /** Shared tube/spear/fish coordinates prevent independent, contradictory motion. */
-function collectionMotion(run, aspect = 1.6) {
-    const mouthX = aspect >= 1 ? -.64 : -.64 * (aspect * aspect + .10), axis = { x: 0, y: -.35, z: .94 };
-    const progress = run.exposed && run.interactionId === 'held' ? run.interaction : 0;
-    let approach = smooth(progress / .65), insert = (0, math_js_1.clamp)((progress - .65) / .35, 0, 1) * .8;
+function collectionMotion(run, aspect = 1.6, presentation) {
+    const mouthX = -.64 * Math.min(1, aspect * aspect + .10), axis = { x: 0, y: -.35, z: .94 };
+    const progress = presentation?.progress ?? (run.exposed && run.interactionId === 'held' ? run.interaction : 0);
+    // Raise the mouth first. Fish and prongs approach only once it is level.
+    let approach = smooth((progress - .24) / .46), insert = (0, math_js_1.clamp)((progress - .70) / .30, 0, 1) * .8;
     if (run.transfer) {
         const elapsed = (0, math_js_1.clamp)((run.time - run.transfer.started) / 1.35, 0, 1);
         approach = 1 - smooth((elapsed - .45) / .55);
         insert = .8 * (1 - (0, math_js_1.clamp)(elapsed / .45, 0, 1));
     }
     const mouth = { x: mouthX, y: -.55, z: 1.10 };
-    return { mouth, axis, approach, insert, spear: { x: (mouth.x - .007) * approach, y: mouth.y * approach + axis.y * insert, z: (mouth.z - 2.63) * approach + axis.z * insert } };
+    const lift = presentation?.lift ?? (run.transfer ? 1 : smooth(progress / .24));
+    const tubeAngle = 1.40 * (presentation?.portrait ?? (aspect < 1 ? 1 : 0)) * (1 - lift), co = Math.cos(tubeAngle), si = Math.sin(tubeAngle);
+    // Hinge beside the diver's chest, behind the mouth; the whole barrel swings down.
+    const pivotY = -.50, pivotZ = .55;
+    const tubePosition = { x: mouth.x + .64, y: pivotY - (pivotY * co - pivotZ * si), z: pivotZ - (pivotY * si + pivotZ * co) };
+    return { mouth, axis, approach, insert, tubeAngle, tubePosition, spear: { x: (mouth.x - .007) * approach, y: mouth.y * approach + axis.y * insert, z: (mouth.z - 2.63) * approach + axis.z * insert } };
 }
+/** Render-only easing, including cancelled holds and orientation changes. */
+class CollectionRig {
+    constructor() {
+        this.progress = 0;
+        this.lift = 0;
+        this.aspect = null;
+        this.portrait = 0;
+    }
+    update(run, aspect, dt) {
+        const first = this.aspect === null;
+        dt = (0, math_js_1.clamp)(dt, 0, .083);
+        const raw = run.exposed && run.interactionId === 'held' ? run.interaction : 0;
+        this.progress = Math.max(raw, this.progress - dt / .32);
+        const target = run.transfer ? 1 : smooth(this.progress / .24), blend = 1 - Math.exp(-dt * 14);
+        this.lift = first ? target : Math.max(target, this.lift + (target - this.lift) * blend);
+        this.aspect = first ? aspect : this.aspect + (aspect - this.aspect) * blend;
+        this.portrait = first ? (aspect < 1 ? 1 : 0) : this.portrait + ((aspect < 1 ? 1 : 0) - this.portrait) * blend;
+        return collectionMotion(run, this.aspect, { progress: this.progress, lift: this.lift, portrait: this.portrait });
+    }
+}
+exports.CollectionRig = CollectionRig;
 
 },
 "render/marine-life.ts":function(require,module,exports){
@@ -5926,6 +6032,11 @@ void main(){
    p.x+=sin(phase*frequency+p.z*7.0)*tail*tail*(uv.x==5.0?.055:.12);
    p.y+=sin(phase*6.0+p.z*3.0)*fin*.26;
   }
+ }
+ if(uMode==13.0){
+  float phase=dot(w[3].xz,vec2(.19,.07));
+  float bout=smoothstep(.72,.94,.5+.5*sin(uTime*.23+phase*.3));
+  p.y+=sin(uTime*3.5+phase)*(.10+.30*bout)*uv.y*uMotion;
  }
  if(uMode==11.0){float age=fract(uTime*1.8+uv.x);p.y+=age*.9-age*age*1.6;p.x+=sign(p.x)*age*.6;p.z-=age*1.8;}
  if(uMode==12.0){p.x-=sign(p.x)*max(0.0,abs(p.x)-.12)*uFold*.84;p.y-=sign(p.y)*max(0.0,abs(p.y)-.20)*uFold*.70;}
@@ -7297,7 +7408,7 @@ const reef_recovery_js_1 = require("../game/reef-recovery.js");
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const key = (s) => s.replace('Key', '').replace('Left', '').replace('Mouse0', 'Mouse 1');
 const orderText = { none: 'Explore at your own pace. No contract bonus is promised.', catch: 'The Sandbar Kitchen · Land and sell 4 fish for a $45 order bonus.', cleanup: 'Lantern Bay Trust · Remove 2 pieces of fishing gear for a $40 contract bonus.', restore: 'Coral Commons · Plant 2 nursery-grown fragments for a $45 contract bonus.', research: 'Lantern Bay Field Archive · Survey 2 different field stations. First assignment: $65 by day / $72 at night, including station pay. Later Monitoring: $38 / $45.' };
-function reefRecoveryText(p, site) { const stage = (0, reef_recovery_js_1.recoveryFromProgress)(p.reefs[site]); return stage === 0 ? 'Reef life returns between productive visits. Revisit over 3–5 outings to see more fish.' : stage < 5 ? 'Fish are returning between visits. Each productive outing helps the reef grow livelier.' : 'Fish and reef life are returning between visits. Keep revisiting to see the change.'; }
+function reefRecoveryText(p, site) { const stage = (0, reef_recovery_js_1.recoveryFromProgress)(p.reefs[site]); return stage === 0 ? 'Reef life returns between productive visits. Revisit over 3-5 outings to see more fish.' : stage < 5 ? 'Fish are returning between visits. Each productive outing helps the reef grow livelier.' : 'Fish and reef life are returning between visits. Keep revisiting to see the change.'; }
 const upgradeIcon = (id) => {
     const drawings = {
         fins: '<path d="M15 37c4-10 3-19 2-25 7 4 13 12 14 23M28 40c5-9 11-14 18-16-1 9-6 17-15 21"/><path d="M11 40c7 3 13 3 20 0M29 45c6 2 12 1 17-2"/>',
@@ -7351,7 +7462,7 @@ class UI {
         this.controllerReadout = { pads: [], selectedKey: null, connected: false, rawAxes: [], rawButtons: [], saved: false, calibration: { phase: 'idle', prompt: '', step: 0, total: 19, completed: false }, scanning: true };
         this.panel = document.getElementById('panel');
         this.hud = document.getElementById('hud');
-        this.boatSite = null;
+        this.boatSite = undefined;
         this.panel.addEventListener('click', e => {
             const b = e.target.closest('button');
             if (!b || b.disabled)
@@ -7417,7 +7528,9 @@ class UI {
             const el = e.target;
             if (el.id === 'order-choice') {
                 this.order = el.value;
-                document.getElementById('order-detail').textContent = orderText[this.order];
+                const detail = document.getElementById('order-detail');
+                if (detail)
+                    detail.textContent = orderText[this.order];
             }
             if (el.dataset.night !== undefined) {
                 this.night = el.checked;
@@ -7620,12 +7733,7 @@ class UI {
             this.panel.querySelector('[data-setting="quality"]')?.closest('.setting')?.insertAdjacentHTML('afterend', '<div class="quality-reload-note" role="status"><p>High graphics saved. Reload to apply full reef detail and shadows.</p><div class="button-row"><button class="primary" data-action="quality-reload">Reload now</button><button data-action="quality-later">Later</button></div></div>');
         if (screen === 'dock') {
             this.panel.querySelector('.launch-row')?.insertAdjacentHTML('beforebegin', this.nightControl(p));
-            const orderSelect = this.panel.querySelector('#order-choice');
-            const offers = (0, campaign_js_1.contractOptions)(p, this.site), labels = { catch: 'Kitchen · Sell 4 fish', cleanup: 'Cleanup · Remove 2 pieces of gear', restore: 'Restoration · Plant 2 fragments', research: 'Research · Read 2 stations', none: 'Free exploration · No contract' };
-            if (orderSelect)
-                orderSelect.innerHTML = offers.map(o => `<option value="${o.kind}" ${this.order === o.kind ? 'selected' : ''} ${o.available ? '' : 'disabled'}>${labels[o.kind]}${o.available ? '' : ' — unavailable'}</option>`).join('');
-            const unavailable = offers.filter(o => !o.available);
-            this.panel.querySelector('.dock-card')?.insertAdjacentHTML('beforeend', `${unavailable.length ? `<details class="offer-notes"><summary>Why some offers are unavailable</summary>${unavailable.map(o => `<p class="tiny">${labels[o.kind]}: ${esc(o.reason)}</p>`).join('')}</details>` : ''}${(0, campaign_ui_js_1.careerView)(p)}`);
+            this.panel.querySelector('.dock-card')?.insertAdjacentHTML('beforeend', (0, campaign_ui_js_1.careerView)(p));
             if (p.day % 3 === 0)
                 this.panel.querySelector('.dock-card')?.insertAdjacentHTML('afterbegin', `<p class="event-banner">Lantern Bay Sweep today · ${this.event ? 'Registered' : 'Register in Events'} · safe return needed</p>`);
         }
@@ -7651,7 +7759,7 @@ class UI {
         this.updateFullscreenState(!!document.fullscreenElement || !!document.webkitFullscreenElement);
         requestAnimationFrame(() => (screen === 'filleting' ? this.panel.querySelector('[data-action="fillet-cut"]') : this.panel.querySelector('button:not(:disabled),select'))?.focus({ preventScroll: true }));
     }
-    dock(p) { const site = data_js_2.SITES[this.site], response = (0, expedition_js_1.outbreakPlan)(p); return `<header class="topbar"><div class="wordmark">Reef Sweep<span>DIVING CO.</span></div><nav class="toplinks" aria-label="Harbour"><span class="wallet"><strong>${(0, math_js_1.money)(p.cash)}</strong> Day ${p.day} · ${p.audience} followers</span><button data-screen="gear">Equipment</button><button data-screen="events">Events${p.day % 3 === 0 ? ' •' : ''}</button><button data-screen="settings" aria-label="Settings">⚙</button><button data-screen="saves" aria-label="Save slots">Saves</button><button data-action="fullscreen" data-fullscreen-label aria-label="Enter full screen">Full screen</button></nav></header><div class="dock-main"><section class="hero"><div class="eyebrow overline">A SAMFA12 GAME · LANTERN BAY</div><h1>A little room<br>for <em>life.</em></h1><p>Follow the light. Learn the reef.<br>Build a diving company that leaves<br>something better behind.</p><div class="hero-progress"><div><strong>${p.totalRemoved}</strong><span>lionfish removed</span></div><div><strong>${p.totalRestored}</strong><span>fragments planted</span></div><div><strong>${p.reputation}</strong><span>reputation</span></div></div><button class="link-button" data-screen="help" style="margin-top:18px;font-size:12px">Your first dive? Start here ↗</button></section><section class="dock-card"><div class="eyebrow">THE NEXT OUTING</div>${response ? `<p class="outbreak-report"><b>Trust field response · ${esc(data_js_2.SITES[response.site].name)}</b><br>${response.remaining ? `${response.remaining} marked crown-of-thorns targets remaining · $14 + 1 reputation each` : `This response area is complete. Thank you for the careful work.`}<br><span class="tiny">Optional alongside your usual contract. Next area in ${response.daysLeft} days. Amber triangles on the chart.</span></p>` : ''}<h2>The bay is waiting.</h2><p class="tiny muted">Take the helm, follow the navigation chart and stop beside a gold buoy to choose your dive.</p><div class="site-selector">${Object.values(data_js_2.SITES).map((t, index) => `<button class="site-choice ${this.site === t.id ? 'selected' : ''}" data-site="${t.id}" ${!(0, data_js_2.siteUnlocked)(p, t.id) ? 'disabled' : ''}><span class="micro">${String(index + 1).padStart(2, '0')} / ${esc(t.label ?? t.name)}</span><strong>${esc(t.name)}</strong><span class="tiny">${(0, data_js_2.siteUnlocked)(p, t.id) ? esc(t.shortDescription ?? t.description) : esc((0, data_js_2.siteUnlockText)(p, t.id))}</span></button>`).join('')}</div><p class="site-copy">${esc(site.description)}</p><p class="tiny muted">Towing ${expedition_js_2.BAY_SITES[this.site].towKm} km · sea route ${expedition_js_2.BAY_SITES[this.site].seaKm} km · fuel from $${(0, expedition_js_2.travelCosts)(this.site).tow + (0, expedition_js_2.travelCosts)(this.site).boat}</p><p class="recovery-note">${reefRecoveryText(p, this.site)}</p><div class="reef-strip"><span>Reef condition</span><strong>${(0, data_js_2.healthOfReef)(p, this.site)} / 100</strong></div><div class="meter"><i style="width:${(0, data_js_2.healthOfReef)(p, this.site)}%"></i></div><label class="field" for="order-choice">Take a field contract</label><select id="order-choice" ${p.active || p.pending ? 'disabled' : ''}><option value="catch" ${this.order === 'catch' ? 'selected' : ''}>Restaurant · Sell 4 lionfish</option><option value="cleanup" ${this.order === 'cleanup' ? 'selected' : ''}>Cleanup · Remove 2 pieces of gear</option><option value="restore" ${this.order === 'restore' ? 'selected' : ''}>Restoration · Plant 2 fragments</option></select><p id="order-detail" class="contract-note">${orderText[this.order]}</p><div class="launch-row"><button class="primary" data-action="${p.pending ? 'review' : p.active ? 'resume' : 'boat-launch'}">${p.pending ? 'Review landed catch' : p.active ? 'Resume suspended dive' : 'Take the helm'} <span aria-hidden="true">↗</span></button><button data-screen="journal" title="Reef chart">Chart</button></div><p class="status-note">${p.pending ? 'Your last outing is ready to settle.' : p.active ? 'Saved mid-dive. Air and wildlife have been paused.' : this.event ? 'Event entered · Land safely to record your score.' : 'Air filled · Nursery fragments stocked · Pole spear ready'}</p></section></div><footer class="bottomline"><span>Reef Sweep · v0.5 expedition preview · Local saves</span><button class="link-button" data-screen="help" style="font-size:10px">Credits & controls</button></footer>`; }
+    dock(p) { const saved = p.active || p.pending, response = (0, expedition_js_1.outbreakPlan)(p); return `<header class="topbar"><div class="wordmark">Reef Sweep<span>DIVING CO.</span></div><nav class="toplinks" aria-label="Harbour"><span class="wallet"><strong>${(0, math_js_1.money)(p.cash)}</strong> Day ${p.day} · ${p.audience} followers</span><button data-screen="gear">Equipment</button><button data-screen="events">Events${p.day % 3 === 0 ? ' •' : ''}</button><button data-screen="settings" aria-label="Settings">⚙</button><button data-screen="saves" aria-label="Save slots">Saves</button><button data-action="fullscreen" data-fullscreen-label aria-label="Enter full screen">Full screen</button></nav></header><div class="dock-main"><section class="hero"><div class="eyebrow overline">A SAMFA12 GAME · LANTERN BAY</div><h1>A little room<br>for <em>life.</em></h1><p>Follow the light. Learn the reef.<br>Build a diving company that leaves<br>something better behind.</p><div class="hero-progress"><div><strong>${p.totalRemoved}</strong><span>lionfish removed</span></div><div><strong>${p.totalRestored}</strong><span>fragments planted</span></div><div><strong>${p.reputation}</strong><span>reputation</span></div></div><button class="link-button" data-screen="help" style="margin-top:18px;font-size:12px">Your first dive? Start here ↗</button></section><section class="dock-card"><div class="eyebrow">THE NEXT OUTING</div>${response ? `<p class="outbreak-report"><b>Trust field response · ${esc(data_js_2.SITES[response.site].name)}</b><br>${response.remaining ? `${response.remaining} marked crown-of-thorns targets remaining · $14 + 1 reputation each` : `This response area is complete. Thank you for the careful work.`}<br><span class="tiny">Optional alongside your usual contract. Next area in ${response.daysLeft} days. Amber triangles on the chart.</span></p>` : ''}<h2>The bay is waiting.</h2><p class="tiny muted">Take the helm, follow the navigation chart and stop beside a gold buoy to choose your dive.</p>${saved ? `<p class="site-copy"><strong>${esc(data_js_2.SITES[saved.site].name)}</strong><br>${p.pending ? 'Allocate your landed catch and finish this outing.' : 'Your saved position, catch and remaining air are waiting.'}</p>` : ''}<div class="launch-row"><button class="primary" data-action="${p.pending ? 'review' : p.active ? 'resume' : 'boat-launch'}">${p.pending ? 'Review landed catch' : p.active ? 'Resume suspended dive' : 'Take the helm'} <span aria-hidden="true">↗</span></button><button data-screen="journal" title="Reef chart">Chart</button></div><p class="status-note">${p.pending ? 'Your last outing is ready to settle.' : p.active ? 'Saved mid-dive. Air and wildlife have been paused.' : this.event ? 'Event entered · Land safely to record your score.' : 'Air filled · Nursery fragments stocked · Pole spear ready'}</p></section></div><footer class="bottomline"><span>Reef Sweep · v0.5 expedition preview · Local saves</span><button class="link-button" data-screen="help" style="font-size:10px">Credits & controls</button></footer>`; }
     nightControl(p) { const available = (0, data_js_2.upgradeLevel)(p, 'torch') >= 1 && (0, data_js_2.siteUnlocked)(p, 'passage'), lockedReason = (0, data_js_2.upgradeLevel)(p, 'torch') < 1 ? 'Regulator level 2 → fit a head torch → unlock Tideglass Passage.' : 'Unlock Tideglass Passage to open night dives.'; return `<label class="night-option"><span><strong>Night dive</strong><small>${available ? 'Challenge conditions · torch and wildlife adapt to the dark.' : lockedReason}</small></span><input type="checkbox" aria-label="Night dive" data-night ${this.night ? 'checked' : ''} ${available && !p.active && !p.pending ? '' : 'disabled'}></label>`; }
     gearCard(u, p) { const level = (0, data_js_2.upgradeLevel)(p, u.id), maxed = level >= data_js_2.MAX_UPGRADE_LEVEL, cost = (0, data_js_2.upgradeCost)(p, u.id), blockedBy = u.requires && (0, data_js_2.upgradeLevel)(p, u.requires) < (u.requiredLevel ?? 1), prerequisiteName = u.requires ? data_js_2.UPGRADES.find(item => item.id === u.requires)?.name || u.requires : '', requirement = u.requires === 'air' ? `Regulator level ${u.requiredLevel ?? 1} needed` : `${prerequisiteName} needed`, service = (0, data_js_2.upgradeServiceRequirement)(p, u.id), disabled = !service.available || maxed || p.cash < cost || !!p.active || !!p.pending || !!blockedBy; return `<article class="gear-card"><div class="gear-art" aria-hidden="true">${upgradeIcon(u.id)}</div><div class="eyebrow">${u.tag}</div><h3>${u.name}</h3><div class="gear-rank">Level ${level} <span>/ ${data_js_2.MAX_UPGRADE_LEVEL}</span></div><p>${u.description}</p>${!service.available ? `<p class="tiny status-note">${esc(service.reason)}</p>` : ""}<div class="price"><strong>${maxed ? 'MAX LEVEL' : (0, math_js_1.money)(cost)}</strong><button data-buy="${u.id}" ${disabled ? 'disabled' : ''}>${maxed ? 'Maxed' : blockedBy ? requirement : `Upgrade to ${level + 1}`}</button></div></article>`; }
     help(s) { return `<section class="modal help-copy">${this.header('Work gently. Come home.', 'DIVER’S FIELD GUIDE')}<p><b>Find the striped, fan-finned lionfish.</b> Move close, settle your aim, hold to draw the pole spear and release to strike. A fish stays exposed until you hold Interact to secure it in your tube.</p><div class="control-sheet"><div><b>Keyboard & mouse</b><p>${key(s.keys.forward)}${key(s.keys.left)}${key(s.keys.back)}${key(s.keys.right)} swim · mouse look<br>${key(s.keys.up)} ascend · ${key(s.keys.down)} descend<br>${key(s.keys.boost)} stronger fin kick · ${key(s.keys.steady)} steady<br>Mouse 1 draw / release · ${key(s.keys.interact)} hold to interact<br>${key(s.keys.scooter)} scooter · ${key(s.keys.light)} light · ${key(s.keys.journal)} chart · ${key(s.keys.watch)} raise/lower watch · Esc pause</p></div><div><b>Touch & controller</b><p>Touch (portrait or landscape): left stick moves; drag the scene to look. Hold and drag Draw to aim, then release. Hold Interact to secure catches or work. Use the Watch button in the upper HUD to check your instruments.<br>Controller: sticks move / look. Click the left stick for the dive computer by default. Button meanings vary by browser and device; open Settings → Controller calibration to see live readings and set your own map. The standard browser layout has a ready-to-use fallback.</p></div></div><p>Aim with the centre reticle. Hold Mouse 1 to draw, then release to strike. This also requests mouse capture. If capture is unavailable, simply move the mouse over the scene to look without holding a button. Left-hold still draws while aiming; right-drag also looks. Hold <b>R</b> as an alternate spear input. Uncaptured look is bounded by the browser window. Releasing or cancelling a pointer outside the canvas will not leave the controls stuck.</p><div class="rule"></div><div class="two-col"><div><h3>A living reef</h3><p><b>Cleanup:</b> hold Interact near discarded nets or crates.<br><b>Restore:</b> plant nursery-grown fragments at the marked nursery plots. Growth happens between game days.<br><b>Survey:</b> record the site at the teal survey sign. The chart marks all work areas.</p><p><b>Field response:</b> after sustained reef work the Trust reports a crown-of-thorns outbreak in one area. Amber triangles mark purple many-armed spiny targets; ordinary orange five-arm stars stay part of the scenery. Approach with your catch secured, hold Interact to position the injector, release the safety, then hold to press the plunger. You can stop and resume, switch back to spear or scooter, or ignore the optional response. Each treatment is logged once.</p><p><b>Marlow:</b> this grouper may watch, approach and then steal an exposed fish. Secure it or move away. Your tube is safe.<br><b>Moray:</b> give its crevice room. If it moves towards you and a warning appears, back away.</p></div><div><h3>Leave a reserve</h3><p>The home marker points towards the mooring. Return to it, ascend alongside the rope, and hold Interact to board. The chart shows a route around major rocks.</p><p>Rescue costs $85 and forfeits the day’s catch, but equipment and completed reef work remain. Loan gear is always available. Pause or suspend at any time.</p><p>After the dive, sell, keep a meal or donate. Choose two highlight <b>image cards</b> to publish. They represent footage in the fiction; this build does not record playable video.</p></div></div><div class="rule"></div><h3>Inspiration, not instruction.</h3><p>Inspired by the underwater storytelling and conservation work of <b>Lionfish Extermination Corp</b>; art and loop inspiration from <b>Dave the Diver</b>. This is an independent fictional game, not affiliated with or endorsed by either. Marlow, the companies and the island are fictional. Music is an original composition using <b>Samfa12’s Pocket Chordsmith</b> instruments.</p><p>Lionfish are native in the Indo-Pacific and invasive in the Atlantic/Caribbean setting used here. Do not feed wild predators. Morays normally open their mouths to breathe; mouth opening alone is not a warning. Coral recovery is time-compressed. Air, ascent, currents, handling and restoration are simplified gameplay—not dive training, medical advice or permission to undertake real restoration.</p><p class="tiny">Babylon.js 9.26.1 · Apache-2.0. Original procedural art and game code. Source details and third-party notices are included in the handoff package.</p><div class="button-row"><button class="primary" data-close>Ready for the reef</button><button data-screen="settings">Adjust controls</button></div></section>`; }
@@ -7790,28 +7898,51 @@ class UI {
         if (!navigation) {
             navigation = document.createElement('section');
             navigation.id = 'boat-navigation';
-            navigation.innerHTML = `<canvas id="bay-chart" width="260" height="215" aria-label="Bay navigation chart with five dive buoys"></canvas><p id="boat-status" aria-live="polite"></p><label class="tiny" for="boat-contract">Dive assignment</label><select id="boat-contract"><option value="none">Free exploration</option></select><div class="button-row"><button id="boat-enter" class="primary" disabled>Stop by a dive buoy</button><button id="boat-return">Harbour</button></div><p class="tiny">W/S or joystick: throttle · A/D: steer · slow beside a buoy</p>`;
+            navigation.setAttribute('aria-label', 'Boat navigation');
+            navigation.innerHTML = `<div class="boat-heading"><p id="boat-status" role="status"></p><button id="boat-return">Harbour</button></div><details id="boat-map"><summary>Bay chart</summary><canvas id="bay-chart" width="260" height="215" aria-label="Bay navigation chart with five dive buoys"></canvas></details><div id="boat-mooring" hidden><p id="boat-site-detail" class="tiny"></p><label class="tiny" for="boat-contract">Dive assignment</label><select id="boat-contract" aria-describedby="boat-contract-note" disabled><option value="none">Choose at a dive buoy</option></select><p id="boat-contract-note" class="tiny muted"></p><button id="boat-enter" class="primary" disabled>Stop by a dive buoy</button></div><p class="tiny boat-help">W/S or joystick: throttle · A/D: steer · slow beside a buoy</p>`;
             this.hud.append(navigation);
+            this.boatSite = undefined;
+            this.order = 'none';
             document.getElementById('boat-enter').onclick = () => this.dispatch('boat-dive');
             document.getElementById('boat-return').onclick = () => this.dispatch('boat-harbour');
-            document.getElementById('boat-contract').onchange = e => { this.order = e.target.value; };
+            document.getElementById('boat-contract').onchange = e => { this.order = e.target.value; document.getElementById('boat-contract-note').textContent = orderText[this.order]; };
+            const portrait = matchMedia('(max-width:680px) and (orientation:portrait)'), map = document.getElementById('boat-map');
+            const orient = () => { map.open = !portrait.matches; };
+            orient();
+            portrait.addEventListener('change', orient);
         }
     }
-    updateBoat(b, site) { if (this.boatSite !== site) {
-        this.boatSite = site;
-        const select = document.getElementById('boat-contract');
-        if (select) {
-            const offers = site ? (0, campaign_js_1.contractOptions)(this.getProfile(), site) : [];
-            select.innerHTML = offers.length ? offers.map(o => `<option value="${o.kind}" ${o.available ? '' : 'disabled'}>${o.kind === 'none' ? 'Free exploration' : o.kind === 'catch' ? 'Kitchen · sell 4 market fish' : o.kind === 'cleanup' ? 'Cleanup · remove 2' : o.kind === 'restore' ? 'Restore · plant 2' : 'Research · 2 stations'}</option>`).join('') : '<option value="none">Choose at a dive buoy</option>';
-            this.order = offers.find(o => o.available)?.kind ?? 'none';
-            select.value = this.order;
-            select.disabled = !site;
+    updateBoat(b, site) {
+        if (this.boatSite !== site) {
+            this.boatSite = site;
+            const select = document.getElementById('boat-contract');
+            if (select) {
+                const offers = site ? (0, campaign_js_1.contractOptions)(this.getProfile(), site) : [];
+                select.innerHTML = offers.length ? offers.map(o => `<option value="${o.kind}" ${o.available ? '' : 'disabled'} title="${esc(o.reason)}">${o.kind === 'none' ? 'Free exploration' : o.kind === 'catch' ? 'Kitchen · sell 4 market fish' : o.kind === 'cleanup' ? 'Cleanup · remove 2' : o.kind === 'restore' ? 'Restore · plant 2' : 'Research · 2 stations'}${o.available ? '' : ' · unavailable'}</option>`).join('') : '<option value="none">Choose at a dive buoy</option>';
+                this.order = offers.find(o => o.available)?.kind ?? 'none';
+                select.value = this.order;
+                select.disabled = !site;
+                document.getElementById('boat-contract-note').textContent = site ? orderText[this.order] : '';
+            }
+            document.getElementById('boat-mooring').hidden = !site;
+            const detail = document.getElementById('boat-site-detail');
+            if (detail)
+                detail.textContent = site ? `${data_js_2.SITES[site].shortDescription ?? data_js_2.SITES[site].description} Towing ${expedition_js_2.BAY_SITES[site].towKm} km · sea route ${expedition_js_2.BAY_SITES[site].seaKm} km · fuel from $${(0, expedition_js_2.travelCosts)(site).tow + (0, expedition_js_2.travelCosts)(site).boat}. Reef condition ${(0, data_js_2.healthOfReef)(this.getProfile(), site)}/100.` : '';
         }
-    } const status = document.getElementById('boat-status'); if (status)
-        status.textContent = site ? data_js_2.SITES[site].name + ' · mooring within reach · Interact to dive' : `${Math.round(Math.abs(b.speed) * 1.94)} knots · steer towards a gold buoy`; const button = document.getElementById('boat-enter'); if (button) {
-        button.disabled = !site;
-        button.textContent = site ? 'Dive ' + data_js_2.SITES[site].name : 'Slow to moor at a gold buoy';
-    } }
+        const status = document.getElementById('boat-status');
+        if (status) {
+            const text = site ? data_js_2.SITES[site].name + ' · moored' : `${Math.round(Math.abs(b.speed) * 1.94)} knots · find a gold buoy`;
+            if (status.textContent !== text)
+                status.textContent = text;
+        }
+        const button = document.getElementById('boat-enter');
+        if (button) {
+            button.disabled = !site;
+            const text = site ? 'Dive ' + data_js_2.SITES[site].name : 'Slow to moor at a gold buoy';
+            if (button.textContent !== text)
+                button.textContent = text;
+        }
+    }
     miniView(p, screen) {
         const r = p.pending;
         if (!r || r.rescued || !r.cargo.length)
