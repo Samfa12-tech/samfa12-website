@@ -13,5 +13,6 @@ games/reef-sweep/play/** -text
 /game-sources/reef-sweep/public/babylon.js -text
 /game-sources/reef-sweep/**/*.png -text
 /game-sources/reef-sweep/**/*.blend -text
+/game-sources/reef-sweep/**/*.webm -text
 
 /game-sources/reef-sweep/vendor/** linguist-vendored
