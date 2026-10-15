@@ -1637,7 +1637,20 @@
         ]
       }
     ],
-    "updates": [],
+    "updates": [
+      {
+        "id": "towtal-chaos-itch-publication-october-2026",
+        "kind": "listing",
+        "date": "2026-10-12",
+        "dateMeaning": "itch.io page publication date (UTC)",
+        "title": "Playable alpha arrives on itch.io",
+        "summary": "Towtal Chaos is now listed on itch.io as a playable HTML5 caravan-parking alpha. The page describes eight parking challenges, four towing setups and Challenge, Relaxed and Sandbox modes, with keyboard and touch controls. Progress is saved locally in the browser; an internet connection is needed to load the 3D engine.",
+        "platform": "HTML5 browser",
+        "sources": [
+          "https://samfa12.itch.io/towtal-chaos"
+        ]
+      }
+    ],
     "relatedIds": [
       "game-wonky-vehicle-lab"
     ],
@@ -1734,6 +1747,23 @@
         "answer": "It's an early playable build. Five dive sites, equipment upgrades, night dives, filleting and a working dive watch are available, but the artwork and balance are still being worked on. Expect a few rough edges.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "reef-sweep-v0-5-expedition-october-2026",
+        "kind": "release",
+        "date": "2026-10-15",
+        "dateMeaning": "Samfa12.com deployment date (UTC)",
+        "title": "v0.5 expedition preview and portrait refinements",
+        "summary": "The v0.5.0-preview.2 browser build brings boat travel around Lantern Bay, keepsake charms, optional catch preparation and cooking, and later crown-of-thorns conservation work. Portrait refinements make the boat chart compact and lower the catch tube between collections. The game remains in development; physical phone acceptance of the new features, sustained performance and natural campaign pacing remain unverified.",
+        "platform": "HTML5 browser",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/",
+          "https://samfa12.com/games/reef-sweep/play/",
+          "https://github.com/Samfa12-tech/samfa12-website/actions/runs/38716409698",
+          "https://wavedash.com/games/reef-sweep/patch-notes"
         ]
       }
     ],

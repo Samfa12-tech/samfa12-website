@@ -8,7 +8,7 @@
     "explicitlyExcluded": 5,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 16,
+    "oneContextualIncoming": 14,
     "relationshipEdges": 71
   },
   "excluded": [
@@ -2290,10 +2290,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/updates/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/updates/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2305,9 +2307,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/ship-blockade/",
@@ -2484,10 +2484,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/updates/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/updates/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2499,9 +2501,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/wonky-vehicle-lab/",
