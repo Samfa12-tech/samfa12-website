@@ -26,6 +26,12 @@ or failed local responses occur after the loader-path correction. The initial
 summary are retained with the family candidate's release-preflight evidence.
 This does not claim a physical phone, speaker route or human listening pass.
 
+The first hosted validation stopped on a stale indexing snapshot: its recorded
+Chordsmith heading still said v68. Regenerating the audit changes exactly that
+heading to v69, with no new route/site findings or editorial changes. The updated
+audit check and all five local regression suites pass. Terminal hosted results
+for the corrected head remain a separate check.
+
 The family source separately passes Core213, Chordsmith browser155 with five
 intentional phone genre-metric skips and cross-browser8, DJ browser94 plus
 cross-browser6, and DAW source1235/106. Godot's intermittent ObjectDB gate and
