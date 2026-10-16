@@ -7,7 +7,7 @@ This supersedes the older v69/v1h mirror candidate for this update; it does not
 publish or close that earlier review automatically.
 
 Canonical app source is Pocket-Chordsmith
-`5bb532c4098072cb22eec1c8504caff78e647582` (PR131, stacked on PR128). The
+`a31ffae545e0d50b5024dd1be746b834d6f7bed3` (PR132, stacked on PR131/128). The
 reviewed original head remains preserved. Both apps bundle Core 0.3.0, unchanged
 save formats and the existing Campfire recipe. The corrected source includes
 selected-passage comparison, reversible Apply/Undo, playable listening examples,
@@ -33,3 +33,9 @@ This is a draft review candidate. Source corrections and this integration need
 independent review and exact-head CI before promotion. Merging into website main
 triggers the existing Pages deployment; it is a public release action. No merge
 or deployment has occurred. Godot and DAW installer holds remain independent.
+
+The earlier website PR34 snapshot `064a3e8d810e652966bc47f2d0132225ad087c63`
+is preserved. This narrow refresh adds Chordsmith's capped-history correction:
+39 genuine edits, Apply and same-chord no-op now retain the panel's own Undo
+entry despite eviction of the oldest snapshot. All39 comparison checks passed
+across desktop/touch Chromium and Firefox. Other app logic remains unchanged.
