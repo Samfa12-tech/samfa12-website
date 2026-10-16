@@ -2,7 +2,7 @@
   "schema": 1,
   "websiteBase": "526a8a9c6498bd372c108de68ac61178be17185c",
   "sourceRepository": "Samfa12-tech/Pocket-Chordsmith",
-  "sourceCommit": "5bb532c4098072cb22eec1c8504caff78e647582",
+  "sourceCommit": "a31ffae545e0d50b5024dd1be746b834d6f7bed3",
   "sourceDirty": false,
   "products": {
     "chordsmith": "v70",
@@ -31,7 +31,7 @@
     },
     {
       "path": "apps/pocket-chordsmith/index.html",
-      "sha256": "9516ed36c546ff212f4a531e20c3c45b25cfc3a4197ad79f714210473b6bd200",
+      "sha256": "7e514a570fa090058e723450a47b8f738f537da7b6580d63dff478cc0e2b755b",
       "hashMode": "UTF-8 LF"
     },
     {
@@ -1132,5 +1132,8 @@
       "canonicalSource": "packages/pocket-audio-core/src/synth/melody.js"
     }
   ],
-  "scope": "Review candidate, not deployed. Text hashes canonicalize CRLF to LF; PNG hashes are raw. No private/local absolute paths."
+  "scope": "Review candidate, not deployed. Text hashes canonicalize CRLF to LF; PNG hashes are raw. No private/local absolute paths. Includes narrow capped-history correction; prior mirror review head is preserved.",
+  "previousMirrorSourceCommit": "5bb532c4098072cb22eec1c8504caff78e647582",
+  "integrationParent": "064a3e8d810e652966bc47f2d0132225ad087c63",
+  "correctionReview": "Samfa12-tech/Pocket-Chordsmith#132"
 }
