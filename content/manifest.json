@@ -50,10 +50,11 @@
       "path": "/games/the-last-guard/",
       "action": "create",
       "officialSources": [
-        "https://samfa12.itch.io/the-last-guard"
+        "https://samfa12.itch.io/the-last-guard",
+        "https://wavedash.com/games/the-last-guard"
       ],
       "notes": "Cross-link Briarhold as the catalogue describes a spiritual-sequel relationship; verify public wording.",
-      "pageModified": "2026-10-08"
+      "pageModified": "2026-10-16"
     },
     {
       "id": "game-the-horde",
