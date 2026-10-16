@@ -1,5 +1,5 @@
 // src/constants.js
-var POCKET_AUDIO_CORE_VERSION = "0.2.0";
+var POCKET_AUDIO_CORE_VERSION = "0.3.0";
 var CORE_PROJECT_VERSION = 1;
 var PCS_SHARE_PREFIX = "PCS1:";
 var DEFAULT_SOURCE_SCHEMA_VERSION = 16;
@@ -971,6 +971,7 @@ function findPocketDrumLane(id) {
 var POCKET_GUITAR_ARTICULATIONS = Object.freeze(["off", "open", "chug", "accent", "hold", "scratch"]);
 var POCKET_GUITAR_STEP_CYCLE = Object.freeze(["off", "chug", "accent", "hold", "scratch"]);
 var POCKET_GUITAR_TONES = Object.freeze(["clean", "crunch", "high_gain", "metal", "tight_metal", "doom_fuzz", "western_twang", "funk_muted"]);
+var POCKET_PREPARED_GUITAR_TONES = Object.freeze(["campfire_acoustic"]);
 var DEFAULT_GUITAR_TONE = "high_gain";
 var POCKET_GUITAR_REGISTERS = Object.freeze(["low", "mid", "high"]);
 var DEFAULT_GUITAR_REGISTER = "low";
@@ -1002,11 +1003,402 @@ var POCKET_GUITAR_TONE_CONFIGS = Object.freeze({
   funk_muted: Object.freeze({ drive: 1.45, input: 0.7, peak: 0.074, lowpass: 3900, highpass: 210, body: 1.2, mid: 2.75, spread: 0.014, sustain: 0.42, mute: 0.045, scratch: 0.038 })
 });
 function findPocketGuitarTone(id) {
+  if (POCKET_PREPARED_GUITAR_TONES.includes(id)) throw new Error(`${id} requires prepared PCM playback; an amplifier fallback is unsupported.`);
   return POCKET_GUITAR_TONE_CONFIGS[id] || POCKET_GUITAR_TONE_CONFIGS[DEFAULT_GUITAR_TONE];
 }
 function validatePocketGuitarRegistry() {
   return {
     missingToneConfigs: POCKET_GUITAR_TONES.filter((id) => !POCKET_GUITAR_TONE_CONFIGS[id])
+  };
+}
+
+// src/sounds/campfire-acoustic.js
+var CAMPFIRE_ACOUSTIC_RECIPE = Object.freeze({
+  id: "campfire_acoustic",
+  version: 1,
+  durationSeconds: 1.5,
+  excitationRange: 0.45,
+  feedbackPairGain: 0.496,
+  seedPitchMultiplier: 311,
+  strumSeconds: 0.027,
+  noteGain: 0.36,
+  minMidi: 36,
+  maxMidi: 96,
+  minSampleRate: 8e3,
+  maxSampleRate: 192e3,
+  tuning: "rounded-integer-period-reference",
+  tailPolicy: "reference-cut"
+});
+var CAMPFIRE_REFERENCE_CHORDS = Object.freeze([
+  Object.freeze({ name: "D", rootPc: 2, quality: "maj", notes: Object.freeze([50, 57, 62, 66]) }),
+  Object.freeze({ name: "G", rootPc: 7, quality: "maj", notes: Object.freeze([55, 59, 62, 67]) }),
+  Object.freeze({ name: "Bm", rootPc: 11, quality: "min", notes: Object.freeze([47, 54, 59, 62]) }),
+  Object.freeze({ name: "A", rootPc: 9, quality: "maj", notes: Object.freeze([45, 57, 61, 64]) })
+]);
+function campfireAcousticNoteIdentity(options = {}) {
+  const midi = options.midi;
+  const sampleRate = options.sampleRate ?? 44100;
+  const recipeVersion = options.recipeVersion ?? CAMPFIRE_ACOUSTIC_RECIPE.version;
+  const seed = options.seed ?? midi * CAMPFIRE_ACOUSTIC_RECIPE.seedPitchMultiplier;
+  const tailPolicy = options.tailPolicy ?? CAMPFIRE_ACOUSTIC_RECIPE.tailPolicy;
+  if (recipeVersion !== 1) throw new RangeError(`Unsupported Campfire recipe version: ${recipeVersion}`);
+  requireInteger(midi, 36, 96, "MIDI pitch");
+  requireInteger(sampleRate, 8e3, 192e3, "sample rate");
+  requireInteger(seed, 0, 4294967295, "seed");
+  if (!["reference-cut", "fade-5ms"].includes(tailPolicy)) throw new RangeError(`Unsupported Campfire tail policy: ${tailPolicy}`);
+  return { recipeVersion, midi, sampleRate, seed, tailPolicy };
+}
+function campfireAcousticNoteKey(options = {}) {
+  const identity = campfireAcousticNoteIdentity(options);
+  return JSON.stringify(["campfire_acoustic", identity.recipeVersion, identity.sampleRate, identity.midi, identity.seed, identity.tailPolicy]);
+}
+function renderCampfireAcousticNote(options = {}) {
+  const identity = campfireAcousticNoteIdentity(options);
+  const frequency = 440 * 2 ** ((identity.midi - 69) / 12);
+  const delayFrames = Math.round(identity.sampleRate / frequency);
+  const samples = new Float32Array(Math.floor(identity.sampleRate * 1.5));
+  let randomState = identity.seed >>> 0;
+  for (let frame = 0; frame < delayFrames; frame += 1) {
+    randomState = Math.imul(randomState, 1664525) + 1013904223 >>> 0;
+    samples[frame] = (randomState / 4294967296 - 0.5) * 0.45;
+  }
+  for (let frame = delayFrames; frame < samples.length; frame += 1) {
+    const delayedPair = samples[frame - delayFrames] + samples[frame - delayFrames + 1];
+    samples[frame] = delayedPair * 0.496;
+  }
+  if (identity.tailPolicy === "fade-5ms") {
+    const fadeFrames = Math.max(2, Math.round(identity.sampleRate * 5e-3));
+    for (let frame = 0; frame < fadeFrames; frame += 1) {
+      samples[samples.length - fadeFrames + frame] *= 1 - frame / (fadeFrames - 1);
+    }
+  }
+  return samples;
+}
+var CampfireAcousticNoteCache = class {
+  #entries = /* @__PURE__ */ new Map();
+  #bytes = 0;
+  #hits = 0;
+  #misses = 0;
+  #maxBytes;
+  #maxEntries;
+  constructor({ maxBytes = 16 * 1024 * 1024, maxEntries = 64 } = {}) {
+    requireInteger(maxBytes, 0, 64 * 1024 * 1024, "cache byte budget");
+    requireInteger(maxEntries, 0, 256, "cache entry budget");
+    this.#maxBytes = maxBytes;
+    this.#maxEntries = maxEntries;
+  }
+  getNote(options) {
+    const key = campfireAcousticNoteKey(options);
+    let samples = this.#entries.get(key);
+    if (samples) {
+      this.#hits += 1;
+      this.#entries.delete(key);
+      this.#entries.set(key, samples);
+    } else {
+      this.#misses += 1;
+      samples = renderCampfireAcousticNote(options);
+      if (samples.byteLength <= this.#maxBytes && this.#maxEntries > 0) {
+        while (this.#entries.size >= this.#maxEntries || this.#bytes + samples.byteLength > this.#maxBytes) {
+          const oldest = this.#entries.keys().next().value;
+          this.#bytes -= this.#entries.get(oldest).byteLength;
+          this.#entries.delete(oldest);
+        }
+        this.#entries.set(key, samples);
+        this.#bytes += samples.byteLength;
+      }
+    }
+    return samples.slice();
+  }
+  clear() {
+    this.#entries.clear();
+    this.#bytes = 0;
+  }
+  getDiagnostics() {
+    return { entries: this.#entries.size, bytes: this.#bytes, hits: this.#hits, misses: this.#misses, maxBytes: this.#maxBytes, maxEntries: this.#maxEntries };
+  }
+};
+function campfireAcousticVoicing({ rootPc, quality = "maj", register = "low" } = {}) {
+  requireInteger(rootPc, 0, 11, "chord root");
+  if (!["maj", "min", "dim", "aug"].includes(quality)) throw new RangeError(`Unsupported Campfire chord quality: ${quality}`);
+  const octave = { low: 0, mid: 12, high: 24 }[register];
+  if (octave === void 0) throw new RangeError(`Unsupported Campfire register: ${register}`);
+  const reference = CAMPFIRE_REFERENCE_CHORDS.find((chord2) => chord2.rootPc === rootPc && chord2.quality === quality);
+  const root = 45 + (rootPc - 9 + 12) % 12;
+  const third = quality === "min" || quality === "dim" ? 3 : 4;
+  const fifth = quality === "dim" ? 6 : quality === "aug" ? 8 : 7;
+  return (reference?.notes || [root, root + fifth, root + 12, root + third + 12]).map((note) => note + octave);
+}
+function campfireAcousticPerformanceNote({ beat, rootPc, quality = "maj", register = "low", direction = "down" } = {}) {
+  requireInteger(beat, 0, 16383, "performance beat");
+  if (!["down", "up"].includes(direction)) throw new RangeError(`Unsupported Campfire direction: ${direction}`);
+  if (beat % 4 !== 0 && beat % 2 !== 1) return null;
+  const notes = campfireAcousticVoicing({ rootPc, quality, register });
+  const picked = beat % 2 === 1;
+  const midi = picked ? notes[beat % 3 === 1 ? 3 : 2] + 12 : void 0;
+  if (picked && midi > CAMPFIRE_ACOUSTIC_RECIPE.maxMidi) throw new RangeError("Campfire strum and pick needs Low or Mid register. High picking exceeds the supported note range.");
+  return {
+    ...picked ? { midi } : { midiNotes: notes },
+    instrument: CAMPFIRE_ACOUSTIC_RECIPE.id,
+    duration: 1.5,
+    velocity: picked ? 0.15 / CAMPFIRE_ACOUSTIC_RECIPE.noteGain : 1,
+    articulation: "open",
+    direction,
+    technique: { campfire: { recipeVersion: 1, strumSeconds: 0.027, tailPolicy: "reference-cut" } }
+  };
+}
+function campfireEventParameters(event2, { sampleRate = 44100, noteGain = 0.36 } = {}) {
+  const notes = event2.midiNotes?.length ? [...event2.midiNotes] : [event2.midi];
+  if (notes.length > 12) throw new RangeError("Campfire supports at most 12 ordered notes per event.");
+  const performance2 = event2.technique?.campfire || {};
+  const strumSeconds = performance2.strumSeconds ?? 0.027;
+  const velocity = event2.velocity ?? 1;
+  requireRange(strumSeconds, 0, 0.1, "strum seconds");
+  requireRange(velocity, 0, 1.4, "velocity");
+  requireRange(noteGain, 0, 1, "note gain");
+  if (event2.direction !== void 0 && !["down", "up"].includes(event2.direction)) throw new RangeError(`Unsupported Campfire direction: ${event2.direction}`);
+  if (event2.direction === "up") notes.reverse();
+  const identity = campfireAcousticNoteIdentity({ midi: notes[0], sampleRate, seed: performance2.seed, recipeVersion: performance2.recipeVersion, tailPolicy: performance2.tailPolicy });
+  notes.forEach((midi) => campfireAcousticNoteIdentity({ ...identity, midi, seed: performance2.seed ?? midi * 311 }));
+  const frameCount = Math.floor(sampleRate * 1.5) + Math.round((notes.length - 1) * strumSeconds * sampleRate);
+  return { notes, identity, performance: performance2, strumSeconds, velocity, noteGain, sampleRate, frameCount };
+}
+function campfireAcousticEventFrameCount(event2, options = {}) {
+  return campfireEventParameters(event2, options).frameCount;
+}
+function campfireAcousticEventVoices(event2, options = {}) {
+  const { notes, identity, performance: performance2, strumSeconds, velocity, noteGain, sampleRate } = campfireEventParameters(event2, options);
+  return notes.map((midi, index) => ({
+    identity: { ...identity, midi, seed: performance2.seed ?? midi * 311 },
+    offsetSeconds: Math.round(index * strumSeconds * sampleRate) / sampleRate,
+    gain: velocity * noteGain
+  }));
+}
+function renderCampfireAcousticEvent(event2, options = {}) {
+  const { notes, identity, performance: performance2, strumSeconds, velocity, noteGain, sampleRate, frameCount } = campfireEventParameters(event2, options);
+  const cache = options.cache || null;
+  const output = new Float32Array(frameCount);
+  notes.forEach((midi, stringIndex) => {
+    const options2 = { ...identity, midi, seed: performance2.seed ?? midi * 311 };
+    const samples = cache ? cache.getNote(options2) : renderCampfireAcousticNote(options2);
+    const offset = Math.round(stringIndex * strumSeconds * sampleRate);
+    for (let frame = 0; frame < samples.length; frame += 1) output[offset + frame] += samples[frame] * velocity * noteGain;
+  });
+  return output;
+}
+function campfireAcousticReferenceEvents({ bpm = 76 } = {}) {
+  requireRange(bpm, 40, 240, "tempo");
+  const beatSeconds2 = 60 / bpm;
+  const events = [];
+  for (let beat = 0; beat < 32; beat += 1) {
+    const chord2 = CAMPFIRE_REFERENCE_CHORDS[Math.floor(beat / 8)];
+    if (beat % 4 === 0) events.push({ type: "guitar", instrument: "campfire_acoustic", time: beat * beatSeconds2, duration: 1.5, velocity: 1, direction: "down", midiNotes: [...chord2.notes] });
+    if (beat % 2 === 1) events.push({ type: "guitar", instrument: "campfire_acoustic", time: beat * beatSeconds2, duration: 1.5, velocity: 0.15 / 0.36, midi: chord2.notes[beat % 3 === 1 ? 3 : 2] + 12 });
+  }
+  return events;
+}
+function requireInteger(value, minimum, maximum, label) {
+  if (!Number.isInteger(value) || value < minimum || value > maximum) throw new RangeError(`Campfire ${label} must be an integer from ${minimum} to ${maximum}.`);
+}
+function requireRange(value, minimum, maximum, label) {
+  if (!Number.isFinite(value) || value < minimum || value > maximum) throw new RangeError(`Campfire ${label} must be from ${minimum} to ${maximum}.`);
+}
+
+// src/synth/campfire-acoustic.js
+async function prepareCampfireAcousticNoteBank(context, events, options = {}) {
+  const maxBytes = options.maxBytes ?? 16 * 1024 * 1024;
+  if (!Number.isInteger(maxBytes) || maxBytes < 0 || maxBytes > 64 * 1024 * 1024) throw new RangeError("Campfire preparation budget must be from zero to 64 MiB.");
+  const checkCancelled = () => {
+    if (options.signal?.aborted) throw new DOMException("Campfire preparation cancelled", "AbortError");
+  };
+  const identities = /* @__PURE__ */ new Map();
+  const bytesPerNote = Math.floor(context.sampleRate * 1.5) * 4;
+  checkCancelled();
+  for (const event2 of events) {
+    for (const voice of campfireAcousticEventVoices(event2, { sampleRate: context.sampleRate })) {
+      identities.set(campfireAcousticNoteKey(voice.identity), voice.identity);
+      if (identities.size * bytesPerNote > maxBytes) throw new RangeError(`Campfire preparation exceeds the configured ${maxBytes} PCM byte budget. Use offline rendering or a smaller set of note identities.`);
+    }
+  }
+  let bytes = identities.size * bytesPerNote;
+  const buffers = /* @__PURE__ */ new Map();
+  const yieldTask = options.yieldTask || (() => new Promise((resolve2) => setTimeout(resolve2, 0)));
+  for (const [key, identity] of identities) {
+    checkCancelled();
+    const pcm = renderCampfireAcousticNote(identity);
+    const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
+    buffer.copyToChannel(pcm, 0);
+    buffers.set(key, buffer);
+    if (buffers.size % 4 === 0) await yieldTask();
+  }
+  checkCancelled();
+  const active = /* @__PURE__ */ new Set();
+  let disposed = false;
+  let updateGeneration = 0;
+  let updateTail = Promise.resolve();
+  let outputGain = 1;
+  const rampVoiceGain = (voice, level, seconds) => {
+    const now = context.currentTime;
+    const param = voice.gain.gain;
+    const currentLevel = Number.isFinite(param.value) ? param.value : voice.level;
+    if (typeof param.cancelAndHoldAtTime === "function") param.cancelAndHoldAtTime(now);
+    else param.cancelScheduledValues(now);
+    param.setValueAtTime(currentLevel, now);
+    param.linearRampToValueAtTime(level, now + seconds);
+    voice.level = level;
+  };
+  const stopAll = (releaseSeconds = 5e-3) => {
+    if (!Number.isFinite(releaseSeconds) || releaseSeconds < 0 || releaseSeconds > 0.1) throw new RangeError("Campfire stop release must be from zero to 0.1 seconds.");
+    for (const voice of active) {
+      if (voice.stopped) continue;
+      voice.stopped = true;
+      const now = context.currentTime;
+      if (voice.when > now) {
+        voice.source.stop(now);
+        continue;
+      }
+      rampVoiceGain(voice, 0, releaseSeconds);
+      voice.source.stop(now + releaseSeconds);
+    }
+  };
+  return {
+    getDiagnostics: () => ({ entries: buffers.size, bytes: disposed ? 0 : bytes, maxBytes, activeVoices: active.size, outputGain }),
+    prepareMissingEvents(events2, { signal, yieldTask: yieldMore = yieldTask } = {}) {
+      const generation = ++updateGeneration;
+      const update = updateTail.catch(() => {
+      }).then(async () => {
+        const check2 = () => {
+          if (disposed || signal?.aborted || generation !== updateGeneration) throw new DOMException("Campfire preparation cancelled", "AbortError");
+        };
+        check2();
+        const missing2 = /* @__PURE__ */ new Map();
+        for (const event2 of events2) for (const voice of campfireAcousticEventVoices(event2, { sampleRate: context.sampleRate })) {
+          const key = campfireAcousticNoteKey(voice.identity);
+          if (!buffers.has(key)) missing2.set(key, voice.identity);
+          if (bytes + missing2.size * bytesPerNote > maxBytes) throw new RangeError("Campfire live edits exceed the prepared PCM budget. Stop and Play to rebuild the current note set.");
+        }
+        const pending = /* @__PURE__ */ new Map();
+        try {
+          for (const [key, identity] of missing2) {
+            check2();
+            const pcm = renderCampfireAcousticNote(identity);
+            const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
+            buffer.copyToChannel(pcm, 0);
+            pending.set(key, buffer);
+            if (pending.size % 4 === 0) await yieldMore();
+          }
+          check2();
+          for (const [key, buffer] of pending) buffers.set(key, buffer);
+          bytes = buffers.size * bytesPerNote;
+          return { added: pending.size, bytes };
+        } finally {
+          pending.clear();
+        }
+      });
+      updateTail = update;
+      return update;
+    },
+    setOutputGain(gain2, rampSeconds = 5e-3) {
+      if (disposed) throw new Error("Campfire note bank has been disposed.");
+      if (!Number.isFinite(gain2) || gain2 < 0 || !Number.isFinite(rampSeconds) || rampSeconds < 0 || rampSeconds > 0.1) throw new RangeError("Invalid Campfire output gain or ramp time.");
+      outputGain = gain2;
+      for (const voice of active) if (!voice.stopped) rampVoiceGain(voice, voice.baseLevel * outputGain, rampSeconds);
+    },
+    schedule(event2, when, { gain: gain2 = 1, pan = event2.pan ?? 0 } = {}) {
+      if (disposed) throw new Error("Campfire note bank has been disposed.");
+      if (!Number.isFinite(when) || !Number.isFinite(gain2) || gain2 < 0 || !Number.isFinite(pan) || pan < -1 || pan > 1) throw new RangeError("Invalid Campfire scheduling time, gain or pan.");
+      const voices = campfireAcousticEventVoices(event2, { sampleRate: context.sampleRate });
+      const prepared = voices.map((voice) => {
+        const buffer = buffers.get(campfireAcousticNoteKey(voice.identity));
+        if (!buffer) throw new Error("Campfire note identity was not prepared. Stop and prepare the updated project before playing.");
+        return { ...voice, buffer };
+      });
+      const startFrame = Math.max(Math.round(context.currentTime * context.sampleRate), Math.floor(when * context.sampleRate));
+      const start = startFrame / context.sampleRate;
+      for (const item of prepared) {
+        const voiceWhen = (startFrame + Math.round(item.offsetSeconds * context.sampleRate)) / context.sampleRate;
+        const source = context.createBufferSource();
+        const output = context.createGain();
+        const panner = context.createStereoPanner();
+        const baseLevel = item.gain * gain2;
+        const level = baseLevel * outputGain;
+        source.buffer = item.buffer;
+        output.gain.value = level;
+        output.gain.setValueAtTime(level, voiceWhen);
+        panner.pan.setValueAtTime(pan, start);
+        source.connect(output);
+        output.connect(panner);
+        panner.connect(options.destination || context.destination);
+        const voice = { source, gain: output, baseLevel, level, when: voiceWhen, stopped: false };
+        source.onended = () => {
+          active.delete(voice);
+          source.disconnect();
+          output.disconnect();
+          panner.disconnect();
+        };
+        active.add(voice);
+        source.start(voiceWhen);
+      }
+    },
+    stopAll,
+    cancelScheduledFrom(when) {
+      for (const voice of active) if (!voice.stopped && voice.when >= when) {
+        voice.stopped = true;
+        voice.source.stop(context.currentTime);
+      }
+    },
+    dispose() {
+      updateGeneration++;
+      stopAll();
+      buffers.clear();
+      disposed = true;
+    }
+  };
+}
+function prepareCampfireAcousticPlayback(context, event2, options = {}) {
+  const pcm = renderCampfireAcousticEvent(event2, { ...options, sampleRate: context.sampleRate });
+  const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
+  buffer.copyToChannel(pcm, 0);
+  const active = /* @__PURE__ */ new Set();
+  const destination = options.destination || context.destination;
+  const stopVoice = (voice, releaseSeconds = 5e-3) => {
+    if (voice.stopped) return;
+    if (!Number.isFinite(releaseSeconds) || releaseSeconds < 0 || releaseSeconds > 0.1) throw new RangeError("Campfire stop release must be from zero to 0.1 seconds.");
+    const now = context.currentTime;
+    voice.stopped = true;
+    if (voice.when > now) {
+      voice.source.stop(now);
+      return;
+    }
+    voice.gain.gain.cancelScheduledValues(now);
+    voice.gain.gain.setValueAtTime(1, now);
+    voice.gain.gain.linearRampToValueAtTime(0, now + releaseSeconds);
+    voice.source.stop(now + releaseSeconds);
+  };
+  return {
+    durationSeconds: buffer.duration,
+    sampleRate: buffer.sampleRate,
+    getActiveVoiceCount: () => active.size,
+    start(when = context.currentTime) {
+      if (!Number.isFinite(when) || when < context.currentTime) throw new RangeError("Campfire start must use a current or future AudioContext time.");
+      const source = context.createBufferSource();
+      const gain2 = context.createGain();
+      source.buffer = buffer;
+      source.connect(gain2);
+      gain2.connect(destination);
+      const startFrame = Math.max(Math.round(context.currentTime * context.sampleRate), Math.floor(when * context.sampleRate));
+      const voice = { source, gain: gain2, when: startFrame / context.sampleRate, stopped: false };
+      source.onended = () => {
+        active.delete(voice);
+        source.disconnect();
+        gain2.disconnect();
+      };
+      source.start(voice.when);
+      active.add(voice);
+      return { stop: (releaseSeconds) => stopVoice(voice, releaseSeconds) };
+    },
+    stopAll(releaseSeconds) {
+      active.forEach((voice) => stopVoice(voice, releaseSeconds));
+    }
   };
 }
 
@@ -2875,6 +3267,7 @@ var POCKET_AUDIO_RENDERER_CAPABILITIES = Object.freeze({
     directDrumLanes: DIRECT_DRUM_LANES,
     directArticulations: DIRECT_ARTICULATIONS,
     techniqueCommands: {
+      campfire: ["seed", "recipeVersion", "tailPolicy", "strumSeconds"],
       chip: ["channel", "duty", "envelope", "commands", "sweep", "pitchSlide", "vibrato", "retrigger"],
       metal: ["palmMute", "pickDirection", "tremoloRate", "string", "dualTakeSeed"],
       western: ["pickDirection", "strumDirection", "banjoRoll", "bowDirection", "breathDirection", "bend"],
@@ -2886,6 +3279,7 @@ var POCKET_AUDIO_RENDERER_CAPABILITIES = Object.freeze({
     directDrumLanes: DIRECT_DRUM_LANES,
     directArticulations: DIRECT_ARTICULATIONS,
     techniqueCommands: {
+      campfire: ["seed", "recipeVersion", "tailPolicy", "strumSeconds"],
       chip: ["channel", "duty", "envelope", "commands", "sweep", "pitchSlide", "vibrato", "retrigger"],
       metal: ["palmMute", "pickDirection", "tremoloRate", "string", "dualTakeSeed"],
       western: ["pickDirection", "strumDirection", "banjoRoll", "bowDirection", "breathDirection", "bend"],
@@ -2911,7 +3305,10 @@ function createPocketAudioRendererCapabilityReport(input, options = {}) {
   }
   collectRichEvents(input).forEach(({ event: event2, path, trackId }) => {
     const articulation = String(event2.articulation || "").toLowerCase();
-    if (articulation && !capabilities.directArticulations.includes(articulation)) {
+    const campfire = (event2.sound || event2.instrument) === "campfire_acoustic" && (trackId === "guitar" || event2.type === "guitar");
+    if (campfire && articulation && !["open", "accent", "finger"].includes(articulation)) {
+      entries.push(campfireArticulationEntry(`${path}.articulation`, articulation));
+    } else if (articulation && !capabilities.directArticulations.includes(articulation)) {
       const action = capabilities.approximatedArticulations.includes(articulation) ? "approximated" : "fallback";
       entries.push(entry(`${path}.articulation`, `articulation:${articulation}`, action, articulationFallback(articulation), `${articulation} is ${action} by ${capabilities.id}; source intent is preserved.`));
     }
@@ -2927,6 +3324,23 @@ function createPocketAudioRendererCapabilityReport(input, options = {}) {
       Object.keys(commands || {}).forEach((command) => {
         if (!supported.has(command)) entries.push(entry(`${path}.technique.${namespace}.${command}`, `technique:${namespace}:${command}`, "preserved", "", `Unknown ${namespace}.${command} command is preserved but not interpreted.`));
       });
+    });
+  });
+  SECTION_IDS.forEach((id) => {
+    const section = input?.sections?.[id];
+    const guitar = section?.guitar;
+    if (!(guitar?.enabled ?? input?.guitarEnabled)) return;
+    const tone = guitar?.tone || input?.guitarTone;
+    const performance2 = guitar?.performance || input?.[`guitarPerformance${id}`] || "grid";
+    if (performance2 !== "grid" && (performance2 !== "strum_pick" || tone !== "campfire_acoustic")) entries.push(entry(`sections.${id}.guitar.performance`, `guitar-performance:${performance2}`, "fallback", "grid", "This guitar performance is unsupported for the selected tone. The grid is used and source intent is retained."));
+    if (tone !== "campfire_acoustic") return;
+    const pattern2 = guitar?.pattern || input?.[`guitarPattern${id}`] || [];
+    const automatic = performance2 === "strum_pick";
+    if (!automatic && !pattern2.some((value) => value && value !== "off" && value !== "hold")) return;
+    const chordType = section?.chords?.type || input?.chordType;
+    if (["seventh", "sus2", "sus4"].includes(chordType)) entries.push(entry(`sections.${id}.chords.type`, `campfire-chord:${chordType}`, "approximated", "triad", `Compact Campfire voicings support major/minor triads. Use explicit rich note arrays to preserve ${chordType} chords; source chord intent is retained.`));
+    pattern2.forEach((articulation, index) => {
+      if (!automatic && (articulation === "chug" || articulation === "scratch")) entries.push(campfireArticulationEntry(`sections.${id}.guitar.pattern[${index}]`, articulation));
     });
   });
   const losses = entries.filter((item) => item.action !== "preserved");
@@ -2954,6 +3368,7 @@ function capability(id, values) {
     drumLanes: POCKET_AUDIO_COMMON_DRUM_LANE_IDS,
     directDrumLanes: values.directDrumLanes,
     techniqueCommands: Object.freeze(values.techniqueCommands),
+    preparedGuitarTones: POCKET_PREPARED_GUITAR_TONES,
     preservesUnknownData: true,
     reportsFallbacks: true,
     sampleClock: values.sampleClock
@@ -2974,6 +3389,9 @@ function articulationFallback(value) {
   if (value === "flam" || value === "drag" || value === "roll") return "accent";
   if (value === "pop" || value === "slap") return "accent";
   return "finger";
+}
+function campfireArticulationEntry(path, articulation) {
+  return entry(path, `campfire-articulation:${articulation}`, "fallback", "natural-pluck", `Campfire renders ${articulation} as its natural pluck; amplifier gates and expressive techniques are unsupported. Source intent is preserved.`);
 }
 function entry(path, feature, action, fallback, message) {
   return { path, feature, action, ...fallback ? { fallback } : {}, message };
@@ -3016,6 +3434,16 @@ function assertLimit(path, actual, limit) {
   error.actual = actual;
   error.limit = limit;
   throw error;
+}
+
+// src/schema/rich-track-stem.js
+function richTrackStem(trackId, track) {
+  const requested = String(track?.stem || track?.role || trackId || "").toLowerCase();
+  if (["drums", "drum", "kick", "snare", "rim", "clap", "hat", "hat_closed", "hat_open", "ride", "crash", "china", "tom_high", "tom_mid", "tom_low", "percussion"].includes(requested)) return "drums";
+  if (requested === "bass") return "bass";
+  if (["chord", "chords", "harmony", "stab", "stabs"].includes(requested)) return "chords";
+  if (requested === "guitar") return "guitar";
+  return "melody";
 }
 
 // src/events/timeline-events.js
@@ -3085,7 +3513,7 @@ function buildSectionEvents(project, section, { baseTime = 0, baseTick = 0, arra
     if (!rich.ownedStems.has("bass")) addBassEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex, totalSteps });
     if (!rich.ownedStems.has("chords")) addChordEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex });
     if (!rich.ownedStems.has("melody")) addMelodyEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex, totalSteps });
-    if (!rich.ownedStems.has("guitar")) addGuitarEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex, totalSteps });
+    if (!rich.ownedStems.has("guitar")) addGuitarEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex, totalSteps, baseTime });
   }
   return {
     events,
@@ -3100,6 +3528,7 @@ function buildRichSectionEvents(project, section, context) {
     const sourceEvents = Array.isArray(track?.events) ? track.events : [];
     if (!sourceEvents.length) return;
     const stem = richTrackStem(trackId, track);
+    if (stem === "guitar" && section.guitar.tone === CAMPFIRE_ACOUSTIC_RECIPE.id && section.guitar.performance === "strum_pick") return;
     if (!richTrackOwnsStem(project, track)) return;
     ownedStems.add(stem);
     let previousPitched = null;
@@ -3143,6 +3572,7 @@ function buildRichSectionEvents(project, section, context) {
         role: source.role,
         expression: source.expression,
         technique: source.technique,
+        direction: source.direction,
         note: source.note,
         notes: source.notes,
         sourceDuration: source.duration,
@@ -3334,7 +3764,24 @@ function addMelodyEvents(events, project, section, context) {
   });
 }
 function addGuitarEvents(events, project, section, context) {
-  if (project.mixer.stems.guitar?.mute || !section.guitar.enabled) return;
+  const campfire = section.guitar.tone === CAMPFIRE_ACOUSTIC_RECIPE.id;
+  if (!section.guitar.enabled || project.mixer.stems.guitar?.mute && !campfire) return;
+  if (campfire && section.guitar.performance === "strum_pick") {
+    if (context.step % project.meta.resolution !== 0) return;
+    const beat = Math.floor(context.step / project.meta.resolution);
+    const chord3 = currentChord(project, section, context.step);
+    const note = campfireAcousticPerformanceNote({ beat, rootPc: chord3.rootPc, quality: chord3.quality, register: section.guitar.register, direction: guitarDirection(Math.floor(beat / 4), section.guitar.strumMode) });
+    if (!note) return;
+    events.push(baseEvent(project, section, context, {
+      ...note,
+      stem: "guitar",
+      type: "guitar",
+      time: context.baseTime + beat * beatSeconds(project),
+      humanizeSeed: 17,
+      humanizeVelocity: false
+    }));
+    return;
+  }
   const art = section.guitar.pattern[context.step];
   if (!art || art === "off" || art === "hold") return;
   const chord2 = currentChord(project, section, context.step);
@@ -3342,11 +3789,13 @@ function addGuitarEvents(events, project, section, context) {
     stem: "guitar",
     type: "guitar",
     duration: guitarDuration(project, section, context.step, art, context.totalSteps),
-    velocity: section.guitar.volume,
-    midiNotes: powerChordNotes(project, section, chord2),
+    // Campfire's shared mixer applies volume once, independently of note intent.
+    velocity: campfire ? art === "accent" ? 1.28 : 1 : section.guitar.volume,
+    midiNotes: campfire ? campfireAcousticVoicing({ rootPc: chord2.rootPc, quality: chord2.quality, register: section.guitar.register }) : powerChordNotes(project, section, chord2),
     instrument: section.guitar.tone,
     articulation: art,
     direction: guitarDirection(context.step, section.guitar.strumMode),
+    ...campfire ? { technique: { campfire: { recipeVersion: CAMPFIRE_ACOUSTIC_RECIPE.version, strumSeconds: CAMPFIRE_ACOUSTIC_RECIPE.strumSeconds, tailPolicy: CAMPFIRE_ACOUSTIC_RECIPE.tailPolicy } } } : {},
     humanizeSeed: 17,
     humanizeVelocity: false
   }));
@@ -3516,14 +3965,6 @@ function guitarDirection(step, mode) {
   if (mode === "up") return "up";
   if (mode === "alternate") return step % 2 ? "up" : DEFAULT_GUITAR_STRUM_MODE;
   return DEFAULT_GUITAR_STRUM_MODE;
-}
-function richTrackStem(trackId, track) {
-  const requested = String(track?.stem || track?.role || trackId || "").toLowerCase();
-  if (["drums", "drum", "kick", "snare", "rim", "clap", "hat", "hat_closed", "hat_open", "ride", "crash", "china", "tom_high", "tom_mid", "tom_low", "percussion"].includes(requested)) return "drums";
-  if (requested === "bass") return "bass";
-  if (["chord", "chords", "harmony", "stab", "stabs"].includes(requested)) return "chords";
-  if (requested === "guitar") return "guitar";
-  return "melody";
 }
 function richEventType(stem, lane) {
   if (stem === "drums") return lane || "percussion";
@@ -3936,9 +4377,10 @@ function normaliseSection(project, id, context) {
     })),
     guitar: {
       enabled: Boolean(project.guitarEnabled),
-      tone: safeChoice2(project.guitarTone, POCKET_GUITAR_TONES, DEFAULT_GUITAR_TONE),
+      tone: safeChoice2(project.guitarTone, [...POCKET_GUITAR_TONES, ...POCKET_PREPARED_GUITAR_TONES], DEFAULT_GUITAR_TONE),
       register: safeChoice2(project.guitarRegister, POCKET_GUITAR_REGISTERS, DEFAULT_GUITAR_REGISTER),
       strumMode: safeChoice2(project.guitarStrumMode, POCKET_GUITAR_STRUM_MODES, DEFAULT_GUITAR_STRUM_MODE),
+      performance: String(project[`guitarPerformance${id}`] || "grid"),
       volume: clamp3(asNumber(project.guitarVolume, DEFAULT_STEM_MIX.guitar.volume), 0, 1),
       pattern: guitarPattern
     },
@@ -3996,8 +4438,10 @@ function normaliseRichTracks(value, context) {
 }
 function normaliseRichEvent(value, context) {
   const source = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  const sound = source.sound ?? (source.instrument === "campfire_acoustic" ? source.instrument : void 0);
+  const campfire = sound === "campfire_acoustic";
   const step = source.step === void 0 ? void 0 : clamp3(asNumber(source.step, 0), 0, Math.max(0, context.steps - 1e-6));
-  const tick = source.tick === void 0 ? void 0 : Math.max(0, asInt(source.tick, 0));
+  const tick = source.tick === void 0 ? void 0 : Math.max(0, campfire ? asNumber(source.tick, 0) : asInt(source.tick, 0));
   const articulation = source.articulation === void 0 ? void 0 : normalisePocketAudioArticulation(source.articulation);
   const notes = Array.isArray(source.notes) ? source.notes.map((note) => asNumber(note, 0)) : void 0;
   return {
@@ -4005,12 +4449,12 @@ function normaliseRichEvent(value, context) {
     ...step !== void 0 ? { step } : {},
     ...tick !== void 0 ? { tick } : {},
     duration: Math.max(0.01, asNumber(source.duration, 1)),
-    ...source.durationTicks === void 0 ? {} : { durationTicks: Math.max(1, asInt(source.durationTicks, 1)) },
+    ...source.durationTicks === void 0 ? {} : { durationTicks: Math.max(1, campfire ? asNumber(source.durationTicks, 1) : asInt(source.durationTicks, 1)) },
     ...source.note === void 0 ? {} : { note: asNumber(source.note, 0) },
     ...notes ? { notes } : {},
     velocity: clamp3(asNumber(source.velocity, 100), 0, 127),
     ...articulation ? { articulation } : {},
-    ...source.sound === void 0 ? {} : { sound: String(source.sound) },
+    ...sound === void 0 ? {} : { sound: String(sound) },
     ...source.lane === void 0 ? {} : { lane: String(source.lane) },
     role: normalisePocketAudioRole(source.role),
     expression: normalisePocketAudioExpression(source.expression),
@@ -4285,10 +4729,13 @@ function decodePcmWavBytes(bytes) {
     const payloadOffset = offset + 8;
     if (payloadOffset + size > bytes.byteLength) throw new Error("Invalid WAV chunk size.");
     if (id === "fmt ") {
+      if (size < 16) throw new Error("Invalid WAV fmt chunk size.");
       fmt3 = {
         audioFormat: view.getUint16(payloadOffset, true),
         channels: view.getUint16(payloadOffset + 2, true),
         sampleRate: view.getUint32(payloadOffset + 4, true),
+        byteRate: view.getUint32(payloadOffset + 8, true),
+        blockAlign: view.getUint16(payloadOffset + 12, true),
         bitsPerSample: view.getUint16(payloadOffset + 14, true)
       };
     } else if (id === "data") {
@@ -4299,16 +4746,21 @@ function decodePcmWavBytes(bytes) {
     offset = payloadOffset + size + size % 2;
   }
   if (!fmt3 || dataOffset < 0) throw new Error("WAV file is missing fmt or data chunks.");
-  if (fmt3.audioFormat !== 1 || ![16, 24].includes(fmt3.bitsPerSample)) {
+  const integerPcm = fmt3.audioFormat === 1 && [16, 24].includes(fmt3.bitsPerSample);
+  const floatPcm = fmt3.audioFormat === 3 && fmt3.bitsPerSample === 32;
+  if (!integerPcm && !floatPcm) {
     throw new Error(`Unsupported WAV format: format=${fmt3.audioFormat} bits=${fmt3.bitsPerSample}.`);
   }
   const bytesPerSample = fmt3.bitsPerSample / 8;
+  if (!fmt3.channels || !fmt3.sampleRate || fmt3.blockAlign !== fmt3.channels * bytesPerSample || fmt3.byteRate !== fmt3.sampleRate * fmt3.blockAlign || dataSize % fmt3.blockAlign) {
+    throw new Error("Invalid WAV frame alignment or sample-rate metadata.");
+  }
   const frameCount = Math.floor(dataSize / (fmt3.channels * bytesPerSample));
   const channels = Array.from({ length: fmt3.channels }, () => new Float32Array(frameCount));
   for (let frame = 0; frame < frameCount; frame += 1) {
     for (let channel = 0; channel < fmt3.channels; channel += 1) {
       const sampleOffset = dataOffset + (frame * fmt3.channels + channel) * bytesPerSample;
-      channels[channel][frame] = readPcmSample(view, sampleOffset, fmt3.bitsPerSample);
+      channels[channel][frame] = floatPcm ? view.getFloat32(sampleOffset, true) : readPcmSample(view, sampleOffset, fmt3.bitsPerSample);
     }
   }
   return {
@@ -4370,6 +4822,7 @@ function renderPocketAudioBuffer(project, options = {}) {
   return renderPocketAudioEventBuffer(timeline.events, {
     ...options,
     durationSeconds: timeline.duration,
+    stemMix: project?.mixer?.stems,
     lofiTexture: project?.lofi?.texture,
     timeline
   });
@@ -4378,12 +4831,16 @@ function renderPocketAudioStemBuffers(project, options = {}) {
   const sampleRate = options.sampleRate || 44100;
   const stems = options.stems || ["drums", "bass", "chords", "melody", "guitar"];
   const timeline = buildPocketAudioTimeline(project, options);
+  const tailSeconds = options.tailSeconds ?? 0.6;
+  const campfireEnd = tailSeconds === 0 ? 0 : timeline.events.reduce((end, event2) => isCampfireEvent(event2) ? Math.max(end, Number(event2.time || 0) + campfireAcousticEventFrameCount(event2, { sampleRate }) / sampleRate) : end, 0);
+  const alignedDuration = Math.max(timeline.duration, campfireEnd - tailSeconds);
   const out = {};
   stems.forEach((stem) => {
     out[stem] = renderPocketAudioEventBuffer(timeline.events.filter((event2) => event2.stem === stem), {
       ...options,
       sampleRate,
-      durationSeconds: timeline.duration,
+      durationSeconds: alignedDuration,
+      stemMix: project?.mixer?.stems,
       lofiTexture: null,
       timeline: {
         ...timeline,
@@ -4391,16 +4848,26 @@ function renderPocketAudioStemBuffers(project, options = {}) {
       }
     });
   });
+  if (options.includeSharedBed && project?.lofi?.texture?.enabled) {
+    out.shared_bed = renderPocketAudioEventBuffer([], { ...options, sampleRate, durationSeconds: alignedDuration, lofiTexture: project.lofi.texture, timeline });
+  }
   return out;
 }
 function renderPocketAudioEventBuffer(events, options = {}) {
   const sampleRate = options.sampleRate || 44100;
   const tailSeconds = options.tailSeconds ?? 0.6;
   const durationSeconds = Number.isFinite(options.durationSeconds) ? Math.max(0, Number(options.durationSeconds)) : events.reduce((duration, event2) => Math.max(duration, Number(event2.time || 0) + Number(event2.duration || 0)), 0);
-  const frameCount = Math.max(1, Math.ceil((durationSeconds + tailSeconds) * sampleRate));
+  const campfireEnd = tailSeconds === 0 ? 0 : events.reduce((end, event2) => {
+    if (!isCampfireEvent(event2)) return end;
+    return Math.max(end, Number(event2.time || 0) + campfireAcousticEventFrameCount(event2, { sampleRate }) / sampleRate);
+  }, 0);
+  const frameCount = Math.max(1, Math.ceil(Math.max(durationSeconds + tailSeconds, campfireEnd) * sampleRate));
   const left = new Float32Array(frameCount);
   const right = new Float32Array(frameCount);
-  events.forEach((event2) => renderEventToChannels(event2, left, right, sampleRate));
+  const campfireCache = events.some(isCampfireEvent) ? new CampfireAcousticNoteCache() : null;
+  const campfireMix = options.stemMix?.guitar;
+  const campfireGain = campfireMix?.mute ? 0 : chordsmithOfflineStemRenderGain("guitar", campfireMix?.volume);
+  events.forEach((event2) => renderEventToChannels(event2, left, right, sampleRate, campfireCache, campfireGain));
   renderLofiTexture({ lofi: { texture: options.lofiTexture } }, left, right, sampleRate);
   return {
     channels: [left, right],
@@ -4446,10 +4913,29 @@ function filterTextureSample(input, state) {
   return state.lowpass;
 }
 function renderPocketAudioWav(project, options = {}) {
-  const buffer = renderPocketAudioBuffer(project, options);
-  return encodePcm16WavBlob({ channels: buffer.channels, sampleRate: buffer.sampleRate });
+  return new Blob([renderPocketAudioWavBytes(project, options)], { type: "audio/wav" });
 }
-function renderEventToChannels(event2, left, right, sampleRate) {
+function renderPocketAudioWavBytes(project, options = {}) {
+  const buffer = renderPocketAudioBuffer(project, options);
+  return encodePcm16WavBytes({ channels: buffer.channels, sampleRate: buffer.sampleRate });
+}
+function isCampfireEvent(event2) {
+  return event2.type === "guitar" && event2.instrument === "campfire_acoustic";
+}
+function renderEventToChannels(event2, left, right, sampleRate, campfireCache, campfireGain) {
+  if (isCampfireEvent(event2)) {
+    if (campfireGain === 0) return;
+    const samples = renderCampfireAcousticEvent(event2, { sampleRate, cache: campfireCache });
+    const start2 = Math.max(0, Math.floor(Number(event2.time || 0) * sampleRate));
+    const pan2 = Math.max(-1, Math.min(1, Number(event2.pan || 0)));
+    const leftGain2 = Math.cos((pan2 + 1) * Math.PI / 4) * campfireGain;
+    const rightGain2 = Math.sin((pan2 + 1) * Math.PI / 4) * campfireGain;
+    for (let frame = 0; frame < samples.length && start2 + frame < left.length; frame += 1) {
+      left[start2 + frame] += samples[frame] * leftGain2;
+      right[start2 + frame] += samples[frame] * rightGain2;
+    }
+    return;
+  }
   const funk = event2.audioProfile === "funk_groove" ? funkParameters(event2) : null;
   const pocketOffset = funk && Number(event2.step || 0) % 2 !== 0 ? (funk.pocket - 0.5) * 0.03 : 0;
   const durationScale = funk && event2.type === "chord" ? 1 - funk.stabTightness * 0.68 : 1;
@@ -4934,27 +5420,10 @@ async function renderStemPlaceholders({ stems = [], sampleRate = 44100 } = {}) {
 }
 async function renderPocketAudioStems(project, options = {}) {
   const sampleRate = options.sampleRate || 44100;
-  const stems = options.stems || ["drums", "bass", "chords", "melody", "guitar"];
-  const timeline = buildPocketAudioTimeline(project, options);
-  const duration = timeline.duration + (options.tailSeconds ?? 0.6);
-  const frameCount = Math.max(1, Math.ceil(duration * sampleRate));
+  const buffers = renderPocketAudioStemBuffers(project, options);
   const out = {};
-  stems.forEach((stem) => {
-    const left = new Float32Array(frameCount);
-    const right = new Float32Array(frameCount);
-    timeline.events.filter((event2) => event2.stem === stem).forEach((event2) => {
-      const start = Math.max(0, Math.floor(event2.time * sampleRate));
-      const length = Math.max(1, Math.floor(Math.max(0.02, event2.duration || 0.08) * sampleRate));
-      const freq = 440 * Math.pow(2, ((event2.midi || event2.midiNotes?.[0] || 60) - 69) / 12);
-      const gain2 = Math.min(0.4, Math.max(0, event2.velocity || 0.25)) * 0.16;
-      for (let index = 0; index < length && start + index < frameCount; index += 1) {
-        const env = 1 - index / length;
-        const sample = Math.sin(2 * Math.PI * freq * index / sampleRate) * gain2 * env;
-        left[start + index] += sample;
-        right[start + index] += sample;
-      }
-    });
-    out[stem] = encodePcm16WavBlob({ channels: [left, right], sampleRate });
+  Object.entries(buffers).forEach(([stem, buffer]) => {
+    out[stem] = encodePcm16WavBlob({ channels: buffer.channels, sampleRate });
   });
   return out;
 }
@@ -4969,6 +5438,9 @@ var PocketAudio = class {
     this.playing = false;
     this.audioContext = null;
     this.schedulerTimer = null;
+    this.campfireNoteBank = null;
+    this.campfirePreparation = null;
+    this.playRequestGeneration = 0;
     this.playStartedAt = 0;
     this.audioStartTime = null;
     this.timelineStartTime = null;
@@ -5005,6 +5477,9 @@ var PocketAudio = class {
     this.defineMusicStates(options.musicStates || options.stateMap || {});
   }
   async loadProject(input, options = {}) {
+    this.stop();
+    this.campfireNoteBank?.dispose();
+    this.campfireNoteBank = null;
     const raw = input?.app === "PocketAudioProject" ? input.source?.original || input : parsePocketChordsmithInput(input);
     this.project = raw?.app === "PocketAudioProject" ? raw : normalisePocketChordsmithProject(raw, options);
     this.timeline = buildPocketAudioTimeline(this.project, { scope: "sequence" });
@@ -5025,10 +5500,39 @@ var PocketAudio = class {
   }
   async play(options = {}) {
     this.ensureProject();
+    const requestGeneration = ++this.playRequestGeneration;
+    this.campfirePreparation?.abort();
+    this.campfireNoteBank?.dispose();
+    this.campfireNoteBank = null;
+    this.playing = false;
+    this.clearTimelineScheduler();
     if (!this.audioContext && this.options.audio !== false && (globalThis.AudioContext || globalThis.webkitAudioContext)) await this.resume();
-    this.playing = true;
+    if (requestGeneration !== this.playRequestGeneration) return;
     if (options.sectionId) this.transport.sectionId = normaliseSectionId2(options.sectionId);
-    this.timeline = buildPocketAudioTimeline(this.project, { scope: options.scope || "sequence", sectionId: this.transport.sectionId });
+    this.timeline = buildPocketAudioTimeline(this.project, { scope: options.scope || "sequence", sectionId: this.transport.sectionId, renderer: "live" });
+    if (this.options.audio !== false && projectUsesCampfire(this.project)) {
+      const events = Object.keys(this.project.sections).flatMap((sectionId) => buildPocketAudioTimeline(this.project, { scope: "section", sectionId, renderer: "live" }).events.filter(isCampfireEvent2));
+      if (events.length) {
+        if (!this.audioContext) throw new Error("Campfire live playback needs an AudioContext. Use Core offline rendering when browser audio is unavailable.");
+        const preparation = new AbortController();
+        this.campfirePreparation = preparation;
+        try {
+          const bank = await prepareCampfireAcousticNoteBank(this.audioContext, events, { maxBytes: this.options.campfireMaxPreparedBytes, signal: preparation.signal });
+          if (requestGeneration !== this.playRequestGeneration) {
+            bank.dispose();
+            return;
+          }
+          this.campfireNoteBank = bank;
+          this.updateCampfireMixerGain();
+        } catch (error) {
+          if (preparation.signal.aborted) return;
+          throw error;
+        } finally {
+          if (this.campfirePreparation === preparation) this.campfirePreparation = null;
+        }
+      }
+    }
+    this.playing = true;
     this.nextEventIndex = 0;
     this.audioStartTime = this.clock();
     this.playStartedAt = this.audioStartTime;
@@ -5040,11 +5544,13 @@ var PocketAudio = class {
     this.emit("play", this.getTransport());
   }
   pause() {
+    this.cancelCampfirePlayback();
     this.playing = false;
     this.clearTimelineScheduler();
     this.emit("pause", this.getTransport());
   }
   stop() {
+    this.cancelCampfirePlayback();
     this.playing = false;
     this.clearTimelineScheduler();
     this.transport = { ...this.transport, bar: 1, beat: 1, step: -1, seconds: 0, tick: 0 };
@@ -5052,7 +5558,13 @@ var PocketAudio = class {
   }
   restart() {
     this.stop();
-    this.play();
+    return this.play();
+  }
+  cancelCampfirePlayback() {
+    this.playRequestGeneration += 1;
+    this.campfirePreparation?.abort();
+    this.campfirePreparation = null;
+    this.campfireNoteBank?.stopAll();
   }
   queueSection(sectionId, options = {}) {
     this.ensureProject();
@@ -5205,6 +5717,8 @@ var PocketAudio = class {
       intensity: this.intensity,
       ducking: this.ducking,
       projectLoaded: Boolean(this.project),
+      campfirePreparationPending: Boolean(this.campfirePreparation),
+      campfirePrepared: this.campfireNoteBank?.getDiagnostics() || null,
       ...this.diagnostics
     };
   }
@@ -5250,6 +5764,7 @@ var PocketAudio = class {
   resetTimelineAtTransition(transportTime) {
     if (this.audioStartTime === null) return;
     this.timelineStartTime = this.audioStartTime + Number(transportTime || 0);
+    this.campfireNoteBank?.cancelScheduledFrom(this.timelineStartTime);
     this.timelineLoopOffset = 0;
     this.nextEventIndex = 0;
   }
@@ -5266,6 +5781,8 @@ var PocketAudio = class {
   }
   dispose() {
     this.stop();
+    this.campfireNoteBank?.dispose();
+    this.campfireNoteBank = null;
     this.listeners.clear();
   }
   ensureProject() {
@@ -5307,7 +5824,10 @@ var PocketAudio = class {
           this.timelineLoopOffset = completedLoops * this.timeline.duration;
           this.nextEventIndex = 0;
         } else {
-          this.stop();
+          this.playing = false;
+          this.clearTimelineScheduler();
+          this.transport = { ...this.transport, bar: 1, beat: 1, step: -1, seconds: 0, tick: 0 };
+          this.emit("stop", this.getTransport());
         }
       }
     };
@@ -5336,12 +5856,18 @@ var PocketAudio = class {
     this.emit("beat", event2);
     const scheduledEvent = { ...event2, scheduledAudioTime: targetAudioTime };
     this.emit("event", scheduledEvent);
-    if (this.audioContext) scheduleSimpleAudioEvent(this.audioContext, event2, this.project, targetAudioTime);
+    if (this.audioContext && this.options.audio !== false) {
+      if (isCampfireEvent2(event2)) {
+        if (!this.campfireNoteBank) throw new Error("Campfire audio must be prepared before transport starts.");
+        this.campfireNoteBank.schedule(event2, targetAudioTime);
+      } else scheduleSimpleAudioEvent(this.audioContext, event2, this.project, targetAudioTime);
+    }
   }
   patchStem(stem, patch) {
     this.ensureProject();
     if (!this.project.mixer.stems[stem]) throw new Error(`Unknown stem: ${stem}`);
     this.project.mixer.stems[stem] = { ...this.project.mixer.stems[stem], ...patch };
+    if (stem === "guitar") this.updateCampfireMixerGain();
     this.emit("stem", { stem, settings: this.project.mixer.stems[stem] });
   }
   applyStemPatchMap(stems = {}) {
@@ -5350,6 +5876,10 @@ var PocketAudio = class {
       if (patch.mute !== void 0) this.setStemMute(stem, patch.mute);
     });
   }
+  updateCampfireMixerGain() {
+    const mix = this.project?.mixer?.stems?.guitar;
+    this.campfireNoteBank?.setOutputGain(mix?.mute ? 0 : chordsmithOfflineStemRenderGain("guitar", mix?.volume));
+  }
   getMusicStateDefinition(name) {
     const safeName = String(name || "");
     const definition = this.musicStates.get(safeName);
@@ -5357,6 +5887,12 @@ var PocketAudio = class {
     return definition;
   }
 };
+function isCampfireEvent2(event2) {
+  return event2.type === "guitar" && event2.instrument === "campfire_acoustic";
+}
+function projectUsesCampfire(project) {
+  return Object.values(project.sections).some((section) => section.guitar?.tone === "campfire_acoustic" || Object.values(section.richTracks || {}).some((track) => track.events?.some((event2) => (event2.sound || event2.instrument) === "campfire_acoustic")));
+}
 function nowSeconds(context) {
   return context?.currentTime ?? performance.now() / 1e3;
 }
@@ -5710,7 +6246,7 @@ function analyseRenderedBuffer(rendered) {
   const rms = Math.sqrt(sumSquares / Math.max(1, count));
   const sampleRate = rendered.sampleRate || 44100;
   const frameCount = Math.max(0, channels[0]?.length || 0);
-  const truePeak = estimateTruePeak(channels);
+  const truePeak = estimateTruePeak(channels, peak, nanSamples + infiniteSamples > 0);
   const spectralBalance = estimateSpectralBalance(channels, sampleRate);
   const left = channels[0] || new Float32Array(0);
   const right = channels[1] || left;
@@ -5725,12 +6261,12 @@ function analyseRenderedBuffer(rendered) {
     samplePeakDbfs: ampToDb(peak),
     truePeakDbtp: ampToDb(truePeak),
     estimatedTruePeakDbtp: ampToDb(truePeak),
-    truePeakMethod: "estimated_catmull_rom_4x_v2",
+    truePeakMethod: "estimated_blackman_sinc_4x32_v3",
     intersampleRisk: truePeak > peak + dbToAmp(-60),
     rms: round(rms),
     rmsDbfs: ampToDb(rms),
     integratedLufs: estimateIntegratedLufs(channels, sampleRate),
-    lufsMethod: "estimated_bs1770_k_weighted_gated_v2",
+    lufsMethod: "estimated_bs1770_k_weighted_gated_v3",
     meteringStatus: "estimated_pending_external_calibration",
     crestFactorDb: rms > 0 ? round(ampToDb(peak / rms)) : null,
     clippedSamples,
@@ -5762,23 +6298,42 @@ function ampToDb(value) {
 function dbToAmp(db) {
   return Math.pow(10, db / 20);
 }
-function estimateTruePeak(channels, oversample = 4) {
-  let peak = 0;
-  channels.forEach((channel) => {
+var TRUE_PEAK_RADIUS = 16;
+var TRUE_PEAK_KERNELS = [0.25, 0.5, 0.75].map((fraction) => {
+  const coefficients = Float64Array.from({ length: TRUE_PEAK_RADIUS * 2 }, (_, tap) => {
+    const distance = fraction - (tap + 1 - TRUE_PEAK_RADIUS);
+    if (Math.abs(distance) >= TRUE_PEAK_RADIUS) return 0;
+    const sinc = Math.abs(distance) < 1e-12 ? 1 : Math.sin(Math.PI * distance) / (Math.PI * distance);
+    const window = 0.42 + 0.5 * Math.cos(Math.PI * distance / TRUE_PEAK_RADIUS) + 0.08 * Math.cos(2 * Math.PI * distance / TRUE_PEAK_RADIUS);
+    return sinc * window;
+  });
+  const sum = coefficients.reduce((total, coefficient) => total + coefficient, 0);
+  return coefficients.map((coefficient) => coefficient / sum);
+});
+function estimateTruePeak(channels, samplePeak, hasNonFinite) {
+  let peak = samplePeak;
+  for (const channel of channels) {
+    if (!channel.length) continue;
     for (let index = 0; index < channel.length; index += 1) {
-      const p0 = finiteAt(channel, index - 1);
-      const p1 = finiteAt(channel, index);
-      const p2 = finiteAt(channel, index + 1, p1);
-      const p3 = finiteAt(channel, index + 2, p2);
-      peak = Math.max(peak, Math.abs(p1));
-      for (let step = 1; step < oversample; step += 1) {
-        const t = step / oversample;
-        const interpolated = catmullRom(p0, p1, p2, p3, t);
+      const interior = index >= TRUE_PEAK_RADIUS - 1 && index + TRUE_PEAK_RADIUS < channel.length;
+      for (const coefficients of TRUE_PEAK_KERNELS) {
+        let interpolated = 0;
+        for (let tap = 0; tap < coefficients.length; tap += 1) {
+          const sourceIndex = index + tap + 1 - TRUE_PEAK_RADIUS;
+          const value = channel[interior ? sourceIndex : mirrorIndex(sourceIndex, channel.length)];
+          interpolated += (hasNonFinite && !Number.isFinite(value) ? 0 : value) * coefficients[tap];
+        }
         peak = Math.max(peak, Math.abs(interpolated));
       }
     }
-  });
+  }
   return peak;
+}
+function mirrorIndex(index, length) {
+  if (length <= 1) return 0;
+  const period = 2 * (length - 1);
+  const folded = (index % period + period) % period;
+  return folded < length ? folded : period - folded;
 }
 function estimateIntegratedLufs(channels, sampleRate) {
   const weighted = channels.map((channel) => applyKWeighting(channel, sampleRate));
@@ -5808,20 +6363,11 @@ function estimateIntegratedLufs(channels, sampleRate) {
   const mean = (gated.length ? gated : blockPowers).reduce((sum, value) => sum + value, 0) / Math.max(1, (gated.length ? gated : blockPowers).length);
   return round(loudnessFromPower(mean));
 }
-function finiteAt(channel, index, fallback = 0) {
-  const value = channel[index];
-  return Number.isFinite(value) ? value : fallback;
-}
-function catmullRom(p0, p1, p2, p3, t) {
-  const t2 = t * t;
-  const t3 = t2 * t;
-  return 0.5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 + (-p0 + 3 * p1 - 3 * p2 + p3) * t3);
-}
 function loudnessFromPower(power) {
   return -0.691 + 10 * Math.log10(Math.max(1e-20, power));
 }
 function applyKWeighting(channel, sampleRate) {
-  const highShelf = designHighShelf(sampleRate, 1681.974450955533, 3.999843853973347, 0.7071752369554196);
+  const highShelf = kWeightingShelf(sampleRate);
   const highPass2 = designHighPass(sampleRate, 38.13547087613982, 0.5003270373238773);
   return applyBiquad(applyBiquad(channel, highShelf), highPass2);
 }
@@ -5842,33 +6388,25 @@ function applyBiquad(channel, coeffs) {
   }
   return out;
 }
-function designHighShelf(sampleRate, hz, gainDb, q) {
-  const a = Math.pow(10, gainDb / 40);
-  const omega = 2 * Math.PI * hz / sampleRate;
-  const sin = Math.sin(omega);
-  const cos = Math.cos(omega);
-  const alpha = sin / (2 * q);
-  const sqrtA = Math.sqrt(a);
-  const b0 = a * (a + 1 + (a - 1) * cos + 2 * sqrtA * alpha);
-  const b1 = -2 * a * (a - 1 + (a + 1) * cos);
-  const b2 = a * (a + 1 + (a - 1) * cos - 2 * sqrtA * alpha);
-  const a0 = a + 1 - (a - 1) * cos + 2 * sqrtA * alpha;
-  const a1 = 2 * (a - 1 - (a + 1) * cos);
-  const a2 = a + 1 - (a - 1) * cos - 2 * sqrtA * alpha;
+function kWeightingShelf(sampleRate) {
+  const b = [1.53512485958697, -2.69169618940638, 1.19839281085285];
+  const a = [1, -1.69065929318241, 0.73248077421585];
+  const hz = 1681.974450955533;
+  const ratio = Math.tan(Math.PI * hz / 48e3) / Math.tan(Math.PI * hz / sampleRate);
+  const transform = ([c0, c1, c2]) => {
+    const constant = c0 + c1 + c2;
+    const linear = 2 * (c0 - c2) * ratio;
+    const square = (c0 - c1 + c2) * ratio * ratio;
+    return [constant + linear + square, 2 * constant - 2 * square, constant - linear + square];
+  };
+  const [b0, b1, b2] = transform(b);
+  const [a0, a1, a2] = transform(a);
   return normalizeBiquad({ b0, b1, b2, a0, a1, a2 });
 }
 function designHighPass(sampleRate, hz, q) {
-  const omega = 2 * Math.PI * hz / sampleRate;
-  const sin = Math.sin(omega);
-  const cos = Math.cos(omega);
-  const alpha = sin / (2 * q);
-  const b0 = (1 + cos) / 2;
-  const b1 = -(1 + cos);
-  const b2 = (1 + cos) / 2;
-  const a0 = 1 + alpha;
-  const a1 = -2 * cos;
-  const a2 = 1 - alpha;
-  return normalizeBiquad({ b0, b1, b2, a0, a1, a2 });
+  const k = Math.tan(Math.PI * hz / sampleRate);
+  const denominator = 1 + k / q + k * k;
+  return { b0: 1, b1: -2, b2: 1, a1: 2 * (k * k - 1) / denominator, a2: (1 - k / q + k * k) / denominator };
 }
 function normalizeBiquad({ b0, b1, b2, a0, a1, a2 }) {
   return {
@@ -6455,8 +6993,23 @@ function createBaseManifest(project, { profile: profile2, sampleRate }) {
       samples: GAME_PACK_FOLDERS.samples
     },
     events: [],
+    mixContract: {
+      version: 1,
+      sourceRenderer: "pocket-audio-core-offline",
+      sampleRate,
+      bitDepth: 16,
+      normalization: "off",
+      layerGain: "baked-core-offline-stem-gain-and-pan",
+      sharedBed: "separate-when-enabled",
+      masterFx: "metadata-only-not-baked",
+      reconstruction: "verify-decoded-pcm-against-full-mix-at-unity-gain",
+      outputClipping: "hard-limit-at-output",
+      playbackGroups: []
+    },
     notes: [
-      "Exact parity requires these core-rendered assets. Native Godot procedural playback should be labelled preview until tested."
+      "The Core-rendered full mix is the reference for these assets; this does not establish Chordsmith browser or native DAW full-mix parity.",
+      "Choose the full mix OR the corresponding layer set. Never sum the full mix with its stems. Keep baked layer gains at unity unless intentionally remixing.",
+      "FX settings are descriptive metadata; Core offline export does not bake the browser's shared FX/master chain. Procedural playback remains preview until tested."
     ]
   };
 }
@@ -6464,12 +7017,13 @@ async function addStemSyncAssets(project, manifest, files, { sampleRate }) {
   const fullMixName = gamePackPath("full", "full_mix.wav");
   files.set(fullMixName, renderPocketAudioWav(project, { scope: "sequence", sampleRate, tailSeconds: 0 }));
   manifest.assets.mix = fullMixName;
-  const stems = await renderPocketAudioStems(project, { scope: "sequence", sampleRate, tailSeconds: 0, stems: STEM_IDS });
-  STEM_IDS.forEach((stem) => {
+  const stems = await renderPocketAudioStems(project, { scope: "sequence", sampleRate, tailSeconds: 0, stems: STEM_IDS, includeSharedBed: true });
+  Object.keys(stems).forEach((stem) => {
     const name = gamePackPath("stems", `${stem}.wav`);
     files.set(name, stems[stem]);
     manifest.assets[stem] = name;
   });
+  addPlaybackGroup(manifest, "sequence", manifest.assets);
 }
 async function addLoopKitAssets(project, manifest, files, { sampleRate, includeStems }) {
   for (const sectionId of Object.keys(manifest.sections)) {
@@ -6478,28 +7032,40 @@ async function addLoopKitAssets(project, manifest, files, { sampleRate, includeS
     files.set(mixName, renderPocketAudioWav(project, { scope: "section", sectionId, sampleRate, tailSeconds: 0 }));
     sectionManifest.assets.mix = mixName;
     if (includeStems) {
-      const stems = await renderPocketAudioStems(project, { scope: "section", sectionId, sampleRate, tailSeconds: 0, stems: STEM_IDS });
-      STEM_IDS.forEach((stem) => {
+      const stems = await renderPocketAudioStems(project, { scope: "section", sectionId, sampleRate, tailSeconds: 0, stems: STEM_IDS, includeSharedBed: true });
+      Object.keys(stems).forEach((stem) => {
         const name = gamePackPath("stems", `section_${sectionId}_${stem}.wav`);
         files.set(name, stems[stem]);
         sectionManifest.assets[stem] = name;
       });
     }
+    addPlaybackGroup(manifest, `section:${sectionId}`, sectionManifest.assets);
   }
 }
 async function addHybridAssets(project, manifest, files, { sampleRate }) {
-  const stems = await renderPocketAudioStems(project, { scope: "sequence", sampleRate, tailSeconds: 0, stems: STEM_IDS });
-  STEM_IDS.forEach((stem) => {
+  const fullMixName = gamePackPath("full", "full_mix.wav");
+  files.set(fullMixName, renderPocketAudioWav(project, { scope: "sequence", sampleRate, tailSeconds: 0 }));
+  manifest.assets.mix = fullMixName;
+  const stems = await renderPocketAudioStems(project, { scope: "sequence", sampleRate, tailSeconds: 0, stems: STEM_IDS, includeSharedBed: true });
+  Object.keys(stems).forEach((stem) => {
     const name = gamePackPath("stems", `bed_${stem}.wav`);
     files.set(name, stems[stem]);
     manifest.assets[stem] = name;
   });
+  addPlaybackGroup(manifest, "sequence", manifest.assets);
   ["kick", "snare", "crash", "victory_stinger"].forEach((sample) => {
     const name = gamePackPath("samples", `${sample}.wav`);
     files.set(name, createSilentWavBlob({ durationSeconds: sample.endsWith("stinger") ? 0.75 : 0.25, sampleRate }));
     manifest.assets[sample] = name;
   });
   manifest.notes.push("HYBRID sample assets are generated placeholders in this v0 export and should be replaced as the sample kit matures.");
+}
+function addPlaybackGroup(manifest, id, assets) {
+  const layers = Object.entries(assets).filter(([name]) => name !== "mix").map(([, path]) => path);
+  manifest.mixContract.playbackGroups.push({ id, alternatives: [
+    ...assets.mix ? [{ id: "full-mix-reference", assets: [assets.mix] }] : [],
+    ...layers.length ? [{ id: "adaptive-layers", assets: layers }] : []
+  ] });
 }
 function createFxManifest(project) {
   const fx = project.mixer?.fx || {};
@@ -7719,6 +8285,8 @@ function scheduleGuitarEvent(event2) {
   return { ...event2, scheduledBy: "pocket-audio-core/guitar" };
 }
 export {
+  CAMPFIRE_ACOUSTIC_RECIPE,
+  CAMPFIRE_REFERENCE_CHORDS,
   CHIP_AUDIO_PROFILE_ID,
   CHIP_BASS_TONES,
   CHIP_BASS_TONE_CONFIGS,
@@ -7759,6 +8327,7 @@ export {
   CLASSIC_DRUM_KIT_CONFIG,
   CLASSIC_LEAD_INSTRUMENT_CONFIGS,
   CORE_PROJECT_VERSION,
+  CampfireAcousticNoteCache,
   DEFAULT_BPM,
   DEFAULT_CHIP_DRUM_KIT,
   DEFAULT_CHIP_PRESET_ID,
@@ -7876,6 +8445,7 @@ export {
   POCKET_LOFI_SOUND_REGISTRY,
   POCKET_MELODY_INSTRUMENTS,
   POCKET_METAL_SOUND_REGISTRY,
+  POCKET_PREPARED_GUITAR_TONES,
   POCKET_PRO_EQ_BANDS,
   POCKET_PRO_EQ_DEFAULT_PARAMETERS,
   POCKET_PRO_EQ_PRESETS,
@@ -7918,6 +8488,13 @@ export {
   buildSectionEvents,
   buildStepTimeline,
   buildWesternPatternEvents,
+  campfireAcousticEventFrameCount,
+  campfireAcousticEventVoices,
+  campfireAcousticNoteIdentity,
+  campfireAcousticNoteKey,
+  campfireAcousticPerformanceNote,
+  campfireAcousticReferenceEvents,
+  campfireAcousticVoicing,
   chordIntervals,
   chordMidiNotes2 as chordMidiNotes,
   chordQuality,
@@ -8041,13 +8618,18 @@ export {
   pocketLeadExtraLayers,
   pocketProEqPresetParameters,
   pos16ToStep,
+  prepareCampfireAcousticNoteBank,
+  prepareCampfireAcousticPlayback,
   releaseSummaryCsv,
+  renderCampfireAcousticEvent,
+  renderCampfireAcousticNote,
   renderMarkdownReport,
   renderPocketAudioBuffer,
   renderPocketAudioEventBuffer,
   renderPocketAudioStemBuffers,
   renderPocketAudioStems,
   renderPocketAudioWav,
+  renderPocketAudioWavBytes,
   renderStemPlaceholders,
   renderWav,
   resolveInputPaths,

@@ -1,6 +1,14 @@
 (() => {
+  var __typeError = (msg) => {
+    throw TypeError(msg);
+  };
+  var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
+  var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
+  var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+  var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
+
   // src/constants.js
-  var POCKET_AUDIO_CORE_VERSION = "0.2.0";
+  var POCKET_AUDIO_CORE_VERSION = "0.3.0";
   var CORE_PROJECT_VERSION = 1;
   var PCS_SHARE_PREFIX = "PCS1:";
   var DEFAULT_SOURCE_SCHEMA_VERSION = 16;
@@ -379,6 +387,7 @@
   var POCKET_GUITAR_ARTICULATIONS = Object.freeze(["off", "open", "chug", "accent", "hold", "scratch"]);
   var POCKET_GUITAR_STEP_CYCLE = Object.freeze(["off", "chug", "accent", "hold", "scratch"]);
   var POCKET_GUITAR_TONES = Object.freeze(["clean", "crunch", "high_gain", "metal", "tight_metal", "doom_fuzz", "western_twang", "funk_muted"]);
+  var POCKET_PREPARED_GUITAR_TONES = Object.freeze(["campfire_acoustic"]);
   var DEFAULT_GUITAR_TONE = "high_gain";
   var POCKET_GUITAR_REGISTERS = Object.freeze(["low", "mid", "high"]);
   var DEFAULT_GUITAR_REGISTER = "low";
@@ -410,7 +419,195 @@
     funk_muted: Object.freeze({ drive: 1.45, input: 0.7, peak: 0.074, lowpass: 3900, highpass: 210, body: 1.2, mid: 2.75, spread: 0.014, sustain: 0.42, mute: 0.045, scratch: 0.038 })
   });
   function findPocketGuitarTone(id) {
+    if (POCKET_PREPARED_GUITAR_TONES.includes(id)) throw new Error(`${id} requires prepared PCM playback; an amplifier fallback is unsupported.`);
     return POCKET_GUITAR_TONE_CONFIGS[id] || POCKET_GUITAR_TONE_CONFIGS[DEFAULT_GUITAR_TONE];
+  }
+
+  // src/sounds/campfire-acoustic.js
+  var CAMPFIRE_ACOUSTIC_RECIPE = Object.freeze({
+    id: "campfire_acoustic",
+    version: 1,
+    durationSeconds: 1.5,
+    excitationRange: 0.45,
+    feedbackPairGain: 0.496,
+    seedPitchMultiplier: 311,
+    strumSeconds: 0.027,
+    noteGain: 0.36,
+    minMidi: 36,
+    maxMidi: 96,
+    minSampleRate: 8e3,
+    maxSampleRate: 192e3,
+    tuning: "rounded-integer-period-reference",
+    tailPolicy: "reference-cut"
+  });
+  var CAMPFIRE_REFERENCE_CHORDS = Object.freeze([
+    Object.freeze({ name: "D", rootPc: 2, quality: "maj", notes: Object.freeze([50, 57, 62, 66]) }),
+    Object.freeze({ name: "G", rootPc: 7, quality: "maj", notes: Object.freeze([55, 59, 62, 67]) }),
+    Object.freeze({ name: "Bm", rootPc: 11, quality: "min", notes: Object.freeze([47, 54, 59, 62]) }),
+    Object.freeze({ name: "A", rootPc: 9, quality: "maj", notes: Object.freeze([45, 57, 61, 64]) })
+  ]);
+  function campfireAcousticNoteIdentity(options = {}) {
+    const midi = options.midi;
+    const sampleRate = options.sampleRate ?? 44100;
+    const recipeVersion = options.recipeVersion ?? CAMPFIRE_ACOUSTIC_RECIPE.version;
+    const seed = options.seed ?? midi * CAMPFIRE_ACOUSTIC_RECIPE.seedPitchMultiplier;
+    const tailPolicy = options.tailPolicy ?? CAMPFIRE_ACOUSTIC_RECIPE.tailPolicy;
+    if (recipeVersion !== 1) throw new RangeError(`Unsupported Campfire recipe version: ${recipeVersion}`);
+    requireInteger(midi, 36, 96, "MIDI pitch");
+    requireInteger(sampleRate, 8e3, 192e3, "sample rate");
+    requireInteger(seed, 0, 4294967295, "seed");
+    if (!["reference-cut", "fade-5ms"].includes(tailPolicy)) throw new RangeError(`Unsupported Campfire tail policy: ${tailPolicy}`);
+    return { recipeVersion, midi, sampleRate, seed, tailPolicy };
+  }
+  function campfireAcousticNoteKey(options = {}) {
+    const identity = campfireAcousticNoteIdentity(options);
+    return JSON.stringify(["campfire_acoustic", identity.recipeVersion, identity.sampleRate, identity.midi, identity.seed, identity.tailPolicy]);
+  }
+  function renderCampfireAcousticNote(options = {}) {
+    const identity = campfireAcousticNoteIdentity(options);
+    const frequency = 440 * 2 ** ((identity.midi - 69) / 12);
+    const delayFrames = Math.round(identity.sampleRate / frequency);
+    const samples = new Float32Array(Math.floor(identity.sampleRate * 1.5));
+    let randomState = identity.seed >>> 0;
+    for (let frame = 0; frame < delayFrames; frame += 1) {
+      randomState = Math.imul(randomState, 1664525) + 1013904223 >>> 0;
+      samples[frame] = (randomState / 4294967296 - 0.5) * 0.45;
+    }
+    for (let frame = delayFrames; frame < samples.length; frame += 1) {
+      const delayedPair = samples[frame - delayFrames] + samples[frame - delayFrames + 1];
+      samples[frame] = delayedPair * 0.496;
+    }
+    if (identity.tailPolicy === "fade-5ms") {
+      const fadeFrames = Math.max(2, Math.round(identity.sampleRate * 5e-3));
+      for (let frame = 0; frame < fadeFrames; frame += 1) {
+        samples[samples.length - fadeFrames + frame] *= 1 - frame / (fadeFrames - 1);
+      }
+    }
+    return samples;
+  }
+  var _entries, _bytes, _hits, _misses, _maxBytes, _maxEntries;
+  var CampfireAcousticNoteCache = class {
+    constructor({ maxBytes = 16 * 1024 * 1024, maxEntries = 64 } = {}) {
+      __privateAdd(this, _entries, /* @__PURE__ */ new Map());
+      __privateAdd(this, _bytes, 0);
+      __privateAdd(this, _hits, 0);
+      __privateAdd(this, _misses, 0);
+      __privateAdd(this, _maxBytes);
+      __privateAdd(this, _maxEntries);
+      requireInteger(maxBytes, 0, 64 * 1024 * 1024, "cache byte budget");
+      requireInteger(maxEntries, 0, 256, "cache entry budget");
+      __privateSet(this, _maxBytes, maxBytes);
+      __privateSet(this, _maxEntries, maxEntries);
+    }
+    getNote(options) {
+      const key = campfireAcousticNoteKey(options);
+      let samples = __privateGet(this, _entries).get(key);
+      if (samples) {
+        __privateSet(this, _hits, __privateGet(this, _hits) + 1);
+        __privateGet(this, _entries).delete(key);
+        __privateGet(this, _entries).set(key, samples);
+      } else {
+        __privateSet(this, _misses, __privateGet(this, _misses) + 1);
+        samples = renderCampfireAcousticNote(options);
+        if (samples.byteLength <= __privateGet(this, _maxBytes) && __privateGet(this, _maxEntries) > 0) {
+          while (__privateGet(this, _entries).size >= __privateGet(this, _maxEntries) || __privateGet(this, _bytes) + samples.byteLength > __privateGet(this, _maxBytes)) {
+            const oldest = __privateGet(this, _entries).keys().next().value;
+            __privateSet(this, _bytes, __privateGet(this, _bytes) - __privateGet(this, _entries).get(oldest).byteLength);
+            __privateGet(this, _entries).delete(oldest);
+          }
+          __privateGet(this, _entries).set(key, samples);
+          __privateSet(this, _bytes, __privateGet(this, _bytes) + samples.byteLength);
+        }
+      }
+      return samples.slice();
+    }
+    clear() {
+      __privateGet(this, _entries).clear();
+      __privateSet(this, _bytes, 0);
+    }
+    getDiagnostics() {
+      return { entries: __privateGet(this, _entries).size, bytes: __privateGet(this, _bytes), hits: __privateGet(this, _hits), misses: __privateGet(this, _misses), maxBytes: __privateGet(this, _maxBytes), maxEntries: __privateGet(this, _maxEntries) };
+    }
+  };
+  _entries = new WeakMap();
+  _bytes = new WeakMap();
+  _hits = new WeakMap();
+  _misses = new WeakMap();
+  _maxBytes = new WeakMap();
+  _maxEntries = new WeakMap();
+  function campfireAcousticVoicing({ rootPc, quality = "maj", register = "low" } = {}) {
+    requireInteger(rootPc, 0, 11, "chord root");
+    if (!["maj", "min", "dim", "aug"].includes(quality)) throw new RangeError(`Unsupported Campfire chord quality: ${quality}`);
+    const octave = { low: 0, mid: 12, high: 24 }[register];
+    if (octave === void 0) throw new RangeError(`Unsupported Campfire register: ${register}`);
+    const reference = CAMPFIRE_REFERENCE_CHORDS.find((chord2) => chord2.rootPc === rootPc && chord2.quality === quality);
+    const root = 45 + (rootPc - 9 + 12) % 12;
+    const third = quality === "min" || quality === "dim" ? 3 : 4;
+    const fifth = quality === "dim" ? 6 : quality === "aug" ? 8 : 7;
+    return (reference?.notes || [root, root + fifth, root + 12, root + third + 12]).map((note) => note + octave);
+  }
+  function campfireAcousticPerformanceNote({ beat, rootPc, quality = "maj", register = "low", direction = "down" } = {}) {
+    requireInteger(beat, 0, 16383, "performance beat");
+    if (!["down", "up"].includes(direction)) throw new RangeError(`Unsupported Campfire direction: ${direction}`);
+    if (beat % 4 !== 0 && beat % 2 !== 1) return null;
+    const notes = campfireAcousticVoicing({ rootPc, quality, register });
+    const picked = beat % 2 === 1;
+    const midi = picked ? notes[beat % 3 === 1 ? 3 : 2] + 12 : void 0;
+    if (picked && midi > CAMPFIRE_ACOUSTIC_RECIPE.maxMidi) throw new RangeError("Campfire strum and pick needs Low or Mid register. High picking exceeds the supported note range.");
+    return {
+      ...picked ? { midi } : { midiNotes: notes },
+      instrument: CAMPFIRE_ACOUSTIC_RECIPE.id,
+      duration: 1.5,
+      velocity: picked ? 0.15 / CAMPFIRE_ACOUSTIC_RECIPE.noteGain : 1,
+      articulation: "open",
+      direction,
+      technique: { campfire: { recipeVersion: 1, strumSeconds: 0.027, tailPolicy: "reference-cut" } }
+    };
+  }
+  function campfireEventParameters(event, { sampleRate = 44100, noteGain = 0.36 } = {}) {
+    const notes = event.midiNotes?.length ? [...event.midiNotes] : [event.midi];
+    if (notes.length > 12) throw new RangeError("Campfire supports at most 12 ordered notes per event.");
+    const performance2 = event.technique?.campfire || {};
+    const strumSeconds = performance2.strumSeconds ?? 0.027;
+    const velocity = event.velocity ?? 1;
+    requireRange(strumSeconds, 0, 0.1, "strum seconds");
+    requireRange(velocity, 0, 1.4, "velocity");
+    requireRange(noteGain, 0, 1, "note gain");
+    if (event.direction !== void 0 && !["down", "up"].includes(event.direction)) throw new RangeError(`Unsupported Campfire direction: ${event.direction}`);
+    if (event.direction === "up") notes.reverse();
+    const identity = campfireAcousticNoteIdentity({ midi: notes[0], sampleRate, seed: performance2.seed, recipeVersion: performance2.recipeVersion, tailPolicy: performance2.tailPolicy });
+    notes.forEach((midi) => campfireAcousticNoteIdentity({ ...identity, midi, seed: performance2.seed ?? midi * 311 }));
+    const frameCount = Math.floor(sampleRate * 1.5) + Math.round((notes.length - 1) * strumSeconds * sampleRate);
+    return { notes, identity, performance: performance2, strumSeconds, velocity, noteGain, sampleRate, frameCount };
+  }
+  function campfireAcousticEventFrameCount(event, options = {}) {
+    return campfireEventParameters(event, options).frameCount;
+  }
+  function campfireAcousticEventVoices(event, options = {}) {
+    const { notes, identity, performance: performance2, strumSeconds, velocity, noteGain, sampleRate } = campfireEventParameters(event, options);
+    return notes.map((midi, index) => ({
+      identity: { ...identity, midi, seed: performance2.seed ?? midi * 311 },
+      offsetSeconds: Math.round(index * strumSeconds * sampleRate) / sampleRate,
+      gain: velocity * noteGain
+    }));
+  }
+  function renderCampfireAcousticEvent(event, options = {}) {
+    const { notes, identity, performance: performance2, strumSeconds, velocity, noteGain, sampleRate, frameCount } = campfireEventParameters(event, options);
+    const cache = options.cache || null;
+    const output = new Float32Array(frameCount);
+    notes.forEach((midi, stringIndex) => {
+      const options2 = { ...identity, midi, seed: performance2.seed ?? midi * 311 };
+      const samples = cache ? cache.getNote(options2) : renderCampfireAcousticNote(options2);
+      const offset = Math.round(stringIndex * strumSeconds * sampleRate);
+      for (let frame = 0; frame < samples.length; frame += 1) output[offset + frame] += samples[frame] * velocity * noteGain;
+    });
+    return output;
+  }
+  function requireInteger(value, minimum, maximum, label) {
+    if (!Number.isInteger(value) || value < minimum || value > maximum) throw new RangeError(`Campfire ${label} must be an integer from ${minimum} to ${maximum}.`);
+  }
+  function requireRange(value, minimum, maximum, label) {
+    if (!Number.isFinite(value) || value < minimum || value > maximum) throw new RangeError(`Campfire ${label} must be from ${minimum} to ${maximum}.`);
   }
 
   // src/sounds/drum-lanes.js
@@ -712,6 +909,7 @@
       directDrumLanes: DIRECT_DRUM_LANES,
       directArticulations: DIRECT_ARTICULATIONS,
       techniqueCommands: {
+        campfire: ["seed", "recipeVersion", "tailPolicy", "strumSeconds"],
         chip: ["channel", "duty", "envelope", "commands", "sweep", "pitchSlide", "vibrato", "retrigger"],
         metal: ["palmMute", "pickDirection", "tremoloRate", "string", "dualTakeSeed"],
         western: ["pickDirection", "strumDirection", "banjoRoll", "bowDirection", "breathDirection", "bend"],
@@ -723,6 +921,7 @@
       directDrumLanes: DIRECT_DRUM_LANES,
       directArticulations: DIRECT_ARTICULATIONS,
       techniqueCommands: {
+        campfire: ["seed", "recipeVersion", "tailPolicy", "strumSeconds"],
         chip: ["channel", "duty", "envelope", "commands", "sweep", "pitchSlide", "vibrato", "retrigger"],
         metal: ["palmMute", "pickDirection", "tremoloRate", "string", "dualTakeSeed"],
         western: ["pickDirection", "strumDirection", "banjoRoll", "bowDirection", "breathDirection", "bend"],
@@ -748,7 +947,10 @@
     }
     collectRichEvents(input).forEach(({ event, path, trackId }) => {
       const articulation = String(event.articulation || "").toLowerCase();
-      if (articulation && !capabilities.directArticulations.includes(articulation)) {
+      const campfire = (event.sound || event.instrument) === "campfire_acoustic" && (trackId === "guitar" || event.type === "guitar");
+      if (campfire && articulation && !["open", "accent", "finger"].includes(articulation)) {
+        entries.push(campfireArticulationEntry(`${path}.articulation`, articulation));
+      } else if (articulation && !capabilities.directArticulations.includes(articulation)) {
         const action = capabilities.approximatedArticulations.includes(articulation) ? "approximated" : "fallback";
         entries.push(entry(`${path}.articulation`, `articulation:${articulation}`, action, articulationFallback(articulation), `${articulation} is ${action} by ${capabilities.id}; source intent is preserved.`));
       }
@@ -764,6 +966,23 @@
         Object.keys(commands || {}).forEach((command) => {
           if (!supported.has(command)) entries.push(entry(`${path}.technique.${namespace}.${command}`, `technique:${namespace}:${command}`, "preserved", "", `Unknown ${namespace}.${command} command is preserved but not interpreted.`));
         });
+      });
+    });
+    SECTION_IDS.forEach((id) => {
+      const section = input?.sections?.[id];
+      const guitar = section?.guitar;
+      if (!(guitar?.enabled ?? input?.guitarEnabled)) return;
+      const tone = guitar?.tone || input?.guitarTone;
+      const performance2 = guitar?.performance || input?.[`guitarPerformance${id}`] || "grid";
+      if (performance2 !== "grid" && (performance2 !== "strum_pick" || tone !== "campfire_acoustic")) entries.push(entry(`sections.${id}.guitar.performance`, `guitar-performance:${performance2}`, "fallback", "grid", "This guitar performance is unsupported for the selected tone. The grid is used and source intent is retained."));
+      if (tone !== "campfire_acoustic") return;
+      const pattern = guitar?.pattern || input?.[`guitarPattern${id}`] || [];
+      const automatic = performance2 === "strum_pick";
+      if (!automatic && !pattern.some((value) => value && value !== "off" && value !== "hold")) return;
+      const chordType = section?.chords?.type || input?.chordType;
+      if (["seventh", "sus2", "sus4"].includes(chordType)) entries.push(entry(`sections.${id}.chords.type`, `campfire-chord:${chordType}`, "approximated", "triad", `Compact Campfire voicings support major/minor triads. Use explicit rich note arrays to preserve ${chordType} chords; source chord intent is retained.`));
+      pattern.forEach((articulation, index) => {
+        if (!automatic && (articulation === "chug" || articulation === "scratch")) entries.push(campfireArticulationEntry(`sections.${id}.guitar.pattern[${index}]`, articulation));
       });
     });
     const losses = entries.filter((item) => item.action !== "preserved");
@@ -790,6 +1009,7 @@
       drumLanes: POCKET_AUDIO_COMMON_DRUM_LANE_IDS,
       directDrumLanes: values.directDrumLanes,
       techniqueCommands: Object.freeze(values.techniqueCommands),
+      preparedGuitarTones: POCKET_PREPARED_GUITAR_TONES,
       preservesUnknownData: true,
       reportsFallbacks: true,
       sampleClock: values.sampleClock
@@ -810,6 +1030,9 @@
     if (value === "flam" || value === "drag" || value === "roll") return "accent";
     if (value === "pop" || value === "slap") return "accent";
     return "finger";
+  }
+  function campfireArticulationEntry(path, articulation) {
+    return entry(path, `campfire-articulation:${articulation}`, "fallback", "natural-pluck", `Campfire renders ${articulation} as its natural pluck; amplifier gates and expressive techniques are unsupported. Source intent is preserved.`);
   }
   function entry(path, feature, action, fallback, message) {
     return { path, feature, action, ...fallback ? { fallback } : {}, message };
@@ -852,6 +1075,16 @@
     error.actual = actual;
     error.limit = limit;
     throw error;
+  }
+
+  // src/schema/rich-track-stem.js
+  function richTrackStem(trackId, track) {
+    const requested = String(track?.stem || track?.role || trackId || "").toLowerCase();
+    if (["drums", "drum", "kick", "snare", "rim", "clap", "hat", "hat_closed", "hat_open", "ride", "crash", "china", "tom_high", "tom_mid", "tom_low", "percussion"].includes(requested)) return "drums";
+    if (requested === "bass") return "bass";
+    if (["chord", "chords", "harmony", "stab", "stabs"].includes(requested)) return "chords";
+    if (requested === "guitar") return "guitar";
+    return "melody";
   }
 
   // src/events/timeline-events.js
@@ -921,7 +1154,7 @@
       if (!rich.ownedStems.has("bass")) addBassEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex, totalSteps });
       if (!rich.ownedStems.has("chords")) addChordEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex });
       if (!rich.ownedStems.has("melody")) addMelodyEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex, totalSteps });
-      if (!rich.ownedStems.has("guitar")) addGuitarEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex, totalSteps });
+      if (!rich.ownedStems.has("guitar")) addGuitarEvents(events, project, section, { step, time, tick, bar, beat, arrangementIndex, totalSteps, baseTime });
     }
     return {
       events,
@@ -936,6 +1169,7 @@
       const sourceEvents = Array.isArray(track?.events) ? track.events : [];
       if (!sourceEvents.length) return;
       const stem = richTrackStem(trackId, track);
+      if (stem === "guitar" && section.guitar.tone === CAMPFIRE_ACOUSTIC_RECIPE.id && section.guitar.performance === "strum_pick") return;
       if (!richTrackOwnsStem(project, track)) return;
       ownedStems.add(stem);
       let previousPitched = null;
@@ -979,6 +1213,7 @@
           role: source.role,
           expression: source.expression,
           technique: source.technique,
+          direction: source.direction,
           note: source.note,
           notes: source.notes,
           sourceDuration: source.duration,
@@ -1170,7 +1405,24 @@
     });
   }
   function addGuitarEvents(events, project, section, context) {
-    if (project.mixer.stems.guitar?.mute || !section.guitar.enabled) return;
+    const campfire = section.guitar.tone === CAMPFIRE_ACOUSTIC_RECIPE.id;
+    if (!section.guitar.enabled || project.mixer.stems.guitar?.mute && !campfire) return;
+    if (campfire && section.guitar.performance === "strum_pick") {
+      if (context.step % project.meta.resolution !== 0) return;
+      const beat = Math.floor(context.step / project.meta.resolution);
+      const chord3 = currentChord(project, section, context.step);
+      const note = campfireAcousticPerformanceNote({ beat, rootPc: chord3.rootPc, quality: chord3.quality, register: section.guitar.register, direction: guitarDirection(Math.floor(beat / 4), section.guitar.strumMode) });
+      if (!note) return;
+      events.push(baseEvent(project, section, context, {
+        ...note,
+        stem: "guitar",
+        type: "guitar",
+        time: context.baseTime + beat * beatSeconds(project),
+        humanizeSeed: 17,
+        humanizeVelocity: false
+      }));
+      return;
+    }
     const art = section.guitar.pattern[context.step];
     if (!art || art === "off" || art === "hold") return;
     const chord2 = currentChord(project, section, context.step);
@@ -1178,11 +1430,13 @@
       stem: "guitar",
       type: "guitar",
       duration: guitarDuration(project, section, context.step, art, context.totalSteps),
-      velocity: section.guitar.volume,
-      midiNotes: powerChordNotes(project, section, chord2),
+      // Campfire's shared mixer applies volume once, independently of note intent.
+      velocity: campfire ? art === "accent" ? 1.28 : 1 : section.guitar.volume,
+      midiNotes: campfire ? campfireAcousticVoicing({ rootPc: chord2.rootPc, quality: chord2.quality, register: section.guitar.register }) : powerChordNotes(project, section, chord2),
       instrument: section.guitar.tone,
       articulation: art,
       direction: guitarDirection(context.step, section.guitar.strumMode),
+      ...campfire ? { technique: { campfire: { recipeVersion: CAMPFIRE_ACOUSTIC_RECIPE.version, strumSeconds: CAMPFIRE_ACOUSTIC_RECIPE.strumSeconds, tailPolicy: CAMPFIRE_ACOUSTIC_RECIPE.tailPolicy } } } : {},
       humanizeSeed: 17,
       humanizeVelocity: false
     }));
@@ -1352,14 +1606,6 @@
     if (mode === "up") return "up";
     if (mode === "alternate") return step % 2 ? "up" : DEFAULT_GUITAR_STRUM_MODE;
     return DEFAULT_GUITAR_STRUM_MODE;
-  }
-  function richTrackStem(trackId, track) {
-    const requested = String(track?.stem || track?.role || trackId || "").toLowerCase();
-    if (["drums", "drum", "kick", "snare", "rim", "clap", "hat", "hat_closed", "hat_open", "ride", "crash", "china", "tom_high", "tom_mid", "tom_low", "percussion"].includes(requested)) return "drums";
-    if (requested === "bass") return "bass";
-    if (["chord", "chords", "harmony", "stab", "stabs"].includes(requested)) return "chords";
-    if (requested === "guitar") return "guitar";
-    return "melody";
   }
   function richEventType(stem, lane) {
     if (stem === "drums") return lane || "percussion";
@@ -3042,18 +3288,52 @@
     return renderPocketAudioEventBuffer(timeline.events, {
       ...options,
       durationSeconds: timeline.duration,
+      stemMix: project?.mixer?.stems,
       lofiTexture: project?.lofi?.texture,
       timeline
     });
+  }
+  function renderPocketAudioStemBuffers(project, options = {}) {
+    const sampleRate = options.sampleRate || 44100;
+    const stems = options.stems || ["drums", "bass", "chords", "melody", "guitar"];
+    const timeline = buildPocketAudioTimeline(project, options);
+    const tailSeconds = options.tailSeconds ?? 0.6;
+    const campfireEnd = tailSeconds === 0 ? 0 : timeline.events.reduce((end, event) => isCampfireEvent(event) ? Math.max(end, Number(event.time || 0) + campfireAcousticEventFrameCount(event, { sampleRate }) / sampleRate) : end, 0);
+    const alignedDuration = Math.max(timeline.duration, campfireEnd - tailSeconds);
+    const out = {};
+    stems.forEach((stem) => {
+      out[stem] = renderPocketAudioEventBuffer(timeline.events.filter((event) => event.stem === stem), {
+        ...options,
+        sampleRate,
+        durationSeconds: alignedDuration,
+        stemMix: project?.mixer?.stems,
+        lofiTexture: null,
+        timeline: {
+          ...timeline,
+          events: timeline.events.filter((event) => event.stem === stem)
+        }
+      });
+    });
+    if (options.includeSharedBed && project?.lofi?.texture?.enabled) {
+      out.shared_bed = renderPocketAudioEventBuffer([], { ...options, sampleRate, durationSeconds: alignedDuration, lofiTexture: project.lofi.texture, timeline });
+    }
+    return out;
   }
   function renderPocketAudioEventBuffer(events, options = {}) {
     const sampleRate = options.sampleRate || 44100;
     const tailSeconds = options.tailSeconds ?? 0.6;
     const durationSeconds = Number.isFinite(options.durationSeconds) ? Math.max(0, Number(options.durationSeconds)) : events.reduce((duration, event) => Math.max(duration, Number(event.time || 0) + Number(event.duration || 0)), 0);
-    const frameCount = Math.max(1, Math.ceil((durationSeconds + tailSeconds) * sampleRate));
+    const campfireEnd = tailSeconds === 0 ? 0 : events.reduce((end, event) => {
+      if (!isCampfireEvent(event)) return end;
+      return Math.max(end, Number(event.time || 0) + campfireAcousticEventFrameCount(event, { sampleRate }) / sampleRate);
+    }, 0);
+    const frameCount = Math.max(1, Math.ceil(Math.max(durationSeconds + tailSeconds, campfireEnd) * sampleRate));
     const left = new Float32Array(frameCount);
     const right = new Float32Array(frameCount);
-    events.forEach((event) => renderEventToChannels(event, left, right, sampleRate));
+    const campfireCache = events.some(isCampfireEvent) ? new CampfireAcousticNoteCache() : null;
+    const campfireMix = options.stemMix?.guitar;
+    const campfireGain = campfireMix?.mute ? 0 : chordsmithOfflineStemRenderGain("guitar", campfireMix?.volume);
+    events.forEach((event) => renderEventToChannels(event, left, right, sampleRate, campfireCache, campfireGain));
     renderLofiTexture({ lofi: { texture: options.lofiTexture } }, left, right, sampleRate);
     return {
       channels: [left, right],
@@ -3105,7 +3385,23 @@
     const buffer = renderPocketAudioBuffer(project, options);
     return encodePcm16WavBytes({ channels: buffer.channels, sampleRate: buffer.sampleRate });
   }
-  function renderEventToChannels(event, left, right, sampleRate) {
+  function isCampfireEvent(event) {
+    return event.type === "guitar" && event.instrument === "campfire_acoustic";
+  }
+  function renderEventToChannels(event, left, right, sampleRate, campfireCache, campfireGain) {
+    if (isCampfireEvent(event)) {
+      if (campfireGain === 0) return;
+      const samples = renderCampfireAcousticEvent(event, { sampleRate, cache: campfireCache });
+      const start2 = Math.max(0, Math.floor(Number(event.time || 0) * sampleRate));
+      const pan2 = Math.max(-1, Math.min(1, Number(event.pan || 0)));
+      const leftGain2 = Math.cos((pan2 + 1) * Math.PI / 4) * campfireGain;
+      const rightGain2 = Math.sin((pan2 + 1) * Math.PI / 4) * campfireGain;
+      for (let frame = 0; frame < samples.length && start2 + frame < left.length; frame += 1) {
+        left[start2 + frame] += samples[frame] * leftGain2;
+        right[start2 + frame] += samples[frame] * rightGain2;
+      }
+      return;
+    }
     const funk = event.audioProfile === "funk_groove" ? funkParameters(event) : null;
     const pocketOffset = funk && Number(event.step || 0) % 2 !== 0 ? (funk.pocket - 0.5) * 0.03 : 0;
     const durationScale = funk && event.type === "chord" ? 1 - funk.stabTightness * 0.68 : 1;
@@ -3936,9 +4232,10 @@
       })),
       guitar: {
         enabled: Boolean(project.guitarEnabled),
-        tone: safeChoice2(project.guitarTone, POCKET_GUITAR_TONES, DEFAULT_GUITAR_TONE),
+        tone: safeChoice2(project.guitarTone, [...POCKET_GUITAR_TONES, ...POCKET_PREPARED_GUITAR_TONES], DEFAULT_GUITAR_TONE),
         register: safeChoice2(project.guitarRegister, POCKET_GUITAR_REGISTERS, DEFAULT_GUITAR_REGISTER),
         strumMode: safeChoice2(project.guitarStrumMode, POCKET_GUITAR_STRUM_MODES, DEFAULT_GUITAR_STRUM_MODE),
+        performance: String(project[`guitarPerformance${id}`] || "grid"),
         volume: clamp2(asNumber(project.guitarVolume, DEFAULT_STEM_MIX.guitar.volume), 0, 1),
         pattern: guitarPattern
       },
@@ -3996,8 +4293,10 @@
   }
   function normaliseRichEvent(value, context) {
     const source = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    const sound = source.sound ?? (source.instrument === "campfire_acoustic" ? source.instrument : void 0);
+    const campfire = sound === "campfire_acoustic";
     const step = source.step === void 0 ? void 0 : clamp2(asNumber(source.step, 0), 0, Math.max(0, context.steps - 1e-6));
-    const tick = source.tick === void 0 ? void 0 : Math.max(0, asInt(source.tick, 0));
+    const tick = source.tick === void 0 ? void 0 : Math.max(0, campfire ? asNumber(source.tick, 0) : asInt(source.tick, 0));
     const articulation = source.articulation === void 0 ? void 0 : normalisePocketAudioArticulation(source.articulation);
     const notes = Array.isArray(source.notes) ? source.notes.map((note) => asNumber(note, 0)) : void 0;
     return {
@@ -4005,12 +4304,12 @@
       ...step !== void 0 ? { step } : {},
       ...tick !== void 0 ? { tick } : {},
       duration: Math.max(0.01, asNumber(source.duration, 1)),
-      ...source.durationTicks === void 0 ? {} : { durationTicks: Math.max(1, asInt(source.durationTicks, 1)) },
+      ...source.durationTicks === void 0 ? {} : { durationTicks: Math.max(1, campfire ? asNumber(source.durationTicks, 1) : asInt(source.durationTicks, 1)) },
       ...source.note === void 0 ? {} : { note: asNumber(source.note, 0) },
       ...notes ? { notes } : {},
       velocity: clamp2(asNumber(source.velocity, 100), 0, 127),
       ...articulation ? { articulation } : {},
-      ...source.sound === void 0 ? {} : { sound: String(source.sound) },
+      ...sound === void 0 ? {} : { sound: String(sound) },
       ...source.lane === void 0 ? {} : { lane: String(source.lane) },
       role: normalisePocketAudioRole(source.role),
       expression: normalisePocketAudioExpression(source.expression),
@@ -4133,29 +4432,164 @@
   // src/export/stems.js
   async function renderPocketAudioStems(project, options = {}) {
     const sampleRate = options.sampleRate || 44100;
-    const stems = options.stems || ["drums", "bass", "chords", "melody", "guitar"];
-    const timeline = buildPocketAudioTimeline(project, options);
-    const duration = timeline.duration + (options.tailSeconds ?? 0.6);
-    const frameCount = Math.max(1, Math.ceil(duration * sampleRate));
+    const buffers = renderPocketAudioStemBuffers(project, options);
     const out = {};
-    stems.forEach((stem) => {
-      const left = new Float32Array(frameCount);
-      const right = new Float32Array(frameCount);
-      timeline.events.filter((event) => event.stem === stem).forEach((event) => {
-        const start = Math.max(0, Math.floor(event.time * sampleRate));
-        const length = Math.max(1, Math.floor(Math.max(0.02, event.duration || 0.08) * sampleRate));
-        const freq = 440 * Math.pow(2, ((event.midi || event.midiNotes?.[0] || 60) - 69) / 12);
-        const gain = Math.min(0.4, Math.max(0, event.velocity || 0.25)) * 0.16;
-        for (let index = 0; index < length && start + index < frameCount; index += 1) {
-          const env = 1 - index / length;
-          const sample = Math.sin(2 * Math.PI * freq * index / sampleRate) * gain * env;
-          left[start + index] += sample;
-          right[start + index] += sample;
-        }
-      });
-      out[stem] = encodePcm16WavBlob({ channels: [left, right], sampleRate });
+    Object.entries(buffers).forEach(([stem, buffer]) => {
+      out[stem] = encodePcm16WavBlob({ channels: buffer.channels, sampleRate });
     });
     return out;
+  }
+
+  // src/synth/campfire-acoustic.js
+  async function prepareCampfireAcousticNoteBank(context, events, options = {}) {
+    const maxBytes = options.maxBytes ?? 16 * 1024 * 1024;
+    if (!Number.isInteger(maxBytes) || maxBytes < 0 || maxBytes > 64 * 1024 * 1024) throw new RangeError("Campfire preparation budget must be from zero to 64 MiB.");
+    const checkCancelled = () => {
+      if (options.signal?.aborted) throw new DOMException("Campfire preparation cancelled", "AbortError");
+    };
+    const identities = /* @__PURE__ */ new Map();
+    const bytesPerNote = Math.floor(context.sampleRate * 1.5) * 4;
+    checkCancelled();
+    for (const event of events) {
+      for (const voice of campfireAcousticEventVoices(event, { sampleRate: context.sampleRate })) {
+        identities.set(campfireAcousticNoteKey(voice.identity), voice.identity);
+        if (identities.size * bytesPerNote > maxBytes) throw new RangeError(`Campfire preparation exceeds the configured ${maxBytes} PCM byte budget. Use offline rendering or a smaller set of note identities.`);
+      }
+    }
+    let bytes = identities.size * bytesPerNote;
+    const buffers = /* @__PURE__ */ new Map();
+    const yieldTask = options.yieldTask || (() => new Promise((resolve) => setTimeout(resolve, 0)));
+    for (const [key, identity] of identities) {
+      checkCancelled();
+      const pcm = renderCampfireAcousticNote(identity);
+      const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
+      buffer.copyToChannel(pcm, 0);
+      buffers.set(key, buffer);
+      if (buffers.size % 4 === 0) await yieldTask();
+    }
+    checkCancelled();
+    const active = /* @__PURE__ */ new Set();
+    let disposed = false;
+    let updateGeneration = 0;
+    let updateTail = Promise.resolve();
+    let outputGain = 1;
+    const rampVoiceGain = (voice, level, seconds) => {
+      const now = context.currentTime;
+      const param = voice.gain.gain;
+      const currentLevel = Number.isFinite(param.value) ? param.value : voice.level;
+      if (typeof param.cancelAndHoldAtTime === "function") param.cancelAndHoldAtTime(now);
+      else param.cancelScheduledValues(now);
+      param.setValueAtTime(currentLevel, now);
+      param.linearRampToValueAtTime(level, now + seconds);
+      voice.level = level;
+    };
+    const stopAll = (releaseSeconds = 5e-3) => {
+      if (!Number.isFinite(releaseSeconds) || releaseSeconds < 0 || releaseSeconds > 0.1) throw new RangeError("Campfire stop release must be from zero to 0.1 seconds.");
+      for (const voice of active) {
+        if (voice.stopped) continue;
+        voice.stopped = true;
+        const now = context.currentTime;
+        if (voice.when > now) {
+          voice.source.stop(now);
+          continue;
+        }
+        rampVoiceGain(voice, 0, releaseSeconds);
+        voice.source.stop(now + releaseSeconds);
+      }
+    };
+    return {
+      getDiagnostics: () => ({ entries: buffers.size, bytes: disposed ? 0 : bytes, maxBytes, activeVoices: active.size, outputGain }),
+      prepareMissingEvents(events2, { signal, yieldTask: yieldMore = yieldTask } = {}) {
+        const generation = ++updateGeneration;
+        const update = updateTail.catch(() => {
+        }).then(async () => {
+          const check = () => {
+            if (disposed || signal?.aborted || generation !== updateGeneration) throw new DOMException("Campfire preparation cancelled", "AbortError");
+          };
+          check();
+          const missing = /* @__PURE__ */ new Map();
+          for (const event of events2) for (const voice of campfireAcousticEventVoices(event, { sampleRate: context.sampleRate })) {
+            const key = campfireAcousticNoteKey(voice.identity);
+            if (!buffers.has(key)) missing.set(key, voice.identity);
+            if (bytes + missing.size * bytesPerNote > maxBytes) throw new RangeError("Campfire live edits exceed the prepared PCM budget. Stop and Play to rebuild the current note set.");
+          }
+          const pending = /* @__PURE__ */ new Map();
+          try {
+            for (const [key, identity] of missing) {
+              check();
+              const pcm = renderCampfireAcousticNote(identity);
+              const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
+              buffer.copyToChannel(pcm, 0);
+              pending.set(key, buffer);
+              if (pending.size % 4 === 0) await yieldMore();
+            }
+            check();
+            for (const [key, buffer] of pending) buffers.set(key, buffer);
+            bytes = buffers.size * bytesPerNote;
+            return { added: pending.size, bytes };
+          } finally {
+            pending.clear();
+          }
+        });
+        updateTail = update;
+        return update;
+      },
+      setOutputGain(gain, rampSeconds = 5e-3) {
+        if (disposed) throw new Error("Campfire note bank has been disposed.");
+        if (!Number.isFinite(gain) || gain < 0 || !Number.isFinite(rampSeconds) || rampSeconds < 0 || rampSeconds > 0.1) throw new RangeError("Invalid Campfire output gain or ramp time.");
+        outputGain = gain;
+        for (const voice of active) if (!voice.stopped) rampVoiceGain(voice, voice.baseLevel * outputGain, rampSeconds);
+      },
+      schedule(event, when, { gain = 1, pan = event.pan ?? 0 } = {}) {
+        if (disposed) throw new Error("Campfire note bank has been disposed.");
+        if (!Number.isFinite(when) || !Number.isFinite(gain) || gain < 0 || !Number.isFinite(pan) || pan < -1 || pan > 1) throw new RangeError("Invalid Campfire scheduling time, gain or pan.");
+        const voices = campfireAcousticEventVoices(event, { sampleRate: context.sampleRate });
+        const prepared = voices.map((voice) => {
+          const buffer = buffers.get(campfireAcousticNoteKey(voice.identity));
+          if (!buffer) throw new Error("Campfire note identity was not prepared. Stop and prepare the updated project before playing.");
+          return { ...voice, buffer };
+        });
+        const startFrame = Math.max(Math.round(context.currentTime * context.sampleRate), Math.floor(when * context.sampleRate));
+        const start = startFrame / context.sampleRate;
+        for (const item of prepared) {
+          const voiceWhen = (startFrame + Math.round(item.offsetSeconds * context.sampleRate)) / context.sampleRate;
+          const source = context.createBufferSource();
+          const output = context.createGain();
+          const panner = context.createStereoPanner();
+          const baseLevel = item.gain * gain;
+          const level = baseLevel * outputGain;
+          source.buffer = item.buffer;
+          output.gain.value = level;
+          output.gain.setValueAtTime(level, voiceWhen);
+          panner.pan.setValueAtTime(pan, start);
+          source.connect(output);
+          output.connect(panner);
+          panner.connect(options.destination || context.destination);
+          const voice = { source, gain: output, baseLevel, level, when: voiceWhen, stopped: false };
+          source.onended = () => {
+            active.delete(voice);
+            source.disconnect();
+            output.disconnect();
+            panner.disconnect();
+          };
+          active.add(voice);
+          source.start(voiceWhen);
+        }
+      },
+      stopAll,
+      cancelScheduledFrom(when) {
+        for (const voice of active) if (!voice.stopped && voice.when >= when) {
+          voice.stopped = true;
+          voice.source.stop(context.currentTime);
+        }
+      },
+      dispose() {
+        updateGeneration++;
+        stopAll();
+        buffers.clear();
+        disposed = true;
+      }
+    };
   }
 
   // src/engine/live-engine.js
@@ -4168,6 +4602,9 @@
       this.playing = false;
       this.audioContext = null;
       this.schedulerTimer = null;
+      this.campfireNoteBank = null;
+      this.campfirePreparation = null;
+      this.playRequestGeneration = 0;
       this.playStartedAt = 0;
       this.audioStartTime = null;
       this.timelineStartTime = null;
@@ -4204,6 +4641,9 @@
       this.defineMusicStates(options.musicStates || options.stateMap || {});
     }
     async loadProject(input, options = {}) {
+      this.stop();
+      this.campfireNoteBank?.dispose();
+      this.campfireNoteBank = null;
       const raw = input?.app === "PocketAudioProject" ? input.source?.original || input : parsePocketChordsmithInput(input);
       this.project = raw?.app === "PocketAudioProject" ? raw : normalisePocketChordsmithProject(raw, options);
       this.timeline = buildPocketAudioTimeline(this.project, { scope: "sequence" });
@@ -4224,10 +4664,39 @@
     }
     async play(options = {}) {
       this.ensureProject();
+      const requestGeneration = ++this.playRequestGeneration;
+      this.campfirePreparation?.abort();
+      this.campfireNoteBank?.dispose();
+      this.campfireNoteBank = null;
+      this.playing = false;
+      this.clearTimelineScheduler();
       if (!this.audioContext && this.options.audio !== false && (globalThis.AudioContext || globalThis.webkitAudioContext)) await this.resume();
-      this.playing = true;
+      if (requestGeneration !== this.playRequestGeneration) return;
       if (options.sectionId) this.transport.sectionId = normaliseSectionId2(options.sectionId);
-      this.timeline = buildPocketAudioTimeline(this.project, { scope: options.scope || "sequence", sectionId: this.transport.sectionId });
+      this.timeline = buildPocketAudioTimeline(this.project, { scope: options.scope || "sequence", sectionId: this.transport.sectionId, renderer: "live" });
+      if (this.options.audio !== false && projectUsesCampfire(this.project)) {
+        const events = Object.keys(this.project.sections).flatMap((sectionId) => buildPocketAudioTimeline(this.project, { scope: "section", sectionId, renderer: "live" }).events.filter(isCampfireEvent2));
+        if (events.length) {
+          if (!this.audioContext) throw new Error("Campfire live playback needs an AudioContext. Use Core offline rendering when browser audio is unavailable.");
+          const preparation = new AbortController();
+          this.campfirePreparation = preparation;
+          try {
+            const bank = await prepareCampfireAcousticNoteBank(this.audioContext, events, { maxBytes: this.options.campfireMaxPreparedBytes, signal: preparation.signal });
+            if (requestGeneration !== this.playRequestGeneration) {
+              bank.dispose();
+              return;
+            }
+            this.campfireNoteBank = bank;
+            this.updateCampfireMixerGain();
+          } catch (error) {
+            if (preparation.signal.aborted) return;
+            throw error;
+          } finally {
+            if (this.campfirePreparation === preparation) this.campfirePreparation = null;
+          }
+        }
+      }
+      this.playing = true;
       this.nextEventIndex = 0;
       this.audioStartTime = this.clock();
       this.playStartedAt = this.audioStartTime;
@@ -4239,11 +4708,13 @@
       this.emit("play", this.getTransport());
     }
     pause() {
+      this.cancelCampfirePlayback();
       this.playing = false;
       this.clearTimelineScheduler();
       this.emit("pause", this.getTransport());
     }
     stop() {
+      this.cancelCampfirePlayback();
       this.playing = false;
       this.clearTimelineScheduler();
       this.transport = { ...this.transport, bar: 1, beat: 1, step: -1, seconds: 0, tick: 0 };
@@ -4251,7 +4722,13 @@
     }
     restart() {
       this.stop();
-      this.play();
+      return this.play();
+    }
+    cancelCampfirePlayback() {
+      this.playRequestGeneration += 1;
+      this.campfirePreparation?.abort();
+      this.campfirePreparation = null;
+      this.campfireNoteBank?.stopAll();
     }
     queueSection(sectionId, options = {}) {
       this.ensureProject();
@@ -4404,6 +4881,8 @@
         intensity: this.intensity,
         ducking: this.ducking,
         projectLoaded: Boolean(this.project),
+        campfirePreparationPending: Boolean(this.campfirePreparation),
+        campfirePrepared: this.campfireNoteBank?.getDiagnostics() || null,
         ...this.diagnostics
       };
     }
@@ -4449,6 +4928,7 @@
     resetTimelineAtTransition(transportTime) {
       if (this.audioStartTime === null) return;
       this.timelineStartTime = this.audioStartTime + Number(transportTime || 0);
+      this.campfireNoteBank?.cancelScheduledFrom(this.timelineStartTime);
       this.timelineLoopOffset = 0;
       this.nextEventIndex = 0;
     }
@@ -4465,6 +4945,8 @@
     }
     dispose() {
       this.stop();
+      this.campfireNoteBank?.dispose();
+      this.campfireNoteBank = null;
       this.listeners.clear();
     }
     ensureProject() {
@@ -4506,7 +4988,10 @@
             this.timelineLoopOffset = completedLoops * this.timeline.duration;
             this.nextEventIndex = 0;
           } else {
-            this.stop();
+            this.playing = false;
+            this.clearTimelineScheduler();
+            this.transport = { ...this.transport, bar: 1, beat: 1, step: -1, seconds: 0, tick: 0 };
+            this.emit("stop", this.getTransport());
           }
         }
       };
@@ -4535,12 +5020,18 @@
       this.emit("beat", event);
       const scheduledEvent = { ...event, scheduledAudioTime: targetAudioTime };
       this.emit("event", scheduledEvent);
-      if (this.audioContext) scheduleSimpleAudioEvent(this.audioContext, event, this.project, targetAudioTime);
+      if (this.audioContext && this.options.audio !== false) {
+        if (isCampfireEvent2(event)) {
+          if (!this.campfireNoteBank) throw new Error("Campfire audio must be prepared before transport starts.");
+          this.campfireNoteBank.schedule(event, targetAudioTime);
+        } else scheduleSimpleAudioEvent(this.audioContext, event, this.project, targetAudioTime);
+      }
     }
     patchStem(stem, patch) {
       this.ensureProject();
       if (!this.project.mixer.stems[stem]) throw new Error(`Unknown stem: ${stem}`);
       this.project.mixer.stems[stem] = { ...this.project.mixer.stems[stem], ...patch };
+      if (stem === "guitar") this.updateCampfireMixerGain();
       this.emit("stem", { stem, settings: this.project.mixer.stems[stem] });
     }
     applyStemPatchMap(stems = {}) {
@@ -4549,6 +5040,10 @@
         if (patch.mute !== void 0) this.setStemMute(stem, patch.mute);
       });
     }
+    updateCampfireMixerGain() {
+      const mix = this.project?.mixer?.stems?.guitar;
+      this.campfireNoteBank?.setOutputGain(mix?.mute ? 0 : chordsmithOfflineStemRenderGain("guitar", mix?.volume));
+    }
     getMusicStateDefinition(name) {
       const safeName = String(name || "");
       const definition = this.musicStates.get(safeName);
@@ -4556,6 +5051,12 @@
       return definition;
     }
   };
+  function isCampfireEvent2(event) {
+    return event.type === "guitar" && event.instrument === "campfire_acoustic";
+  }
+  function projectUsesCampfire(project) {
+    return Object.values(project.sections).some((section) => section.guitar?.tone === "campfire_acoustic" || Object.values(section.richTracks || {}).some((track) => track.events?.some((event) => (event.sound || event.instrument) === "campfire_acoustic")));
+  }
   function nowSeconds(context) {
     return context?.currentTime ?? performance.now() / 1e3;
   }

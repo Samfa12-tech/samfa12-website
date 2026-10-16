@@ -1,6 +1,6 @@
 {
   "name": "pocket-audio-core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Shared headless audio runtime and sound-profile contract for the Pocket Chordsmith family.",
@@ -30,8 +30,10 @@
     "pretest": "npm run build",
     "test": "node --test",
     "test:core": "node --test tests/core.test.js",
-    "test:golden": "node --test tests/golden.test.js --test-name-pattern \"golden event trace|fixture index\"",
-    "test:render": "node --test tests/golden.test.js --test-name-pattern \"audio metrics\"",
+    "calibrate:meters": "node scripts/calibrate-audio-meters.mjs",
+    "verify:campfire-browser": "npm run build && node scripts/verify-campfire-browser.mjs",
+    "test:golden": "node --test --test-name-pattern=\"golden event trace|fixture index\" tests/golden.test.js",
+    "test:render": "node --test --test-name-pattern=\"audio metrics\" tests/golden.test.js",
     "update:golden": "node scripts/update-golden.mjs"
   },
   "files": [
@@ -53,7 +55,7 @@
   ],
   "license": "UNLICENSED",
   "devDependencies": {
-    "esbuild": "^0.25.12",
-    "playwright": "^1.52.0"
+    "esbuild": "^0.28.2",
+    "playwright": "^1.63.0"
   }
 }
