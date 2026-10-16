@@ -68,6 +68,13 @@
           "url": "https://samfa12.itch.io/the-last-guard",
           "identity": "samfa12.itch.io /the-last-guard",
           "access": "read-public-source"
+        },
+        {
+          "url": "https://wavedash.com/games/the-last-guard",
+          "identity": "The Last Guard public Wavedash game listing",
+          "access": "read-public-source",
+          "reviewedAt": "2026-10-16",
+          "notes": "HTTP 200 public page identifies The Last Guard as a browser wall-defense survival game. Verified listing availability only; no version parity or save transfer claim."
         }
       ]
     },
