@@ -1,0 +1,1136 @@
+{
+  "schema": 1,
+  "websiteBase": "526a8a9c6498bd372c108de68ac61178be17185c",
+  "sourceRepository": "Samfa12-tech/Pocket-Chordsmith",
+  "sourceCommit": "5bb532c4098072cb22eec1c8504caff78e647582",
+  "sourceDirty": false,
+  "products": {
+    "chordsmith": "v70",
+    "dj": "v1i",
+    "core": "0.3.0"
+  },
+  "sync": "scripts/sync-pocket-apps.js --apps-only with explicit HTML paths",
+  "allowedHtmlTransforms": [
+    "managed head metadata",
+    "bundled relative Core import paths"
+  ],
+  "canonicalCopyChecks": true,
+  "preservedTrees": {
+    "games/reef-sweep": "c3f3a7a9f991d6384956a0598d87e907f93309f7",
+    "game-sources/reef-sweep": "779ad6e36c0e295b53cdcecd191351a948232a24",
+    "apps/pocket-audio-handoff": "26bcb5b381d3ba89ebb4941d14e8467883892306",
+    "content": "72b0dbacd671940cfc913932b9bb441a85165e87",
+    ".github": "f870d1f3a1be7371cd5b1aec780cae267bc21954"
+  },
+  "unrelatedTrackedChanges": [],
+  "inventory": [
+    {
+      "path": "apps/pocket-chordsmith/icon.png",
+      "sha256": "d2e055c86aff9be7b266373157bee0c6e93f28f97d18a99a2e652f4f306f8f86",
+      "hashMode": "raw"
+    },
+    {
+      "path": "apps/pocket-chordsmith/index.html",
+      "sha256": "9516ed36c546ff212f4a531e20c3c45b25cfc3a4197ad79f714210473b6bd200",
+      "hashMode": "UTF-8 LF"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/dist/api-manifest.json",
+      "sha256": "4f4c4057a4df06128e13f8e2e324ee16b2abb6028a74738ccfd2edb0130de5d6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/api-manifest.json"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/dist/chordsmith-wav-worker.js",
+      "sha256": "e7c8ecd1f7b01484a68c14f663e1da3448e72b9f3f444e442fb599af2a95ab89",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/chordsmith-wav-worker.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/dist/pocket-audio-campfire.iife.js",
+      "sha256": "00346b9965607cebe8adda5bc9caee622753d543019200c2c9ceb4338d526806",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-campfire.iife.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/dist/pocket-audio-core.browser.esm.js",
+      "sha256": "dd474a82c750a8df728461c8231498eceeb36fe26062d5db273b4d378e780a14",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-core.browser.esm.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/dist/pocket-audio-core.esm.js",
+      "sha256": "3ca535540bdf2bf1d592b916ba0888c62a2a7b2f1a7aa0d42e562308422658aa",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-core.esm.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/dist/pocket-audio-core.iife.js",
+      "sha256": "fcbc42464293f344fd3ee664ed689b587319aafaad47c18767512fb4b3db53a4",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-core.iife.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/dist/pocket-audio-prepared.iife.js",
+      "sha256": "a7040aa2505598a1884a5a36aecfb636195ef2f688d17006f1ba021bf426682e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-prepared.iife.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/dist/README.md",
+      "sha256": "c8dee32b827ca62388440de4631b064db102c3351b73694550e4e4d1b0775f10",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/README.md"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/package.json",
+      "sha256": "10ae39b60089d404825059819f4086e28f95ddb9fdc1c3e6b3b260d66d2d3f7f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/package.json"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/README.md",
+      "sha256": "71e6dcd102cfd86c26624e69b25e537d98e4b2dc5b8a78a6ef2bea3ea0e5771d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/README.md"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/adaptive/game-state-controller.js",
+      "sha256": "80e064c6e39e8ddfb9439dd6b959ff9152f3cf549975dd2039bab837bd31ad73",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/adaptive/game-state-controller.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/browser.js",
+      "sha256": "cbc5297eb9cb665c872ad4c7d7fb8f9c55f29cb9353ba4450bc8ecb6926d19a2",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/browser.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/campfire-browser.js",
+      "sha256": "172185ae59b1c78cfd13c536d814b545140a0616d408aafa54800ded70b2cead",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/campfire-browser.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/constants.js",
+      "sha256": "c8b2000be00247ceb658a8097e6f858911f445ea65d6fd12ffad6e4b89efee32",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/constants.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/engine/audio-context.js",
+      "sha256": "a885a6d4b6591447e18d3c97afc7f646829ddfcc1c72c9149dde512b761b4c55",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/audio-context.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/engine/buses.js",
+      "sha256": "55548416531466f2958724eedab3c09d7e932f61edb31d4aadc234558843d42a",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/buses.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/engine/capabilities.js",
+      "sha256": "3b9675ec22309a88828958e05fc163874ce7a50c9f3fb8e05b449518a21332d2",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/capabilities.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/engine/live-engine.js",
+      "sha256": "e332ce129ae6184f3cfd4d9b2436d82ac1b66de73af79dbd1254aa1b88d95e0b",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/live-engine.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/engine/offline-renderer.js",
+      "sha256": "2f2f0206a28c8190bc5a356e539863427bf6909ef1dad5ef23317a7d5fcf480e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/offline-renderer.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/engine/scheduler.js",
+      "sha256": "0e0be45ea156f70b008505383c7d71d13dc798c7042c4194359b0a48a264589d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/scheduler.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/engine/voice-manager.js",
+      "sha256": "6a6a720d30237c3666c8133bbf1219c808669f68fcb332f9ac38cf50b7191397",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/voice-manager.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/events/timeline-events.js",
+      "sha256": "23453ffa295f7fb7b57f88700a802f35657eaa9ff88d837960beb4255a2cdc46",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/events/timeline-events.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/export/audio-metrics.js",
+      "sha256": "5d5716bbf0e3f1786986f9a5550082d92da90bb4c526756564c2db99beb099db",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/audio-metrics.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/export/chordsmith-wav-worker.js",
+      "sha256": "858f9c512c84e93698a238f675be8406c9ef6c6276e99312055c4982e3b0b7e9",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/chordsmith-wav-worker.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/export/game-pack-paths.js",
+      "sha256": "3f78b7c6d27aa6b2da5a6829abaf458a637d19176a3f1cd89b312bfc613bd311",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/game-pack-paths.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/export/godot-kit.js",
+      "sha256": "cbfeffa4988e87626c5fbdadd6f2af2b2a709fd322244f06b4ba3b045c6c1f4c",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/godot-kit.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/export/stems.js",
+      "sha256": "540b9bda24ef496aa7c9dd983a54d444fce3192a31133b879a67351ead631b6a",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/stems.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/export/wav.js",
+      "sha256": "c46a9875a1c7897af7ae8064b95b0705c32f975d0c4b7329cda9feac9cf5f194",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/wav.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/fx/built-in-fx.js",
+      "sha256": "67db063bfb6be07a9da6c08bc89cb2e133e8e49ddde84ca4f3f2c6be3ded045e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/built-in-fx.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/fx/chordsmith-fx.js",
+      "sha256": "857efbd276fc296778343029d7a931a1134a5dd4f8bc2a04a29d62882b53d9c5",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/chordsmith-fx.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/fx/delay.js",
+      "sha256": "2eefa0763c314702d27393794cca652d815d072109ce98b9e70354bc00f3f94e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/delay.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/fx/filter.js",
+      "sha256": "7d0cb9ded54300905c602c003b267f145fb4dd2b0ee69b700b18f20b449ba32f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/filter.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/fx/pro-eq.js",
+      "sha256": "22f52e01366c375f8ff72f05b03496449e8deae03b72f2fdab1edadb643ca899",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/pro-eq.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/fx/reverb.js",
+      "sha256": "bd7a0bd787dc8fbb3d5fffa51f48761ada7d233f4b289703d6e06b3151af72c0",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/reverb.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/fx/sidechain.js",
+      "sha256": "10818c514aa05d57fcace8e9fdb96fc1778f8ad0eb3cfacf4edb358c7a01b4f3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/sidechain.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/index.js",
+      "sha256": "47d329305abdac4e208ba52e969d51d78bf13ac6c2ff18d0879bd51ad877a68a",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/index.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/mastering/audio-buffer-utils.js",
+      "sha256": "d77dd803c7bc18a146975afa8f31ab1276e3212007928d2639a795d9f988c5f3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/audio-buffer-utils.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/mastering/batch-release.js",
+      "sha256": "b0cbf79414d1ded9eb0babf3a046a02d3cc6e360b9f0fccd62743a99222fd196",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/batch-release.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/mastering/master-chain.js",
+      "sha256": "9eb54bed4e56b8dc67c34106e65e19b24b2315f4844790a8cc306823083cc4fb",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/master-chain.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/mastering/mix-assistant.js",
+      "sha256": "72c59782871ffc324e4e7a3de4adb3bec223b29c5797f5335ba213a7fe03121c",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/mix-assistant.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/mastering/qc.js",
+      "sha256": "b37f65580c7a8deada83969a526c5b687a3f2ff0054cd0018ae7b6cec19d5789",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/qc.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/mastering/release-profiles.js",
+      "sha256": "7e38aa538d5ebb40268b1214999dc689867b9649452fc25ec55841673ea2d271",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/release-profiles.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/mastering/reports.js",
+      "sha256": "a929378d6a25702633396ed9d7a9fd637de60d9ab43c987345127d10a75d5304",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/reports.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/music/chords.js",
+      "sha256": "e82ec4d28d53bbb2ce1fe9002780576a65fc1373dafb22f0b2268d9af03a8770",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/music/chords.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/music/pitches.js",
+      "sha256": "54f03e0713c269cd82aeb4dff405b0d7e5f3702343f3ac55a242084b1dddd472",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/music/pitches.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/music/scales.js",
+      "sha256": "30f31a4f1e324193f42377fd3c9b12d863279198e35500644170bbd08024c367",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/music/scales.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/music/timeline.js",
+      "sha256": "237e9819dbbacba409506c9e32a3cd4c38122e6526ceafabc5a35a5b7428b405",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/music/timeline.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/patterns/bass-presets.js",
+      "sha256": "33f32271266e3e103d5e9d011a41fc829f73b7f1d13a41c77767f9f0ad8e0962",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/bass-presets.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/patterns/drum-presets.js",
+      "sha256": "19a9971d6cfbc2206bfa8e5357af8f1bbca1d48bff9d89a138c52823283dd406",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/drum-presets.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/patterns/funk-grammar.js",
+      "sha256": "d225133f7e898ecf85f70b35dee59172b80cb927a6356bc7de55fa90b41ca9e0",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/funk-grammar.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/patterns/guitar-presets.js",
+      "sha256": "fd065d614ca9d138eb33ec05149e3ada5dcd1ac7a959541ba6d39fcba43b0f40",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/guitar-presets.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/patterns/metal-grammar.js",
+      "sha256": "f96b03716113be1a8c55eb3f220aa95aa4b3a5b789e147381515e6b45e8760d2",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/metal-grammar.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/patterns/western-grammar.js",
+      "sha256": "d4e1bb410c801797fe8d894f7194097b3ac8267561178feff297fd436122d011",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/western-grammar.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/chord-rhythm.js",
+      "sha256": "8dab3719f787f672b64d15579c6e650d32273b5617df87f388f0f6eae7104ce4",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/chord-rhythm.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/drum-feel.js",
+      "sha256": "dd76ba52eebe4675d7129084319b35d38324e424a13d18c30d2d1f94ac22baf6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/drum-feel.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/expression.js",
+      "sha256": "840294a9b26d9f1191e73e412b3bd73f8ab0df5c49c2724b70b7d28719bba31d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/expression.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/guitar-gates.js",
+      "sha256": "5837aa9e9df5091e8176e6e0300a8f615cf38198fdca45c323d82c8fefd1c08d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/guitar-gates.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/humanize.js",
+      "sha256": "9f06e4928ff61e1ede6acc504037979351e9588fb7364229feaab914fc7dd78f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/humanize.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/lofi-texture.js",
+      "sha256": "d1b10299b3509b76de16bef9c0b02ed4d194f0c639270a53cd22b70cc0e9495f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/lofi-texture.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/phrases.js",
+      "sha256": "8a821a22c32d538e040fe3aa09fa33a543f3d42556a84bf1d511cb633a5969f6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/phrases.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/stem-mix.js",
+      "sha256": "2302cde64ee94fea4fd9b9068ec8a50e04629cc8d70694396517e5b8d9eab2f8",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/stem-mix.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/performance/tuplets.js",
+      "sha256": "42cdff67b8cfda955b02834ab4ab84ffe5f79607999d8efc2b7b4226504ad797",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/tuplets.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/prepared-browser.js",
+      "sha256": "c864eeea6620e9d1b284b8792de887626a5bdbc60936d73fb0f7d9a2e3fc9588",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/prepared-browser.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/presets/chip.js",
+      "sha256": "8221f776e1473749c798a6a6553f087157ca65273ee9c9455b781b65656f57c0",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/chip.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/presets/funk.js",
+      "sha256": "34fb005133288af2a7e3adf43500803943b18e7e6911fd042590dcab138a056d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/funk.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/presets/lofi.js",
+      "sha256": "e63d34c645bdcec28e0d18ddc41cba120c47d827b25c860d80342081201cb52c",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/lofi.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/presets/metal.js",
+      "sha256": "5352566ac06b9c2f2de1b18ea061b22f8c15ea2795ea564df7ccb33fd531ac99",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/metal.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/presets/preset-utils.js",
+      "sha256": "0fe884001539f5e9e8070ac662aadf77b8b532fe56a7c3bbe85bb84d9a02f785",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/preset-utils.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/presets/western.js",
+      "sha256": "c674f45d670771440555cb78a895dc5d415189fd1e7c12ef48b4b38452ee4c72",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/western.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/profiles/profile-registry.js",
+      "sha256": "d63798f4fbc9ce8620fef4fdb8516de875c9f10058b78bbd7dde21abbc7e7d71",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/profiles/profile-registry.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/schema/migrations.js",
+      "sha256": "c90dc7e639ee891dc71d244c9453140193200ca74bd95d49380acebe76a565ce",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/migrations.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/schema/normalise-project.js",
+      "sha256": "ae2dcfbfc6b24af1925a28422055220866be001324be372d3bf0cbdd564f7aeb",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/normalise-project.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/schema/parse-share-code.js",
+      "sha256": "e1e2d8ad44450e24de09932ad6f77e2a9667ad436218c4fff3eaf1bdea1ea7b6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/parse-share-code.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/schema/resource-limits.js",
+      "sha256": "9a18af0fa6b20b800e1c2f80b883f303e3dbac1a7839020c04b87b7bd2939430",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/resource-limits.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/schema/rich-track-stem.js",
+      "sha256": "58f3bf69a1603c304a0c3445deaf454c4ab0c97a0bbf8f9c6a07a3d5ea09061c",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/rich-track-stem.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/campfire-acoustic.js",
+      "sha256": "39c13b280c57c28c7ac924de015d0bed7c8017f52315af7318db9510c726db45",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/campfire-acoustic.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/chip-registry.js",
+      "sha256": "0d36b12c42a2faed949c6eb59456e00b838e5feeede690c33114e55e084e63ed",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/chip-registry.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/drum-lanes.js",
+      "sha256": "0781d5be1828879e30ce437d7afab680a99b72e0e7e21268aba09a678c5c06e6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/drum-lanes.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/funk-registry.js",
+      "sha256": "ed3b46544bcce29b016344bb9ccad5de319bb47d7f0ee6222211cde89466b13e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/funk-registry.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/guitar.js",
+      "sha256": "27a96f46fcba0326fe878ffead42ebd1a928e1767838a5d7993bcc5470dbbbc4",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/guitar.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/instruments.js",
+      "sha256": "ab46457fdba1331fc83420f32352bb658ad0417430927c29d85da9b04a8cd469",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/instruments.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/lofi-registry.js",
+      "sha256": "d5e7756bcbadc9c9fabfb32a99409f832d57237453fbf442f82952dc6fc38bd4",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/lofi-registry.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/metal-registry.js",
+      "sha256": "01964aee9830b9234f1106cb414c8daf2b48c1a9b8f286186930e186ea583f5b",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/metal-registry.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/sounds/western-registry.js",
+      "sha256": "a0bc25c98475137ca55ffe96da544137674dcfb3ecf4107af05d55b045a6c739",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/western-registry.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/synth/bass.js",
+      "sha256": "923a87d5b1094520e5891634e600afea9e9c85a6e731d463e44dd8dc44d3abe3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/bass.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/synth/campfire-acoustic.js",
+      "sha256": "522cacb7d8c3a1cbe76afb95ea846a8547953c1f7d1d57c72850a4f710ee82a3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/campfire-acoustic.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/synth/chords.js",
+      "sha256": "7feb747bcc3f293ca57dc9655311ac8599488a035c046228e6bcd8b8fbedb312",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/chords.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/synth/drums.js",
+      "sha256": "8fa4b579eb5b3cf4e1b51d3782f76bc4e42a1e8a00554641871e42b17cf459c3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/drums.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/synth/guitar.js",
+      "sha256": "1939c8971cad8d88f027501f5a08dcec2c1bf14e24ee07ef3cb317c1d7c0299f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/guitar.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/pocket-audio-core/src/synth/melody.js",
+      "sha256": "404f3f60565856b8fb1fba4876f76064b841a3c1458383672e7eabfe6c250b62",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/melody.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/src/genre-composer.js",
+      "sha256": "ac359b9762c41a960f08a2ab6b24d1e27334a6717a1a8cbe161df06c34326805",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "apps/chordsmith-web/src/genre-composer.js"
+    },
+    {
+      "path": "apps/pocket-chordsmith/src/wav-export-preflight.js",
+      "sha256": "ae9ca657b8cc274ae9e1163469f0f56901e33519191ede0b2acc72594d541b99",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "apps/chordsmith-web/src/wav-export-preflight.js"
+    },
+    {
+      "path": "apps/pocket-dj/index.html",
+      "sha256": "6b9ae315f1cb9437ad43ccaec2e718a4b93f18586923d70dd14a3f01495b37b9",
+      "hashMode": "UTF-8 LF"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/dist/api-manifest.json",
+      "sha256": "4f4c4057a4df06128e13f8e2e324ee16b2abb6028a74738ccfd2edb0130de5d6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/api-manifest.json"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/dist/chordsmith-wav-worker.js",
+      "sha256": "e7c8ecd1f7b01484a68c14f663e1da3448e72b9f3f444e442fb599af2a95ab89",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/chordsmith-wav-worker.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/dist/pocket-audio-campfire.iife.js",
+      "sha256": "00346b9965607cebe8adda5bc9caee622753d543019200c2c9ceb4338d526806",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-campfire.iife.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/dist/pocket-audio-core.browser.esm.js",
+      "sha256": "dd474a82c750a8df728461c8231498eceeb36fe26062d5db273b4d378e780a14",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-core.browser.esm.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/dist/pocket-audio-core.esm.js",
+      "sha256": "3ca535540bdf2bf1d592b916ba0888c62a2a7b2f1a7aa0d42e562308422658aa",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-core.esm.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/dist/pocket-audio-core.iife.js",
+      "sha256": "fcbc42464293f344fd3ee664ed689b587319aafaad47c18767512fb4b3db53a4",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-core.iife.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/dist/pocket-audio-prepared.iife.js",
+      "sha256": "a7040aa2505598a1884a5a36aecfb636195ef2f688d17006f1ba021bf426682e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/pocket-audio-prepared.iife.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/dist/README.md",
+      "sha256": "c8dee32b827ca62388440de4631b064db102c3351b73694550e4e4d1b0775f10",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/dist/README.md"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/package.json",
+      "sha256": "10ae39b60089d404825059819f4086e28f95ddb9fdc1c3e6b3b260d66d2d3f7f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/package.json"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/README.md",
+      "sha256": "71e6dcd102cfd86c26624e69b25e537d98e4b2dc5b8a78a6ef2bea3ea0e5771d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/README.md"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/adaptive/game-state-controller.js",
+      "sha256": "80e064c6e39e8ddfb9439dd6b959ff9152f3cf549975dd2039bab837bd31ad73",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/adaptive/game-state-controller.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/browser.js",
+      "sha256": "cbc5297eb9cb665c872ad4c7d7fb8f9c55f29cb9353ba4450bc8ecb6926d19a2",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/browser.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/campfire-browser.js",
+      "sha256": "172185ae59b1c78cfd13c536d814b545140a0616d408aafa54800ded70b2cead",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/campfire-browser.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/constants.js",
+      "sha256": "c8b2000be00247ceb658a8097e6f858911f445ea65d6fd12ffad6e4b89efee32",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/constants.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/engine/audio-context.js",
+      "sha256": "a885a6d4b6591447e18d3c97afc7f646829ddfcc1c72c9149dde512b761b4c55",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/audio-context.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/engine/buses.js",
+      "sha256": "55548416531466f2958724eedab3c09d7e932f61edb31d4aadc234558843d42a",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/buses.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/engine/capabilities.js",
+      "sha256": "3b9675ec22309a88828958e05fc163874ce7a50c9f3fb8e05b449518a21332d2",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/capabilities.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/engine/live-engine.js",
+      "sha256": "e332ce129ae6184f3cfd4d9b2436d82ac1b66de73af79dbd1254aa1b88d95e0b",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/live-engine.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/engine/offline-renderer.js",
+      "sha256": "2f2f0206a28c8190bc5a356e539863427bf6909ef1dad5ef23317a7d5fcf480e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/offline-renderer.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/engine/scheduler.js",
+      "sha256": "0e0be45ea156f70b008505383c7d71d13dc798c7042c4194359b0a48a264589d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/scheduler.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/engine/voice-manager.js",
+      "sha256": "6a6a720d30237c3666c8133bbf1219c808669f68fcb332f9ac38cf50b7191397",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/engine/voice-manager.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/events/timeline-events.js",
+      "sha256": "23453ffa295f7fb7b57f88700a802f35657eaa9ff88d837960beb4255a2cdc46",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/events/timeline-events.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/export/audio-metrics.js",
+      "sha256": "5d5716bbf0e3f1786986f9a5550082d92da90bb4c526756564c2db99beb099db",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/audio-metrics.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/export/chordsmith-wav-worker.js",
+      "sha256": "858f9c512c84e93698a238f675be8406c9ef6c6276e99312055c4982e3b0b7e9",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/chordsmith-wav-worker.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/export/game-pack-paths.js",
+      "sha256": "3f78b7c6d27aa6b2da5a6829abaf458a637d19176a3f1cd89b312bfc613bd311",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/game-pack-paths.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/export/godot-kit.js",
+      "sha256": "cbfeffa4988e87626c5fbdadd6f2af2b2a709fd322244f06b4ba3b045c6c1f4c",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/godot-kit.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/export/stems.js",
+      "sha256": "540b9bda24ef496aa7c9dd983a54d444fce3192a31133b879a67351ead631b6a",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/stems.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/export/wav.js",
+      "sha256": "c46a9875a1c7897af7ae8064b95b0705c32f975d0c4b7329cda9feac9cf5f194",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/export/wav.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/fx/built-in-fx.js",
+      "sha256": "67db063bfb6be07a9da6c08bc89cb2e133e8e49ddde84ca4f3f2c6be3ded045e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/built-in-fx.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/fx/chordsmith-fx.js",
+      "sha256": "857efbd276fc296778343029d7a931a1134a5dd4f8bc2a04a29d62882b53d9c5",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/chordsmith-fx.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/fx/delay.js",
+      "sha256": "2eefa0763c314702d27393794cca652d815d072109ce98b9e70354bc00f3f94e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/delay.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/fx/filter.js",
+      "sha256": "7d0cb9ded54300905c602c003b267f145fb4dd2b0ee69b700b18f20b449ba32f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/filter.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/fx/pro-eq.js",
+      "sha256": "22f52e01366c375f8ff72f05b03496449e8deae03b72f2fdab1edadb643ca899",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/pro-eq.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/fx/reverb.js",
+      "sha256": "bd7a0bd787dc8fbb3d5fffa51f48761ada7d233f4b289703d6e06b3151af72c0",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/reverb.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/fx/sidechain.js",
+      "sha256": "10818c514aa05d57fcace8e9fdb96fc1778f8ad0eb3cfacf4edb358c7a01b4f3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/fx/sidechain.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/index.js",
+      "sha256": "47d329305abdac4e208ba52e969d51d78bf13ac6c2ff18d0879bd51ad877a68a",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/index.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/mastering/audio-buffer-utils.js",
+      "sha256": "d77dd803c7bc18a146975afa8f31ab1276e3212007928d2639a795d9f988c5f3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/audio-buffer-utils.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/mastering/batch-release.js",
+      "sha256": "b0cbf79414d1ded9eb0babf3a046a02d3cc6e360b9f0fccd62743a99222fd196",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/batch-release.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/mastering/master-chain.js",
+      "sha256": "9eb54bed4e56b8dc67c34106e65e19b24b2315f4844790a8cc306823083cc4fb",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/master-chain.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/mastering/mix-assistant.js",
+      "sha256": "72c59782871ffc324e4e7a3de4adb3bec223b29c5797f5335ba213a7fe03121c",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/mix-assistant.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/mastering/qc.js",
+      "sha256": "b37f65580c7a8deada83969a526c5b687a3f2ff0054cd0018ae7b6cec19d5789",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/qc.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/mastering/release-profiles.js",
+      "sha256": "7e38aa538d5ebb40268b1214999dc689867b9649452fc25ec55841673ea2d271",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/release-profiles.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/mastering/reports.js",
+      "sha256": "a929378d6a25702633396ed9d7a9fd637de60d9ab43c987345127d10a75d5304",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/mastering/reports.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/music/chords.js",
+      "sha256": "e82ec4d28d53bbb2ce1fe9002780576a65fc1373dafb22f0b2268d9af03a8770",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/music/chords.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/music/pitches.js",
+      "sha256": "54f03e0713c269cd82aeb4dff405b0d7e5f3702343f3ac55a242084b1dddd472",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/music/pitches.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/music/scales.js",
+      "sha256": "30f31a4f1e324193f42377fd3c9b12d863279198e35500644170bbd08024c367",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/music/scales.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/music/timeline.js",
+      "sha256": "237e9819dbbacba409506c9e32a3cd4c38122e6526ceafabc5a35a5b7428b405",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/music/timeline.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/patterns/bass-presets.js",
+      "sha256": "33f32271266e3e103d5e9d011a41fc829f73b7f1d13a41c77767f9f0ad8e0962",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/bass-presets.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/patterns/drum-presets.js",
+      "sha256": "19a9971d6cfbc2206bfa8e5357af8f1bbca1d48bff9d89a138c52823283dd406",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/drum-presets.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/patterns/funk-grammar.js",
+      "sha256": "d225133f7e898ecf85f70b35dee59172b80cb927a6356bc7de55fa90b41ca9e0",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/funk-grammar.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/patterns/guitar-presets.js",
+      "sha256": "fd065d614ca9d138eb33ec05149e3ada5dcd1ac7a959541ba6d39fcba43b0f40",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/guitar-presets.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/patterns/metal-grammar.js",
+      "sha256": "f96b03716113be1a8c55eb3f220aa95aa4b3a5b789e147381515e6b45e8760d2",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/metal-grammar.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/patterns/western-grammar.js",
+      "sha256": "d4e1bb410c801797fe8d894f7194097b3ac8267561178feff297fd436122d011",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/patterns/western-grammar.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/chord-rhythm.js",
+      "sha256": "8dab3719f787f672b64d15579c6e650d32273b5617df87f388f0f6eae7104ce4",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/chord-rhythm.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/drum-feel.js",
+      "sha256": "dd76ba52eebe4675d7129084319b35d38324e424a13d18c30d2d1f94ac22baf6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/drum-feel.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/expression.js",
+      "sha256": "840294a9b26d9f1191e73e412b3bd73f8ab0df5c49c2724b70b7d28719bba31d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/expression.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/guitar-gates.js",
+      "sha256": "5837aa9e9df5091e8176e6e0300a8f615cf38198fdca45c323d82c8fefd1c08d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/guitar-gates.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/humanize.js",
+      "sha256": "9f06e4928ff61e1ede6acc504037979351e9588fb7364229feaab914fc7dd78f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/humanize.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/lofi-texture.js",
+      "sha256": "d1b10299b3509b76de16bef9c0b02ed4d194f0c639270a53cd22b70cc0e9495f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/lofi-texture.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/phrases.js",
+      "sha256": "8a821a22c32d538e040fe3aa09fa33a543f3d42556a84bf1d511cb633a5969f6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/phrases.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/stem-mix.js",
+      "sha256": "2302cde64ee94fea4fd9b9068ec8a50e04629cc8d70694396517e5b8d9eab2f8",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/stem-mix.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/performance/tuplets.js",
+      "sha256": "42cdff67b8cfda955b02834ab4ab84ffe5f79607999d8efc2b7b4226504ad797",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/performance/tuplets.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/prepared-browser.js",
+      "sha256": "c864eeea6620e9d1b284b8792de887626a5bdbc60936d73fb0f7d9a2e3fc9588",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/prepared-browser.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/presets/chip.js",
+      "sha256": "8221f776e1473749c798a6a6553f087157ca65273ee9c9455b781b65656f57c0",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/chip.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/presets/funk.js",
+      "sha256": "34fb005133288af2a7e3adf43500803943b18e7e6911fd042590dcab138a056d",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/funk.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/presets/lofi.js",
+      "sha256": "e63d34c645bdcec28e0d18ddc41cba120c47d827b25c860d80342081201cb52c",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/lofi.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/presets/metal.js",
+      "sha256": "5352566ac06b9c2f2de1b18ea061b22f8c15ea2795ea564df7ccb33fd531ac99",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/metal.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/presets/preset-utils.js",
+      "sha256": "0fe884001539f5e9e8070ac662aadf77b8b532fe56a7c3bbe85bb84d9a02f785",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/preset-utils.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/presets/western.js",
+      "sha256": "c674f45d670771440555cb78a895dc5d415189fd1e7c12ef48b4b38452ee4c72",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/presets/western.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/profiles/profile-registry.js",
+      "sha256": "d63798f4fbc9ce8620fef4fdb8516de875c9f10058b78bbd7dde21abbc7e7d71",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/profiles/profile-registry.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/schema/migrations.js",
+      "sha256": "c90dc7e639ee891dc71d244c9453140193200ca74bd95d49380acebe76a565ce",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/migrations.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/schema/normalise-project.js",
+      "sha256": "ae2dcfbfc6b24af1925a28422055220866be001324be372d3bf0cbdd564f7aeb",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/normalise-project.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/schema/parse-share-code.js",
+      "sha256": "e1e2d8ad44450e24de09932ad6f77e2a9667ad436218c4fff3eaf1bdea1ea7b6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/parse-share-code.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/schema/resource-limits.js",
+      "sha256": "9a18af0fa6b20b800e1c2f80b883f303e3dbac1a7839020c04b87b7bd2939430",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/resource-limits.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/schema/rich-track-stem.js",
+      "sha256": "58f3bf69a1603c304a0c3445deaf454c4ab0c97a0bbf8f9c6a07a3d5ea09061c",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/schema/rich-track-stem.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/campfire-acoustic.js",
+      "sha256": "39c13b280c57c28c7ac924de015d0bed7c8017f52315af7318db9510c726db45",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/campfire-acoustic.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/chip-registry.js",
+      "sha256": "0d36b12c42a2faed949c6eb59456e00b838e5feeede690c33114e55e084e63ed",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/chip-registry.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/drum-lanes.js",
+      "sha256": "0781d5be1828879e30ce437d7afab680a99b72e0e7e21268aba09a678c5c06e6",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/drum-lanes.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/funk-registry.js",
+      "sha256": "ed3b46544bcce29b016344bb9ccad5de319bb47d7f0ee6222211cde89466b13e",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/funk-registry.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/guitar.js",
+      "sha256": "27a96f46fcba0326fe878ffead42ebd1a928e1767838a5d7993bcc5470dbbbc4",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/guitar.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/instruments.js",
+      "sha256": "ab46457fdba1331fc83420f32352bb658ad0417430927c29d85da9b04a8cd469",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/instruments.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/lofi-registry.js",
+      "sha256": "d5e7756bcbadc9c9fabfb32a99409f832d57237453fbf442f82952dc6fc38bd4",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/lofi-registry.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/metal-registry.js",
+      "sha256": "01964aee9830b9234f1106cb414c8daf2b48c1a9b8f286186930e186ea583f5b",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/metal-registry.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/sounds/western-registry.js",
+      "sha256": "a0bc25c98475137ca55ffe96da544137674dcfb3ecf4107af05d55b045a6c739",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/sounds/western-registry.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/synth/bass.js",
+      "sha256": "923a87d5b1094520e5891634e600afea9e9c85a6e731d463e44dd8dc44d3abe3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/bass.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/synth/campfire-acoustic.js",
+      "sha256": "522cacb7d8c3a1cbe76afb95ea846a8547953c1f7d1d57c72850a4f710ee82a3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/campfire-acoustic.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/synth/chords.js",
+      "sha256": "7feb747bcc3f293ca57dc9655311ac8599488a035c046228e6bcd8b8fbedb312",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/chords.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/synth/drums.js",
+      "sha256": "8fa4b579eb5b3cf4e1b51d3782f76bc4e42a1e8a00554641871e42b17cf459c3",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/drums.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/synth/guitar.js",
+      "sha256": "1939c8971cad8d88f027501f5a08dcec2c1bf14e24ee07ef3cb317c1d7c0299f",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/guitar.js"
+    },
+    {
+      "path": "apps/pocket-dj/pocket-audio-core/src/synth/melody.js",
+      "sha256": "404f3f60565856b8fb1fba4876f76064b841a3c1458383672e7eabfe6c250b62",
+      "hashMode": "UTF-8 LF",
+      "canonicalSource": "packages/pocket-audio-core/src/synth/melody.js"
+    }
+  ],
+  "scope": "Review candidate, not deployed. Text hashes canonicalize CRLF to LF; PNG hashes are raw. No private/local absolute paths."
+}

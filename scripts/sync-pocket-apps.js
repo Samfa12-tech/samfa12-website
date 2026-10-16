@@ -17,9 +17,7 @@ const handoffSource = process.env.POCKET_AUDIO_HANDOFF_HTML
 
 const pocketAudioCoreImportBlock = `const POCKET_AUDIO_CORE_IMPORT_PATHS = [
   "./pocket-audio-core/src/index.js",
-  "./pocket-audio-core/dist/pocket-audio-core.esm.js",
-  "../../packages/pocket-audio-core/src/index.js",
-  "../../packages/pocket-audio-core/dist/pocket-audio-core.esm.js"
+  "./pocket-audio-core/dist/pocket-audio-core.esm.js"
 ];`;
 
 const apps = [
@@ -153,6 +151,9 @@ function patchHead(html, app) {
 }
 
 function patchPocketAudioCoreImports(html) {
+  // Hosted mirrors bundle Core beside the page. Localhost must use those same
+  // files instead of probing monorepo-only paths before its packaged fallback.
+  html = html.replaceAll('"../../packages/pocket-audio-core/', '"./pocket-audio-core/');
   if (!/const\s+POCKET_AUDIO_CORE_IMPORT_PATHS\s*=/.test(html)) {
     return html;
   }
@@ -266,7 +267,9 @@ async function run() {
   for (const app of apps) {
     synced.push(await syncApp(app));
   }
-  synced.push(await syncHandoffApp());
+  if (!process.argv.includes("--apps-only")) {
+    synced.push(await syncHandoffApp());
+  }
 
   console.log("Synced Pocket Audio apps:");
   for (const item of synced) {

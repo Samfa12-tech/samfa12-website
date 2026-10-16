@@ -46,6 +46,8 @@ npm run verify:briarhold-pages -- <verified-game-dist>
 builds from the current user's `Documents\Pocket Chordsmith` folder by default. Use
 `POCKET_CHORDSMITH_ROOT`, `POCKET_CHORDSMITH_HTML`, or `POCKET_DJ_HTML` only
 when intentionally overriding the source.
+For a Chordsmith/DJ-only release mirror, use `npm run sync:pocket-apps --
+--apps-only` to preserve the separately released Handoff route.
 
 `sync:what-would-win` copies a completed build from the current user's
 `Documents\What Would Win\app\dist` folder by default to
