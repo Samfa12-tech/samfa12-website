@@ -584,6 +584,11 @@
           "url": "https://samfa12.itch.io/pocket-daw",
           "identity": "samfa12.itch.io /pocket-daw",
           "access": "read-public-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith release pocket-daw-v0.6.59",
+          "access": "read-public-source"
         }
       ]
     },
