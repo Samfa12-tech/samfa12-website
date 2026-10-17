@@ -393,10 +393,11 @@
       "path": "/pocket-audio/pocket-daw/",
       "action": "create",
       "officialSources": [
-        "https://samfa12.itch.io/pocket-daw"
+        "https://samfa12.itch.io/pocket-daw",
+        "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59"
       ],
       "notes": "Windows desktop download; do not invent a browser DAW or market it as the Pocket Chordsmith app.",
-      "pageModified": "2026-10-05"
+      "pageModified": "2026-10-17"
     },
     {
       "id": "game-mandible-wars",
