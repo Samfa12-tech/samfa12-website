@@ -546,6 +546,20 @@
     ],
     "updates": [
       {
+        "id": "godot-addon-130-20261017",
+        "kind": "release",
+        "date": "2026-10-17",
+        "dateMeaning": "GitHub and itch addon release date",
+        "title": "1.3.0 - prepared Core and native DAW audio",
+        "summary": "Version1.3.0 adds prepared Core/Campfire audio and fully arranged native DAW-export playback. Validated on Godot4.6.3 Windows/WASAPI, with both human listening checks passed. Historical intermittent stalls were not reproduced; cause unknown. Dummy timing and whole-run frame limits remain documented. Store and Asset Library updates are separate.",
+        "platform": "Godot4.6 (validated4.6.3 Windows/WASAPI)",
+        "sources": [
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/godot-addon-v1.3.0",
+          "https://samfa12.itch.io/pocket-chordsmith",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/blob/godot-addon-v1.3.0/addons/pocket_chordsmith/docs/RELEASE_ACCEPTANCE_1_3_0.md"
+        ]
+      },
+      {
         "id": "godot-asset-library-submission-2026",
         "kind": "listing",
         "date": "2026-07-23",
