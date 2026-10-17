@@ -2,7 +2,7 @@
 export function sampledThrust(previous:number,playing:boolean,sampled:boolean,frame:{moveX:number;moveZ:number;vertical:number}){
     return !playing?0:sampled?Math.min(1,Math.hypot(frame.moveX,frame.moveZ,frame.vertical)):previous;
 }
-/** A fixed two-oscillator voice: silent at rest outside a deployed, powered dive. */
+/** Fixed reusable motor voice; its caller owns boat/scooter power and lifecycle. */
 export class ScooterMotor {
     private gain: GainNode;
     private filter: BiquadFilterNode;
@@ -12,7 +12,7 @@ export class ScooterMotor {
     thrust = 0;
     private lastLevel = -1;
     private lastPitch = -1;
-    constructor(private ctx: AudioContext, destination: AudioNode) {
+    constructor(private ctx: AudioContext, destination: AudioNode, private baseHz = 62) {
         this.gain = ctx.createGain(); this.gain.gain.value = 0;
         this.filter = ctx.createBiquadFilter(); this.filter.type = 'lowpass'; this.filter.frequency.value = 380;
         this.low = ctx.createOscillator(); this.low.type = 'sine'; this.low.frequency.value = 62;
@@ -22,7 +22,7 @@ export class ScooterMotor {
     }
     update(powered: boolean, thrust: number) {
         this.active = powered && this.ctx.state === 'running'; this.thrust = this.active ? Math.max(0, Math.min(1, thrust)) : 0;
-        const level = this.active ? .025 + this.thrust * .075 : 0, pitch = 62 + this.thrust * 42, t = this.ctx.currentTime;
+        const level = this.active ? .025 + this.thrust * .075 : 0, pitch = this.baseHz + this.thrust * 42, t = this.ctx.currentTime;
         if (Math.abs(level - this.lastLevel) > .001) { this.gain.gain.cancelScheduledValues(t); this.gain.gain.setTargetAtTime(level, t, .035); this.lastLevel = level; }
         if (Math.abs(pitch - this.lastPitch) > .5) { this.low.frequency.setTargetAtTime(pitch, t, .09); this.hum.frequency.setTargetAtTime(pitch * 2, t, .09); this.filter.frequency.setTargetAtTime(380 + this.thrust * 420, t, .09); this.lastPitch = pitch; }
     }

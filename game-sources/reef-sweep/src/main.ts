@@ -14,13 +14,15 @@ import type { Profile, Settings, SiteId, InputFrame } from './game/types.js';
 import { vec, sub } from './game/math.js';
 import { ReefRenderer } from './render/renderer.js';
 import { InputController } from './input.js';
-import { Soundscape } from './audio/audio.js';
+import { Soundscape, bindAudioUnlock } from './audio/audio.js';
 import { UI, Screen } from './ui/ui.js';
 const canvas = document.getElementById('ocean') as HTMLCanvasElement;
 const store = new SaveStore();
 let profile = store.load(store.selectedSlot()), settings = store.settings(), sim: Simulation | null = null, paused = true, visualDive = false, renderer: ReefRenderer | null = null, stack: (Screen | 'play')[] = [], fault = false;
 let boat: BoatState|null=null, boatRenderer: BoatTravelRenderer|null=null, travelledDistance=0,boatInteract=false;
 const audio = new Soundscape(settings);
+const unbindAudioUnlock = bindAudioUnlock(audio, document);
+audio.setHidden(document.hidden);
 const ui = new UI(() => profile, () => settings, dispatch);
 const input = new InputController(canvas, settings, action => { if (action === 'pause') {
     if (!paused)
@@ -90,7 +92,7 @@ function updateWatchReadout() {
 function setPause(v: boolean) { if (v) setWatchRaised(false); paused = v; input.setActive(!v); accum = 0; if (sim) {
     sim.run.charge = 0;
     sim.run.interaction = 0;
-} audio.setPaused(v && visualDive); if (v)
+} audio.setPaused(v && (visualDive || !!boat)); if (v)
     persist(); }
 function preview(id: SiteId = ui.site) { if (!renderer)
     return; const copy = structuredClone(profile); copy.active = null; copy.pending = null; const run = startRun(copy, siteUnlocked(copy, id) ? id : 'gardens', 'none'); renderer.build(profile, run); visualDive = false; }
@@ -126,7 +128,7 @@ function resume() { if (!profile.active) {
     return;
 } sim=bindSuspendedDive(profile,sim,renderer!,run=>new Simulation(profile,run));
     if(!visualDive&&!sim.run.practice)playCandidate=true; visualDive = true; setPause(false); stack = []; ui.play(); void audio.start(); canvas.focus(); input.capture(); }
-function resumeBoat(){setPause(false);ui.playBoat();}
+function resumeBoat(){setPause(false);ui.playBoat();void audio.start();}
 function launchBoat(){if(profile.active||profile.pending){begin();return;}setPause(true);input.boatMode=true;sim=null;visualDive=false;boat=newBoat();boatInteract=false;playCandidate=true;boatRenderer=new BoatTravelRenderer(renderer!,profile,settings);stack=[];resumeBoat();}
 function begin() { if (profile.pending) {
     review();
@@ -441,7 +443,7 @@ function frame(now: number) {
         settings.performancePromptDismissed = true; store.saveSettings(settings); open('performance');
     }
     audioThrust=sampledThrust(audioThrust,visualDive&&!paused, inputTime>0,f);
-    audio.update(sim?.run || null, visualDive && !paused, audioThrust);
+    audio.update(sim?.run || null, visualDive && !paused, audioThrust, boat && !paused ? boat.speed : null);
     hudClock += dt;
     try {
         renderer!.setWatchReserve(sim?.reserve ?? 40);
@@ -507,10 +509,11 @@ finally {
 } });
 window.addEventListener('blur', () => {     if (!paused && (profile.active||boat))
     open('pause'); });
-document.addEventListener('visibilitychange', () => { if (document.hidden && !paused && (profile.active||boat))
+document.addEventListener('visibilitychange', () => { audio.setHidden(document.hidden); if (document.hidden && !paused && (profile.active||boat))
     open('pause'); if (document.hidden)
     persist(); });
-window.addEventListener('pagehide', event => {persist();if(!event.persisted)gameStarts.dispose();});
+window.addEventListener('pagehide', event => {audio.setHidden(true);persist();if(!event.persisted){unbindAudioUnlock();gameStarts.dispose();}});
+window.addEventListener('pageshow', () => audio.setHidden(document.hidden));
 function orientation() { document.getElementById('rotate')!.hidden = true; }
 function resizeViewport() { renderer?.engine.resize(); orientation(); if (ui.screen === 'journal') ui.chart(sim && visualDive ? sim : null); }
 window.addEventListener('resize', resizeViewport);

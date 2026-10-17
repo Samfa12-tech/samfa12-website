@@ -47,3 +47,7 @@ Music, ambience and effects have independent controls. The ambience includes syn
 ## Known audio work for Codex
 
 Run a physical-device soak test for oscillator/node growth and audible clicks. Refine the arrangement after an uninterrupted ten-minute dive; short automation cannot judge musical fatigue. Test iOS autoplay/resume and tab/background transitions. Add richer underwater equipment sounds without burying breathing or safety cues. Preserve the original score source, instrument provenance and bar-synchronised changes.
+
+## Menu and boat lifecycle correction (2026-10-17, local only)
+
+Menu pointer/key/touch gestures now unlock the same Room for Life clock used by dives. Boat travel reuses the fixed synthesized motor voice with a lower 52 Hz base, and drives its level/pitch from absolute boat speed. Music and SFX retain existing settings. Boat pause, hidden/pagehide and zero volumes silence the appropriate buses; changing paused settings cancels deferred warning restores. See AUDIO_FIX_2026-10-17.md for measured local evidence and remaining listening checks.

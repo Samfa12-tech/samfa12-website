@@ -5,12 +5,21 @@ import { SCORE } from './score.js';
 import { chordInstrumentConfig, leadInstrumentConfig } from './pcs-voices.js';
 import type { Settings, Run } from '../game/types.js';
 import { clamp } from '../game/math.js';
+/** Keep retries installed: a denied or interrupted context needs a later gesture. */
+export function bindAudioUnlock(sound: Pick<Soundscape, 'start'>, target: EventTarget) {
+    const unlock = () => { void sound.start(); };
+    const events = ['pointerdown', 'keydown', 'touchend', 'click'];
+    for (const event of events) target.addEventListener(event, unlock, { capture: true, passive: true });
+    return () => { for (const event of events) target.removeEventListener(event, unlock, true); };
+}
 export type Mood = 'harbour' | 'explore' | 'focus' | 'danger' | 'recovery';
 const freq = (m: number) => 440 * Math.pow(2, (m - 69) / 12);
 /** One musical clock; no per-frame note generation. Voice stealing is bounded. */
 export class Soundscape {
     ctx: AudioContext | null = null;
     motor: ScooterMotor | null = null;
+    boatMotor: ScooterMotor | null = null;
+    hidden = false;
     music!: GainNode;
     ambience!: GainNode;
     effects!: GainNode;
@@ -38,6 +47,7 @@ export class Soundscape {
     moodUntil = 0;
     constructor(s: Settings) { this.settings = s; }
     async start() { try {
+        if (this.ctx?.state === 'running' || this.hidden) return;
         if (!this.ctx) {
             const AC = window.AudioContext || (window as any).webkitAudioContext;
             if (!AC)
@@ -52,6 +62,7 @@ export class Soundscape {
             this.ambience = gain(this.settings.ambience * .23, limiter);
             this.effects = gain(this.settings.effects * .55, limiter);
             this.motor = new ScooterMotor(ctx, this.effects);
+            this.boatMotor = new ScooterMotor(ctx, this.effects, 52);
             this.pad = gain(.6, this.music);
             this.lead = gain(.65, this.music);
             this.bass = gain(.12, this.music);
@@ -67,18 +78,27 @@ export class Soundscape {
 
             this.timer = setInterval(() => this.schedule(), 30);
         }
-        if (this.ctx?.state === 'suspended')
+        this.applyLevels();
+        if (this.ctx && this.ctx.state !== 'running' && this.ctx.state !== 'closed')
             await this.ctx.resume();
+        this.schedule();
     }
     catch { /* Silent play is always available. */ } }
-    setSettings(s: Settings) { this.settings = s; if (!this.ctx)
-        return; const t = this.ctx.currentTime; this.music.gain.setTargetAtTime(s.music * .32, t, .05); this.ambience.gain.setTargetAtTime(s.ambience * .23, t, .05); this.effects.gain.setTargetAtTime(s.effects * .55, t, .05); }
+    private applyLevels() {
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        for (const [bus, level] of [[this.music, this.hidden ? 0 : this.settings.music * (this.paused ? .08 : .32)],
+            [this.ambience, this.hidden || this.paused ? 0 : this.settings.ambience * .23],
+            [this.effects, this.hidden || this.paused ? 0 : this.settings.effects * .55]] as [GainNode, number][]) {
+            // In particular, discard a warning's deferred music restore after mute/pause.
+            bus.gain.cancelScheduledValues(t);
+            bus.gain.setTargetAtTime(level, t, .035);
+        }
+    }
+    setSettings(s: Settings) { this.settings = s; this.applyLevels(); }
     setMood(m: Mood) { this.pending = m; }
-    setPaused(p: boolean) { this.paused = p; if(p) this.motor?.silence(); if (this.ctx) {
-        this.music.gain.setTargetAtTime(p ? this.settings.music * .08 : this.settings.music * .32, this.ctx.currentTime, .15);
-        this.ambience.gain.setTargetAtTime(p ? 0 : this.settings.ambience * .23, this.ctx.currentTime, .15);
-        this.effects.gain.setTargetAtTime(p ? 0 : this.settings.effects * .55, this.ctx.currentTime, .035);
-    } }
+    setPaused(p: boolean) { this.paused = p; if (p) { this.motor?.silence(); this.boatMotor?.silence(); } this.applyLevels(); }
+    setHidden(hidden: boolean) { this.hidden = hidden; if (hidden) { this.motor?.silence(); this.boatMotor?.silence(); } this.applyLevels(); }
     register(source: AudioScheduledSourceNode, gain: GainNode, end: number) { const ctx = this.ctx!; this.voices = this.voices.filter(v => v.end > ctx.currentTime); while (this.voices.length >= 48) {
         const v = this.voices.shift()!;
         try {
@@ -109,7 +129,7 @@ export class Soundscape {
     }
     schedule() {
         const ctx = this.ctx;
-        if (!ctx || ctx.state !== 'running')
+        if (!ctx || ctx.state !== 'running' || this.hidden)
             return;
         const beat = 60 / SCORE.bpm, stepDur = beat / 4;
         if (this.next < ctx.currentTime - .3)
@@ -150,7 +170,7 @@ export class Soundscape {
         }
     }
 
-    sfx(name: string) { const ctx = this.ctx; if (!ctx || this.paused)
+    sfx(name: string) { const ctx = this.ctx; if (!ctx || this.paused || this.hidden)
         return; const t = ctx.currentTime; switch (name) {
         case 'boat-engine':
             this.tone(32, t, 3, 'triangle', this.effects, .10, { sustain:.35, release:1, filter:'lowpass', freq:260 });
@@ -179,10 +199,12 @@ export class Soundscape {
             break;
         default: this.tone(42, t, .07, 'triangle', this.effects, .12);
     } }
-    update(r: Run | null, active: boolean, thrust = 0) {
-        this.motor?.update(!!r && active && !this.paused && !r.finished && r.scooter && r.battery > 0 && this.settings.effects > 0, thrust);
+    update(r: Run | null, active: boolean, thrust = 0, boatSpeed: number | null = null) {
+        const audible = !this.paused && !this.hidden && this.settings.effects > 0;
+        this.boatMotor?.update(boatSpeed !== null && audible, Math.abs(boatSpeed ?? 0) / 15);
+        this.motor?.update(!!r && active && audible && !r.finished && r.scooter && r.battery > 0, thrust);
         this.submerged = !!r && active && !this.paused && !r.finished && r.p.y < SITES[r.site].surface - .12;
-        const breath = this.breathClock.sample(r?.time ?? 0, this.submerged && this.ctx?.state === 'running', this.paused);
+        const breath = this.breathClock.sample(r?.time ?? 0, this.submerged && !this.hidden && this.ctx?.state === 'running', this.paused);
         if (breath && this.ctx) {
             this.breathCount++;
             const now = this.ctx.currentTime;
@@ -209,5 +231,5 @@ export class Soundscape {
         return;
     else
         this.setMood(r.restored > 0 && r.time % 55 < 12 ? 'recovery' : 'explore'); }
-    stats() { return { context: this.ctx?.state ?? 'not-started', mood: this.mood, voices: this.voices.length, step: this.step, submerged: this.submerged, breathCount: this.breathCount, motor: this.motor?.stats() ?? null }; }
+    stats() { return { context: this.ctx?.state ?? 'not-started', mood: this.mood, voices: this.voices.length, step: this.step, submerged: this.submerged, breathCount: this.breathCount, motor: this.motor?.stats() ?? null, boatMotor: this.boatMotor?.stats() ?? null, hidden: this.hidden }; }
 }

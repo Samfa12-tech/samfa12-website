@@ -1,5 +1,9 @@
 # Feature status: v0.5.0-preview.2 portrait refinements
 
+## Local audio correction (2026-10-17)
+
+Unpublished audio candidate: first menu interaction unlocks the existing PCS score; boat travel has a bounded idle/throttle motor using existing synthesis. Pause, saved volume zeros and hidden-tab silence are preserved. Typecheck, 192 tests, 8 package checks and 32 muted Chrome browser checks passed. Human listening and physical-device acceptance remain pending. See AUDIO_FIX_2026-10-17.md for cause, evidence and known issues. NEXT_UPDATE.md records the requested boat pilot, seated diver and Blender-authored backward-roll entry; that work is planned, not implemented.
+
 The v0.5 expedition baseline was published on 2026-10-15 from main 3f104c1854d0704ec8985b8731053595cc75cf16. These follow-up portrait refinements are a new local review candidate. User authorized website and existing Wavedash publication after quality review on 2026-10-15. Parent candidate review remains a publication gate. This branch is not already live.
 
 | System | Implemented behavior |
