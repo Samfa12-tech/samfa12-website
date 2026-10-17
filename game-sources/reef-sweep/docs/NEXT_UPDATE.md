@@ -1,8 +1,9 @@
 # Next Reef Sweep update: boat crew and water entry
 
 Owner request received 2026-10-17; planned after the current audio correction.
-This document records scope and source inspection. No animation implementation,
-Blender render, new asset generation or public release happened in this task.
+The original plan below now has a local implementation checkpoint: see
+BOAT_ENTRY_INTEGRATION.md. The cloud asset was integrated without local Blender
+work. No public release has happened; lionfish follow-up remains pending.
 
 ## Requested result
 

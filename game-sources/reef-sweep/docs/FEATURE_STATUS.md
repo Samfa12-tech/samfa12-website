@@ -1,5 +1,9 @@
 # Feature status: v0.5.0-preview.2 portrait refinements
 
+## Local crew and entry checkpoint (2026-10-17)
+
+The cloud-authored pilot and diver now render aboard the skiff, followed by a 3.583-second gear-check/backward-roll entry, contact splash and fade into the selected reef. Pause, skip, reduced motion and once-only save creation are covered. This combined audio/boat candidate passed 195 tests, 8 package checks, 22 entry and 32 audio browser checks. It is unpublished; owner/runtime acceptance and the separate cloud lionfish package remain pending. See BOAT_ENTRY_INTEGRATION.md.
+
 ## Local audio correction (2026-10-17)
 
 Unpublished audio candidate: first menu interaction unlocks the existing PCS score; boat travel has a bounded idle/throttle motor using existing synthesis. Pause, saved volume zeros and hidden-tab silence are preserved. Typecheck, 192 tests, 8 package checks and 32 muted Chrome browser checks passed. Human listening and physical-device acceptance remain pending. See AUDIO_FIX_2026-10-17.md for cause, evidence and known issues. NEXT_UPDATE.md records the requested boat pilot, seated diver and Blender-authored backward-roll entry; that work is planned, not implemented.

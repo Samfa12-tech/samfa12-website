@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "ed337e47ae7a9a4c50ede668ce3b2b15daac1aa2",
+  "origin": "Original crew authored in Blender; existing original skiff reconstructed unchanged",
+  "crewTriangles": 3216,
+  "parts": 52,
+  "frames": 44,
+  "textures": 0,
+  "duration": 3.5833333333333335,
+  "clip": "BoatEntry",
+  "notes": "Boat not included in crew GLB. Blender contains reference boat. Runtime bake includes crew only, world transforms relative to boat origin. Hide diver after submerged; retain pilot. Mask check, chest check, back roll. No splash mesh, runtime supplies water/splash/fade."
+}

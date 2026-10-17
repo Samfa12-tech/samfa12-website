@@ -45,3 +45,7 @@ Evidence from corrections lives in docs/review-evidence/expedition/review and fu
 ## Local audio correction (2026-10-17)
 
 The default npm test includes tests/audio-lifecycle.test.mjs (192 total tests). Run python tests/browser-audio.py with installed Python Playwright and CHROMIUM_BIN if Chrome is elsewhere. The runner serves a loopback-only site-style route plus the standalone build, launches Chrome with strict gesture autoplay and muted output, and writes qa-output/audio (or REEF_SWEEP_QA_OUT). It uses an analyser connected through a zero-gain sink; it records RMS numbers, not audio. Hidden visibility is a controlled handler fixture. Coordinate builds/browser work with any timing-sensitive audio task first. Human and physical-device listening remain required. See AUDIO_FIX_2026-10-17.md and its retained failure evidence.
+
+## Boat crew and entry (2026-10-17)
+
+The default test command now includes tests/boat-entry.test.mjs (195 total). Run python tests/browser-boat-entry.py after building, with the same existing Playwright/Chrome setup as browser-audio.py. The bounded muted runner checks actual two-batch crew geometry, full desktop/portrait entry, pause, skip/duplicate protection, all five destinations, a night dive, reload interruption and reduced motion. It writes qa-output/boat-entry or REEF_SWEEP_QA_OUT. See BOAT_ENTRY_INTEGRATION.md for source provenance, retained failed runs and acceptance limits.

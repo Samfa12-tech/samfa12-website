@@ -176,6 +176,9 @@ export class Soundscape {
             this.tone(32, t, 3, 'triangle', this.effects, .10, { sustain:.35, release:1, filter:'lowpass', freq:260 });
             this.noiseHit(t, 3, this.effects, .08, 180);
             break;
+        case 'water-entry':
+            this.noiseHit(t, .65, this.effects, .38, 700);
+            break;
         case 'strike':
             this.noiseHit(t, .18, this.effects, .75, 400);
             break;

@@ -40,8 +40,8 @@ try:
     check('baseline has no travel engine',not snapshot['audio'].get('boatMotor'));ctx.close();break
    if touch:p.touchscreen.tap(20,20)
    else:p.keyboard.press('Tab')
-   p.wait_for_function('__REEF__.audio.ctx?.state==="running" && __REEF__.audio.step>0')
-   music=rms(p,'music');check(label+' menu music produces signal',music>1e-5,music);p.screenshot(path=str(OUT/(label+'-menu.png')))
+   p.wait_for_function('__REEF__.audio.ctx?.state==="running" && __REEF__.audio.ctx.currentTime>.5 && __REEF__.audio.step>=4')
+   music=rms(p,'music');check(label+' menu music produces signal',music>1e-5,{'rms':music,'audio':state(p)['audio'],'time':p.evaluate('__REEF__.audio.ctx.currentTime')});p.screenshot(path=str(OUT/(label+'-menu.png')))
    p.locator('[data-action="boat-launch"]').click();p.wait_for_function('__REEF__.boat!==null && !__REEF__.paused');p.wait_for_function('__REEF__.audio.stats().boatMotor.active')
    idle=state(p)['audio']['boatMotor'];engine=rms(p,'effects');check(label+' boat idle produces signal',engine>1e-5,{'rms':engine,'motor':idle})
    if touch:
