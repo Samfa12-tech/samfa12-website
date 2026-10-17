@@ -49,3 +49,7 @@ The default npm test includes tests/audio-lifecycle.test.mjs (192 total tests). 
 ## Boat crew and entry (2026-10-17)
 
 The default test command now includes tests/boat-entry.test.mjs (195 total). Run python tests/browser-boat-entry.py after building, with the same existing Playwright/Chrome setup as browser-audio.py. The bounded muted runner checks actual two-batch crew geometry, full desktop/portrait entry, pause, skip/duplicate protection, all five destinations, a night dive, reload interruption and reduced motion. It writes qa-output/boat-entry or REEF_SWEEP_QA_OUT. See BOAT_ENTRY_INTEGRATION.md for source provenance, retained failed runs and acceptance limits.
+
+## Lionfish anatomical/display integration (2026-10-17)
+
+The default suite includes tests/lionfish.test.mjs (198 total). After a build, python tests/browser-lionfish.py checks actual GPU colour/sun-depth per-fish uniforms, near/far independence, hysteresis, pause, retreat, shared geometry and existing capture/tube flow. It records two short High samples at desktop and portrait touch-emulated viewports. Use --baseline --dist <retained-prior-dist> before rebuilding to record paired prior evidence. These samples use the desktop GPU and do not certify physical-phone performance. Existing entry/audio runners pass against the combined build. See LIONFISH_INTEGRATION.md.

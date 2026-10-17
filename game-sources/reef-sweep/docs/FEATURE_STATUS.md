@@ -1,5 +1,9 @@
 # Feature status: v0.5.0-preview.2 portrait refinements
 
+## Local combined candidate: audio, entry and lionfish (2026-10-17)
+
+The cloud-authored lionfish remodel now uses independent GPU defensive flare with near/retreat hysteresis, shared geometry and matching shadow deformation. Existing damage, hit ranges, fish sizing data and saves are unchanged. Final local checks: 198 tests, 8 package checks, 22 lionfish, 22 crew/entry and 32 audio browser assertions. Owner runtime/listening acceptance and physical-phone performance remain pending; nothing is published. See LIONFISH_INTEGRATION.md and BOAT_ENTRY_INTEGRATION.md. Earlier checkpoint sections below retain their historical scope.
+
 ## Local crew and entry checkpoint (2026-10-17)
 
 The cloud-authored pilot and diver now render aboard the skiff, followed by a 3.583-second gear-check/backward-roll entry, contact splash and fade into the selected reef. Pause, skip, reduced motion and once-only save creation are covered. This combined audio/boat candidate passed 195 tests, 8 package checks, 22 entry and 32 audio browser checks. It is unpublished; owner/runtime acceptance and the separate cloud lionfish package remain pending. See BOAT_ENTRY_INTEGRATION.md.

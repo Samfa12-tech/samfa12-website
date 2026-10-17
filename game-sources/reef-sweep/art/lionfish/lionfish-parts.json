@@ -1,0 +1,380 @@
+[
+  {
+    "name": "Body \u2014 deep chest, tapered peduncle",
+    "tag": 0,
+    "pivot": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "axis": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "calm": 0,
+    "flare": 0,
+    "delta": 0,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Left pectoral fan",
+    "tag": 1,
+    "pivot": [
+      -0.20000000298023224,
+      -0.03999999910593033,
+      0.23999999463558197
+    ],
+    "axis": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "calm": -0.65,
+    "flare": 0.1,
+    "delta": 0.75,
+    "idleAmplitude": -0.035
+  },
+  {
+    "name": "Right pectoral fan",
+    "tag": 2,
+    "pivot": [
+      0.20000000298023224,
+      -0.03999999910593033,
+      0.23999999463558197
+    ],
+    "axis": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "calm": 0.65,
+    "flare": -0.1,
+    "delta": -0.75,
+    "idleAmplitude": 0.035
+  },
+  {
+    "name": "Dorsal spine 01",
+    "tag": 10,
+    "pivot": [
+      0.0,
+      0.2428823560476303,
+      0.30000001192092896
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 02",
+    "tag": 11,
+    "pivot": [
+      0.0,
+      0.2644541263580322,
+      0.23600000143051147
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 03",
+    "tag": 12,
+    "pivot": [
+      0.0,
+      0.28602588176727295,
+      0.1720000058412552
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 04",
+    "tag": 13,
+    "pivot": [
+      0.0,
+      0.2897409498691559,
+      0.1080000028014183
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 05",
+    "tag": 14,
+    "pivot": [
+      0.0,
+      0.29287999868392944,
+      0.04399999976158142
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 06",
+    "tag": 15,
+    "pivot": [
+      0.0,
+      0.296019047498703,
+      -0.019999999552965164
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 07",
+    "tag": 16,
+    "pivot": [
+      0.0,
+      0.28763166069984436,
+      -0.08399999886751175
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 08",
+    "tag": 17,
+    "pivot": [
+      0.0,
+      0.2740049958229065,
+      -0.14800000190734863
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 09",
+    "tag": 18,
+    "pivot": [
+      0.0,
+      0.26037833094596863,
+      -0.21199999749660492
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 10",
+    "tag": 19,
+    "pivot": [
+      0.0,
+      0.24675166606903076,
+      -0.2759999930858612
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 11",
+    "tag": 20,
+    "pivot": [
+      0.0,
+      0.22033999860286713,
+      -0.3400000035762787
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 12",
+    "tag": 21,
+    "pivot": [
+      0.0,
+      0.1930759996175766,
+      -0.40400001406669617
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Dorsal spine 13",
+    "tag": 22,
+    "pivot": [
+      0.0,
+      0.16581200063228607,
+      -0.46799999475479126
+    ],
+    "axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "calm": -0.48,
+    "flare": 0.13,
+    "delta": 0.61,
+    "idleAmplitude": 0
+  },
+  {
+    "name": "Left pelvic fin",
+    "tag": 3,
+    "pivot": [
+      -0.11999999731779099,
+      -0.20499999821186066,
+      0.11999999731779099
+    ],
+    "axis": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "calm": 0.25,
+    "flare": -0.25,
+    "delta": -0.5,
+    "idleAmplitude": -0.025
+  },
+  {
+    "name": "Right pelvic fin",
+    "tag": 4,
+    "pivot": [
+      0.11999999731779099,
+      -0.20499999821186066,
+      0.11999999731779099
+    ],
+    "axis": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "calm": -0.25,
+    "flare": 0.25,
+    "delta": 0.5,
+    "idleAmplitude": 0.025
+  },
+  {
+    "name": "Caudal fin \u2014 rounded spotted tail",
+    "tag": 5,
+    "pivot": [
+      0.0,
+      -0.02500000037252903,
+      -0.7599999904632568
+    ],
+    "axis": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "calm": 0,
+    "flare": 0,
+    "delta": 0,
+    "idleAmplitude": 0.12
+  },
+  {
+    "name": "Soft posterior dorsal",
+    "tag": 6,
+    "pivot": [
+      0.0,
+      0.11999999731779099,
+      -0.44999998807907104
+    ],
+    "axis": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "calm": 0,
+    "flare": 0,
+    "delta": 0,
+    "idleAmplitude": 0.035
+  },
+  {
+    "name": "Anal soft fin",
+    "tag": 7,
+    "pivot": [
+      0.0,
+      -0.10499999672174454,
+      -0.4300000071525574
+    ],
+    "axis": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "calm": 0,
+    "flare": 0,
+    "delta": 0,
+    "idleAmplitude": 0.035
+  }
+]

@@ -77,5 +77,6 @@ Blender locally and is not a claim of exhaustive GPU/interpolated collision
 certification. Physical phones, controller-only use, long-session performance,
 human audio mix and owner acceptance of the final runtime shot remain pending.
 
-Lionfish anatomical/defensive-flare work is awaiting the separate cloud package.
-No fish-rendering or damage/size-rule change is part of this checkpoint.
+This report records boat/audio checkpoint c37bb36127666f1c19f5d22d79ef0c886da46f13.
+The subsequent lionfish integration is now documented in LIONFISH_INTEGRATION.md;
+its model/display changes also preserve gameplay damage and saved-size rules.

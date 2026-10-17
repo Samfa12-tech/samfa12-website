@@ -57,8 +57,8 @@ export class ReefShadows {
     depth(mode: number) {
         let material=this.depthMaterials.get(mode);if(material)return material;
         const B=BABYLON;
-        material=new B.ShaderMaterial('reef-shadow-'+mode,this.scene,{vertex:'reefShadow',fragment:'reefShadow'},{attributes:['position','normal','color','uv'],uniforms:['world','viewProjection','uTime','uMode','uMotion','uSurface','uNight','uCurrent']});
-        material.backFaceCulling=false;material.setFloat('uMode',mode);material.setFloat('uMotion',1);
+        material=new B.ShaderMaterial('reef-shadow-'+mode,this.scene,{vertex:'reefShadow',fragment:'reefShadow'},{attributes:['position','normal','color','uv'],uniforms:['world','viewProjection','uTime','uMode','uLionfishDefense','uMotion','uSurface','uNight','uCurrent']});
+        material.backFaceCulling=false;material.setFloat('uMode',mode);material.setFloat('uLionfishDefense',0);material.setFloat('uMotion',1);
         this.depthMaterials.set(mode,material);return material;
     }
     pass(target: any, passId: number, view: any, projection: any, run: Run, site: Site, reducedMotion: boolean) {

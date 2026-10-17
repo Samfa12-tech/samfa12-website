@@ -62,3 +62,7 @@ requirement. Consider reduced-motion behavior alongside that suggestion.
 Coordinate heavy Blender/build/playback work around Godot timing runs. Reuse
 dependencies and keep artifacts bounded. Public publishing/merge requires its
 own authorization; this plan does not grant a release.
+
+## Subsequent owner request: lionfish anatomy and proximity display
+
+Cloud remodel and per-fish smooth defensive flare are now integrated locally alongside the boat/audio checkpoint. See LIONFISH_INTEGRATION.md for the exact render contract, unchanged gameplay rules, passing checks and remaining owner/physical-device acceptance. Publication is still held.

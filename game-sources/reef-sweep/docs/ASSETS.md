@@ -77,3 +77,7 @@ Original local vertex-colour geometry in src/render/seagulls.ts: pale body/head,
 ## Boat crew and entry
 
 Original Samfa12 cloud Blender production, referenced to the existing unchanged skiff. Editable art/boat-entry/reef-crew-entry.blend, crew-only animated GLB, source scripts/author-boat-entry.py and src/render/assets/boat-entry.ts are retained. The current runtime uses two batched Geometry draws with sampled rigid-part transforms; no new loader, textures, purchased assets or services. Supplied manifest/clearance evidence and README stay alongside the source. See BOAT_ENTRY_INTEGRATION.md.
+
+## Lionfish anatomical remodel and defensive display
+
+Original cloud Blender asset: art/lionfish retains editable blend, GLB, authoring/contract scripts, hinges, GLSL and validation. Runtime src/render/assets/lionfish-mesh.ts has 5539 vertices / 8125 triangles; source geometry stays in authoring units and world fish apply size times .65 once. All scene lionfish share one static GPU geometry, with per-draw shader flare and identical colour/depth deformation. No new loader/textures. The larger triangle count requires physical-phone acceptance; see LIONFISH_INTEGRATION.md.
