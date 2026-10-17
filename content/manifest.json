@@ -131,10 +131,11 @@
         "https://samfa12.itch.io/pocket-chordsmith",
         "https://godotengine.org/asset-library/asset/5174",
         "https://store.godotengine.org/asset/samfa12/pocket-chordsmith/",
-        "https://github.com/Samfa12-tech/Pocket-Chordsmith/tree/main/addons/pocket_chordsmith"
+        "https://github.com/Samfa12-tech/Pocket-Chordsmith/tree/main/addons/pocket_chordsmith",
+        "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/godot-addon-v1.3.0"
       ],
       "notes": "Distinct add-on. MIT applies only where the source license supports it; do not extend this to all apps, music or artwork.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-17"
     },
     {
       "id": "app-pocket-audio-handoff",
