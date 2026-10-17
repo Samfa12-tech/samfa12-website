@@ -41,3 +41,19 @@ Evidence from corrections lives in docs/review-evidence/expedition/review and fu
 
 ## Portrait refinements (v0.5.0-preview.2)
 189 automated cases include a new whole-barrel projection test at maximum 100-degree FOV, ordered raise/approach, cancellation and eased orientation regression. tests/browser-refinements.py checks four local Chrome views (1280x800, 390x844, 844x390, 320x568), native chart disclosure/assignment selection, real keyboard/touch boat steering, two actual struck meshes, cancelled collection, successful insertion, save/reload/resume, orientation and seagull lifecycle. Before/after captures and the exact report live in docs/review-evidence/refinements. Debug placements isolate buoy/catch/surface cases; this is not physical-phone evidence. The five owner Library JPEGs were resolved but could not be materialized because the current skill transfer helper was unavailable. They were not viewed; parent explicitly authorized independently reproduced written fixes.
+
+## Local audio correction (2026-10-17)
+
+The default npm test includes tests/audio-lifecycle.test.mjs (192 total tests). Run python tests/browser-audio.py with installed Python Playwright and CHROMIUM_BIN if Chrome is elsewhere. The runner serves a loopback-only site-style route plus the standalone build, launches Chrome with strict gesture autoplay and muted output, and writes qa-output/audio (or REEF_SWEEP_QA_OUT). It uses an analyser connected through a zero-gain sink; it records RMS numbers, not audio. Hidden visibility is a controlled handler fixture. Coordinate builds/browser work with any timing-sensitive audio task first. Human and physical-device listening remain required. See AUDIO_FIX_2026-10-17.md and its retained failure evidence.
+
+## Boat crew and entry (2026-10-17)
+
+The default test command now includes tests/boat-entry.test.mjs (195 total). Run python tests/browser-boat-entry.py after building, with the same existing Playwright/Chrome setup as browser-audio.py. The bounded muted runner checks actual two-batch crew geometry, full desktop/portrait entry, pause, skip/duplicate protection, all five destinations, a night dive, reload interruption and reduced motion. It writes qa-output/boat-entry or REEF_SWEEP_QA_OUT. See BOAT_ENTRY_INTEGRATION.md for source provenance, retained failed runs and acceptance limits.
+
+## Lionfish anatomical/display integration (2026-10-17)
+
+The default suite includes tests/lionfish.test.mjs (198 total). After a build, python tests/browser-lionfish.py checks actual GPU colour/sun-depth per-fish uniforms, near/far independence, hysteresis, pause, retreat, shared geometry and existing capture/tube flow. It records two short High samples at desktop and portrait touch-emulated viewports. Use --baseline --dist <retained-prior-dist> before rebuilding to record paired prior evidence. These samples use the desktop GPU and do not certify physical-phone performance. Existing entry/audio runners pass against the combined build. See LIONFISH_INTEGRATION.md.
+
+## Boat camera owner regression (2026-10-17)
+
+The default suite now has 201 tests, including bounded trip-local look state and boat pointer-drag/cancellation checks. Run python tests/browser-boat-camera.py after building; it writes qa-output/boat-camera or REEF_SWEEP_QA_OUT. The 26-check isolated muted runner checks native desktop mouse, portrait CDP touch and a simulated standard controller, steering-relative look, paused input, cinematic isolation/resume, cancel/new trip and full/skip dive handoff. Before-fix and corrected receipts are retained under the 2026-10-17 task-3 folder. Sam's live game windows/save data were not automated or reset. His previous local audio/entry/lionfish acceptance does not imply acceptance of this subsequent camera correction or physical-phone/controller testing.

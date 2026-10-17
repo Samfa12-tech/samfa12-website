@@ -1,3 +1,5 @@
+import { lionfishGeometry, bindLionfishDraw } from './lionfish.js';
+import { makeLionfishDefense, updateLionfishDefense, type LionfishDefense } from './lionfish-defense.js';
 import { Seagulls } from './seagulls.js';
 import { CollectionRig } from './collection-motion.js';
 import { skiffGeometry } from './boat-travel.js';
@@ -36,6 +38,7 @@ export class ReefRenderer {
     materials: any[] = [];
     staticMeshes: BMesh[] = [];
     fishMeshes = new Map<string, BMesh>();
+    lionfishDefense = new Map<string, LionfishDefense>();
     animalMeshes = new Map<string, BMesh>();
     jobMeshes = new Map<string, BMesh>();
     nativeSchools: {
@@ -102,13 +105,13 @@ export class ReefRenderer {
     constructor(public canvas: HTMLCanvasElement, settings: Settings) { this.settings = settings; const B = BABYLON; this.engine = new B.Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance' }, false); this.scene = new B.Scene(this.engine); this.scene.clearColor = new B.Color4(.035, .31, .37, 1); this.scene.autoClear = true; this.camera = new B.FreeCamera('diver', new B.Vector3(0, 8, -41), this.scene); this.camera.minZ = .045; this.camera.maxZ = 500; this.camera.fov = settings.fov * Math.PI / 180; this.scene.activeCamera = this.camera; this.scene.skipPointerMovePicking = true; this.scene.setRenderingAutoClearDepthStencil(1, true, true, true); B.Effect.ShadersStore['reefVertexShader'] = reefVertex; B.Effect.ShadersStore['reefFragmentShader'] = reefFragment; this.nativeScale = new B.Vector3(1, 1, 1); this.nativeRotation = new B.Quaternion(0, 0, 0, 1); this.nativeTranslation = new B.Vector3(); this.nativeTransform = new B.Matrix(); this.forwardVector = new B.Vector3(); this.torchVector = {x:16,y:.05}; this.shadows = new ReefShadows(this.scene,this.engine); this.configure(settings); canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); this.onLost(); }); window.addEventListener('resize', () => this.engine.resize()); }
     configure(settings: Settings) { this.settings = settings; const scale = settings.quality === 'high' ? 1 / Math.min(devicePixelRatio || 1, 1.5) : settings.quality === 'low' ? 1.45 : 1; this.engine.setHardwareScalingLevel(scale); this.engine.resize(); this.camera.fov = settings.fov * Math.PI / 180; this.shadows?.configure(settings.quality === 'high'); }
     material(mode: number) { let m = this.materials.find(m => m._reefMode === mode); if (m)
-        return m; const B = BABYLON; m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uSea', 'uRadius', 'uFold', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uWaterColor', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow','uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 || mode === 10 || mode === 11 }); m._reefMode = mode; m.backFaceCulling = false; m.setFloat('uMode', mode); m.setFloat('uSea',0);m.setFloat('uFold',0);m.setFloat('uRadius',this.site.radius); m.setFloat('uSurface', this.site.surface); m.setFloat('uMotion', 1); m.setVector3('uWaterColor',new B.Vector3(.035,.31,.39)); m.setFloat('uFog', .030); m.setFloat('uLight', 0); m.setFloat('uNight', 0); m.setVector2('uCurrent', {x:this.site.current,y:this.site.channelX ?? (this.site.id === 'gardens' ? 18 : 0)}); m.setVector2('uTorch', {x:24,y:.10}); if (mode === 5 || mode === 6 || mode === 8 || mode === 10 || mode === 11) {
+        return m; const B = BABYLON; m = new B.ShaderMaterial('reef-' + mode, this.scene, { vertex: 'reef', fragment: 'reef' }, { attributes: ['position', 'normal', 'color', 'uv'], uniforms: ['world', 'viewProjection', 'uTime', 'uMode', 'uLionfishDefense', 'uSea', 'uRadius', 'uFold', 'uMotion', 'uSurface', 'uEye', 'uFog', 'uLight', 'uForward', 'uWaterColor', 'uNight', 'uCurrent', 'uTorch', 'uSunMatrix', 'uTorchMatrix', 'uShadows', 'uTorchShadows'], samplers: ['uSunShadow','uTorchShadow'], needAlphaBlending: mode === 5 || mode === 6 || mode === 8 || mode === 10 || mode === 11 }); m._reefMode = mode; m.backFaceCulling = false; m.setFloat('uMode', mode);m.setFloat('uLionfishDefense',0); m.setFloat('uSea',0);m.setFloat('uFold',0);m.setFloat('uRadius',this.site.radius); m.setFloat('uSurface', this.site.surface); m.setFloat('uMotion', 1); m.setVector3('uWaterColor',new B.Vector3(.035,.31,.39)); m.setFloat('uFog', .030); m.setFloat('uLight', 0); m.setFloat('uNight', 0); m.setVector2('uCurrent', {x:this.site.current,y:this.site.channelX ?? (this.site.id === 'gardens' ? 18 : 0)}); m.setVector2('uTorch', {x:24,y:.10}); if (mode === 5 || mode === 6 || mode === 8 || mode === 10 || mode === 11) {
         m.disableDepthWrite = true;
         m.alphaMode = B.Engine.ALPHA_COMBINE;
     } m.setMatrix('uSunMatrix',this.shadows.sunMatrix);m.setMatrix('uTorchMatrix',this.shadows.torchMatrix);m.setFloat('uShadows',0);m.setFloat('uTorchShadows',0);m.setTexture('uSunShadow',this.shadows.white);m.setTexture('uTorchShadow',this.shadows.white);this.materials.push(m); return m; }
     mesh(name: string, g: Geometry, mode = 1) { const B = BABYLON, m = new B.Mesh(name, this.scene), v = new B.VertexData(); v.positions = g.positions; v.normals = g.normals; v.colors = g.colors; v.uvs = g.uvs; v.indices = g.indices; v.applyToMesh(m, false); m.material = this.material(mode); m.isPickable = false; return m; }
     disposeWorld() { this.seagulls=null; this.watch?.dispose();this.watch=null;this.watchRequested=false;this.watchBlend=0; for (const m of this.scene.meshes.slice())
-        m.dispose(false, false); this.staticMeshes = []; this.fishMeshes.clear(); this.animalMeshes.clear(); this.jobMeshes.clear(); this.nativeSchools = []; this.captureQueue = []; }
+        m.dispose(false, false); this.staticMeshes = []; this.fishMeshes.clear(); this.lionfishDefense.clear(); this.animalMeshes.clear(); this.jobMeshes.clear(); this.nativeSchools = []; this.captureQueue = []; }
     build(profile: Profile, run: Run) {
         this.disposeWorld();
         this.camera.maxZ=500;
@@ -298,10 +301,17 @@ export class ReefRenderer {
         pipeMesh.position.set(pipe.x, pipe.y + 1.25, pipe.z);
         this.staticMeshes.push(pipeMesh);
         this.environmentCounts.pipeMouths = 1;
+        let sharedLionfish:BMesh|null=null;
         for (const f of run.fish) {
-            const m = this.mesh(f.id, fishGeometry('lionfish'), 2);
-            this.fishMeshes.set(f.id, m);
+            const m:BMesh = sharedLionfish ? sharedLionfish.clone(f.id,null,true) : this.mesh(f.id,lionfishGeometry(),2);
+            sharedLionfish ??= m;
+            this.fishMeshes.set(f.id,m);
+            this.lionfishDefense.set(f.id,makeLionfishDefense());
+            // Bounds cover the complete authored flare + idle sway, without changing hitboxes.
+            m.getBoundingInfo().reConstruct(new B.Vector3(-1.1,-.7,-1.28),new B.Vector3(1.1,1.1,.8));
         }
+        // Bind only after cloning, so observers cannot be inherited from the source fish.
+        for(const [id,m] of this.fishMeshes){m._lionfishBindings={};bindLionfishDraw(m,this.engine,this.lionfishDefense.get(id)!);}
         for (const a of run.animals) {
             const m = this.mesh(a.id, fishGeometry(a.id), 2);
             this.animalMeshes.set(a.id, m);
@@ -474,7 +484,11 @@ export class ReefRenderer {
             const m = this.fishMeshes.get(f.id);
             const caught=heldCatches(r).find(c=>c.id===f.id), transferring=r.transfer?.catches.find(c=>c.id===f.id);
             m.setEnabled(f.alive || playing && !!(caught||transferring));
-            m.scaling.setAll(f.size);
+            const defense=this.lionfishDefense.get(f.id)!;
+            if(!f.alive){defense.active=false;defense.value=0;}
+            else if(playing&&poseDt>0&&!r.finished)updateLionfishDefense(defense,distance(r.p,f.p),poseDt);
+            // Authoring coordinates and hinge pivots remain unscaled; apply .65 once here.
+            m.scaling.setAll(f.size*.65);
             if(caught||transferring){
                 if(m.parent!==this.camera){m.parent=this.camera;m.renderingGroupId=1;m.alwaysSelectAsActiveMesh=true;m.material=this.material(12);}
                 const c=caught??transferring!,index=caught?heldCatches(r).findIndex(item=>item.id===f.id):r.transfer!.catches.findIndex(item=>item.id===f.id);

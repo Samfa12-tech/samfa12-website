@@ -1,0 +1,28 @@
+{
+  "glbVersion": 2,
+  "glbBytes": 290396,
+  "glbMeshCount": 52,
+  "glbAnimations": [
+    {
+      "name": "BoatEntry",
+      "channels": 18
+    }
+  ],
+  "crewTriangles": 3216,
+  "namedParts": 52,
+  "sampleCount": 44,
+  "allGeometryAndMatricesFinite": true,
+  "glbTextures": 0,
+  "visualReview": "Four Blender previews checked: seated crew, mask/strap check, back roll, entry. Studio previews intentionally omit water; runtime water/contact/fade needed. Pilot partly canopy-occluded in elevated stern view; use lower port-side camera for cutscene.",
+  "notYetValidated": "Actual game renderer import, GPU winding/material correctness and final level transition must be validated by integration thread.",
+  "blenderReimport": {
+    "passed": true,
+    "meshCount": 52,
+    "animatedObjectActions": 9
+  },
+  "wholeBoatClearance": {
+    "frames": 87,
+    "triangleIntersections": 0,
+    "evidence": "boat-clearance.json"
+  }
+}

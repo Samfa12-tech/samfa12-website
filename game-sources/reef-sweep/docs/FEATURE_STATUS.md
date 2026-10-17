@@ -1,5 +1,21 @@
 # Feature status: v0.5.0-preview.2 portrait refinements
 
+## Owner test and boat camera correction (2026-10-17)
+
+Sam confirmed local audio, dive entry/transition and lionfish defensive flare. He identified a driving-camera blocker: the new close view was locked throughout boat travel. Driving now starts centred behind the skiff, consumes mouse/touch/controller look, and isolates cinematic ownership to entry. Pause/resume, cancellation/new trip and dive handoff are covered by a dedicated browser regression. Typecheck, 201 automated tests and 8 package checks pass. See BOAT_CAMERA_FIX_2026-10-17.md. Sam subsequently confirmed the corrected driving view; preview.3 publication to both existing hosts is authorized. See the task release receipt for actual deployment state. Physical-phone testing is still unclaimed.
+
+## Local combined candidate: audio, entry and lionfish (2026-10-17)
+
+The cloud-authored lionfish remodel now uses independent GPU defensive flare with near/retreat hysteresis, shared geometry and matching shadow deformation. Existing damage, hit ranges, fish sizing data and saves are unchanged. Final local checks: 198 tests, 8 package checks, 22 lionfish, 22 crew/entry and 32 audio browser assertions. Owner runtime/listening acceptance and physical-phone performance remain pending; nothing is published. See LIONFISH_INTEGRATION.md and BOAT_ENTRY_INTEGRATION.md. Earlier checkpoint sections below retain their historical scope.
+
+## Local crew and entry checkpoint (2026-10-17)
+
+The cloud-authored pilot and diver now render aboard the skiff, followed by a 3.583-second gear-check/backward-roll entry, contact splash and fade into the selected reef. Pause, skip, reduced motion and once-only save creation are covered. This combined audio/boat candidate passed 195 tests, 8 package checks, 22 entry and 32 audio browser checks. It is unpublished; owner/runtime acceptance and the separate cloud lionfish package remain pending. See BOAT_ENTRY_INTEGRATION.md.
+
+## Local audio correction (2026-10-17)
+
+Unpublished audio candidate: first menu interaction unlocks the existing PCS score; boat travel has a bounded idle/throttle motor using existing synthesis. Pause, saved volume zeros and hidden-tab silence are preserved. Typecheck, 192 tests, 8 package checks and 32 muted Chrome browser checks passed. Human listening and physical-device acceptance remain pending. See AUDIO_FIX_2026-10-17.md for cause, evidence and known issues. NEXT_UPDATE.md records the requested boat pilot, seated diver and Blender-authored backward-roll entry; that work is planned, not implemented.
+
 The v0.5 expedition baseline was published on 2026-10-15 from main 3f104c1854d0704ec8985b8731053595cc75cf16. These follow-up portrait refinements are a new local review candidate. User authorized website and existing Wavedash publication after quality review on 2026-10-15. Parent candidate review remains a publication gate. This branch is not already live.
 
 | System | Implemented behavior |

@@ -1,3 +1,4 @@
+import { lionfishGLSL } from './assets/lionfish-deformation.js';
 import { oceanGLSL } from '../game/ocean.js';
 export const reefVertex = `precision highp float;
 attribute vec3 position;
@@ -12,6 +13,7 @@ uniform float uMotion;
 uniform float uSurface;
 uniform float uNight;
 uniform float uFold;
+uniform float uLionfishDefense;
 uniform float uSea;
 uniform float uRadius;
 uniform vec2 uCurrent;
@@ -30,17 +32,20 @@ varying vec2 vUV;
 varying vec4 vSunCoord;
 varying vec4 vTorchCoord;
 ${oceanGLSL}
+${lionfishGLSL}
 void main(){
  mat4 w=world;
  #ifdef INSTANCES
  w=mat4(world0,world1,world2,world3);
  #endif
  vec3 p=position;
+ vec3 n=normal;
  if(uMode==1.0){
   p.x+=sin(uTime*.75+p.z*.7+p.x*.5)*uv.y*.08*uMotion;
   p.z+=sin(uTime*.54+p.x*.6)*uv.y*.04*uMotion;
  }
- if(uMode==2.0){
+ if(uMode==2.0 && uv.x==5.0){deformLionfish(p,n,uv.y,uLionfishDefense,uTime);}
+ else if(uMode==2.0){
   float phase=uTime+dot(w[3].xz,vec2(.17,.23));
   float tail=max(0.0,-p.z), fin=uv.y;
   if(uv.x==2.0){p.y+=sin(phase*1.8+p.z*.9)*fin*.23; p.z+=cos(phase*1.8)*fin*.08;}
@@ -74,9 +79,9 @@ void main(){
  }
  vec4 pos=w*vec4(p,1.0);
  vWorld=pos.xyz;
- vSunCoord=uSunMatrix*vec4(pos.xyz+normalize(mat3(w)*normal)*.10,1.0);
- vTorchCoord=uTorchMatrix*vec4(pos.xyz+normalize(mat3(w)*normal)*.025,1.0);
- vNormal=normalize(mat3(w)*normal);
+ vSunCoord=uSunMatrix*vec4(pos.xyz+normalize(mat3(w)*n)*.10,1.0);
+ vTorchCoord=uTorchMatrix*vec4(pos.xyz+normalize(mat3(w)*n)*.025,1.0);
+ vNormal=normalize(mat3(w)*n);
  vColor=color;
  vUV=uv;
  gl_Position=viewProjection*pos;

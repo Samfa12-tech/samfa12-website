@@ -28,3 +28,7 @@ Parent review corrections (v0.5 candidate): revision-three reef landforms preser
 
 ## Portrait refinement candidate (2026-10-15)
 The v0.5.0-preview.1 expedition release is already published from main 3f104c1854d0704ec8985b8731053595cc75cf16 (PR31). v0.5.0-preview.2 is the follow-up requested by the owner: compact portrait boat navigation, rotating portrait catch tube, simplified harbour launch and above-water seagulls. See canonical docs/PORTRAIT_REFINEMENTS.md for fresh evidence. Parent candidate review precedes publication to the same website and existing Wavedash game; do not upload the older build again.
+
+## Accepted preview.3 release (2026-10-17)
+
+Sam authorized publishing the combined audio/crew/entry/lionfish update to samfa12.com and the existing Wavedash game, then tested and accepted the corrected driving camera. Frozen runtime candidate: 63d06883e6aae98146c092e8ea552859c359691e, version 0.5.0-preview.3, game.js SHA-256 6bc2e2a5a2fb4c922a782e5da75fe9cdaeab8e6e9cd577dc81f54e8e6a9b90db. Source typecheck, 201 tests, 8 package checks, the prior 76 combined browser assertions and 26 camera checks passed. Wavedash preparation adds only its boot-ready adapter and platform manifest/index changes; all eight shared non-index assets match the website. Physical-phone/thermal acceptance is not claimed. Preserve the Pocket DAW 0.6.59 and Godot 1.3.0 metadata from current main. Release receipt and live readback belong in the task evidence after actual publication; this authorization note alone is not proof of publication.

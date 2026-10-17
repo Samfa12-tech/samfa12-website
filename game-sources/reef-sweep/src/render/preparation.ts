@@ -1,4 +1,5 @@
-import { Geometry, fishGeometry, rgb } from './geometry.js';
+import { lionfishGeometry } from './lionfish.js';
+import { Geometry, rgb } from './geometry.js';
 import { vec } from '../game/math.js';
 declare const BABYLON:any;
 /** Separate small 3D bench view, disposed on every menu transition. No save state. */
@@ -14,7 +15,7 @@ export class PreparationView {
   const mat=new B.ShaderMaterial('bench-material',this.scene,{vertex:'bench',fragment:'bench'},{attributes:['position','normal','color'],uniforms:['world','viewProjection']});mat.backFaceCulling=false;
   const make=(name:string,g:Geometry)=>{const m=new B.Mesh(name,this.scene),v=new B.VertexData();v.positions=g.positions;v.normals=g.normals;v.colors=g.colors;v.indices=g.indices;v.uvs=g.uvs;v.applyToMesh(m);m.material=mat;return m;};
   const board=new Geometry();board.box(vec(0,-.11,0),vec(2.25,.14,1.3),rgb('#a78760'));for(let i=0;i<12;i++)board.box(vec(-1.05+i*.19,-.033,0),vec(.006,.003,1.2),rgb('#866746'));make('wooden-fillet-board',board);
-  const body=fishGeometry('lionfish');
+  const body=lionfishGeometry(.65);
   // Lay the same recognisable striped fish on its side with fins resting flat.
   // Transform normals too, rather than leaving upright display fins on the board.
   for(let i=0;i<body.positions.length;i+=3){let [x,y,z]=body.positions.slice(i,i+3);x=Math.sign(x)*Math.min(Math.abs(x),.18+Math.max(0,Math.abs(x)-.18)*.25);y=Math.sign(y)*Math.min(Math.abs(y),.30+Math.max(0,Math.abs(y)-.30)*.22);body.positions.splice(i,3,z,x*.7,-y*.8);const [nx,ny,nz]=body.normals.slice(i,i+3);body.normals.splice(i,3,nz,nx,-ny);}

@@ -122,7 +122,15 @@ export class InputController {
         canvas.addEventListener('contextmenu', e => e.preventDefault());
         canvas.addEventListener('pointerleave', () => { this.hoverX = null; });
         canvas.addEventListener('pointerdown', e => { if (!this.active)
-            return; canvas.focus({ preventScroll: true }); if(this.boatMode)return; if (e.pointerType === 'touch') {
+            return; canvas.focus({ preventScroll: true }); if(this.boatMode) {
+            // Keep the harbour cursor available, but allow mouse/touch drag-look.
+            this.touchMode = e.pointerType === 'touch';
+            if (e.pointerType === 'touch' || e.button === 0 || e.button === 2) {
+                this.lookPointer = e.pointerId; this.lastX = e.clientX; this.lastY = e.clientY;
+                canvas.setPointerCapture(e.pointerId);
+            }
+            return;
+        } if (e.pointerType === 'touch') {
             this.touchMode = true;
             this.lookPointer = e.pointerId;
             this.lastX = e.clientX;

@@ -1,3 +1,5 @@
+import { BoatEntrySequence } from './game/boat-entry.js';
+import { BOAT_ENTRY_DURATION, BOAT_WATER_CONTACT } from './render/boat-crew.js';
 import { BoatTravelRenderer } from './render/boat-travel.js';
 import { newBoat, updateBoatTravel, arrivalSite, travelCosts, completeCooking, equipCharm, type BoatState } from './game/expedition.js';
 import { PerformanceSuggestion } from './host.js';
@@ -14,13 +16,26 @@ import type { Profile, Settings, SiteId, InputFrame } from './game/types.js';
 import { vec, sub } from './game/math.js';
 import { ReefRenderer } from './render/renderer.js';
 import { InputController } from './input.js';
-import { Soundscape } from './audio/audio.js';
+import { Soundscape, bindAudioUnlock } from './audio/audio.js';
 import { UI, Screen } from './ui/ui.js';
 const canvas = document.getElementById('ocean') as HTMLCanvasElement;
 const store = new SaveStore();
 let profile = store.load(store.selectedSlot()), settings = store.settings(), sim: Simulation | null = null, paused = true, visualDive = false, renderer: ReefRenderer | null = null, stack: (Screen | 'play')[] = [], fault = false;
 let boat: BoatState|null=null, boatRenderer: BoatTravelRenderer|null=null, travelledDistance=0,boatInteract=false;
+let boatEntrySequence:BoatEntrySequence|null=null,entrySplashPlayed=false,entryFade=0;
+const entryFadeElement=document.createElement('div');entryFadeElement.id='boat-entry-fade';entryFadeElement.setAttribute('aria-hidden','true');document.body.append(entryFadeElement);
+const entryStatus=document.createElement('div');entryStatus.id='boat-entry-status';entryStatus.hidden=true;
+entryStatus.innerHTML='<span role="status" aria-live="polite">Checking dive gear</span><button type="button">Skip entry</button>';document.body.append(entryStatus);
+entryStatus.querySelector('button')!.onclick=()=>dispatch('boat-entry-skip');
+function cancelBoatEntry(){input.clear();boatEntrySequence?.cancel();boatEntrySequence=null;entryFade=0;entrySplashPlayed=false;entryStatus.hidden=true;document.body.classList.remove('boat-entry');}
+function finishBoatEntry(skip=false){const selection=boatEntrySequence?.take(skip);if(!selection)return;
+    boatEntrySequence=null;entryStatus.hidden=true;document.body.classList.remove('boat-entry');
+    ui.site=selection.site;ui.order=selection.order;ui.night=selection.night;travelledDistance=selection.distance;
+    entryFade=1;input.clear();try{begin();}catch(error){entryFade=0;ui.toast(String(error));if(boat)resumeBoat();}
+}
 const audio = new Soundscape(settings);
+const unbindAudioUnlock = bindAudioUnlock(audio, document);
+audio.setHidden(document.hidden);
 const ui = new UI(() => profile, () => settings, dispatch);
 const input = new InputController(canvas, settings, action => { if (action === 'pause') {
     if (!paused)
@@ -90,7 +105,7 @@ function updateWatchReadout() {
 function setPause(v: boolean) { if (v) setWatchRaised(false); paused = v; input.setActive(!v); accum = 0; if (sim) {
     sim.run.charge = 0;
     sim.run.interaction = 0;
-} audio.setPaused(v && visualDive); if (v)
+} audio.setPaused(v && (visualDive || !!boat)); if (v)
     persist(); }
 function preview(id: SiteId = ui.site) { if (!renderer)
     return; const copy = structuredClone(profile); copy.active = null; copy.pending = null; const run = startRun(copy, siteUnlocked(copy, id) ? id : 'gardens', 'none'); renderer.build(profile, run); visualDive = false; }
@@ -126,8 +141,8 @@ function resume() { if (!profile.active) {
     return;
 } sim=bindSuspendedDive(profile,sim,renderer!,run=>new Simulation(profile,run));
     if(!visualDive&&!sim.run.practice)playCandidate=true; visualDive = true; setPause(false); stack = []; ui.play(); void audio.start(); canvas.focus(); input.capture(); }
-function resumeBoat(){setPause(false);ui.playBoat();}
-function launchBoat(){if(profile.active||profile.pending){begin();return;}setPause(true);input.boatMode=true;sim=null;visualDive=false;boat=newBoat();boatInteract=false;playCandidate=true;boatRenderer=new BoatTravelRenderer(renderer!,profile,settings);stack=[];resumeBoat();}
+function resumeBoat(){setPause(false);ui.playBoat();void audio.start();}
+function launchBoat(){if(profile.active||profile.pending){begin();return;}cancelBoatEntry();setPause(true);input.boatMode=true;sim=null;visualDive=false;boat=newBoat();boatInteract=false;playCandidate=true;boatRenderer=new BoatTravelRenderer(renderer!,profile,settings);stack=[];resumeBoat();}
 function begin() { if (profile.pending) {
     review();
     return;
@@ -175,8 +190,12 @@ function dispatch(action: string, data?: any) {
                 break;
             case 'boat-launch':launchBoat();break;
             case 'boat-resume':resumeBoat();break;
-            case 'boat-harbour':input.boatMode=false;boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');preview();stack=[];show('dock');break;
-            case 'boat-dive':{const id=boat&&arrivalSite(boat);if(!id||!siteUnlocked(profile,id)){ui.toast('Stop beside an unlocked gold dive buoy first.');break;}ui.site=id;travelledDistance=boat!.distance;try{begin();}catch(error){ui.toast(String(error));}break;}
+            case 'boat-harbour':cancelBoatEntry();input.boatMode=false;boat=null;boatRenderer=null;document.body.classList.remove('boat-travel');preview();stack=[];show('dock');break;
+            case 'boat-dive':{if(boatEntrySequence)break;const id=boat&&arrivalSite(boat);if(!id||!siteUnlocked(profile,id)){ui.toast('Stop beside an unlocked gold dive buoy first.');break;}
+                boatEntrySequence=new BoatEntrySequence({site:id,order:ui.order,night:ui.night,distance:boat!.distance},BOAT_ENTRY_DURATION);
+                boat!.speed=0;input.clear();entrySplashPlayed=false;entryFade=0;entryStatus.hidden=false;document.body.classList.add('boat-entry');
+                if(settings.reducedMotion)finishBoatEntry(true);break;}
+            case 'boat-entry-skip':if(!paused)finishBoatEntry(true);break;
             case 'prep-return':stack=[];show('debrief');break;
             case 'cook-save':if(profile.pending){completeCooking(profile,data.recipe,data.scores);persist();}break;
             case 'scaling-save':if(profile.pending&&!profile.pending.filletQuality){profile.pending.scalingPasses=data;persist();}break;
@@ -420,11 +439,22 @@ function frame(now: number) {
     // Retain look/release/cancel edges on render frames with no simulation tick.
     // Controller look uses the simulation time actually covered by this sample.
     const inputTime = Math.min(5, Math.floor((accum + dt) * 60)) / 60;
-    const f = paused || !sim ? input.sample(dt) : inputTime > 0 ? input.sample(inputTime) : EMPTY_INPUT;
+    let f = paused || !sim ? input.sample(dt) : inputTime > 0 ? input.sample(inputTime) : EMPTY_INPUT;
     if (input.padDisconnected && watchRaised) setWatchRaised(false);
     if (ui.screen === 'settings' && hudClock > .09) { hudClock = 0; ui.updateControllerStatus(input.controllerStatus()); }
     document.body.classList.toggle('touch', input.touchMode && !input.gamepad);
-    if(boat&&!paused){updateBoatTravel(boat,dt,f.moveZ,f.moveX);const arrived=arrivalSite(boat);ui.updateBoat(boat,arrived&&siteUnlocked(profile,arrived)?arrived:null);if(f.interact&&!boatInteract&&arrived&&siteUnlocked(profile,arrived))dispatch('boat-dive');boatInteract=f.interact;}
+    if(boat&&!paused&&!boatEntrySequence){boatRenderer?.look.update(f.lookX,f.lookY);updateBoatTravel(boat,dt,f.moveZ,f.moveX);const arrived=arrivalSite(boat);ui.updateBoat(boat,arrived&&siteUnlocked(profile,arrived)?arrived:null);if(f.interact&&!boatInteract&&arrived&&siteUnlocked(profile,arrived))dispatch('boat-dive');boatInteract=f.interact;}
+    if(boatEntrySequence){
+        entryStatus.hidden=paused;boatEntrySequence.advance(dt,paused);
+        if(!paused){boat!.time+=dt;const t=boatEntrySequence.elapsed;
+            const label=t<1.375?'Checking mask and dive gear':t<BOAT_WATER_CONTACT?'Ready — backward entry':'Entering the water';
+            if(entryStatus.firstElementChild!.textContent!==label)entryStatus.firstElementChild!.textContent=label;
+            if(t>=BOAT_WATER_CONTACT&&!entrySplashPlayed){entrySplashPlayed=true;audio.sfx('water-entry');}
+            entryFade=Math.max(0,Math.min(1,(t-(BOAT_ENTRY_DURATION-.42))/.42));finishBoatEntry();
+        }
+    }else if(entryFade>0&&!document.hidden)entryFade=Math.max(0,entryFade-dt/.48);
+    entryFadeElement.style.opacity=paused&&boatEntrySequence?'0':String(entryFade);
+    if(entryFade>0){input.clear();f=EMPTY_INPUT;}
     if (!paused && sim) {
         accum += dt;
         let n = 0;
@@ -441,11 +471,11 @@ function frame(now: number) {
         settings.performancePromptDismissed = true; store.saveSettings(settings); open('performance');
     }
     audioThrust=sampledThrust(audioThrust,visualDive&&!paused, inputTime>0,f);
-    audio.update(sim?.run || null, visualDive && !paused, audioThrust);
+    audio.update(sim?.run || null, visualDive && !paused, audioThrust, boat && !paused && !boatEntrySequence ? boat.speed : null);
     hudClock += dt;
     try {
         renderer!.setWatchReserve(sim?.reserve ?? 40);
-        if(boat&&boatRenderer){boatRenderer.render(boat);if(playCandidate&&!paused&&boat.distance>2){playCandidate=false;if(!debug)gameStarts.start();}const chart=document.getElementById('bay-chart') as HTMLCanvasElement|null;if(chart)boatRenderer.drawChart(chart,boat);}
+        if(boat&&boatRenderer){boatRenderer.render(boat,boatEntrySequence?.elapsed??null);if(playCandidate&&!paused&&boat.distance>2){playCandidate=false;if(!debug)gameStarts.start();}const chart=document.getElementById('bay-chart') as HTMLCanvasElement|null;if(chart)boatRenderer.drawChart(chart,boat);}
         else renderer!.render(visualDive ? sim?.run.time ?? visualTime : visualTime, visualDive);
         if(playCandidate&&visualDive&&!paused&&sim&&!sim.run.practice&&renderer!.run===sim.run){playCandidate=false;if(!debug)gameStarts.start();}
     }
@@ -507,10 +537,11 @@ finally {
 } });
 window.addEventListener('blur', () => {     if (!paused && (profile.active||boat))
     open('pause'); });
-document.addEventListener('visibilitychange', () => { if (document.hidden && !paused && (profile.active||boat))
+document.addEventListener('visibilitychange', () => { audio.setHidden(document.hidden); if (document.hidden && !paused && (profile.active||boat))
     open('pause'); if (document.hidden)
     persist(); });
-window.addEventListener('pagehide', event => {persist();if(!event.persisted)gameStarts.dispose();});
+window.addEventListener('pagehide', event => {audio.setHidden(true);persist();if(!event.persisted){unbindAudioUnlock();gameStarts.dispose();}});
+window.addEventListener('pageshow', () => audio.setHidden(document.hidden));
 function orientation() { document.getElementById('rotate')!.hidden = true; }
 function resizeViewport() { renderer?.engine.resize(); orientation(); if (ui.screen === 'journal') ui.chart(sim && visualDive ? sim : null); }
 window.addEventListener('resize', resizeViewport);
@@ -534,9 +565,9 @@ catch (e) {
     document.querySelector('#loading pre')!.textContent = String(e);
     console.error(e);
 }
-(window as any).render_game_to_text = () => JSON.stringify({ screen: paused ? ui.screen : boat ? 'boat' : 'dive', day: profile.day, site: sim?.run.site, position: sim?.run.p, air: sim?.run.air, catch: sim?.run.cargo.length, exposed: sim?.run.exposed?.id, aim: sim?.aim, renderer: renderer?.stats(), audio: audio.stats() });
+(window as any).render_game_to_text = () => JSON.stringify({ screen: paused ? ui.screen : boatEntrySequence ? 'entry' : boat ? 'boat' : 'dive', day: profile.day, site: sim?.run.site, position: sim?.run.p, air: sim?.run.air, catch: sim?.run.cargo.length, exposed: sim?.run.exposed?.id, aim: sim?.aim, renderer: renderer?.stats(), audio: audio.stats() });
 if (debug)
-    (window as any).__REEF__ = { get boat() { return boat; }, get profile() { return profile; }, get sim() { return sim; }, get ui() { return ui; }, get renderer() { return renderer; }, get input() { return input; }, get audio() { return audio; }, get paused() { return paused; }, dispatch, store, tick(seconds: number, frame: Partial<InputFrame> = {}) { if (!sim)
+    (window as any).__REEF__ = { get boatEntry() { return boatEntrySequence; }, get boatRenderer() { return boatRenderer; }, get boat() { return boat; }, get profile() { return profile; }, get sim() { return sim; }, get ui() { return ui; }, get renderer() { return renderer; }, get input() { return input; }, get audio() { return audio; }, get paused() { return paused; }, dispatch, store, tick(seconds: number, frame: Partial<InputFrame> = {}) { if (!sim)
             return; for (let i = 0; i < seconds * 60 && !sim.run.finished; i++)
             sim.update(1 / 60, { ...EMPTY_INPUT, ...frame }); processEvents(); }, aimAt(p: {
             x: number;

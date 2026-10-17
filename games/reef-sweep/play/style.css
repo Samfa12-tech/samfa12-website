@@ -135,3 +135,9 @@ body.game .hud-top .hud-buttons{margin-left:auto}
 /* Compact navigation leaves the helm visible; native disclosure supports touch/keyboard. */
 #boat-navigation .boat-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}#boat-status{margin:0;font-size:13px}#boat-return{flex:none}#boat-map summary{cursor:pointer;min-height:44px;display:list-item;align-content:center;padding:10px 0;color:var(--teal);touch-action:manipulation;-webkit-user-select:none;user-select:none}#boat-map summary:focus-visible{outline:2px solid var(--sand);outline-offset:2px}#boat-mooring{border-top:1px solid var(--line);padding-top:8px}#boat-mooring[hidden]{display:none}#boat-mooring p{font-size:11px;line-height:1.4;margin:5px 0 8px}#boat-enter{width:100%;margin-top:6px}#boat-navigation .boat-help{margin-top:6px}#boat-navigation:has(#boat-mooring:not([hidden])) #boat-map:not([open]){margin-bottom:0}
 @media(max-height:500px) and (orientation:landscape){#boat-navigation{max-height:calc(100dvh - 82px);overflow:auto}#boat-navigation #bay-chart{height:auto;max-height:125px;width:auto;max-width:100%;display:block;margin:auto}}
+
+/* Authored boat-entry presentation: pause button remains available. */
+body.boat-entry #boat-navigation,body.boat-entry #touch-controls{display:none!important}
+#boat-entry-fade{position:fixed;inset:0;background:#082d39;opacity:0;pointer-events:none;z-index:30}
+#boat-entry-status{width:max-content;position:fixed;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:18px;max-width:calc(100% - 24px);padding:10px 14px;border:1px solid #a6d4ce55;border-radius:12px;background:#103b43e8;color:#f2efdc;z-index:31;font-size:14px}
+#boat-entry-status[hidden]{display:none}#boat-entry-status button{flex:none;min-height:44px;padding:8px 12px}
