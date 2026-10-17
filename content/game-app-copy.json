@@ -1697,14 +1697,14 @@
     "details": [
       {
         "heading": "Explore Lantern Bay",
-        "text": "Drive your diving skiff across the bay, follow the navigation chart and slow beside a gold buoy to choose a dive. A Blender-authored hull, swells, buoyancy, wake and bow spray give each crossing a sense of water. Underneath are five authored sites: Sunlit Gardens, Tideglass Passage, Mangrove Reach, Azure Cenote and Rusted Harbour. Their ledges, roots, limestone basins and old structures offer different routes. Playable reefs retain clear water, with distance haze beyond their boundaries.",
+        "text": "Drive your diving skiff across the bay, follow the navigation chart and slow beside a gold buoy to choose a dive. A pilot and diver ride aboard the Blender-authored skiff, with swells, buoyancy, wake and bow spray. At a dive buoy, the diver checks their gear and rolls backward into the water before the chosen reef loads. Skip the entry when you want to get straight to the dive; Steady camera skips the sequence too. Underneath are five authored sites: Sunlit Gardens, Tideglass Passage, Mangrove Reach, Azure Cenote and Rusted Harbour. Their ledges, roots, limestone basins and old structures offer different routes. Playable reefs retain clear water, with distance haze beyond their boundaries.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
       },
       {
         "heading": "Hunt lionfish and restore the reef",
-        "text": "Identify a lionfish, draw the pole spear and release a careful strike. The actual fish stays on the spear until you guide it into the catch tube. Spear a second before stashing for a Shishkabob moment in the existing automatic-photo highlights. Larger fish have restaurant value; smaller targets still count towards eradication. Remove abandoned gear, plant coral and survey the reef. Marlow, the named grouper, makes his home in Sunlit Gardens. Ordinary sea stars, lobsters and large sponges bring quieter corners to life.",
+        "text": "The remodeled lionfish have striped bodies, broad fans and long dorsal spines. Their defensive display flares as you approach and relaxes when you retreat. Identify a lionfish, draw the pole spear and release a careful strike. The actual fish stays on the spear until you guide it into the catch tube. Spear a second before stashing for a Shishkabob moment in the existing automatic-photo highlights. Larger fish have restaurant value; smaller targets still count towards eradication. Remove abandoned gear, plant coral and survey the reef. Marlow, the named grouper, makes his home in Sunlit Gardens. Ordinary sea stars, lobsters and large sponges bring quieter corners to life.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
@@ -1746,7 +1746,7 @@
       },
       {
         "heading": "Music that follows the dive",
-        "text": "The original score, “Room for Life,” uses sounds adapted from Pocket Chordsmith. Its layers change with the dive, wildlife and danger.",
+        "text": "The original score, “Room for Life,” uses sounds adapted from Pocket Chordsmith. Music starts after your first menu interaction and continues through boat travel and diving. The boat motor responds to speed, while the score changes with wildlife and danger. Sound settings stay saved, including mute; pausing or leaving the tab quietens the appropriate sounds.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
@@ -1784,6 +1784,20 @@
       }
     ],
     "updates": [
+      {
+        "id": "reef-sweep-v0-5-preview-3-october-2026",
+        "kind": "release",
+        "date": "2026-10-17",
+        "dateMeaning": "Samfa12.com deployment date (UTC)",
+        "title": "v0.5.0-preview.3 — crew, water entry and lionfish display",
+        "summary": "Menu and boat audio now start after interaction, with a speed-responsive engine. A visible pilot and diver accompany boat trips, followed by a short gear-check and backward-roll entry at the selected reef. Remodeled lionfish flare their fins and spines independently as the diver approaches, then relax on retreat. Driving starts behind the skiff with mouse, touch and controller camera control; the close cinematic view is limited to water entry. Existing saves and gameplay damage rules are preserved. Sam confirmed the local audio, entry, lionfish display and corrected driving camera. Physical-phone performance remains unverified.",
+        "platform": "HTML5 browser",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/",
+          "https://samfa12.com/games/reef-sweep/play/",
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      },
       {
         "id": "reef-sweep-v0-5-expedition-october-2026",
         "kind": "release",

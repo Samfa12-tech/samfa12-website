@@ -2,7 +2,7 @@
 
 ## Owner test and boat camera correction (2026-10-17)
 
-Sam confirmed local audio, dive entry/transition and lionfish defensive flare. He identified a driving-camera blocker: the new close view was locked throughout boat travel. Driving now starts centred behind the skiff, consumes mouse/touch/controller look, and isolates cinematic ownership to entry. Pause/resume, cancellation/new trip and dive handoff are covered by a dedicated browser regression. Typecheck, 201 automated tests and 8 package checks pass. See BOAT_CAMERA_FIX_2026-10-17.md. The rebuilt preview.3 is local; publication awaits Sam's camera confirmation. Physical-phone testing is still unclaimed.
+Sam confirmed local audio, dive entry/transition and lionfish defensive flare. He identified a driving-camera blocker: the new close view was locked throughout boat travel. Driving now starts centred behind the skiff, consumes mouse/touch/controller look, and isolates cinematic ownership to entry. Pause/resume, cancellation/new trip and dive handoff are covered by a dedicated browser regression. Typecheck, 201 automated tests and 8 package checks pass. See BOAT_CAMERA_FIX_2026-10-17.md. Sam subsequently confirmed the corrected driving view; preview.3 publication to both existing hosts is authorized. See the task release receipt for actual deployment state. Physical-phone testing is still unclaimed.
 
 ## Local combined candidate: audio, entry and lionfish (2026-10-17)
 
