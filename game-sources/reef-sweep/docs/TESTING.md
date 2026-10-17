@@ -53,3 +53,7 @@ The default test command now includes tests/boat-entry.test.mjs (195 total). Run
 ## Lionfish anatomical/display integration (2026-10-17)
 
 The default suite includes tests/lionfish.test.mjs (198 total). After a build, python tests/browser-lionfish.py checks actual GPU colour/sun-depth per-fish uniforms, near/far independence, hysteresis, pause, retreat, shared geometry and existing capture/tube flow. It records two short High samples at desktop and portrait touch-emulated viewports. Use --baseline --dist <retained-prior-dist> before rebuilding to record paired prior evidence. These samples use the desktop GPU and do not certify physical-phone performance. Existing entry/audio runners pass against the combined build. See LIONFISH_INTEGRATION.md.
+
+## Boat camera owner regression (2026-10-17)
+
+The default suite now has 201 tests, including bounded trip-local look state and boat pointer-drag/cancellation checks. Run python tests/browser-boat-camera.py after building; it writes qa-output/boat-camera or REEF_SWEEP_QA_OUT. The 26-check isolated muted runner checks native desktop mouse, portrait CDP touch and a simulated standard controller, steering-relative look, paused input, cinematic isolation/resume, cancel/new trip and full/skip dive handoff. Before-fix and corrected receipts are retained under the 2026-10-17 task-3 folder. Sam's live game windows/save data were not automated or reset. His previous local audio/entry/lionfish acceptance does not imply acceptance of this subsequent camera correction or physical-phone/controller testing.

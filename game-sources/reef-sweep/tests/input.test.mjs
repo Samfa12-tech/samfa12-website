@@ -294,3 +294,13 @@ test('a second touch cannot replace the held action and lost capture cancels wit
  button.send('pointerdown',{pointerId:8,pointerType:'touch'});button.send('pointerup',{pointerId:8,pointerType:'touch'});assert.equal(input.sample(1/60).draw,true);
  button.send('lostpointercapture',{pointerId:7,pointerType:'touch'});const f=input.sample(1/60);assert.equal(f.draw,false);assert.equal(f.release,false);assert.equal(f.cancelDraw,true);
 });
+
+for (const pointerType of ['mouse','touch']) test(`boat ${pointerType} drag looks without drawing, cancellation and pause clear motion`,()=>{
+ const {canvas,win,input}=setup();input.boatMode=true;
+ canvas.send('pointerdown',{pointerType});win.send('pointermove',{pointerType,clientX:190,clientY:130});
+ const frame=input.sample(1/60);assert.ok(frame.lookX>.1&&frame.lookY>0);assert.equal(frame.draw,false);assert.equal(frame.release,false);
+ win.send('pointercancel',{pointerType});win.send('pointermove',{pointerType,clientX:290,clientY:200});
+ assert.equal(input.sample(1/60).lookX,0);
+ canvas.send('pointerdown',{pointerType});input.setActive(false);win.send('pointermove',{pointerType,clientX:390});
+ assert.equal(input.sample(1/60).lookX,0);input.setActive(true);assert.equal(input.sample(1/60).lookX,0);
+});

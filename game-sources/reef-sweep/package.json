@@ -1,9 +1,9 @@
 {
   "name": "reef-sweep",
-  "version": "0.5.0-preview.2",
+  "version": "0.5.0-preview.3",
   "private": true,
   "type": "module",
-  "description": "Reef Sweep \u2014 Lantern Bay. First-person reef conservation adventure.",
+  "description": "Reef Sweep — Lantern Bay. First-person reef conservation adventure.",
   "scripts": {
     "build": "node scripts/sync-music.mjs && tsc && node scripts/build.mjs",
     "typecheck": "tsc --noEmit",

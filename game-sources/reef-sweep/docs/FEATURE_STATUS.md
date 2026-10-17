@@ -1,5 +1,9 @@
 # Feature status: v0.5.0-preview.2 portrait refinements
 
+## Owner test and boat camera correction (2026-10-17)
+
+Sam confirmed local audio, dive entry/transition and lionfish defensive flare. He identified a driving-camera blocker: the new close view was locked throughout boat travel. Driving now starts centred behind the skiff, consumes mouse/touch/controller look, and isolates cinematic ownership to entry. Pause/resume, cancellation/new trip and dive handoff are covered by a dedicated browser regression. Typecheck, 201 automated tests and 8 package checks pass. See BOAT_CAMERA_FIX_2026-10-17.md. The rebuilt preview.3 is local; publication awaits Sam's camera confirmation. Physical-phone testing is still unclaimed.
+
 ## Local combined candidate: audio, entry and lionfish (2026-10-17)
 
 The cloud-authored lionfish remodel now uses independent GPU defensive flare with near/retreat hysteresis, shared geometry and matching shadow deformation. Existing damage, hit ranges, fish sizing data and saves are unchanged. Final local checks: 198 tests, 8 package checks, 22 lionfish, 22 crew/entry and 32 audio browser assertions. Owner runtime/listening acceptance and physical-phone performance remain pending; nothing is published. See LIONFISH_INTEGRATION.md and BOAT_ENTRY_INTEGRATION.md. Earlier checkpoint sections below retain their historical scope.

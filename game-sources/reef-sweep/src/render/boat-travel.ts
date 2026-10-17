@@ -1,3 +1,4 @@
+import { BoatLook } from './boat-look.js';
 import { BoatCrew, BOAT_WATER_CONTACT } from './boat-crew.js';
 import { Seagulls } from './seagulls.js';
 import { Geometry, rgb, islandGeometry } from './geometry.js';
@@ -10,6 +11,7 @@ import { vec } from '../game/math.js';
 export function skiffGeometry() { return Object.assign(new Geometry(),diveSkiff); }
 /** Lightweight authored bay around a shared swell function. One boat draw, no physics meshes. */
 export class BoatTravelRenderer {
+ readonly look = new BoatLook();
  boat:any; wake:any; surface:any; spray:any; birds:Seagulls; crew:BoatCrew; entrySplash:any;
  constructor(public renderer:ReefRenderer,public profile:Profile,public settings:Settings) {
   const r=renderer;r.disposeWorld();r.shadows.reset();r.camera.maxZ=900;
@@ -50,12 +52,18 @@ export class BoatTravelRenderer {
   this.spray.setEnabled(Math.abs(b.speed)>6);this.spray.position.copyFrom(this.boat.position);this.spray.rotation.copyFrom(this.boat.rotation);
   this.wake.position.set(b.x,.06,b.z);this.wake.rotation.y=b.yaw;this.wake.setEnabled(Math.abs(b.speed)>1);this.wake.scaling.set(1,1,Math.min(1,Math.abs(b.speed)/10));
   this.birds.update(t,vec(b.x,0,b.z),0,true);
-  // A low port-quarter view keeps both seated people below the canopy in view.
-  const follow=entryTime===null?0:Math.max(0,Math.min(1,(entryTime-1.8)/1.65));
-  const cx=entryTime===null?-4.8:-4.6,cz=entryTime===null?-7.8:-4.8+follow*.8,cy=entryTime===null?2.65:2.1-follow*1.95;
-  r.camera.position.set(b.x+side.x*cx+forward.x*cz,height+cy,b.z+side.z*cx+forward.z*cz);
-  const tx=entryTime===null?0:-.7-follow*1.45,tz=entryTime===null?-.6:-2.0,ty=entryTime===null?1.05:1.25-follow*1.4;
-  r.camera.setTarget(new B.Vector3(b.x+side.x*tx+forward.x*tz,height+ty,b.z+side.z*tx+forward.z*tz));
+  if(entryTime===null) {
+   // Centred, elevated chase view; all existing look inputs use their normal sensitivity.
+   const yaw=b.yaw+this.look.yaw,pitch=this.look.pitch,distance=11,flat=Math.cos(pitch)*distance;
+   r.camera.position.set(b.x-Math.sin(yaw)*flat,1.8+Math.sin(pitch)*distance+(this.settings.reducedMotion?0:height*.18),b.z-Math.cos(yaw)*flat);
+   r.camera.rotation.set(pitch,yaw,0);
+  } else {
+   // Only the entry clip owns the close port-quarter camera.
+   const follow=Math.max(0,Math.min(1,(entryTime-1.8)/1.65)),cx=-4.6,cz=-4.8+follow*.8,cy=2.1-follow*1.95;
+   r.camera.position.set(b.x+side.x*cx+forward.x*cz,height+cy,b.z+side.z*cx+forward.z*cz);
+   const tx=-.7-follow*1.45,tz=-2.0,ty=1.25-follow*1.4;
+   r.camera.setTarget(new B.Vector3(b.x+side.x*tx+forward.x*tz,height+ty,b.z+side.z*tx+forward.z*tz));
+  }
   r.scene.clearColor=new B.Color4(.53,.75,.81,1);
   for(const m of r.materials){m.setFloat('uTime',t);m.setFloat('uSurface',0);m.setFloat('uSea',1);m.setFloat('uRadius',220);m.setFloat('uFog',.002);m.setFloat('uMotion',this.settings.reducedMotion?0:1);m.setFloat('uNight',0);m.setFloat('uLight',0);m.setFloat('uShadows',0);m.setFloat('uTorchShadows',0);m.setVector3('uEye',r.camera.position);m.setVector3('uForward',new B.Vector3(forward.x,0,forward.z));}
   r.engine.beginFrame();r.engine._drawCalls?.fetchNewFrame();r.scene.render();r.engine.endFrame();

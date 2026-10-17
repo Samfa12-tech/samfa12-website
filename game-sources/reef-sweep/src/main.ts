@@ -27,7 +27,7 @@ const entryFadeElement=document.createElement('div');entryFadeElement.id='boat-e
 const entryStatus=document.createElement('div');entryStatus.id='boat-entry-status';entryStatus.hidden=true;
 entryStatus.innerHTML='<span role="status" aria-live="polite">Checking dive gear</span><button type="button">Skip entry</button>';document.body.append(entryStatus);
 entryStatus.querySelector('button')!.onclick=()=>dispatch('boat-entry-skip');
-function cancelBoatEntry(){boatEntrySequence?.cancel();boatEntrySequence=null;entryFade=0;entrySplashPlayed=false;entryStatus.hidden=true;document.body.classList.remove('boat-entry');}
+function cancelBoatEntry(){input.clear();boatEntrySequence?.cancel();boatEntrySequence=null;entryFade=0;entrySplashPlayed=false;entryStatus.hidden=true;document.body.classList.remove('boat-entry');}
 function finishBoatEntry(skip=false){const selection=boatEntrySequence?.take(skip);if(!selection)return;
     boatEntrySequence=null;entryStatus.hidden=true;document.body.classList.remove('boat-entry');
     ui.site=selection.site;ui.order=selection.order;ui.night=selection.night;travelledDistance=selection.distance;
@@ -142,7 +142,7 @@ function resume() { if (!profile.active) {
 } sim=bindSuspendedDive(profile,sim,renderer!,run=>new Simulation(profile,run));
     if(!visualDive&&!sim.run.practice)playCandidate=true; visualDive = true; setPause(false); stack = []; ui.play(); void audio.start(); canvas.focus(); input.capture(); }
 function resumeBoat(){setPause(false);ui.playBoat();void audio.start();}
-function launchBoat(){if(profile.active||profile.pending){begin();return;}setPause(true);input.boatMode=true;sim=null;visualDive=false;boat=newBoat();boatInteract=false;playCandidate=true;boatRenderer=new BoatTravelRenderer(renderer!,profile,settings);stack=[];resumeBoat();}
+function launchBoat(){if(profile.active||profile.pending){begin();return;}cancelBoatEntry();setPause(true);input.boatMode=true;sim=null;visualDive=false;boat=newBoat();boatInteract=false;playCandidate=true;boatRenderer=new BoatTravelRenderer(renderer!,profile,settings);stack=[];resumeBoat();}
 function begin() { if (profile.pending) {
     review();
     return;
@@ -443,7 +443,7 @@ function frame(now: number) {
     if (input.padDisconnected && watchRaised) setWatchRaised(false);
     if (ui.screen === 'settings' && hudClock > .09) { hudClock = 0; ui.updateControllerStatus(input.controllerStatus()); }
     document.body.classList.toggle('touch', input.touchMode && !input.gamepad);
-    if(boat&&!paused&&!boatEntrySequence){updateBoatTravel(boat,dt,f.moveZ,f.moveX);const arrived=arrivalSite(boat);ui.updateBoat(boat,arrived&&siteUnlocked(profile,arrived)?arrived:null);if(f.interact&&!boatInteract&&arrived&&siteUnlocked(profile,arrived))dispatch('boat-dive');boatInteract=f.interact;}
+    if(boat&&!paused&&!boatEntrySequence){boatRenderer?.look.update(f.lookX,f.lookY);updateBoatTravel(boat,dt,f.moveZ,f.moveX);const arrived=arrivalSite(boat);ui.updateBoat(boat,arrived&&siteUnlocked(profile,arrived)?arrived:null);if(f.interact&&!boatInteract&&arrived&&siteUnlocked(profile,arrived))dispatch('boat-dive');boatInteract=f.interact;}
     if(boatEntrySequence){
         entryStatus.hidden=paused;boatEntrySequence.advance(dt,paused);
         if(!paused){boat!.time+=dt;const t=boatEntrySequence.elapsed;
