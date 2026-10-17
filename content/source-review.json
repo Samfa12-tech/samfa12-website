@@ -203,6 +203,13 @@
           "url": "https://store.godotengine.org/asset/samfa12/pocket-chordsmith/",
           "identity": "store.godotengine.org /asset/samfa12/pocket-chordsmith/",
           "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/godot-addon-v1.3.0",
+          "identity": "Pocket Chordsmith Godot addon1.3.0; addon-only159files, SHA-2568318f5a6d59619b8d995d53c1a9fbfa10e554ce4d8f31bddae8faa1204355509; final live publication readback required before this website PR merges",
+          "access": "read-owner-authorized-release-artifact",
+          "sourceCommit": "5cec85ebbfc8ffb324662e9e4183aadb1245dfc1",
+          "notes": "Runtime GDScript unchanged from reviewed e00f946. Prepared Core/native human listening passed. Historical stalls not reproduced, cause unknown; accepted Windows/WASAPI scope. Existing marketing prose and older Asset Library listing history preserved."
         }
       ]
     },
@@ -583,6 +590,11 @@
         {
           "url": "https://samfa12.itch.io/pocket-daw",
           "identity": "samfa12.itch.io /pocket-daw",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59",
+          "identity": "github.com /Samfa12-tech/Pocket-Chordsmith release pocket-daw-v0.6.59",
           "access": "read-public-source"
         }
       ]

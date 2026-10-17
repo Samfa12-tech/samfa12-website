@@ -3131,7 +3131,7 @@
       "kind": "product",
       "canonical": "https://samfa12.com/pocket-audio/pocket-daw/",
       "title": "Pocket DAW Windows music arrangement alpha | Samfa12",
-      "description": "Pocket DAW is an early Windows desktop alpha for arranging and producing Pocket Chordsmith and Pocket Audio projects. Import a song, place parts on a timeline, edit clips, work with audio or MIDI material and export WAV or MIDI files.",
+      "description": "Pocket DAW is a Windows desktop music-workflow alpha. Import Pocket Chordsmith songs, arrange audio and MIDI, record takes and export WAV, MIDI or game-audio ZIPs.",
       "h1": [
         "Pocket DAW"
       ],

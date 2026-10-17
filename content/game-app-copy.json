@@ -546,6 +546,20 @@
     ],
     "updates": [
       {
+        "id": "godot-addon-130-20261017",
+        "kind": "release",
+        "date": "2026-10-17",
+        "dateMeaning": "GitHub and itch addon release date",
+        "title": "1.3.0 - prepared Core and native DAW audio",
+        "summary": "Version1.3.0 adds prepared Core/Campfire audio and fully arranged native DAW-export playback. Validated on Godot4.6.3 Windows/WASAPI, with both human listening checks passed. Historical intermittent stalls were not reproduced; cause unknown. Dummy timing and whole-run frame limits remain documented. Store and Asset Library updates are separate.",
+        "platform": "Godot4.6 (validated4.6.3 Windows/WASAPI)",
+        "sources": [
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/godot-addon-v1.3.0",
+          "https://samfa12.itch.io/pocket-chordsmith",
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/blob/godot-addon-v1.3.0/addons/pocket_chordsmith/docs/RELEASE_ACCEPTANCE_1_3_0.md"
+        ]
+      },
+      {
         "id": "godot-asset-library-submission-2026",
         "kind": "listing",
         "date": "2026-07-23",
@@ -1389,41 +1403,60 @@
   },
   "app-pocket-daw": {
     "seoTitle": "Pocket DAW Windows music arrangement alpha",
-    "intro": "Pocket DAW is an early Windows desktop alpha for arranging and producing Pocket Chordsmith and Pocket Audio projects. Import a song, place parts on a timeline, edit clips, work with audio or MIDI material and export WAV or MIDI files.",
+    "intro": "Pocket DAW is a Windows desktop music-workflow alpha. Import Pocket Chordsmith songs, arrange audio and MIDI, record takes and export WAV, MIDI or game-audio ZIPs.",
     "details": [
       {
-        "heading": "A desktop arrangement workflow",
-        "text": "The itch page describes Chordsmith imports, timeline clips, a compact piano-roll inspector, a simple mixer, project save/reopen, full-song WAV and MIDI exports, and stem WAV or game-audio manifest previews. It is a Windows desktop tool, not a browser DAW.",
+        "heading": "Arrange, record and compare",
+        "text": "Version 0.6.59 adds Campfire Acoustic, finite Hear this bit auditions and Finish & Compare. Prepare an edit without autoplay, compare the same passage at matched levels, then apply, discard or undo it. Native recording, audio/MIDI take lanes, project media collection and optional VST3 hosting support the arrangement workflow.",
         "sources": [
-          "https://samfa12.itch.io/pocket-daw",
-          "https://github.com/Samfa12-tech/Pocket-Chordsmith"
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59"
         ]
       },
       {
-        "heading": "Early alpha limitations",
-        "text": "The publisher says Pocket DAW is not yet a finished professional DAW. The itch description notes that recording is not good yet, there is no plugin host or deep waveform editor, game exports are not finished asset-pack ZIPs, and the early installer may show warnings because it is unsigned.",
+        "heading": "Export for listening or a game",
+        "text": "Export WAV and MIDI, stems, section loops, or Godot and Web game-audio ZIPs. The native DAW pack follows the arranged timeline, including recording media, effects, automation and tails. Check WAV provides measured delivery guidance; target-game audio and timing still need testing in the game.",
         "sources": [
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59"
+        ]
+      },
+      {
+        "heading": "Windows alpha",
+        "text": "Pocket DAW remains an early Windows alpha. Keep backups of important projects and verify exports before delivery. The installer has an updater signature but is not Windows Authenticode signed, so Windows may show a warning. Get it through the established itch download or the official GitHub release.",
+        "sources": [
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59",
           "https://samfa12.itch.io/pocket-daw"
         ]
       }
     ],
     "faqs": [
       {
-        "question": "Which operating system is listed?",
-        "answer": "The itch page lists Windows and describes the download as an early Windows alpha.",
+        "question": "Which operating system does Pocket DAW support?",
+        "answer": "Pocket DAW is an installed Windows desktop application. Pocket Chordsmith and Pocket DJ are separate browser apps.",
         "sources": [
-          "https://samfa12.itch.io/pocket-daw"
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59"
         ]
       },
       {
-        "question": "Are game-audio exports finished asset packs?",
-        "answer": "No. The current page says game exports are manifest previews and renderable assets, not complete finished asset-pack ZIPs.",
+        "question": "Does it export game-audio packs?",
+        "answer": "Yes. The current release exports Godot and Web game-audio ZIPs, alongside WAV, MIDI, stems and section loops. Check the imported music and its timing in your target game. This DAW release does not update the separately distributed Godot addon.",
         "sources": [
-          "https://samfa12.itch.io/pocket-daw"
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59"
         ]
       }
     ],
     "updates": [
+      {
+        "id": "pocket-daw-v0-6-59-october-2026",
+        "kind": "release",
+        "date": "2026-10-17",
+        "dateMeaning": "GitHub release publication date in Australia/Sydney",
+        "title": "0.6.59 - Campfire, comparison and updater fixes",
+        "summary": "Campfire Acoustic, finite passage auditions and Finish & Compare join native recording and export workflows. Warm playback reuses resident audio, stale starts are cancelled, and Undo/Redo keeps the export controls in view. This release also patches the native updater dependency and keeps background update checks from replacing active controls.",
+        "platform": "Windows",
+        "sources": [
+          "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59"
+        ]
+      },
       {
         "id": "pocket-daw-v0-6-50-october-2026",
         "kind": "release",
