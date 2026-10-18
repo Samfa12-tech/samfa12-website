@@ -404,6 +404,116 @@
       "textSha256": "c904880085da9bbbecf445aa6990ef6913fb5807bc8ebe27d9220d307008f76d",
       "scheduledAt": "2026-10-11T12:06:34.683Z",
       "dueAt": "2026-10-17T06:15:00.000Z"
+    },
+    {
+      "id": "article18-formats-1",
+      "project": "Article 18",
+      "category": "Books",
+      "date": "2026-10-19",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e380a208cb3235df876",
+      "textSha256": "32d883bbc5f197f9958145499748ad9bbf37f39d05e2ccb7f595e0e9498d7f38",
+      "scheduledAt": "2026-10-18T10:23:52.434Z",
+      "dueAt": "2026-10-18T21:15:00.000Z"
+    },
+    {
+      "id": "mandible-mobile-rts-1",
+      "project": "Mandible Wars",
+      "category": "Games",
+      "date": "2026-10-20",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e38ae173d6e00f7fc2a",
+      "textSha256": "d39ee677b0efe282454594709257dd20120ca5fda766dba090db45d32108a7bf",
+      "scheduledAt": "2026-10-18T10:23:52.741Z",
+      "dueAt": "2026-10-19T21:15:00.000Z"
+    },
+    {
+      "id": "chordsmith-godot-130-1",
+      "project": "Pocket Chordsmith",
+      "category": "Web development",
+      "date": "2026-10-21",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e38938409f1d0c6e705",
+      "textSha256": "e4e096959d5dc286e280af817e6d7cb42db2c870aeb973c4cea5379bd3a35657",
+      "scheduledAt": "2026-10-18T10:23:52.953Z",
+      "dueAt": "2026-10-20T21:15:00.000Z"
+    },
+    {
+      "id": "dust-origin-1",
+      "project": "Dust on the River",
+      "category": "Games",
+      "date": "2026-10-22",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e39938409f1d0c6e72e",
+      "textSha256": "e5ea596a1c08b583c8024c41cb7d2e1ef1c17983dfa650287fad0a24fb63f315",
+      "scheduledAt": "2026-10-18T10:23:53.147Z",
+      "dueAt": "2026-10-21T21:15:00.000Z"
+    },
+    {
+      "id": "brokenroad-release2",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-10-23",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e390a208cb3235df8be",
+      "textSha256": "e93a46d90c26b616c935ea480dfaa7e43426b3187bf7c18bb83f56c60227296c",
+      "scheduledAt": "2026-10-18T10:23:53.344Z",
+      "dueAt": "2026-10-22T21:15:00.000Z"
+    },
+    {
+      "id": "towtal-chaos-alpha-1",
+      "project": "Towtal Chaos",
+      "category": "Games",
+      "date": "2026-10-24",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e390a208cb3235df8e7",
+      "textSha256": "0679c547d5ba3ada1b4313839f87af7900155eedfcb3a9e99529665453c051b6",
+      "scheduledAt": "2026-10-18T10:23:53.545Z",
+      "dueAt": "2026-10-23T21:15:00.000Z"
+    },
+    {
+      "id": "goodhome-pair-1",
+      "project": "The Good Home novels",
+      "category": "Books",
+      "date": "2026-10-25",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e39ae173d6e00f7fcc4",
+      "textSha256": "e9e0a765b1698d5602fbda01dbe1e74ffa7ee9a35801a6d461eaa3fb9847a292",
+      "scheduledAt": "2026-10-18T10:23:53.760Z",
+      "dueAt": "2026-10-24T21:15:00.000Z"
+    },
+    {
+      "id": "brokenroad-job-1",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-10-20",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e390a208cb3235df910",
+      "textSha256": "d48bd7c327203b2213475b6c898fad1f8853598dd7e0643e683d6a19cf469647",
+      "scheduledAt": "2026-10-18T10:23:53.956Z",
+      "dueAt": "2026-10-20T06:15:00.000Z"
+    },
+    {
+      "id": "pocket-daw-workflow-1",
+      "project": "Pocket DAW",
+      "category": "Web development",
+      "date": "2026-10-22",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e3a938409f1d0c6e772",
+      "textSha256": "db36c6fefb6eb93e151fedfcd5f9e19ed79143e40e969b9fcf536c6c8b551a1b",
+      "scheduledAt": "2026-10-18T10:23:54.160Z",
+      "dueAt": "2026-10-22T06:15:00.000Z"
+    },
+    {
+      "id": "no-wall-logistics-1",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-10-24",
+      "status": "scheduled",
+      "bufferPostId": "6ad49e3a769b457934b9cb04",
+      "textSha256": "15b0ee40f4ad3e809557e0854f7e64691db8e74dedce713091a55ac787d95788",
+      "scheduledAt": "2026-10-18T10:23:54.433Z",
+      "dueAt": "2026-10-24T06:15:00.000Z"
     }
   ]
 }
