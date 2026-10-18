@@ -5,11 +5,11 @@
   "hostname": "samfa12.com",
   "path": "/games/briarhold/play/",
   "metric": "game-page-requests",
-  "count": 31,
-  "updatedAt": "2026-10-17T05:36:41.043Z",
+  "count": 33,
+  "updatedAt": "2026-10-18T05:55:07.181Z",
   "period": {
-    "start": "2026-10-10T00:00:00.000Z",
-    "end": "2026-10-17T00:00:00.000Z",
+    "start": "2026-10-11T00:00:00.000Z",
+    "end": "2026-10-18T00:00:00.000Z",
     "timeZone": "UTC"
   }
 }
