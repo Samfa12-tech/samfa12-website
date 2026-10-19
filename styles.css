@@ -3086,3 +3086,17 @@ body[data-page="apps"] .project-card-catalogue {
     min-height: 11rem;
   }
 }
+
+/* Focused book feature; the wider portfolio remains below. */
+.book-feature .hero-grid { grid-template-columns: minmax(0, 1.35fr) minmax(240px, .65fr); }
+.book-feature .hero-copy { gap: 1rem; }
+.book-feature .hero-title { font-size: clamp(2.3rem, 4.5vw, 4.5rem); line-height: 1.06; }
+.book-feature-title { margin: 0; font-size: clamp(1.5rem, 2.5vw, 2rem); }
+.book-feature-genre, .book-feature-availability { margin: 0; color: var(--muted); }
+.book-feature .lead { font-size: 1.08rem; line-height: 1.7; max-width: 65ch; }
+.book-feature-cover { display: block; width: min(100%, 333px); justify-self: center; border-radius: 4px; box-shadow: 0 24px 70px rgba(0, 0, 0, .5); }
+.book-feature-cover img { display: block; width: 100%; height: auto; border-radius: inherit; }
+@media (max-width: 800px) {
+  .book-feature .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .book-feature-cover { width: min(65vw, 280px); }
+}

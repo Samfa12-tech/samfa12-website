@@ -399,7 +399,7 @@
       "title": "Samfa12 | Games, stories, music, and Pocket Audio",
       "description": "Samfa12 is a creative lab for playable worlds, strange stories, music, Pocket Audio tools, and experiments.",
       "h1": [
-        "Small games.\n              Strange stories.\n              Pocket-sized tools."
+        "He saved the city.\n              It never forgave him."
       ],
       "inSitemap": true,
       "incoming": [
@@ -526,7 +526,7 @@
         "/stats/",
         "/tools/what-would-win/"
       ],
-      "localAssetCount": 18,
+      "localAssetCount": 15,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
