@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20261013-1";
+  const DATA_VERSION = "20261019-1";
   const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
@@ -25,6 +25,8 @@
   let navigationReady = false;
   let overlayReady = false;
   let revealObserver = null;
+  const savedCatalogueCards = new WeakMap();
+  const catalogueState = { filter: "All", sort: "curated" };
   const CATALOGUE_FILTER_CONFIG = {
     Games: {
       filterLabel: "Platform",
@@ -870,11 +872,13 @@
     return list.sort(bySortThenTitle);
   }
 
-  function buildCatalogueStatusMessage({ category, config, filterValue, sortValue, total, visibleCount, loaded }) {
+  function buildCatalogueStatusMessage({ category, config, filterValue, sortValue, total, visibleCount, loaded, loading = false }) {
     const labelText = filterValue === "All" ? `All ${config.filterLabelPlural}` : filterValue;
     const sortText = sortValue === "curated" ? "Curated" : sortValue === "title" ? "Title A-Z" : config.sortLabel;
     const noun = String(category || "records").toLowerCase();
-    const sourceNote = loaded ? "" : " Saved catalogue data is in use because live data could not be loaded.";
+    const sourceNote = loaded ? "" : loading
+      ? " Saved catalogue data is in use while live data loads."
+      : " Saved catalogue data is in use because live data could not be loaded.";
 
     if (visibleCount === 0) {
       return `No ${noun} match ${labelText}. Sort: ${sortText}.${sourceNote}`;
@@ -949,11 +953,30 @@
     };
   }
 
+  function getSavedCatalogueCards(grid, category) {
+    if (!grid) return [];
+    if (!savedCatalogueCards.has(grid)) {
+      const cards = Array.from(grid.querySelectorAll(".project-card")).map((card, index) => {
+        const links = Array.from(card.querySelectorAll(".project-actions a[href]"))
+          .map((link) => ({ url: safeUrl(link.getAttribute("href")) })).filter((link) => link.url);
+        const project = { category, type: card.querySelector(".project-label")?.textContent || "" };
+        return {
+          card,
+          title: card.querySelector("h3")?.textContent.trim() || "",
+          sortOrder: index,
+          catalogueLabels: deriveCatalogueLabels(project, links),
+        };
+      });
+      savedCatalogueCards.set(grid, cards);
+    }
+    return savedCatalogueCards.get(grid);
+  }
+
   function renderCatalogue(projects, context = {}) {
     const grid = document.getElementById("project-grid");
     const category = document.body.dataset.category;
     const predicate = (project) => isInCatalogue(project, category);
-    const list = usePageFallbackIfEmpty(
+    let list = usePageFallbackIfEmpty(
       grid,
       projects.filter(predicate).slice().sort(bySortThenTitle),
       predicate,
@@ -972,8 +995,12 @@
       return;
     }
 
-    const filterOptions = config.labelOrder.filter((label) => list.some((project) => project.catalogueLabels.includes(label)));
-    const state = { filter: "All", sort: "curated" };
+    const savedCards = getSavedCatalogueCards(grid, category);
+    const usingSavedCards = !list.length && savedCards.length > 0;
+    if (usingSavedCards) list = savedCards;
+    const loaded = context.loaded !== false && !usingSavedCards;
+    const state = catalogueState;
+    const filterOptions = config.labelOrder.filter((label) => label === state.filter || list.some((project) => project.catalogueLabels.includes(label)));
     const controls = createCatalogueControls(
       config,
       filterOptions,
@@ -997,10 +1024,17 @@
           ? `No ${String(category || "catalogue").toLowerCase()} records are available right now.`
           : `No ${String(category || "catalogue").toLowerCase()} match ${state.filter}.`;
 
-      renderGrid(grid, sorted, {
-        emptyMessage,
-        preserveExistingOnEmpty: false,
-      });
+      if (usingSavedCards) {
+        // Keep all original nodes in savedCards, including cards filtered out of
+        // the grid, so All and Curated can always restore the saved catalogue.
+        grid.replaceChildren(...sorted.map((project) => project.card));
+        initializeReveals(grid);
+      } else {
+        renderGrid(grid, sorted, {
+          emptyMessage,
+          preserveExistingOnEmpty: false,
+        });
+      }
       showDataStatus(
         buildCatalogueStatusMessage({
           category,
@@ -1009,18 +1043,14 @@
           sortValue: state.sort,
           total: list.length,
           visibleCount: sorted.length,
-          loaded: context.loaded !== false,
+          loaded,
+          loading: context.loading === true,
         }),
-        { tone: context.loaded === false ? "warning" : "summary" }
+        { tone: !loaded && !context.loading ? "warning" : "summary", canRetry: !loaded && !context.loading }
       );
     }
 
-    if (gridHasUsefulCards(grid)) {
-      controls?.sync(state);
-      showDataStatus(buildCatalogueStatusMessage({ category, config, filterValue: state.filter, sortValue: state.sort, total: list.length, visibleCount: list.length, loaded: context.loaded !== false }), { tone: "summary" });
-    } else {
-      applyCatalogueState();
-    }
+    applyCatalogueState();
   }
 
   function renderApps(projects) {
@@ -2169,9 +2199,12 @@
 
     const primaryGrid = document.getElementById("featured-grid") || document.getElementById("project-grid");
     const hasSavedCards = gridHasUsefulCards(primaryGrid);
+    if (hasSavedCards && document.body.dataset.page === "catalogue" && getCatalogueConfig(document.body.dataset.category)) {
+      renderCatalogue([], { loaded: false, loading: true });
+    }
     const { projects, loaded } = await loadProjects();
     if (!hasSavedCards || document.body.dataset.page === "catalogue" || document.body.dataset.page === "home") {
-      if (loaded || !hasSavedCards) renderPage(projects, { loaded });
+      if (loaded || !hasSavedCards || document.body.dataset.page === "catalogue") renderPage(projects, { loaded });
     }
     if (primaryGrid) initializeReveals(primaryGrid);
     initializeSurprise(projects, loaded);
