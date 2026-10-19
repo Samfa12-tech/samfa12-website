@@ -120,6 +120,20 @@ Review and commit only the resulting public data, history, and sanitised Steam
 state—never the downloaded CSV. This baseline remains published until the next
 owner-exported CSV import.
 
+### Drink baseline refresh — 19 October 2026
+
+The owner-exported report covers 1 January through 18 October 2026. It retains
+the original direct `Steam` package-sales scope: Drink and its soundtrack;
+`Retail` press/review activations are excluded. The replacement baseline is
+28 gross units, 1 return and **27 net units**, an increase of **8** over the
+previous 19 net units. The base game contributes 23 net units and the soundtrack
+4; nine Retail activations are excluded.
+
+All 15 prior sale dates match exactly. Six new sale dates add eight net units.
+Other providers' metrics and report coverage are retained unchanged. Reimporting
+the same CSV leaves totals and history count unchanged. The raw CSV and all
+financial/customer fields remain outside the repository and public site.
+
 The collectors use official server-side/provider report APIs only. itch earnings
 and Steam financial fields are discarded during normalisation. Google order
 numbers are held only in memory while calculating paid-app purchase outcomes and

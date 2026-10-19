@@ -106,6 +106,48 @@
         "returnedUnits": 0,
         "netUnits": 1
       }
+    },
+    "2026-09-11": {
+      "4419290": {
+        "grossUnits": 2,
+        "returnedUnits": 0,
+        "netUnits": 2
+      }
+    },
+    "2026-09-30": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-10-02": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-10-06": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
+    },
+    "2026-10-08": {
+      "4419290": {
+        "grossUnits": 2,
+        "returnedUnits": 0,
+        "netUnits": 2
+      }
+    },
+    "2026-10-16": {
+      "4419290": {
+        "grossUnits": 1,
+        "returnedUnits": 0,
+        "netUnits": 1
+      }
     }
   }
 }
