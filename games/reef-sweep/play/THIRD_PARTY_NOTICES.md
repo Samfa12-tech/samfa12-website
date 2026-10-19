@@ -35,4 +35,8 @@ Lionfish Extermination Corp and Dave the Diver are credited as inspirations only
 
 ## Original project materials
 
-The original game code, procedural art, score and documentation are supplied for Sam’s project. This handoff does not assign an unsolicited blanket public open-source license to those original materials. Choose the project’s distribution license before publishing its source. Third-party licenses remain applicable independently.
+Reef Sweep's original game code, art, models, score and documentation are reserved original project materials, except where a separate licence applies, and only to the extent that the relevant rights are owned by Sam Small (Samfa12). Public source visibility is not a blanket open-source licence.
+
+You may play the officially published game as intended, including the technical copies needed for that use. This does not grant a general right to redistribute, resell, rehost or incorporate the reserved game materials into other products.
+
+See the repository's [original-material rights notice](https://github.com/Samfa12-tech/samfa12-website/blob/main/LICENSE.md) and [licensing overview](https://github.com/Samfa12-tech/samfa12-website/blob/main/LICENSING.md). Third-party licences and any express separate permissions remain applicable independently. Existing licence grants, rights under applicable law, and GitHub's public-repository viewing/forking rights are preserved. No claim is made that every generated or AI-assisted element is copyrightable.

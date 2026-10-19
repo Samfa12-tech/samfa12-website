@@ -3,6 +3,14 @@
 This is a static portfolio website for `samfa12.com`, showcasing games, books,
 Pocket Audio, music, and links for **Samfa12**.
 
+## Rights and licensing
+
+This is a mixed-licensing repository, not a blanket open-source release.
+See the [licensing categories and project-specific notices](LICENSING.md)
+and the [reserved original-material rights notice](LICENSE.md). Third-party
+and separately licensed materials retain their own terms; ordinary use of
+the official website and play of its published games remain permitted.
+
 ## What this site includes
 
 - `index.html` – compact homepage overview
