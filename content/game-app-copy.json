@@ -1692,6 +1692,10 @@
     }
   },
   "game-reef-sweep": {
+    "audioPreview": {
+      "title": "Listen to the island theme",
+      "src": "/assets/audio/reef-sweep-island-theme.wav"
+    },
     "seoTitle": "Reef Sweep first-person diving game",
     "intro": "Take the helm in Lantern Bay, moor at a reef and hunt invasive lionfish. Explore five dive sites, restore habitat and bring your catch home to prepare, sell or donate. Reef Sweep is a first-person conservation and diving-business game in development.",
     "details": [
