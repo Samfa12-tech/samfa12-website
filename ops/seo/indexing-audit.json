@@ -2297,7 +2297,7 @@
         "/games/",
         "/updates/"
       ],
-      "localAssetCount": 9,
+      "localAssetCount": 10,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
