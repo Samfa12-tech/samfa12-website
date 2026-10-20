@@ -1,6 +1,7 @@
 (() => {
   const DATA_VERSION = "20261019-1";
-  const DATA_URL = `/data/projects.json?v=${DATA_VERSION}`;
+  const PAGE_DATA_VERSION = new URL(document.currentScript.src).searchParams.get("data-version") || DATA_VERSION;
+  const DATA_URL = `/data/projects.json?v=${PAGE_DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
   const CLARITY_PROJECT_ID = "x4qwugpfik";
   const FETCH_TIMEOUT_MS = 8000;

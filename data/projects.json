@@ -11,9 +11,7 @@
       "Samfa12",
       "Pocket Audio"
     ],
-    "featured": true,
-    "homepageRank": 1,
-    "homepageSize": "hero",
+    "featured": false,
     "accent": "cyan",
     "imageFit": "contain",
     "links": [
@@ -686,9 +684,7 @@
       "The Broken Road Trilogy",
       "Book 1"
     ],
-    "featured": true,
-    "homepageRank": 6,
-    "homepageSize": "wide",
+    "featured": false,
     "accent": "spark",
     "imageFit": "contain",
     "links": [
@@ -971,7 +967,7 @@
     ],
     "featured": true,
     "homepageRank": 3,
-    "homepageSize": "wide",
+    "homepageSize": "standard",
     "links": [
       {
         "label": "Play on itch.io",
@@ -1773,15 +1769,18 @@
     "title": "Reef Sweep",
     "category": "Games",
     "type": "Playable browser prototype",
+    "cardLabel": "Playable demo · Full game TBA",
     "status": "In Development",
-    "description": "Drive the bay, dive five reefs and restore habitat. Spear lionfish, find keepsakes and prepare the catch in a growing diving company.",
+    "description": "Play the Reef Sweep diving demo. A full campaign is in development: start a new life in Lantern Bay, meet its residents and help restore the reefs. Release date TBA.",
     "tags": [
       "First-person",
       "Reef conservation",
-      "Browser prototype",
+      "Lantern Bay",
       "Samfa12"
     ],
-    "featured": false,
+    "featured": true,
+    "homepageRank": 1,
+    "homepageSize": "hero",
     "links": [
       {
         "label": "Play Reef Sweep",
@@ -1790,6 +1789,12 @@
       {
         "label": "Play on Wavedash",
         "url": "https://wavedash.com/games/reef-sweep"
+      }
+    ],
+    "cardLinks": [
+      {
+        "label": "Play the demo",
+        "url": "/games/reef-sweep/play/?v=0.5.0-preview.3"
       }
     ],
     "sortOrder": 36,
