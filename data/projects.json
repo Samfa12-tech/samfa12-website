@@ -11,9 +11,7 @@
       "Samfa12",
       "Pocket Audio"
     ],
-    "featured": true,
-    "homepageRank": 1,
-    "homepageSize": "hero",
+    "featured": false,
     "accent": "cyan",
     "imageFit": "contain",
     "links": [
@@ -686,9 +684,7 @@
       "The Broken Road Trilogy",
       "Book 1"
     ],
-    "featured": true,
-    "homepageRank": 6,
-    "homepageSize": "wide",
+    "featured": false,
     "accent": "spark",
     "imageFit": "contain",
     "links": [
@@ -971,7 +967,7 @@
     ],
     "featured": true,
     "homepageRank": 3,
-    "homepageSize": "wide",
+    "homepageSize": "standard",
     "links": [
       {
         "label": "Play on itch.io",
@@ -1773,15 +1769,18 @@
     "title": "Reef Sweep",
     "category": "Games",
     "type": "Playable browser prototype",
+    "cardLabel": "First-person conservation adventure",
     "status": "In Development",
-    "description": "Drive the bay, dive five reefs and restore habitat. Spear lionfish, find keepsakes and prepare the catch in a growing diving company.",
+    "description": "Explore five dive sites in Lantern Bay, hunt invasive lionfish and restore habitat. Bring your catch home to prepare, sell or donate as you build a new life in the bay.",
     "tags": [
       "First-person",
       "Reef conservation",
-      "Browser prototype",
+      "Lantern Bay",
       "Samfa12"
     ],
-    "featured": false,
+    "featured": true,
+    "homepageRank": 1,
+    "homepageSize": "hero",
     "links": [
       {
         "label": "Play Reef Sweep",
