@@ -48,7 +48,8 @@ function responsiveImage(project, sizes) {
 function card(project, index, featured = false) {
   const detail = project.detailUrl ? safeUrl(project.detailUrl) : "";
   const first = project.links?.[0];
-  const actions = (featured ? project.links?.slice(0, 1) : project.links) || [];
+  const cardLinks = project.cardLinks || project.links;
+  const actions = (featured ? cardLinks?.slice(0, 1) : cardLinks) || [];
   const size = featured ? (project.homepageSize || (index === 0 ? "hero" : "standard")) : "standard";
   const accent = project.accent || (project.category === "Books" ? "spark" : project.category === "Music" ? "pink" : project.category === "Apps & Tools" || project.category === "Assets" ? "green" : index % 2 ? "violet" : "cyan");
   const [imageWidth, imageHeight] = imageDimensions[project.thumbnail] || [640, 540];

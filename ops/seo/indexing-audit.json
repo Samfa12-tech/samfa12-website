@@ -1878,12 +1878,14 @@
       ],
       "inSitemap": true,
       "incoming": [
+        "/",
         "/books/sober/",
         "/games/",
         "/music/drink-ost/",
         "/updates/"
       ],
       "incomingMain": [
+        "/",
         "/books/sober/",
         "/games/",
         "/music/drink-ost/",
@@ -1912,13 +1914,11 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/",
         "/books/dust-on-the-river/",
         "/games/",
         "/updates/"
       ],
       "incomingMain": [
-        "/",
         "/books/dust-on-the-river/",
         "/games/",
         "/updates/"
@@ -2290,10 +2290,12 @@
       ],
       "inSitemap": true,
       "incoming": [
+        "/",
         "/games/",
         "/updates/"
       ],
       "incomingMain": [
+        "/",
         "/games/",
         "/updates/"
       ],
