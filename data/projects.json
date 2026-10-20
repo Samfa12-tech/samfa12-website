@@ -1189,7 +1189,7 @@
     "category": "Games",
     "type": "Spiritual sequel to The Last Guard",
     "status": "Browser and Android testing available",
-    "description": "A spiritual sequel to The Last Guard, Briarhold is a first-person action-defence roguelite available for Alpha.103 testing in browsers and on Android. Time your cooling, prepare and reclaim authored defences, and aim the ballista or directional gate rack as the Briar Host reaches the walls. Experimental multiplayer co-op remains in testing.",
+    "description": "A first-person action-defence roguelite in Alpha.103 testing for browser and Android. Manage cooling, reclaim authored defences, and aim the ballista as the Briar Host reaches the walls.",
     "tags": [
       "Experimental Multiplayer Co-op",
       "Action Defence",
@@ -1197,7 +1197,7 @@
     ],
     "featured": true,
     "homepageRank": 2,
-    "homepageSize": "tall",
+    "homepageSize": "standard",
     "links": [
       {
         "label": "Play in browser",
