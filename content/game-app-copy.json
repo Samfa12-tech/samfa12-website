@@ -1696,11 +1696,11 @@
       "title": "Listen to the island theme",
       "src": "/assets/audio/reef-sweep-island-theme.wav"
     },
-    "seoTitle": "Reef Sweep first-person diving game",
-    "intro": "Take the helm in Lantern Bay, moor at a reef and hunt invasive lionfish. Explore five dive sites, restore habitat and bring your catch home to prepare, sell or donate. Reef Sweep is a first-person conservation and diving-business game in development.",
+    "seoTitle": "Reef Sweep playable diving demo · Full game in development",
+    "intro": "You’re playing an early demo of Reef Sweep. The full game is in development, with release timing to be announced. In the current demo, take the helm in Lantern Bay, moor at a reef and hunt invasive lionfish. Explore five dive sites, restore habitat and bring your catch home to prepare, sell or donate.",
     "details": [
       {
-        "heading": "Explore Lantern Bay",
+        "heading": "Explore Lantern Bay in the current demo",
         "text": "Drive your diving skiff across the bay, follow the navigation chart and slow beside a gold buoy to choose a dive. A pilot and diver ride aboard the Blender-authored skiff, with swells, buoyancy, wake and bow spray. At a dive buoy, the diver checks their gear and rolls backward into the water before the chosen reef loads. Skip the entry when you want to get straight to the dive; Steady camera skips the sequence too. Underneath are five authored sites: Sunlit Gardens, Tideglass Passage, Mangrove Reach, Azure Cenote and Rusted Harbour. Their ledges, roots, limestone basins and old structures offer different routes. Playable reefs retain clear water, with distance haze beyond their boundaries.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
@@ -1754,12 +1754,19 @@
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
+      },
+      {
+        "heading": "Planned for the full game",
+        "text": "The full campaign is in development, with plans to start a new life in Lantern Bay and meet its residents. This planned content is separate from the current playable demo. Release timing will be announced.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/"
+        ]
       }
     ],
     "faqs": [
       {
         "question": "Where can I play Reef Sweep?",
-        "answer": "Play it here in your browser using the Play Reef Sweep button, or choose Play on Wavedash. The game is still in development.",
+        "answer": "Choose Play the demo to play the current browser demo here, or Play the demo on Wavedash. The full game is in development, with release timing to be announced.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/",
           "https://wavedash.com/games/reef-sweep"
@@ -1781,7 +1788,7 @@
       },
       {
         "question": "Is the game finished?",
-        "answer": "It's an early playable build. Five dive sites, equipment upgrades, night dives, filleting and a working dive watch are available, but the artwork and balance are still being worked on. Expect a few rough edges.",
+        "answer": "No. This is an early playable demo, separate from the full game in development. The current demo includes five dive sites, equipment upgrades, night dives, catch preparation and a working dive watch. Artwork and balance are still being worked on. Release timing for the full game will be announced.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]

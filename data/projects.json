@@ -1768,10 +1768,10 @@
   {
     "title": "Reef Sweep",
     "category": "Games",
-    "type": "Playable browser prototype",
-    "cardLabel": "Playable demo · Full game TBA",
-    "status": "In Development",
-    "description": "Play the Reef Sweep diving demo. A full campaign is in development: start a new life in Lantern Bay, meet its residents and help restore the reefs. Release date TBA.",
+    "type": "Playable demo",
+    "cardLabel": "Playable demo · Full game in development",
+    "status": "Full game in development",
+    "description": "Play the Reef Sweep diving demo. The full campaign is in development: start a new life in Lantern Bay, meet its residents and help restore the reefs. Release timing will be announced.",
     "tags": [
       "First-person",
       "Reef conservation",
@@ -1783,11 +1783,11 @@
     "homepageSize": "hero",
     "links": [
       {
-        "label": "Play Reef Sweep",
+        "label": "Play the demo",
         "url": "/games/reef-sweep/play/?v=0.5.0-preview.3"
       },
       {
-        "label": "Play on Wavedash",
+        "label": "Play the demo on Wavedash",
         "url": "https://wavedash.com/games/reef-sweep"
       }
     ],
