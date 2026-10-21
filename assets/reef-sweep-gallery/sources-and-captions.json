@@ -1,0 +1,109 @@
+{
+  "purpose": "Reef Sweep player-facing marketing gallery",
+  "currentPublicDemo": "0.5.0-preview.3",
+  "selectionPolicy": "Actual gameplay captures only. Normal gameplay HUD retained. No debug overlays, story spoilers, personal data or source archives. Earlier released demo captures and private development previews explicitly labelled.",
+  "images": [
+    {
+      "id": "demo-first-dive",
+      "status": "public-demo",
+      "source": "Public demo first-dive practice; fresh isolated browser session; normal player controls; no owner save used.",
+      "sourceFile": "first-dive.png",
+      "captureBuild": "Current playable demo · v0.5.0-preview.3",
+      "originalSha256": "5bd80899a1012f5a86f344f36b3b19ca61b498861acd947cc1dc0f696cce5f49",
+      "width": 1280,
+      "height": 800,
+      "alt": "First-person diving among coral and fish in Sunlit Gardens, with the pole spear and dive watch visible.",
+      "caption": "Start with a practice dive in Sunlit Gardens.",
+      "webFiles": [
+        "/assets/reef-sweep-gallery/demo-first-dive-1280.webp",
+        "/assets/reef-sweep-gallery/demo-first-dive-640.webp"
+      ],
+      "transform": "Full uncropped frame; resized only, WebP quality 86. No generated imagery or compositing."
+    },
+    {
+      "id": "demo-manual-catch",
+      "status": "earlier-public-demo",
+      "source": "Committed expedition review evidence, dfea5a4004e8c703e681bee79fef473c4a503713; validation.json identifies v0.5.0-preview.1.",
+      "sourceFile": "catch-insertion.png",
+      "captureBuild": "Earlier demo capture · v0.5.0-preview.1",
+      "originalSha256": "82bfb2091824a4aa28be350593ebd162a99898b00ca04e592c7e65349e600cda",
+      "width": 1280,
+      "height": 800,
+      "alt": "A diver guiding a striped lionfish towards the catch tube.",
+      "caption": "Aim the pole spear and secure your catch by hand.",
+      "webFiles": [
+        "/assets/reef-sweep-gallery/demo-manual-catch-1280.webp",
+        "/assets/reef-sweep-gallery/demo-manual-catch-640.webp"
+      ],
+      "transform": "Full uncropped frame; resized only, WebP quality 86. No generated imagery or compositing."
+    },
+    {
+      "id": "demo-mangrove",
+      "status": "earlier-public-demo",
+      "source": "Committed expedition review evidence, dfea5a4004e8c703e681bee79fef473c4a503713; validation.json identifies v0.5.0-preview.1.",
+      "sourceFile": "mangrove-gameplay.png",
+      "captureBuild": "Earlier demo capture · v0.5.0-preview.1",
+      "originalSha256": "dcb68d44325526e9406e9d844bf83965289b72c939572185f5c836d7f32416cb",
+      "width": 1280,
+      "height": 800,
+      "alt": "A first-person diver looking through mangrove roots with fish and sea grass below.",
+      "caption": "Find your route through the roots at Mangrove Reach.",
+      "webFiles": [
+        "/assets/reef-sweep-gallery/demo-mangrove-1280.webp",
+        "/assets/reef-sweep-gallery/demo-mangrove-640.webp"
+      ],
+      "transform": "Full uncropped frame; resized only, WebP quality 86. No generated imagery or compositing."
+    },
+    {
+      "id": "demo-skiff",
+      "status": "earlier-public-demo",
+      "source": "Committed expedition review evidence, dfea5a4004e8c703e681bee79fef473c4a503713; expedition validation.json identifies v0.5.0-preview.1.",
+      "sourceFile": "boat-driving-1.png",
+      "captureBuild": "Earlier demo capture · v0.5.0-preview.1",
+      "originalSha256": "af530c370903936a4caa8f26628522d0c8b027c5a115854e1d1a40217ad85a81",
+      "width": 1280,
+      "height": 800,
+      "alt": "A small diving skiff travelling across Lantern Bay towards the islands.",
+      "caption": "Take the skiff out and choose your next dive.",
+      "webFiles": [
+        "/assets/reef-sweep-gallery/demo-skiff-1280.webp",
+        "/assets/reef-sweep-gallery/demo-skiff-640.webp"
+      ],
+      "transform": "Full uncropped frame; resized only, WebP quality 86. No generated imagery or compositing."
+    },
+    {
+      "id": "development-harbour",
+      "status": "private-development-preview",
+      "source": "Saved physical46-v1 evidence; campaign46-coastal.json identifies campaign.46 / progress46-v2, bundle 1352ccbc67ade3a2fcfb5f19fe7fef62f853c0f942cccc22ef23ff23cac26f6e.",
+      "sourceFile": "skiff-slipway-native-reverse-clear.png",
+      "captureBuild": "Full-game development preview · campaign.46",
+      "originalSha256": "f2afe8e29d24a8e6de2d88d3e843b04bd34424d502adcd1b40acdfbd8b9df91e",
+      "width": 1280,
+      "height": 800,
+      "alt": "A diving skiff beside the coastal town slipway, with a boat workshop and gear shop ashore.",
+      "caption": "A coastal home base to return to. Not included in the demo.",
+      "webFiles": [
+        "/assets/reef-sweep-gallery/development-harbour-1280.webp",
+        "/assets/reef-sweep-gallery/development-harbour-640.webp"
+      ],
+      "transform": "Full uncropped frame; resized only, WebP quality 86. No generated imagery or compositing."
+    },
+    {
+      "id": "development-arrival",
+      "status": "private-development-preview",
+      "source": "Saved native52-v2 evidence; campaign52-intro-polish.json identifies 0.6.0-campaign.52 / progress52-v1, source 8198994b93516202d2b03995c35225e9ecd831d8.",
+      "sourceFile": "51-van-driving.png",
+      "captureBuild": "Full-game development preview · campaign.52",
+      "originalSha256": "69fdaebe3674db9cd65ca3cf2a322043ceb7726269632f4148627a1a4b079b43",
+      "width": 1280,
+      "height": 720,
+      "alt": "A small van follows a coastal road above the bay at sunset.",
+      "caption": "Arriving in Lantern Bay. Not included in the demo.",
+      "webFiles": [
+        "/assets/reef-sweep-gallery/development-arrival-1280.webp",
+        "/assets/reef-sweep-gallery/development-arrival-640.webp"
+      ],
+      "transform": "Full uncropped frame; resized only, WebP quality 86. No generated imagery or compositing."
+    }
+  ]
+}

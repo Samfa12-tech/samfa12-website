@@ -8,6 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const siteRoot = path.resolve(process.env.SEO_SITE_ROOT || root);
 const catalogue = JSON.parse(fs.readFileSync(path.join(root, "data/projects.json"), "utf8"));
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "content/manifest.json"), "utf8"));
+const editorial = {...JSON.parse(fs.readFileSync(path.join(root, "content/game-app-copy.json"), "utf8")),...JSON.parse(fs.readFileSync(path.join(root, "content/book-music-copy.json"), "utf8"))};
 const errors = [];
 const read = (relative) => fs.readFileSync(path.join(siteRoot, relative), "utf8");
 const has = (relative) => fs.existsSync(path.join(siteRoot, relative));
@@ -87,7 +88,8 @@ for (const plan of manifest.products) {
   if (plan.action === "create" && !html.includes(`<h1>${escapedTitle}</h1>`)) fail(`${plan.path}: title does not match identity`);
   if (plan.action !== "create" && !new RegExp(`<h1[^>]*>${escapedTitle}`).test(html)) fail(`${plan.path}: title does not match identity`);
   if (!/<meta\s+name="description"\s+content="[^"<>]{30,}"/i.test(html)) fail(`${plan.path}: missing useful description`);
-  if (plan.action === "create" && !html.includes(`src="/${record.thumbnail}"`)) fail(`${plan.path}: missing local artwork`);
+  const artwork = editorial[plan.id]?.heroScreenshot?.src || `/${record.thumbnail}`;
+  if (plan.action === "create" && (!artwork.startsWith("/assets/") || !has(artwork.slice(1)) || !html.includes(`src="${artwork}"`))) fail(`${plan.path}: missing local artwork`);
   if (plan.action !== "create" && !html.includes(plan.id === "game-briarhold" ? "briarhold-key-art.png" : "og-image-v2.png")) fail(`${plan.path}: missing local artwork`);
   if (!html.includes('class="product-breadcrumbs"')) fail(`${plan.path}: missing visible breadcrumb`);
   for (const link of record.links || []) if (link.url !== plan.path && !html.includes(`href="${link.url.replace(/&/g,"&amp;")}"`)) fail(`${plan.path}: missing destination ${link.url}`);

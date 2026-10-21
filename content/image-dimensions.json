@@ -262,5 +262,53 @@
   "assets/thumbnails/reef-sweep-icon-512.webp": [
     512,
     512
+  ],
+  "assets/reef-sweep-gallery/demo-first-dive-1280.webp": [
+    1280,
+    800
+  ],
+  "assets/reef-sweep-gallery/demo-first-dive-640.webp": [
+    640,
+    400
+  ],
+  "assets/reef-sweep-gallery/demo-manual-catch-1280.webp": [
+    1280,
+    800
+  ],
+  "assets/reef-sweep-gallery/demo-manual-catch-640.webp": [
+    640,
+    400
+  ],
+  "assets/reef-sweep-gallery/demo-mangrove-1280.webp": [
+    1280,
+    800
+  ],
+  "assets/reef-sweep-gallery/demo-mangrove-640.webp": [
+    640,
+    400
+  ],
+  "assets/reef-sweep-gallery/demo-skiff-1280.webp": [
+    1280,
+    800
+  ],
+  "assets/reef-sweep-gallery/demo-skiff-640.webp": [
+    640,
+    400
+  ],
+  "assets/reef-sweep-gallery/development-harbour-1280.webp": [
+    1280,
+    800
+  ],
+  "assets/reef-sweep-gallery/development-harbour-640.webp": [
+    640,
+    400
+  ],
+  "assets/reef-sweep-gallery/development-arrival-1280.webp": [
+    1280,
+    720
+  ],
+  "assets/reef-sweep-gallery/development-arrival-640.webp": [
+    640,
+    360
   ]
 }

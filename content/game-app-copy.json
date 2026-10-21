@@ -1697,8 +1697,107 @@
       "src": "/assets/audio/reef-sweep-island-theme.wav"
     },
     "seoTitle": "Reef Sweep playable diving demo · Full game in development",
-    "intro": "You’re playing an early demo of Reef Sweep. The full game is in development, with release timing to be announced. In the current demo, take the helm in Lantern Bay, moor at a reef and hunt invasive lionfish. Explore five dive sites, restore habitat and bring your catch home to prepare, sell or donate.",
+    "intro": "Reef Sweep is a first-person diving and reef-conservation game set in Lantern Bay. Take your skiff out, hunt invasive lionfish, help the reef recover and bring your catch home.",
     "details": [
+      {
+        "heading": "Head out. Dive in. Make room for life.",
+        "text": "Choose a dive site, follow the reef and find your next lionfish. Move close, steady your aim and draw the pole spear. Secure each catch before moving on, and watch your air so you can make it back to the boat.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "heading": "What you can play in the demo",
+        "text": "Explore five dive sites, clear abandoned fishing gear, plant coral and record surveys. Bring your catch back to prepare, sell or donate, then spend your earnings on better diving gear. Local contracts, reef recovery and night dives give you reasons to head out again.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "kind": "planned",
+        "heading": "Planned for the full game",
+        "text": "The full campaign is being developed around a new life in Lantern Bay: arriving on the coast, meeting its residents and building a place for yourself between dives. The coastal town and arrival scenes shown below are development previews, separate from the playable demo. Features may change, and release timing will be announced.",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Where can I play Reef Sweep?",
+        "answer": "Choose Play the demo to play the current browser demo here, or Play the demo on Wavedash. The full game is in development, with release timing to be announced.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/",
+          "https://wavedash.com/games/reef-sweep"
+        ]
+      },
+      {
+        "question": "Where is my progress saved?",
+        "answer": "Your progress stays in the browser you're using. There are three save slots, plus export and import options if you'd like a backup or want to move your save. Saves don't automatically carry between devices, browsers or a downloaded copy of the game.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "question": "Can I play on my phone?",
+        "answer": "The demo has touch controls for portrait and landscape play, plus keyboard/mouse and controller support. Phone performance varies; compatibility with every Android and iPhone browser has not been fully verified. On iPhone, check Silent Mode and media volume if there is no sound.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
+      {
+        "question": "Is the game finished?",
+        "answer": "No. This is an early playable demo, separate from the full game in development. The current demo includes five dive sites, equipment upgrades, night dives, catch preparation and a working dive watch. Artwork and balance are still being worked on. Release timing for the full game will be announced.",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "reef-sweep-v0-5-preview-3-october-2026",
+        "kind": "release",
+        "date": "2026-10-17",
+        "dateMeaning": "Samfa12.com deployment date (UTC)",
+        "title": "v0.5.0-preview.3 — crew, water entry and lionfish display",
+        "summary": "Menu and boat audio now start after interaction, with a speed-responsive engine. A visible pilot and diver accompany boat trips, followed by a short gear-check and backward-roll entry at the selected reef. Remodeled lionfish flare their fins and spines independently as the diver approaches, then relax on retreat. Driving starts behind the skiff with mouse, touch and controller camera control; the close cinematic view is limited to water entry. Existing saves and gameplay damage rules are preserved. Sam confirmed the local audio, entry, lionfish display and corrected driving camera. Physical-phone performance remains unverified.",
+        "platform": "HTML5 browser",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/",
+          "https://samfa12.com/games/reef-sweep/play/",
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      },
+      {
+        "id": "reef-sweep-v0-5-expedition-october-2026",
+        "kind": "release",
+        "date": "2026-10-15",
+        "dateMeaning": "Samfa12.com deployment date (UTC)",
+        "title": "v0.5 expedition preview and portrait refinements",
+        "summary": "The v0.5.0-preview.2 browser build brings boat travel around Lantern Bay, keepsake charms, optional catch preparation and cooking, and later crown-of-thorns conservation work. Portrait refinements make the boat chart compact and lower the catch tube between collections. The game remains in development; physical phone acceptance of the new features, sustained performance and natural campaign pacing remain unverified.",
+        "platform": "HTML5 browser",
+        "sources": [
+          "https://samfa12.com/games/reef-sweep/",
+          "https://samfa12.com/games/reef-sweep/play/",
+          "https://github.com/Samfa12-tech/samfa12-website/actions/runs/38716409698",
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "app-pocket-chordsmith"
+    ],
+    "relatedLabels": {
+      "app-pocket-chordsmith": "Explore Pocket Chordsmith, used to create the score"
+    },
+    "titleArtwork": {
+      "wide": "/assets/reef-sweep-title/reef-sweep-wide-on-dark-wave.svg",
+      "stacked": "/assets/reef-sweep-title/reef-sweep-stacked-on-dark-wave.svg"
+    },
+    "secondaryInfo": true,
+    "demoNotice": "Play an early demo now. The full game is in development, with release timing to be announced.",
+    "metaDescription": "Play the Reef Sweep demo: explore Lantern Bay, hunt invasive lionfish and restore the reef. The full game is in development; release timing will be announced.",
+    "technicalDetails": [
       {
         "heading": "Explore Lantern Bay in the current demo",
         "text": "Drive your diving skiff across the bay, follow the navigation chart and slow beside a gold buoy to choose a dive. A pilot and diver ride aboard the Blender-authored skiff, with swells, buoyancy, wake and bow spray. At a dive buoy, the diver checks their gear and rolls backward into the water before the chosen reef loads. Skip the entry when you want to get straight to the dive; Steady camera skips the sequence too. Underneath are five authored sites: Sunlit Gardens, Tideglass Passage, Mangrove Reach, Azure Cenote and Rusted Harbour. Their ledges, roots, limestone basins and old structures offer different routes. Playable reefs retain clear water, with distance haze beyond their boundaries.",
@@ -1754,86 +1853,73 @@
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
-      },
-      {
-        "heading": "Planned for the full game",
-        "text": "The full campaign is in development, with plans to start a new life in Lantern Bay and meet its residents. This planned content is separate from the current playable demo. Release timing will be announced.",
-        "sources": [
-          "https://wavedash.com/games/reef-sweep"
-        ]
       }
     ],
-    "faqs": [
-      {
-        "question": "Where can I play Reef Sweep?",
-        "answer": "Choose Play the demo to play the current browser demo here, or Play the demo on Wavedash. The full game is in development, with release timing to be announced.",
-        "sources": [
-          "https://samfa12.com/games/reef-sweep/play/",
-          "https://wavedash.com/games/reef-sweep"
-        ]
-      },
-      {
-        "question": "Where is my progress saved?",
-        "answer": "Your progress stays in the browser you're using. There are three save slots, plus export and import options if you'd like a backup or want to move your save. Saves don't automatically carry between devices, browsers or a downloaded copy of the game.",
-        "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
-        ]
-      },
-      {
-        "question": "Can I play on my phone?",
-        "answer": "Touch controls support portrait and landscape play. This expedition update has controlled Chromium touch-emulation coverage; physical Android and iPhone Safari acceptance of the new features remains unverified. Fullscreen is offered only where the host and browser support it. On iPhone, check Silent Mode and media volume if there is no sound.",
-        "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
-        ]
-      },
-      {
-        "question": "Is the game finished?",
-        "answer": "No. This is an early playable demo, separate from the full game in development. The current demo includes five dive sites, equipment upgrades, night dives, catch preparation and a working dive watch. Artwork and balance are still being worked on. Release timing for the full game will be announced.",
-        "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
-        ]
-      }
-    ],
-    "updates": [
-      {
-        "id": "reef-sweep-v0-5-preview-3-october-2026",
-        "kind": "release",
-        "date": "2026-10-17",
-        "dateMeaning": "Samfa12.com deployment date (UTC)",
-        "title": "v0.5.0-preview.3 — crew, water entry and lionfish display",
-        "summary": "Menu and boat audio now start after interaction, with a speed-responsive engine. A visible pilot and diver accompany boat trips, followed by a short gear-check and backward-roll entry at the selected reef. Remodeled lionfish flare their fins and spines independently as the diver approaches, then relax on retreat. Driving starts behind the skiff with mouse, touch and controller camera control; the close cinematic view is limited to water entry. Existing saves and gameplay damage rules are preserved. Sam confirmed the local audio, entry, lionfish display and corrected driving camera. Physical-phone performance remains unverified.",
-        "platform": "HTML5 browser",
-        "sources": [
-          "https://samfa12.com/games/reef-sweep/",
-          "https://samfa12.com/games/reef-sweep/play/",
-          "https://wavedash.com/games/reef-sweep/patch-notes"
-        ]
-      },
-      {
-        "id": "reef-sweep-v0-5-expedition-october-2026",
-        "kind": "release",
-        "date": "2026-10-15",
-        "dateMeaning": "Samfa12.com deployment date (UTC)",
-        "title": "v0.5 expedition preview and portrait refinements",
-        "summary": "The v0.5.0-preview.2 browser build brings boat travel around Lantern Bay, keepsake charms, optional catch preparation and cooking, and later crown-of-thorns conservation work. Portrait refinements make the boat chart compact and lower the catch tube between collections. The game remains in development; physical phone acceptance of the new features, sustained performance and natural campaign pacing remain unverified.",
-        "platform": "HTML5 browser",
-        "sources": [
-          "https://samfa12.com/games/reef-sweep/",
-          "https://samfa12.com/games/reef-sweep/play/",
-          "https://github.com/Samfa12-tech/samfa12-website/actions/runs/38716409698",
-          "https://wavedash.com/games/reef-sweep/patch-notes"
-        ]
-      }
-    ],
-    "relatedIds": [
-      "app-pocket-chordsmith"
-    ],
-    "relatedLabels": {
-      "app-pocket-chordsmith": "Explore Pocket Chordsmith, used to create the score"
+    "heroScreenshot": {
+      "src": "/assets/reef-sweep-gallery/demo-first-dive-1280.webp",
+      "small": "/assets/reef-sweep-gallery/demo-first-dive-640.webp",
+      "width": 1280,
+      "height": 800,
+      "alt": "First-person diving among coral and fish in Sunlit Gardens, with the pole spear and dive watch visible.",
+      "caption": "Start with a practice dive in Sunlit Gardens.",
+      "label": "Current playable demo · v0.5.0-preview.3"
     },
-    "titleArtwork": {
-      "wide": "/assets/reef-sweep-title/reef-sweep-wide-on-dark-wave.svg",
-      "stacked": "/assets/reef-sweep-title/reef-sweep-stacked-on-dark-wave.svg"
+    "gallery": {
+      "title": "A look at the demo",
+      "intro": "Actual in-game screenshots. The hero image shows the current v0.5.0-preview.3 practice dive. The three expedition captures below are from the earlier released v0.5.0-preview.1 demo, so some artwork and interface details differ.",
+      "images": [
+        {
+          "src": "/assets/reef-sweep-gallery/demo-manual-catch-1280.webp",
+          "small": "/assets/reef-sweep-gallery/demo-manual-catch-640.webp",
+          "width": 1280,
+          "height": 800,
+          "alt": "A diver guiding a striped lionfish towards the catch tube.",
+          "caption": "Aim the pole spear and secure your catch by hand.",
+          "label": "Earlier demo capture · v0.5.0-preview.1"
+        },
+        {
+          "src": "/assets/reef-sweep-gallery/demo-mangrove-1280.webp",
+          "small": "/assets/reef-sweep-gallery/demo-mangrove-640.webp",
+          "width": 1280,
+          "height": 800,
+          "alt": "A first-person diver looking through mangrove roots with fish and sea grass below.",
+          "caption": "Find your route through the roots at Mangrove Reach.",
+          "label": "Earlier demo capture · v0.5.0-preview.1"
+        },
+        {
+          "src": "/assets/reef-sweep-gallery/demo-skiff-1280.webp",
+          "small": "/assets/reef-sweep-gallery/demo-skiff-640.webp",
+          "width": 1280,
+          "height": 800,
+          "alt": "A small diving skiff travelling across Lantern Bay towards the islands.",
+          "caption": "Take the skiff out and choose your next dive.",
+          "label": "Earlier demo capture · v0.5.0-preview.1"
+        }
+      ]
+    },
+    "developmentGallery": {
+      "title": "Lantern Bay in development",
+      "intro": "Full-game development previews — these town and arrival scenes are not included in the current demo.",
+      "images": [
+        {
+          "src": "/assets/reef-sweep-gallery/development-harbour-1280.webp",
+          "small": "/assets/reef-sweep-gallery/development-harbour-640.webp",
+          "width": 1280,
+          "height": 800,
+          "alt": "A diving skiff beside the coastal town slipway, with a boat workshop and gear shop ashore.",
+          "caption": "A coastal home base to return to. Not included in the demo.",
+          "label": "Full-game development preview · campaign.46"
+        },
+        {
+          "src": "/assets/reef-sweep-gallery/development-arrival-1280.webp",
+          "small": "/assets/reef-sweep-gallery/development-arrival-640.webp",
+          "width": 1280,
+          "height": 720,
+          "alt": "A small van follows a coastal road above the bay at sunset.",
+          "caption": "Arriving in Lantern Bay. Not included in the demo.",
+          "label": "Full-game development preview · campaign.52"
+        }
+      ]
     }
   }
 }

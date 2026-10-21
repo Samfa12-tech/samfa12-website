@@ -8,7 +8,7 @@
     "explicitlyExcluded": 5,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 14,
+    "oneContextualIncoming": 13,
     "relationshipEdges": 71
   },
   "excluded": [
@@ -2284,7 +2284,7 @@
       "kind": "product",
       "canonical": "https://samfa12.com/games/reef-sweep/",
       "title": "Reef Sweep playable diving demo · Full game in development | Samfa12",
-      "description": "You’re playing an early demo of Reef Sweep. The full game is in development, with release timing to be announced. In the current demo, take the helm in Lantern Bay, moor at a reef and hunt invasive lionfish. Explore five dive sites, restore habitat and bring your catch home to prepare, sell or donate.",
+      "description": "Play the Reef Sweep demo: explore Lantern Bay, hunt invasive lionfish and restore the reef. The full game is in development; release timing will be announced.",
       "h1": [
         "Reef Sweep"
       ],
@@ -2299,7 +2299,7 @@
         "/games/",
         "/updates/"
       ],
-      "localAssetCount": 11,
+      "localAssetCount": 16,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -3479,7 +3479,8 @@
         "/tools/what-would-win/"
       ],
       "incomingMain": [
-        "/"
+        "/",
+        "/games/reef-sweep/"
       ],
       "localAssetCount": 8,
       "jsonLdStatus": "parsed",
@@ -3489,9 +3490,7 @@
         "CollectionPage"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     }
   ]
 }
