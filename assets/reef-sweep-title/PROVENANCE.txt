@@ -1,0 +1,5 @@
+Approved Reef Sweep title treatment, supplied 2026-10-21.
+Exact outlined SVGs from reef-sweep-title-draft-2026-10-21.zip.
+Transferred subset ZIP SHA-256: 5bbcab6e7339788b9d4bd3b531b6001758394c132587364f479594d5b25f338e
+Noto Serif outlines; original font metadata and OFL notices are retained in licenses/.
+No remote fonts are loaded. SVG artwork is preserved byte for byte.

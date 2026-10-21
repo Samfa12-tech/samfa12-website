@@ -1830,6 +1830,10 @@
     ],
     "relatedLabels": {
       "app-pocket-chordsmith": "Explore Pocket Chordsmith, used to create the score"
+    },
+    "titleArtwork": {
+      "wide": "/assets/reef-sweep-title/reef-sweep-wide-on-dark-wave.svg",
+      "stacked": "/assets/reef-sweep-title/reef-sweep-stacked-on-dark-wave.svg"
     }
   }
 }

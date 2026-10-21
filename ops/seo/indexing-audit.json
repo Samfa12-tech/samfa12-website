@@ -2299,7 +2299,7 @@
         "/games/",
         "/updates/"
       ],
-      "localAssetCount": 10,
+      "localAssetCount": 11,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
