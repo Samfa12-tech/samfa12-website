@@ -1213,6 +1213,11 @@ h3 {
   gap: var(--space-4);
 }
 
+/* Keep the short Steam table from stretching to match a longer neighbour. */
+.stats-project-panel-steam {
+  align-self: start;
+}
+
 .stats-project-panel {
   min-width: 0;
   padding: var(--space-5);
