@@ -469,6 +469,18 @@
     ],
     "updates": [
       {
+        "id": "chordsmith-v70-campfire-october-2026",
+        "kind": "release",
+        "date": "2026-10-16",
+        "dateMeaning": "itch.io development log publication date (UTC)",
+        "title": "v70: Campfire guitar and passage comparisons",
+        "summary": "Campfire Acoustic adds major and minor guitar voicings, strumming and picking controls, and MIDI/WAV export. Preview a passage with Hear this bit, compare a proposed performance change with the original, then Apply or Discard. Three optional themes join playback and Undo fixes. Mixing Campfire and amp sections is supported in offline WAV export, but not yet in live playback.",
+        "platform": "Browser",
+        "sources": [
+          "https://samfa12.itch.io/pocket-chordsmith/devlog/1711196/pocket-chordsmith-v70-campfire-guitar-ab-previews-and-new-themes"
+        ]
+      },
+      {
         "id": "chordsmith-v68-core-bridge-september-2026",
         "kind": "release",
         "date": "2026-09-23",
