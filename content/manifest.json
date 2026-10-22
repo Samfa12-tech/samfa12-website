@@ -14,7 +14,7 @@
         "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver"
       ],
       "notes": "Separate VideoGame entity from the book. Cross-link the adaptation; do not use the Amazon book as the game sameAs.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-drink",
@@ -28,7 +28,7 @@
         "https://store.steampowered.com/app/4419290/Drink/"
       ],
       "notes": "Separate from the sequel novel Sober and the Drink OST. Verify which features belong to each platform.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-possum-cafe",
@@ -41,7 +41,7 @@
         "https://play.google.com/store/apps/details?id=com.samsmall.possumcafe"
       ],
       "notes": "Resolve current display name against the same Google Play package and itch product; retain verified former/platform titles as aliases, not duplicate pages.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-the-last-guard",
@@ -54,7 +54,7 @@
         "https://wavedash.com/games/the-last-guard"
       ],
       "notes": "Cross-link Briarhold as the catalogue describes a spiritual-sequel relationship; verify public wording.",
-      "pageModified": "2026-10-16"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-the-horde",
@@ -68,7 +68,7 @@
         "https://samfa12.itch.io/the-horde/devlog/1698261/the-horde-162-finishing-the-tomb"
       ],
       "notes": "Preserve experimental/tech-demo limitations and platform requirements. Do not market unverified hardware compatibility.",
-      "pageModified": "2026-10-09"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-bug-swarm",
@@ -80,7 +80,7 @@
         "https://samfa12.com/games/bug-swarm/"
       ],
       "notes": "Existing full-screen canvas runtime must stay intact. Proposed sibling marketing route avoids changing play URL. Use website/project source and verified documentation where no storefront exists.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-cursed-cutter",
@@ -92,7 +92,7 @@
         "https://samfa12.com/games/cursed-cutter/"
       ],
       "notes": "Keep current play URL and fullscreen behaviour. Inspect the existing wrapper before choosing the safest separate marketing route.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "app-what-would-win",
@@ -105,7 +105,7 @@
         "https://github.com/Samfa12-tech/What-Would-Win"
       ],
       "notes": "Cross-listed in Games but one entity and one marketing page. Leave the generated app, manifest, service worker, legal notices, assets and share URLs unchanged. Explain simulation assumptions, not scientific predictive accuracy.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "app-pocket-chordsmith",
@@ -135,7 +135,7 @@
         "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/godot-addon-v1.3.0"
       ],
       "notes": "Distinct add-on. MIT applies only where the source license supports it; do not extend this to all apps, music or artwork.",
-      "pageModified": "2026-10-17"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "app-pocket-audio-handoff",
@@ -148,7 +148,7 @@
         "https://github.com/Samfa12-tech/Pocket-Chordsmith"
       ],
       "notes": "Enrich the existing explanatory helper when safe instead of creating a duplicate page. Preserve transfer URLs, local app handoff, relay behaviour and privacy distinctions.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-bug-maze-td",
@@ -161,7 +161,7 @@
         "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
       ],
       "notes": "Google Play link is a bundle containing this game, not the standalone game identity.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-breakfast-beat",
@@ -174,7 +174,7 @@
         "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
       ],
       "notes": "Verify mechanics from itch; the current catalogue description is generic. Google Play destination is the TD Pack, not a standalone app.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-ship-blockade",
@@ -187,7 +187,7 @@
         "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
       ],
       "notes": "Google Play destination is a collection. Verify inclusion and label the bundle CTA clearly.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-hop-bunny",
@@ -199,7 +199,7 @@
         "https://samfa12.itch.io/hop-bunny"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-pocket-pattern",
@@ -211,7 +211,7 @@
         "https://samfa12.itch.io/pocket-pattern"
       ],
       "notes": "Owner confirmed Pocket Pattern as the display name after an initial Pocket Puzzle shorthand. Itch hosts the HTML5 game; this site links to it and does not copy the runtime.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-backwater",
@@ -223,7 +223,7 @@
         "https://www.amazon.com.au/dp/B0GX2XQR3D"
       ],
       "notes": "Do not conflate the novel with any separate Backwater game or development concept.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-reckless-dentist",
@@ -235,7 +235,7 @@
         "https://samfa12.itch.io/reckless-dentist"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-gremlin-grenade-pinball",
@@ -247,7 +247,7 @@
         "https://samfa12.itch.io/gremlin-grenade-pinball"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-wonky-vehicle-lab",
@@ -259,7 +259,7 @@
         "https://samfa12.itch.io/wonky-vehicle-lab"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-toknight",
@@ -271,7 +271,7 @@
         "https://www.amazon.com.au/dp/B0GX2NG31Z"
       ],
       "notes": "Verify Jason Proud series naming and Book 1 position from public listing.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-dust-on-the-river",
@@ -283,7 +283,7 @@
         "https://www.amazon.com.au/dp/B0H7QQQXBN"
       ],
       "notes": "Novelisation, not the game. Different stable ID, title metadata and Book schema; no copied game controls or system requirements.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-the-wall-that-lied",
@@ -295,7 +295,7 @@
         "https://www.amazon.com.au/dp/B0H6VJ4VG1"
       ],
       "notes": "KDP dashboard screenshot supplied 1 October 2026 showed the Kindle preorder scheduled for release that day and marked Ready for release; paperback was also scheduled for 1 October. Checked Amazon Australia after release on 1 October 2026: the Kindle edition was live at $4.99 with a Buy now with 1-Click option and a publication date of 1 October 2026.",
-      "pageModified": "2026-10-01"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-no-wall-to-hold",
@@ -307,7 +307,7 @@
         "https://www.amazon.com.au/dp/B0H233JY8P"
       ],
       "notes": "Repository says Book 2, planned 1 November 2026. Preserve spoiler-free public synopsis and verify availability.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-what-we-save",
@@ -319,7 +319,7 @@
         "https://www.amazon.com.au/dp/B0HC46KFJP"
       ],
       "notes": "Repository says Book 3, planned 1 December 2026. No manuscript spoilers or invented release confirmation.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-article-18",
@@ -333,7 +333,7 @@
         "https://play.google.com/store/audiobooks/details/Samfa12_Article_18?id=AQAAAEDaH2pfoM"
       ],
       "notes": "Use verified comic-noir description from itch rather than extrapolating from generic catalogue tags. Distinguish ebook/PDF and audiobook editions.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-td-pack",
@@ -345,7 +345,7 @@
         "https://play.google.com/store/apps/details?id=com.samsmall.samfa12tdpack"
       ],
       "notes": "Collection page with verified constituent games and links. Do not duplicate a bundle listing as standalone sameAs for every component.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-lofi-and-chill-pack",
@@ -357,7 +357,7 @@
         "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
       ],
       "notes": "Verify exact current name and contents. Do not invent individual listings for all six scenes from a count.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-spin-vector",
@@ -371,7 +371,7 @@
         "https://wavedash.com/games/spin-vector"
       ],
       "notes": "Itch sampled text has an old closed-testing line despite a live Google Play listing and a launch devlog. Resolve by source date and platform, not blind copying.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "app-pocket-dj",
@@ -385,7 +385,7 @@
         "https://samfa12.com/apps/pocket-dj/"
       ],
       "notes": "Keep generated app URL and directory unchanged. Do not infer standalone native Android availability from the catalogue type Mobile app.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "app-pocket-daw",
@@ -398,7 +398,7 @@
         "https://github.com/Samfa12-tech/Pocket-Chordsmith/releases/tag/pocket-daw-v0.6.59"
       ],
       "notes": "Windows desktop download; do not invent a browser DAW or market it as the Pocket Chordsmith app.",
-      "pageModified": "2026-10-17"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-mandible-wars",
@@ -410,7 +410,7 @@
         "https://samfa12.itch.io/mandible-wars"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-moon-mower",
@@ -423,7 +423,7 @@
         "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
       ],
       "notes": "Google Play is the Lofi and Chill Pack collection; identify the relationship rather than equating them.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-pocket-fish-tank",
@@ -436,7 +436,7 @@
         "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
       ],
       "notes": "Verify Voxel Fish Tank/Pocket Fish Tank names and platform distinctions; the Google Play destination is a bundle.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-party-bus",
@@ -448,7 +448,7 @@
         "https://samfa12.itch.io/party-bus"
       ],
       "notes": "Verify actual published/prototype status; do not promise roadmap concepts as shipped mechanics.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-pocket-ant-farm",
@@ -461,7 +461,7 @@
         "https://play.google.com/store/apps/details?id=com.samfa12.lofiandchillpack"
       ],
       "notes": "Google Play destination is the Lofi and Chill Pack collection.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-briarhold",
@@ -475,7 +475,7 @@
         "https://github.com/Samfa12-tech/samfa12-website/blob/main/games/briarhold/releases/latest.json"
       ],
       "notes": "Prepare the existing detailed page for the frozen Alpha.103 browser and Android package. Preserve statistics definitions and protected browser assets. Keep the updater manifest at Alpha.102 until the separate final publication step. Co-op remains experimental; state unverified paired and physical areas plainly.",
-      "pageModified": "2026-10-13"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-toknight-2",
@@ -487,7 +487,7 @@
         "https://www.amazon.com.au/dp/B0H3MW9LGP"
       ],
       "notes": "Verify Jason Proud series Book 2; link back to Book 1.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-free-to-a-good-home",
@@ -499,7 +499,7 @@
         "https://www.amazon.com.au/dp/B0GZDH57ZC"
       ],
       "notes": "Verify The Good Home novels series position before schema or reading-order claims.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-a-place-of-his-own",
@@ -511,7 +511,7 @@
         "https://www.amazon.com.au/dp/B0H1Q3TGS7"
       ],
       "notes": "Verify The Good Home novels Book 2; use public blurb only, no private manuscript context.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-colossal",
@@ -523,7 +523,7 @@
         "https://www.amazon.com.au/dp/B0H738LPJ5"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-concubine",
@@ -535,7 +535,7 @@
         "https://www.amazon.com.au/dp/B0H1LG55MZ"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "book-sober",
@@ -547,7 +547,7 @@
         "https://www.amazon.com.au/dp/B0GSQQMS4M"
       ],
       "notes": "Catalogue describes sequel novel to Drink. Verify and make that relationship explicit, not sameAs.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "music-drink-ost",
@@ -559,7 +559,7 @@
         "https://open.spotify.com/album/42zZtz4npdYAkaFBa8fZtg"
       ],
       "notes": "Album product, separate from the game. Only use verified track/release/credit details.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "music-billions-of-years",
@@ -571,7 +571,7 @@
         "https://open.spotify.com/album/5VdeivtOdHyPniSFIBlTEE"
       ],
       "notes": "Only enrich beyond the current minimal catalogue description when public album metadata supports it.",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "music-tower-defense-pack-ost",
@@ -583,7 +583,7 @@
         "https://open.spotify.com/album/0suDmn5Oj3Uwx6Tt1ghtiS"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "music-lofi-and-chill-pack-ost",
@@ -595,7 +595,7 @@
         "https://open.spotify.com/album/0VxBtatSWXbnCt5oPW1t3F"
       ],
       "notes": "",
-      "pageModified": "2026-09-23"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-breakfast-beat-down",
@@ -607,7 +607,7 @@
         "https://samfa12.com/games/breakfast-beat-down/play/"
       ],
       "notes": "Owner-supplied v0.2: Rush Hour Remix browser release. The first-party play URL identifies this hosted package, not a previously inspected live publication. Keep the original Breakfast Beat distinct. Hosting adds only canonical/noindex/favicon metadata; verify the remaining release bytes against the owner-supplied SHA-256.",
-      "pageModified": "2026-10-05"
+      "pageModified": "2026-10-23"
     },
     {
       "id": "game-banana-banana-ducky",
@@ -618,7 +618,7 @@
       "officialSources": [
         "https://samfa12.com/games/banana-banana-ducky/play/"
       ],
-      "pageModified": "2026-10-05",
+      "pageModified": "2026-10-23",
       "notes": "Owner-supplied v1.1 cartoon + touch package. First-party play URL identifies the copy prepared here, not an earlier live publication. Public copy contains only game information. No external storefront destination is asserted."
     },
     {
@@ -630,7 +630,7 @@
       "officialSources": [
         "https://samfa12.itch.io/towtal-chaos"
       ],
-      "pageModified": "2026-10-15",
+      "pageModified": "2026-10-23",
       "notes": "Owner-confirmed itch launch. Live listing and owner-supplied 0.3.1 notes support a playable HTML5 alpha. Promotional artwork is not a gameplay screenshot. No Android download, offline engine or device performance claim."
     },
     {
@@ -644,7 +644,7 @@
         "https://wavedash.com/games/reef-sweep"
       ],
       "notes": "Owner-supplied playable browser prototype with landscape touch feel approved after physical Android Chrome play. The implemented update is 0.2.0-preview.3; its local High shadow build has owner approval. Keep in development status and do not infer a public release date or third-party storefront. High-only depth-map shadows, saved/reapplied High quality, compact mobile footer, fullscreen control, portrait layout without forced pause, and Backbone One mapping/calibration are implemented and covered by automated Chromium validation; the USB Backbone controls have owner approval in Windows Chrome; physical acceptance of revised portrait and fullscreen behavior remains outstanding. iPhone/Safari compatibility, sustained performance and full natural-campaign acceptance remain outstanding. Game artwork remains procedural prototype art. The v0.3.0-preview.1 update adds three authored sites, per-site recovery across productive completed visits, animated wildlife and arms, and a wrist computer with optional HUD air/time. Its exact distribution passed source/package and Chromium gameplay/render checks. Publication was explicitly authorized on 2026-10-14; physical phone/controller acceptance of the new watch/sites, sustained performance and natural campaign pacing remain unverified. The v0.4.0-preview.1 campaign update is a review candidate only: canonical source, correctness regressions, research gating, early reward/service rebalance, tutorial, events, recognition, Passage route, optional boats and shared disabled start analytics. Browser fixtures and short paired laptop GPU evidence are retained; physical acceptance and natural pacing remain manual. Do not infer publication from this review. Expedition candidate v0.5.0-preview.1 adds boat navigation, Blender skiff, touch fixes, mesh-continuous catches, size-aware economics, keepsakes, preparation/recipes and treatment. User authorized publication on 2026-10-15 after quality review; this local candidate still requires parent review. Physical phone acceptance is not claimed. Sam authorized publication of the combined 0.5.0-preview.3 audio, original Blender crew/water-entry and anatomical lionfish defensive-display update to samfa12.com and the existing Wavedash game on 2026-10-17. The local candidate passed 198 tests, 8 package checks and 76 muted browser assertions, including actual per-fish GPU colour/depth binding. Existing damage/save rules remain. Physical-phone/thermal acceptance and dedicated human Reef listening are not claimed. Sam confirmed the local audio, dive animation/transition and lionfish near display, then confirmed the corrected driving camera on 2026-10-17. Candidate 63d06883e6aae98146c092e8ea552859c359691e passed 201 tests, typecheck, 8 package checks and 26 additional camera browser checks. The tested preview.3 payload is frozen for the authorized release to both hosts. Physical-device/thermal certification remains unclaimed.",
-      "pageModified": "2026-10-21"
+      "pageModified": "2026-10-23"
     }
   ],
   "directories": [

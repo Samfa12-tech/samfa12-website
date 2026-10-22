@@ -4,7 +4,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "An 1890s Victorian frontier life game with station work and a bushranger past. Android is listed on Google Play; the itch browser build remains in development.",
+    "description": "Make a new life in an 1890s Victorian river town, with station work and a bushranger past. Play on Android through Google Play, or try the browser build still in development on itch.io.",
     "tags": [
       "Game",
       "Adventure",
@@ -77,7 +77,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A night-shift simulation of cafe operations in a stylized, humorous setting with service pacing, atmosphere, and progression, now live on Google Play.",
+    "description": "Take the night shift as a possum barista. Serve drinks and treats to animal customers through quiet moments and café rushes. Available on Google Play.",
     "tags": [
       "Game",
       "Arcade",
@@ -204,7 +204,7 @@
     "category": "Games",
     "type": "Browser game",
     "status": "Playable",
-    "description": "A semi rogue-lite browser action game built in Babylon.js. Cut through cursed waves, survive each run, upgrade, and push further on phone or computer.",
+    "description": "Cut through cursed garden beds, survive the rootlings and upgrade between runs in this browser action game for phone or computer.",
     "tags": [
       "Game",
       "Browser",
@@ -271,7 +271,7 @@
     "category": "Apps & Tools",
     "type": "Web app",
     "status": "Published",
-    "description": "The Pocket Audio songwriting hub for sketching progressions, MIDI ideas, exports, and game-audio handoff workflows.",
+    "description": "Sketch chord progressions, beats, melodies and guitar parts in your browser, then export your idea or take it into Pocket DAW.",
     "tags": [
       "Music",
       "Web Audio",
@@ -356,7 +356,7 @@
     "category": "Apps & Tools",
     "type": "Static transfer helper",
     "status": "Published",
-    "description": "A static samfa12.com helper for moving Pocket Chordsmith PCS1 songs between phone, desktop Pocket DAW, and the Godot addon without a server-side relay.",
+    "description": "Move Pocket Chordsmith PCS1 songs between your phone, Pocket DAW and the Godot addon, without a server-side relay.",
     "tags": [
       "Music",
       "Pocket Audio",
@@ -390,7 +390,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A compact tactical tower-defense game using bite-sized levels and progressively harder enemy patterns. Featured in Samfa12's TD Pack.",
+    "description": "Build paths and place bug-themed towers across compact garden levels. Also included in Samfa12’s TD Pack on Android.",
     "tags": [
       "Game",
       "Tower Defense",
@@ -418,7 +418,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A rhythm-forward game centered on timing, progression, and playful challenge. Featured in Samfa12's TD Pack.",
+    "description": "Defend the breakfast line with food-themed towers that turn your layout into a musical grid. Also included in Samfa12’s TD Pack.",
     "tags": [
       "Game",
       "Rhythm",
@@ -474,7 +474,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A playful jump-and-run challenge built around momentum, obstacle timing, and short-form progression.",
+    "description": "Charge your jump, pick your moment and climb through hazards and collectibles towards the carrot moon.",
     "tags": [
       "Game",
       "Platformer",
@@ -549,7 +549,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "An arcade survival game with high-impact movement and escalating risk-reward decisions.",
+    "description": "Clean, fill and pull cartoon teeth against the clock in a very silly browser score-attack game.",
     "tags": [
       "Game",
       "Arcade",
@@ -573,7 +573,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Prototype",
-    "description": "A quirky pinball-style prototype with quick scoring spikes and playful mechanics.",
+    "description": "Keep a live grenade bouncing and stop gremlins reaching the bottom of the board in this pinball prototype.",
     "tags": [
       "Game",
       "Pinball",
@@ -598,7 +598,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Prototype",
-    "description": "A sandboxy vehicle playground prototype with quirky controls, experimental builds, and fast iteration loops.",
+    "description": "Draw an odd little vehicle, glue or weld the parts together, then see whether it survives a bumpy physics track. Still a prototype.",
     "tags": [
       "Game",
       "Experimental",
@@ -792,7 +792,7 @@
     "category": "Storefronts",
     "type": "Developer listing",
     "status": "Published",
-    "description": "A publisher page listing Samfa12's Android games, tools, and experiments in one Google Play collection.",
+    "description": "Find my Android games and tools on Google Play.",
     "tags": [
       "Android",
       "Creator",
@@ -815,7 +815,7 @@
     "category": "Storefronts",
     "type": "Author page",
     "status": "Published",
-    "description": "Amazon author page for Samfa12 novels, ebooks, and related book releases.",
+    "description": "Find my novels and ebooks on Amazon.",
     "tags": [
       "Books",
       "Storefront",
@@ -838,7 +838,7 @@
     "category": "Storefronts",
     "type": "Asset library profile",
     "status": "Published",
-    "description": "Godot Asset Library listings for Samfa12 tools, add-ons, and workflow helpers.",
+    "description": "Find my Godot tools and addons in the Asset Library.",
     "tags": [
       "Godot",
       "Assets",
@@ -861,7 +861,7 @@
     "category": "Storefronts",
     "type": "Artist profile",
     "status": "Available",
-    "description": "Samfa12's Spotify artist profile with released music, albums, and soundtrack entries.",
+    "description": "Listen to my albums and game soundtracks on Spotify.",
     "tags": [
       "Music",
       "Streaming",
@@ -884,7 +884,7 @@
     "category": "Storefronts",
     "type": "Publisher page",
     "status": "Published",
-    "description": "Steam storefront entries for Samfa12 releases and demos.",
+    "description": "Find my games and demos on Steam.",
     "tags": [
       "Games",
       "Storefront",
@@ -932,7 +932,7 @@
     "category": "Games",
     "type": "Android chill pack",
     "status": "Published",
-    "description": "A Google Play collection of small calming scenes including Fish Tank, Ant Farm and Moon Mower; the listing describes a growing set of experiences.",
+    "description": "A growing Android collection of small, calming scenes, including Fish Tank, Ant Farm and Moon Mower.",
     "tags": [
       "Game",
       "Android",
@@ -957,7 +957,7 @@
     "category": "Games",
     "type": "Android game",
     "status": "Published",
-    "description": "A neon action arcade game from Samfa12, with a major update just released on Google Play.",
+    "description": "Pilot a vector drone through neon arenas, survive the waves and spend your credits on upgrades, with music powered by Pocket Chordsmith.",
     "tags": [
       "Game",
       "Android",
@@ -1077,7 +1077,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A short-form arcade game with quirky mechanics, repeated loops, and playful progression. Featured in Samfa12's Lofi and Chill Pack.",
+    "description": "Mow an overgrown moon, free trapped spirits and chase a high score before time runs out. Also included in Samfa12’s Lofi and Chill Pack.",
     "tags": [
       "Game",
       "Arcade",
@@ -1106,7 +1106,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A low-poly voxel world game centered on fish-care progression and ambient simulation rhythm. Featured in Samfa12's Lofi and Chill Pack.",
+    "description": "Decorate a voxel aquarium and watch fish, crabs, snails and shrimp settle in. No score, no fail state. Also included in Samfa12’s Lofi and Chill Pack.",
     "tags": [
       "Game",
       "Voxel",
@@ -1160,7 +1160,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A simulation game focused on colony growth, maintenance rhythms, and scalable growth mechanics. Featured in Samfa12's Lofi and Chill Pack.",
+    "description": "Watch a tiny ant colony dig and forage, drop food and suggest new tunnels. Also included in Samfa12’s Lofi and Chill Pack.",
     "tags": [
       "Game",
       "Simulation",
@@ -1245,7 +1245,7 @@
     "category": "Books",
     "type": "The Good Home novels — Book 1",
     "status": "Published",
-    "description": "The first Good Home novel: a grounded contemporary story about care, belonging, family pressure, and the consequences of trying to do the right thing.",
+    "description": "A contemporary Australian story about a caravan-park holiday, a boy nobody seems to be looking after, and the cost of noticing.",
     "tags": [
       "Narrative",
       "Drama",
@@ -1271,7 +1271,7 @@
     "category": "Books",
     "type": "The Good Home novels — Book 2",
     "status": "Published",
-    "description": "The second Good Home novel, about independence, family, support, and finding a place that can actually hold you.",
+    "description": "The sequel to Free to a Good Home, about independence, family, support and finding a place that can actually hold you.",
     "tags": [
       "Narrative",
       "Fiction",
@@ -1374,7 +1374,7 @@
     "category": "Music",
     "type": "Artist profile",
     "status": "Available",
-    "description": "Samfa12's official Spotify artist page with released music and artist updates.",
+    "description": "Listen to my released music and albums on Spotify.",
     "tags": [
       "Music",
       "Streaming",
@@ -1425,7 +1425,7 @@
     "category": "Music",
     "type": "Album",
     "status": "Published",
-    "description": "Samfa12 album release on Spotify.",
+    "description": "Listen to Billions of Years on Spotify.",
     "tags": [
       "Music",
       "Album"
@@ -1497,7 +1497,7 @@
     "category": "Music",
     "type": "Music search",
     "status": "Available",
-    "description": "A searchable music hub entry for Samfa12 tracks and releases on YouTube Music.",
+    "description": "Find my tracks and releases on YouTube Music.",
     "tags": [
       "Music",
       "Streaming",
@@ -1520,7 +1520,7 @@
     "category": "Social",
     "type": "Profile",
     "status": "Published",
-    "description": "A public landing view for source repositories, releases, and development history across Samfa12 projects.",
+    "description": "Explore the source code, releases and development history of my projects.",
     "tags": [
       "Code",
       "Repos",
@@ -1542,7 +1542,7 @@
     "category": "Social",
     "type": "Profile",
     "status": "Published",
-    "description": "A concise channel for updates, experiments, and release notes.",
+    "description": "Follow along for game clips, experiments and development updates.",
     "tags": [
       "Social",
       "Updates"
@@ -1563,7 +1563,7 @@
     "category": "Social",
     "type": "Profile",
     "status": "Published",
-    "description": "Community posting and updates on projects, work sessions, and announcements.",
+    "description": "Follow my projects and announcements on Facebook.",
     "tags": [
       "Community",
       "Social"
@@ -1584,7 +1584,7 @@
     "category": "Social",
     "type": "Profile",
     "status": "Published",
-    "description": "A forum profile for sharing development discussions and creator experiences.",
+    "description": "Find my development discussions and posts on Reddit.",
     "tags": [
       "Community",
       "Forums"
@@ -1605,7 +1605,7 @@
     "category": "Social",
     "type": "Channel",
     "status": "Published",
-    "description": "Official Samfa12 YouTube channel for videos, uploads, and creator updates.",
+    "description": "Watch my game videos and project updates on YouTube.",
     "tags": [
       "Video",
       "Channel",
@@ -1627,7 +1627,7 @@
     "category": "Storefronts",
     "type": "Publisher page",
     "status": "Published",
-    "description": "The central Samfa12 storefront entry for game demos, browser builds, and releases.",
+    "description": "Play browser games, try demos and download my releases on itch.io.",
     "tags": [
       "Games",
       "Storefront"
