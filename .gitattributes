@@ -16,3 +16,6 @@ games/reef-sweep/play/** -text
 /game-sources/reef-sweep/**/*.webm -text
 
 /game-sources/reef-sweep/vendor/** linguist-vendored
+
+# Preserve the exact verified What Would Win release across platform checkouts.
+/apps/what-would-win/** -text
