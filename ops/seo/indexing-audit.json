@@ -3391,11 +3391,13 @@
       "inSitemap": true,
       "incoming": [
         "/apps/",
-        "/games/"
+        "/games/",
+        "/updates/"
       ],
       "incomingMain": [
         "/apps/",
-        "/games/"
+        "/games/",
+        "/updates/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
