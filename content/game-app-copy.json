@@ -394,11 +394,18 @@
     "updates": []
   },
   "app-what-would-win": {
-    "intro": "What Would Win is a mock-serious text simulator for one creature against another or a group. A numerical model determines the result, with seeded Monte Carlo variation. Generated narration tells the story; it doesn't choose the winner.",
+    "intro": "One horse-sized duck or a hundred duck-sized horses? Pick a suggested matchup or build your own, set the scene, and read the battle story. The model estimates who wins; the written account explains why.",
     "details": [
       {
+        "heading": "Read the battle, then change the odds",
+        "text": "Follow the opening, turning point and finish, with the reasons behind the result and the other side's best chance. The story is an illustrative reconstruction, not a replay of an individual trial. Change the environment, double the group or try the model's approximate 50/50 group size when one is available.",
+        "sources": [
+          "https://github.com/Samfa12-tech/What-Would-Win"
+        ]
+      },
+      {
         "heading": "A simulator, not a prediction authority",
-        "text": "Creature profiles, abilities and counters feed the numerical simulation. The model and random variation determine the result, not the generated text. Treat it as a matchup simulator, not a scientific prediction of a real-world fight.",
+        "text": "Creature profiles, sizes, abilities and battlefield conditions shape the numerical result. The story explains that result without choosing or changing the winner. Every percentage is an estimate in this entertainment model, not a real-world prediction. Deep dive keeps the detailed calculations and sources available.",
         "sources": [
           "https://github.com/Samfa12-tech/What-Would-Win"
         ]
