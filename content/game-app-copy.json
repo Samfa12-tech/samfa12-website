@@ -434,7 +434,21 @@
         ]
       }
     ],
-    "updates": []
+    "updates": [
+      {
+        "id": "what-would-win-091-story-first-20261023",
+        "kind": "release",
+        "date": "2026-10-23",
+        "dateMeaning": "Samfa12.com deployment date (UTC)",
+        "title": "0.9.1: Written battles, presets and next experiments",
+        "summary": "Suggested matchups now lead Simple mode, followed by a full matchup verdict and a written opening, turning point and finish. Percentages are labelled as model estimates. Change the environment, double the group or try an approximate 50/50 group size when available. The animated battle view is retired. Model 0.5.0, data 0.6.0, profiles, saves and share formats are unchanged.",
+        "platform": "Browser",
+        "sources": [
+          "https://samfa12.com/apps/what-would-win/",
+          "https://github.com/Samfa12-tech/What-Would-Win/commit/2b6ca912ff2d96882878193633b3269f253fc60e"
+        ]
+      }
+    ]
   },
   "app-pocket-chordsmith": {
     "seoTitle": "Pocket Chordsmith browser music sketchpad",
