@@ -6,10 +6,10 @@
   "path": "/games/briarhold/play/",
   "metric": "game-page-requests",
   "count": 21,
-  "updatedAt": "2026-10-23T06:02:42.246Z",
+  "updatedAt": "2026-10-24T05:54:51.917Z",
   "period": {
-    "start": "2026-10-16T00:00:00.000Z",
-    "end": "2026-10-23T00:00:00.000Z",
+    "start": "2026-10-17T00:00:00.000Z",
+    "end": "2026-10-24T00:00:00.000Z",
     "timeZone": "UTC"
   }
 }
