@@ -28,6 +28,24 @@
         "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
       }
     ],
+    "cardLinks": [
+      {
+        "url": "https://samfa12.itch.io/dust-on-the-river",
+        "label": "Play on itch.io"
+      },
+      {
+        "label": "View on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver"
+      },
+      {
+        "label": "View or purchase novelisation on Amazon",
+        "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
+      },
+      {
+        "label": "Play on Wavedash",
+        "url": "https://wavedash.com/games/dust-on-the-river"
+      }
+    ],
     "sortOrder": 0,
     "thumbnail": "assets/thumbnails/dust-on-the-river-b9a9e3.png",
     "thumbnailAlt": "Cover image for Dust on the River",
