@@ -320,6 +320,26 @@
       "combined": {
         "paidUnits": 288
       }
+    },
+    {
+      "capturedAt": "2026-10-25T22:59:34.960Z",
+      "itch": {
+        "views": 5720,
+        "downloads": 171,
+        "purchases": 2
+      },
+      "steam": {
+        "netUnits": 27
+      },
+      "googlePlay": {
+        "netPaidAppPurchases": 243
+      },
+      "amazon": {
+        "netUnits": 17
+      },
+      "combined": {
+        "paidUnits": 289
+      }
     }
   ]
 }
