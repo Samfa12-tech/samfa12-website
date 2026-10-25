@@ -514,6 +514,116 @@
       "textSha256": "15b0ee40f4ad3e809557e0854f7e64691db8e74dedce713091a55ac787d95788",
       "scheduledAt": "2026-10-18T10:23:54.433Z",
       "dueAt": "2026-10-24T06:15:00.000Z"
+    },
+    {
+      "id": "breakfast-beatdown-v02-1",
+      "project": "Breakfast Beat-down",
+      "category": "Games",
+      "date": "2026-10-26",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4c3d5b27036bca2700",
+      "textSha256": "8166a6968392d911a09a744ed9d3100066410262f390a50ff8cd6ca541b3c704",
+      "scheduledAt": "2026-10-25T10:43:24.372Z",
+      "dueAt": "2026-10-25T21:15:00.000Z"
+    },
+    {
+      "id": "www-story-1",
+      "project": "What Would Win",
+      "category": "Web development",
+      "date": "2026-10-27",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4c6887a2efc1fe381e",
+      "textSha256": "f7411b1f4f0a821998b9da176fda3a5a9000d3c525752bd679efbd5dcba513f0",
+      "scheduledAt": "2026-10-25T10:43:24.512Z",
+      "dueAt": "2026-10-26T21:15:00.000Z"
+    },
+    {
+      "id": "reef-sweep-loop-1",
+      "project": "Reef Sweep",
+      "category": "Games",
+      "date": "2026-10-28",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4cbd33ce99c368e2bc",
+      "textSha256": "530253e88f683cc48ab0b94ecf7a357960b927a40f6d61a1083978088820bb75",
+      "scheduledAt": "2026-10-25T10:43:24.658Z",
+      "dueAt": "2026-10-27T21:15:00.000Z"
+    },
+    {
+      "id": "chordsmith-campfire-controls-1",
+      "project": "Pocket Chordsmith",
+      "category": "Web development",
+      "date": "2026-10-29",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4dbd33ce99c368e2ec",
+      "textSha256": "4b28d5ceba07e68c2e9bf762f637cfbd262d7e0442faa15c6c4008adb23752b8",
+      "scheduledAt": "2026-10-25T10:43:25.351Z",
+      "dueAt": "2026-10-28T21:15:00.000Z"
+    },
+    {
+      "id": "briarhold-pressure-1",
+      "project": "Briarhold",
+      "category": "Games",
+      "date": "2026-10-30",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4dbd33ce99c368e31d",
+      "textSha256": "1cf4bc4ed129e7d35d5e1f2fe43b12fa8cc6d2c44a99af321d67448422c8952e",
+      "scheduledAt": "2026-10-25T10:43:25.528Z",
+      "dueAt": "2026-10-29T21:15:00.000Z"
+    },
+    {
+      "id": "wall-live-1",
+      "project": "The Wall that Lied",
+      "category": "Books",
+      "date": "2026-10-31",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4d8b3d437ddc02303a",
+      "textSha256": "e033738ca8664fd783f2571d6c05096022987070de01603d880be4303c13e7d4",
+      "scheduledAt": "2026-10-25T10:43:25.670Z",
+      "dueAt": "2026-10-30T21:15:00.000Z"
+    },
+    {
+      "id": "party-bus-rust-mile-1",
+      "project": "P.A.R.T.Y. Bus: Wasteland Run",
+      "category": "Games",
+      "date": "2026-11-01",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4d8b3d437ddc023088",
+      "textSha256": "c6e0422fdcf823261014b8209b3033f505fcdc321d803452a9ec22f24996f02e",
+      "scheduledAt": "2026-10-25T10:43:25.875Z",
+      "dueAt": "2026-10-31T21:15:00.000Z"
+    },
+    {
+      "id": "reef-sweep-preview3-1",
+      "project": "Reef Sweep",
+      "category": "Games",
+      "date": "2026-10-27",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4d3d5b27036bca2759",
+      "textSha256": "91aa898fdeffd775d77a2e9a29d525a4a4f65b1aa8357696418e14f00aa593d7",
+      "scheduledAt": "2026-10-25T10:43:26.007Z",
+      "dueAt": "2026-10-27T06:15:00.000Z"
+    },
+    {
+      "id": "reckless-dentist-1",
+      "project": "Reckless Dentist",
+      "category": "Games",
+      "date": "2026-10-29",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4ee4be8a4d86a1daff",
+      "textSha256": "5eef218615b108dd9b721a45f89ea07e58dc2984602db5c10cd0d8f2d7ac6700",
+      "scheduledAt": "2026-10-25T10:43:26.146Z",
+      "dueAt": "2026-10-29T06:15:00.000Z"
+    },
+    {
+      "id": "dust-free-paid-1",
+      "project": "Dust on the River",
+      "category": "Games",
+      "date": "2026-10-31",
+      "status": "scheduled",
+      "bufferPostId": "6adddd4e3d5b27036bca2782",
+      "textSha256": "95fc744adbd208f0c9d0cb81ab67640fbbca32c2483d696550ee95652b5fd3f4",
+      "scheduledAt": "2026-10-25T10:43:26.300Z",
+      "dueAt": "2026-10-31T06:15:00.000Z"
     }
   ]
 }
