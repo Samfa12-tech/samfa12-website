@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-19T04:35:26.683Z",
+  "generatedAt": "2026-10-25T22:53:56Z",
   "totals": {
     "itch": {
       "views": 5483,
@@ -18,11 +18,11 @@
       "netPaidAppPurchases": 242
     },
     "amazon": {
-      "netUnits": 16,
+      "netUnits": 17,
       "pagesRead": 2807
     },
     "combined": {
-      "paidUnits": 287
+      "paidUnits": 288
     }
   },
   "change": {
@@ -33,16 +33,16 @@
         "purchases": 0
       },
       "steam": {
-        "netUnits": 8
+        "netUnits": 0
       },
       "googlePlay": {
         "netPaidAppPurchases": 0
       },
       "combined": {
-        "paidUnits": 8
+        "paidUnits": 1
       },
       "amazon": {
-        "netUnits": 0
+        "netUnits": 1
       }
     }
   },
@@ -386,6 +386,11 @@
       },
       {
         "title": "ToKnight",
+        "netUnits": 1,
+        "pagesRead": 0
+      },
+      {
+        "title": "ToKnight 2: The Fire Beneath",
         "netUnits": 1,
         "pagesRead": 0
       }
