@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "posts": {
+    "www-story-1": {
+      "reviewedAt": "2026-10-25",
+      "status": "Released hosted browser update 0.9.1 on 23 October 2026. Percentages remain model estimates; simulation model/data unchanged.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/commit/0c7a33353ff5080e89fde12037eef7427b717439",
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/game-app-copy.json"
+      ],
+      "rationale": "Refresh an unused broad battle-story post into a concrete experiment with environment and group size; preserve stable ID.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only; no verified visual selected for this post."
+      },
+      "validation": {
+        "rawCharacters": 280,
+        "xWeightedCharacters": 263,
+        "method": "ASCII-only copy; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "chordsmith-campfire-controls-1": {
+      "reviewedAt": "2026-10-25",
+      "status": "Released v70 browser build dated 16 October; newly documented on website 22 October. Campfire major/minor voicings, strum/pick and MIDI/WAV exports are available. Mixed Campfire/amp live playback is unsupported; offline WAV export supports it.",
+      "sources": [
+        "https://samfa12.itch.io/pocket-chordsmith/devlog/1711196/pocket-chordsmith-v70-campfire-guitar-ab-previews-and-new-themes",
+        "https://github.com/Samfa12-tech/samfa12-website/commit/fa35e2af37f2d66477965c0509848f96c1259aae"
+      ],
+      "rationale": "Focus on a musical performance choice, distinct from recent DAW comparison and Godot-addon posts.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only; no verified visual selected for this post."
+      },
+      "validation": {
+        "rawCharacters": 275,
+        "xWeightedCharacters": 255,
+        "method": "ASCII-only copy; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "site-catalogue-fallback-1": {
+      "reviewedAt": "2026-10-25",
+      "status": "Merged website improvement on 19 October 2026. Source includes saved-card filtering and failure/retry browser scenarios; no performance gain claimed and tests were not independently repeated in this editorial review.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/commit/d05487fbc4d359a716b6e220205923fd9964e382",
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/script.js",
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/tests/catalogue-fallback-browser.py"
+      ],
+      "rationale": "One reliability problem and visitor benefit rather than repeating the general static-site catalogue pitch.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only; no verified visual selected for this post."
+      },
+      "validation": {
+        "rawCharacters": 256,
+        "xWeightedCharacters": 259,
+        "method": "ASCII-only copy; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    }
+  },
+  "manualCandidates": {
+    "reef-watch-demo-20261025": {
+      "reviewedAt": "2026-10-25",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/game-app-copy.json",
+        "https://samfa12.com/games/reef-sweep/"
+      ],
+      "status": "Current playable demo v0.5.0-preview.3. Full-game town and arrival previews are separate and not included in the demo.",
+      "media": {
+        "asset": "https://samfa12.com/assets/reef-sweep-gallery/demo-first-dive-1280.webp",
+        "repositoryPath": "assets/reef-sweep-gallery/demo-first-dive-1280.webp",
+        "verified": "Downloaded and visually inspected 25 October 2026: actual first-person gameplay with reef, spear, wrist dive computer and tutorial visible.",
+        "publishing": "Manual attachment required; social-post.mjs sends text only. No attachment has been queued."
+      },
+      "proposedText": "Your air supply lives on your wrist in Reef Sweep. Raise the watch to check depth, air and return reserve without losing sight of the reef. It's in the playable demo; the full campaign is in development. https://samfa12.com/games/reef-sweep/ #GameDesign #IndieGames",
+      "rationale": "A visible design choice with a clear player benefit. Keep separate from general Reef Sweep posts.",
+      "approval": "Manual suggestion only; not in content-bank.json. Check recent manual X posts and the live queue before posting."
+    }
+  },
+  "withheld": {
+    "horde-mobile-performance-20261025": {
+      "reason": "No new measured public-release evidence reviewed; experimental resolutions or local optimisation work must not become released performance claims."
+    },
+    "article18-editorial-release-20261025": {
+      "reason": "Editorial work alone does not verify revised storefront files are publicly released; its formats post was recently scheduled."
+    }
+  }
+}
