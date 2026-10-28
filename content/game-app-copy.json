@@ -212,6 +212,19 @@
     ],
     "updates": [
       {
+        "id": "last-guard-wavedash-release-october-2026",
+        "kind": "release",
+        "date": "2026-10-17",
+        "dateMeaning": "Wavedash listing release date",
+        "title": "The Last Guard joins Wavedash as a free browser game",
+        "summary": "The Last Guard is available to play free in the browser on Wavedash. Defend the fortress wall against a huge orc horde, manage a belt-fed gun's heat, call artillery and spend banked scrap on better weapons and defences. The 2k, 6k and 14k army settings are normal play profiles; 28k and 40k are stress tests. Keyboard, mouse and touch controls are supported; controllers remain experimental.",
+        "platform": "HTML5 browser on Wavedash",
+        "sources": [
+          "https://wavedash.com/games/the-last-guard",
+          "https://samfa12.itch.io/the-last-guard"
+        ]
+      },
+      {
         "id": "last-guard-alpha-15-september-2026",
         "kind": "release",
         "date": "2026-09-27",
@@ -1786,6 +1799,20 @@
       }
     ],
     "updates": [
+      {
+        "id": "reef-sweep-full-wavedash-campaign-october-2026",
+        "kind": "release",
+        "date": "2026-10-28",
+        "dateMeaning": "Samfa12.com campaign availability announcement date (Australia/Sydney)",
+        "title": "Full campaign arrives on Wavedash; early website demo stays available",
+        "summary": "Reef Sweep's full Lantern Bay campaign is now available on Wavedash. Take the skiff to new dive sites, hunt invasive lionfish, help restore reefs and build a life around the coastal community. The separate free browser demo on Samfa12.com is an earlier five-site build, not the full campaign. Keep those versions and their saves distinct when trying them.",
+        "platform": "Wavedash browser campaign; separate early website demo",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep",
+          "https://samfa12.com/games/reef-sweep/",
+          "https://samfa12.com/games/reef-sweep/play/"
+        ]
+      },
       {
         "id": "reef-sweep-v0-5-preview-3-october-2026",
         "kind": "release",
