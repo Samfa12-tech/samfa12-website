@@ -4,7 +4,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "Make a new life in an 1890s Victorian river town, with station work and a bushranger past. Play on Android through Google Play, or try the browser build still in development on itch.io.",
+    "description": "Make a new life in an 1890s Victorian river town, with station work and a bushranger past. Play in your browser on Wavedash or on Android through Google Play.",
     "tags": [
       "Game",
       "Adventure",
@@ -26,6 +26,10 @@
       {
         "label": "View or purchase novelisation on Amazon",
         "url": "https://www.amazon.com.au/dp/B0H7QQQXBN"
+      },
+      {
+        "label": "Play on Wavedash",
+        "url": "https://wavedash.com/games/dust-on-the-river"
       }
     ],
     "cardLinks": [
@@ -1789,7 +1793,7 @@
     "type": "Game",
     "cardLabel": "Full campaign on Wavedash",
     "status": "Full campaign available on Wavedash",
-    "description": "Dive for invasive lionfish, help restore the reefs around Lantern Bay, then bring your catch home, prepare it and get to know the coastal community. Play the full game free on Wavedash.",
+    "description": "Take your skiff out from Lantern Bay, dive for invasive lionfish and help the reef recover. Bring your catch home, prepare it and get to know the coastal community. Play free on Wavedash.",
     "tags": [
       "First-person",
       "Reef conservation",

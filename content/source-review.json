@@ -15,6 +15,13 @@
           "url": "https://samfa12.itch.io/dust-on-the-river",
           "identity": "samfa12.itch.io /dust-on-the-river",
           "access": "read-public-source"
+        },
+        {
+          "url": "https://wavedash.com/games/dust-on-the-river",
+          "identity": "Dust on the River public Wavedash game listing",
+          "access": "read-public-source",
+          "reviewedAt": "2026-10-28",
+          "notes": "HTTP 200 public listing identifies Dust on the River and offers browser play."
         }
       ]
     },
