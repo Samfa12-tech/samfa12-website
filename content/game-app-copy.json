@@ -212,6 +212,18 @@
     ],
     "updates": [
       {
+        "id": "last-guard-alpha-20-wavedash-october-2026",
+        "kind": "release",
+        "date": "2026-10-28",
+        "dateMeaning": "Wavedash listing observation date (UTC)",
+        "title": "Alpha.20 on Wavedash",
+        "summary": "The Wavedash listing identifies the current build as Alpha.20, with touch controls, steep aim and cooling settings.",
+        "platform": "HTML5 browser on Wavedash",
+        "sources": [
+          "https://wavedash.com/games/the-last-guard/patch-notes"
+        ]
+      },
+      {
         "id": "last-guard-wavedash-release-october-2026",
         "kind": "release",
         "date": "2026-10-17",
@@ -1743,25 +1755,25 @@
       "src": "/assets/audio/reef-sweep-island-theme.wav"
     },
     "seoTitle": "Reef Sweep · Full campaign on Wavedash",
-    "intro": "Dive for invasive lionfish, help restore the reefs around Lantern Bay, then bring your catch home, prepare it and get to know the coastal community. Play the full campaign on Wavedash, or try the separate early browser demo here.",
+    "intro": "Dive for invasive lionfish, help restore the reefs around Lantern Bay, then bring your catch home, prepare it and get to know the coastal community. Play the full game free on Wavedash.",
     "details": [
       {
         "heading": "Head out. Dive in. Make room for life.",
         "text": "Choose a dive site, follow the reef and find your next lionfish. Move close, steady your aim and draw the pole spear. Secure each catch before moving on, and watch your air so you can make it back to the boat.",
         "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
+          "https://wavedash.com/games/reef-sweep"
         ]
       },
       {
-        "heading": "What you can play in the demo",
-        "text": "Explore five dive sites, clear abandoned fishing gear, plant coral and record surveys. Bring your catch back to prepare, sell or donate, then spend your earnings on better diving gear. Local contracts, reef recovery and night dives give you reasons to head out again.",
+        "heading": "The earlier website demo",
+        "text": "The earlier website demo included five dive sites, reef activities, catch preparation and equipment upgrades. It has since been retired as a public play route.",
         "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
+          "https://github.com/Samfa12-tech/samfa12-website/tree/76cc3ba005682584922fdd4759d91d571ebb1728/games/reef-sweep/play"
         ]
       },
       {
         "heading": "Life in Lantern Bay",
-        "text": "Start a new life in Lantern Bay, meet its residents and build a place for yourself between dives. The town and arrival images below are development previews; they are separate from the early website demo.",
+        "text": "Start a new life in Lantern Bay, meet its residents and build a place for yourself between dives. The town and arrival images below are development previews.",
         "sources": [
           "https://wavedash.com/games/reef-sweep"
         ]
@@ -1770,31 +1782,30 @@
     "faqs": [
       {
         "question": "Where can I play Reef Sweep?",
-        "answer": "Play the full campaign on Wavedash, or choose Play the early website demo for the separate earlier browser build.",
+        "answer": "Play the full game free in your browser on Wavedash. The earlier website demo has been retired.",
         "sources": [
-          "https://samfa12.com/games/reef-sweep/play/",
           "https://wavedash.com/games/reef-sweep"
         ]
       },
       {
         "question": "Where is my progress saved?",
-        "answer": "In the early website demo, progress stays in the browser you use. It offers three save slots and export and import options for backups. Automatic transfer between devices is not established.",
+        "answer": "The Wavedash game has its own progress. Cross-device recovery has not been verified.",
         "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
+          "https://wavedash.com/games/reef-sweep"
         ]
       },
       {
         "question": "Can I play on my phone?",
-        "answer": "The demo has touch controls for portrait and landscape play, plus keyboard/mouse and controller support. Phone performance varies; compatibility with every Android and iPhone browser has not been fully verified. On iPhone, check Silent Mode and media volume if there is no sound.",
+        "answer": "Reef Sweep is a browser game on Wavedash. Performance and compatibility vary by device and browser.",
         "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
+          "https://wavedash.com/games/reef-sweep"
         ]
       },
       {
         "question": "Is the game finished?",
-        "answer": "The full campaign is available on Wavedash. The early website demo is a separate earlier build with five dive sites and diving activities.",
+        "answer": "The full campaign is available free on Wavedash. The earlier website demo has been retired.",
         "sources": [
-          "https://samfa12.com/games/reef-sweep/play/"
+          "https://wavedash.com/games/reef-sweep"
         ]
       }
     ],
@@ -1804,8 +1815,8 @@
         "kind": "release",
         "date": "2026-10-28",
         "dateMeaning": "Samfa12.com campaign availability announcement date (Australia/Sydney)",
-        "title": "Full campaign arrives on Wavedash; early website demo stays available",
-        "summary": "Reef Sweep's full Lantern Bay campaign is now available on Wavedash. Take the skiff to new dive sites, hunt invasive lionfish, help restore reefs and build a life around the coastal community. The separate free browser demo on Samfa12.com is an earlier five-site build, not the full campaign. Keep those versions and their saves distinct when trying them.",
+        "title": "Full campaign arrives on Wavedash",
+        "summary": "Reef Sweep’s full Lantern Bay campaign is available on Wavedash. At the time of the announcement, an earlier website demo was also available; that demo has since been retired and its old play link now leads to Wavedash.",
         "platform": "Wavedash browser campaign; separate early website demo",
         "sources": [
           "https://wavedash.com/games/reef-sweep",
@@ -1853,9 +1864,9 @@
       "wide": "/assets/reef-sweep-title/reef-sweep-wide-on-dark-wave.svg",
       "stacked": "/assets/reef-sweep-title/reef-sweep-stacked-on-dark-wave.svg"
     },
-    "secondaryInfo": true,
-    "demoNotice": "The full campaign is available on Wavedash. The early website demo remains available separately.",
-    "metaDescription": "Explore Lantern Bay, hunt invasive lionfish and help restore the reef in Reef Sweep. Play the full campaign on Wavedash or try the early browser demo.",
+    "secondaryInfo": false,
+    "demoNotice": "The earlier website demo has been retired. Play the full game free on Wavedash.",
+    "metaDescription": "Explore Lantern Bay, hunt invasive lionfish and help restore the reef in Reef Sweep. Play the full game free on Wavedash.",
     "technicalDetails": [
       {
         "heading": "Explore Lantern Bay in the current demo",
@@ -1920,12 +1931,12 @@
       "width": 1280,
       "height": 800,
       "alt": "First-person diving among coral and fish in Sunlit Gardens, with the pole spear and dive watch visible.",
-      "caption": "Start with a practice dive in Sunlit Gardens.",
-      "label": "Current playable demo · v0.5.0-preview.3"
+      "caption": "A practice dive from the earlier website demo.",
+      "label": "Earlier website demo · v0.5.0-preview.3"
     },
     "gallery": {
-      "title": "A look at the demo",
-      "intro": "Actual in-game screenshots. The hero image shows the current v0.5.0-preview.3 practice dive. The three expedition captures below are from the earlier released v0.5.0-preview.1 demo, so some artwork and interface details differ.",
+      "title": "Earlier demo captures",
+      "intro": "Historical in-game screenshots from the retired website demo. Artwork and interface details differ from the full campaign.",
       "images": [
         {
           "src": "/assets/reef-sweep-gallery/demo-manual-catch-1280.webp",
