@@ -12,20 +12,22 @@
       },
       {
         "heading": "Work, ride and explore",
-        "text": "Take station jobs, move livestock, ride between Crossing and nearby stations, fish and pan for gold in the Android game. Eat, rest and save your progress along the way. The browser build on itch.io is unfinished and still in development, so the two versions are at different stages.",
+        "text": "Take station jobs, move livestock, ride between Crossing and nearby stations, fish and pan for gold in the Android game. Play in your browser on Wavedash, or find the Android version on Google Play. The older itch.io browser build remains unfinished.",
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
-          "https://samfa12.itch.io/dust-on-the-river"
+          "https://samfa12.itch.io/dust-on-the-river",
+          "https://wavedash.com/games/dust-on-the-river"
         ]
       }
     ],
     "faqs": [
       {
         "question": "Where can I play?",
-        "answer": "Play the unfinished browser build on itch.io, or find the separate Android version on Google Play. Check the destination for details of the version you're choosing.",
+        "answer": "Play in your browser on Wavedash or find the Android version on Google Play. The older itch.io browser build remains unfinished.",
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
-          "https://samfa12.itch.io/dust-on-the-river"
+          "https://samfa12.itch.io/dust-on-the-river",
+          "https://wavedash.com/games/dust-on-the-river"
         ]
       }
     ],
@@ -1755,25 +1757,25 @@
       "src": "/assets/audio/reef-sweep-island-theme.wav"
     },
     "seoTitle": "Reef Sweep · Full campaign on Wavedash",
-    "intro": "Dive for invasive lionfish, help restore the reefs around Lantern Bay, then bring your catch home, prepare it and get to know the coastal community. Play the full game free on Wavedash.",
+    "intro": "Take your skiff out from Lantern Bay and dive beneath the waves. Hunt invasive lionfish, help the reef recover, then bring your catch home to prepare. Between dives, get to know the people who call the bay home. Play free in your browser on Wavedash.",
     "details": [
       {
-        "heading": "Head out. Dive in. Make room for life.",
-        "text": "Choose a dive site, follow the reef and find your next lionfish. Move close, steady your aim and draw the pole spear. Secure each catch before moving on, and watch your air so you can make it back to the boat.",
+        "heading": "Dive into the reef",
+        "text": "Choose a dive site, head out in your skiff and look for lionfish among the coral. Keep an eye on your air, aim your pole spear and secure your catch before returning to the boat.",
         "sources": [
           "https://wavedash.com/games/reef-sweep"
         ]
       },
       {
-        "heading": "The earlier website demo",
-        "text": "The earlier website demo included five dive sites, reef activities, catch preparation and equipment upgrades. It has since been retired as a public play route.",
+        "heading": "Bring your catch home",
+        "text": "Back ashore, prepare your catch and decide what to do with it. There is always another reason to head back out on the water.",
         "sources": [
-          "https://github.com/Samfa12-tech/samfa12-website/tree/76cc3ba005682584922fdd4759d91d571ebb1728/games/reef-sweep/play"
+          "https://wavedash.com/games/reef-sweep"
         ]
       },
       {
-        "heading": "Life in Lantern Bay",
-        "text": "Start a new life in Lantern Bay, meet its residents and build a place for yourself between dives. The town and arrival images below are development previews.",
+        "heading": "Meet Lantern Bay",
+        "text": "Make a home on the coast and get to know the people of Lantern Bay between dives.",
         "sources": [
           "https://wavedash.com/games/reef-sweep"
         ]
@@ -1782,14 +1784,21 @@
     "faqs": [
       {
         "question": "Where can I play Reef Sweep?",
-        "answer": "Play the full game free in your browser on Wavedash. The earlier website demo has been retired.",
+        "answer": "Play the full game free in your browser on Wavedash.",
         "sources": [
           "https://wavedash.com/games/reef-sweep"
         ]
       },
       {
         "question": "Where is my progress saved?",
-        "answer": "The Wavedash game has its own progress. Cross-device recovery has not been verified.",
+        "answer": "The Wavedash game has its own progress. Moving saves between devices has not been verified.",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep"
+        ]
+      },
+      {
+        "question": "How do I control the game?",
+        "answer": "Use keyboard and mouse, touch controls or a controller. Performance and compatibility vary by device and browser.",
         "sources": [
           "https://wavedash.com/games/reef-sweep"
         ]
@@ -1803,7 +1812,7 @@
       },
       {
         "question": "Is the game finished?",
-        "answer": "The full campaign is available free on Wavedash. The earlier website demo has been retired.",
+        "answer": "The full campaign is free to play on Wavedash. The earlier Samfa12.com demo has been retired.",
         "sources": [
           "https://wavedash.com/games/reef-sweep"
         ]
@@ -1816,7 +1825,7 @@
         "date": "2026-10-28",
         "dateMeaning": "Samfa12.com campaign availability announcement date (Australia/Sydney)",
         "title": "Full campaign arrives on Wavedash",
-        "summary": "Reef Sweep’s full Lantern Bay campaign is available on Wavedash. At the time of the announcement, an earlier website demo was also available; that demo has since been retired and its old play link now leads to Wavedash.",
+        "summary": "The full Lantern Bay campaign is available on Wavedash. The earlier website demo has since been retired; its old link now takes you to the full game.",
         "platform": "Wavedash browser campaign; separate early website demo",
         "sources": [
           "https://wavedash.com/games/reef-sweep",
@@ -1830,7 +1839,7 @@
         "date": "2026-10-17",
         "dateMeaning": "Samfa12.com deployment date (UTC)",
         "title": "v0.5.0-preview.3 — crew, water entry and lionfish display",
-        "summary": "Menu and boat audio now start after interaction, with a speed-responsive engine. A visible pilot and diver accompany boat trips, followed by a short gear-check and backward-roll entry at the selected reef. Remodeled lionfish flare their fins and spines independently as the diver approaches, then relax on retreat. Driving starts behind the skiff with mouse, touch and controller camera control; the close cinematic view is limited to water entry. Existing saves and gameplay damage rules are preserved. Sam confirmed the local audio, entry, lionfish display and corrected driving camera. Physical-phone performance remains unverified.",
+        "summary": "The website demo added a crewed skiff, a short dive entry, new sounds and more lifelike lionfish. Sam tested and approved the changes; phone performance had not been verified.",
         "platform": "HTML5 browser",
         "sources": [
           "https://samfa12.com/games/reef-sweep/",
@@ -1844,7 +1853,7 @@
         "date": "2026-10-15",
         "dateMeaning": "Samfa12.com deployment date (UTC)",
         "title": "v0.5 expedition preview and portrait refinements",
-        "summary": "The v0.5.0-preview.2 browser build brings boat travel around Lantern Bay, keepsake charms, optional catch preparation and cooking, and later crown-of-thorns conservation work. Portrait refinements make the boat chart compact and lower the catch tube between collections. The game remains in development; physical phone acceptance of the new features, sustained performance and natural campaign pacing remain unverified.",
+        "summary": "The early demo added skiff trips, keepsakes, catch preparation and later reef conservation work. Phone performance and natural campaign pacing had not yet been verified.",
         "platform": "HTML5 browser",
         "sources": [
           "https://samfa12.com/games/reef-sweep/",
@@ -1865,8 +1874,8 @@
       "stacked": "/assets/reef-sweep-title/reef-sweep-stacked-on-dark-wave.svg"
     },
     "secondaryInfo": false,
-    "demoNotice": "The earlier website demo has been retired. Play the full game free on Wavedash.",
-    "metaDescription": "Explore Lantern Bay, hunt invasive lionfish and help restore the reef in Reef Sweep. Play the full game free on Wavedash.",
+    "demoNotice": "Play the full game free in your browser on Wavedash.",
+    "metaDescription": "Dive for lionfish, help restore the reef and find a home in Lantern Bay. Play Reef Sweep free in your browser on Wavedash.",
     "technicalDetails": [
       {
         "heading": "Explore Lantern Bay in the current demo",
@@ -1931,12 +1940,12 @@
       "width": 1280,
       "height": 800,
       "alt": "First-person diving among coral and fish in Sunlit Gardens, with the pole spear and dive watch visible.",
-      "caption": "A practice dive from the earlier website demo.",
-      "label": "Earlier website demo · v0.5.0-preview.3"
+      "caption": "A dive from an earlier version of the game.",
+      "label": "Early gameplay preview"
     },
     "gallery": {
-      "title": "Earlier demo captures",
-      "intro": "Historical in-game screenshots from the retired website demo. Artwork and interface details differ from the full campaign.",
+      "title": "From the early demo",
+      "intro": "These screenshots are from an earlier demo. The full game may look different.",
       "images": [
         {
           "src": "/assets/reef-sweep-gallery/demo-manual-catch-1280.webp",
@@ -1945,7 +1954,7 @@
           "height": 800,
           "alt": "A diver guiding a striped lionfish towards the catch tube.",
           "caption": "Aim the pole spear and secure your catch by hand.",
-          "label": "Earlier demo capture · v0.5.0-preview.1"
+          "label": "Early gameplay preview"
         },
         {
           "src": "/assets/reef-sweep-gallery/demo-mangrove-1280.webp",
@@ -1954,7 +1963,7 @@
           "height": 800,
           "alt": "A first-person diver looking through mangrove roots with fish and sea grass below.",
           "caption": "Find your route through the roots at Mangrove Reach.",
-          "label": "Earlier demo capture · v0.5.0-preview.1"
+          "label": "Early gameplay preview"
         },
         {
           "src": "/assets/reef-sweep-gallery/demo-skiff-1280.webp",
@@ -1963,13 +1972,13 @@
           "height": 800,
           "alt": "A small diving skiff travelling across Lantern Bay towards the islands.",
           "caption": "Take the skiff out and choose your next dive.",
-          "label": "Earlier demo capture · v0.5.0-preview.1"
+          "label": "Early gameplay preview"
         }
       ]
     },
     "developmentGallery": {
-      "title": "Lantern Bay development previews",
-      "intro": "Development captures of the town and arrival scenes; these are not included in the early website demo.",
+      "title": "Around Lantern Bay",
+      "intro": "These early glimpses show the town and arrival. The full game may look different.",
       "images": [
         {
           "src": "/assets/reef-sweep-gallery/development-harbour-1280.webp",
@@ -1977,8 +1986,8 @@
           "width": 1280,
           "height": 800,
           "alt": "A diving skiff beside the coastal town slipway, with a boat workshop and gear shop ashore.",
-          "caption": "A coastal home base to return to. Not included in the demo.",
-          "label": "Full-game development preview · campaign.46"
+          "caption": "A coastal home base to return to.",
+          "label": "Early development image"
         },
         {
           "src": "/assets/reef-sweep-gallery/development-arrival-1280.webp",
@@ -1986,8 +1995,8 @@
           "width": 1280,
           "height": 720,
           "alt": "A small van follows a coastal road above the bay at sunset.",
-          "caption": "Arriving in Lantern Bay. Not included in the demo.",
-          "label": "Full-game development preview · campaign.52"
+          "caption": "Arriving in Lantern Bay.",
+          "label": "Early development image"
         }
       ]
     }
