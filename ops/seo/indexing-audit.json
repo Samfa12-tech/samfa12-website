@@ -2,10 +2,10 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 77,
+    "htmlPages": 78,
     "indexableRoutes": 72,
     "sitemapRoutes": 72,
-    "explicitlyExcluded": 5,
+    "explicitlyExcluded": 6,
     "routesWithFindings": 1,
     "siteFindings": 0,
     "oneContextualIncoming": 14,
@@ -26,6 +26,10 @@
     },
     {
       "route": "/games/reef-sweep/play/",
+      "reason": "explicit noindex"
+    },
+    {
+      "route": "/games/the-horde/benchmark-stats/",
       "reason": "explicit noindex"
     },
     {
