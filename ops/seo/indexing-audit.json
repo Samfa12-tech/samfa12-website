@@ -8,7 +8,7 @@
     "explicitlyExcluded": 5,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 13,
+    "oneContextualIncoming": 14,
     "relationshipEdges": 71
   },
   "excluded": [
@@ -2284,7 +2284,7 @@
       "kind": "product",
       "canonical": "https://samfa12.com/games/reef-sweep/",
       "title": "Reef Sweep · Full campaign on Wavedash | Samfa12",
-      "description": "Explore Lantern Bay, hunt invasive lionfish and help restore the reef in Reef Sweep. Play the full campaign on Wavedash or try the early browser demo.",
+      "description": "Explore Lantern Bay, hunt invasive lionfish and help restore the reef in Reef Sweep. Play the full game free on Wavedash.",
       "h1": [
         "Reef Sweep"
       ],
@@ -3481,8 +3481,7 @@
         "/tools/what-would-win/"
       ],
       "incomingMain": [
-        "/",
-        "/games/reef-sweep/"
+        "/"
       ],
       "localAssetCount": 8,
       "jsonLdStatus": "parsed",
@@ -3492,7 +3491,9 @@
         "CollectionPage"
       ],
       "findings": [],
-      "advisories": []
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
     }
   ]
 }

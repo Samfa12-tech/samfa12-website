@@ -1,6 +1,6 @@
 # Reef Sweep authoring and review workflow
 
-`game-sources/reef-sweep/` is the canonical editable TypeScript project. It was recovered from the retained owner handoff and reproduced the public v0.3 game bundle byte for byte before this update. `games/reef-sweep/play/` is an exact generated release copy. Do not hand-edit it.
+`game-sources/reef-sweep/` is the canonical editable TypeScript project. It was recovered from the retained owner handoff and reproduced the public v0.3 game bundle byte for byte before this update. `games/reef-sweep/play/` retains the generated demo assets; its entry point is the Wavedash redirect generated from `scripts/reef-sweep-redirect.html`. The original index remains in Git history. Do not hand-edit the hosted route.
 
 Use:
 
@@ -32,3 +32,7 @@ The v0.5.0-preview.1 expedition release is already published from main 3f104c185
 ## Accepted preview.3 release (2026-10-17)
 
 Sam authorized publishing the combined audio/crew/entry/lionfish update to samfa12.com and the existing Wavedash game, then tested and accepted the corrected driving camera. Frozen runtime candidate: 63d06883e6aae98146c092e8ea552859c359691e, version 0.5.0-preview.3, game.js SHA-256 6bc2e2a5a2fb4c922a782e5da75fe9cdaeab8e6e9cd577dc81f54e8e6a9b90db. Source typecheck, 201 tests, 8 package checks, the prior 76 combined browser assertions and 26 camera checks passed. Wavedash preparation adds only its boot-ready adapter and platform manifest/index changes; all eight shared non-index assets match the website. Physical-phone/thermal acceptance is not claimed. Preserve the Pocket DAW 0.6.59 and Godot 1.3.0 metadata from current main. Release receipt and live readback belong in the task evidence after actual publication; this authorization note alone is not proof of publication.
+
+## Retired website demo (2026-10-28)
+
+The former `/games/reef-sweep/play/` entry redirects to the full game on Wavedash. Its old index remains in Git history and the other demo assets remain tracked. `sync:reef-sweep` preserves the redirect from `scripts/reef-sweep-redirect.html`; verification checks that redirect and the remaining original distribution files. The build manifest describes the archived demo build, including its original index.

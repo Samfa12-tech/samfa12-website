@@ -1789,7 +1789,7 @@
     "type": "Game",
     "cardLabel": "Full campaign on Wavedash",
     "status": "Full campaign available on Wavedash",
-    "description": "Dive for invasive lionfish, help restore the reefs around Lantern Bay, then bring your catch home, prepare it and get to know the coastal community. Play the full campaign on Wavedash, or try the separate early browser demo here.",
+    "description": "Dive for invasive lionfish, help restore the reefs around Lantern Bay, then bring your catch home, prepare it and get to know the coastal community. Play the full game free on Wavedash.",
     "tags": [
       "First-person",
       "Reef conservation",
@@ -1801,12 +1801,8 @@
     "homepageSize": "hero",
     "links": [
       {
-        "label": "Play the full campaign on Wavedash",
+        "label": "Play free on Wavedash",
         "url": "https://wavedash.com/games/reef-sweep"
-      },
-      {
-        "label": "Play the early website demo",
-        "url": "/games/reef-sweep/play/?v=0.5.0-preview.3"
       },
       {
         "label": "Watch the release trailer",
@@ -1815,7 +1811,7 @@
     ],
     "cardLinks": [
       {
-        "label": "Play the full campaign on Wavedash",
+        "label": "Play free on Wavedash",
         "url": "https://wavedash.com/games/reef-sweep"
       }
     ],

@@ -141,4 +141,4 @@ user changes in this repo.
 
 ## Reef Sweep campaign sources
 
-`game-sources/reef-sweep/` is the canonical editable TypeScript source. Build with `npm run build:reef-sweep`, export with `npm run sync:reef-sweep`, and verify with `npm run verify:reef-sweep-pages`. Do not hand-edit `games/reef-sweep/play/`. Read `ops/releases/REEF_SWEEP.md`; source/tooling stays excluded from Pages. Preserve schema-1 saves, portrait/touch/controller controls, the local renderer and High shadow settings. Draft campaign changes do not authorize merging or publication.
+`game-sources/reef-sweep/` is the canonical editable TypeScript source. Build with `npm run build:reef-sweep`, export with `npm run sync:reef-sweep`, and verify with `npm run verify:reef-sweep-pages`. The retired `games/reef-sweep/play/` entry is generated from `scripts/reef-sweep-redirect.html` and redirects to Wavedash; the older demo remains recoverable in Git history. Read `ops/releases/REEF_SWEEP.md`; source/tooling stays excluded from Pages. Preserve schema-1 saves, portrait/touch/controller controls, the local renderer and High shadow settings. Draft campaign changes do not authorize merging or publication.

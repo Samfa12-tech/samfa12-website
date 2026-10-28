@@ -1,6 +1,9 @@
 import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
 const repo=path.resolve(import.meta.dirname,'..'),source=path.join(repo,'game-sources/reef-sweep/dist');
 const siteRoot=path.resolve(process.env.REEF_SWEEP_SITE_ROOT || repo),target=path.join(siteRoot,'games/reef-sweep/play');
+const redirect=fs.readFileSync(path.join(repo,'scripts/reef-sweep-redirect.html'));
+const redirectHtml=redirect.toString('utf8');
+if(!redirectHtml.includes('content="0; url=https://wavedash.com/games/reef-sweep"')||!redirectHtml.includes('href="https://wavedash.com/games/reef-sweep"'))throw Error('Reef Sweep redirect target is invalid.');
 const verify=process.argv.includes('--verify'),manifest=JSON.parse(fs.readFileSync(path.join(source,'build-manifest.json'),'utf8'));
 const expected=['LICENSE-BABYLON.txt','THIRD_PARTY_NOTICES.md','babylon.js','game.js','icon-192.png','icon-512.png','index.html','music/room-for-life.pcs.json','style.css'];
 if(manifest.version!==JSON.parse(fs.readFileSync(path.join(repo,'game-sources/reef-sweep/package.json'),'utf8')).version)throw Error('Distribution version differs from canonical source.');
@@ -13,8 +16,9 @@ if(!verify){
  if(target!==path.join(repo,'games/reef-sweep/play'))throw Error('Sync is restricted to the canonical hosted route.');
  fs.mkdirSync(target,{recursive:true});
  if(JSON.stringify(inventory(target))!==JSON.stringify(all))throw Error('Unexpected files in existing hosted route; review manually.');
- for(const name of all)fs.copyFileSync(path.join(source,name),path.join(target,name));
+ for(const name of all)if(name!=='index.html')fs.copyFileSync(path.join(source,name),path.join(target,name));
+ fs.writeFileSync(path.join(target,'index.html'),redirect);
 }
 if(JSON.stringify(inventory(target))!==JSON.stringify(all))throw Error('Hosted distribution inventory differs.');
-for(const name of all)if(!fs.readFileSync(path.join(source,name)).equals(fs.readFileSync(path.join(target,name))))throw Error('Hosted Reef Sweep differs from built source: '+name);
-console.log(`Reef Sweep ${manifest.version}: ${all.length} hosted files match the canonical build byte for byte.`);
+for(const name of all){const expectedBytes=name==='index.html'?redirect:fs.readFileSync(path.join(source,name));if(!expectedBytes.equals(fs.readFileSync(path.join(target,name))))throw Error('Hosted Reef Sweep differs from expected release: '+name);}
+console.log(`Reef Sweep ${manifest.version}: ${all.length} hosted files verified; the entry point redirects to Wavedash.`);
