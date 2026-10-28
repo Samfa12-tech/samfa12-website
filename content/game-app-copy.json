@@ -1729,8 +1729,8 @@
       "title": "Listen to the island theme",
       "src": "/assets/audio/reef-sweep-island-theme.wav"
     },
-    "seoTitle": "Reef Sweep playable diving demo · Full game in development",
-    "intro": "Reef Sweep is a first-person diving and reef-conservation game set in Lantern Bay. Take your skiff out, hunt invasive lionfish, help the reef recover and bring your catch home.",
+    "seoTitle": "Reef Sweep · Full campaign on Wavedash",
+    "intro": "Dive for invasive lionfish, help restore the reefs around Lantern Bay, then bring your catch home, prepare it and get to know the coastal community. Play the full campaign on Wavedash, or try the separate early browser demo here.",
     "details": [
       {
         "heading": "Head out. Dive in. Make room for life.",
@@ -1747,9 +1747,8 @@
         ]
       },
       {
-        "kind": "planned",
-        "heading": "Planned for the full game",
-        "text": "The full campaign is being developed around a new life in Lantern Bay: arriving on the coast, meeting its residents and building a place for yourself between dives. The coastal town and arrival scenes shown below are development previews, separate from the playable demo. Features may change, and release timing will be announced.",
+        "heading": "Life in Lantern Bay",
+        "text": "Start a new life in Lantern Bay, meet its residents and build a place for yourself between dives. The town and arrival images below are development previews; they are separate from the early website demo.",
         "sources": [
           "https://wavedash.com/games/reef-sweep"
         ]
@@ -1758,7 +1757,7 @@
     "faqs": [
       {
         "question": "Where can I play Reef Sweep?",
-        "answer": "Choose Play the demo to play the current browser demo here, or Play the demo on Wavedash. The full game is in development, with release timing to be announced.",
+        "answer": "Play the full campaign on Wavedash, or choose Play the early website demo for the separate earlier browser build.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/",
           "https://wavedash.com/games/reef-sweep"
@@ -1766,7 +1765,7 @@
       },
       {
         "question": "Where is my progress saved?",
-        "answer": "Your progress stays in the browser you're using. There are three save slots, plus export and import options if you'd like a backup or want to move your save. Saves don't automatically carry between devices, browsers or a downloaded copy of the game.",
+        "answer": "In the early website demo, progress stays in the browser you use. It offers three save slots and export and import options for backups. Automatic transfer between devices is not established.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
@@ -1780,7 +1779,7 @@
       },
       {
         "question": "Is the game finished?",
-        "answer": "No. This is an early playable demo, separate from the full game in development. The current demo includes five dive sites, equipment upgrades, night dives, catch preparation and a working dive watch. Artwork and balance are still being worked on. Release timing for the full game will be announced.",
+        "answer": "The full campaign is available on Wavedash. The early website demo is a separate earlier build with five dive sites and diving activities.",
         "sources": [
           "https://samfa12.com/games/reef-sweep/play/"
         ]
@@ -1828,8 +1827,8 @@
       "stacked": "/assets/reef-sweep-title/reef-sweep-stacked-on-dark-wave.svg"
     },
     "secondaryInfo": true,
-    "demoNotice": "Play an early demo now. The full game is in development, with release timing to be announced.",
-    "metaDescription": "Play the Reef Sweep demo: explore Lantern Bay, hunt invasive lionfish and restore the reef. The full game is in development; release timing will be announced.",
+    "demoNotice": "The full campaign is available on Wavedash. The early website demo remains available separately.",
+    "metaDescription": "Explore Lantern Bay, hunt invasive lionfish and help restore the reef in Reef Sweep. Play the full campaign on Wavedash or try the early browser demo.",
     "technicalDetails": [
       {
         "heading": "Explore Lantern Bay in the current demo",
@@ -1931,8 +1930,8 @@
       ]
     },
     "developmentGallery": {
-      "title": "Lantern Bay in development",
-      "intro": "Full-game development previews — these town and arrival scenes are not included in the current demo.",
+      "title": "Lantern Bay development previews",
+      "intro": "Development captures of the town and arrival scenes; these are not included in the early website demo.",
       "images": [
         {
           "src": "/assets/reef-sweep-gallery/development-harbour-1280.webp",

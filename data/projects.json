@@ -1786,10 +1786,10 @@
   {
     "title": "Reef Sweep",
     "category": "Games",
-    "type": "Playable demo",
-    "cardLabel": "Playable demo · Full game in development",
-    "status": "Full game in development",
-    "description": "Play the Reef Sweep diving demo. The full campaign is in development: start a new life in Lantern Bay, meet its residents and help restore the reefs. Release timing will be announced.",
+    "type": "Game",
+    "cardLabel": "Full campaign on Wavedash",
+    "status": "Full campaign available on Wavedash",
+    "description": "Dive for invasive lionfish, help restore the reefs around Lantern Bay, then bring your catch home, prepare it and get to know the coastal community. Play the full campaign on Wavedash, or try the separate early browser demo here.",
     "tags": [
       "First-person",
       "Reef conservation",
@@ -1801,18 +1801,22 @@
     "homepageSize": "hero",
     "links": [
       {
-        "label": "Play the demo",
+        "label": "Play the full campaign on Wavedash",
+        "url": "https://wavedash.com/games/reef-sweep"
+      },
+      {
+        "label": "Play the early website demo",
         "url": "/games/reef-sweep/play/?v=0.5.0-preview.3"
       },
       {
-        "label": "Play the demo on Wavedash",
-        "url": "https://wavedash.com/games/reef-sweep"
+        "label": "Watch the release trailer",
+        "url": "https://youtu.be/T4-xGIkh2QA"
       }
     ],
     "cardLinks": [
       {
-        "label": "Play the demo",
-        "url": "/games/reef-sweep/play/?v=0.5.0-preview.3"
+        "label": "Play the full campaign on Wavedash",
+        "url": "https://wavedash.com/games/reef-sweep"
       }
     ],
     "sortOrder": 36,
