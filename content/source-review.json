@@ -75,6 +75,13 @@
           "access": "read-public-source",
           "reviewedAt": "2026-10-16",
           "notes": "HTTP 200 public page identifies The Last Guard as a browser wall-defense survival game. Verified listing availability only; no version parity or save transfer claim."
+        },
+        {
+          "url": "https://wavedash.com/games/the-last-guard/patch-notes",
+          "identity": "The Last Guard public Wavedash listing and build information",
+          "access": "read-public-source",
+          "reviewedAt": "2026-10-28",
+          "notes": "Public listing exposed Alpha.20 build message for touch controls, steep aim and cooling settings. The observation date is not asserted as a release date."
         }
       ]
     },
@@ -1004,6 +1011,13 @@
           "access": "read-public-source",
           "reviewedAt": "2026-10-14",
           "notes": "HTTP 200 public page identifies Reef Sweep and offers browser play. Verified listing availability only; no version parity, save transfer or revenue claim."
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/samfa12-website/tree/76cc3ba005682584922fdd4759d91d571ebb1728/games/reef-sweep/play",
+          "identity": "Tracked early website demo at the last pre-redirect website commit",
+          "access": "read-public-source",
+          "reviewedAt": "2026-10-28",
+          "notes": "Repository tree identifies the retained early demo files; the original entry point remains recoverable in Git history."
         }
       ],
       "limits": [
