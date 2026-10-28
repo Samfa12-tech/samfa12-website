@@ -1934,15 +1934,6 @@
         ]
       }
     ],
-    "heroScreenshot": {
-      "src": "/assets/reef-sweep-gallery/demo-first-dive-1280.webp",
-      "small": "/assets/reef-sweep-gallery/demo-first-dive-640.webp",
-      "width": 1280,
-      "height": 800,
-      "alt": "First-person diving among coral and fish in Sunlit Gardens, with the pole spear and dive watch visible.",
-      "caption": "A dive from an earlier version of the game.",
-      "label": "Early gameplay preview"
-    },
     "gallery": {
       "title": "From the early demo",
       "intro": "These screenshots are from an earlier demo. The full game may look different.",

@@ -1820,11 +1820,22 @@
       }
     ],
     "sortOrder": 36,
-    "thumbnail": "assets/thumbnails/reef-sweep-icon-512.webp",
-    "thumbnailAlt": "Striped lionfish with fan fins above a colourful coral reef in turquoise water.",
-    "thumbnailWidth": 512,
-    "thumbnailHeight": 512,
+    "thumbnail": "assets/thumbnails/reef-sweep-cover-1280.webp",
+    "thumbnailAlt": "Illustrated Reef Sweep cover: a diver aims at a lionfish above a colourful reef, with the words Dive. Restore. Belong.",
+    "thumbnailWidth": 1280,
+    "thumbnailHeight": 720,
     "id": "game-reef-sweep",
-    "detailUrl": "/games/reef-sweep/"
+    "detailUrl": "/games/reef-sweep/",
+    "imageFit": "contain",
+    "thumbnailVariants": [
+      {
+        "path": "assets/thumbnails/reef-sweep-cover-640.webp",
+        "width": 640
+      },
+      {
+        "path": "assets/thumbnails/reef-sweep-cover-1280.webp",
+        "width": 1280
+      }
+    ]
   }
 ]
