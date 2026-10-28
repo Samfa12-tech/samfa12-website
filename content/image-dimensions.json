@@ -310,5 +310,13 @@
   "assets/reef-sweep-gallery/development-arrival-640.webp": [
     640,
     360
+  ],
+  "assets/thumbnails/reef-sweep-cover-640.webp": [
+    640,
+    360
+  ],
+  "assets/thumbnails/reef-sweep-cover-1280.webp": [
+    1280,
+    720
   ]
 }
