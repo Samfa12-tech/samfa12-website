@@ -1,0 +1,9 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import { checkedQuery, loadExamples, selectExamples, FILTER_FIELDS } from "../assets/horde-benchmark-core.js";
+const fixture=JSON.parse(fs.readFileSync(new URL("./fixtures/horde-benchmark-example.json",import.meta.url),"utf8"));
+const query=()=>({...Object.fromEntries(FILTER_FIELDS.map(x=>[x,""])),sort:"model",order:"asc",limit:100,cursor:null});
+test("query allowlist, bounded limit and opaque cursor",()=>{ assert.equal(checkedQuery({...query(),cursor:"opaque-token"}).cursor,"opaque-token"); assert.throws(()=>checkedQuery({...query(),limit:101})); assert.throws(()=>checkedQuery({...query(),cursor:"x".repeat(513)})); assert.throws(()=>checkedQuery({...query(),privateField:"x"})); assert.throws(()=>checkedQuery({...query(),sort:"gpuMs"})); });
+test("only explicitly synthetic local examples can load",async()=>{let called; const rows=await loadExamples(query(),async(url,options)=>{called={url,options};return {ok:true,json:async()=>fixture};});assert.equal(called.url,"/tests/fixtures/horde-benchmark-example.json");assert.equal(rows.length,3);await assert.rejects(loadExamples(query(),async()=>({ok:true,json:async()=>({...fixture,synthetic:false})})));await assert.rejects(loadExamples({...query(),cursor:"opaque"},async()=>{throw Error("must not fetch");}));await assert.rejects(loadExamples(query(),async()=>({ok:false})));});
+test("filters examples and never groups provisional or unknown revisions",()=>{const result=selectExamples(fixture.rows,query());assert.equal(result.groups.length,3);assert.ok(result.groups.every(group=>group.length===1));assert.equal(result.nextCursor,null);const filtered=selectExamples(fixture.rows,{...query(),platform:"Android"});assert.equal(filtered.selected.length,2);assert.equal(filtered.groups.length,2);assert.equal(selectExamples(fixture.rows,{...query(),platform:"not present"}).selected.length,0);});

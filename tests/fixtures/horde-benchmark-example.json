@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "rows": [
+    {
+      "key": "example-a",
+      "platform": "Android",
+      "model": "Example device A / GPU A",
+      "build": "Example build 1",
+      "revision": null,
+      "bucket": "Example 720p / Medium / Vulkan RT / DRS off",
+      "configuration": "720p internal and output; Medium; Vulkan RT; DRS off; output policy unknown; shader pair and other quality settings unknown",
+      "evidence": "Client-reported RT presentation",
+      "reports": 2,
+      "frameMs": 33.4,
+      "frameScope": "owning frame",
+      "gpuMs": 25.2,
+      "gpuScope": "GPU duration",
+      "provisional": true
+    },
+    {
+      "key": "example-b",
+      "platform": "Windows",
+      "model": "Example device B / GPU B",
+      "build": "Example build 1",
+      "revision": "Example course A / profile 1",
+      "bucket": "Example 1080p / High / Vulkan RT / DRS off",
+      "configuration": "1080p internal and output; High; Vulkan RT; DRS off; example output policy; shader pair and other quality settings unknown",
+      "evidence": "Client-reported RT presentation",
+      "reports": 1,
+      "frameMs": 19.6,
+      "frameScope": "owning frame",
+      "gpuMs": 14.1,
+      "gpuScope": "GPU duration",
+      "provisional": true
+    },
+    {
+      "key": "example-c",
+      "platform": "Android",
+      "model": "Example device C / GPU C",
+      "build": "Example build 2",
+      "revision": null,
+      "bucket": "Example 720p / Medium / Vulkan RT / DRS off",
+      "configuration": "720p internal and output; Medium; Vulkan RT; DRS off; output policy unknown; shader pair and other quality settings unknown",
+      "evidence": "Client-reported RT presentation",
+      "reports": 1,
+      "frameMs": null,
+      "frameScope": "unavailable",
+      "gpuMs": null,
+      "gpuScope": "unavailable",
+      "provisional": true
+    }
+  ]
+}
