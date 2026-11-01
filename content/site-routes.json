@@ -1,7 +1,7 @@
 [
   {
     "route": "/",
-    "pageModified": "2026-10-28"
+    "pageModified": "2026-11-01"
   },
   {
     "route": "/games/",
@@ -25,7 +25,7 @@
   },
   {
     "route": "/books/",
-    "pageModified": "2026-10-23"
+    "pageModified": "2026-11-01"
   },
   {
     "route": "/pocket-audio/",

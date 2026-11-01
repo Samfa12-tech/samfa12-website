@@ -3105,3 +3105,13 @@ body[data-page="apps"] .project-card-catalogue {
   .book-feature .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .book-feature-cover { width: min(65vw, 280px); }
 }
+
+/* Featured Reef Sweep artwork */
+.reef-feature .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.reef-feature .hero-copy { gap: 1rem; }
+.reef-feature .lead { max-width: 55ch; }
+.reef-feature-art { display: block; overflow: hidden; border-radius: 18px; box-shadow: 0 24px 70px rgba(0, 0, 0, .4); }
+.reef-feature-art img { display: block; width: 100%; height: auto; }
+@media (max-width: 800px) {
+  .reef-feature .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+}
