@@ -734,7 +734,7 @@
       "The Broken Road Trilogy",
       "Book 2"
     ],
-    "featured": false,
+    "featured": true,
     "accent": "spark",
     "imageFit": "contain",
     "links": [
@@ -747,7 +747,9 @@
     "thumbnail": "assets/thumbnails/no-wall-to-hold-amazon-cover.jpg",
     "thumbnailAlt": "Cover for No Wall to Hold, Book 2 of The Broken Road Trilogy",
     "id": "book-no-wall-to-hold",
-    "detailUrl": "/books/no-wall-to-hold/"
+    "detailUrl": "/books/no-wall-to-hold/",
+    "homepageRank": 1,
+    "homepageSize": "hero"
   },
   {
     "title": "What We Save",
@@ -1800,9 +1802,7 @@
       "Lantern Bay",
       "Samfa12"
     ],
-    "featured": true,
-    "homepageRank": 1,
-    "homepageSize": "hero",
+    "featured": false,
     "links": [
       {
         "label": "Play free on Wavedash",

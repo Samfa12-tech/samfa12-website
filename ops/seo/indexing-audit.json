@@ -1231,12 +1231,14 @@
       ],
       "inSitemap": true,
       "incoming": [
+        "/",
         "/books/",
         "/books/the-broken-road/",
         "/books/the-wall-that-lied/",
         "/books/what-we-save/"
       ],
       "incomingMain": [
+        "/",
         "/books/",
         "/books/the-broken-road/",
         "/books/the-wall-that-lied/",
