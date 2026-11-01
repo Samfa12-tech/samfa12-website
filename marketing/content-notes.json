@@ -58,6 +58,108 @@
         "method": "ASCII-only copy; each URL counts as 23 characters",
         "hashtags": 2
       }
+    },
+    "reef-sweep-lantern-bay-release-1": {
+      "reviewedAt": "2026-11-01",
+      "status": "First-party release announcement dated 28 October 2026: full campaign free on Wavedash; former website demo retired. Current in-game build and all device compatibility were not independently tested.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/game-app-copy.json",
+        "https://github.com/Samfa12-tech/samfa12-website/commit/89766def1fe0bf3738f2034124cf1425e8ca6598",
+        "https://wavedash.com/games/reef-sweep"
+      ],
+      "rationale": "New campaign status and returning to town between dives, distinct from recent preview/skiff posts. No stability or performance claim.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only. Trailer URL is known but could not be fetched to inspect in this review; not represented as an attachment."
+      },
+      "verificationGap": "Wavedash could not be read directly here; availability claim follows current first-party release records.",
+      "validation": {
+        "rawCharacters": 267,
+        "xWeightedCharacters": 253,
+        "method": "ASCII-only text; URLs count as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "no-wall-kindle-release-1": {
+      "reviewedAt": "2026-11-01",
+      "status": "Current author catalogue and book copy changed from preorder to Kindle available on 1 November 2026. Retailer buybox could not be independently read.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/commit/96ebef0afd117673d131d4b6ca3420a39e744e90",
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/book-music-copy.json",
+        "https://www.amazon.com.au/dp/B0H233JY8P"
+      ],
+      "rationale": "Marks the actual author-announced release after earlier scheduled preorder/logistics copy. Preserves series project identity for cooldown.",
+      "media": {
+        "asset": "https://samfa12.com/assets/videos/no-wall-to-hold-landscape.mp4",
+        "publishing": "Manual upload only. Downloaded and ffprobe-verified: 42 seconds, 1920x1080, audio track present; frame at 5 seconds visually inspected as book promotional artwork, not gameplay. Portrait alternative exists in repository; not separately inspected."
+      },
+      "verificationGap": "Confirm Amazon Kindle availability manually; this review relies on today's author announcement rather than the scheduled date alone.",
+      "validation": {
+        "rawCharacters": 268,
+        "xWeightedCharacters": 249,
+        "method": "ASCII-only text; URLs count as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "lastguard-army-profiles-1": {
+      "reviewedAt": "2026-11-01",
+      "status": "Released game's documented ordinary army profiles 2k/6k/14k versus stress profiles 28k/40k; newly relevant alongside the Alpha.20 Wavedash listing record dated 28 October.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/game-app-copy.json",
+        "https://samfa12.itch.io/the-last-guard",
+        "https://wavedash.com/games/the-last-guard/patch-notes"
+      ],
+      "rationale": "Explains a concrete settings distinction so players do not mistake stress tests for ordinary difficulty or a mobile performance promise.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only; no verified visual selected."
+      },
+      "verificationGap": "Live Wavedash patch-note page inaccessible in this review; no Alpha.20-specific mechanic or performance claim used.",
+      "validation": {
+        "rawCharacters": 262,
+        "xWeightedCharacters": 244,
+        "method": "ASCII-only text; URLs count as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "reef-sweep-loop-1": {
+      "reviewedAt": "2026-11-01",
+      "status": "Expired bank entry; historic post text retained. No Buffer post or history changed.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/game-app-copy.json"
+      ],
+      "media": {
+        "asset": null,
+        "publishing": "Not eligible for future scheduling."
+      },
+      "rationale": "The full campaign replaced the retired website demo on 28 October. Stop presenting preview copy as current.",
+      "notAfter": "2026-10-27"
+    },
+    "reef-sweep-preview3-1": {
+      "reviewedAt": "2026-11-01",
+      "status": "Expired bank entry; historic post text retained. No Buffer post or history changed.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/game-app-copy.json"
+      ],
+      "media": {
+        "asset": null,
+        "publishing": "Not eligible for future scheduling."
+      },
+      "rationale": "The full campaign replaced the retired website demo on 28 October. Stop presenting preview copy as current.",
+      "notAfter": "2026-10-27"
+    },
+    "no-wall-logistics-1": {
+      "reviewedAt": "2026-11-01",
+      "status": "Expired bank entry; historic post text retained. No Buffer post or history changed.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/book-music-copy.json"
+      ],
+      "media": {
+        "asset": null,
+        "publishing": "Not eligible for future scheduling."
+      },
+      "rationale": "The book is now announced available; stop describing 1 November as an upcoming release.",
+      "notAfter": "2026-10-31"
     }
   },
   "manualCandidates": {
@@ -67,7 +169,7 @@
         "https://github.com/Samfa12-tech/samfa12-website/blob/main/content/game-app-copy.json",
         "https://samfa12.com/games/reef-sweep/"
       ],
-      "status": "Current playable demo v0.5.0-preview.3. Full-game town and arrival previews are separate and not included in the demo.",
+      "status": "WITHDRAWN on 1 November 2026: historical demo screenshot and draft. The website demo was retired; do not publish the old draft as current.",
       "media": {
         "asset": "https://samfa12.com/assets/reef-sweep-gallery/demo-first-dive-1280.webp",
         "repositoryPath": "assets/reef-sweep-gallery/demo-first-dive-1280.webp",
@@ -76,7 +178,21 @@
       },
       "proposedText": "Your air supply lives on your wrist in Reef Sweep. Raise the watch to check depth, air and return reserve without losing sight of the reef. It's in the playable demo; the full campaign is in development. https://samfa12.com/games/reef-sweep/ #GameDesign #IndieGames",
       "rationale": "A visible design choice with a clear player benefit. Keep separate from general Reef Sweep posts.",
-      "approval": "Manual suggestion only; not in content-bank.json. Check recent manual X posts and the live queue before posting."
+      "approval": "Not queued. Requires rewritten copy and current campaign media verification before reuse."
+    },
+    "no-wall-launch-trailer-20261101": {
+      "reviewedAt": "2026-11-01",
+      "status": "Author-announced Kindle release; book promotional trailer.",
+      "sources": [
+        "https://github.com/Samfa12-tech/samfa12-website/blob/main/assets/videos/no-wall-to-hold-landscape.mp4",
+        "https://github.com/Samfa12-tech/samfa12-website/commit/0a5942ac610dae4bd8569ae2e97856367fd600a5"
+      ],
+      "media": {
+        "asset": "https://samfa12.com/assets/videos/no-wall-to-hold-landscape.mp4",
+        "publishing": "Manual upload only. Downloaded and ffprobe-verified: 42 seconds, 1920x1080, audio track present; frame at 5 seconds visually inspected as book promotional artwork, not gameplay. Portrait alternative exists in repository; not separately inspected."
+      },
+      "rationale": "Strongest verified visual for this review. Existing 42-second trailer is longer than the preferred 10-20 seconds; use it as-is if appropriate. No shorter cut was created or claimed.",
+      "approval": "Manual suggestion only. Check recent manual X posts and Buffer queue for overlap with the new bank release post; use as an alternative, not an extra automatic post."
     }
   },
   "withheld": {
@@ -85,6 +201,12 @@
     },
     "article18-editorial-release-20261025": {
       "reason": "Editorial work alone does not verify revised storefront files are publicly released; its formats post was recently scheduled."
+    },
+    "reef-current-gameplay-trailer-20261101": {
+      "reason": "Known trailer URL https://youtu.be/T4-xGIkh2QA could not be fetched to inspect. No clip contents or duration claimed; verify before manual sharing."
+    },
+    "horde-17-release-20261101": {
+      "reason": "Testing progress is not evidence of a public 1.7 release or measured mobile performance improvement; no release post added."
     }
   }
 }
