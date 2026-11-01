@@ -20,5 +20,9 @@ export function mountPublicResults(root, transport) {
  }
  form.addEventListener('submit',e=>{e.preventDefault();cursor=null;load();});form.addEventListener('reset',()=>{cursor=null;setTimeout(()=>load(),0);});next.addEventListener('click',()=>load(true));load();
 }
-// Live transport is deliberately absent until the reviewed deployment is approved.
-mountPublicResults(document.querySelector('.benchmark'));
+const endpoint = 'https://briarhold-signal.samfa12.com/api/horde-benchmark-stats';
+const transport = query => fetch(`${endpoint}?${query}`, {
+ method: 'GET', credentials: 'omit', cache: 'no-store', redirect: 'error',
+ headers: {Accept: 'application/json'}, signal: AbortSignal.timeout(10000),
+});
+mountPublicResults(document.querySelector('.benchmark'), transport);
