@@ -399,7 +399,7 @@
       "title": "Samfa12 | Games, stories, music, and Pocket Audio",
       "description": "Samfa12 is a creative lab for playable worlds, strange stories, music, Pocket Audio tools, and experiments.",
       "h1": [
-        "He saved the city.\n              It never forgave him."
+        "Reef Sweep"
       ],
       "inSitemap": true,
       "incoming": [
@@ -1331,14 +1331,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/",
         "/books/",
         "/books/no-wall-to-hold/",
         "/books/the-broken-road/",
         "/books/what-we-save/"
       ],
       "incomingMain": [
-        "/",
         "/books/",
         "/books/no-wall-to-hold/",
         "/books/the-broken-road/",

@@ -646,7 +646,7 @@
       },
       {
         "heading": "Second in The Broken Road",
-        "text": "This is Book 2 of 3 in The Broken Road. At the 23 September 2026 check, Amazon Australia offered the Kindle edition for preorder with delivery scheduled for 1 November 2026. Check Amazon for current availability.",
+        "text": "This is Book 2 of 3 in The Broken Road. The Kindle edition is available on Amazon Australia.",
         "sources": [
           "https://www.amazon.com.au/dp/B0H233JY8P"
         ]
@@ -663,7 +663,7 @@
       },
       {
         "question": "Has the Kindle edition been released?",
-        "answer": "The Kindle edition was scheduled for 1 November 2026 when Amazon Australia was checked on 23 September. Check Amazon for current availability.",
+        "answer": "Yes. The Kindle edition is available on Amazon Australia.",
         "sources": [
           "https://www.amazon.com.au/dp/B0H233JY8P"
         ]
