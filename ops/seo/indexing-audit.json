@@ -526,7 +526,7 @@
         "/stats/",
         "/tools/what-would-win/"
       ],
-      "localAssetCount": 15,
+      "localAssetCount": 17,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -1231,12 +1231,14 @@
       ],
       "inSitemap": true,
       "incoming": [
+        "/",
         "/books/",
         "/books/the-broken-road/",
         "/books/the-wall-that-lied/",
         "/books/what-we-save/"
       ],
       "incomingMain": [
+        "/",
         "/books/",
         "/books/the-broken-road/",
         "/books/the-wall-that-lied/",
