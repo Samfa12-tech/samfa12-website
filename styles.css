@@ -3105,3 +3105,28 @@ body[data-page="apps"] .project-card-catalogue {
   .book-feature .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .book-feature-cover { width: min(65vw, 280px); }
 }
+
+/* Featured Reef Sweep artwork */
+.reef-feature .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.reef-feature .hero-copy { gap: 1rem; }
+.reef-feature .lead { max-width: 55ch; }
+.reef-feature-art { display: block; overflow: hidden; border-radius: 18px; box-shadow: 0 24px 70px rgba(0, 0, 0, .4); }
+.reef-feature-art img { display: block; width: 100%; height: auto; }
+@media (max-width: 800px) {
+  .reef-feature .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+}
+
+.book-trailer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: center; margin-top: 2rem; padding: clamp(1.25rem, 3vw, 2rem); border: 1px solid var(--line-strong); border-radius: var(--radius-card); background: rgba(12, 17, 34, .75); }
+.book-trailer h3 { margin: .5rem 0; }
+.book-trailer p { max-width: 55ch; }
+.book-trailer-status:empty, .book-trailer [data-trailer-play][hidden] { display: none; }
+.book-trailer-poster { display: block; width: min(22vw, 180px); height: auto; border-radius: 4px; }
+.book-trailer-video { display: block; width: min(48vw, 640px); max-width: 100%; height: auto; background: #000; }
+.book-trailer-video[data-layout="portrait"] { width: min(35vw, 300px); max-height: 70vh; }
+.book-trailer-video[hidden], .book-trailer-poster[hidden] { display: none; }
+@media (max-width: 800px) {
+  .book-trailer { grid-template-columns: minmax(0, 1fr); }
+  .book-trailer-poster { width: min(45vw, 180px); }
+  .book-trailer-video { width: 100%; }
+  .book-trailer-video[data-layout="portrait"] { width: min(100%, 300px); }
+}

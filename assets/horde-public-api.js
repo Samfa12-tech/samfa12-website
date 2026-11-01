@@ -13,6 +13,14 @@ export function publicQuery(input = {}) {
   return q.toString();
 }
 const keys = ['schemaVersion','product','classification','countUnit','reportCount','matchingReportCount','provisionalReportCount','rankingEligibleReportCount','revision','bucketDefinitions','missingDataFlags','rows','nextCursor'];
+const label = v => { if(v === null) return 'Unknown'; if(typeof v !== 'string' || v.length>1024 || /[\x00-\x1f]/.test(v)) throw Error('Invalid label'); return v; };
+const metric = v => {if(v === null) return null; if(typeof v !== 'number' || !Number.isFinite(v) || v<0) throw Error('Invalid metric'); return v;};
+const extent = v => {if(!Array.isArray(v)||v.length!==2||v.some(n=>!Number.isInteger(n)||n<1||n>32768)) throw Error('Invalid extent'); return v.join(' × ');};
+export function displayRow(r) {
+ const c=r.configuration,h=r.hardware,p=c?.benchmarkProfile;
+ if(!c||!h||!p||p.classification!=='custom-unranked'||p.ranked!==false||!Number.isInteger(r.sampleCount)||r.sampleCount<1) throw Error('Invalid configuration');
+ return {resultId:label(r.resultId),dateUtc:label(r.dateUtc),bucket:label(r.bucket),model:label(h.model),gpu:label(h.gpu),platform:label(c.platform),build:label(c.build),profile:label(p.id),backend:label(c.executionBackend),shaderPair:label(c.shaderPair),internal:extent(c.internalExtent),output:extent(c.presentationExtent),water:label(c.waterQuality),dielectric:label(c.dielectricQuality),fire:label(c.fireQuality),sampleCount:r.sampleCount,frameMedianMs:metric(r.frameMedianMs),frameP95Ms:metric(r.frameP95Ms),gpuMedianMs:metric(r.gpuMedianMs),cpuTimingScope:label(r.cpuTimingScope),gpuTimingScope:label(r.gpuTimingScope),provisional:true};
+}
 export function readPublicPage(body) {
   if(!body || Object.keys(body).length !== keys.length || keys.some(k=>!Object.hasOwn(body,k)) || body.schemaVersion !== 1 || body.product !== 'horde-lantern-rt' || body.classification !== 'community-client-reported' || body.countUnit !== 'reports') throw Error('Invalid public response');
   for(const k of ['reportCount','matchingReportCount','provisionalReportCount','rankingEligibleReportCount']) if(!Number.isInteger(body[k]) || body[k]<0 || body[k]>1024) throw Error('Invalid count');
@@ -22,10 +30,7 @@ export function readPublicPage(body) {
   // The staged receiver emits only provisional custom results. Never promote them to a ranking.
   for(const row of body.rows) if(!row || row.evidenceClass !== 'community-client-reported' || row.validationState !== 'syntax-checked-client-report' || row.deviceCompatibilityVerified !== false || row.rankingEligible !== false || row.scanoutFpsMeasured !== false || row.comparability?.exactBucketEligible !== false) throw Error('Invalid evidence class');
   return {...body, bucketDefinitions: body.bucketDefinitions.map(b => ({key:b.key,workload:b.workload,platform:b.platform,profileId:b.profileId,exactBucketEligible:false})),
-    rows:body.rows.map(r => ({resultId:r.resultId,dateUtc:r.dateUtc,bucket:r.bucket,evidenceClass:r.evidenceClass,
-      validationState:r.validationState,deviceCompatibilityVerified:false,rankingEligible:false,
-      sampleCount:r.sampleCount,frameMedianMs:r.frameMedianMs,frameP95Ms:r.frameP95Ms,gpuMedianMs:r.gpuMedianMs,
-      cpuTimingScope:r.cpuTimingScope,gpuTimingScope:r.gpuTimingScope,scanoutFpsMeasured:false})),
+    rows:body.rows.map(displayRow),
     missingDataFlags:Object.fromEntries(['courseRevision','profileRevision','outputPolicy','packageArtifactHash','osMajor','rawDriverVersion','measuredThermal','scanoutFps','submittedDimensions','gpuTiming'].map(k=>[k,body.missingDataFlags[k] === true]))};
 }
 // No default endpoint or fetch: a caller must explicitly inject the reviewed transport.

@@ -3,7 +3,7 @@
     "route": "/books/the-broken-road/",
     "title": "The Broken Road trilogy",
     "description": "Read The Broken Road in order: The Wall that Lied, No Wall to Hold and What We Save.",
-    "intro": "The Broken Road follows engineer Tomas Parker through three novels. Start with The Wall that Lied in the city of Auster, follow the roads beyond it in No Wall to Hold, then finish with What We Save. The first Kindle edition is available now on Amazon Australia.",
+    "intro": "The Broken Road follows engineer Tomas Parker through three novels. Start with The Wall that Lied in the city of Auster, follow the roads beyond it in No Wall to Hold, then finish with What We Save. The first two Kindle editions are available on Amazon Australia.",
     "type": "BookSeries",
     "books": [
       "book-the-wall-that-lied",
@@ -15,7 +15,7 @@
       "https://www.amazon.com.au/dp/B0H233JY8P",
       "https://www.amazon.com.au/dp/B0HC46KFJP"
     ],
-    "pageModified": "2026-10-23"
+    "pageModified": "2026-11-01"
   },
   {
     "route": "/books/jason-proud/",
