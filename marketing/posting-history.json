@@ -624,6 +624,116 @@
       "textSha256": "95fc744adbd208f0c9d0cb81ab67640fbbca32c2483d696550ee95652b5fd3f4",
       "scheduledAt": "2026-10-25T10:43:26.300Z",
       "dueAt": "2026-10-31T06:15:00.000Z"
+    },
+    {
+      "id": "site-catalogue-fallback-1",
+      "project": "Samfa12.com",
+      "category": "Web development",
+      "date": "2026-11-02",
+      "status": "scheduled",
+      "bufferPostId": "6ae73349cf3a3112f3f902c1",
+      "textSha256": "545e3b94d23f47f1cc38ef9a8ea9d0e9a1901e240746d6a2169cfa5e16a66f98",
+      "scheduledAt": "2026-11-01T12:40:41.784Z",
+      "dueAt": "2026-11-01T21:15:00.000Z"
+    },
+    {
+      "id": "breakfast-music-1",
+      "project": "Breakfast Beat",
+      "category": "Games",
+      "date": "2026-11-03",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334921c807e9d5baffbc",
+      "textSha256": "194e354ee70d719b2cbb7c1ad35ee539adb9682d22d028af84f1ecddfdf3113e",
+      "scheduledAt": "2026-11-01T12:40:41.998Z",
+      "dueAt": "2026-11-02T21:15:00.000Z"
+    },
+    {
+      "id": "backwater-crossmedia-1",
+      "project": "Backwater",
+      "category": "Books",
+      "date": "2026-11-04",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334aab019b90875bbcf0",
+      "textSha256": "bbcdc8c093f9724f8d11cee46c8c5db03546efc01d18081233c4ccf93bbb0920",
+      "scheduledAt": "2026-11-01T12:40:42.238Z",
+      "dueAt": "2026-11-03T21:15:00.000Z"
+    },
+    {
+      "id": "briarhold-alpha103-1",
+      "project": "Briarhold",
+      "category": "Games",
+      "date": "2026-11-05",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334aab019b90875bbd28",
+      "textSha256": "48504bb1633bbf6c12eed9dfef05dd13ce57a7a3e8e17fc83a9923fbae25c9d9",
+      "scheduledAt": "2026-11-01T12:40:42.528Z",
+      "dueAt": "2026-11-04T21:15:00.000Z"
+    },
+    {
+      "id": "colossal-gladiator-1",
+      "project": "Colossal",
+      "category": "Books",
+      "date": "2026-11-06",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334af0984eef33659d8f",
+      "textSha256": "e453be5387de3b10e3015e5063f83a62c5e977cc82dbc781366199dd84011ee3",
+      "scheduledAt": "2026-11-01T12:40:42.763Z",
+      "dueAt": "2026-11-05T21:15:00.000Z"
+    },
+    {
+      "id": "lastguard-army-profiles-1",
+      "project": "The Last Guard",
+      "category": "Games",
+      "date": "2026-11-07",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334a21c807e9d5bafff1",
+      "textSha256": "8ebe1a958a5ac0a94e0a187cc66da9d569621c1c8ce9931015e9716b4b499675",
+      "scheduledAt": "2026-11-01T12:40:42.980Z",
+      "dueAt": "2026-11-06T21:15:00.000Z"
+    },
+    {
+      "id": "no-wall-kindle-release-1",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-11-08",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334b21c807e9d5bb001b",
+      "textSha256": "e10f207a0a16207fc6747a8a7adabdd6f9c434a6f4f109a32245d7e99d442b46",
+      "scheduledAt": "2026-11-01T12:40:43.194Z",
+      "dueAt": "2026-11-07T21:15:00.000Z"
+    },
+    {
+      "id": "colossal-gladiator-1",
+      "project": "Colossal",
+      "category": "Books",
+      "date": "2026-11-03",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334b37c1acd2a004182b",
+      "textSha256": "e453be5387de3b10e3015e5063f83a62c5e977cc82dbc781366199dd84011ee3",
+      "scheduledAt": "2026-11-01T12:40:43.434Z",
+      "dueAt": "2026-11-03T06:15:00.000Z"
+    },
+    {
+      "id": "no-wall-kindle-release-1",
+      "project": "The Broken Road Trilogy",
+      "category": "Books",
+      "date": "2026-11-05",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334bcf3a3112f3f90324",
+      "textSha256": "e10f207a0a16207fc6747a8a7adabdd6f9c434a6f4f109a32245d7e99d442b46",
+      "scheduledAt": "2026-11-01T12:40:43.730Z",
+      "dueAt": "2026-11-05T06:15:00.000Z"
+    },
+    {
+      "id": "chordsmith-wav-v68-1",
+      "project": "Pocket Chordsmith",
+      "category": "Web development",
+      "date": "2026-11-07",
+      "status": "scheduled",
+      "bufferPostId": "6ae7334bf0984eef33659f54",
+      "textSha256": "b477041047ce96c52342c94bf9471c0f934ddcfb6d39a87510b6e463ec67c0fc",
+      "scheduledAt": "2026-11-01T12:40:43.935Z",
+      "dueAt": "2026-11-07T06:15:00.000Z"
     }
   ]
 }
