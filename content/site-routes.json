@@ -49,7 +49,7 @@
   },
   {
     "route": "/links/",
-    "pageModified": "2026-10-23"
+    "pageModified": "2026-11-01"
   },
   {
     "route": "/join/",
@@ -78,5 +78,9 @@
   {
     "route": "/updates/",
     "pageModified": "2026-10-28"
+  },
+  {
+    "route": "/reef-for-good/",
+    "pageModified": "2026-11-01"
   }
 ]

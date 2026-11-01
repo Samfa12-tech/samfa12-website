@@ -2,9 +2,9 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 78,
-    "indexableRoutes": 72,
-    "sitemapRoutes": 72,
+    "htmlPages": 79,
+    "indexableRoutes": 73,
+    "sitemapRoutes": 73,
     "explicitlyExcluded": 6,
     "routesWithFindings": 1,
     "siteFindings": 0,
@@ -469,6 +469,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -607,6 +608,7 @@
         "/pocket-audio/pocket-chordsmith/",
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
+        "/reef-for-good/",
         "/tools/what-would-win/",
         "/updates/"
       ],
@@ -698,6 +700,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -913,6 +916,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -1531,6 +1535,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -2612,6 +2617,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -2703,6 +2709,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -2796,6 +2803,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -3024,6 +3032,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -3273,6 +3282,7 @@
         "/pocket-audio/pocket-chordsmith/",
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
+        "/reef-for-good/",
         "/stats/",
         "/tools/what-would-win/",
         "/updates/"
@@ -3282,6 +3292,34 @@
         "/stats/"
       ],
       "localAssetCount": 8,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage"
+      ],
+      "findings": [],
+      "advisories": []
+    },
+    {
+      "route": "/reef-for-good/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/reef-for-good/",
+      "title": "Reef for Good — November 2026 | Samfa12",
+      "description": "Reef for Good: Samfa12 is donating 100% of the final November 2026 Wavedash Creator Fund allocation across four games to the Great Barrier Reef Foundation.",
+      "h1": [
+        "Play a game. Help me give something back to the reef."
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/",
+        "/links/"
+      ],
+      "incomingMain": [
+        "/",
+        "/links/"
+      ],
+      "localAssetCount": 10,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -3365,6 +3403,7 @@
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
         "/privacy/",
+        "/reef-for-good/",
         "/tools/what-would-win/",
         "/updates/"
       ],
@@ -3482,6 +3521,7 @@
         "/pocket-audio/pocket-chordsmith/",
         "/pocket-audio/pocket-daw/",
         "/pocket-audio/pocket-dj/",
+        "/reef-for-good/",
         "/tools/what-would-win/"
       ],
       "incomingMain": [
