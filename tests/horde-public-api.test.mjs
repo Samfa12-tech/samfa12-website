@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {publicQuery,loadPublicPage,readPublicPage} from '../assets/horde-public-api.js';
+const empty={schemaVersion:1,product:'horde-lantern-rt',classification:'community-client-reported',countUnit:'reports',reportCount:0,matchingReportCount:0,provisionalReportCount:0,rankingEligibleReportCount:0,revision:0,bucketDefinitions:[],missingDataFlags:{courseRevision:true},rows:[],nextCursor:null};
+test('receiver query bounds and exact filter names',()=>{assert.equal(publicQuery({profileRevision:'unknown',limit:100,sort:'gpuMedianMs'}),'profileRevision=unknown&limit=100&sort=gpuMedianMs'); for(const q of [{limit:101},{revision:'x'},{sort:'model'},{cursor:'bad!'}]) assert.throws(()=>publicQuery(q));});
+test('mock-only transport states and honest empty result',async()=>{assert.equal((await loadPublicPage({})).state,'unavailable'); assert.equal((await loadPublicPage({},async()=>new Response(null,{status:202}))).state,'pending'); assert.equal((await loadPublicPage({},async()=>new Response(null,{status:400}))).state,'restart-required'); assert.equal((await loadPublicPage({},async()=>Response.json(empty))).state,'empty'); assert.throws(()=>readPublicPage({...empty,privateReport:{}})); assert.throws(()=>readPublicPage({...empty,rankingEligibleReportCount:1}));});
