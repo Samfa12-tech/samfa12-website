@@ -1392,7 +1392,7 @@
     ];
     if (data.totals.amazon) {
       const amazonCard = createMarketplaceStatsCard({ id: "dashboard-amazon", platform: "Amazon KDP", primaryLabel: "Net book sales", primaryValue: data.totals.amazon.netUnits, detailMetrics: [{ label: "KENP pages read", value: data.totals.amazon.pagesRead }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.amazon.netUnits, "KDP book sale") });
-      overviewCards.splice(2, 1, createElement("div", { className: "stats-dashboard-storefront-stack" }, [overviewCards[2], amazonCard]));
+      overviewCards.push(amazonCard);
     }
     marketplaceDashboardOverview.replaceChildren(...overviewCards);
     marketplaceDashboardUpdated.textContent = `Last refreshed ${formatMarketplaceDate(data.generatedAt)}`;
