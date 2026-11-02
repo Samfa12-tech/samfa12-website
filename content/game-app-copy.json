@@ -1118,6 +1118,30 @@
     ],
     "updates": [
       {
+        "id": "spin-vector-safer-saves-controls-october-2026",
+        "kind": "release",
+        "date": "2026-10-25",
+        "dateMeaning": "Wavedash version history publication date",
+        "title": "Safer saves and clearer controls",
+        "summary": "Saving failures now keep progress pending and show a retry notice. Controller aiming stays consistent as inputs change, while the small-screen HUD, tutorial controls, button labels and language selection are clearer. A dedicated EMP tutorial and more readable enemy and credit colours make the next run easier to learn.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/spin-vector/patch-notes"
+        ]
+      },
+      {
+        "id": "spin-vector-wavedash-progress-october-2026",
+        "kind": "release",
+        "date": "2026-10-23",
+        "dateMeaning": "Wavedash version history publication date",
+        "title": "Improved touch and Wavedash progress",
+        "summary": "Touch and Backbone controls are steadier, Retry and ship upgrades are easier to find, and Wavedash achievements, stats and leaderboards now cover arenas and Gauntlet. Progress sync avoids counting the same run twice across game tabs.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/spin-vector/patch-notes"
+        ]
+      },
+      {
         "id": "spin-vector-android-optimisation-august-2026",
         "kind": "listing",
         "date": "2026-08-31",
@@ -1819,6 +1843,42 @@
       }
     ],
     "updates": [
+      {
+        "id": "reef-sweep-island-life-november-2026",
+        "kind": "release",
+        "date": "2026-11-02",
+        "dateMeaning": "Wavedash version history publication date",
+        "title": "Island Life brings more to Lantern Bay",
+        "summary": "Good Boy can join you for a short stroll, pelicans fish near the lighthouse, and town gardens, beach shells and two new night tracks add life to Lantern Bay. Reef cleanup now remembers your efforts, and the computer lets you choose a favourite dive photo for Fishbook after recording an outing.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      },
+      {
+        "id": "reef-sweep-fishbook-reliability-november-2026",
+        "kind": "release",
+        "date": "2026-11-01",
+        "dateMeaning": "Wavedash version history publication date",
+        "title": "Safer saves and Fishbook fixes",
+        "summary": "Saving when leaving and recovery after a graphics interruption are more reliable. Earned achievements can catch up when Wavedash becomes ready, and dive-photo choices stay available after recording an outing. The reported High/Max dive crash on affected iPhones remains unresolved; Balanced is recommended there.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      },
+      {
+        "id": "reef-sweep-fishbook-languages-october-2026",
+        "kind": "release",
+        "date": "2026-10-31",
+        "dateMeaning": "Wavedash version history publication date",
+        "title": "Fishbook, languages and smoother island life",
+        "summary": "Revisit past outings in Fishbook and keep a favourite dive photo. Switch among 14 newly added languages in Options. Controller menus, tutorials, scooter travel and underwater readability also received polish. New mobile settings start on Balanced; saved choices stay yours.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      },
       {
         "id": "reef-sweep-full-wavedash-campaign-october-2026",
         "kind": "release",
