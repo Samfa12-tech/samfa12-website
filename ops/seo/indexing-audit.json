@@ -8,7 +8,7 @@
     "explicitlyExcluded": 6,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 14,
+    "oneContextualIncoming": 15,
     "relationshipEdges": 71
   },
   "excluded": [
@@ -3288,8 +3288,7 @@
         "/updates/"
       ],
       "incomingMain": [
-        "/join/",
-        "/stats/"
+        "/join/"
       ],
       "localAssetCount": 8,
       "jsonLdStatus": "parsed",
@@ -3299,7 +3298,9 @@
         "WebPage"
       ],
       "findings": [],
-      "advisories": []
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
     },
     {
       "route": "/reef-for-good/",
@@ -3410,7 +3411,7 @@
       "incomingMain": [
         "/"
       ],
-      "localAssetCount": 10,
+      "localAssetCount": 9,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",

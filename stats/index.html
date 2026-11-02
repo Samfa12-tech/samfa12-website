@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/styles.css?v=20261023-steam-card" />
-    <link rel="stylesheet" href="/assets/game-starts.css?v=1" />
+    <link rel="stylesheet" href="/assets/stats-page.css?v=20261102" />
   </head>
   <body data-page="stats">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -62,20 +62,13 @@
         <div class="container hero-inner">
           <p class="eyebrow">Storefront signal // public dashboard</p>
           <h1>Marketplace statistics</h1>
-          <p class="lead">A privacy-safe readout of lifetime activity across the places Samfa12 releases live.</p>
+          <p class="lead">Audience activity for a clearly dated period, alongside lifetime storefront sales and reads.</p>
         </div>
       </section>
 
-      <section class="section" aria-labelledby="game-starts-title">
-        <div class="container">
-          <p class="eyebrow">Browser games</p>
-          <h2 id="game-starts-title">Briarhold and Reef Sweep starts</h2>
-          <p class="section-intro">One start per consenting browser play session, after the game is ready and play begins. These are separate from Cloudflare page-request estimates and marketplace activity.</p>
-          <div data-game-start-stats aria-live="polite"><p>Start tracking is not enabled yet. Totals will appear after tracking begins.</p></div>
-          <p class="stats-panel-note">Blocked or undelivered events can be missed. Repeat plays within one session count once. Historical page requests are not converted into starts. <a href="/privacy/">Privacy and analytics preferences</a></p>
-        </div>
-      </section>
 
+
+      <section class="section audience-section" aria-labelledby="audience-title"><div class="container"><p class="eyebrow">Audience / This period</p><h2 id="audience-title">Wavedash activity</h2><p class="section-intro">4 October–2 November 2026 · Australia/Sydney · 2 November is partial.</p><p class="stats-panel-note">Source: verified Wavedash dashboard figures supplied by Sam. As of 2 November 2026; exact capture time unavailable. This rolling 30-day view is not the November Reef for Good campaign total.</p><div class="audience-grid"><article class="audience-card"><h3>Reef Sweep</h3><dl><div><dt>Players</dt><dd>160</dd></div><div><dt>Plays</dt><dd>305</dd></div><div><dt>Time played</dt><dd>15h 29m 34s</dd></div></dl></article><article class="audience-card"><h3>Spin Vector</h3><dl><div><dt>Players</dt><dd>16</dd></div><div><dt>Plays</dt><dd>30</dd></div><div><dt>Time played</dt><dd>1h 54m 15s</dd></div></dl></article><article class="audience-card"><h3>The Last Guard</h3><dl><div><dt>Players</dt><dd>20</dd></div><div><dt>Plays</dt><dd>38</dd></div><div><dt>Time played</dt><dd>1h 21m 38s</dd></div></dl></article><article class="audience-card"><h3>Dust on the River</h3><p>Not collected for this update.</p><p class="stats-panel-note">No activity figure is available yet.</p></article></div><p class="stats-panel-note">Players are reported separately for each game and must not be added together as unique people. Plays and time played are activity measures, not earnings or donations. This is a dated snapshot, not a live feed.</p></div></section>
       <section class="section stats-dashboard" data-marketplace-dashboard hidden aria-labelledby="stats-dashboard-title">
         <div class="container">
           <div class="stats-dashboard-head">
@@ -158,7 +151,7 @@
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
       </div>
     </footer>
-    <script type="module" src="/assets/game-starts-stats.js?v=1"></script>
-    <script src="/script.js?v=20261019-1" defer></script>
+
+    <script src="/script.js?v=20261102-stats" defer></script>
   </body>
 </html>
