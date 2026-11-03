@@ -64,11 +64,14 @@
       "action": "create",
       "officialSources": [
         "https://samfa12.itch.io/the-horde",
+        "https://github.com/Samfa12-tech/The-Horde-RT-demo/releases/tag/v1.7.0",
+        "https://github.com/Samfa12-tech/The-Horde-RT-demo/blob/main/docs/SHOWCASE_ALPHA_1_7_0_RELEASE_NOTES_DRAFT.md",
+        "https://github.com/Samfa12-tech/The-Horde-RT-demo/blob/main/docs/SHOWCASE_ALPHA_1_7_0_RELEASE_VALIDATION_2026-11-03.md",
         "https://github.com/Samfa12-tech/The-Horde-RT-demo",
         "https://samfa12.itch.io/the-horde/devlog/1698261/the-horde-162-finishing-the-tomb"
       ],
       "notes": "Preserve experimental/tech-demo limitations and platform requirements. Do not market unverified hardware compatibility.",
-      "pageModified": "2026-11-01"
+      "pageModified": "2026-11-03"
     },
     {
       "id": "game-bug-swarm",

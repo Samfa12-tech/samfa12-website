@@ -1,11 +1,11 @@
 [
   {
     "route": "/",
-    "pageModified": "2026-11-01"
+    "pageModified": "2026-11-03"
   },
   {
     "route": "/games/",
-    "pageModified": "2026-10-28"
+    "pageModified": "2026-11-03"
   },
   {
     "route": "/games/bug-swarm/",
@@ -77,7 +77,7 @@
   },
   {
     "route": "/updates/",
-    "pageModified": "2026-11-02"
+    "pageModified": "2026-11-03"
   },
   {
     "route": "/reef-for-good/",
