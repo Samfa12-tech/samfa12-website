@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Browse self-reported community benchmark results for The Horde by device and configuration."><title>The Horde benchmark statistics | Samfa12</title><link rel="canonical" href="https://samfa12.com/games/the-horde/benchmark-stats/"><link rel="icon" href="/assets/favicon.png"><link rel="stylesheet" href="/styles.css?v=20261023-steam-card"><link rel="stylesheet" href="/assets/horde-benchmark-stats.css?v=1"></head><body data-page="horde-benchmark"><a class="skip-link" href="#main">Skip to content</a><header class="site-header" data-site-header>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="See community performance results for The Horde. Find your hardware, compare settings and view clearly labelled FPS estimates."><title>The Horde performance results | Samfa12</title><link rel="canonical" href="https://samfa12.com/games/the-horde/benchmark-stats/"><link rel="icon" href="/assets/favicon.png"><link rel="stylesheet" href="/styles.css?v=20261023-steam-card"><link rel="stylesheet" href="/assets/horde-benchmark-stats.css?v=20261103-player-results"></head><body data-page="horde-benchmark"><a class="skip-link" href="#main">Skip to content</a><header class="site-header" data-site-header>
       <div class="container header-inner">
         <a class="brand" href="/" aria-label="Samfa12 home">
           <span class="brand-orb" aria-hidden="true"><img class="brand-mark" src="/assets/samfa12-character.jpg" alt="" width="40" height="40" /></span>
@@ -23,7 +23,77 @@
           <button class="surprise-button" type="button" data-surprise disabled>Surprise me</button>
         </nav>
       </div>
-    </header><main id="main" class="benchmark"><section class="section"><div class="container"><p class="eyebrow">The Horde / performance</p><h1>How does it perform?</h1><p>Community reports are unverified and custom/unranked. Report counts are not unique people or devices. GPU duration is not display FPS. Unknown revisions remain provisional; unlike configurations are not ranked together.</p><p><a href="/games/the-horde/">Back to The Horde</a></p><form data-public-filters><fieldset><legend>Browse public reports</legend><div class="benchmark-filters"><label>Platform<input name="platform" maxlength="128"></label><label>Model<input name="model" maxlength="128"></label><label>GPU<input name="gpu" maxlength="128"></label><label>Build<input name="build" maxlength="128"></label><label>Profile<input name="profileId" maxlength="128"></label><label>Backend<input name="backend" maxlength="128"></label><label>Configuration bucket<input name="bucket" maxlength="128"></label><label>Course revision<input name="courseRevision" maxlength="128"></label><label>Profile revision<input name="profileRevision" maxlength="128"></label><label>Internal width<input name="width" maxlength="128"></label><label>Internal height<input name="height" maxlength="128"></label><label>Water quality<input name="water" maxlength="128"></label><label>Dielectric quality<input name="dielectric" maxlength="128"></label><label>Fire quality<input name="fire" maxlength="128"></label><label>Evidence class<input name="evidenceClass" maxlength="128"></label><label>Sort<select name="sort"><option value="date">Date</option><option value="frameMedianMs">Frame median duration</option><option value="gpuMedianMs">GPU median duration</option><option value="sampleCount">Sample count</option></select></label><label>Order<select name="order"><option value="desc">Descending</option><option value="asc">Ascending</option></select></label></div><button type="submit" class="project-link">Apply / refresh</button><button type="reset" class="project-link">Clear filters</button></fieldset></form><p role="status" aria-live="polite" data-public-status>Loading public reports…</p><div data-public-results></div><button type="button" class="project-link" data-public-next hidden>Next page</button><noscript><p>JavaScript is required to load public results.</p></noscript></div></section></main><footer class="site-footer">
+    </header><main id="main" class="benchmark">
+  <div class="container benchmark-content">
+    <header class="benchmark-intro">
+      <a class="benchmark-back" href="/games/the-horde/">← The Horde</a>
+      <p class="eyebrow">Community performance results</p>
+      <h1>How does your device run?</h1>
+      <p class="benchmark-lead">Find your hardware. Check the settings. See how The Horde performs.</p>
+    </header>
+
+    <form class="benchmark-browse" data-public-filters aria-label="Find benchmark results">
+      <div class="benchmark-toolbar">
+        <label class="benchmark-search">Find a device or graphics card
+          <input type="search" data-hardware-search maxlength="128" placeholder="e.g. RTX 5050 or Galaxy" autocomplete="off" aria-describedby="search-help">
+        </label>
+        <label>Platform
+          <select name="platform"><option value="">All platforms</option><option value="Windows">Windows</option><option value="Android">Android</option></select>
+        </label>
+        <label>Show
+          <select data-sort-order><option value="desc">Newest first</option><option value="asc">Oldest first</option></select>
+        </label>
+      </div>
+      <div class="benchmark-filter-footer">
+        <details class="benchmark-more-filters">
+          <summary>More filters</summary>
+          <p>Optional exact-match filters. Apply them with “Refresh”.</p>
+          <div class="benchmark-advanced">
+            <label>Device model<input name="model" maxlength="128"></label>
+            <label>Graphics card<input name="gpu" maxlength="128"></label>
+            <label>Game build<input name="build" maxlength="128"></label>
+            <label>Graphics profile<input name="profileId" maxlength="128"></label>
+            <label>Rendering backend<input name="backend" maxlength="128"></label>
+            <label>Configuration ID<input name="bucket" maxlength="128"></label>
+            <label>Course revision<input name="courseRevision" maxlength="128"></label>
+            <label>Profile revision<input name="profileRevision" maxlength="128"></label>
+            <label>Render width<input name="width" inputmode="numeric" maxlength="128"></label>
+            <label>Render height<input name="height" inputmode="numeric" maxlength="128"></label>
+            <label>Water quality<input name="water" maxlength="128"></label>
+            <label>Glass quality<input name="dielectric" maxlength="128"></label>
+            <label>Fire quality<input name="fire" maxlength="128"></label>
+            <label>Evidence class<input name="evidenceClass" maxlength="128"></label>
+          </div>
+        </details>
+        <div class="benchmark-filter-actions">
+          <button type="reset" class="benchmark-button benchmark-button-quiet">Reset</button>
+          <button type="submit" class="benchmark-button" aria-label="Update results">Refresh</button>
+        </div>
+      </div>
+      <p id="search-help" class="benchmark-search-help" data-search-help hidden>Search covers the reports loaded so far. Load more to search further.</p>
+    </form>
+
+    <section class="benchmark-results-section" aria-labelledby="results-title">
+      <div class="benchmark-results-heading"><h2 id="results-title">Recent results</h2><span class="benchmark-count" data-public-count>Community reports</span></div>
+      <p class="benchmark-context">Each result is a separate, unverified report. Match the settings before comparing.</p>
+      <p class="benchmark-status" role="status" aria-live="polite" data-public-status>Loading results…</p>
+      <div class="benchmark-results" data-public-results aria-busy="true"></div>
+      <button type="button" class="benchmark-button benchmark-retry" data-public-retry hidden>Try again</button>
+      <button type="button" class="benchmark-button benchmark-load-more" data-public-next hidden>Load more results</button>
+      <noscript><p>Turn on JavaScript to load community results. <a href="/games/the-horde/">Return to The Horde</a>.</p></noscript>
+    </section>
+
+    <details class="benchmark-about">
+      <summary>How to read these results</summary>
+      <div>
+        <p><strong>FPS means frames per second.</strong> Higher values usually mean smoother motion. An estimate gives an indication of performance; it is not a measured gameplay frame rate.</p>
+        <p><strong>Average FPS is not in the current reports.</strong> The FPS estimate shown here uses the typical recorded rendering time. A typical value is a median, so it cannot tell us the average. We show the missing average explicitly rather than guess it.</p>
+        <p><strong>Different settings change the workload.</strong> Compare resolution, graphics settings and game build before drawing conclusions. These are custom test runs, not a verified leaderboard. Each card stays separate, even when the hardware name matches.</p>
+        <p>Reports are shared by players and have not been independently checked. Multiple reports may come from the same person or device. Open a result’s details for its original timings, build and test configuration.</p>
+      </div>
+    </details>
+  </div>
+</main><footer class="site-footer">
       <div class="container">
         <div class="footer-grid">
           <div>
@@ -50,4 +120,4 @@
         </div>
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
       </div>
-    </footer><script src="/script.js?v=20261019-1" defer></script><script type="module" src="/assets/horde-benchmark-stats.js?v=2"></script></body></html>
+    </footer><script src="/script.js?v=20261019-1" defer></script><script type="module" src="/assets/horde-benchmark-stats.js?v=20261103-player-results"></script></body></html>
