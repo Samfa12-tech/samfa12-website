@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {aggregateResults, summariseRuns, fpsEstimate} from '../assets/horde-benchmark-summary.js';
+import {aggregateResults, summariseRuns, fpsEstimate, isPublicHardwareIdentified} from '../assets/horde-benchmark-summary.js';
 
 const run = (fps, index, extra = {}) => ({resultId:`run-${index}`, dateUtc:'2026-11-03', platform:'Windows', model:'Unknown', gpu:'NVIDIA GeForce RTX 5050 Laptop GPU', frameMedianMs:1000/fps, cpuTimingScope:'completed-owning-render-entry-through-present', internal:'1920 × 1080', output:'1920 × 1080', profile:'custom', backend:'RT', water:'high', dielectric:'high', fire:'High', shaderPair:'same-shaders', build:'build-a', ...extra});
 
@@ -49,7 +49,7 @@ test('small samples, missing timings and identical timings have explicit conserv
 
 test('phone identity, GPU identity and missing phone model do not merge unrelated hardware', () => {
   const groups = aggregateResults([run(60,0,{platform:'Android',model:'Phone A'}),run(60,1,{platform:'Android',model:'Phone B'}),run(60,2,{platform:'Android',model:'Unknown'}),run(60,3,{platform:'Android',model:'Unknown'}),run(60,4),run(60,5,{gpu:'NVIDIA GeForce RTX 5060 Laptop GPU'})]);
-  assert.equal(groups.length,6);
+  assert.equal(groups.length,4);
 });
 
 test('S24 Ultra model code and friendly name aggregate together, separately from S26 Ultra', () => {
@@ -62,4 +62,15 @@ test('S24 Ultra model code and friendly name aggregate together, separately from
   assert.equal(groups[0].title,'Galaxy S24 Ultra');
   assert.equal(groups[0].rows.length,2);
   assert.equal(groups[1].title,'Galaxy S26 Ultra');
+});
+
+
+test('public summaries need a GPU and mobile model, while Windows needs no PC model', () => {
+  assert.equal(isPublicHardwareIdentified(run(60,0)),true);
+  for (const gpu of [null, '', 'Unknown']) {
+    assert.equal(isPublicHardwareIdentified(run(60,1,{gpu})),false);
+    assert.equal(aggregateResults([run(60,1,{gpu})]).length,0);
+  }
+  assert.equal(isPublicHardwareIdentified(run(60,2,{platform:'Android',model:'Unknown'})),false);
+  assert.equal(isPublicHardwareIdentified(run(60,3,{platform:'Android',model:'SM-S948B'})),true);
 });
