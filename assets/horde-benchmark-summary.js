@@ -1,4 +1,4 @@
-const known = value => typeof value === 'string' && value.length > 0 && value !== 'Unknown';
+const known = value => typeof value === 'string' && value.trim().length > 0 && value.trim().toLowerCase() !== 'unknown';
 const FRAME_SCOPES = new Set(['completed-owning-render-entry-through-present', 'whole-frame-cycle']);
 
 export function frameRateEstimate(row) {
@@ -28,6 +28,11 @@ export function friendlyDeviceName(model) {
 
 export function gpuName(value) {
   return known(value) ? value.replace(/^NVIDIA GeForce /i, '').replace(/\s*\(TM\)/gi, '').replace(/ GPU$/i, '') : null;
+}
+
+// Display guard for legacy responses. Publication consent is enforced by the service.
+export function isPublicHardwareIdentified(row) {
+  return known(row.gpu) && (row.platform !== 'Android' || known(row.model));
 }
 
 function quantile(sorted, fraction) {
@@ -80,6 +85,7 @@ function settingsKey(row) {
 export function aggregateResults(rows) {
   const groups = new Map();
   for (const row of rows) {
+    if (!isPublicHardwareIdentified(row)) continue;
     const hardware = identity(row);
     if (!groups.has(hardware.key)) groups.set(hardware.key, {...hardware, platform: row.platform, rows: [], settings: new Map()});
     const group = groups.get(hardware.key);

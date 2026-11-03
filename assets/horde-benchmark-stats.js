@@ -1,7 +1,7 @@
 import {loadPublicPage} from './horde-public-api.js';
-import {fpsEstimate, aggregateResults, friendlyDeviceName, gpuName} from './horde-benchmark-summary.js?v=20261103-device-names';
-import {optionCatalog, matchesOptions, gameVersion} from './horde-benchmark-filters.js?v=20261103-device-names';
-export {fpsEstimate} from './horde-benchmark-summary.js?v=20261103-device-names';
+import {fpsEstimate, aggregateResults, friendlyDeviceName, gpuName, isPublicHardwareIdentified} from './horde-benchmark-summary.js?v=20261103-hardware-consent';
+import {optionCatalog, matchesOptions, gameVersion} from './horde-benchmark-filters.js?v=20261103-hardware-consent';
+export {fpsEstimate} from './horde-benchmark-summary.js?v=20261103-hardware-consent';
 
 const known = value => value && value !== 'Unknown';
 const titleCase = value => known(value) ? value.charAt(0).toUpperCase() + value.slice(1) : 'Not reported';
@@ -38,6 +38,7 @@ export function mountPublicResults(root, transport) {
   const count = find('[data-public-count]');
   const searchHelp = find('[data-search-help]');
   const optionFilters = [...root.querySelectorAll('[data-option-filter]')];
+  const seenReports = new Set();
   let generation = 0, cursor = null, rows = [], matchingCount = 0, loading = false, retryPaging = false;
 
   function el(tag, text, className) {
@@ -215,9 +216,10 @@ export function mountPublicResults(root, transport) {
     next.hidden = !cursor;
     if (!visible.length) {
       const title = Object.values(filters).some(Boolean) ? 'No results match these filters' : search.value.trim() || gpu.value ? 'No matching hardware in these results' : 'No results yet';
-      message(title, cursor ? 'Try another choice, reset the filters, or load more results below.' : 'Try another choice or reset the filters to see all reports.');
+      const help = !rows.length && seenReports.size ? 'Reports without shared GPU details or a mobile model are not shown.' : 'Try another choice or reset the filters to see all reports.';
+      message(title, cursor ? 'Try another choice, reset the filters, or load more results below.' : help);
     }
-    status.textContent = `${groups.length} hardware ${groups.length === 1 ? 'summary' : 'summaries'} from ${visible.length} ${visible.length === 1 ? 'run' : 'runs'}${cursor ? ` · ${rows.length} of ${matchingCount} reports loaded; summaries cover loaded runs` : ''}.`;
+    status.textContent = `${groups.length} hardware ${groups.length === 1 ? 'summary' : 'summaries'} from ${visible.length} ${visible.length === 1 ? 'run' : 'runs'}${cursor ? ` · ${seenReports.size} of ${matchingCount} reports loaded; summaries cover loaded runs` : ''}.`;
   }
 
   async function load(paging = false) {
@@ -232,7 +234,7 @@ export function mountPublicResults(root, transport) {
     query.sort = 'date';
     query.order = sort.value;
     if (paging && cursor) query.cursor = cursor;
-    if (!paging) { rows = []; cursor = null; matchingCount = 0; results.replaceChildren(); count.textContent = 'Community reports'; }
+    if (!paging) { seenReports.clear(); rows = []; cursor = null; matchingCount = 0; results.replaceChildren(); count.textContent = 'Community reports'; }
     status.textContent = paging ? 'Loading more results…' : 'Loading results…';
     results.setAttribute('aria-busy', 'true');
     next.hidden = true;
@@ -244,9 +246,11 @@ export function mountPublicResults(root, transport) {
       if (token !== generation) return;
       if (response.state === 'ready' || response.state === 'empty') {
         const page = response.page;
-        const seen = new Set(rows.map(row => row.resultId));
         for (const row of page.rows) {
-          if (!seen.has(row.resultId)) { seen.add(row.resultId); rows.push(row); }
+          if (!seenReports.has(row.resultId)) {
+            seenReports.add(row.resultId);
+            if (isPublicHardwareIdentified(row)) rows.push(row);
+          }
         }
         cursor = page.nextCursor;
         matchingCount = page.matchingReportCount;
