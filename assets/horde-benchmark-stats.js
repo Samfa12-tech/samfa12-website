@@ -1,7 +1,7 @@
 import {loadPublicPage} from './horde-public-api.js';
-import {fpsEstimate, aggregateResults, friendlyDeviceName, gpuName} from './horde-benchmark-summary.js';
-import {optionCatalog, matchesOptions, gameVersion} from './horde-benchmark-filters.js';
-export {fpsEstimate} from './horde-benchmark-summary.js';
+import {fpsEstimate, aggregateResults, friendlyDeviceName, gpuName} from './horde-benchmark-summary.js?v=20261103-device-names';
+import {optionCatalog, matchesOptions, gameVersion} from './horde-benchmark-filters.js?v=20261103-device-names';
+export {fpsEstimate} from './horde-benchmark-summary.js?v=20261103-device-names';
 
 const known = value => value && value !== 'Unknown';
 const titleCase = value => known(value) ? value.charAt(0).toUpperCase() + value.slice(1) : 'Not reported';

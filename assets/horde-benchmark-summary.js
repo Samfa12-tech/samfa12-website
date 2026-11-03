@@ -12,15 +12,17 @@ export function fpsEstimate(row) {
   return fps === null ? null : Math.round(fps);
 }
 
-// Samsung identifies these model codes as Galaxy S26 Ultra:
+// Samsung identifies the S948 model codes as Galaxy S26 Ultra; the owner
+// confirmed SM-S928B as Galaxy S24 Ultra. Unknown codes remain unchanged.
 // https://doc.samsungmobile.com/SM-S948B/037405260313/eng.html
 // https://doc.samsungmobile.com/SM-S948U/CCT/doc.html
-const PHONE_NAMES = new Map([['SM-S948B', 'Galaxy S26 Ultra'], ['SM-S948U', 'Galaxy S26 Ultra']]);
+const PHONE_NAMES = new Map([['SM-S928B', 'Galaxy S24 Ultra'], ['SM-S948B', 'Galaxy S26 Ultra'], ['SM-S948U', 'Galaxy S26 Ultra']]);
 export function friendlyDeviceName(model) {
   if (!known(model)) return null;
   const text = model.trim();
   if (PHONE_NAMES.has(text.toUpperCase())) return PHONE_NAMES.get(text.toUpperCase());
-  if (/^(?:Samsung\s+)?Galaxy\s+S26\s+Ultra$/i.test(text)) return 'Galaxy S26 Ultra';
+  const galaxy = /^(?:Samsung\s+)?Galaxy\s+S(24|26)\s+Ultra$/i.exec(text);
+  if (galaxy) return `Galaxy S${galaxy[1]} Ultra`;
   return text;
 }
 

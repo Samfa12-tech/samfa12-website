@@ -51,3 +51,15 @@ test('phone identity, GPU identity and missing phone model do not merge unrelate
   const groups = aggregateResults([run(60,0,{platform:'Android',model:'Phone A'}),run(60,1,{platform:'Android',model:'Phone B'}),run(60,2,{platform:'Android',model:'Unknown'}),run(60,3,{platform:'Android',model:'Unknown'}),run(60,4),run(60,5,{gpu:'NVIDIA GeForce RTX 5060 Laptop GPU'})]);
   assert.equal(groups.length,6);
 });
+
+test('S24 Ultra model code and friendly name aggregate together, separately from S26 Ultra', () => {
+  const groups=aggregateResults([
+    run(40,0,{platform:'Android',model:'SM-S928B',gpu:'Adreno (TM) 750'}),
+    run(42,1,{platform:'Android',model:'Samsung Galaxy S24 Ultra',gpu:'Adreno (TM) 750'}),
+    run(70,2,{platform:'Android',model:'SM-S948B',gpu:'Adreno (TM) 840'}),
+  ]);
+  assert.equal(groups.length,2);
+  assert.equal(groups[0].title,'Galaxy S24 Ultra');
+  assert.equal(groups[0].rows.length,2);
+  assert.equal(groups[1].title,'Galaxy S26 Ultra');
+});
