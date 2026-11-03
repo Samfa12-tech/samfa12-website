@@ -115,10 +115,30 @@
           "url": "https://github.com/Samfa12-tech/The-Horde-RT-demo/blob/main/docs/evidence/2026-10-09-release-publication/README.md",
           "identity": "Verified Android and Windows 1.6.2 distribution receipt; no GitHub Release created",
           "access": "read-public-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/The-Horde-RT-demo/releases/tag/v1.7.0",
+          "identity": "Public immutable GitHub 1.7.0 release, published 2026-11-03",
+          "access": "read-public-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/The-Horde-RT-demo/blob/main/docs/SHOWCASE_ALPHA_1_7_0_RELEASE_NOTES_DRAFT.md",
+          "identity": "Approved 1.7 feature summary",
+          "access": "read-repository-source"
+        },
+        {
+          "url": "https://github.com/Samfa12-tech/The-Horde-RT-demo/blob/main/docs/SHOWCASE_ALPHA_1_7_0_RELEASE_VALIDATION_2026-11-03.md",
+          "identity": "Exact-package testing scope and limits",
+          "access": "read-repository-source"
+        },
+        {
+          "url": "https://samfa12.com/games/the-horde/benchmark-stats/",
+          "identity": "First-party community benchmark board; unverified and unranked results",
+          "access": "read-repository-source"
         }
       ],
-      "reviewedAt": "2026-10-09",
-      "dateMeaning": "Official public release and storefront verification date, not a substitute for event dates"
+      "reviewedAt": "2026-11-03",
+      "dateMeaning": "Verified GitHub 1.7.0 release, itch download publication and repository feature/validation review date"
     },
     "game-bug-swarm": {
       "disposition": "create",
