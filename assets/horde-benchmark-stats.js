@@ -1,23 +1,25 @@
 import {loadPublicPage, PUBLIC_FILTERS} from './horde-public-api.js';
+import {fpsEstimate, aggregateResults, friendlyDeviceName, gpuName} from './horde-benchmark-summary.js';
+export {fpsEstimate} from './horde-benchmark-summary.js';
 
-const FRAME_SCOPES = new Set(['completed-owning-render-entry-through-present', 'whole-frame-cycle']);
 const known = value => value && value !== 'Unknown';
 const titleCase = value => known(value) ? value.charAt(0).toUpperCase() + value.slice(1) : 'Not reported';
 const number = value => new Intl.NumberFormat('en', {maximumFractionDigits: 2}).format(value);
 
 // The service exposes medians, not an arithmetic mean or a measured gameplay FPS.
 // Only use the owning frame's timing. GPU ray-tracing duration is never a fallback.
-export function fpsEstimate(row) {
-  if (!FRAME_SCOPES.has(row.cpuTimingScope) || !Number.isFinite(row.frameMedianMs) || row.frameMedianMs <= 0) return null;
-  return Math.round(1000 / row.frameMedianMs);
-}
-
 export function hardwareName(row) {
-  return known(row.model) ? row.model : known(row.gpu) ? row.gpu : 'Device not reported';
+  return friendlyDeviceName(row.model) || (known(row.gpu) ? row.gpu : 'Device not reported');
 }
 
 export function matchesHardware(row, search) {
-  return `${known(row.model) ? row.model : ''} ${known(row.gpu) ? row.gpu : ''}`.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase());
+  return `${known(row.model) ? row.model : ''} ${hardwareName(row)} ${known(row.gpu) ? row.gpu : ''}`.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase());
+}
+
+export function gpuChoices(rows) {
+  return [...new Set(rows.map(row => row.gpu).filter(known))]
+    .sort((a, b) => a.localeCompare(b, 'en', {numeric: true}))
+    .map(value => ({value, label: gpuName(value)}));
 }
 
 export function mountPublicResults(root, transport) {
@@ -30,6 +32,7 @@ export function mountPublicResults(root, transport) {
   const next = find('[data-public-next]');
   const retry = find('[data-public-retry]');
   const search = find('[data-hardware-search]');
+  const gpu = find('[data-gpu-filter]');
   const sort = find('[data-sort-order]');
   const count = find('[data-public-count]');
   const searchHelp = find('[data-search-help]');
@@ -48,8 +51,22 @@ export function mountPublicResults(root, transport) {
     results.replaceChildren(panel);
   }
 
+  function updateGPUChoices() {
+    const selected = gpu.value;
+    const choices = gpuChoices(rows);
+    const all = el('option', choices.length ? 'All GPUs' : 'No GPUs reported');
+    all.value = '';
+    gpu.replaceChildren(all, ...choices.map(choice => {
+      const option = el('option', choice.label);
+      option.value = choice.value;
+      return option;
+    }));
+    if (choices.some(choice => choice.value === selected)) gpu.value = selected;
+    gpu.disabled = !choices.length;
+  }
+
   function report(row, index) {
-    const card = el('article', undefined, 'benchmark-result');
+    const card = el('article', undefined, 'benchmark-run');
     const body = el('div', undefined, 'benchmark-result-body');
     const hardware = el('div', undefined, 'benchmark-result-hardware');
     const meta = el('div', undefined, 'benchmark-result-meta');
@@ -57,7 +74,7 @@ export function mountPublicResults(root, transport) {
     // The service's public date is day-granular; no local timezone conversion.
     if (/^\d{4}-\d{2}-\d{2}$/.test(row.dateUtc)) date.dateTime = row.dateUtc;
     meta.append(el('span', row.platform, 'benchmark-platform'), date);
-    const heading = el('h3', hardwareName(row));
+    const heading = el('h4', hardwareName(row));
     heading.id = `benchmark-report-${index}`;
     card.setAttribute('aria-labelledby', heading.id);
     hardware.append(meta, heading);
@@ -106,16 +123,78 @@ export function mountPublicResults(root, transport) {
     return card;
   }
 
+  function hardwareSummary(group, index) {
+    const card = el('article', undefined, 'benchmark-result');
+    const body = el('div', undefined, 'benchmark-result-body');
+    const primary = group.primary, row = primary.rows[0], stats = primary.stats;
+    const hardware = el('div', undefined, 'benchmark-result-hardware');
+    const meta = el('div', undefined, 'benchmark-result-meta');
+    meta.append(el('span', group.platform === 'Android' ? 'Mobile' : group.platform, 'benchmark-platform'), el('span', `${group.rows.length} ${group.rows.length === 1 ? 'run' : 'runs'}`));
+    const heading = el('h3', group.title);
+    heading.id = `benchmark-hardware-${index}`;
+    card.setAttribute('aria-labelledby', heading.id);
+    hardware.append(meta, heading);
+    if (group.platform === 'Android' && known(row.gpu)) hardware.append(el('p', gpuName(row.gpu), 'benchmark-secondary'));
+    if (new Set(primary.rows.map(run => run.build)).size > 1) hardware.append(el('p', 'Across different game versions', 'benchmark-secondary'));
+    if (stats.used < 5) hardware.append(el('p', stats.used === 1 ? 'Early result · 1 usable run' : 'Small sample · more runs will help', 'benchmark-secondary'));
+
+    const setup = el('div', undefined, 'benchmark-result-setup');
+    setup.append(el('p', group.settings.length > 1 ? 'Most reported settings' : 'Test settings', 'benchmark-setup-label'), el('p', `${row.internal} · Custom`, 'benchmark-resolution'));
+    const quality = el('p', undefined, 'benchmark-quality');
+    for (const [label, value] of [['Water', row.water], ['Glass', row.dielectric], ['Fire', row.fire]]) quality.append(el('span', `${label}: ${titleCase(value)}`));
+    setup.append(quality);
+    if (group.settings.length > 1) setup.append(el('p', `${primary.rows.length} runs at these settings · ${group.settings.length - 1} other ${group.settings.length === 2 ? 'setup' : 'setups'} in details`, 'benchmark-secondary'));
+
+    const performance = el('div', undefined, 'benchmark-fps');
+    performance.append(el('p', 'Average estimated FPS', 'benchmark-fps-label'));
+    const value = el('span', stats.mean === null ? '—' : `~${number(Math.round(stats.mean))}`, 'benchmark-fps-number');
+    if (stats.mean !== null) value.append(el('small', ' FPS'));
+    const range = stats.used > 1 ? `Range: ${number(Math.round(stats.low))}–${number(Math.round(stats.high))} FPS` : stats.used === 1 ? 'More runs needed for a range' : 'Frame timing unavailable';
+    performance.append(value, el('p', range, 'benchmark-fps-note'));
+    const sample = `${stats.used} ${stats.used === 1 ? 'run' : 'runs'} used${stats.excludedIds.length ? ` · ${stats.excludedIds.length} unusual ${stats.excludedIds.length === 1 ? 'run' : 'runs'} excluded` : ''}${stats.missing ? ` · ${stats.missing} missing timings` : ''}`;
+    performance.append(el('p', sample, 'benchmark-average'));
+    body.append(hardware, setup, performance);
+
+    const details = el('details', undefined, 'benchmark-result-details');
+    details.append(el('summary', `Runs & details (${group.rows.length})`));
+    const content = el('div', undefined, 'benchmark-detail-content');
+    content.append(el('p', 'The average gives each usable run equal weight. Each run contributes an FPS estimate from its median rendering time; this is not a measured average gameplay FPS. The range is the lowest to highest estimate retained in the summary.'));
+    content.append(el('p', 'Unusual runs are excluded only when at least five runs have usable timings at the same reported settings. We use the usual 1.5× interquartile-range rule. When the middle half is identical, a 10% (at least 1 FPS) tolerance avoids removing small variations. Original reports remain available below.'));
+    content.append(el('p', 'These are unverified community summaries, not a leaderboard. Resolution, graphics profile, rendering backend and shader versions are matched before averaging. Game builds can differ; missing test revisions and output rules prevent a verified like-for-like comparison. Run counts are not unique people or devices.'));
+    if (group.settings.length > 1) {
+      content.append(el('h4', 'Other test settings'));
+      const list = el('dl');
+      for (const setting of group.settings.slice(1)) {
+        const sampleRow = setting.rows[0], summary = setting.stats;
+        list.append(el('dt', `${sampleRow.internal} · Water ${titleCase(sampleRow.water)} · Glass ${titleCase(sampleRow.dielectric)} · Fire ${titleCase(sampleRow.fire)}`), el('dd', summary.mean === null ? `${setting.rows.length} runs · FPS unavailable` : `~${number(Math.round(summary.mean))} FPS average estimate · ${summary.used} runs used${summary.excludedIds.length ? ` · ${summary.excludedIds.length} excluded` : ''}`));
+      }
+      content.append(list);
+    }
+    const runs = el('details', undefined, 'benchmark-run-list');
+    runs.append(el('summary', `View ${group.rows.length} individual ${group.rows.length === 1 ? 'run' : 'runs'}`));
+    const excluded = new Set(group.settings.flatMap(setting => setting.stats.excludedIds));
+    group.rows.forEach((run, runIndex) => {
+      const original = report(run, index * 10000 + runIndex);
+      if (excluded.has(run.resultId)) original.prepend(el('p', 'Unusual run · excluded from the summary', 'benchmark-excluded'));
+      runs.append(original);
+    });
+    content.append(runs);
+    details.append(content);
+    card.append(body, details);
+    return card;
+  }
+
   function render() {
-    const visible = rows.filter(row => matchesHardware(row, search.value));
-    results.replaceChildren(...visible.map(report));
-    count.textContent = `${matchingCount} ${matchingCount === 1 ? 'report' : 'reports'}`;
+    const visible = rows.filter(row => (!gpu.value || row.gpu === gpu.value) && matchesHardware(row, search.value));
+    const groups = aggregateResults(visible);
+    results.replaceChildren(...groups.map(hardwareSummary));
+    count.textContent = `${groups.length} ${groups.length === 1 ? 'model' : 'models'} · ${visible.length} ${visible.length === 1 ? 'run' : 'runs'}`;
     searchHelp.hidden = !cursor;
     next.hidden = !cursor;
     if (!visible.length) {
-      message(search.value.trim() ? 'No matching hardware in these results' : 'No results yet', cursor ? 'Try another search, reset the filters, or load more results below.' : 'Try another device or platform, or reset the filters to see all reports.');
+      message(search.value.trim() || gpu.value ? 'No matching hardware in these results' : 'No results yet', cursor ? 'Try another search, reset the filters, or load more results below.' : 'Try another device or platform, or reset the filters to see all reports.');
     }
-    status.textContent = `${visible.length} ${visible.length === 1 ? 'result' : 'results'} shown${cursor ? ` · ${rows.length} of ${matchingCount} reports loaded` : ''}.`;
+    status.textContent = `${groups.length} hardware ${groups.length === 1 ? 'summary' : 'summaries'} from ${visible.length} ${visible.length === 1 ? 'run' : 'runs'}${cursor ? ` · ${rows.length} of ${matchingCount} reports loaded; summaries cover loaded runs` : ''}.`;
   }
 
   async function load(paging = false) {
@@ -123,7 +202,9 @@ export function mountPublicResults(root, transport) {
     loading = true;
     retryPaging = paging;
     const query = {};
-    for (const [key, value] of new FormData(form)) if (PUBLIC_FILTERS.includes(key) && value.trim()) query[key] = value.trim();
+    // GPU filtering stays local to the platform's reports, so choosing one GPU
+    // cannot hide other GPU models from the dropdown on a later refresh.
+    for (const [key, value] of new FormData(form)) if (PUBLIC_FILTERS.includes(key) && key !== 'gpu' && value.trim()) query[key] = value.trim();
     query.limit = 100;
     query.sort = 'date';
     query.order = sort.value;
@@ -134,15 +215,19 @@ export function mountPublicResults(root, transport) {
     next.hidden = true;
     retry.hidden = true;
     searchHelp.hidden = true;
+    gpu.disabled = true;
     try {
       const response = await loadPublicPage(query, transport);
       if (token !== generation) return;
       if (response.state === 'ready' || response.state === 'empty') {
         const page = response.page;
         const seen = new Set(rows.map(row => row.resultId));
-        rows.push(...page.rows.filter(row => !seen.has(row.resultId)));
+        for (const row of page.rows) {
+          if (!seen.has(row.resultId)) { seen.add(row.resultId); rows.push(row); }
+        }
         cursor = page.nextCursor;
         matchingCount = page.matchingReportCount;
+        updateGPUChoices();
         render();
       } else {
         const states = {
@@ -166,13 +251,19 @@ export function mountPublicResults(root, transport) {
       retry.hidden = false;
       retry.textContent = 'Try again';
     } finally {
-      if (token === generation) { loading = false; results.setAttribute('aria-busy', 'false'); }
+      if (token === generation) { loading = false; results.setAttribute('aria-busy', 'false'); if (rows.length) gpu.disabled = !gpuChoices(rows).length; }
     }
   }
 
   form.addEventListener('submit', event => { event.preventDefault(); load(); });
   form.addEventListener('reset', () => setTimeout(() => load(), 0));
-  form.elements.platform.addEventListener('change', () => load());
+  form.elements.platform.addEventListener('change', () => {
+    const option = el('option', 'Loading graphics cards…');
+    option.value = '';
+    gpu.replaceChildren(option);
+    load();
+  });
+  gpu.addEventListener('change', () => { if (!loading && rows.length) render(); });
   sort.addEventListener('change', () => load());
   search.addEventListener('input', () => { if (!loading && rows.length) render(); });
   next.addEventListener('click', () => { if (!loading) load(true); });
