@@ -1,7 +1,7 @@
-import {loadPublicPage} from './horde-public-api.js';
-import {fpsEstimate, aggregateResults, friendlyDeviceName, gpuName, isPublicHardwareIdentified} from './horde-benchmark-summary.js?v=20261103-hardware-consent';
-import {optionCatalog, matchesOptions, gameVersion} from './horde-benchmark-filters.js?v=20261103-hardware-consent';
-export {fpsEstimate} from './horde-benchmark-summary.js?v=20261103-hardware-consent';
+import {loadPublicPage} from './horde-public-api.js?v=20261103-hardware-names';
+import {fpsEstimate, aggregateResults, friendlyDeviceName, gpuName, isPublicHardwareIdentified} from './horde-benchmark-summary.js?v=20261103-hardware-names';
+import {optionCatalog, matchesOptions, gameVersion} from './horde-benchmark-filters.js?v=20261103-hardware-names';
+export {fpsEstimate} from './horde-benchmark-summary.js?v=20261103-hardware-names';
 
 const known = value => value && value !== 'Unknown';
 const titleCase = value => known(value) ? value.charAt(0).toUpperCase() + value.slice(1) : 'Not reported';
@@ -38,7 +38,15 @@ export function mountPublicResults(root, transport) {
   const count = find('[data-public-count]');
   const searchHelp = find('[data-search-help]');
   const optionFilters = [...root.querySelectorAll('[data-option-filter]')];
-  const seenReports = new Set();
+  const seenReports = new Set(), unrecognizedReports = new Set();
+  const hardwareNotice = find('[data-public-hardware-notice]');
+  function updateHardwareNotice() {
+    if (!hardwareNotice) return;
+    hardwareNotice.hidden = unrecognizedReports.size === 0;
+    hardwareNotice.querySelector('summary').textContent = `${unrecognizedReports.size} shared ${unrecognizedReports.size === 1 ? 'report needs' : 'reports need'} a hardware name check`;
+    const references = hardwareNotice.querySelector('[data-hardware-references]');
+    references.replaceChildren(...[...unrecognizedReports].map(id => el('li', id)));
+  }
   let generation = 0, cursor = null, rows = [], matchingCount = 0, loading = false, retryPaging = false;
 
   function el(tag, text, className) {
@@ -207,6 +215,7 @@ export function mountPublicResults(root, transport) {
   }
 
   function render() {
+    updateHardwareNotice();
     const filters = Object.fromEntries(optionFilters.map(select => [select.dataset.optionFilter, select.value]));
     const visible = rows.filter(row => (!gpu.value || row.gpu === gpu.value) && matchesHardware(row, search.value) && matchesOptions(row, filters));
     const groups = aggregateResults(visible);
@@ -234,7 +243,7 @@ export function mountPublicResults(root, transport) {
     query.sort = 'date';
     query.order = sort.value;
     if (paging && cursor) query.cursor = cursor;
-    if (!paging) { seenReports.clear(); rows = []; cursor = null; matchingCount = 0; results.replaceChildren(); count.textContent = 'Community reports'; }
+    if (!paging) { seenReports.clear(); unrecognizedReports.clear(); updateHardwareNotice(); rows = []; cursor = null; matchingCount = 0; results.replaceChildren(); count.textContent = 'Community reports'; }
     status.textContent = paging ? 'Loading more results…' : 'Loading results…';
     results.setAttribute('aria-busy', 'true');
     next.hidden = true;
@@ -249,6 +258,7 @@ export function mountPublicResults(root, transport) {
         for (const row of page.rows) {
           if (!seenReports.has(row.resultId)) {
             seenReports.add(row.resultId);
+            if (row.hardwareLabelStatus === 'unrecognized') unrecognizedReports.add(row.resultId);
             if (isPublicHardwareIdentified(row)) rows.push(row);
           }
         }
