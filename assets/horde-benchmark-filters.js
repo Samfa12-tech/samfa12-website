@@ -1,8 +1,9 @@
-import {friendlyDeviceName} from './horde-benchmark-summary.js';
+import {friendlyDeviceName} from './horde-benchmark-summary.js?v=20261103-device-names';
 
 // Verified against VERSION at these exact source commits. Different package /
 // compiler fingerprints for a source commit retain its declared game version.
 const SOURCE_VERSIONS = new Map([
+  ['d1c6d152d18c7002c41638d51dc9d9bcceea1bd4', '1.7.0'],
   ['6c06df462a6154fbd0a30e751b03d1dee01c565c', '1.7.0'],
   ['b169400a25bce1f257a70c54aff66999e4a35c49', '1.7.0'],
   ['43d5886df9a4141d8898a30a32624b8bbd7bbb9d', '1.6.2'],

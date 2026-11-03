@@ -11,6 +11,7 @@ const row = {build:current,model:'SM-S948B',profile:'custom',internal:'475 × 98
 test('build choices use verified versions, combine packages and do not mislabel older or unknown builds', () => {
   assert.deepEqual(gameVersion(current),{value:'version:1.7.0',label:'1.7.0'});
   assert.deepEqual(gameVersion(android),gameVersion(current));
+  assert.deepEqual(gameVersion(build('d1c6d152d18c7002c41638d51dc9d9bcceea1bd4')),gameVersion(current));
   assert.deepEqual(gameVersion(older),{value:'version:1.6.2',label:'1.6.2'});
   assert.equal(gameVersion(build('a'.repeat(40))).label,'Unidentified build (aaaaaaa)');
   assert.equal(gameVersion('1.8.0').label,'1.8.0');
