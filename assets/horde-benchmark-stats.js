@@ -1,5 +1,6 @@
-import {loadPublicPage, PUBLIC_FILTERS} from './horde-public-api.js';
+import {loadPublicPage} from './horde-public-api.js';
 import {fpsEstimate, aggregateResults, friendlyDeviceName, gpuName} from './horde-benchmark-summary.js';
+import {optionCatalog, matchesOptions, gameVersion} from './horde-benchmark-filters.js';
 export {fpsEstimate} from './horde-benchmark-summary.js';
 
 const known = value => value && value !== 'Unknown';
@@ -36,6 +37,7 @@ export function mountPublicResults(root, transport) {
   const sort = find('[data-sort-order]');
   const count = find('[data-public-count]');
   const searchHelp = find('[data-search-help]');
+  const optionFilters = [...root.querySelectorAll('[data-option-filter]')];
   let generation = 0, cursor = null, rows = [], matchingCount = 0, loading = false, retryPaging = false;
 
   function el(tag, text, className) {
@@ -63,6 +65,23 @@ export function mountPublicResults(root, transport) {
     }));
     if (choices.some(choice => choice.value === selected)) gpu.value = selected;
     gpu.disabled = !choices.length;
+  }
+
+  function updateOptionChoices() {
+    const catalog = optionCatalog(rows);
+    for (const select of optionFilters) {
+      const selected = select.value;
+      const choices = catalog[select.dataset.optionFilter] || [];
+      const all = el('option', select.dataset.anyLabel);
+      all.value = '';
+      select.replaceChildren(all, ...choices.map(choice => {
+        const option = el('option', choice.label);
+        option.value = choice.value;
+        return option;
+      }));
+      if (choices.some(choice => choice.value === selected)) select.value = selected;
+      select.disabled = !choices.length;
+    }
   }
 
   function report(row, index) {
@@ -135,7 +154,9 @@ export function mountPublicResults(root, transport) {
     card.setAttribute('aria-labelledby', heading.id);
     hardware.append(meta, heading);
     if (group.platform === 'Android' && known(row.gpu)) hardware.append(el('p', gpuName(row.gpu), 'benchmark-secondary'));
-    if (new Set(primary.rows.map(run => run.build)).size > 1) hardware.append(el('p', 'Across different game versions', 'benchmark-secondary'));
+    const versions = primary.rows.map(run => gameVersion(run.build));
+    if (versions.some(version => version.value.startsWith('build:'))) hardware.append(el('p', 'Game version not fully identified', 'benchmark-secondary'));
+    else if (new Set(versions.map(version => version.value)).size > 1) hardware.append(el('p', 'Across different game versions', 'benchmark-secondary'));
     if (stats.used < 5) hardware.append(el('p', stats.used === 1 ? 'Early result · 1 usable run' : 'Small sample · more runs will help', 'benchmark-secondary'));
 
     const setup = el('div', undefined, 'benchmark-result-setup');
@@ -185,14 +206,16 @@ export function mountPublicResults(root, transport) {
   }
 
   function render() {
-    const visible = rows.filter(row => (!gpu.value || row.gpu === gpu.value) && matchesHardware(row, search.value));
+    const filters = Object.fromEntries(optionFilters.map(select => [select.dataset.optionFilter, select.value]));
+    const visible = rows.filter(row => (!gpu.value || row.gpu === gpu.value) && matchesHardware(row, search.value) && matchesOptions(row, filters));
     const groups = aggregateResults(visible);
     results.replaceChildren(...groups.map(hardwareSummary));
     count.textContent = `${groups.length} ${groups.length === 1 ? 'model' : 'models'} · ${visible.length} ${visible.length === 1 ? 'run' : 'runs'}`;
     searchHelp.hidden = !cursor;
     next.hidden = !cursor;
     if (!visible.length) {
-      message(search.value.trim() || gpu.value ? 'No matching hardware in these results' : 'No results yet', cursor ? 'Try another search, reset the filters, or load more results below.' : 'Try another device or platform, or reset the filters to see all reports.');
+      const title = Object.values(filters).some(Boolean) ? 'No results match these filters' : search.value.trim() || gpu.value ? 'No matching hardware in these results' : 'No results yet';
+      message(title, cursor ? 'Try another choice, reset the filters, or load more results below.' : 'Try another choice or reset the filters to see all reports.');
     }
     status.textContent = `${groups.length} hardware ${groups.length === 1 ? 'summary' : 'summaries'} from ${visible.length} ${visible.length === 1 ? 'run' : 'runs'}${cursor ? ` · ${rows.length} of ${matchingCount} reports loaded; summaries cover loaded runs` : ''}.`;
   }
@@ -202,9 +225,9 @@ export function mountPublicResults(root, transport) {
     loading = true;
     retryPaging = paging;
     const query = {};
-    // GPU filtering stays local to the platform's reports, so choosing one GPU
-    // cannot hide other GPU models from the dropdown on a later refresh.
-    for (const [key, value] of new FormData(form)) if (PUBLIC_FILTERS.includes(key) && key !== 'gpu' && value.trim()) query[key] = value.trim();
+    // Filter the public platform data locally. This preserves every available
+    // dropdown choice and lets one readable version cover multiple package IDs.
+    if (form.elements.platform.value) query.platform = form.elements.platform.value;
     query.limit = 100;
     query.sort = 'date';
     query.order = sort.value;
@@ -228,6 +251,7 @@ export function mountPublicResults(root, transport) {
         cursor = page.nextCursor;
         matchingCount = page.matchingReportCount;
         updateGPUChoices();
+        updateOptionChoices();
         render();
       } else {
         const states = {
@@ -264,10 +288,12 @@ export function mountPublicResults(root, transport) {
     load();
   });
   gpu.addEventListener('change', () => { if (!loading && rows.length) render(); });
+  for (const select of optionFilters) select.addEventListener('change', () => { if (!loading && rows.length) render(); });
   sort.addEventListener('change', () => load());
   search.addEventListener('input', () => { if (!loading && rows.length) render(); });
   next.addEventListener('click', () => { if (!loading) load(true); });
   retry.addEventListener('click', () => { if (!loading) load(retryPaging); });
+  updateOptionChoices();
   load();
 }
 
