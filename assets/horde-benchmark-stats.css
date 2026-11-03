@@ -110,3 +110,9 @@
   .benchmark-detail-content dd { margin-bottom: .6rem; }
 }
 @media (prefers-reduced-motion: reduce) { .benchmark *, .benchmark *::before, .benchmark *::after { animation: none !important; transition: none !important; } }
+
+.benchmark-hardware-notice { margin: 1rem 0; padding: .85rem 1rem; border: 1px solid var(--spark); border-radius: 10px; background: rgba(255,182,110,.06); }
+.benchmark-hardware-notice[hidden] { display: none; }
+.benchmark-hardware-notice > summary { color: var(--text); font-size: .9rem; }
+.benchmark-hardware-notice p, .benchmark-hardware-notice li { color: var(--text-soft); font-size: .85rem; overflow-wrap: anywhere; }
+.benchmark-hardware-notice ul { padding-left: 1.2rem; }

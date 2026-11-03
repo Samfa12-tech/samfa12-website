@@ -18,8 +18,10 @@ const metric = v => {if(v === null) return null; if(typeof v !== 'number' || !Nu
 const extent = v => {if(!Array.isArray(v)||v.length!==2||v.some(n=>!Number.isInteger(n)||n<1||n>32768)) throw Error('Invalid extent'); return v.join(' × ');};
 export function displayRow(r) {
  const c=r.configuration,h=r.hardware,p=c?.benchmarkProfile;
+ const hardwareLabelStatus=r.hardwareLabelStatus ?? 'unknown';
+ if(!['identified','not-shared','unrecognized','unknown'].includes(hardwareLabelStatus)) throw Error('Invalid hardware label status');
  if(!c||!h||!p||p.classification!=='custom-unranked'||p.ranked!==false||!Number.isInteger(r.sampleCount)||r.sampleCount<1) throw Error('Invalid configuration');
- return {resultId:label(r.resultId),dateUtc:label(r.dateUtc),bucket:label(r.bucket),model:label(h.model),gpu:label(h.gpu),platform:label(c.platform),build:label(c.build),profile:label(p.id),backend:label(c.executionBackend),shaderPair:label(c.shaderPair),internal:extent(c.internalExtent),output:extent(c.presentationExtent),water:label(c.waterQuality),dielectric:label(c.dielectricQuality),fire:label(c.fireQuality),sampleCount:r.sampleCount,frameMedianMs:metric(r.frameMedianMs),frameP95Ms:metric(r.frameP95Ms),gpuMedianMs:metric(r.gpuMedianMs),cpuTimingScope:label(r.cpuTimingScope),gpuTimingScope:label(r.gpuTimingScope),provisional:true};
+ return {hardwareLabelStatus,resultId:label(r.resultId),dateUtc:label(r.dateUtc),bucket:label(r.bucket),model:label(h.model),gpu:label(h.gpu),platform:label(c.platform),build:label(c.build),profile:label(p.id),backend:label(c.executionBackend),shaderPair:label(c.shaderPair),internal:extent(c.internalExtent),output:extent(c.presentationExtent),water:label(c.waterQuality),dielectric:label(c.dielectricQuality),fire:label(c.fireQuality),sampleCount:r.sampleCount,frameMedianMs:metric(r.frameMedianMs),frameP95Ms:metric(r.frameP95Ms),gpuMedianMs:metric(r.gpuMedianMs),cpuTimingScope:label(r.cpuTimingScope),gpuTimingScope:label(r.gpuTimingScope),provisional:true};
 }
 export function readPublicPage(body) {
   if(!body || Object.keys(body).length !== keys.length || keys.some(k=>!Object.hasOwn(body,k)) || body.schemaVersion !== 1 || body.product !== 'horde-lantern-rt' || body.classification !== 'community-client-reported' || body.countUnit !== 'reports') throw Error('Invalid public response');

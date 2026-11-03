@@ -1,4 +1,4 @@
-import {friendlyDeviceName} from './horde-benchmark-summary.js?v=20261103-hardware-consent';
+import {friendlyDeviceName} from './horde-benchmark-summary.js?v=20261103-hardware-names';
 
 // Verified against VERSION at these exact source commits. Different package /
 // compiler fingerprints for a source commit retain its declared game version.
