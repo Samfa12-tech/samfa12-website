@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="See community performance results for The Horde. Find your hardware, compare settings and view clearly labelled FPS estimates."><title>The Horde performance results | Samfa12</title><link rel="canonical" href="https://samfa12.com/games/the-horde/benchmark-stats/"><link rel="icon" href="/assets/favicon.png"><link rel="stylesheet" href="/styles.css?v=20261023-steam-card"><link rel="stylesheet" href="/assets/horde-benchmark-stats.css?v=20261103-player-results"></head><body data-page="horde-benchmark"><a class="skip-link" href="#main">Skip to content</a><header class="site-header" data-site-header>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="See community performance results for The Horde. Find your hardware, compare settings and view clearly labelled FPS estimates."><title>The Horde performance results | Samfa12</title><link rel="canonical" href="https://samfa12.com/games/the-horde/benchmark-stats/"><link rel="icon" href="/assets/favicon.png"><link rel="stylesheet" href="/styles.css?v=20261023-steam-card"><link rel="stylesheet" href="/assets/horde-benchmark-stats.css?v=20261103-hardware-summaries"></head><body data-page="horde-benchmark"><a class="skip-link" href="#main">Skip to content</a><header class="site-header" data-site-header>
       <div class="container header-inner">
         <a class="brand" href="/" aria-label="Samfa12 home">
           <span class="brand-orb" aria-hidden="true"><img class="brand-mark" src="/assets/samfa12-character.jpg" alt="" width="40" height="40" /></span>
@@ -29,16 +29,19 @@
       <a class="benchmark-back" href="/games/the-horde/">← The Horde</a>
       <p class="eyebrow">Community performance results</p>
       <h1>How does your device run?</h1>
-      <p class="benchmark-lead">Find your hardware. Check the settings. See how The Horde performs.</p>
+      <p class="benchmark-lead">See average FPS estimates and ranges for each graphics card or phone.</p>
     </header>
 
     <form class="benchmark-browse" data-public-filters aria-label="Find benchmark results">
       <div class="benchmark-toolbar">
-        <label class="benchmark-search">Find a device or graphics card
-          <input type="search" data-hardware-search maxlength="128" placeholder="e.g. RTX 5050 or Galaxy" autocomplete="off" aria-describedby="search-help">
-        </label>
         <label>Platform
-          <select name="platform"><option value="">All platforms</option><option value="Windows">Windows</option><option value="Android">Android</option></select>
+          <select name="platform"><option value="">All platforms</option><option value="Android">Mobile</option><option value="Windows">Windows</option></select>
+        </label>
+        <label>Graphics card
+          <select name="gpu" data-gpu-filter disabled><option value="">Loading graphics cards…</option></select>
+        </label>
+        <label class="benchmark-search">Search models
+          <input type="search" data-hardware-search maxlength="128" placeholder="Search hardware" autocomplete="off" aria-describedby="search-help">
         </label>
         <label>Show
           <select data-sort-order><option value="desc">Newest first</option><option value="asc">Oldest first</option></select>
@@ -50,7 +53,6 @@
           <p>Optional exact-match filters. Apply them with “Refresh”.</p>
           <div class="benchmark-advanced">
             <label>Device model<input name="model" maxlength="128"></label>
-            <label>Graphics card<input name="gpu" maxlength="128"></label>
             <label>Game build<input name="build" maxlength="128"></label>
             <label>Graphics profile<input name="profileId" maxlength="128"></label>
             <label>Rendering backend<input name="backend" maxlength="128"></label>
@@ -70,12 +72,12 @@
           <button type="submit" class="benchmark-button" aria-label="Update results">Refresh</button>
         </div>
       </div>
-      <p id="search-help" class="benchmark-search-help" data-search-help hidden>Search covers the reports loaded so far. Load more to search further.</p>
+      <p id="search-help" class="benchmark-search-help" data-search-help hidden>Summaries cover loaded runs. Load more to include further runs and graphics cards.</p>
     </form>
 
     <section class="benchmark-results-section" aria-labelledby="results-title">
-      <div class="benchmark-results-heading"><h2 id="results-title">Recent results</h2><span class="benchmark-count" data-public-count>Community reports</span></div>
-      <p class="benchmark-context">Each result is a separate, unverified report. Match the settings before comparing.</p>
+      <div class="benchmark-results-heading"><h2 id="results-title">Performance by hardware</h2><span class="benchmark-count" data-public-count>Community reports</span></div>
+      <p class="benchmark-context">One summary per model. Matching settings are averaged; individual runs are in the details.</p>
       <p class="benchmark-status" role="status" aria-live="polite" data-public-status>Loading results…</p>
       <div class="benchmark-results" data-public-results aria-busy="true"></div>
       <button type="button" class="benchmark-button benchmark-retry" data-public-retry hidden>Try again</button>
@@ -86,10 +88,10 @@
     <details class="benchmark-about">
       <summary>How to read these results</summary>
       <div>
-        <p><strong>FPS means frames per second.</strong> Higher values usually mean smoother motion. An estimate gives an indication of performance; it is not a measured gameplay frame rate.</p>
-        <p><strong>Average FPS is not in the current reports.</strong> The FPS estimate shown here uses the typical recorded rendering time. A typical value is a median, so it cannot tell us the average. We show the missing average explicitly rather than guess it.</p>
-        <p><strong>Different settings change the workload.</strong> Compare resolution, graphics settings and game build before drawing conclusions. These are custom test runs, not a verified leaderboard. Each card stays separate, even when the hardware name matches.</p>
-        <p>Reports are shared by players and have not been independently checked. Multiple reports may come from the same person or device. Open a result’s details for its original timings, build and test configuration.</p>
+        <p><strong>One summary per graphics card or phone model.</strong> See its average estimated FPS, the range across usable runs and how many runs contributed. More runs usually give a more useful picture. Repeat submissions may come from the same person or device.</p>
+        <p><strong>Compare matching settings.</strong> Resolution and graphics settings can change performance substantially. If a model has several test setups, its most reported setup appears first and the others are available in its details. Different game versions can still be included and are labelled.</p>
+        <p><strong>Unusual results are kept out of the average.</strong> Cleaning starts when at least five runs have usable timings at the same settings. With fewer runs, we keep every usable result and label the small sample. Excluded runs remain available in the details.</p>
+        <p><strong>These are estimates, not measured gameplay FPS.</strong> Each run's estimate uses its typical recorded rendering time. The summary averages those estimates with equal weight per run. Original frame timings and the outlier rule are in the details. All results are unverified community reports, not a leaderboard.</p>
       </div>
     </details>
   </div>
@@ -120,4 +122,4 @@
         </div>
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
       </div>
-    </footer><script src="/script.js?v=20261019-1" defer></script><script type="module" src="/assets/horde-benchmark-stats.js?v=20261103-player-results"></script></body></html>
+    </footer><script src="/script.js?v=20261019-1" defer></script><script type="module" src="/assets/horde-benchmark-stats.js?v=20261103-hardware-summaries"></script></body></html>
