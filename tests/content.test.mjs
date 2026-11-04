@@ -82,6 +82,18 @@ test("generated pages contain initial content and direct actions", () => {
   }
 });
 
+test("Links page includes every grouped destination in initial HTML", () => {
+  const groups = JSON.parse(fs.readFileSync(path.join(root,"content/link-groups.json"),"utf8"));
+  const source = fs.readFileSync(path.join(root,"links/index.html"),"utf8");
+  for (const group of groups) {
+    for (const [label,url] of group.links) {
+      assert.ok(source.includes(`href="${html(safeUrl(url))}"`),`${group.title}: ${label} URL`);
+      assert.ok(source.includes(`>${html(label)} <span class="link-arrow"`),`${group.title}: ${label} label`);
+    }
+  }
+  assert.ok(groups.find((group)=>group.title==="Follow").links.some(([label,url])=>label==="TikTok" && url==="https://www.tiktok.com/@samfa12_tech"));
+});
+
 test("What Would Win visible breadcrumb agrees with structured Apps parent", () => {
   const source = fs.readFileSync(path.join(root,"tools/what-would-win/index.html"),"utf8");
   assert.match(source,/<nav class="product-breadcrumbs"[^>]*>.*?<a href="\/apps\/">Apps<\/a>/);
