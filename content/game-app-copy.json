@@ -1871,6 +1871,30 @@
     ],
     "updates": [
       {
+        "id": "reef-sweep-shell-key-hermit-november-2026",
+        "kind": "release",
+        "date": "2026-11-05",
+        "dateMeaning": "Wavedash public release observation date (UTC); version history displays 6 November 2026",
+        "title": "Shell Key and the Hermit",
+        "summary": "Moor at Shell Key to explore a cave and shelter, find a keepsake and meet the island hermit and his pelican. A suggestion box at the gear shop opens problem reporting. Island scenery, boat travel, jogging and underwater atmosphere are refined, with warmer campfire lighting and scooters returning to their usual places overnight.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      },
+      {
+        "id": "reef-sweep-one-more-dive-november-2026",
+        "kind": "release",
+        "date": "2026-11-04",
+        "dateMeaning": "Wavedash version history publication date",
+        "title": "One More Dive: Good Boy joins the boat",
+        "summary": "Befriend Good Boy over three days, add a collected charm to his collar and invite him aboard. A skippable Dario encounter follows the first dive, with clearer opening dialogue and guidance for preparing catches, filling Yvette’s orders and recording outings. Boat steering and companion placement are improved.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      },
+      {
         "id": "reef-sweep-island-life-november-2026",
         "kind": "release",
         "date": "2026-11-02",
