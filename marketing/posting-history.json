@@ -734,6 +734,116 @@
       "textSha256": "b477041047ce96c52342c94bf9471c0f934ddcfb6d39a87510b6e463ec67c0fc",
       "scheduledAt": "2026-11-01T12:40:43.935Z",
       "dueAt": "2026-11-07T06:15:00.000Z"
+    },
+    {
+      "id": "briarhold-diagnostics-1",
+      "project": "Briarhold",
+      "category": "Games",
+      "date": "2026-11-09",
+      "status": "scheduled",
+      "bufferPostId": "6af06edf51492b796e3a7ef7",
+      "textSha256": "e2eff19593e6755ca65dce990254d13e5f2bb65883ed08f307b882dcf15ff441",
+      "scheduledAt": "2026-11-08T12:45:20.021Z",
+      "dueAt": "2026-11-08T21:15:00.000Z"
+    },
+    {
+      "id": "fish-tank-cozy-1",
+      "project": "Pocket Fish Tank",
+      "category": "Games",
+      "date": "2026-11-10",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee051492b796e3a7f1d",
+      "textSha256": "74d04624595121b63f6e0245d7650e48d314e10a92d86d0ffd04c7ade746ed98",
+      "scheduledAt": "2026-11-08T12:45:20.210Z",
+      "dueAt": "2026-11-09T21:15:00.000Z"
+    },
+    {
+      "id": "bug-maze-td-1",
+      "project": "Bug Maze TD",
+      "category": "Games",
+      "date": "2026-11-11",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee09214322f6852a2d9",
+      "textSha256": "9f913ba7cbc7de7d69655b27e5989ad14d5e6ca2311790a10998c059156afdaf",
+      "scheduledAt": "2026-11-08T12:45:20.369Z",
+      "dueAt": "2026-11-10T21:15:00.000Z"
+    },
+    {
+      "id": "antfarm-observation-1",
+      "project": "Pocket Ant Farm",
+      "category": "Games",
+      "date": "2026-11-12",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee09214322f6852a333",
+      "textSha256": "3f7f9147c31e4e4092c3f9cd2b94d8fe41f4639bab19bf6a66d6d0347a25a3f5",
+      "scheduledAt": "2026-11-08T12:45:20.641Z",
+      "dueAt": "2026-11-11T21:15:00.000Z"
+    },
+    {
+      "id": "horde-170-flask-guidance-1",
+      "project": "The Horde",
+      "category": "Games",
+      "date": "2026-11-13",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee1d6bbae6fa1ead0b2",
+      "textSha256": "157c98d1bb067c9c7d75433559f9b9a367f6a8ee5596e20766f95cf45abcb6e0",
+      "scheduledAt": "2026-11-08T12:45:21.310Z",
+      "dueAt": "2026-11-12T21:15:00.000Z"
+    },
+    {
+      "id": "reef-sweep-mask-mist-1",
+      "project": "Reef Sweep",
+      "category": "Games",
+      "date": "2026-11-14",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee151492b796e3a7f7f",
+      "textSha256": "a7498759ff4aaf0e75d414f2d8f6c9b5b67d6707ee18b5b5a0ed7f0ea0706aeb",
+      "scheduledAt": "2026-11-08T12:45:21.460Z",
+      "dueAt": "2026-11-13T21:15:00.000Z"
+    },
+    {
+      "id": "gremlin-grenade-pinball-1",
+      "project": "Gremlin Grenade Pinball",
+      "category": "Games",
+      "date": "2026-11-15",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee1562f2e6de9bad4cb",
+      "textSha256": "dc80e38cc9231390df1ceaa197e029c8fbeda6d888fca4ad9b1c895ee7cf210a",
+      "scheduledAt": "2026-11-08T12:45:21.682Z",
+      "dueAt": "2026-11-14T21:15:00.000Z"
+    },
+    {
+      "id": "antfarm-observation-1",
+      "project": "Pocket Ant Farm",
+      "category": "Games",
+      "date": "2026-11-10",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee1562f2e6de9bad502",
+      "textSha256": "3f7f9147c31e4e4092c3f9cd2b94d8fe41f4639bab19bf6a66d6d0347a25a3f5",
+      "scheduledAt": "2026-11-08T12:45:21.944Z",
+      "dueAt": "2026-11-10T06:15:00.000Z"
+    },
+    {
+      "id": "gremlin-grenade-pinball-1",
+      "project": "Gremlin Grenade Pinball",
+      "category": "Games",
+      "date": "2026-11-12",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee29214322f6852a386",
+      "textSha256": "dc80e38cc9231390df1ceaa197e029c8fbeda6d888fca4ad9b1c895ee7cf210a",
+      "scheduledAt": "2026-11-08T12:45:22.161Z",
+      "dueAt": "2026-11-12T06:15:00.000Z"
+    },
+    {
+      "id": "spinvector-save-retry-1",
+      "project": "Spin Vector",
+      "category": "Games",
+      "date": "2026-11-14",
+      "status": "scheduled",
+      "bufferPostId": "6af06ee29214322f6852a3d3",
+      "textSha256": "074995d5627e1790a76dae1a5ef98116af6b0788c3c838d9818e5cf24760b019",
+      "scheduledAt": "2026-11-08T12:45:22.379Z",
+      "dueAt": "2026-11-14T06:15:00.000Z"
     }
   ]
 }
