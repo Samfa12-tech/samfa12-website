@@ -959,7 +959,10 @@
     if (!savedCatalogueCards.has(grid)) {
       const cards = Array.from(grid.querySelectorAll(".project-card")).map((card, index) => {
         const links = Array.from(card.querySelectorAll(".project-actions a[href]"))
-          .map((link) => ({ url: safeUrl(link.getAttribute("href")) })).filter((link) => link.url);
+          .map((link) => ({
+            url: safeUrl(link.getAttribute("href")),
+            label: link.dataset.linkLabel || link.textContent.trim(),
+          })).filter((link) => link.url);
         const project = { category, type: card.querySelector(".project-label")?.textContent || "" };
         return {
           card,

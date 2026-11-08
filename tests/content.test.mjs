@@ -264,3 +264,58 @@ test("storefront labels remain unchanged for native games", () => {
     { label: "Play on itch.io", url: "https://samfa12.itch.io/example" },
   ] }), ["itch.io"]);
 });
+vm.runInContext([
+  "const savedCatalogueCards = new WeakMap();",
+  scriptSection("function safeUrl(", "function safeHostname("),
+  scriptSection("function deriveBookCatalogueLabels(", "function normalizeProject("),
+  scriptSection("function isInCatalogue(", "function normalizeProjects("),
+  scriptSection("function getSavedCatalogueCards(", "function renderCatalogue("),
+].join("\n"), catalogueContext);
+
+function savedCardFixture(type, title, links) {
+  return {
+    querySelector(selector) {
+      if (selector === ".project-label") return { textContent: type };
+      if (selector === "h3") return { textContent: title };
+      throw new Error(`Unexpected saved-card selector: ${selector}`);
+    },
+    querySelectorAll(selector) {
+      assert.equal(selector, ".project-actions a[href]");
+      return links.map(({ url, label, text = label }) => ({
+        getAttribute(name) { assert.equal(name, "href"); return url; },
+        dataset: label === undefined ? {} : { linkLabel: label },
+        textContent: text,
+      }));
+    },
+  };
+}
+function savedCardLabels(cards) {
+  const grid = { querySelectorAll(selector) { assert.equal(selector, ".project-card"); return cards; } };
+  return Array.from(catalogueContext.getSavedCatalogueCards(grid, "Games"), (project) => Array.from(project.catalogueLabels));
+}
+
+test("saved generated cards retain Play action labels and exclude Horde information links", () => {
+  const gamesHtml = fs.readFileSync(path.join(root, "games/index.html"), "utf8");
+  const cards = ["game-the-horde", "game-bug-swarm", "game-briarhold"].map((id) => {
+    const card = Array.from(gamesHtml.matchAll(/<article\b[^>]*data-project-id="([^"]+)"[\s\S]*?<\/article>/g)).find((match) => match[1] === id)?.[0];
+    assert.ok(card, id);
+    const type = card.match(/<p class="project-label">([^<]*)<\/p>/)?.[1] || "";
+    const actions = card.split('<div class="project-actions"')[1];
+    const links = Array.from(actions.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*data-link-label="([^"]+)"/g), (match) => ({ url: match[1], label: match[2], text: `${match[2]} ->` }));
+    assert.ok(links.length, id);
+    return savedCardFixture(type, id, links);
+  });
+  assert.deepEqual(savedCardLabels(cards), [["itch.io"], ["Browser"], ["Browser"]]);
+});
+
+test("saved-card adapter uses visible Play text when metadata is absent, not arbitrary local routes", () => {
+  const cards = [
+    savedCardFixture("Game", "Browser build", [{ url: "/games/example/play/", text: "  Play now ->  " }]),
+    savedCardFixture("Tech demo", "Native demo", [
+      { url: "/games/the-horde/", text: "Learn more ->" },
+      { url: "/games/the-horde/benchmark-stats/", label: "How does it perform?", text: "How does it perform? ->" },
+      { url: "/games/the-horde/download/", text: "Download for Windows ->" },
+    ]),
+  ];
+  assert.deepEqual(savedCardLabels(cards), [["Browser"], []]);
+});
