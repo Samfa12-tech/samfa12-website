@@ -5,7 +5,11 @@
   },
   {
     "route": "/games/",
-    "pageModified": "2026-11-03"
+    "pageModified": "2026-11-08"
+  },
+  {
+    "route": "/games/chrome-coalition-warlords/",
+    "pageModified": "2026-11-08"
   },
   {
     "route": "/games/bug-swarm/",

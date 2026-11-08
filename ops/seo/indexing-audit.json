@@ -2,13 +2,13 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 79,
-    "indexableRoutes": 73,
-    "sitemapRoutes": 73,
+    "htmlPages": 80,
+    "indexableRoutes": 74,
+    "sitemapRoutes": 74,
     "explicitlyExcluded": 6,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 15,
+    "oneContextualIncoming": 16,
     "relationshipEdges": 71
   },
   "excluded": [
@@ -434,6 +434,7 @@
         "/games/briarhold/",
         "/games/bug-maze-td/",
         "/games/bug-swarm-guide/",
+        "/games/chrome-coalition-warlords/",
         "/games/cursed-cutter-guide/",
         "/games/drink/",
         "/games/dust-on-the-river/",
@@ -1500,6 +1501,7 @@
         "/games/briarhold/",
         "/games/bug-maze-td/",
         "/games/bug-swarm-guide/",
+        "/games/chrome-coalition-warlords/",
         "/games/cursed-cutter-guide/",
         "/games/drink/",
         "/games/dust-on-the-river/",
@@ -1823,6 +1825,34 @@
         "missing description"
       ],
       "advisories": []
+    },
+    {
+      "route": "/games/chrome-coalition-warlords/",
+      "kind": "site",
+      "canonical": "https://samfa12.com/games/chrome-coalition-warlords/",
+      "title": "Chrome Coalition: Warlords | Coming soon to Wavedash | Samfa12",
+      "description": "Chrome Coalition: Warlords. Coming soon to Wavedash.",
+      "h1": [
+        "Chrome Coalition: Warlords"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 6,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
     },
     {
       "route": "/games/cursed-cutter-guide/",
