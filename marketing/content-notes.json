@@ -160,6 +160,63 @@
       },
       "rationale": "The book is now announced available; stop describing 1 November as an upcoming release.",
       "notAfter": "2026-10-31"
+    },
+    "horde-170-flask-guidance-1": {
+      "reviewedAt": "2026-11-08",
+      "sources": [
+        "https://github.com/Samfa12-tech/The-Horde-RT-demo/releases/tag/v1.7.0",
+        "https://samfa12.itch.io/the-horde/devlog/1749252/the-horde-17-beyond-the-tomb"
+      ],
+      "status": "Released 3 November 2026, 1.7.0 Windows and compatible Android showcase. Kit walks to the upper basin and chooses guidance matching the player's remaining charges.",
+      "rationale": "A specific contextual dialogue choice, distinct from graphics and broad release announcements.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only. No matching public asset verified for automated attachment."
+      },
+      "validation": {
+        "rawCharacters": 246,
+        "xWeightedCharacters": 236,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "reef-sweep-mask-mist-1": {
+      "reviewedAt": "2026-11-08",
+      "sources": [
+        "https://wavedash.com/games/reef-sweep/patch-notes",
+        "https://wavedash.com/games/reef-sweep"
+      ],
+      "status": "Build 23 (campaign266) publication confirmed by the first-party release record on 6 November 2026. Mist is occasional, free to clear, and initialized on Continue/resume. Live public patch-note page could not be read directly in this review.",
+      "rationale": "One visible underwater interaction. No sustained performance or unreleased reef recovery claim.",
+      "media": {
+        "asset": null,
+        "publishing": "Manual only. A real after-clear Build 23 gameplay screenshot was visually verified in restricted review evidence; no public asset URL. Use as an alternative to the text post after checking the queue."
+      },
+      "validation": {
+        "rawCharacters": 252,
+        "xWeightedCharacters": 238,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "spinvector-save-retry-1": {
+      "reviewedAt": "2026-11-08",
+      "sources": [
+        "https://samfa12.com/updates/",
+        "https://wavedash.com/games/spin-vector/patch-notes"
+      ],
+      "status": "Wavedash version history dates the feature to 25 October 2026; verified in the 3 November website release roundup (Sydney). Direct Wavedash patch-note read unavailable.",
+      "rationale": "Highlights retry behaviour, separate from the existing adaptive-music post. Newly relevant via the public roundup; not presented as a new release this week.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only. No matching public asset verified for automated attachment."
+      },
+      "validation": {
+        "rawCharacters": 216,
+        "xWeightedCharacters": 201,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
     }
   },
   "manualCandidates": {
