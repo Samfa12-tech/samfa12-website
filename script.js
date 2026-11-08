@@ -410,17 +410,17 @@
 
   function deriveGameCatalogueLabels(project, links) {
     const labels = [];
-    const primaryUrl = links[0]?.url || "";
     const type = String(project.type || "").toLowerCase();
 
-    if (type.includes("browser") || isLocalGameRoute(primaryUrl)) {
+    // A local detail or benchmark page is not evidence of a browser build.
+    const hasLocalPlayLink = links.some((link) => isLocalGameRoute(link.url) && /^play\b/i.test(link.label || ""));
+    if (type.includes("browser") || hasLocalPlayLink) {
       pushUniqueLabel(labels, "Browser");
     }
 
     links.forEach((link) => {
       const host = safeHostname(link.url);
       const path = safePathname(link.url);
-      if (isLocalGameRoute(link.url)) pushUniqueLabel(labels, "Browser");
       if (host.endsWith("itch.io")) pushUniqueLabel(labels, "itch.io");
       if (host === "play.google.com" && path.startsWith("/store/apps")) pushUniqueLabel(labels, "Google Play");
       if (host === "store.steampowered.com") pushUniqueLabel(labels, "Steam");
@@ -959,7 +959,10 @@
     if (!savedCatalogueCards.has(grid)) {
       const cards = Array.from(grid.querySelectorAll(".project-card")).map((card, index) => {
         const links = Array.from(card.querySelectorAll(".project-actions a[href]"))
-          .map((link) => ({ url: safeUrl(link.getAttribute("href")) })).filter((link) => link.url);
+          .map((link) => ({
+            url: safeUrl(link.getAttribute("href")),
+            label: link.dataset.linkLabel || link.textContent.trim(),
+          })).filter((link) => link.url);
         const project = { category, type: card.querySelector(".project-label")?.textContent || "" };
         return {
           card,
