@@ -33,7 +33,7 @@ test('landing page preserves its URL and uses cover social metadata without a pr
   assert.match(page, /name="viewport"/);
   assert.match(page, /href="\/assets\/favicon\.png"/);
   assert.doesNotMatch(page, /https?:\/\/(?:www\.)?wavedash\.com/);
-  assert.match(page, /property="og:image" content="https:\/\/samfa12\.com\/assets\/chrome-coalition\/chrome-coalition-cover\.png"/);
+  assert.match(page, /property="og:image" content="https:\/\/samfa12\.com\/assets\/chrome-coalition\/chrome-coalition-social-1200\.jpg"/);
   for (const block of page.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
     const graph = JSON.parse(block[1])['@graph'];
     const webPage = graph.find(node => node['@type'] === 'WebPage');
@@ -58,4 +58,26 @@ test('approved original cover is unchanged and responsive variants are supplied'
     assert.ok(variant.length < 550000, 'Keep the cover lightweight for phone layouts');
     assert.ok(page.includes(file));
   }
+});
+
+
+test('social preview uses an absolute, compact JPEG with intact cover', () => {
+  const url = 'https://samfa12.com/assets/chrome-coalition/chrome-coalition-social-1200.jpg';
+  assert.ok(page.includes(`property="og:image" content="${url}"`));
+  assert.ok(page.includes(`name="twitter:image" content="${url}"`));
+  assert.match(page, /name="twitter:card" content="summary_large_image"/);
+  assert.match(page, /property="og:image:type" content="image\/jpeg"/);
+  assert.match(page, /property="og:image:width" content="1200"/);
+  assert.match(page, /property="og:image:height" content="630"/);
+  const image = fs.readFileSync(new URL('../assets/chrome-coalition/chrome-coalition-social-1200.jpg', import.meta.url));
+  assert.equal(image.subarray(0, 3).toString('hex'), 'ffd8ff');
+  assert.ok(image.length < 500000, 'Keep the social preview lightweight');
+  let offset = 2, dimensions;
+  while (offset < image.length) {
+    assert.equal(image[offset], 0xff);
+    const marker = image[offset + 1], length = image.readUInt16BE(offset + 2);
+    if ([0xc0, 0xc2].includes(marker)) { dimensions = [image.readUInt16BE(offset + 7), image.readUInt16BE(offset + 5)]; break; }
+    offset += 2 + length;
+  }
+  assert.deepEqual(dimensions, [1200, 630]);
 });
