@@ -318,5 +318,9 @@
   "assets/thumbnails/reef-sweep-cover-1280.webp": [
     1280,
     720
+  ],
+  "assets/thumbnails/chrome-coalition-cover-960.webp": [
+    960,
+    540
   ]
 }

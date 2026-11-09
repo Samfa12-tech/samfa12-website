@@ -1055,6 +1055,17 @@
         "The progression model is an economic fixture, not human playtest evidence; audio timing and mix remain to be reviewed.",
         "No public release date or third-party storefront is asserted."
       ]
+    },
+    "game-chrome-coalition": {
+      "disposition": "preserve-existing",
+      "landingPath": "/games/chrome-coalition-warlords/",
+      "sources": [
+        {
+          "url": "https://samfa12.com/games/chrome-coalition-warlords/",
+          "identity": "samfa12.com /games/chrome-coalition-warlords/",
+          "access": "read-first-party-route-and-repository"
+        }
+      ]
     }
   }
 }

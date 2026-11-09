@@ -2102,5 +2102,17 @@
         }
       ]
     }
+  },
+  "game-chrome-coalition": {
+    "intro": "Chrome Coalition is an in-development browser FPS inspired by PS2-era multiplayer battles and destructible environments.",
+    "details": [
+      {
+        "heading": "Planned multiplayer",
+        "text": "The initial target is 4v4 online multiplayer, with bots filling empty spots.",
+        "sources": [
+          "https://samfa12.com/games/chrome-coalition-warlords/"
+        ]
+      }
+    ]
   }
 }
