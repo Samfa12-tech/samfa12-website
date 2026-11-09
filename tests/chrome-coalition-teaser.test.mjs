@@ -4,30 +4,58 @@ import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 
 const page = fs.readFileSync(new URL('../games/chrome-coalition-warlords/index.html', import.meta.url), 'utf8');
+const main = page.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1];
+const visibleText = main.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
-test('teaser contains only the approved title, status and image in main', () => {
-  const main = page.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1];
-  const visibleText = main.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-  assert.equal(visibleText, 'Chrome Coalition: Warlords Coming soon to Wavedash');
-  assert.equal((main.match(/<img\b/g) || []).length, 1);
-  assert.match(main, /src="\/assets\/chrome-coalition\/Chrome-Neon-Teaser-Loop\.gif"/);
+test('landing page uses the approved title and description with development status', () => {
+  assert.match(page, /<h1>Chrome Coalition<\/h1>/);
   assert.equal((page.match(/<h1\b/g) || []).length, 1);
-  assert.doesNotMatch(main, /<a\b|<button\b|<iframe\b|<video\b/);
+  assert.doesNotMatch(visibleText, /Warlords|Online Destruction Shooter|Play now/i);
+  for (const copy of [
+    'In development · Browser FPS',
+    'The AI took control. The Chrome Coalition is fighting back.',
+    'Battle across a neon-lit canyon where the battlefield won’t stay the same for long.',
+    'Blast through walls, carve tunnels through solid rock and find a new way into the enemy base.',
+    'Just remember: your opponents can do the same.',
+    'Chrome Coalition is an in-development browser FPS inspired by the chaotic multiplayer battles and destructible environments of the PS2 era.',
+    'Choose a side in the fight between the human resistance and the machines, grab weapons around the map and make your own path through the battlefield.',
+    'Planned multiplayer',
+    'The initial target is 4v4 online multiplayer, with bots filling empty spots.',
+    'Team Deathmatch, Deathmatch and Capture the Flag are planned as development progresses.',
+    'Coming soon to Wavedash.'
+  ]) assert.ok(visibleText.includes(copy), `Missing approved copy: ${copy}`);
+  assert.match(main, /Cover artwork\. Game in development\./);
+  assert.doesNotMatch(main, /<button\b|<iframe\b|<video\b/);
 });
 
-test('teaser has canonical metadata and no guessed store destination', () => {
+test('landing page preserves its URL and uses cover social metadata without a premature store link', () => {
   assert.match(page, /<link rel="canonical" href="https:\/\/samfa12\.com\/games\/chrome-coalition-warlords\/">/);
   assert.match(page, /name="viewport"/);
   assert.match(page, /href="\/assets\/favicon\.png"/);
   assert.doesNotMatch(page, /https?:\/\/(?:www\.)?wavedash\.com/);
-  for (const block of page.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) assert.doesNotThrow(() => JSON.parse(block[1]));
+  assert.match(page, /property="og:image" content="https:\/\/samfa12\.com\/assets\/chrome-coalition\/chrome-coalition-cover\.png"/);
+  for (const block of page.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    const graph = JSON.parse(block[1])['@graph'];
+    const webPage = graph.find(node => node['@type'] === 'WebPage');
+    assert.equal(webPage.name, 'Chrome Coalition');
+    assert.equal(webPage.dateModified, '2026-11-09');
+    assert.match(webPage.description, /in-development/);
+  }
+  const games = fs.readFileSync(new URL('../games/index.html', import.meta.url), 'utf8');
+  assert.match(games, /href="\/games\/chrome-coalition-warlords\/">Chrome Coalition<\/a>/);
 });
 
-test('approved GIF has been supplied before publication', () => {
-  const gifPath = new URL('../assets/chrome-coalition/Chrome-Neon-Teaser-Loop.gif', import.meta.url);
-  assert.ok(fs.existsSync(gifPath), 'Save the approved teaser GIF at assets/chrome-coalition/Chrome-Neon-Teaser-Loop.gif before publication');
-  const data = fs.readFileSync(gifPath);
-  assert.match(data.subarray(0, 6).toString('ascii'), /^GIF8[79]a$/);
-  assert.equal(data.length, 12903754, 'Use the approved, unchanged GIF');
-  assert.equal(createHash('sha256').update(data).digest('hex'), '8bf16e121559cebca6379a8b9948a141eb2cecf076a8c16e6ac078d491bf3e0f');
+test('approved original cover is unchanged and responsive variants are supplied', () => {
+  const cover = fs.readFileSync(new URL('../assets/chrome-coalition/chrome-coalition-cover.png', import.meta.url));
+  assert.equal(createHash('sha256').update(cover).digest('hex'), '1c10012100692843a5b014c1431bf00071f192cbeaf74f39cd41bd4305113dde');
+  assert.equal(cover.readUInt32BE(16), 1672);
+  assert.equal(cover.readUInt32BE(20), 941);
+  assert.match(main, /width="1672" height="941" fetchpriority="high"/);
+  assert.match(page, /\.coalition-cover img \{[^}]*width: 100%; height: auto;/);
+  for (const file of ['chrome-coalition-cover.webp', 'chrome-coalition-cover-960.webp']) {
+    const variant = fs.readFileSync(new URL(`../assets/chrome-coalition/${file}`, import.meta.url));
+    assert.equal(variant.subarray(8, 12).toString('ascii'), 'WEBP');
+    assert.ok(variant.length < 550000, 'Keep the cover lightweight for phone layouts');
+    assert.ok(page.includes(file));
+  }
 });

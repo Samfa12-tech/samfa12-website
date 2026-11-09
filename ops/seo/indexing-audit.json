@@ -1830,10 +1830,10 @@
       "route": "/games/chrome-coalition-warlords/",
       "kind": "site",
       "canonical": "https://samfa12.com/games/chrome-coalition-warlords/",
-      "title": "Chrome Coalition: Warlords | Coming soon to Wavedash | Samfa12",
-      "description": "Chrome Coalition: Warlords. Coming soon to Wavedash.",
+      "title": "Chrome Coalition | Destructible browser FPS in development | Samfa12",
+      "description": "The AI took control. The Chrome Coalition is fighting back. An in-development browser FPS with destructible environments, humans vs machines and 4v4 multiplayer planned.",
       "h1": [
-        "Chrome Coalition: Warlords"
+        "Chrome Coalition"
       ],
       "inSitemap": true,
       "incoming": [

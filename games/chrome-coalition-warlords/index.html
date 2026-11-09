@@ -4,45 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Chrome Coalition: Warlords | Coming soon to Wavedash | Samfa12</title>
-    <meta name="description" content="Chrome Coalition: Warlords. Coming soon to Wavedash.">
+    <title>Chrome Coalition | Destructible browser FPS in development | Samfa12</title>
+    <meta name="description" content="The AI took control. The Chrome Coalition is fighting back. An in-development browser FPS with destructible environments, humans vs machines and 4v4 multiplayer planned.">
     <meta name="theme-color" content="#050714">
     <link rel="canonical" href="https://samfa12.com/games/chrome-coalition-warlords/">
     <link rel="icon" type="image/png" href="/assets/favicon.png">
     <link rel="stylesheet" href="/styles.css?v=20261019-1">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Chrome Coalition: Warlords">
-    <meta property="og:description" content="Coming soon to Wavedash.">
+    <meta property="og:title" content="Chrome Coalition">
+    <meta property="og:description" content="The AI took control. The Chrome Coalition is fighting back. A destructible browser FPS in development. Coming soon to Wavedash.">
     <meta property="og:url" content="https://samfa12.com/games/chrome-coalition-warlords/">
-    <meta property="og:image" content="https://samfa12.com/assets/chrome-coalition/Chrome-Neon-Teaser-Loop.gif">
+    <meta property="og:image" content="https://samfa12.com/assets/chrome-coalition/chrome-coalition-cover.png">
+    <meta property="og:image:width" content="1672">
+    <meta property="og:image:height" content="941">
+    <meta property="og:image:alt" content="Chrome Coalition cover art: cyan-lit human resistance faces pink-lit robots across a canyon as a rocket blasts a tunnel through rock.">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Chrome Coalition: Warlords">
-    <meta name="twitter:description" content="Coming soon to Wavedash.">
-    <meta name="twitter:image" content="https://samfa12.com/assets/chrome-coalition/Chrome-Neon-Teaser-Loop.gif">
+    <meta name="twitter:title" content="Chrome Coalition">
+    <meta name="twitter:description" content="Humans vs machines. Make your own path through a destructible battlefield. In development. Coming soon to Wavedash.">
+    <meta name="twitter:image" content="https://samfa12.com/assets/chrome-coalition/chrome-coalition-cover.png">
+    <meta name="twitter:image:alt" content="Chrome Coalition cover art: the cyan human resistance faces pink robots in a neon-lit canyon.">
     <style>
       body { min-width: 0; background: #050714; }
       .teaser-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.25rem; }
       .teaser-header > a:last-child { color: var(--muted); text-decoration: none; }
       .teaser-header > a:last-child:hover { color: var(--text); }
-      .teaser-main { max-width: 1120px; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 1.25rem clamp(2rem, 6vw, 4rem); text-align: center; }
-      .teaser-main h1 { max-width: none; margin: 0; font-size: clamp(2.1rem, 6vw, 4.4rem); line-height: 1.08; letter-spacing: -.045em; overflow-wrap: anywhere; }
-      .teaser-main p { margin: 1.1rem 0 clamp(2rem, 4vw, 3rem); color: var(--cyan); font-size: clamp(1rem, 2.4vw, 1.3rem); line-height: 1.5; }
-      .teaser-gif { display: block; width: 100%; height: auto; margin: 0 auto; border: 1px solid var(--line); border-radius: 16px; background: #080b17; }
+      .coalition-main { max-width: 1200px; margin: 0 auto; padding: clamp(1.25rem, 4vw, 3rem) 1.25rem clamp(3rem, 7vw, 6rem); }
+      .coalition-heading { margin-bottom: 1.8rem; text-align: center; }
+      .coalition-heading h1 { max-width: none; margin: .5rem 0; font-size: clamp(2rem, 5.4vw, 4rem); line-height: 1.1; letter-spacing: -.045em; overflow-wrap: anywhere; }
+      .coalition-status { margin: 0; color: var(--cyan); font-size: .8rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+      .coalition-heading > p:last-child { margin: .75rem 0 0; color: var(--muted); }
+      .coalition-cover { margin: 0; }
+      .coalition-cover img { display: block; width: 100%; height: auto; border: 1px solid var(--line-strong); border-radius: 16px; background: #080b17; }
+      .coalition-cover figcaption { margin-top: .55rem; color: var(--muted); font-size: .75rem; text-align: right; }
+      .coalition-intro { max-width: 800px; margin: clamp(2rem, 5vw, 4rem) auto; text-align: center; }
+      .coalition-intro h2 { margin: 0 0 1.25rem; font-size: clamp(1.6rem, 3.5vw, 2.55rem); line-height: 1.2; letter-spacing: -.025em; }
+      .coalition-intro h2 span { color: var(--cyan); }
+      .coalition-intro p { margin: 0; color: var(--text-soft); font-size: clamp(1.02rem, 2vw, 1.2rem); }
+      .coalition-details { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 1.25rem; }
+      .coalition-panel { padding: clamp(1.25rem, 3vw, 2rem); border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(140deg, rgba(85, 231, 255, .055), rgba(14, 22, 40, .74)); }
+      .coalition-panel:last-child { background: linear-gradient(140deg, rgba(255, 112, 200, .065), rgba(14, 22, 40, .74)); }
+      .coalition-panel h2 { margin: 0 0 .85rem; font-size: 1.2rem; line-height: 1.3; }
+      .coalition-panel p { margin: 0; color: var(--text-soft); }
+      .coalition-panel p + p { margin-top: 1rem; }
+      .coalition-launch { margin: 2.5rem 0 0; text-align: center; color: var(--cyan); font-size: 1.15rem; font-weight: 700; }
       a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 6px; }
-      @media (max-width: 480px) { .teaser-main { padding-inline: 1rem; } .teaser-header { padding-block: 1rem; } .teaser-gif { border-radius: 10px; } }
+      @media (max-width: 700px) { .coalition-details { grid-template-columns: minmax(0, 1fr); } }
+      @media (max-width: 480px) { .coalition-main { padding-inline: 1rem; } .teaser-header { padding-block: 1rem; } .coalition-cover img { border-radius: 10px; } .coalition-cover figcaption { text-align: left; } }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://samfa12.com/#organization","name":"Samfa12","url":"https://samfa12.com/"},{"@type":"WebSite","@id":"https://samfa12.com/#website","name":"Samfa12","url":"https://samfa12.com/","publisher":{"@id":"https://samfa12.com/#organization"}},{"@type":"WebPage","@id":"https://samfa12.com/games/chrome-coalition-warlords/#webpage","name":"Chrome Coalition: Warlords","description":"Coming soon to Wavedash.","url":"https://samfa12.com/games/chrome-coalition-warlords/","isPartOf":{"@id":"https://samfa12.com/#website"}}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://samfa12.com/#organization","name":"Samfa12","url":"https://samfa12.com/"},{"@type":"WebSite","@id":"https://samfa12.com/#website","name":"Samfa12","url":"https://samfa12.com/","publisher":{"@id":"https://samfa12.com/#organization"}},{"@type":"WebPage","@id":"https://samfa12.com/games/chrome-coalition-warlords/#webpage","name":"Chrome Coalition","description":"An in-development browser FPS inspired by PS2-era multiplayer battles and destructible environments. Coming soon to Wavedash.","url":"https://samfa12.com/games/chrome-coalition-warlords/","image":"https://samfa12.com/assets/chrome-coalition/chrome-coalition-cover.png","dateModified":"2026-11-09","isPartOf":{"@id":"https://samfa12.com/#website"}}]}</script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="container teaser-header">
       <a class="brand" href="/" aria-label="Samfa12 home"><span class="brand-orb" aria-hidden="true"><img class="brand-mark" src="/assets/samfa12-character.jpg" alt="" width="40" height="40"></span><span>Samfa12</span></a>
-      <a href="/games/">Games</a>
+      <a href="/games/">All games</a>
     </header>
-    <main id="main" class="teaser-main">
-      <h1>Chrome Coalition: Warlords</h1>
-      <p>Coming soon to Wavedash</p>
-      <img class="teaser-gif" src="/assets/chrome-coalition/Chrome-Neon-Teaser-Loop.gif" alt="Chrome Coalition: Warlords teaser" width="1080" height="608" fetchpriority="high">
+    <main id="main" class="coalition-main">
+      <header class="coalition-heading">
+        <p class="coalition-status">In development · Browser FPS</p>
+        <h1>Chrome Coalition</h1>
+        <p>Coming soon to Wavedash</p>
+      </header>
+      <figure class="coalition-cover">
+        <picture>
+          <source type="image/webp" srcset="/assets/chrome-coalition/chrome-coalition-cover-960.webp 960w, /assets/chrome-coalition/chrome-coalition-cover.webp 1672w" sizes="(max-width: 1200px) calc(100vw - 40px), 1160px">
+          <img src="/assets/chrome-coalition/chrome-coalition-cover.png" alt="Chrome Coalition cover art: cyan-lit human resistance faces pink-lit robots across a canyon as a rocket blasts a tunnel through rock." width="1672" height="941" fetchpriority="high">
+        </picture>
+        <figcaption>Cover artwork. Game in development.</figcaption>
+      </figure>
+      <section class="coalition-intro" aria-labelledby="coalition-hook">
+        <h2 id="coalition-hook">The AI took control.<br><span>The Chrome Coalition is fighting back.</span></h2>
+        <p>Battle across a neon-lit canyon where the battlefield won’t stay the same for long. Blast through walls, carve tunnels through solid rock and find a new way into the enemy base. Just remember: your opponents can do the same.</p>
+      </section>
+      <div class="coalition-details">
+        <section class="coalition-panel" aria-labelledby="coalition-about">
+          <h2 id="coalition-about">Make your own path</h2>
+          <p>Chrome Coalition is an in-development browser FPS inspired by the chaotic multiplayer battles and destructible environments of the PS2 era. Choose a side in the fight between the human resistance and the machines, grab weapons around the map and make your own path through the battlefield.</p>
+        </section>
+        <section class="coalition-panel" aria-labelledby="coalition-plans">
+          <h2 id="coalition-plans">Planned multiplayer</h2>
+          <p>The initial target is 4v4 online multiplayer, with bots filling empty spots.</p>
+          <p>Team Deathmatch, Deathmatch and Capture the Flag are planned as development progresses.</p>
+        </section>
+      </div>
+      <p class="coalition-launch">Coming soon to Wavedash.</p>
     </main>
   </body>
 </html>
