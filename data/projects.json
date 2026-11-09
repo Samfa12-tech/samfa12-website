@@ -1851,5 +1851,35 @@
         "width": 1280
       }
     ]
+  },
+  {
+    "id": "game-chrome-coalition",
+    "title": "Chrome Coalition",
+    "category": "Games",
+    "type": "Browser FPS in development",
+    "status": "Coming soon to Wavedash",
+    "description": "Join the human resistance or the machines in an in-development browser FPS with destructible environments and planned multiplayer.",
+    "tags": [
+      "Game",
+      "Browser",
+      "FPS",
+      "Multiplayer",
+      "Samfa12"
+    ],
+    "featured": false,
+    "accent": "cyan",
+    "imageFit": "contain",
+    "sortOrder": 4.4,
+    "detailUrl": "/games/chrome-coalition-warlords/",
+    "thumbnail": "assets/thumbnails/chrome-coalition-cover-960.webp",
+    "thumbnailAlt": "Chrome Coalition cover art: human resistance and robots face off across a neon canyon.",
+    "thumbnailWidth": 960,
+    "thumbnailHeight": 540,
+    "links": [
+      {
+        "label": "Explore Chrome Coalition",
+        "url": "/games/chrome-coalition-warlords/"
+      }
+    ]
   }
 ]

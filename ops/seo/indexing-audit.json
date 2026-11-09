@@ -499,6 +499,7 @@
         "/games/briarhold/",
         "/games/bug-maze-td/",
         "/games/bug-swarm-guide/",
+        "/games/chrome-coalition-warlords/",
         "/games/cursed-cutter-guide/",
         "/games/drink/",
         "/games/dust-on-the-river/",
@@ -1551,6 +1552,7 @@
         "/games/briarhold/",
         "/games/bug-maze-td/",
         "/games/bug-swarm-guide/",
+        "/games/chrome-coalition-warlords/",
         "/games/cursed-cutter-guide/",
         "/games/drink/",
         "/games/dust-on-the-river/",
@@ -1574,7 +1576,7 @@
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/"
       ],
-      "localAssetCount": 37,
+      "localAssetCount": 38,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -1828,7 +1830,7 @@
     },
     {
       "route": "/games/chrome-coalition-warlords/",
-      "kind": "site",
+      "kind": "product",
       "canonical": "https://samfa12.com/games/chrome-coalition-warlords/",
       "title": "Chrome Coalition | Destructible browser FPS in development | Samfa12",
       "description": "The AI took control. The Chrome Coalition is fighting back. An in-development browser FPS with destructible environments, humans vs machines and 4v4 multiplayer planned.",
@@ -1847,7 +1849,8 @@
       "jsonLdTypes": [
         "Organization",
         "WebSite",
-        "WebPage"
+        "WebPage",
+        "BreadcrumbList"
       ],
       "findings": [],
       "advisories": [
