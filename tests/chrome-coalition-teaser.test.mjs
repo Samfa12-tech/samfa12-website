@@ -7,42 +7,42 @@ const page = fs.readFileSync(new URL('../games/chrome-coalition-warlords/index.h
 const main = page.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1];
 const visibleText = main.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
-test('landing page uses the approved title and description with development status', () => {
+test('landing page invites online testing of the public early build', () => {
   assert.match(page, /<h1>Chrome Coalition<\/h1>/);
   assert.equal((page.match(/<h1\b/g) || []).length, 1);
-  assert.doesNotMatch(visibleText, /Warlords|Online Destruction Shooter|Play now/i);
+  assert.doesNotMatch(visibleText, /Warlords|Coming soon|Planned multiplayer|initial target/i);
   for (const copy of [
-    'In development · Browser FPS',
+    'Early build · Browser FPS',
+    'Now playable on Wavedash. Online testers welcome.',
     'The AI took control. The Chrome Coalition is fighting back.',
-    'Battle across a neon-lit canyon where the battlefield won’t stay the same for long.',
-    'Blast through walls, carve tunnels through solid rock and find a new way into the enemy base.',
-    'Just remember: your opponents can do the same.',
-    'Chrome Coalition is an in-development browser FPS inspired by the chaotic multiplayer battles and destructible environments of the PS2 era.',
-    'Choose a side in the fight between the human resistance and the machines, grab weapons around the map and make your own path through the battlefield.',
-    'Planned multiplayer',
-    'The initial target is 4v4 online multiplayer, with bots filling empty spots.',
-    'Team Deathmatch, Deathmatch and Capture the Flag are planned as development progresses.',
-    'Coming soon to Wavedash.'
-  ]) assert.ok(visibleText.includes(copy), `Missing approved copy: ${copy}`);
+    'Help test online play',
+    'Grab a friend, try an online match and let me know how it goes.',
+    'joining rooms, connection stability, controls, performance and anything that breaks.',
+    'Please include your device, browser and what happened.',
+    'Released 10 November 2026. Still in development. Online testing and feedback welcome.'
+  ]) assert.ok(visibleText.includes(copy), `Missing launch copy: ${copy}`);
   assert.match(main, /Cover artwork\. Game in development\./);
-  assert.doesNotMatch(main, /<button\b|<iframe\b|<video\b/);
+  assert.match(main, /href="https:\/\/wavedash\.com\/games\/chrome-coalition">Play on Wavedash<\/a>/);
+  assert.doesNotMatch(page, /wavedash\.com\/playtest\//);
 });
 
-test('landing page preserves its URL and uses cover social metadata without a premature store link', () => {
+test('landing page preserves URL and cover metadata with accurate release status', () => {
   assert.match(page, /<link rel="canonical" href="https:\/\/samfa12\.com\/games\/chrome-coalition-warlords\/">/);
   assert.match(page, /name="viewport"/);
   assert.match(page, /href="\/assets\/favicon\.png"/);
-  assert.doesNotMatch(page, /https?:\/\/(?:www\.)?wavedash\.com/);
   assert.match(page, /property="og:image" content="https:\/\/samfa12\.com\/assets\/chrome-coalition\/chrome-coalition-social-1200\.jpg"/);
   for (const block of page.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
     const graph = JSON.parse(block[1])['@graph'];
     const webPage = graph.find(node => node['@type'] === 'WebPage');
     assert.equal(webPage.name, 'Chrome Coalition');
-    assert.equal(webPage.dateModified, '2026-11-09');
-    assert.match(webPage.description, /in-development/);
+    assert.equal(webPage.dateModified, '2026-11-10');
+    assert.match(webPage.description, /early-build.*now playable/);
   }
   const games = fs.readFileSync(new URL('../games/index.html', import.meta.url), 'utf8');
   assert.match(games, /href="\/games\/chrome-coalition-warlords\/">Chrome Coalition<\/a>/);
+  const updates = fs.readFileSync(new URL('../updates/index.html', import.meta.url), 'utf8');
+  assert.match(updates, /Chrome Coalition: Early build live on Wavedash/);
+  assert.match(page, /id="early-build-launch-november-2026"/);
 });
 
 test('approved original cover is unchanged and responsive variants are supplied', () => {

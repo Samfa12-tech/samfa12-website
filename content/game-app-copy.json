@@ -2104,13 +2104,27 @@
     }
   },
   "game-chrome-coalition": {
-    "intro": "Chrome Coalition is an in-development browser FPS inspired by PS2-era multiplayer battles and destructible environments.",
+    "intro": "Chrome Coalition is an early-build browser FPS inspired by PS2-era multiplayer battles and destructible environments. It is now playable on Wavedash.",
     "details": [
       {
-        "heading": "Planned multiplayer",
-        "text": "The initial target is 4v4 online multiplayer, with bots filling empty spots.",
+        "heading": "Help test online play",
+        "text": "Try an online match with friends and share feedback on joining rooms, connection stability, controls, performance and anything that breaks. Include your device, browser and what happened so issues are easier to reproduce.",
         "sources": [
-          "https://samfa12.com/games/chrome-coalition-warlords/"
+          "https://wavedash.com/games/chrome-coalition"
+        ]
+      }
+    ],
+    "updates": [
+      {
+        "id": "early-build-launch-november-2026",
+        "kind": "release",
+        "date": "2026-11-10",
+        "dateMeaning": "Wavedash public listing release date",
+        "title": "Early build live on Wavedash",
+        "summary": "Chrome Coalition is now playable on Wavedash. Online testing and feedback are welcome while development continues.",
+        "platform": "Browser",
+        "sources": [
+          "https://wavedash.com/games/chrome-coalition"
         ]
       }
     ]

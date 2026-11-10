@@ -1064,6 +1064,11 @@
           "url": "https://samfa12.com/games/chrome-coalition-warlords/",
           "identity": "samfa12.com /games/chrome-coalition-warlords/",
           "access": "read-first-party-route-and-repository"
+        },
+        {
+          "url": "https://wavedash.com/games/chrome-coalition",
+          "identity": "Chrome Coalition public Wavedash game page",
+          "access": "independent-public-browser-verification-2026-11-10"
         }
       ]
     }

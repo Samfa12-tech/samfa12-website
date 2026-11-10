@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20261019-1";
+  const DATA_VERSION = "20261110-2";
   const PAGE_DATA_VERSION = new URL(document.currentScript.src).searchParams.get("data-version") || DATA_VERSION;
   const DATA_URL = `/data/projects.json?v=${PAGE_DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
