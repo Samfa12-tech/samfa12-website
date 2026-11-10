@@ -319,17 +319,18 @@ test("saved-card adapter uses visible Play text when metadata is absent, not arb
   ];
   assert.deepEqual(savedCardLabels(cards), [["Browser"], []]);
 });
-test("Chrome Coalition is in the saved and dynamic games catalogue as coming soon", () => {
+test("Chrome Coalition is in the saved and dynamic games catalogue as a playable early build", () => {
   const record = catalogue.find((p) => p.id === "game-chrome-coalition");
   assert.ok(record);
   assert.equal(record.detailUrl, "/games/chrome-coalition-warlords/");
-  assert.match(record.status, /coming soon/i);
-  assert.deepEqual(Array.from(catalogueContext.deriveGameCatalogueLabels(record, record.links)), ["Browser"]);
+  assert.match(record.status, /early build live/i);
+  assert.deepEqual(Array.from(catalogueContext.deriveGameCatalogueLabels(record, record.links)), ["Browser", "Wavedash"]);
   const games = fs.readFileSync(path.join(root, "games/index.html"), "utf8");
   const card = Array.from(games.matchAll(/<article\b[^>]*data-project-id="([^"]+)"[\s\S]*?<\/article>/g)).find((match) => match[1] === record.id)?.[0];
   assert.ok(card);
-  assert.match(card, /Coming soon to Wavedash/);
+  assert.match(card, /Early build live on Wavedash/);
   assert.match(card, /href="\/games\/chrome-coalition-warlords\/"/);
   assert.match(card, /chrome-coalition-cover-960\.webp/);
-  assert.doesNotMatch(card, /Play now|href="https:\/\/wavedash\.com/i);
+  assert.match(card, /href="https:\/\/wavedash\.com\/games\/chrome-coalition"/);
+  assert.doesNotMatch(card, /Coming soon|planned multiplayer/i);
 });

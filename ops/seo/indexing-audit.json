@@ -8,7 +8,7 @@
     "explicitlyExcluded": 6,
     "routesWithFindings": 1,
     "siteFindings": 0,
-    "oneContextualIncoming": 16,
+    "oneContextualIncoming": 15,
     "relationshipEdges": 71
   },
   "excluded": [
@@ -1832,17 +1832,21 @@
       "route": "/games/chrome-coalition-warlords/",
       "kind": "product",
       "canonical": "https://samfa12.com/games/chrome-coalition-warlords/",
-      "title": "Chrome Coalition | Destructible browser FPS in development | Samfa12",
-      "description": "The AI took control. The Chrome Coalition is fighting back. An in-development browser FPS with destructible environments, humans vs machines and 4v4 multiplayer planned.",
+      "title": "Chrome Coalition | Play the early build on Wavedash | Samfa12",
+      "description": "Play the early build of Chrome Coalition on Wavedash. Humans vs machines, destructible battlefields and an invitation to help test online play and share feedback.",
       "h1": [
         "Chrome Coalition"
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/",
+        "/games/",
+        "/updates/"
       ],
       "incomingMain": [
-        "/games/"
+        "/",
+        "/games/",
+        "/updates/"
       ],
       "localAssetCount": 6,
       "jsonLdStatus": "parsed",
@@ -1853,9 +1857,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/cursed-cutter-guide/",
@@ -1920,14 +1922,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/",
         "/books/sober/",
         "/games/",
         "/music/drink-ost/",
         "/updates/"
       ],
       "incomingMain": [
-        "/",
         "/books/sober/",
         "/games/",
         "/music/drink-ost/",

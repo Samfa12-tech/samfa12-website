@@ -1856,9 +1856,9 @@
     "id": "game-chrome-coalition",
     "title": "Chrome Coalition",
     "category": "Games",
-    "type": "Browser FPS in development",
-    "status": "Coming soon to Wavedash",
-    "description": "Join the human resistance or the machines in an in-development browser FPS with destructible environments and planned multiplayer.",
+    "type": "Browser FPS",
+    "status": "Early build live on Wavedash",
+    "description": "Humans vs machines in a destructible browser FPS. Play the early build on Wavedash and help test online matches.",
     "tags": [
       "Game",
       "Browser",
@@ -1866,7 +1866,7 @@
       "Multiplayer",
       "Samfa12"
     ],
-    "featured": false,
+    "featured": true,
     "accent": "cyan",
     "imageFit": "contain",
     "sortOrder": 4.4,
@@ -1877,9 +1877,15 @@
     "thumbnailHeight": 540,
     "links": [
       {
-        "label": "Explore Chrome Coalition",
+        "label": "Play on Wavedash",
+        "url": "https://wavedash.com/games/chrome-coalition"
+      },
+      {
+        "label": "About Chrome Coalition",
         "url": "/games/chrome-coalition-warlords/"
       }
-    ]
+    ],
+    "homepageRank": 6,
+    "homepageSize": "wide"
   }
 ]

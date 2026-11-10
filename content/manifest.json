@@ -656,10 +656,11 @@
       "path": "/games/chrome-coalition-warlords/",
       "action": "preserve-existing",
       "officialSources": [
+        "https://wavedash.com/games/chrome-coalition",
         "https://samfa12.com/games/chrome-coalition-warlords/"
       ],
-      "notes": "Preserve the approved standalone teaser page and its original cover; the catalogue adds a link, not a play or store listing.",
-      "pageModified": "2026-11-09"
+      "notes": "Preserve the existing landing-page URL and cover. The public Wavedash early build was independently opened at its rendered menu on 2026-11-10. Invite online testing and feedback; do not imply finished-game status or verified cross-device progression.",
+      "pageModified": "2026-11-10"
     }
   ],
   "directories": [
