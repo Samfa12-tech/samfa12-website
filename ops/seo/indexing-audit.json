@@ -8,8 +8,8 @@
     "explicitlyExcluded": 6,
     "routesWithFindings": 0,
     "siteFindings": 0,
-    "oneContextualIncoming": 15,
-    "relationshipEdges": 71
+    "oneContextualIncoming": 5,
+    "relationshipEdges": 81
   },
   "excluded": [
     {
@@ -57,6 +57,16 @@
     {
       "from": "/books/a-place-of-his-own/",
       "to": "/books/free-to-a-good-home/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/colossal/",
+      "to": "/books/concubine/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/books/concubine/",
+      "to": "/books/colossal/",
       "kind": "editorial-related"
     },
     {
@@ -155,8 +165,18 @@
       "kind": "editorial-related"
     },
     {
+      "from": "/games/banana-banana-ducky/",
+      "to": "/games/hop-bunny/",
+      "kind": "editorial-related"
+    },
+    {
       "from": "/games/breakfast-beat-down/",
       "to": "/games/breakfast-beat/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/breakfast-beat-down/",
+      "to": "/games/reckless-dentist/",
       "kind": "editorial-related"
     },
     {
@@ -172,6 +192,11 @@
     {
       "from": "/games/briarhold/",
       "to": "/games/the-last-guard/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/bug-maze-td/",
+      "to": "/games/bug-swarm-guide/",
       "kind": "editorial-related"
     },
     {
@@ -221,6 +246,11 @@
     },
     {
       "from": "/games/moon-mower/",
+      "to": "/games/cursed-cutter-guide/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/moon-mower/",
       "to": "/games/lofi-and-chill-pack/",
       "kind": "editorial-related"
     },
@@ -232,6 +262,11 @@
     {
       "from": "/games/pocket-ant-farm/",
       "to": "/games/lofi-and-chill-pack/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/pocket-ant-farm/",
+      "to": "/games/mandible-wars/",
       "kind": "editorial-related"
     },
     {
@@ -295,6 +330,16 @@
       "kind": "editorial-related"
     },
     {
+      "from": "/games/the-last-guard/",
+      "to": "/games/gremlin-grenade-pinball/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/games/towtal-chaos/",
+      "to": "/games/party-bus/",
+      "kind": "editorial-related"
+    },
+    {
       "from": "/games/towtal-chaos/",
       "to": "/games/wonky-vehicle-lab/",
       "kind": "editorial-related"
@@ -307,6 +352,11 @@
     {
       "from": "/music/drink-ost/",
       "to": "/games/drink/",
+      "kind": "editorial-related"
+    },
+    {
+      "from": "/music/drink-ost/",
+      "to": "/music/billions-of-years/",
       "kind": "editorial-related"
     },
     {
@@ -1057,10 +1107,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/books/"
+        "/books/",
+        "/books/concubine/"
       ],
       "incomingMain": [
-        "/books/"
+        "/books/",
+        "/books/concubine/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -1072,9 +1124,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/books/concubine/",
@@ -1087,10 +1137,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/books/"
+        "/books/",
+        "/books/colossal/"
       ],
       "incomingMain": [
-        "/books/"
+        "/books/",
+        "/books/colossal/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -1102,9 +1154,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/books/dust-on-the-river/",
@@ -1782,10 +1832,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/games/bug-maze-td/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/games/bug-maze-td/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -1797,9 +1849,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/bug-swarm/",
@@ -1868,10 +1918,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/games/moon-mower/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/games/moon-mower/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -1883,9 +1935,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/cursed-cutter/",
@@ -1986,10 +2036,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/games/the-last-guard/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/games/the-last-guard/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2001,9 +2053,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/hop-bunny/",
@@ -2016,10 +2066,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/games/banana-banana-ducky/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/games/banana-banana-ducky/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2031,9 +2083,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/lofi-and-chill-pack/",
@@ -2084,10 +2134,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/games/pocket-ant-farm/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/games/pocket-ant-farm/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2099,9 +2151,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/moon-mower/",
@@ -2146,10 +2196,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/games/towtal-chaos/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/games/towtal-chaos/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2161,9 +2213,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/pocket-ant-farm/",
@@ -2300,10 +2350,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/games/breakfast-beat-down/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/games/breakfast-beat-down/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2315,9 +2367,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/reef-sweep/",
@@ -2869,10 +2919,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/music/"
+        "/music/",
+        "/music/drink-ost/"
       ],
       "incomingMain": [
-        "/music/"
+        "/music/",
+        "/music/drink-ost/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2884,9 +2936,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/music/drink-ost/",

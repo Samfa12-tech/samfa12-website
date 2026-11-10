@@ -311,8 +311,13 @@
       }
     ],
     "updates": [],
-    "relatedIds": [],
-    "authorCredit": "Samfa12"
+    "relatedIds": [
+      "book-concubine"
+    ],
+    "authorCredit": "Samfa12",
+    "relatedLabels": {
+      "book-concubine": "Explore Concubine, a science-fiction story of resistance"
+    }
   },
   "book-concubine": {
     "intro": "Concubine is an adult political science-fiction novel about Seren Vale, the former First Minister of Veyra. After an occupying power strips her of office, citizenship and legal identity, Seren is brought back to her home world and begins using the empire's own rituals and assumptions to rebuild resistance.",
@@ -349,8 +354,13 @@
       }
     ],
     "updates": [],
-    "relatedIds": [],
-    "authorCredit": "Samfa12"
+    "relatedIds": [
+      "book-colossal"
+    ],
+    "authorCredit": "Samfa12",
+    "relatedLabels": {
+      "book-colossal": "Explore Colossal, a historical story of resistance"
+    }
   },
   "book-sober": {
     "seoTitle": "Sober novel set after the Drink game",
@@ -441,11 +451,13 @@
     "updates": [],
     "relatedIds": [
       "game-drink",
-      "book-sober"
+      "book-sober",
+      "music-billions-of-years"
     ],
     "relatedLabels": {
       "game-drink": "Explore the Drink game",
-      "book-sober": "Read Sober, a later story in Drink's world"
+      "book-sober": "Read Sober, a later story in Drink's world",
+      "music-billions-of-years": "Listen to Billions of Years, another Samfa12 album"
     }
   },
   "music-billions-of-years": {
