@@ -253,10 +253,12 @@
       }
     ],
     "relatedIds": [
-      "game-briarhold"
+      "game-briarhold",
+      "game-gremlin-grenade-pinball"
     ],
     "relatedLabels": {
-      "game-briarhold": "Explore Briarhold action-defence and co-op testing"
+      "game-briarhold": "Explore Briarhold action-defence and co-op testing",
+      "game-gremlin-grenade-pinball": "Try Gremlin Grenade Pinball, a horde-defence prototype"
     }
   },
   "game-the-horde": {
@@ -752,8 +754,12 @@
     "updates": [],
     "relatedIds": [
       "game-td-pack",
-      "music-tower-defense-pack-ost"
-    ]
+      "music-tower-defense-pack-ost",
+      "game-bug-swarm"
+    ],
+    "relatedLabels": {
+      "game-bug-swarm": "Try Bug Swarm, the spiritual sequel"
+    }
   },
   "game-breakfast-beat": {
     "intro": "Breakfast Beat is a rhythm-infused tower-defence game set on a breakfast line. Place food-themed defences against incoming snack waves; lanes map to chord notes and tower columns fire in sequence, turning a defence layout into a musical grid.",
@@ -1256,8 +1262,12 @@
     "updates": [],
     "relatedIds": [
       "game-lofi-and-chill-pack",
-      "music-lofi-and-chill-pack-ost"
-    ]
+      "music-lofi-and-chill-pack-ost",
+      "game-cursed-cutter"
+    ],
+    "relatedLabels": {
+      "game-cursed-cutter": "Try Cursed Cutter, a darker garden-cutting game"
+    }
   },
   "game-pocket-fish-tank": {
     "intro": "Pocket Fish Tank is a calm aquarium toy. Decorate a voxel tank, add water and watch fish and other small creatures settle in. You may also see it called Fish Tank on itch.io.",
@@ -1374,8 +1384,12 @@
     "updates": [],
     "relatedIds": [
       "game-lofi-and-chill-pack",
-      "music-lofi-and-chill-pack-ost"
-    ]
+      "music-lofi-and-chill-pack-ost",
+      "game-mandible-wars"
+    ],
+    "relatedLabels": {
+      "game-mandible-wars": "Try Mandible Wars, an ant-colony strategy game"
+    }
   },
   "game-briarhold": {
     "intro": "Briarhold is a first-person action-defence roguelite with browser and Android Alpha.103 testing builds. Prepare and reclaim authored defences, time your cooling, and fight the Briar Host. Multiplayer co-op remains experimental.",
@@ -1658,11 +1672,13 @@
     ],
     "relatedIds": [
       "game-breakfast-beat",
-      "app-pocket-chordsmith"
+      "app-pocket-chordsmith",
+      "game-reckless-dentist"
     ],
     "relatedLabels": {
       "game-breakfast-beat": "Explore the original Breakfast Beat tower-defence game",
-      "app-pocket-chordsmith": "Explore Pocket Chordsmith, used for the embedded music"
+      "app-pocket-chordsmith": "Explore Pocket Chordsmith, used for the embedded music",
+      "game-reckless-dentist": "Try Reckless Dentist for a fast-paced score challenge"
     }
   },
   "game-banana-banana-ducky": {
@@ -1730,7 +1746,12 @@
         ]
       }
     ],
-    "relatedIds": []
+    "relatedIds": [
+      "game-hop-bunny"
+    ],
+    "relatedLabels": {
+      "game-hop-bunny": "Try Hop Bunny for a precision timing challenge"
+    }
   },
   "game-towtal-chaos": {
     "seoTitle": "Towtal Chaos - play the caravan parking game",
@@ -1796,10 +1817,12 @@
       }
     ],
     "relatedIds": [
-      "game-wonky-vehicle-lab"
+      "game-wonky-vehicle-lab",
+      "game-party-bus"
     ],
     "relatedLabels": {
-      "game-wonky-vehicle-lab": "Try another Samfa12 vehicle physics experiment"
+      "game-wonky-vehicle-lab": "Try another Samfa12 vehicle physics experiment",
+      "game-party-bus": "Try P.A.R.T.Y. Bus, a driving-survival prototype"
     }
   },
   "game-reef-sweep": {
