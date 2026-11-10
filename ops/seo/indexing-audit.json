@@ -6,7 +6,7 @@
     "indexableRoutes": 74,
     "sitemapRoutes": 74,
     "explicitlyExcluded": 6,
-    "routesWithFindings": 1,
+    "routesWithFindings": 0,
     "siteFindings": 0,
     "oneContextualIncoming": 15,
     "relationshipEdges": 71
@@ -1806,7 +1806,7 @@
       "kind": "runtime",
       "canonical": "https://samfa12.com/games/bug-swarm/",
       "title": "Bug Swarm Experiment",
-      "description": "",
+      "description": "Play Bug Swarm, an experimental tower-defence game. Place towers beside a dirt-tray path and use tools to stop waves of bugs.",
       "h1": [
         "Bug Swarm",
         "Run Results"
@@ -1823,9 +1823,7 @@
       "localAssetCount": 3,
       "jsonLdStatus": "not present",
       "jsonLdTypes": [],
-      "findings": [
-        "missing description"
-      ],
+      "findings": [],
       "advisories": []
     },
     {
