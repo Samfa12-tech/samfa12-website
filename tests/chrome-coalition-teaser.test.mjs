@@ -39,7 +39,8 @@ test('landing page preserves URL and cover metadata with accurate release status
     assert.match(webPage.description, /early-build.*now playable/);
   }
   const games = fs.readFileSync(new URL('../games/index.html', import.meta.url), 'utf8');
-  assert.match(games, /href="\/games\/chrome-coalition-warlords\/">Chrome Coalition<\/a>/);
+  assert.doesNotMatch(games, /Coming soon to Wavedash/i);
+  assert.match(games, /data-project-id="game-chrome-coalition"/);
   const updates = fs.readFileSync(new URL('../updates/index.html', import.meta.url), 'utf8');
   assert.match(updates, /Chrome Coalition: Early build live on Wavedash/);
   assert.match(page, /id="early-build-launch-november-2026"/);
