@@ -188,7 +188,11 @@ function choosePost(bank, history, targetDay) {
 function buildWeekPlan(bank, history, startDay, blockedSlots = new Set()) {
   const virtualHistory = {posts: [...(history.posts || [])]};
   const slots = [];
-  const templates = weeklySlotTemplates();
+  // Select in chronological order so reuse checks see every earlier planned slot.
+  // Templates are generated mornings-first; selecting evenings afterward can
+  // otherwise reuse a post already assigned to a later morning.
+  const templates = weeklySlotTemplates().sort((a, b) =>
+    a.dayOffset - b.dayOffset || a.hour - b.hour || a.minute - b.minute);
 
   for (const template of templates) {
     const date = addDays(startDay, template.dayOffset);
