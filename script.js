@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20261110-2";
+  const DATA_VERSION = "20261111-1";
   const PAGE_DATA_VERSION = new URL(document.currentScript.src).searchParams.get("data-version") || DATA_VERSION;
   const DATA_URL = `/data/projects.json?v=${PAGE_DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
@@ -663,6 +663,7 @@
     const meta = createElement("p", { className: "project-meta" }, [
       createElement("span", { className: `pill ${getStatusClass(project.status)}`, text: project.status }),
     ]);
+    if (project.engine) meta.append(createElement("span", { className: "pill", text: `Built with ${project.engine}` }));
     article.append(meta);
 
     if (!isFeatured && project.catalogueLabels.length) {

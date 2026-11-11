@@ -50,6 +50,7 @@ Each project entry has:
 - `type`
 - `status`
 - `description`
+- optional `engine` – verified engine/library or runtime technology name, displayed as “Built with …”; leave absent when unverified
 - `tags`
 - `featured` (`true`/`false`)
 - `links` (array of `{ "label": "...", "url": "..." }`)

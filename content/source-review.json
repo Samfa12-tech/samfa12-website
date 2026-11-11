@@ -23,7 +23,12 @@
           "reviewedAt": "2026-10-28",
           "notes": "HTTP 200 public listing identifies Dust on the River and offers browser play."
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Three.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
+      }
     },
     "game-drink": {
       "disposition": "create",
@@ -49,7 +54,12 @@
           "identity": "store.steampowered.com /app/4419290/Drink/",
           "access": "catalogue-destination-not-used-for-claims"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Godot",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
+      }
     },
     "game-possum-cafe": {
       "disposition": "create",
@@ -65,7 +75,12 @@
           "identity": "samfa12.itch.io /possum-cafe",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "HTML5",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-the-last-guard": {
       "disposition": "create",
@@ -90,7 +105,12 @@
           "reviewedAt": "2026-10-28",
           "notes": "Public listing exposed Alpha.20 build message for touch controls, steep aim and cooling settings. The observation date is not asserted as a release date."
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
+      }
     },
     "game-the-horde": {
       "disposition": "create",
@@ -138,7 +158,12 @@
         }
       ],
       "reviewedAt": "2026-11-03",
-      "dateMeaning": "Verified GitHub 1.7.0 release, itch download publication and repository feature/validation review date"
+      "dateMeaning": "Verified GitHub 1.7.0 release, itch download publication and repository feature/validation review date",
+      "engineReview": {
+        "engine": "Custom C++ / Vulkan",
+        "reviewedAt": "2026-11-11",
+        "basis": "Current native release README and CMakeLists.txt identify a C++20 Vulkan hardware ray-tracing runtime. This label refers to the current native release, not historical browser versions."
+      }
     },
     "game-bug-swarm": {
       "disposition": "create",
@@ -149,7 +174,12 @@
           "identity": "samfa12.com /games/bug-swarm/",
           "access": "read-first-party-route-and-repository"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Website hosted runtime loads vendor/babylon/babylon.js and creates a Babylon engine."
+      }
     },
     "game-cursed-cutter": {
       "disposition": "create",
@@ -160,7 +190,12 @@
           "identity": "samfa12.com /games/cursed-cutter/",
           "access": "read-first-party-route-and-repository"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Website hosted runtime loads cdn.babylonjs.com/babylon.js."
+      }
     },
     "app-what-would-win": {
       "disposition": "create",
@@ -282,7 +317,12 @@
           "identity": "samfa12.itch.io /bug-maze-td",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "HTML5",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT. HTML5 describes technology, not a claimed third-party engine."
+      }
     },
     "game-breakfast-beat": {
       "disposition": "create",
@@ -298,7 +338,12 @@
           "identity": "samfa12.itch.io /breakfast-beat",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "HTML5",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-ship-blockade": {
       "disposition": "create",
@@ -314,7 +359,12 @@
           "identity": "samfa12.itch.io /ship-blockade",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "HTML5",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-hop-bunny": {
       "disposition": "create",
@@ -325,7 +375,12 @@
           "identity": "samfa12.itch.io /hop-bunny",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "HTML5",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-pocket-pattern": {
       "disposition": "create",
@@ -373,7 +428,12 @@
           "identity": "samfa12.itch.io /reckless-dentist",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "HTML5",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-gremlin-grenade-pinball": {
       "disposition": "create",
@@ -384,7 +444,12 @@
           "identity": "samfa12.itch.io /gremlin-grenade-pinball",
           "access": "partial-search-snippet"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Godot",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
+      }
     },
     "game-wonky-vehicle-lab": {
       "disposition": "create",
@@ -395,7 +460,12 @@
           "identity": "samfa12.itch.io /wonky-vehicle-lab",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Godot",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
+      }
     },
     "book-toknight": {
       "disposition": "create",
@@ -542,7 +612,12 @@
           "identity": "samfa12.itch.io /ship-blockade",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "HTML5 collection",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-lofi-and-chill-pack": {
       "disposition": "create",
@@ -568,7 +643,12 @@
           "identity": "samfa12.itch.io /moon-mower",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js collection",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-spin-vector": {
       "disposition": "create",
@@ -589,7 +669,12 @@
           "identity": "wavedash.com /games/spin-vector",
           "access": "catalogue-destination-not-used-for-claims"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "JavaScript / Canvas 2D",
+        "reviewedAt": "2026-11-11",
+        "basis": "Active repository app/android-capacitor/www/game.js uses canvas.getContext('2d'); index.html imports game.js."
+      }
     },
     "app-pocket-dj": {
       "disposition": "create",
@@ -658,7 +743,12 @@
           "identity": "samfa12.itch.io /moon-mower",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-pocket-fish-tank": {
       "disposition": "create",
@@ -674,7 +764,12 @@
           "identity": "samfa12.itch.io /fish-tank",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-party-bus": {
       "disposition": "create",
@@ -685,7 +780,12 @@
           "identity": "samfa12.itch.io /party-bus",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-pocket-ant-farm": {
       "disposition": "create",
@@ -701,7 +801,12 @@
           "identity": "samfa12.itch.io /ant-farm",
           "access": "read-public-source"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT on 11 November 2026. HTML5 is a technology label, not a claimed third-party engine. Collection labels describe the included games, not the native wrapper."
+      }
     },
     "game-briarhold": {
       "disposition": "enhance-existing",
@@ -722,7 +827,12 @@
           "identity": "samfa12.com /games/briarhold/",
           "access": "read-first-party-route-and-repository"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Repository index.html loads vendor/babylon/babylon-9.16.1.min.js and loaders."
+      }
     },
     "book-toknight-2": {
       "disposition": "create",
@@ -917,7 +1027,12 @@
           "releaseSha256": "a2b61eed4248a4daafa6b6012073ea83c46cc5959e064e9038eade837d9ac5d9",
           "notes": "All three HTML releases match. README, source modules and supplied screenshots reviewed. No itch URL or Android inclusion asserted; package provenance is not an independent rights audit. The promotional icon is a new original imagegen illustration based on inspected game art, not a supplied screenshot; PNG master 1254x1254, local WebP 960x960, generated 2026-10-03 at the owner’s request."
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "JavaScript / Canvas 2D",
+        "reviewedAt": "2026-11-11",
+        "basis": "Hosted release renderer uses Canvas 2D directly; no external engine."
+      }
     },
     "game-banana-banana-ducky": {
       "disposition": "create",
@@ -938,7 +1053,12 @@
           "notes": "Two-entry ZIP; self-contained WebGL 2 runtime and documentation reviewed. No third-party dependency or asset references and no separate license file supplied; this is owner-authorized hosting, not an independent rights audit. Original package preserved privately. Hosting removes personal attribution, uses a neutral storage key, adds canonical/noindex/site favicon/Apple touch icon, makes touch controls available with hybrid input, prevents a second joystick pointer from stealing control, and resumes initialized audio on subsequent user gestures. No raw archive or private evidence published. Original promotional icon generated with the built-in imagegen tool from inspected characters; private PNG master and public WebP 320/640/960 variants plus 180px Apple touch icon.",
           "hostingRevisionReview": "2026-10-03: published joystick lifecycle repair and single-pass cel shader; subsequent draft game-scoped gesture and visual viewport repair. Forced Chromium page zoom reproduced the old offscreen HUD; rapid native action taps did not reproduce spontaneous zoom. Candidate checked with simultaneous Chromium touches, actual page zoom, Windows WebKit and event-harness regressions. Safari gesture fallback tested synthetically; physical iPad cause and owner retest remain pending. See ops/releases/banana-banana-ducky.md."
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Custom WebGL2",
+        "reviewedAt": "2026-11-11",
+        "basis": "Hosted release creates a WebGL2 context and compiles shaders directly."
+      }
     },
     "game-towtal-chaos": {
       "disposition": "create",
@@ -966,7 +1086,12 @@
       "limits": [
         "Itch metadata says Released while the description says alpha; public copy uses playable alpha.",
         "No game build or gameplay performance validation was performed for this website addition."
-      ]
+      ],
+      "engineReview": {
+        "engine": "Three.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
+      }
     },
     "game-reef-sweep": {
       "disposition": "create",
@@ -1054,7 +1179,12 @@
         "Artwork remains procedural prototype art.",
         "The progression model is an economic fixture, not human playtest evidence; audio timing and mix remain to be reviewed.",
         "No public release date or third-party storefront is asserted."
-      ]
+      ],
+      "engineReview": {
+        "engine": "Babylon.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
+      }
     },
     "game-chrome-coalition": {
       "disposition": "preserve-existing",
@@ -1070,7 +1200,12 @@
           "identity": "Chrome Coalition public Wavedash game page",
           "access": "independent-public-browser-verification-2026-11-10"
         }
-      ]
+      ],
+      "engineReview": {
+        "engine": "Three.js",
+        "reviewedAt": "2026-11-11",
+        "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
+      }
     }
   }
 }

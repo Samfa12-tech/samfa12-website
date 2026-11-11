@@ -54,7 +54,8 @@
     "thumbnail": "assets/thumbnails/dust-on-the-river-b9a9e3.png",
     "thumbnailAlt": "Cover image for Dust on the River",
     "id": "game-dust-on-the-river",
-    "detailUrl": "/games/dust-on-the-river/"
+    "detailUrl": "/games/dust-on-the-river/",
+    "engine": "Three.js"
   },
   {
     "title": "Drink",
@@ -92,7 +93,8 @@
     "thumbnail": "assets/thumbnails/drink-2ad44b.webp",
     "thumbnailAlt": "Cover image for Drink",
     "id": "game-drink",
-    "detailUrl": "/games/drink/"
+    "detailUrl": "/games/drink/",
+    "engine": "Godot"
   },
   {
     "title": "Night Shift at Possum's Cafe",
@@ -122,7 +124,8 @@
     "thumbnail": "assets/thumbnails/night-shift-at-possums-cafe-81ee5c.jpg",
     "thumbnailAlt": "Cover image for Night Shift at Possum's Cafe",
     "id": "game-possum-cafe",
-    "detailUrl": "/games/possum-cafe/"
+    "detailUrl": "/games/possum-cafe/",
+    "engine": "HTML5"
   },
   {
     "title": "The Last Guard",
@@ -153,7 +156,8 @@
     "thumbnail": "assets/thumbnails/the-last-guard.webp",
     "thumbnailAlt": "The Last Guard key art showing a lone fortress gun facing a vast orc army",
     "id": "game-the-last-guard",
-    "detailUrl": "/games/the-last-guard/"
+    "detailUrl": "/games/the-last-guard/",
+    "engine": "Babylon.js"
   },
   {
     "title": "The Horde — Ray Tracing Tech Demo",
@@ -203,7 +207,8 @@
         "label": "Source on GitHub",
         "url": "https://github.com/Samfa12-tech/The-Horde-RT-demo"
       }
-    ]
+    ],
+    "engine": "Custom C++ / Vulkan"
   },
   {
     "title": "Bug Swarm",
@@ -233,7 +238,8 @@
     "thumbnail": "assets/thumbnails/bug-swarm-experiment.webp",
     "thumbnailAlt": "Key art for Bug Swarm",
     "id": "game-bug-swarm",
-    "detailUrl": "/games/bug-swarm-guide/"
+    "detailUrl": "/games/bug-swarm-guide/",
+    "engine": "Babylon.js"
   },
   {
     "title": "Cursed Cutter",
@@ -264,7 +270,8 @@
     "thumbnail": "assets/thumbnails/cursed-cutter-icon.webp",
     "thumbnailAlt": "Icon for Cursed Cutter",
     "id": "game-cursed-cutter",
-    "detailUrl": "/games/cursed-cutter-guide/"
+    "detailUrl": "/games/cursed-cutter-guide/",
+    "engine": "Babylon.js"
   },
   {
     "title": "What Would Win",
@@ -447,7 +454,8 @@
     "thumbnail": "assets/thumbnails/bug-maze-td-078911.png",
     "thumbnailAlt": "Cover image for Bug Maze TD",
     "id": "game-bug-maze-td",
-    "detailUrl": "/games/bug-maze-td/"
+    "detailUrl": "/games/bug-maze-td/",
+    "engine": "HTML5"
   },
   {
     "title": "Breakfast Beat",
@@ -475,7 +483,8 @@
     "thumbnail": "assets/thumbnails/breakfast-beat-d686e6.jpg",
     "thumbnailAlt": "Cover image for Breakfast Beat",
     "id": "game-breakfast-beat",
-    "detailUrl": "/games/breakfast-beat/"
+    "detailUrl": "/games/breakfast-beat/",
+    "engine": "HTML5"
   },
   {
     "title": "Ship Blockade",
@@ -503,7 +512,8 @@
     "thumbnail": "assets/thumbnails/ship-blockade-59ef6d.jpg",
     "thumbnailAlt": "Cover image for Ship Blockade",
     "id": "game-ship-blockade",
-    "detailUrl": "/games/ship-blockade/"
+    "detailUrl": "/games/ship-blockade/",
+    "engine": "HTML5"
   },
   {
     "title": "Hop Bunny",
@@ -527,7 +537,8 @@
     "thumbnail": "assets/thumbnails/hop-bunny-b0d59d.png",
     "thumbnailAlt": "Cover image for Hop Bunny",
     "id": "game-hop-bunny",
-    "detailUrl": "/games/hop-bunny/"
+    "detailUrl": "/games/hop-bunny/",
+    "engine": "HTML5"
   },
   {
     "title": "Pocket Pattern",
@@ -602,7 +613,8 @@
     "thumbnail": "assets/thumbnails/reckless-dentist-05c1f7.png",
     "thumbnailAlt": "Cover image for Reckless Dentist",
     "id": "game-reckless-dentist",
-    "detailUrl": "/games/reckless-dentist/"
+    "detailUrl": "/games/reckless-dentist/",
+    "engine": "HTML5"
   },
   {
     "title": "Gremlin Grenade Pinball",
@@ -627,7 +639,8 @@
     "thumbnail": "assets/thumbnails/gremlin-grenade-pinball-4f4da7.png",
     "thumbnailAlt": "Cover image for Gremlin Grenade Pinball",
     "id": "game-gremlin-grenade-pinball",
-    "detailUrl": "/games/gremlin-grenade-pinball/"
+    "detailUrl": "/games/gremlin-grenade-pinball/",
+    "engine": "Godot"
   },
   {
     "title": "Wonky Vehicle Lab",
@@ -651,7 +664,8 @@
     "thumbnail": "assets/thumbnails/wonky-vehicle-lab-10cf51.png",
     "thumbnailAlt": "Cover image for Wonky Vehicle Lab",
     "id": "game-wonky-vehicle-lab",
-    "detailUrl": "/games/wonky-vehicle-lab/"
+    "detailUrl": "/games/wonky-vehicle-lab/",
+    "engine": "Godot"
   },
   {
     "title": "ToKnight",
@@ -963,7 +977,8 @@
     "thumbnail": "assets/thumbnails/td-pack-63e5f6.jpg",
     "thumbnailAlt": "Cover image for Samfa12's TD Pack",
     "id": "game-td-pack",
-    "detailUrl": "/games/td-pack/"
+    "detailUrl": "/games/td-pack/",
+    "engine": "HTML5 collection"
   },
   {
     "title": "Samfa12's Lofi and Chill Pack",
@@ -988,7 +1003,8 @@
     "thumbnail": "assets/thumbnails/samfa12-chill-pack-app-icon.webp",
     "thumbnailAlt": "App icon for Samfa12 Chill Pack",
     "id": "game-lofi-and-chill-pack",
-    "detailUrl": "/games/lofi-and-chill-pack/"
+    "detailUrl": "/games/lofi-and-chill-pack/",
+    "engine": "Babylon.js collection"
   },
   {
     "title": "Spin Vector",
@@ -1024,7 +1040,8 @@
     "thumbnail": "assets/thumbnails/spin-vector-7f51f8.png",
     "thumbnailAlt": "Cover image for Spin Vector",
     "id": "game-spin-vector",
-    "detailUrl": "/games/spin-vector/"
+    "detailUrl": "/games/spin-vector/",
+    "engine": "JavaScript / Canvas 2D"
   },
   {
     "title": "Pocket DJ",
@@ -1137,7 +1154,8 @@
     "thumbnail": "assets/thumbnails/moon-mower-icon.webp",
     "thumbnailAlt": "Cover image for Moon Mower",
     "id": "game-moon-mower",
-    "detailUrl": "/games/moon-mower/"
+    "detailUrl": "/games/moon-mower/",
+    "engine": "Babylon.js"
   },
   {
     "title": "Pocket Fish Tank",
@@ -1166,7 +1184,8 @@
     "thumbnail": "assets/thumbnails/voxel-fish-tank-41a16e.jpg",
     "thumbnailAlt": "Cover image for Pocket Fish Tank",
     "id": "game-pocket-fish-tank",
-    "detailUrl": "/games/pocket-fish-tank/"
+    "detailUrl": "/games/pocket-fish-tank/",
+    "engine": "Babylon.js"
   },
   {
     "title": "P.A.R.T.Y. Bus: Wasteland Run",
@@ -1191,7 +1210,8 @@
     "thumbnail": "assets/thumbnails/party-bus-wasteland-run-597195.png",
     "thumbnailAlt": "Cover image for P.A.R.T.Y. Bus: Wasteland Run",
     "id": "game-party-bus",
-    "detailUrl": "/games/party-bus/"
+    "detailUrl": "/games/party-bus/",
+    "engine": "Babylon.js"
   },
   {
     "title": "Pocket Ant Farm",
@@ -1220,7 +1240,8 @@
     "thumbnail": "assets/thumbnails/ant-farm-485b3d.webp",
     "thumbnailAlt": "Cover image for Pocket Ant Farm",
     "id": "game-pocket-ant-farm",
-    "detailUrl": "/games/pocket-ant-farm/"
+    "detailUrl": "/games/pocket-ant-farm/",
+    "engine": "Babylon.js"
   },
   {
     "title": "Briarhold",
@@ -1250,7 +1271,8 @@
     "sortOrder": 25,
     "thumbnail": "assets/thumbnails/briarhold-samfa12-icon-512.webp",
     "thumbnailAlt": "Briarhold emblem: a gold oak leaf and Warden sword encircled by thorns beneath a moonlit stone arch.",
-    "id": "game-briarhold"
+    "id": "game-briarhold",
+    "engine": "Babylon.js"
   },
   {
     "title": "ToKnight 2: The Fire Beneath",
@@ -1710,7 +1732,8 @@
         "url": "/games/breakfast-beat-down/play/",
         "fullscreen": true
       }
-    ]
+    ],
+    "engine": "JavaScript / Canvas 2D"
   },
   {
     "id": "game-banana-banana-ducky",
@@ -1756,7 +1779,8 @@
         "url": "/games/banana-banana-ducky/play/",
         "fullscreen": true
       }
-    ]
+    ],
+    "engine": "Custom WebGL2"
   },
   {
     "id": "game-towtal-chaos",
@@ -1801,7 +1825,8 @@
         "label": "Play on itch.io",
         "url": "https://samfa12.itch.io/towtal-chaos"
       }
-    ]
+    ],
+    "engine": "Three.js"
   },
   {
     "title": "Reef Sweep",
@@ -1850,7 +1875,8 @@
         "path": "assets/thumbnails/reef-sweep-cover-1280.webp",
         "width": 1280
       }
-    ]
+    ],
+    "engine": "Babylon.js"
   },
   {
     "id": "game-chrome-coalition",
@@ -1886,6 +1912,7 @@
       }
     ],
     "homepageRank": 6,
-    "homepageSize": "wide"
+    "homepageSize": "wide",
+    "engine": "Three.js"
   }
 ]

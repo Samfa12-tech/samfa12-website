@@ -334,3 +334,13 @@ test("Chrome Coalition is in the saved and dynamic games catalogue as a playable
   assert.match(card, /href="https:\/\/wavedash\.com\/games\/chrome-coalition"/);
   assert.doesNotMatch(card, /Coming soon|planned multiplayer/i);
 });
+
+test("verified engine labels are retained in static catalogue and runtime rendering", () => {
+  const page = fs.readFileSync(path.join(root,"games/index.html"),"utf8");
+  for (const project of catalogue.filter(p=>p.engine)) {
+    assert.ok(["Babylon.js","Three.js","Godot","HTML5","HTML5 collection","Babylon.js collection","JavaScript / Canvas 2D","Custom WebGL2","Custom C++ / Vulkan"].includes(project.engine));
+    assert.ok(page.includes(`Built with ${project.engine}`));
+    assert.equal(sourceReview.products[project.id].engineReview.engine, project.engine);
+  }
+  assert.match(fs.readFileSync(path.join(root,"script.js"),"utf8"), /Built with \$\{project.engine\}/);
+});
