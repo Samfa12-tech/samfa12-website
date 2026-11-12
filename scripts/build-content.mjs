@@ -12,6 +12,9 @@ const hubs = JSON.parse(fs.readFileSync(path.join(root, "content/hubs.json"), "u
 const linkGroups = JSON.parse(fs.readFileSync(path.join(root, "content/link-groups.json"), "utf8"));
 const siteRoutes = JSON.parse(fs.readFileSync(path.join(root, "content/site-routes.json"), "utf8"));
 const sourceReview = JSON.parse(fs.readFileSync(path.join(root, "content/source-review.json"), "utf8"));
+// Retain withdrawn sources as historical evidence without linking visitors to them.
+const withdrawnPublicSources = new Set(Object.values(sourceReview.products).flatMap((product) =>
+  (product.sources || []).filter((source) => source.publicLink === false).map((source) => source.url)));
 const assetVersion = fs.readFileSync(path.join(root,"script.js"),"utf8").match(/const DATA_VERSION = "([0-9]{8}-[0-9]+)";/)?.[1];
 if (!assetVersion) throw Error("Missing shared asset cache version");
 const imageDimensions = JSON.parse(fs.readFileSync(path.join(root, "content/image-dimensions.json"), "utf8"));
@@ -123,7 +126,7 @@ function productPage(plan, project, content) {
   const related = (content.relatedIds || []).map((id)=>{const other = plansById.get(id); return other && other.path !== route && other.action !== "hold" ? `<li><a href="${html(other.path)}">${html(content.relatedLabels?.[id] || other.title)}</a></li>` : "";}).filter(Boolean);
   related.push(...hubs.filter((hub)=>hub.books.includes(plan.id)).map((hub)=>`<li><a href="${html(hub.route)}">${html(hub.title)} reading order</a></li>`));
   const relatedBlock = related.length ? `<section class="section section-tight"><div class="container product-narrow"><h2>Related projects</h2><ul class="product-related">${related.join("")}</ul></div></section>` : "";
-  const evidenceLinks = [...new Set([...(content.details || []).flatMap((d)=>d.sources || []),...(content.faqs || []).flatMap((f)=>f.sources || [])])].filter((s)=>/^https?:/.test(s));
+  const evidenceLinks = [...new Set([...(content.details || []).flatMap((d)=>d.sources || []),...(content.faqs || []).flatMap((f)=>f.sources || [])])].filter((s)=>/^https?:/.test(s) && !withdrawnPublicSources.has(s));
   const sources = evidenceLinks.length ? `<section class="section section-tight"><div class="container product-narrow"><h2>More about this project</h2><ul class="product-related">${evidenceLinks.map((s)=>`<li><a href="${html(safeUrl(s))}" target="_blank" rel="noopener noreferrer">${html(new URL(s).hostname)} · ${html(new URL(s).pathname.split("/").filter(Boolean).pop() || "profile")}</a></li>`).join("")}</ul></div></section>` : "";
   const [imageWidth, imageHeight] = imageDimensions[project.thumbnail] || [640, 540];
   const heroArt = content.heroScreenshot ? screenshotFigure(content.heroScreenshot, true) : `<img class="product-hero-art" src="${html(image)}"${responsiveImage(project, "(max-width: 760px) 90vw, 440px")} alt="${html(project.thumbnailAlt || `${project.title} artwork`)}" width="${imageWidth}" height="${imageHeight}">`;
@@ -248,7 +251,8 @@ for (const hub of hubs) {
     const project = productsById.get(id);
     return `<li><h2><a href="${html(plan.path)}">${html(project.title)}</a></h2><p>${html(copy[id].intro)}</p>${link("View book page",plan.path)}</li>`;
   });
-  const body = `<section class="page-hero"><div class="container hero-inner">${breadcrumbs(route,hub.title,"/books/")}<p class="eyebrow">Reading order</p><h1>${html(hub.title)}</h1><p class="lead">${html(hub.intro)}</p></div></section><section class="section"><div class="container product-narrow"><ol class="product-series-list">${items.join("")}</ol><h2>Find the books</h2><ul class="product-related">${hub.sources.map((s)=>`<li>${link(new URL(s).pathname.split("/").filter(Boolean).pop(),s)}</li>`).join("")}</ul></div></section>`;
+  const publicSources = hub.sources.filter((s)=>!withdrawnPublicSources.has(s));
+  const body = `<section class="page-hero"><div class="container hero-inner">${breadcrumbs(route,hub.title,"/books/")}<p class="eyebrow">Reading order</p><h1>${html(hub.title)}</h1><p class="lead">${html(hub.intro)}</p></div></section><section class="section"><div class="container product-narrow"><ol class="product-series-list">${items.join("")}</ol>${publicSources.length ? `<h2>Find the books</h2><ul class="product-related">${publicSources.map((s)=>`<li>${link(new URL(s).pathname.split("/").filter(Boolean).pop(),s)}</li>`).join("")}</ul>` : ""}</div></section>`;
   const entity = hub.type === "BookSeries" ? {"@type":"BookSeries","@id":`${base}${route}#series`,name:hub.title,hasPart:hub.books.map((id)=>({"@type":"Book",url:`${base}${plansById.get(id).path}`}))} : {"@type":"ItemList","@id":`${base}${route}#list`,itemListElement:hub.books.map((id,index)=>({"@type":"ListItem",position:index+1,url:`${base}${plansById.get(id).path}`}))};
   const breadcrumb = {"@type":"BreadcrumbList","@id":`${base}${route}#breadcrumbs`,itemListElement:[{"@type":"ListItem",position:1,name:"Home",item:`${base}/`},{"@type":"ListItem",position:2,name:"Books",item:`${base}/books/`},{"@type":"ListItem",position:3,name:hub.title,item:`${base}${route}`} ]};
   write(safeRoute(route),shell({title:hub.title,description:hub.description,route,body,schema:{"@context":"https://schema.org","@graph":[organizationNode(),websiteNode(),{...pageNode(route,hub.title),mainEntity:{"@id":entity["@id"]}},entity,breadcrumb]},active:"Books"}));
