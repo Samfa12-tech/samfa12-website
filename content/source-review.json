@@ -474,7 +474,8 @@
         {
           "url": "https://samfa12.itch.io/toknight",
           "identity": "samfa12.itch.io /toknight",
-          "access": "read-public-source"
+          "access": "read-public-source",
+          "publicLink": false
         },
         {
           "url": "https://www.amazon.com.au/dp/B0GX2NG31Z",
@@ -841,12 +842,14 @@
         {
           "url": "https://samfa12.itch.io/toknight",
           "identity": "samfa12.itch.io /toknight",
-          "access": "read-public-source"
+          "access": "read-public-source",
+          "publicLink": false
         },
         {
           "url": "https://samfa12.itch.io/toknight-2-the-fire-beneath",
           "identity": "samfa12.itch.io /toknight-2-the-fire-beneath",
-          "access": "read-public-source"
+          "access": "read-public-source",
+          "publicLink": false
         },
         {
           "url": "https://www.amazon.com.au/dp/B0H3MW9LGP",
@@ -862,7 +865,8 @@
         {
           "url": "https://samfa12.itch.io/free-to-a-good-home",
           "identity": "samfa12.itch.io /free-to-a-good-home",
-          "access": "read-public-source"
+          "access": "read-public-source",
+          "publicLink": false
         },
         {
           "url": "https://www.amazon.com.au/dp/B0GZDH57ZC",
@@ -878,12 +882,14 @@
         {
           "url": "https://samfa12.itch.io/a-place-of-his-own",
           "identity": "samfa12.itch.io /a-place-of-his-own",
-          "access": "read-public-source"
+          "access": "read-public-source",
+          "publicLink": false
         },
         {
           "url": "https://samfa12.itch.io/free-to-a-good-home",
           "identity": "samfa12.itch.io /free-to-a-good-home",
-          "access": "read-public-source"
+          "access": "read-public-source",
+          "publicLink": false
         },
         {
           "url": "https://www.amazon.com.au/dp/B0H1Q3TGS7",
@@ -899,7 +905,8 @@
         {
           "url": "https://samfa12.itch.io/colossal",
           "identity": "samfa12.itch.io /colossal",
-          "access": "read-public-source"
+          "access": "read-public-source",
+          "publicLink": false
         },
         {
           "url": "https://www.amazon.com.au/dp/B0H738LPJ5",
@@ -915,7 +922,8 @@
         {
           "url": "https://samfa12.itch.io/concubine",
           "identity": "samfa12.itch.io /concubine",
-          "access": "read-public-source"
+          "access": "read-public-source",
+          "publicLink": false
         },
         {
           "url": "https://www.amazon.com.au/dp/B0H1LG55MZ",

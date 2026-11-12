@@ -344,3 +344,16 @@ test("verified engine labels are retained in static catalogue and runtime render
   }
   assert.match(fs.readFileSync(path.join(root,"script.js"),"utf8"), /Built with \$\{project.engine\}/);
 });
+
+test('withdrawn book itch links stay out of public pages while exceptions remain', () => {
+  const withdrawn = ['toknight', 'toknight-2-the-fire-beneath', 'free-to-a-good-home', 'a-place-of-his-own', 'colossal', 'concubine'];
+  const pages = ['toknight', 'toknight-2-the-fire-beneath', 'free-to-a-good-home', 'a-place-of-his-own', 'colossal', 'concubine', 'jason-proud', 'free-to-a-good-home-books'];
+  for (const slug of pages) {
+    const html = fs.readFileSync(new URL(`../books/${slug}/index.html`, import.meta.url), 'utf8');
+    for (const dead of withdrawn) assert.ok(!html.includes(`https://samfa12.itch.io/${dead}"`), `${slug} links to ${dead}`);
+  }
+  for (const [slug, url] of [['sober','sober'], ['article-18','article-18'], ['backwater','backwater'], ['dust-on-the-river','dust-on-the-river']]) {
+    const html = fs.readFileSync(new URL(`../books/${slug}/index.html`, import.meta.url), 'utf8');
+    assert.ok(html.includes(`https://samfa12.itch.io/${url}`), `${slug} exception missing`);
+  }
+});
