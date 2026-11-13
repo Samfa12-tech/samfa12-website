@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20261111-1";
+  const DATA_VERSION = "20261113-2";
   const PAGE_DATA_VERSION = new URL(document.currentScript.src).searchParams.get("data-version") || DATA_VERSION;
   const DATA_URL = `/data/projects.json?v=${PAGE_DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
@@ -33,7 +33,7 @@
       filterLabel: "Platform",
       filterLabelPlural: "platforms",
       sortLabel: "Platform",
-      labelOrder: ["Browser", "itch.io", "Google Play", "Steam", "Wavedash"],
+      labelOrder: ["Browser", "itch.io", "Google Play", "Steam", "Wavedash", "Spawn.co"],
     },
     Books: {
       filterLabel: "Storefront",
@@ -425,6 +425,7 @@
       if (host === "play.google.com" && path.startsWith("/store/apps")) pushUniqueLabel(labels, "Google Play");
       if (host === "store.steampowered.com") pushUniqueLabel(labels, "Steam");
       if (host === "wavedash.com" || host.endsWith(".wavedash.com")) pushUniqueLabel(labels, "Wavedash");
+      if (host === "spawn.co" || host.endsWith(".spawn.co")) pushUniqueLabel(labels, "Spawn.co");
     });
 
     return orderCatalogueLabels(labels, CATALOGUE_FILTER_CONFIG.Games.labelOrder);

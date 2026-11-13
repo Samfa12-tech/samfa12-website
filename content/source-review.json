@@ -855,6 +855,10 @@
         "engine": "Babylon.js",
         "reviewedAt": "2026-11-11",
         "basis": "Repository index.html loads vendor/babylon/babylon-9.16.1.min.js and loaders."
+      },
+      "editionReview": {
+        "reviewedAt": "2026-11-13",
+        "basis": "Owner confirmed the Spawn edition is now active and supersedes the earlier Babylon.js edition. Preserve older browser and Android access; no claim of save compatibility between editions."
       }
     },
     "book-toknight-2": {

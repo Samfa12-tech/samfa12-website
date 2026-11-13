@@ -1734,7 +1734,7 @@
       "kind": "product",
       "canonical": "https://samfa12.com/games/briarhold/",
       "title": "Briarhold | Samfa12",
-      "description": "Play Briarhold Alpha.103 in your browser or download the Android alpha, and help test Samfa12's seven-night first-person action-defence roguelite.",
+      "description": "Play the active Spawn edition of Briarhold and defend the fortress against the Briar Host. Earlier Babylon.js browser and Android builds remain available.",
       "h1": [
         "Briarhold"
       ],
@@ -1774,12 +1774,10 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/",
         "/games/",
         "/games/briarhold/"
       ],
       "incomingMain": [
-        "/",
         "/games/",
         "/games/briarhold/"
       ],

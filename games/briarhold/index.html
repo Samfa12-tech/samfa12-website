@@ -7,13 +7,13 @@
     <title>Briarhold | Samfa12</title>
     <meta
       name="description"
-      content="Play Briarhold Alpha.103 in your browser or download the Android alpha, and help test Samfa12's seven-night first-person action-defence roguelite."
+      content="Play the active Spawn edition of Briarhold and defend the fortress against the Briar Host. Earlier Babylon.js browser and Android builds remain available."
     />
     <meta name="theme-color" content="#07151a" />
     <meta property="og:title" content="Briarhold | Samfa12" />
     <meta
       property="og:description"
-      content="Play Briarhold Alpha.103 in your browser or on Android and hold the old stone against the Briar Host."
+      content="Play the active Spawn edition of Briarhold. Hold the old stone against the Briar Host; earlier browser and Android editions remain available."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://samfa12.com/games/briarhold/" />
@@ -24,7 +24,7 @@
     <meta name="twitter:title" content="Briarhold | Samfa12" />
     <meta
       name="twitter:description"
-      content="Play Briarhold Alpha.103 in your browser or on Android and hold the old stone against the Briar Host."
+      content="Play the active Spawn edition of Briarhold. Hold the old stone against the Briar Host; earlier browser and Android editions remain available."
     />
     <meta name="twitter:image" content="https://samfa12.com/assets/briarhold-key-art.png" />
     <link rel="canonical" href="https://samfa12.com/games/briarhold/" />
@@ -35,8 +35,10 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=20261111-1" />
+    <link rel="stylesheet" href="/styles.css?v=20261113-2" />
     <style id="briarhold-stats-styles">
+      .game-detail-actions .button { flex-direction: column; gap: .2rem; }
+      .game-detail-actions .game-action-note { font-size: .75rem; font-weight: 500; }
       .briarhold-stats { width: 100%; max-width: 42rem; margin: 1.5rem 0; }
       .briarhold-stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 0; }
       .briarhold-stat { min-width: 0; padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface); }
@@ -48,7 +50,7 @@
       @media (max-width: 520px) { .briarhold-stats-grid { grid-template-columns: minmax(0, 1fr); } }
     </style>
       <!-- content:schema:start -->
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://samfa12.com/#organization","name":"Samfa12","url":"https://samfa12.com/"},{"@type":"WebSite","@id":"https://samfa12.com/#website","url":"https://samfa12.com/","name":"Samfa12","publisher":{"@id":"https://samfa12.com/#organization"}},{"@type":"WebPage","@id":"https://samfa12.com/games/briarhold/#webpage","url":"https://samfa12.com/games/briarhold/","name":"Briarhold","isPartOf":{"@id":"https://samfa12.com/#website"},"mainEntity":{"@id":"https://samfa12.com/games/briarhold/#product"}},{"@type":"VideoGame","@id":"https://samfa12.com/games/briarhold/#product","name":"Briarhold","description":"Briarhold is a first-person action-defence roguelite with browser and Android Alpha.103 testing builds. Prepare and reclaim authored defences, time your cooling, and fight the Briar Host. Multiplayer co-op remains experimental.","url":"https://samfa12.com/games/briarhold/"},{"@type":"BreadcrumbList","@id":"https://samfa12.com/games/briarhold/#breadcrumbs","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://samfa12.com/"},{"@type":"ListItem","position":2,"name":"Games","item":"https://samfa12.com/games/"},{"@type":"ListItem","position":3,"name":"Briarhold","item":"https://samfa12.com/games/briarhold/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://samfa12.com/#organization","name":"Samfa12","url":"https://samfa12.com/"},{"@type":"WebSite","@id":"https://samfa12.com/#website","url":"https://samfa12.com/","name":"Samfa12","publisher":{"@id":"https://samfa12.com/#organization"}},{"@type":"WebPage","@id":"https://samfa12.com/games/briarhold/#webpage","url":"https://samfa12.com/games/briarhold/","name":"Briarhold","isPartOf":{"@id":"https://samfa12.com/#website"},"mainEntity":{"@id":"https://samfa12.com/games/briarhold/#product"}},{"@type":"VideoGame","@id":"https://samfa12.com/games/briarhold/#product","name":"Briarhold","description":"The Spawn edition is now the active version of Briarhold. Defend the fortress against the Briar Host, with the earlier Babylon.js browser and Android Alpha.103 builds retained below for anyone returning to them.","url":"https://samfa12.com/games/briarhold/"},{"@type":"BreadcrumbList","@id":"https://samfa12.com/games/briarhold/#breadcrumbs","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://samfa12.com/"},{"@type":"ListItem","position":2,"name":"Games","item":"https://samfa12.com/games/"},{"@type":"ListItem","position":3,"name":"Briarhold","item":"https://samfa12.com/games/briarhold/"}]}]}</script>
 <!-- content:schema:end -->
   </head>
   <body data-page="game-detail">
@@ -90,29 +92,34 @@
         <div class="game-detail-hero-scrim" aria-hidden="true"></div>
         <div class="container game-detail-hero-inner">
           <nav class="product-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/games/">Games</a><span aria-hidden="true">/</span><span aria-current="page">Briarhold</span></nav>
-          <p class="eyebrow">Briarhold // The Last Guard 2</p>
+          <p class="eyebrow">Briarhold // Active on Spawn</p>
           <h1 id="briarhold-title">Briarhold</h1>
           <p class="game-detail-lead">
             Hold the old stone. Repair the defences between attacks. Stand together when the Briar Host reaches the walls.
           </p>
           <div class="game-detail-meta" aria-label="Briarhold status and platforms">
-            <span class="pill status-coming-soon">Alpha test</span>
-            <span class="pill pill-catalogue-label">Browser available</span>
-            <span class="pill pill-catalogue-label">Android available</span>
+            <span class="pill status-coming-soon">Active on Spawn</span>
+            <span class="pill pill-catalogue-label">Browser game</span>
+            <span class="pill pill-catalogue-label">Earlier builds retained</span>
           </div>
           <div class="game-detail-actions" aria-label="Briarhold play options">
-            <a class="button" href="/games/briarhold/play/">
-              <span>Play in browser</span>
+            <a class="button" href="https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence" target="_blank" rel="noopener noreferrer">
+              <span>Play on Spawn</span>
+              <span class="game-action-note">Active edition</span>
+            </a>
+            <a class="button button-ghost" href="/games/briarhold/play/">
+              <span>Earlier browser edition</span>
               <span class="game-action-note">Alpha.103 — No install</span>
             </a>
             <a class="button button-ghost" href="https://github.com/Samfa12-tech/samfa12-website/releases/download/briarhold-alpha.103/app-debug.apk">
-              <span>Download for Android</span>
+              <span>Earlier Android edition</span>
               <span class="game-action-note">Android APK · Alpha.103</span>
             </a>
           </div>
           <p class="game-action-note">
-            Early tester build. Android may ask you to allow installs from your browser. Existing testers can update in place while preserving their saves.
+            Spawn is now the active edition. The earlier Babylon.js builds are kept here for returning players; the testing information and download statistics below refer to those earlier builds.
           </p>
+          <h2>Earlier edition activity</h2>
           <div class="briarhold-stats" role="group" aria-label="Briarhold activity">
             <dl class="briarhold-stats-grid">
               <div class="briarhold-stat">
@@ -234,7 +241,7 @@
         </div>
       </section>
           <!-- content:existing:start -->
-<section class="section section-tight"><div class="container product-narrow"><h2>Using Briarhold</h2><p>Briarhold is a first-person action-defence roguelite with browser and Android Alpha.103 testing builds. Prepare and reclaim authored defences, time your cooling, and fight the Briar Host. Multiplayer co-op remains experimental.</p><div class="product-prose"><h3>Defend the fortress</h3><p>Briarhold is a first-person action-defence roguelite with repairable defences prepared during daytime. Alpha.103 adds timed active cooling, twelve authored defence sites, mechanical ballista articulation with exclusive upgrade branches, daytime reclaim and replacement, and a directional gate rack with one manual discharge per night. Browser play and Android testing use separate destinations.</p></div><div class="product-prose"><h3>Co-op is experimental</h3><p>Multiplayer co-op remains experimental. Both players should use the same Alpha.103 build. Two-phone and cross-network play, sustained performance, guest cooling and shared automatic medicine consumption remain active test areas; the intermittent Night 5 freeze is still under investigation.</p></div><div class="product-prose"><h3>Android recovery and testing</h3><p>An intermittent Android WebView crash remains under investigation. If the renderer stops, a recovery prompt can restart Briarhold from saved progress. This recovery does not establish that the underlying crash is fixed.</p></div><div class="product-prose"><h3>Spawn edition</h3><p>A separate Spawn edition is also available to play in your browser. Its features and updates may differ from the other editions linked here.</p></div><div class="product-actions"><a class="project-link" href="/games/briarhold/play/">Play in browser <span class="link-arrow" aria-hidden="true">-&gt;</span></a> <a class="project-link" href="https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence" target="_blank" rel="noopener noreferrer">Play Spawn edition <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div></div></section><section class="section section-tight"><div class="container product-narrow"><h2>Questions about Briarhold</h2><div class="product-faqs"><details><summary>Where can I try Briarhold?</summary><p>Play in your browser, or visit the separate Briarhold testing page for Android downloads and current updater details.</p></details><details><summary>Is multiplayer co-op finished?</summary><p>No. Multiplayer co-op is experimental.</p></details></div></div></section><section class="section section-tight"><div class="container product-narrow"><h2>Release updates</h2><article class="product-update" id="alpha-103-october-2026"><p class="eyebrow">2026-10-13 · GitHub prerelease publication date (UTC)</p><h3>Briarhold Alpha.103</h3><p>Alpha.103 adds authored field defences, mechanical ballista controls and upgrade choices, a directional gate rack, and daytime reclaim/replacement. Short taps on Fire perform active cooling; prepared medicine automatically helps a living Warden at 10% Health or below, once per night. Co-op recovery and guest defence choices are corrected, with improved compact touch layouts and release asset identities. Both co-op players should update. The intermittent Android WebView crash and separate earlier Night5 freeze remain unresolved; physical and cross-network playtesting continues.</p></article><article class="product-update" id="alpha-102-october-2026"><p class="eyebrow">2026-10-02 · GitHub prerelease publication date</p><h3>Briarhold Alpha.102</h3><p>Alpha.102 improves NPC arm and hand poses, woodland behind the fortress and west stair handrail landings. Ashwing is easier to see and target, locks dives toward the player after a warning, and leaves clearer ash hazards. Dive warnings follow the actual approach path, including diagonal dives. Phone rendering is sharper. An intermittent Android WebView crash remains under investigation; the recovery prompt can restart from saved progress. Both co-op players should update.</p></article><article class="product-update" id="alpha-101-september-2026"><p class="eyebrow">2026-09-20 · GitHub prerelease publication date</p><h3>Briarhold Alpha.101</h3><p>The release notes describe fixes for recurring Mason repair and New Run freezes, improvements to auto-fire and enemy presentation, and co-op recovery/input changes. The notes also say the intermittent Night 5 freeze remains under investigation; cross-network co-op and sustained performance remain active test areas.</p></article></div></section><section class="section section-tight"><div class="container product-narrow"><h2>Related projects</h2><ul class="product-related"><li><a href="/games/the-last-guard/">Explore The Last Guard action-defence game</a></li></ul></div></section>
+<section class="section section-tight"><div class="container product-narrow"><h2>Using Briarhold</h2><p>The Spawn edition is now the active version of Briarhold. Defend the fortress against the Briar Host, with the earlier Babylon.js browser and Android Alpha.103 builds retained below for anyone returning to them.</p><div class="product-prose"><h3>Earlier Babylon.js edition</h3><p>Briarhold is a first-person action-defence roguelite with repairable defences prepared during daytime. Alpha.103 adds timed active cooling, twelve authored defence sites, mechanical ballista articulation with exclusive upgrade branches, daytime reclaim and replacement, and a directional gate rack with one manual discharge per night. Browser play and Android testing use separate destinations.</p></div><div class="product-prose"><h3>Earlier edition: experimental co-op</h3><p>Multiplayer co-op remains experimental. Both players should use the same Alpha.103 build. Two-phone and cross-network play, sustained performance, guest cooling and shared automatic medicine consumption remain active test areas; the intermittent Night 5 freeze is still under investigation.</p></div><div class="product-prose"><h3>Earlier Android edition: recovery and testing</h3><p>An intermittent Android WebView crash remains under investigation. If the renderer stops, a recovery prompt can restart Briarhold from saved progress. This recovery does not establish that the underlying crash is fixed.</p></div><div class="product-prose"><h3>Spawn edition</h3><p>Play the active version on Spawn. It supersedes the earlier Babylon.js edition; the older browser and Android builds remain available, but their release notes and testing limitations below apply to those earlier builds.</p></div><div class="product-actions"><a class="project-link" href="https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence" target="_blank" rel="noopener noreferrer">Play on Spawn <span class="link-arrow" aria-hidden="true">-&gt;</span></a> <a class="project-link" href="/games/briarhold/play/">Play earlier browser edition <span class="link-arrow" aria-hidden="true">-&gt;</span></a></div></div></section><section class="section section-tight"><div class="container product-narrow"><h2>Questions about Briarhold</h2><div class="product-faqs"><details><summary>Where can I try Briarhold?</summary><p>Play the active edition on Spawn. The earlier Babylon.js browser build and Android Alpha.103 download remain available on this page.</p></details><details><summary>Is multiplayer co-op finished?</summary><p>No. Multiplayer co-op is experimental.</p></details></div></div></section><section class="section section-tight"><div class="container product-narrow"><h2>Release updates</h2><article class="product-update" id="alpha-103-october-2026"><p class="eyebrow">2026-10-13 · GitHub prerelease publication date (UTC)</p><h3>Briarhold Alpha.103</h3><p>Alpha.103 adds authored field defences, mechanical ballista controls and upgrade choices, a directional gate rack, and daytime reclaim/replacement. Short taps on Fire perform active cooling; prepared medicine automatically helps a living Warden at 10% Health or below, once per night. Co-op recovery and guest defence choices are corrected, with improved compact touch layouts and release asset identities. Both co-op players should update. The intermittent Android WebView crash and separate earlier Night5 freeze remain unresolved; physical and cross-network playtesting continues.</p></article><article class="product-update" id="alpha-102-october-2026"><p class="eyebrow">2026-10-02 · GitHub prerelease publication date</p><h3>Briarhold Alpha.102</h3><p>Alpha.102 improves NPC arm and hand poses, woodland behind the fortress and west stair handrail landings. Ashwing is easier to see and target, locks dives toward the player after a warning, and leaves clearer ash hazards. Dive warnings follow the actual approach path, including diagonal dives. Phone rendering is sharper. An intermittent Android WebView crash remains under investigation; the recovery prompt can restart from saved progress. Both co-op players should update.</p></article><article class="product-update" id="alpha-101-september-2026"><p class="eyebrow">2026-09-20 · GitHub prerelease publication date</p><h3>Briarhold Alpha.101</h3><p>The release notes describe fixes for recurring Mason repair and New Run freezes, improvements to auto-fire and enemy presentation, and co-op recovery/input changes. The notes also say the intermittent Night 5 freeze remains under investigation; cross-network co-op and sustained performance remain active test areas.</p></article></div></section><section class="section section-tight"><div class="container product-narrow"><h2>Related projects</h2><ul class="product-related"><li><a href="/games/the-last-guard/">Explore The Last Guard action-defence game</a></li></ul></div></section>
 <!-- content:existing:end -->
     </main>
 
@@ -277,7 +284,7 @@
         <p class="footer-meta">&copy; <span data-current-year>2026</span> Samfa12</p>
       </div>
     </footer>
-    <script src="/script.js?v=20261111-1" defer></script>
+    <script src="/script.js?v=20261113-2" defer></script>
     <script src="/briarhold-browser-stats.js?v=20260914-1" defer></script>
     <script id="briarhold-stats-script">
       (async () => {

@@ -305,7 +305,7 @@ test("saved generated cards retain Play action labels and exclude Horde informat
     assert.ok(links.length, id);
     return savedCardFixture(type, id, links);
   });
-  assert.deepEqual(savedCardLabels(cards), [["itch.io"], ["Browser"], ["Browser"]]);
+  assert.deepEqual(savedCardLabels(cards), [["itch.io"], ["Browser"], ["Browser", "Spawn.co"]]);
 });
 
 test("saved-card adapter uses visible Play text when metadata is absent, not arbitrary local routes", () => {
@@ -324,7 +324,7 @@ test("Chrome Coalition is in the saved and dynamic games catalogue as a playable
   assert.ok(record);
   assert.equal(record.detailUrl, "/games/chrome-coalition-warlords/");
   assert.match(record.status, /early build live/i);
-  assert.deepEqual(Array.from(catalogueContext.deriveGameCatalogueLabels(record, record.links)), ["Browser", "Wavedash"]);
+  assert.deepEqual(Array.from(catalogueContext.deriveGameCatalogueLabels(record, record.links)), ["Browser", "Wavedash", "Spawn.co"]);
   const games = fs.readFileSync(path.join(root, "games/index.html"), "utf8");
   const card = Array.from(games.matchAll(/<article\b[^>]*data-project-id="([^"]+)"[\s\S]*?<\/article>/g)).find((match) => match[1] === record.id)?.[0];
   assert.ok(card);
@@ -356,4 +356,17 @@ test('withdrawn book itch links stay out of public pages while exceptions remain
     const html = fs.readFileSync(new URL(`../books/${slug}/index.html`, import.meta.url), 'utf8');
     assert.ok(html.includes(`https://samfa12.itch.io/${url}`), `${slug} exception missing`);
   }
+});
+
+test("Spawn filter includes exactly the four verified editions", () => {
+  const ids=catalogue.filter(p=>catalogueContext.deriveGameCatalogueLabels(p,p.links||[]).includes("Spawn.co")).map(p=>p.id).sort();
+  assert.deepEqual(ids, ["game-briarhold","game-chrome-coalition","game-spin-vector","game-the-last-guard"]);
+  const briar=catalogue.find(p=>p.id==="game-briarhold");
+  assert.match(briar.links[0].url,/spawn\.co/);
+  assert.match(briar.status,/Active edition/);
+  const page=fs.readFileSync(path.join(root,"games/briarhold/index.html"),"utf8");
+  const hero=page.slice(page.indexOf('<div class="game-detail-actions"'),page.indexOf("briarhold-stats",page.indexOf('<div class="game-detail-actions"')));
+  assert.match(hero,/Play on Spawn/);
+  assert.match(hero,/Earlier browser edition/);
+  assert.match(hero,/Earlier Android edition/);
 });

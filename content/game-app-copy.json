@@ -1418,10 +1418,10 @@
     }
   },
   "game-briarhold": {
-    "intro": "Briarhold is a first-person action-defence roguelite with browser and Android Alpha.103 testing builds. Prepare and reclaim authored defences, time your cooling, and fight the Briar Host. Multiplayer co-op remains experimental.",
+    "intro": "The Spawn edition is now the active version of Briarhold. Defend the fortress against the Briar Host, with the earlier Babylon.js browser and Android Alpha.103 builds retained below for anyone returning to them.",
     "details": [
       {
-        "heading": "Defend the fortress",
+        "heading": "Earlier Babylon.js edition",
         "text": "Briarhold is a first-person action-defence roguelite with repairable defences prepared during daytime. Alpha.103 adds timed active cooling, twelve authored defence sites, mechanical ballista articulation with exclusive upgrade branches, daytime reclaim and replacement, and a directional gate rack with one manual discharge per night. Browser play and Android testing use separate destinations.",
         "sources": [
           "https://samfa12.com/games/briarhold/",
@@ -1429,14 +1429,14 @@
         ]
       },
       {
-        "heading": "Co-op is experimental",
+        "heading": "Earlier edition: experimental co-op",
         "text": "Multiplayer co-op remains experimental. Both players should use the same Alpha.103 build. Two-phone and cross-network play, sustained performance, guest cooling and shared automatic medicine consumption remain active test areas; the intermittent Night 5 freeze is still under investigation.",
         "sources": [
           "https://github.com/Samfa12-tech/samfa12-website/releases"
         ]
       },
       {
-        "heading": "Android recovery and testing",
+        "heading": "Earlier Android edition: recovery and testing",
         "text": "An intermittent Android WebView crash remains under investigation. If the renderer stops, a recovery prompt can restart Briarhold from saved progress. This recovery does not establish that the underlying crash is fixed.",
         "sources": [
           "https://samfa12.com/games/briarhold/",
@@ -1445,7 +1445,7 @@
       },
       {
         "heading": "Spawn edition",
-        "text": "A separate Spawn edition is also available to play in your browser. Its features and updates may differ from the other editions linked here.",
+        "text": "Play the active version on Spawn. It supersedes the earlier Babylon.js edition; the older browser and Android builds remain available, but their release notes and testing limitations below apply to those earlier builds.",
         "sources": [
           "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence"
         ]
@@ -1454,7 +1454,7 @@
     "faqs": [
       {
         "question": "Where can I try Briarhold?",
-        "answer": "Play in your browser, or visit the separate Briarhold testing page for Android downloads and current updater details.",
+        "answer": "Play the active edition on Spawn. The earlier Babylon.js browser build and Android Alpha.103 download remain available on this page.",
         "sources": [
           "https://samfa12.com/games/briarhold/",
           "https://github.com/Samfa12-tech/samfa12-website/releases"

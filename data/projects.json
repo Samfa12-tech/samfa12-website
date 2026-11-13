@@ -1254,37 +1254,36 @@
   {
     "title": "Briarhold",
     "category": "Games",
-    "type": "Spiritual sequel to The Last Guard",
-    "status": "Browser and Android testing available",
-    "description": "A first-person action-defence roguelite in Alpha.103 testing for browser and Android. Manage cooling, reclaim authored defences, and aim the ballista as the Briar Host reaches the walls.",
+    "type": "Fortress defence game",
+    "status": "Active edition on Spawn",
+    "description": "Defend the fortress against the Briar Host in the active Spawn edition of Briarhold. The earlier Babylon.js browser and Android builds remain available.",
     "tags": [
-      "Experimental Multiplayer Co-op",
-      "Action Defence",
-      "Spiritual sequel to The Last Guard"
+      "Fortress Defence",
+      "Spawn edition",
+      "Samfa12"
     ],
     "featured": true,
     "homepageRank": 2,
     "homepageSize": "standard",
     "links": [
       {
-        "label": "Play in browser",
+        "label": "Play on Spawn",
+        "url": "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence"
+      },
+      {
+        "label": "Play earlier browser edition",
         "url": "/games/briarhold/play/"
       },
       {
-        "label": "Enter the Fortress",
+        "label": "About Briarhold",
         "url": "/games/briarhold/"
-      },
-      {
-        "label": "Play Spawn edition",
-        "url": "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence"
       }
     ],
     "detailUrl": "/games/briarhold/",
     "sortOrder": 25,
     "thumbnail": "assets/thumbnails/briarhold-samfa12-icon-512.webp",
     "thumbnailAlt": "Briarhold emblem: a gold oak leaf and Warden sword encircled by thorns beneath a moonlit stone arch.",
-    "id": "game-briarhold",
-    "engine": "Babylon.js"
+    "id": "game-briarhold"
   },
   {
     "title": "ToKnight 2: The Fire Beneath",
