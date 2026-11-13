@@ -150,6 +150,10 @@
       {
         "label": "Play on Wavedash",
         "url": "https://wavedash.com/games/the-last-guard"
+      },
+      {
+        "label": "Play Spawn edition",
+        "url": "https://www.spawn.co/@samfa12/samfa12-s-the-last-guard-spawn-edition"
       }
     ],
     "sortOrder": 2.1,
@@ -1034,6 +1038,10 @@
       {
         "label": "View on Wavedash",
         "url": "https://wavedash.com/games/spin-vector"
+      },
+      {
+        "label": "Play Spawn edition",
+        "url": "https://www.spawn.co/@samfa12/samfa12-s-spin-vector-spawn-edition"
       }
     ],
     "sortOrder": 16,
@@ -1265,6 +1273,10 @@
       {
         "label": "Enter the Fortress",
         "url": "/games/briarhold/"
+      },
+      {
+        "label": "Play Spawn edition",
+        "url": "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence"
       }
     ],
     "detailUrl": "/games/briarhold/",
@@ -1909,6 +1921,10 @@
       {
         "label": "About Chrome Coalition",
         "url": "/games/chrome-coalition-warlords/"
+      },
+      {
+        "label": "Play Spawn edition",
+        "url": "https://www.spawn.co/@samfa12/samfa12-s-chrome-coalition-spawn-edition"
       }
     ],
     "homepageRank": 6,

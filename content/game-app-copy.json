@@ -194,6 +194,13 @@
         "sources": [
           "https://samfa12.itch.io/the-last-guard"
         ]
+      },
+      {
+        "heading": "Spawn edition",
+        "text": "A separate Spawn edition is also available to play in your browser. Its features and updates may differ from the other editions linked here.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/samfa12-s-the-last-guard-spawn-edition"
+        ]
       }
     ],
     "faqs": [
@@ -1130,6 +1137,13 @@
           "https://play.google.com/store/apps/details?id=com.samsmall.spinvector",
           "https://samfa12.itch.io/spin-vector"
         ]
+      },
+      {
+        "heading": "Spawn edition",
+        "text": "A separate Spawn edition is also available to play in your browser. Its features and updates may differ from the other editions linked here.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/samfa12-s-spin-vector-spawn-edition"
+        ]
       }
     ],
     "faqs": [
@@ -1150,6 +1164,18 @@
       }
     ],
     "updates": [
+      {
+        "id": "spin-vector-online-coop-build18-november-2026",
+        "kind": "release",
+        "date": "2026-11-13",
+        "dateMeaning": "Verified Wavedash publication date (UTC)",
+        "title": "Four-player co-op joins Spin Vector",
+        "summary": "Four-player Co-op Arena brings Quick Play, invite joining and ten-second respawns, with improved remote movement smoothing. Refreshed menus and shop presentation retain the original music and existing solo saves. Adventure unlocks after three distinct arena clears; co-op is separate practice rather than solo progression.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/spin-vector/patch-notes"
+        ]
+      },
       {
         "id": "spin-vector-safer-saves-controls-october-2026",
         "kind": "release",
@@ -1415,6 +1441,13 @@
         "sources": [
           "https://samfa12.com/games/briarhold/",
           "https://github.com/Samfa12-tech/samfa12-website/releases"
+        ]
+      },
+      {
+        "heading": "Spawn edition",
+        "text": "A separate Spawn edition is also available to play in your browser. Its features and updates may differ from the other editions linked here.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence"
         ]
       }
     ],
@@ -1894,6 +1927,18 @@
     ],
     "updates": [
       {
+        "id": "reef-sweep-first-dive-home-guidance-november-2026",
+        "kind": "release",
+        "date": "2026-11-10",
+        "dateMeaning": "Verified Wavedash publication date (UTC)",
+        "title": "Clearer first dives and smoother boat guidance",
+        "summary": "The opening dive suggests filling your canister while still allowing an early return. A brighter boat marker and clearer chart boundaries help you find the way back. HOME guidance stays prominent throughout the first dive, then becomes subtler on later outings; smoother tracking and raised mission reminders keep the view easier to read.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep/patch-notes"
+        ]
+      },
+      {
         "id": "reef-sweep-shell-key-hermit-november-2026",
         "kind": "release",
         "date": "2026-11-05",
@@ -2135,9 +2180,28 @@
         "sources": [
           "https://wavedash.com/games/chrome-coalition"
         ]
+      },
+      {
+        "heading": "Spawn edition",
+        "text": "A separate Spawn edition is also available to play in your browser. Its features and updates may differ from the other editions linked here.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/samfa12-s-chrome-coalition-spawn-edition"
+        ]
       }
     ],
     "updates": [
+      {
+        "id": "chrome-coalition-ctf-build39-november-2026",
+        "kind": "release",
+        "date": "2026-11-13",
+        "dateMeaning": "Verified Wavedash publication date (UTC)",
+        "title": "Capture the Flag arrives in Chrome Coalition",
+        "summary": "Raid the opposing fortress, return your flag and defend elevated flag stands in Capture the Flag. Bots can attack, defend, retrieve and escort; Rotate switches between TDM and CTF after completed matches. Touch weapon selection preserves movement, and flags fall when their supporting terrain is destroyed in matches that allow it. Online and bot play remain in active refinement.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/chrome-coalition/patch-notes"
+        ]
+      },
       {
         "id": "early-build-launch-november-2026",
         "kind": "release",

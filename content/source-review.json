@@ -104,6 +104,11 @@
           "access": "read-public-source",
           "reviewedAt": "2026-10-28",
           "notes": "Public listing exposed Alpha.20 build message for touch controls, steep aim and cooling settings. The observation date is not asserted as a release date."
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/samfa12-s-the-last-guard-spawn-edition",
+          "identity": "Separate Spawn edition of The Last Guard",
+          "access": "Public page verified without sign-in on 2026-11-13; live gameplay not tested"
         }
       ],
       "engineReview": {
@@ -669,6 +674,18 @@
           "url": "https://wavedash.com/games/spin-vector",
           "identity": "wavedash.com /games/spin-vector",
           "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/samfa12-s-spin-vector-spawn-edition",
+          "identity": "Separate Spawn edition of Spin Vector",
+          "access": "Public page verified without sign-in on 2026-11-13; live gameplay not tested"
+        },
+        {
+          "url": "https://wavedash.com/games/spin-vector/patch-notes",
+          "identity": "Wavedash browser edition version history",
+          "access": "verified-release-records; public text extraction limited",
+          "reviewedAt": "2026-11-13",
+          "notes": "Build 18 public publication and live asset identity verified in release evidence, 2026-11-13. Co-op Arena is separate practice; this does not describe the Android edition."
         }
       ],
       "engineReview": {
@@ -827,6 +844,11 @@
           "url": "https://samfa12.com/games/briarhold/",
           "identity": "samfa12.com /games/briarhold/",
           "access": "read-first-party-route-and-repository"
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence",
+          "identity": "Separate Spawn edition of Briarhold",
+          "access": "Public page verified without sign-in on 2026-11-13; live gameplay not tested"
         }
       ],
       "engineReview": {
@@ -1178,6 +1200,13 @@
           "access": "read-public-source",
           "reviewedAt": "2026-10-28",
           "notes": "Repository tree identifies the retained early demo files; the original entry point remains recoverable in Git history."
+        },
+        {
+          "url": "https://wavedash.com/games/reef-sweep/patch-notes",
+          "identity": "Wavedash browser edition version history",
+          "access": "verified-release-records; public text extraction limited",
+          "reviewedAt": "2026-11-13",
+          "notes": "Builds 26 and 27 publication receipts verified for 2026-11-10 UTC. First-dive and HOME guidance only; later unreleased dialogue and room-detail work excluded."
         }
       ],
       "limits": [
@@ -1195,7 +1224,7 @@
       }
     },
     "game-chrome-coalition": {
-      "disposition": "preserve-existing",
+      "disposition": "enhance-existing",
       "landingPath": "/games/chrome-coalition-warlords/",
       "sources": [
         {
@@ -1207,6 +1236,18 @@
           "url": "https://wavedash.com/games/chrome-coalition",
           "identity": "Chrome Coalition public Wavedash game page",
           "access": "independent-public-browser-verification-2026-11-10"
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/samfa12-s-chrome-coalition-spawn-edition",
+          "identity": "Separate Spawn edition of Chrome Coalition",
+          "access": "Public page verified without sign-in on 2026-11-13; live gameplay not tested"
+        },
+        {
+          "url": "https://wavedash.com/games/chrome-coalition/patch-notes",
+          "identity": "Wavedash browser edition version history",
+          "access": "verified-release-records; public text extraction limited",
+          "reviewedAt": "2026-11-13",
+          "notes": "Build 39 public publication verified against release receipt and current public store confirmation, 2026-11-13. CTF, touch movement and objective bots; no claim that network issues are solved."
         }
       ],
       "engineReview": {

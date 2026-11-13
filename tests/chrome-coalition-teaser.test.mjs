@@ -35,8 +35,8 @@ test('landing page preserves URL and cover metadata with accurate release status
     const graph = JSON.parse(block[1])['@graph'];
     const webPage = graph.find(node => node['@type'] === 'WebPage');
     assert.equal(webPage.name, 'Chrome Coalition');
-    assert.equal(webPage.dateModified, '2026-11-10');
-    assert.match(webPage.description, /early-build.*now playable/);
+    assert.equal(webPage.dateModified, '2026-11-13');
+    assert.ok(graph.some(node => node['@type'] === 'VideoGame'));
   }
   const games = fs.readFileSync(new URL('../games/index.html', import.meta.url), 'utf8');
   assert.doesNotMatch(games, /Coming soon to Wavedash/i);

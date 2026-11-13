@@ -91,7 +91,7 @@ for (const plan of manifest.products) {
   const artwork = editorial[plan.id]?.heroScreenshot?.src || `/${record.thumbnail}`;
   if (plan.action === "create" && (!artwork.startsWith("/assets/") || !has(artwork.slice(1)) || !html.includes(`src="${artwork}"`))) fail(`${plan.path}: missing local artwork`);
   if (plan.action === "preserve-existing" && (!has(record.thumbnail) || !html.includes("chrome-coalition-cover.png"))) fail(`${plan.path}: missing local artwork`);
-  if (plan.action !== "create" && plan.action !== "preserve-existing" && !html.includes(plan.id === "game-briarhold" ? "briarhold-key-art.png" : "og-image-v2.png")) fail(`${plan.path}: missing local artwork`);
+  if (plan.action !== "create" && plan.action !== "preserve-existing" && !html.includes(plan.id === "game-briarhold" ? "briarhold-key-art.png" : plan.id === "game-chrome-coalition" ? "chrome-coalition-cover.png" : "og-image-v2.png")) fail(`${plan.path}: missing local artwork`);
   if (!html.includes('class="product-breadcrumbs"')) fail(`${plan.path}: missing visible breadcrumb`);
   for (const link of record.links || []) if (link.url !== plan.path && !html.includes(`href="${link.url.replace(/&/g,"&amp;")}"`)) fail(`${plan.path}: missing destination ${link.url}`);
   jsonGraphs(html,plan.path);

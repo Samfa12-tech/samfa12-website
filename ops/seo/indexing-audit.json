@@ -1902,6 +1902,7 @@
         "Organization",
         "WebSite",
         "WebPage",
+        "VideoGame",
         "BreadcrumbList"
       ],
       "findings": [],

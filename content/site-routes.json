@@ -5,11 +5,11 @@
   },
   {
     "route": "/games/",
-    "pageModified": "2026-11-11"
+    "pageModified": "2026-11-13"
   },
   {
     "route": "/games/chrome-coalition-warlords/",
-    "pageModified": "2026-11-11"
+    "pageModified": "2026-11-13"
   },
   {
     "route": "/games/bug-swarm/",
@@ -21,7 +21,7 @@
   },
   {
     "route": "/games/briarhold/",
-    "pageModified": "2026-11-11"
+    "pageModified": "2026-11-13"
   },
   {
     "route": "/games/briarhold/play/",
@@ -81,7 +81,7 @@
   },
   {
     "route": "/updates/",
-    "pageModified": "2026-11-10"
+    "pageModified": "2026-11-13"
   },
   {
     "route": "/reef-for-good/",
