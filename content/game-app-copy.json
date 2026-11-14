@@ -540,6 +540,13 @@
         "sources": [
           "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn"
         ]
+      },
+      {
+        "heading": "Bring a Chordsmith sketch into Spawn",
+        "text": "The Spawn edition can import a PCS1 share code or Pocket Chordsmith project JSON, taking supported sections A, B and C into its studio. Unsupported sections are skipped: this does not import all eight sections or promise a lossless copy of an entire song.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn"
+        ]
       }
     ],
     "faqs": [
@@ -559,6 +566,18 @@
       }
     ],
     "updates": [
+      {
+        "id": "chordsmith-spawn-import-november-2026",
+        "kind": "release",
+        "date": "2026-11-14",
+        "dateMeaning": "Verified public Spawn release observation date (UTC)",
+        "title": "Chordsmith Import arrives in the Spawn edition",
+        "summary": "Bring supported sections A, B and C from a PCS1 share code or Pocket Chordsmith project JSON into the Spawn studio. Unsupported sections are skipped; this is not an all-eight-section or lossless whole-song import.",
+        "platform": "Spawn edition",
+        "sources": [
+          "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn"
+        ]
+      },
       {
         "id": "chordsmith-v70-campfire-october-2026",
         "kind": "release",
