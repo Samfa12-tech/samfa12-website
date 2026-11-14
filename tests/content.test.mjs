@@ -358,9 +358,9 @@ test('withdrawn book itch links stay out of public pages while exceptions remain
   }
 });
 
-test("Spawn filter includes exactly the four verified editions", () => {
+test("Spawn labels include the five verified editions", () => {
   const ids=catalogue.filter(p=>catalogueContext.deriveGameCatalogueLabels(p,p.links||[]).includes("Spawn.co")).map(p=>p.id).sort();
-  assert.deepEqual(ids, ["game-briarhold","game-chrome-coalition","game-spin-vector","game-the-last-guard"]);
+  assert.deepEqual(ids, ["app-pocket-chordsmith","game-briarhold","game-chrome-coalition","game-spin-vector","game-the-last-guard"]);
   const briar=catalogue.find(p=>p.id==="game-briarhold");
   assert.match(briar.links[0].url,/spawn\.co/);
   assert.match(briar.status,/Active edition/);

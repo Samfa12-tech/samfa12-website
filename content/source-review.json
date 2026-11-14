@@ -241,6 +241,12 @@
           "url": "https://samfa12.itch.io/pocket-chordsmith",
           "identity": "samfa12.itch.io /pocket-chordsmith",
           "access": "read-public-source"
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn",
+          "identity": "Pocket Chordsmith Spawn edition; separate social music-making game",
+          "access": "read-public-source-and-owner-authorized-source-review",
+          "notes": "Public Spawn listing checked 2026-11-14 confirms the shared music studio, song sharing, fanbase and bedroom setting. Authorized source review identifies village commissions and gigs. Multiplayer feel and parity with the standalone sketchpad were not verified; no claim of shared saves or export compatibility."
         }
       ]
     },

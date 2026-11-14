@@ -344,6 +344,10 @@
       {
         "url": "https://github.com/Samfa12-tech/Pocket-Chordsmith",
         "label": "Source on GitHub"
+      },
+      {
+        "label": "Play Spawn edition",
+        "url": "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn"
       }
     ],
     "sortOrder": 3,

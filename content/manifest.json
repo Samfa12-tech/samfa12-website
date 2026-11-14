@@ -120,10 +120,11 @@
       "officialSources": [
         "https://samfa12.itch.io/pocket-chordsmith",
         "https://github.com/Samfa12-tech/Pocket-Chordsmith",
-        "https://samfa12.com/apps/pocket-chordsmith/"
+        "https://samfa12.com/apps/pocket-chordsmith/",
+        "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn"
       ],
       "notes": "Separate marketing page outside protected release-copy directory. Verify actual export formats, browser behaviour and licensing.",
-      "pageModified": "2026-10-23"
+      "pageModified": "2026-11-14"
     },
     {
       "id": "asset-pocket-chordsmith-godot",
