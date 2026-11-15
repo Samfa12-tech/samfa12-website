@@ -1,3 +1,4 @@
+import { statsThumbnail } from './stats-artwork.mjs';
 import { isWithdrawnItch } from './marketplace/withdrawn-itch.mjs';
 import { readFile, writeFile } from 'node:fs/promises';
 const root = new URL('../', import.meta.url);
@@ -5,10 +6,11 @@ const file = new URL('stats/index.html', root);
 const load = async name => JSON.parse(await readFile(new URL(`data/${name}.json`, root), 'utf8'));
 const [spawn, wavedash, market] = await Promise.all(['spawn-stats','wavedash-stats','public-stats'].map(load));
 const steamReport = await load('steam-sales-report');
+const catalogue = await load('projects');
 const steamReportMatches = market.projects.steam.length === 1 && market.projects.steam[0].appId === '4419290' && ['grossUnits','returnedUnits','netUnits'].every(key => steamReport.totals[key] === market.totals.steam[key]);
 const escape = value => String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const format = value => typeof value === 'number' ? new Intl.NumberFormat('en-AU').format(value) : value;
-const card = (title, platform, period, values, note = '') => `<article class="stats-project-panel"><p class="technical-label">${escape(platform)}</p><h3>${escape(title)}</h3><p class="stats-panel-note">${escape(period)}</p>${values.length ? `<dl class="stats-release-metrics">${values.map(([label,value])=>`<div><dt>${escape(label)}</dt><dd>${escape(format(value))}</dd></div>`).join('')}</dl>` : '<p>Not collected for this update.</p>'}${note ? `<p class="stats-panel-note">${escape(note)}</p>` : ''}</article>`;
+const card = (title, platform, period, values, note = '') => `<article class="stats-project-panel"><div class="stats-card-heading">${statsThumbnail(title,platform,catalogue)}<div><p class="technical-label">${escape(platform)}</p><h3>${escape(title)}</h3></div></div><p class="stats-panel-note">${escape(period)}</p>${values.length ? `<dl class="stats-release-metrics">${values.map(([label,value])=>`<div><dt>${escape(label)}</dt><dd>${escape(format(value))}</dd></div>`).join('')}</dl>` : '<p>Not collected for this update.</p>'}${note ? `<p class="stats-panel-note">${escape(note)}</p>` : ''}</article>`;
 const cards = [];
 for (const [key, label, metrics] of [
  ['itch','itch.io',[['Views','views'],['Downloads','downloads'],['Purchases','purchases']]],
