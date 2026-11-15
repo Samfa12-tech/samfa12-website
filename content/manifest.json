@@ -666,6 +666,18 @@
       ],
       "notes": "Preserve the existing landing-page URL and cover. The public Wavedash early build was independently opened at its rendered menu on 2026-11-10. Invite online testing and feedback; do not imply finished-game status or verified cross-device progression.",
       "pageModified": "2026-11-13"
+    },
+    {
+      "id": "game-red-line",
+      "category": "Games",
+      "title": "Red Line: Parkour and Surf",
+      "path": "/games/red-line/",
+      "action": "create",
+      "officialSources": [
+        "https://www.spawn.co/@samfa12/red-line-parkour-and-surf"
+      ],
+      "notes": "Spawn-native parkour and surf game. Public listing and published changelog verified; not a Wavedash release.",
+      "pageModified": "2026-11-15"
     }
   ],
   "directories": [

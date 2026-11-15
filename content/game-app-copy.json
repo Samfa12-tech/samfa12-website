@@ -2241,5 +2241,51 @@
         ]
       }
     ]
+  },
+  "game-red-line": {
+    "intro": "Run the rooftops, find your line and carry that speed onto the ramps. Red Line: Parkour and Surf is a first-person time-trial game set in a white city, with red and yellow markings guiding you through the route.",
+    "details": [
+      {
+        "heading": "From rooftops to surf ramps",
+        "text": "Sprint, vault and climb across the city before dropping onto steep ramps. Lean into the slope to surf at speed, then try to carry your momentum through the next section.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/red-line-parkour-and-surf"
+        ]
+      },
+      {
+        "heading": "Chase a better run",
+        "text": "Race your own best time and the room-record ghost, and climb the leaderboard. A fall sends you back to the last checkpoint so you can retry the section rather than lose the whole run.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/red-line-parkour-and-surf"
+        ]
+      },
+      {
+        "heading": "Play on Spawn",
+        "text": "Play in your browser on Spawn. The pause menu includes a reduced-motion switch that turns off camera roll, speed zoom, wind lines and landing shake.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/red-line-parkour-and-surf"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What happens if I fall?",
+        "answer": "You return to the last checkpoint to try again.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/red-line-parkour-and-surf"
+        ]
+      },
+      {
+        "question": "Is there a reduced-motion option?",
+        "answer": "Yes. The pause-menu setting disables camera roll, speed zoom, wind lines and landing shake.",
+        "sources": [
+          "https://www.spawn.co/@samfa12/red-line-parkour-and-surf"
+        ]
+      }
+    ],
+    "updates": [],
+    "relatedIds": [
+      "game-spin-vector"
+    ]
   }
 }

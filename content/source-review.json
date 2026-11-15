@@ -1265,6 +1265,24 @@
         "reviewedAt": "2026-11-11",
         "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
       }
+    },
+    "game-red-line": {
+      "disposition": "create",
+      "landingPath": "/games/red-line/",
+      "sources": [
+        {
+          "url": "https://www.spawn.co/@samfa12/red-line-parkour-and-surf",
+          "identity": "samfa12 / red-line-parkour-and-surf on Spawn",
+          "access": "read-public-source",
+          "reviewedAt": "2026-11-15",
+          "notes": "Public listing JSON-LD and published version history confirm browser availability, rooftop parkour, surf ramps, checkpoints, ghosts, leaderboards and reduced-motion setting. Source checkout reviewed separately; unconfirmed development-only features omitted. Local cover copied from official listing artwork; not represented as gameplay."
+        }
+      ],
+      "engineReview": {
+        "engine": "Three.js",
+        "reviewedAt": "2026-11-15",
+        "basis": "Authorized Spawn source AGENTS.md identifies Three.js and Spawn engine 6.0.0."
+      }
     }
   }
 }

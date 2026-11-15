@@ -1933,5 +1933,35 @@
     "homepageRank": 6,
     "homepageSize": "wide",
     "engine": "Three.js"
+  },
+  {
+    "id": "game-red-line",
+    "title": "Red Line: Parkour and Surf",
+    "category": "Games",
+    "type": "Browser game",
+    "status": "Published",
+    "description": "Sprint across white rooftops, vault and climb, then carve down steep surf ramps. Chase ghosts and faster times in this first-person parkour game on Spawn.",
+    "tags": [
+      "Game",
+      "Parkour",
+      "Surf",
+      "Time trials",
+      "Spawn",
+      "Samfa12"
+    ],
+    "featured": false,
+    "accent": "red",
+    "imageFit": "contain",
+    "links": [
+      {
+        "label": "Play on Spawn",
+        "url": "https://www.spawn.co/@samfa12/red-line-parkour-and-surf"
+      }
+    ],
+    "sortOrder": 17,
+    "thumbnail": "assets/thumbnails/red-line-spawn.webp",
+    "thumbnailAlt": "Red Line: Parkour and Surf cover artwork from Spawn",
+    "detailUrl": "/games/red-line/",
+    "engine": "Three.js"
   }
 ]

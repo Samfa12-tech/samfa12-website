@@ -322,5 +322,9 @@
   "assets/thumbnails/chrome-coalition-cover-960.webp": [
     960,
     540
+  ],
+  "assets/thumbnails/red-line-spawn.webp": [
+    1024,
+    1536
   ]
 }

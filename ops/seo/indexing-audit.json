@@ -2,14 +2,14 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 80,
-    "indexableRoutes": 74,
-    "sitemapRoutes": 74,
+    "htmlPages": 81,
+    "indexableRoutes": 75,
+    "sitemapRoutes": 75,
     "explicitlyExcluded": 6,
     "routesWithFindings": 0,
     "siteFindings": 0,
-    "oneContextualIncoming": 5,
-    "relationshipEdges": 81
+    "oneContextualIncoming": 6,
+    "relationshipEdges": 82
   },
   "excluded": [
     {
@@ -290,6 +290,11 @@
       "kind": "editorial-related"
     },
     {
+      "from": "/games/red-line/",
+      "to": "/games/spin-vector/",
+      "kind": "editorial-related"
+    },
+    {
       "from": "/games/reef-sweep/",
       "to": "/pocket-audio/pocket-chordsmith/",
       "kind": "editorial-related"
@@ -499,6 +504,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -564,6 +570,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -644,6 +651,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -731,6 +739,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -947,6 +956,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -1567,6 +1577,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -1617,6 +1628,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -1626,7 +1638,7 @@
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/"
       ],
-      "localAssetCount": 38,
+      "localAssetCount": 39,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -2369,6 +2381,36 @@
       "advisories": []
     },
     {
+      "route": "/games/red-line/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/red-line/",
+      "title": "Red Line: Parkour and Surf | Samfa12",
+      "description": "Run the rooftops, find your line and carry that speed onto the ramps. Red Line: Parkour and Surf is a first-person time-trial game set in a white city, with red and yellow markings guiding you through the route.",
+      "h1": [
+        "Red Line: Parkour and Surf"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
       "route": "/games/reef-sweep/",
       "kind": "product",
       "canonical": "https://samfa12.com/games/reef-sweep/",
@@ -2445,11 +2487,13 @@
       "incoming": [
         "/",
         "/games/",
+        "/games/red-line/",
         "/updates/"
       ],
       "incomingMain": [
         "/",
         "/games/",
+        "/games/red-line/",
         "/updates/"
       ],
       "localAssetCount": 9,
@@ -2677,6 +2721,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -2769,6 +2814,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -2863,6 +2909,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -3092,6 +3139,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -3342,6 +3390,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -3463,6 +3512,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
@@ -3586,6 +3636,7 @@
         "/games/pocket-pattern/",
         "/games/possum-cafe/",
         "/games/reckless-dentist/",
+        "/games/red-line/",
         "/games/reef-sweep/",
         "/games/ship-blockade/",
         "/games/spin-vector/",
