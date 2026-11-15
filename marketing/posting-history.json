@@ -844,6 +844,116 @@
       "textSha256": "074995d5627e1790a76dae1a5ef98116af6b0788c3c838d9818e5cf24760b019",
       "scheduledAt": "2026-11-08T12:45:22.379Z",
       "dueAt": "2026-11-14T06:15:00.000Z"
+    },
+    {
+      "id": "chordsmith-spawn-sections-1",
+      "project": "Pocket Chordsmith",
+      "category": "Web development",
+      "date": "2026-11-16",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2f9c5b364e0625a2d5f",
+      "textSha256": "44357147dd2e719f4a4c873eb211bf5cfe8ff2bbddd731f531cd83a17b10e987",
+      "scheduledAt": "2026-11-15T13:26:17.835Z",
+      "dueAt": "2026-11-15T21:15:00.000Z"
+    },
+    {
+      "id": "briarhold-1",
+      "project": "Briarhold",
+      "category": "Games",
+      "date": "2026-11-17",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2f9b9a106584cae50cd",
+      "textSha256": "435318ae9a5b2ce3c5c077cf4960d5123fed5f2672a6a736da2ff2bd898bbbb5",
+      "scheduledAt": "2026-11-15T13:26:17.975Z",
+      "dueAt": "2026-11-16T21:15:00.000Z"
+    },
+    {
+      "id": "toknight2-wounded-dragon-1",
+      "project": "ToKnight",
+      "category": "Books",
+      "date": "2026-11-17",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2fae86a5789a611799b",
+      "textSha256": "5fc84beee1aacc929f53cb4088dde91a75e606511276d5a7867f9e592bc92d23",
+      "scheduledAt": "2026-11-15T13:26:18.125Z",
+      "dueAt": "2026-11-17T06:15:00.000Z"
+    },
+    {
+      "id": "wonky-buildcode-1",
+      "project": "Wonky Vehicle Lab",
+      "category": "Games",
+      "date": "2026-11-18",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2fae5a113497aecbd18",
+      "textSha256": "d7e746af549174d425aefc24840046817b4af92ad189e81774a5df6f676ae382",
+      "scheduledAt": "2026-11-15T13:26:18.328Z",
+      "dueAt": "2026-11-17T21:15:00.000Z"
+    },
+    {
+      "id": "pocket-pattern-live-1",
+      "project": "Pocket Pattern",
+      "category": "Games",
+      "date": "2026-11-19",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2fa76c23bf1c780c9fb",
+      "textSha256": "ffef5f5a4b52161884483402fa641464904932837eb17a20e2d6a1ad53d926a7",
+      "scheduledAt": "2026-11-15T13:26:18.467Z",
+      "dueAt": "2026-11-18T21:15:00.000Z"
+    },
+    {
+      "id": "spinvector-coop-practice-1",
+      "project": "Spin Vector",
+      "category": "Games",
+      "date": "2026-11-19",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2fac5b364e0625a2dbe",
+      "textSha256": "08ae39155ea88282d0f24334bb7146449e5ef2e26d0ee2db98fa22e408949d8e",
+      "scheduledAt": "2026-11-15T13:26:18.591Z",
+      "dueAt": "2026-11-19T06:15:00.000Z"
+    },
+    {
+      "id": "chrome-ctf-falling-flags-1",
+      "project": "Chrome Coalition",
+      "category": "Games",
+      "date": "2026-11-20",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2fa918fe79d2ee6219e",
+      "textSha256": "595320cf3569be3a00bf2a5c57cbb9df421cd35f92e9d70429f38fc102b592e1",
+      "scheduledAt": "2026-11-15T13:26:18.735Z",
+      "dueAt": "2026-11-19T21:15:00.000Z"
+    },
+    {
+      "id": "reef-sweep-lantern-bay-release-1",
+      "project": "Reef Sweep",
+      "category": "Games",
+      "date": "2026-11-21",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2fab9a106584cae5107",
+      "textSha256": "9128bf9a5a5d76fb95060a19b502f37af29f48bd82ff6a7ffb2ae6fc6002522c",
+      "scheduledAt": "2026-11-15T13:26:18.865Z",
+      "dueAt": "2026-11-20T21:15:00.000Z"
+    },
+    {
+      "id": "spinvector-adaptive-1",
+      "project": "Spin Vector",
+      "category": "Games",
+      "date": "2026-11-21",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2fa918fe79d2ee621d3",
+      "textSha256": "197829e6ea3b00f295f3696cf69ba2786e6a8ace090d51b80aae3f468dc71e1d",
+      "scheduledAt": "2026-11-15T13:26:19.027Z",
+      "dueAt": "2026-11-21T06:15:00.000Z"
+    },
+    {
+      "id": "reef-sweep-first-dive-home-1",
+      "project": "Reef Sweep",
+      "category": "Games",
+      "date": "2026-11-22",
+      "status": "scheduled",
+      "bufferPostId": "6af9b2fbe86a5789a61179d0",
+      "textSha256": "b1546ec25fc4b06610a99b4cdceaaa4a6cc6b79e89911bc01a3919345f2e402b",
+      "scheduledAt": "2026-11-15T13:26:19.192Z",
+      "dueAt": "2026-11-21T21:15:00.000Z"
     }
   ]
 }
