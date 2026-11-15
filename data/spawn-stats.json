@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-11-15T05:04:14.142Z",
+  "capturedAt": "2026-11-15T22:54:24.245Z",
   "providerAsOf": "2026-11-14",
   "period": "provider-all-time",
   "source": "https://www.spawn.co/api/agent/v1/me/numbers",
@@ -30,23 +30,23 @@
     {
       "id": "460aa904-7820-4cc4-8e18-00dd1161b9bd",
       "title": "Pocket Chordsmith: Spawn Edition",
-      "plays": 2,
-      "players": 2,
+      "plays": 3,
+      "players": 3,
       "likes": 0
     },
     {
       "id": "a6b1f574-034a-44e7-9311-67d60169450f",
       "title": "Spin Vector: Spawn Edition",
-      "plays": 2,
-      "players": 2,
-      "likes": 2
+      "plays": 3,
+      "players": 3,
+      "likes": 3
     },
     {
       "id": "8706054d-b0cb-474e-ac69-ed9cf2a220ad",
       "title": "Red Line: Parkour and Surf",
-      "plays": 2,
-      "players": 0,
-      "likes": 0
+      "plays": 3,
+      "players": 3,
+      "likes": 3
     }
   ]
 }
