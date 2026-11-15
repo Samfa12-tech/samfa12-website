@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-11-15T05:04:14.142Z",
+  "providerAsOf": "2026-11-14",
+  "period": "provider-all-time",
+  "source": "https://www.spawn.co/api/agent/v1/me/numbers",
+  "note": "All-time figures reported by Spawn for the listed editions. Provider cut-off timezone is unconfirmed; some counters may include live activity. Players are per game, not unique people across games. No revenue or personal data is included.",
+  "projects": [
+    {
+      "id": "0d62202a-8fea-415d-9176-29c61aa05958",
+      "title": "The Last Guard: Spawn Edition",
+      "plays": 15,
+      "players": 13,
+      "likes": 6
+    },
+    {
+      "id": "897a32b9-03c4-48f3-bb85-bdab75c8fe3d",
+      "title": "Chrome Coalition: Spawn Edition",
+      "plays": 5,
+      "players": 5,
+      "likes": 3
+    },
+    {
+      "id": "9ed586e2-8d65-42f8-8a7d-a5d44a835297",
+      "title": "Briarhold: Fortress Defence",
+      "plays": 3,
+      "players": 2,
+      "likes": 2
+    },
+    {
+      "id": "460aa904-7820-4cc4-8e18-00dd1161b9bd",
+      "title": "Pocket Chordsmith: Spawn Edition",
+      "plays": 2,
+      "players": 2,
+      "likes": 0
+    },
+    {
+      "id": "a6b1f574-034a-44e7-9311-67d60169450f",
+      "title": "Spin Vector: Spawn Edition",
+      "plays": 2,
+      "players": 2,
+      "likes": 2
+    },
+    {
+      "id": "8706054d-b0cb-474e-ac69-ed9cf2a220ad",
+      "title": "Red Line: Parkour and Surf",
+      "plays": 2,
+      "players": 0,
+      "likes": 0
+    }
+  ]
+}
