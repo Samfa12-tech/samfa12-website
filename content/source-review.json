@@ -1279,9 +1279,9 @@
         }
       ],
       "engineReview": {
-        "engine": "Three.js",
+        "engine": "Spawn 6",
         "reviewedAt": "2026-11-15",
-        "basis": "Authorized Spawn source AGENTS.md identifies Three.js and Spawn engine 6.0.0."
+        "basis": "Authorized Spawn source .spawn/engine.yaml pins Spawn engine 6.0.0; AGENTS.md identifies Three.js as the underlying rendering technology, not the game engine label."
       }
     }
   }
