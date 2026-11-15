@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-11-15",
+  "periodStart": "2025-11-16",
+  "periodEnd": "2026-11-14",
+  "note": "Owner-supplied Steam sales export. Paid Steam units only; retail, press and review keys excluded. Game and soundtrack units are separate, not unique customers. This replaces overlapping report figures rather than adding them.",
+  "totals": { "grossUnits": 29, "returnedUnits": 1, "netUnits": 28 },
+  "projects": [
+    { "productId": "1543161", "title": "Drink", "grossUnits": 25, "returnedUnits": 1, "netUnits": 24 },
+    { "productId": "1543580", "title": "Drink Soundtrack", "grossUnits": 4, "returnedUnits": 0, "netUnits": 4 }
+  ]
+}

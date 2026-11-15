@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-09T00:27:40.432Z",
+  "generatedAt": "2026-11-15T09:48:10.187Z",
   "totals": {
     "itch": {
       "views": 6161,
@@ -8,9 +8,9 @@
       "purchases": 2
     },
     "steam": {
-      "grossUnits": 28,
+      "grossUnits": 29,
       "returnedUnits": 1,
-      "netUnits": 27
+      "netUnits": 28
     },
     "googlePlay": {
       "grossPaidAppPurchases": 300,
@@ -22,24 +22,24 @@
       "pagesRead": 2857
     },
     "combined": {
-      "paidUnits": 292
+      "paidUnits": 293
     }
   },
   "change": {
     "sincePreviousSnapshot": {
       "itch": {
-        "views": 226,
-        "downloads": 12,
+        "views": 0,
+        "downloads": 0,
         "purchases": 0
       },
       "steam": {
-        "netUnits": 0
+        "netUnits": 1
       },
       "googlePlay": {
-        "netPaidAppPurchases": 2
+        "netPaidAppPurchases": 0
       },
       "combined": {
-        "paidUnits": 2
+        "paidUnits": 1
       },
       "amazon": {
         "netUnits": 0
@@ -315,9 +315,9 @@
       {
         "appId": "4419290",
         "title": "Drink",
-        "grossUnits": 28,
+        "grossUnits": 29,
         "returnedUnits": 1,
-        "netUnits": 27
+        "netUnits": 28
       }
     ],
     "googlePlay": [

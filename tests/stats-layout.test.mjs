@@ -2,6 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {preserveWithdrawnItch} from '../scripts/marketplace/withdrawn-itch.mjs';
+
+test('Steam report separates game and soundtrack without double-counting the aggregate', async () => {
+ const report = JSON.parse(await readFile(new URL('../data/steam-sales-report.json', import.meta.url), 'utf8'));
+ const market = JSON.parse(await readFile(new URL('../data/public-stats.json', import.meta.url), 'utf8'));
+ const html = await readFile(new URL('../stats/index.html', import.meta.url), 'utf8');
+ for (const key of ['grossUnits','returnedUnits','netUnits']) assert.equal(report.projects.reduce((sum,p)=>sum+p[key],0),report.totals[key]);
+ assert.equal(report.projects.find(p=>p.productId==='1543161').netUnits,24);
+ assert.equal(report.projects.find(p=>p.productId==='1543580').netUnits,4);
+ if (market.projects.steam.length === 1 && market.projects.steam[0].appId === '4419290' && ['grossUnits','returnedUnits','netUnits'].every(key=>report.totals[key]===market.totals.steam[key])) {
+  assert.ok(html.includes('<h3>Drink Soundtrack</h3>'));
+  assert.ok(html.includes('2025-11-16 to 2026-11-14'));
+  assert.ok(html.includes('Paid units, not unique customers'));
+ }
+});
 test('withdrawn itch destinations removed, counts retained, surviving links untouched',()=>{
  const old={id:'1',title:'ToKnight',url:'https://samfa12.itch.io/toknight',views:100,downloads:5,purchases:2};
  const sober={...old,id:'2',title:'Sober',url:'https://samfa12.itch.io/sober'};

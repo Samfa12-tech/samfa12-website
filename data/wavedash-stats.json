@@ -5,6 +5,10 @@
   "note": "Verified Wavedash dashboard figures supplied by Sam. Exact capture time unavailable; 2 November is partial. This rolling 30-day view is not the November Reef for Good campaign total.",
   "projects": [
     {
+      "title": "Chrome Coalition",
+      "unavailable": true
+    },
+    {
       "title": "Reef Sweep",
       "players": 160,
       "plays": 305,
