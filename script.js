@@ -17,7 +17,6 @@
   const marketplaceDashboardOverview = document.querySelector("[data-marketplace-dashboard-overview]");
   const marketplaceDashboardUpdated = document.querySelector("[data-marketplace-dashboard-updated]");
   const marketplaceTrend = document.querySelector("[data-marketplace-trend]");
-  const marketplaceProjects = document.querySelector("[data-marketplace-projects]");
   const marketplaceDashboardUnavailable = document.querySelector("[data-marketplace-dashboard-unavailable]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const finePointer = window.matchMedia("(pointer: fine)");
@@ -177,7 +176,7 @@
       title,
       description,
       url: canonical,
-      xText: [title, description].filter(Boolean).join(" — ").slice(0, 220),
+      xText: [title, description].filter(Boolean).join(" - ").slice(0, 220),
     };
   }
 
@@ -1358,7 +1357,7 @@
         changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.combined.paidUnits, "paid sale"),
       })
     );
-    marketplaceStatsUpdated.textContent = `Updated weekly · Last refreshed ${refreshedText}`;
+    marketplaceStatsUpdated.textContent = `Updated weekly � Last refreshed ${refreshedText}`;
     marketplaceStatsSection.hidden = false;
     marketplaceStatsSection.classList.add("is-visible");
   }
@@ -1380,35 +1379,8 @@
     return [bars, createElement("figcaption", { text: "Combined paid sales across itch.io, Steam, Google Play, and Amazon KDP." })];
   }
 
-  function createMarketplaceProjectPanel({ id, platform, projects, metrics }) {
-    const titleId = `stats-projects-${id}`;
-    const panel = createElement("section", { className: `stats-project-panel stats-project-panel-${id}`, "aria-labelledby": titleId }, [
-      createElement("p", { className: "technical-label", text: platform }),
-      createElement("h3", { id: titleId, text: `${platform} releases` }),
-    ]);
-    if (!projects.length) {
-      panel.appendChild(createElement("p", { className: "stats-project-empty", text: "No published project records are available for this storefront yet." }));
-      return panel;
-    }
-    const table = createElement("table", { className: "stats-project-table" });
-    const headerRow = createElement("tr");
-    headerRow.appendChild(createElement("th", { scope: "col", text: "Release" }));
-    metrics.forEach((metric) => headerRow.appendChild(createElement("th", { scope: "col", text: metric.label })));
-    table.appendChild(createElement("thead", {}, [headerRow]));
-    const body = createElement("tbody");
-    projects.forEach((project) => {
-      const row = createElement("tr");
-      row.appendChild(createElement("th", { scope: "row", text: project.title }));
-      metrics.forEach((metric) => row.appendChild(createElement("td", { text: formatMarketplaceNumber(project[metric.key]) })));
-      body.appendChild(row);
-    });
-    table.appendChild(body);
-    panel.appendChild(table);
-    return panel;
-  }
-
   function renderMarketplaceDashboard(data, history) {
-    if (!marketplaceDashboard || !marketplaceDashboardOverview || !marketplaceDashboardUpdated || !marketplaceTrend || !marketplaceProjects) return;
+    if (!marketplaceDashboard || !marketplaceDashboardOverview || !marketplaceDashboardUpdated || !marketplaceTrend) return;
     const overviewCards = [
       createMarketplaceStatsCard({
         id: "dashboard-combined",
@@ -1433,13 +1405,6 @@
     marketplaceDashboardOverview.replaceChildren(...overviewCards);
     marketplaceDashboardUpdated.textContent = `Last refreshed ${formatMarketplaceDate(data.generatedAt)}`;
     marketplaceTrend.replaceChildren(...createMarketplaceTrend(history));
-    const projectPanels = [
-      createMarketplaceProjectPanel({ id: "itch", platform: "itch.io", projects: data.projects.itch, metrics: [{ key: "views", label: "Views" }, { key: "downloads", label: "Downloads" }, { key: "purchases", label: "Purchases" }] }),
-      createMarketplaceProjectPanel({ id: "steam", platform: "Steam", projects: data.projects.steam, metrics: [{ key: "grossUnits", label: "Gross units" }, { key: "returnedUnits", label: "Returned" }, { key: "netUnits", label: "Net units" }] }),
-      createMarketplaceProjectPanel({ id: "google-play", platform: "Google Play", projects: data.projects.googlePlay, metrics: [{ key: "grossPaidAppPurchases", label: "Gross purchases" }, { key: "fullyRefundedPaidAppOrders", label: "Fully refunded" }, { key: "netPaidAppPurchases", label: "Net purchases" }] })
-    ];
-    if (data.projects.amazon) projectPanels.push(createMarketplaceProjectPanel({ id: "amazon", platform: "Amazon KDP", projects: data.projects.amazon, metrics: [{ key: "netUnits", label: "Net sales" }, { key: "pagesRead", label: "KENP read" }] }));
-    marketplaceProjects.replaceChildren(...projectPanels);
     marketplaceDashboardUnavailable.hidden = true;
     marketplaceDashboard.hidden = false;
   }

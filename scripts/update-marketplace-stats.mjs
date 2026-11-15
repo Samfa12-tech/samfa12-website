@@ -1,3 +1,4 @@
+import { preserveWithdrawnItch } from './marketplace/withdrawn-itch.mjs';
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,7 +20,7 @@ const previousHistory = await readJsonOr(historyPath, { schemaVersion: 1, snapsh
 assertPublicStats(previousStats);
 assertHistory(previousHistory);
 
-const [itch, googlePlay] = await Promise.all([
+const [currentItch, googlePlay] = await Promise.all([
   collectItch({ apiKey: config.itchApiKey, projectNames: maps.itch }),
   collectGooglePlay({
     serviceAccountJson: config.googlePlayServiceAccountJson,
@@ -28,6 +29,8 @@ const [itch, googlePlay] = await Promise.all([
     projectNames: maps.googlePlay,
   }),
 ]);
+
+const itch = preserveWithdrawnItch(currentItch, previousStats.projects?.itch);
 
 // Steam is refreshed only through the owner-exported CSV importer. Retain its
 // existing sanitised baseline so a Steam API outage cannot block other stores.

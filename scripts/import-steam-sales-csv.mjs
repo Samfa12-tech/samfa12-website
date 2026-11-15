@@ -64,6 +64,7 @@ await writeBundle([
   [statsPath, JSON.stringify(publicStats, null, 2) + "\n"],
   [historyPath, JSON.stringify(history, null, 2) + "\n"],
 ]);
+await import("./render-spawn-stats.mjs");
 console.log(`Imported ${steam.totals.netUnits} sanitised Steam net units across ${Object.keys(parsedDaily).length} report dates.`);
 
 function parseArguments(args) {

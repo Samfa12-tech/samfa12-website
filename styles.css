@@ -3159,3 +3159,8 @@ h1, h2, h3 { text-wrap: balance; }
   .catalogue-select, .filter-btn { border: 1px solid ButtonText; }
   .filter-btn[aria-pressed="true"] { outline: 2px solid Highlight; outline-offset: 2px; }
 }
+
+/* Platform-labelled release cards share one statistics grid. */
+.stats-release-metrics { margin: var(--space-4) 0; }
+.stats-release-metrics > div { display: flex; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: 1px solid var(--line); }
+.stats-release-metrics dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }

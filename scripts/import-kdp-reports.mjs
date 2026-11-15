@@ -44,6 +44,7 @@ await writeBundle([
   [path.join(root, "data", "public-stats.json"), JSON.stringify(publicStats, null, 2) + "\n"],
   [path.join(root, "data", "public-stats-history.json"), JSON.stringify(nextHistory, null, 2) + "\n"],
 ]);
+await import("./render-spawn-stats.mjs");
 console.log(`Imported ${amazon.totals.netUnits} sanitised KDP net book units and ${amazon.totals.pagesRead} KENP pages across ${amazon.projects.length} books.`);
 
 function parseArguments(args) {

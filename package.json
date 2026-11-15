@@ -30,7 +30,7 @@
     "marketplace:verify-providers": "node scripts/verify-marketplace-providers.mjs",
     "marketplace:import-steam-csv": "node scripts/import-steam-sales-csv.mjs",
     "marketplace:import-kdp": "node scripts/import-kdp-reports.mjs",
-    "test:marketplace": "node --test tests/marketplace-stats.test.mjs",
+    "test:marketplace": "node --test tests/marketplace-stats.test.mjs tests/spawn-stats.test.mjs tests/stats-layout.test.mjs",
     "test:handoff-relay": "node --test tests/pocket-audio-handoff-relay.test.mjs",
     "social:dry-run": "SOCIAL_ACTION=dry-run node scripts/social-post.mjs",
     "social:preview-week": "SOCIAL_ACTION=preview-week node scripts/social-post.mjs",
