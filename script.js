@@ -1,5 +1,5 @@
 (() => {
-  const DATA_VERSION = "20261113-2";
+  const DATA_VERSION = "20261115-1";
   const PAGE_DATA_VERSION = new URL(document.currentScript.src).searchParams.get("data-version") || DATA_VERSION;
   const DATA_URL = `/data/projects.json?v=${PAGE_DATA_VERSION}`;
   const ANALYTICS_STORAGE_KEY = "samfa12:analytics-consent";
@@ -27,7 +27,7 @@
   let overlayReady = false;
   let revealObserver = null;
   const savedCatalogueCards = new WeakMap();
-  const catalogueState = { filter: "All", sort: "curated" };
+  const catalogueState = { filter: "All", sort: "curated", query: "" };
   const CATALOGUE_FILTER_CONFIG = {
     Games: {
       filterLabel: "Platform",
@@ -890,7 +890,7 @@
     return `Showing ${visibleCount} of ${total} ${noun}. Filter: ${labelText}. Sort: ${sortText}.${sourceNote}`;
   }
 
-  function createCatalogueControls(config, filterOptions, state, onFilterChange, onSortChange) {
+  function createCatalogueControls(config, filterOptions, state, onFilterChange, onSortChange, onSearchChange) {
     if (!catalogueControls) return null;
 
     const buttons = [createElement("button", {
@@ -929,8 +929,28 @@
     sortSelect.value = state.sort;
     sortSelect.addEventListener("change", (event) => onSortChange(event.target.value));
 
+    const searchInput = createElement("input", {
+      type: "search", id: "catalogue-search", className: "catalogue-select",
+      placeholder: "Search titles, genres and descriptions", value: state.query,
+      autocomplete: "off", "aria-controls": "project-grid",
+    });
+    searchInput.addEventListener("input", () => onSearchChange(searchInput.value));
+    const clearButton = createElement("button", {
+      type: "button", className: "filter-btn", text: "Clear search",
+    });
+    clearButton.hidden = !state.query;
+    clearButton.addEventListener("click", () => {
+      searchInput.value = "";
+      onSearchChange("");
+      searchInput.focus();
+    });
+    const searchGroup = createElement("div", { className: "catalogue-control-group catalogue-search" }, [
+      createElement("label", { className: "catalogue-control-label", htmlFor: "catalogue-search", text: "Find something to explore" }),
+      createElement("div", { className: "catalogue-search-row" }, [searchInput, clearButton]),
+    ]);
     const filterRow = createElement("div", { className: "filter-row", role: "group", "aria-label": `${config.filterLabel} filters` }, buttons);
     const panel = createElement("div", { className: "catalogue-controls-panel" }, [
+      searchGroup,
       createElement("div", { className: "catalogue-control-group" }, [
         createElement("p", { className: "catalogue-control-label", text: config.filterLabel }),
         filterRow,
@@ -952,6 +972,7 @@
           button.setAttribute("aria-pressed", active ? "true" : "false");
         });
         sortSelect.value = nextState.sort;
+        clearButton.hidden = !nextState.query;
       },
     };
   }
@@ -969,6 +990,7 @@
         return {
           card,
           title: card.querySelector("h3")?.textContent.trim() || "",
+          description: card.querySelector(".card-description")?.textContent || "",
           sortOrder: index,
           catalogueLabels: deriveCatalogueLabels(project, links),
         };
@@ -1018,15 +1040,24 @@
       (sortValue) => {
         state.sort = sortValue;
         applyCatalogueState();
+      },
+      (query) => {
+        state.query = query;
+        applyCatalogueState();
       }
     );
 
     function applyCatalogueState() {
       controls?.sync(state);
-      const filtered = state.filter === "All" ? list.slice() : list.filter((project) => project.catalogueLabels.includes(state.filter));
+      const terms = state.query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+      const filtered = list.filter((project) => {
+        const matchesPlatform = state.filter === "All" || project.catalogueLabels.includes(state.filter);
+        const searchable = `${project.title} ${project.description || ""} ${(project.tags || []).join(" ")} ${(project.catalogueLabels || []).join(" ")}`.toLocaleLowerCase();
+        return matchesPlatform && terms.every((term) => searchable.includes(term));
+      });
       const sorted = sortCatalogueProjects(filtered, state.sort, config);
       const emptyMessage =
-        state.filter === "All"
+        state.query.trim() ? "No matches. Try another search or choose All platforms." : state.filter === "All"
           ? `No ${String(category || "catalogue").toLowerCase()} records are available right now.`
           : `No ${String(category || "catalogue").toLowerCase()} match ${state.filter}.`;
 
@@ -1051,7 +1082,7 @@
           visibleCount: sorted.length,
           loaded,
           loading: context.loading === true,
-        }),
+        }) + (state.query.trim() ? ` Search: ${state.query.trim()}.` : ""),
         { tone: !loaded && !context.loading ? "warning" : "summary", canRetry: !loaded && !context.loading }
       );
     }
@@ -1542,8 +1573,7 @@
       toggle.blur();
       focusMenu();
       requestAnimationFrame(focusMenu);
-      window.setTimeout(focusMenu, 280);
-      window.setTimeout(focusMenu, 560);
+
     };
 
     toggle.addEventListener("click", () => {
@@ -1577,7 +1607,7 @@
     });
 
     window.addEventListener("resize", () => {
-      if (finePointer.matches) closeMenu(false);
+      if (window.matchMedia("(min-width: 1081px)").matches) closeMenu(false);
     });
   }
 

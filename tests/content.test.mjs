@@ -277,6 +277,7 @@ function savedCardFixture(type, title, links) {
     querySelector(selector) {
       if (selector === ".project-label") return { textContent: type };
       if (selector === "h3") return { textContent: title };
+      if (selector === ".card-description") return { textContent: "Saved description" };
       throw new Error(`Unexpected saved-card selector: ${selector}`);
     },
     querySelectorAll(selector) {

@@ -58,6 +58,8 @@ html {
   padding: 0;
   background: var(--bg);
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  scroll-padding-top: calc(var(--header-height) + 1rem);
 }
 
 body {
@@ -137,7 +139,11 @@ button {
 
 a:focus-visible,
 button:focus-visible,
-iframe:focus-visible {
+iframe:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
   outline: 3px solid var(--cyan);
   outline-offset: 4px;
 }
@@ -3129,4 +3135,27 @@ body[data-page="apps"] .project-card-catalogue {
   .book-trailer-poster { width: min(45vw, 180px); }
   .book-trailer-video { width: 100%; }
   .book-trailer-video[data-layout="portrait"] { width: min(100%, 300px); }
+}
+
+/* Modern platform polish: preserve the established artwork and identity. */
+.catalogue-search-row { display: flex; gap: .75rem; align-items: center; }
+.catalogue-search-row input { min-width: 0; flex: 1; font-weight: 400; }
+.catalogue-search-row button { flex-shrink: 0; min-height: 44px; }
+.catalogue-search-row button[hidden] { display: none; }
+.catalogue-search-row input::placeholder { color: var(--muted); opacity: 1; }
+.catalogue-controls-panel > * { min-width: 0; }
+.filter-btn { min-height: 44px; }
+h1, h2, h3 { text-wrap: balance; }
+.section-intro, .card-description { text-wrap: pretty; }
+@media (min-width: 761px) {
+  .catalogue-controls-panel { grid-template-columns: minmax(0, 1fr) minmax(180px, .32fr); }
+  .catalogue-search { grid-column: 1 / -1; }
+}
+@media (max-width: 430px) {
+  .catalogue-search-row { flex-wrap: wrap; }
+  .catalogue-search-row input { flex-basis: 100%; }
+}
+@media (forced-colors: active) {
+  .catalogue-select, .filter-btn { border: 1px solid ButtonText; }
+  .filter-btn[aria-pressed="true"] { outline: 2px solid Highlight; outline-offset: 2px; }
 }
