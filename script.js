@@ -1402,6 +1402,8 @@
       const amazonCard = createMarketplaceStatsCard({ id: "dashboard-amazon", platform: "Amazon KDP", primaryLabel: "Net book sales", primaryValue: data.totals.amazon.netUnits, detailMetrics: [{ label: "KENP pages read", value: data.totals.amazon.pagesRead }], changeText: formatMarketplaceChange(data.change.sincePreviousSnapshot.amazon.netUnits, "KDP book sale") });
       overviewCards.push(amazonCard);
     }
+    const browserSummary = document.querySelector("[data-browser-platform-summary]");
+    if (browserSummary) overviewCards.push(...browserSummary.content.cloneNode(true).children);
     marketplaceDashboardOverview.replaceChildren(...overviewCards);
     marketplaceDashboardUpdated.textContent = `Last refreshed ${formatMarketplaceDate(data.generatedAt)}`;
     marketplaceTrend.replaceChildren(...createMarketplaceTrend(history));

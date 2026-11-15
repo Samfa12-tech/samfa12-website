@@ -44,3 +44,18 @@ test('withdrawn itch book cards stay hidden while supported exceptions remain', 
  }
  assert.equal(cards.length, stats.projects.itch.filter(project => project.listingStatus !== 'withdrawn').length);
 });
+
+test('browser platform summaries preserve distinct reporting scopes and filters progressively enhance cards', async () => {
+ const html=await readFile(new URL('../stats/index.html',import.meta.url),'utf8');
+ const wavedash=JSON.parse(await readFile(new URL('../data/wavedash-stats.json',import.meta.url),'utf8'));
+ const spawn=JSON.parse(await readFile(new URL('../data/spawn-stats.json',import.meta.url),'utf8'));
+ const summary=html.match(/<template data-browser-platform-summary>([\s\S]*?)<\/template>/)[1];
+ assert.ok(summary.includes(new Intl.NumberFormat('en-AU').format(wavedash.projects.filter(p=>!p.unavailable).reduce((sum,p)=>sum+p.plays,0))));
+ assert.ok(summary.includes(String(spawn.projects.reduce((sum,p)=>sum+p.plays,0))));
+ assert.ok(summary.includes('Rolling snapshot, not lifetime'));
+ assert.ok(summary.includes('Playtime not supplied'));
+ assert.ok(!summary.includes('Players'));
+ assert.ok(html.includes('data-stats-filters hidden'));
+ assert.ok(html.includes('id="stats-release-grid"'));
+ assert.ok(html.includes('data-stats-filter-status role="status" aria-live="polite"'));
+});

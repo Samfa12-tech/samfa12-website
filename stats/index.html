@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/styles.css?v=20261115-stats-3" />
-    <link rel="stylesheet" href="/assets/stats-page.css?v=20261102" />
+    <link rel="stylesheet" href="/assets/stats-page.css?v=20261116" />
   </head>
   <body data-page="stats">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -69,7 +69,7 @@
         <div class="container">
           <div class="stats-dashboard-head">
             <div>
-              <p class="eyebrow">Lifetime signal</p>
+              <p class="eyebrow">Platform activity</p>
               <h2 id="stats-dashboard-title">Public marketplace activity</h2>
             </div>
             <p class="marketplace-stats-updated" data-marketplace-dashboard-updated></p>
@@ -107,9 +107,12 @@
         </div>
       </section>
       <!-- SPAWN STATS START -->
+      <template data-browser-platform-summary><article class="marketplace-stat-card"><p class="technical-label">Wavedash</p><dl class="marketplace-stat-primary"><div class="marketplace-stat-metric"><dt>Plays in reporting period</dt><dd>1,029</dd></div></dl><p>59h 22m 24s played across 5 tracked games.</p><p class="marketplace-stat-change">18 October-16 November 2026; Australia/Sydney; final day partial. Rolling snapshot, not lifetime.</p></article><article class="marketplace-stat-card"><p class="technical-label">Spawn</p><dl class="marketplace-stat-primary"><div class="marketplace-stat-metric"><dt>Provider all-time plays</dt><dd>32</dd></div></dl><p>Across 6 tracked editions. Playtime not supplied.</p><p class="marketplace-stat-change">Captured 2026-11-15 UTC; provider date 2026-11-14. Provider cut-off timezone unconfirmed.</p></article></template>
       <section class="section stats-projects" aria-labelledby="stats-projects-title"><div class="container">
         <div class="section-head"><div><p class="eyebrow">Project detail</p><h2 id="stats-projects-title">Stats by release and platform</h2><p class="section-intro">Each card represents one release on one platform. Reporting periods are shown on the cards; plays, downloads and sales are different measures.</p></div></div>
-        <div class="stats-project-grid" data-marketplace-projects><article class="stats-project-panel"><div class="stats-card-heading"><span class="stats-thumbnail"><img src="/assets/thumbnails/article-18-5b9e27.png" alt="" width="64" height="64" loading="lazy" decoding="async" /></span><div><p class="technical-label">itch.io</p><h3>Article 18</h3></div></div><p class="stats-panel-note">Lifetime figures; refreshed 2026-11-15 (UTC)</p><dl class="stats-release-metrics"><div><dt>Views</dt><dd>22</dd></div><div><dt>Downloads</dt><dd>8</dd></div><div><dt>Purchases</dt><dd>0</dd></div></dl></article>
+        <div class="catalogue-controls" data-stats-filters hidden></div>
+        <p data-stats-filter-status role="status" aria-live="polite" hidden></p>
+        <div id="stats-release-grid" class="stats-project-grid" data-marketplace-projects><article class="stats-project-panel"><div class="stats-card-heading"><span class="stats-thumbnail"><img src="/assets/thumbnails/article-18-5b9e27.png" alt="" width="64" height="64" loading="lazy" decoding="async" /></span><div><p class="technical-label">itch.io</p><h3>Article 18</h3></div></div><p class="stats-panel-note">Lifetime figures; refreshed 2026-11-15 (UTC)</p><dl class="stats-release-metrics"><div><dt>Views</dt><dd>22</dd></div><div><dt>Downloads</dt><dd>8</dd></div><div><dt>Purchases</dt><dd>0</dd></div></dl></article>
 <article class="stats-project-panel"><div class="stats-card-heading"><span class="stats-thumbnail"><img src="/assets/thumbnails/backwater-245d41.png" alt="" width="64" height="64" loading="lazy" decoding="async" /></span><div><p class="technical-label">itch.io</p><h3>Backwater (Vertical Slice Prototype)</h3></div></div><p class="stats-panel-note">Lifetime figures; refreshed 2026-11-15 (UTC)</p><dl class="stats-release-metrics"><div><dt>Views</dt><dd>55</dd></div><div><dt>Downloads</dt><dd>3</dd></div><div><dt>Purchases</dt><dd>0</dd></div></dl></article>
 <article class="stats-project-panel"><div class="stats-card-heading"><span class="stats-thumbnail"><img src="/assets/thumbnails/breakfast-beat-d686e6.jpg" alt="" width="64" height="64" loading="lazy" decoding="async" /></span><div><p class="technical-label">itch.io</p><h3>Breakfast Beat</h3></div></div><p class="stats-panel-note">Lifetime figures; refreshed 2026-11-15 (UTC)</p><dl class="stats-release-metrics"><div><dt>Views</dt><dd>120</dd></div><div><dt>Downloads</dt><dd>0</dd></div><div><dt>Purchases</dt><dd>1</dd></div></dl></article>
 <article class="stats-project-panel"><div class="stats-card-heading"><span class="stats-thumbnail"><img src="/assets/thumbnails/bug-maze-td-078911.png" alt="" width="64" height="64" loading="lazy" decoding="async" /></span><div><p class="technical-label">itch.io</p><h3>Bug Maze TD</h3></div></div><p class="stats-panel-note">Lifetime figures; refreshed 2026-11-15 (UTC)</p><dl class="stats-release-metrics"><div><dt>Views</dt><dd>132</dd></div><div><dt>Downloads</dt><dd>0</dd></div><div><dt>Purchases</dt><dd>0</dd></div></dl></article>
@@ -161,6 +164,7 @@
 <article class="stats-project-panel"><div class="stats-card-heading"><span class="stats-thumbnail"><img src="/assets/thumbnails/app-pocket-chordsmith-spawn-stats.jpg" alt="" width="64" height="64" loading="lazy" decoding="async" /></span><div><p class="technical-label">Spawn</p><h3>Pocket Chordsmith: Spawn Edition</h3></div></div><p class="stats-panel-note">All-time; captured 2026-11-15 (UTC); provider date 2026-11-14</p><dl class="stats-release-metrics"><div><dt>Plays</dt><dd>3</dd></div><div><dt>Players</dt><dd>3</dd></div><div><dt>Likes</dt><dd>0</dd></div></dl></article>
 <article class="stats-project-panel"><div class="stats-card-heading"><span class="stats-thumbnail"><img src="/assets/thumbnails/game-spin-vector-spawn-stats.jpg" alt="" width="64" height="64" loading="lazy" decoding="async" /></span><div><p class="technical-label">Spawn</p><h3>Spin Vector: Spawn Edition</h3></div></div><p class="stats-panel-note">All-time; captured 2026-11-15 (UTC); provider date 2026-11-14</p><dl class="stats-release-metrics"><div><dt>Plays</dt><dd>3</dd></div><div><dt>Players</dt><dd>3</dd></div><div><dt>Likes</dt><dd>3</dd></div></dl></article>
 <article class="stats-project-panel"><div class="stats-card-heading"><span class="stats-thumbnail"><img src="/assets/thumbnails/red-line-spawn.webp" alt="" width="64" height="64" loading="lazy" decoding="async" /></span><div><p class="technical-label">Spawn</p><h3>Red Line: Parkour and Surf</h3></div></div><p class="stats-panel-note">All-time; captured 2026-11-15 (UTC); provider date 2026-11-14</p><dl class="stats-release-metrics"><div><dt>Plays</dt><dd>3</dd></div><div><dt>Players</dt><dd>3</dd></div><div><dt>Likes</dt><dd>3</dd></div></dl></article></div>
+        <p data-stats-empty hidden>No releases match. Try a different platform or clear your search.</p>
         <details><summary>Reporting periods and sources</summary><p>Wavedash: Verified Wavedash Audience / This period exports captured 16 November 2026, 08:52-09:06 AEDT. The final day is partial. This is a rolling Last 30 days snapshot, not November campaign totals or lifetime totals. Players are distinct within each game only; overlapping reports are not added.</p><p>Spawn: All-time figures reported by Spawn for the listed editions. Provider cut-off timezone is unconfirmed; some counters may include live activity. Players are per game, not unique people across games. No revenue or personal data is included.</p><p>Spawn snapshots refresh on Mondays when source access is available. Capture dates show the latest successful refresh. Per-game player counts must not be added together as unique people.</p><p>Storefront figures retain their original lifetime counters. Withdrawn itch.io listings are omitted from release cards; historical lifetime totals are preserved.</p></details>
       </div></section>
       <!-- SPAWN STATS END -->
@@ -195,6 +199,7 @@
       </div>
     </footer>
 
-    <script src="/script.js?v=20261115-stats-2" defer></script>
+    <script src="/script.js?v=stats-filters-20261115-stats-2" defer></script>
+  <script src="/assets/stats-filters.js?v=20261116" defer></script>
   </body>
 </html>
