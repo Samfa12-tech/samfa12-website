@@ -217,6 +217,108 @@
         "method": "ASCII-only text; each URL counts as 23 characters",
         "hashtags": 2
       }
+    },
+    "chrome-ctf-falling-flags-1": {
+      "reviewedAt": "2026-11-15",
+      "evidenceDate": "2026-11-13",
+      "sources": [
+        "https://samfa12.com/updates/",
+        "https://wavedash.com/games/chrome-coalition"
+      ],
+      "status": "Public Wavedash Build 39, verified 13 November 2026 (UTC). This behaviour is limited to matches with terrain destruction enabled.",
+      "rationale": "Shows what destructible terrain changes about a specific objective; distinct from the general launch and tunnel angle.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only publisher. No matching visual verified for this post."
+      },
+      "validation": {
+        "rawCharacters": 253,
+        "xWeightedCharacters": 233,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "reef-sweep-first-dive-home-1": {
+      "reviewedAt": "2026-11-15",
+      "evidenceDate": "2026-11-10",
+      "sources": [
+        "https://samfa12.com/updates/",
+        "https://samfa12.com/games/reef-sweep/"
+      ],
+      "status": "Public Wavedash Build 27, verified 10 November 2026 (UTC). First-dive HOME guidance remains prominent and is subtler on later dives.",
+      "rationale": "Explains the choice to taper guidance so new divers can find the boat and returning divers see less UI; separate from mask fog and the Shell Key clip.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only publisher. No matching visual verified for this post."
+      },
+      "validation": {
+        "rawCharacters": 277,
+        "xWeightedCharacters": 263,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "spinvector-coop-practice-1": {
+      "reviewedAt": "2026-11-15",
+      "evidenceDate": "2026-11-13",
+      "sources": [
+        "https://samfa12.com/updates/",
+        "https://wavedash.com/games/spin-vector"
+      ],
+      "status": "Public Wavedash co-op release, verified 13 November 2026 (UTC). Co-op arena practice is separate from solo progression; no claim for other editions.",
+      "rationale": "Makes clear that friends can practise together and get back into a fight without affecting solo saves; distinct from the recent save-retry angle.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only publisher. No matching visual verified for this post."
+      },
+      "validation": {
+        "rawCharacters": 255,
+        "xWeightedCharacters": 240,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "chordsmith-spawn-sections-1": {
+      "reviewedAt": "2026-11-15",
+      "evidenceDate": "2026-11-14",
+      "sources": [
+        "https://samfa12.com/updates/",
+        "https://samfa12.com/pocket-audio/pocket-chordsmith/",
+        "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn"
+      ],
+      "status": "Public Spawn edition import, verified 14 November 2026 (UTC). Supported data from sections A, B and C only; unsupported material is skipped. No whole-song or lossless import claim.",
+      "rationale": "Sets the right expectation for bringing a short musical idea into Spawn. Distinct from the existing WAV export, handoff and Campfire ideas.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only publisher. No matching visual verified for this post."
+      },
+      "validation": {
+        "rawCharacters": 274,
+        "xWeightedCharacters": 246,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "toknight2-wounded-dragon-1": {
+      "reviewedAt": "2026-11-15",
+      "evidenceDate": "2026-11-15",
+      "sources": [
+        "https://samfa12.com/books/",
+        "https://samfa12.com/books/toknight-2-the-fire-beneath/",
+        "https://github.com/Samfa12-tech/samfa12-website/blob/ccd8515c865995f4cec62ff9b41603b886475fdd/content/book-music-copy.json"
+      ],
+      "status": "Existing middle-grade sequel in the first-party catalogue. Copy describes the public premise only; no price, date or storefront fulfilment claim. The book's retired itch listing is not used.",
+      "rationale": "A specific choice for the characters rather than another series introduction. Revisited during the catalogue check after the 13 November storefront cleanup.",
+      "media": {
+        "asset": null,
+        "publishing": "Text-only publisher. No matching visual proposed."
+      },
+      "validation": {
+        "rawCharacters": 248,
+        "xWeightedCharacters": 217,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
     }
   },
   "manualCandidates": {
@@ -250,6 +352,50 @@
       },
       "rationale": "Strongest verified visual for this review. Existing 42-second trailer is longer than the preferred 10-20 seconds; use it as-is if appropriate. No shorter cut was created or claimed.",
       "approval": "Manual suggestion only. Check recent manual X posts and Buffer queue for overlap with the new bank release post; use as an alternative, not an extra automatic post."
+    },
+    "reef-sweep-hermit-staged-clip-1": {
+      "reviewedAt": "2026-11-15",
+      "evidenceDate": "2026-11-05",
+      "status": "Shell Key, the hermit and his pelican were publicly observed on Wavedash 5 November 2026 (UTC). Historical Build 22 game-renderer footage, staged career and cinematic camera; no claim about player progression.",
+      "sources": [
+        "https://samfa12.com/games/reef-sweep/",
+        "https://wavedash.com/games/reef-sweep"
+      ],
+      "media": {
+        "asset": null,
+        "publishing": "Verified 20-second owner-supplied game-renderer footage. No public asset URL; manual upload only."
+      },
+      "rationale": "The pelican gives the island detour a small detail to look for; the footage shows the resident, coastline and shelter.",
+      "approval": "Manual suggestion only. Check recent manual X posts and the live Buffer queue before publishing.",
+      "caption": "There's a pelican hanging around the hermit's shelter on Shell Key. It's the sort of little thing you find if you get off the boat between dives. Reef Sweep, filmed in-game with a cinematic camera: https://wavedash.com/games/reef-sweep #ReefSweep #IndieGames",
+      "validation": {
+        "rawCharacters": 258,
+        "xWeightedCharacters": 244,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
+    },
+    "reef-sweep-banana-farmer-staged-clip-1": {
+      "reviewedAt": "2026-11-15",
+      "evidenceDate": "2026-11-11",
+      "status": "Footage provenance reviewed 15 November from the 11 November pack: historical published Build 20 game renderer, staged farm career and cinematic camera. Current build availability of the farmer routine was not independently confirmed.",
+      "sources": [
+        "https://samfa12.com/games/reef-sweep/",
+        "https://wavedash.com/games/reef-sweep"
+      ],
+      "media": {
+        "asset": null,
+        "publishing": "Verified 20-second owner-supplied game-renderer footage. No public asset URL; manual upload only."
+      },
+      "rationale": "The crop rows and shed show how specific the shore setting is. A backup visual when a second island feature is useful.",
+      "approval": "Manual suggestion only. Check recent manual X posts and the live Buffer queue before publishing.",
+      "caption": "Bananas in rows, greens by the shed. Here's a little corner of Lantern Bay you don't see underwater. I filmed this Reef Sweep farm scene in-game with a cinematic camera. https://wavedash.com/games/reef-sweep #ReefSweep #IndieGames",
+      "validation": {
+        "rawCharacters": 230,
+        "xWeightedCharacters": 216,
+        "method": "ASCII-only text; each URL counts as 23 characters",
+        "hashtags": 2
+      }
     }
   },
   "withheld": {
