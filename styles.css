@@ -3164,3 +3164,12 @@ h1, h2, h3 { text-wrap: balance; }
 .stats-release-metrics { margin: var(--space-4) 0; }
 .stats-release-metrics > div { display: flex; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: 1px solid var(--line); }
 .stats-release-metrics dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Compact product identity, with reserved dimensions and no artwork cropping. */
+.stats-card-heading { display: flex; align-items: center; gap: 0.875rem; margin-bottom: var(--space-4); }
+.stats-card-heading > div { min-width: 0; }
+.stats-card-heading h3 { margin-bottom: 0; overflow-wrap: anywhere; }
+.stats-thumbnail { display: grid; place-items: center; flex: 0 0 64px; width: 64px; height: 64px; overflow: hidden; border-radius: 10px; background: rgba(255,255,255,0.045); }
+.stats-thumbnail img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.stats-thumbnail-fallback { color: var(--muted); font-size: 1.5rem; }
+@media (max-width: 400px) { .stats-thumbnail { flex-basis: 52px; width: 52px; height: 52px; } }
