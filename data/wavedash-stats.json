@@ -1,34 +1,38 @@
 {
-  "period": "4 October-2 November 2026",
+  "period": "18 October-16 November 2026",
   "timezone": "Australia/Sydney",
-  "asOf": "2026-11-02",
-  "note": "Verified Wavedash dashboard figures supplied by Sam. Exact capture time unavailable; 2 November is partial. This rolling 30-day view is not the November Reef for Good campaign total.",
+  "asOf": "2026-11-16",
+  "note": "Verified Wavedash Audience / This period exports captured 16 November 2026, 08:52-09:06 AEDT. The final day is partial. This is a rolling Last 30 days snapshot, not November campaign totals or lifetime totals. Players are distinct within each game only; overlapping reports are not added.",
   "projects": [
     {
       "title": "Chrome Coalition",
-      "unavailable": true
+      "players": 30,
+      "plays": 92,
+      "timePlayed": "4h 3m 52s"
     },
     {
       "title": "Reef Sweep",
-      "players": 160,
-      "plays": 305,
-      "timePlayed": "15h 29m 34s"
+      "players": 469,
+      "plays": 850,
+      "timePlayed": "51h 25m 26s"
     },
     {
       "title": "Spin Vector",
-      "players": 16,
+      "players": 17,
       "plays": 30,
-      "timePlayed": "1h 54m 15s"
+      "timePlayed": "2h 11m 20s"
     },
     {
       "title": "The Last Guard",
-      "players": 20,
-      "plays": 38,
-      "timePlayed": "1h 21m 38s"
+      "players": 26,
+      "plays": 47,
+      "timePlayed": "1h 30m 20s"
     },
     {
       "title": "Dust on the River",
-      "unavailable": true
+      "players": 10,
+      "plays": 10,
+      "timePlayed": "0h 11m 26s"
     }
   ]
 }

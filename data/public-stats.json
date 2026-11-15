@@ -19,7 +19,7 @@
     },
     "amazon": {
       "netUnits": 17,
-      "pagesRead": 2857
+      "pagesRead": 2876
     },
     "combined": {
       "paidUnits": 293
@@ -378,7 +378,8 @@
       {
         "title": "Concubine",
         "netUnits": 2,
-        "pagesRead": 382
+        "pagesRead": 401,
+        "pagesReadUpdatedAt": "2026-11-15"
       },
       {
         "title": "Free to a Good Home",

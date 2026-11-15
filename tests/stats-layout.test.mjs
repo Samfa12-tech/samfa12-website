@@ -27,7 +27,7 @@ test('all platforms have individual static cards in the same release grid',async
  const html=await readFile(new URL('../stats/index.html',import.meta.url),'utf8');
  assert.ok(!html.includes('audience-title'));assert.ok(!html.includes('Played on Spawn'));assert.equal((html.match(/data-marketplace-projects/g)||[]).length,1);
  for(const platform of ['itch.io','Steam','Google Play','Amazon KDP','Wavedash','Spawn'])assert.ok(html.includes(`<p class="technical-label">${platform}</p>`));
- assert.ok(html.includes('15h 29m 34s'));assert.ok(html.includes('final day partial'));assert.ok(!html.includes('Historical listing: no longer available'));
+ const wavedash=JSON.parse(await readFile(new URL('../data/wavedash-stats.json',import.meta.url),'utf8')); for(const game of wavedash.projects.filter(game=>!game.unavailable)) assert.ok(html.includes(game.timePlayed));assert.ok(html.includes('final day partial'));assert.ok(!html.includes('Historical listing: no longer available'));
  assert.ok(!html.includes('href="https://samfa12.itch.io/toknight'));
  const js=await readFile(new URL('../script.js',import.meta.url),'utf8');assert.ok(!js.includes('marketplaceProjects.replaceChildren'));
 });

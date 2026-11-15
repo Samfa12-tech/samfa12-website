@@ -21,7 +21,7 @@ for (const [key, label, metrics] of [
  // Keep historical source counters, but never advertise withdrawn itch releases.
  if (key === 'itch' && isWithdrawnItch(game)) continue;
  if (key === 'steam' && steamReportMatches) continue;
- cards.push(card(game.title,label,`Lifetime figures; refreshed ${market.generatedAt.slice(0,10)} (UTC)`,metrics.map(([name,field])=>[name,game[field]])));
+ cards.push(card(game.title,label,`Lifetime figures; refreshed ${market.generatedAt.slice(0,10)} (UTC)`,metrics.map(([name,field])=>[name,game[field]]),game.pagesReadUpdatedAt ? `KENP read updated ${game.pagesReadUpdatedAt}; other counters retain their original refresh date.` : ''));
 }
 if (steamReportMatches) for (const game of steamReport.projects) cards.push(card(game.title,'Steam',`${steamReport.periodStart} to ${steamReport.periodEnd}; report received ${steamReport.capturedAt}`, [['Gross units',game.grossUnits],['Returned',game.returnedUnits],['Net units',game.netUnits]], 'Paid units, not unique customers; press and review keys excluded.'));
 for (const game of wavedash.projects) cards.push(card(game.title,'Wavedash',game.unavailable ? 'Metrics pending verification' : `${wavedash.period}; ${wavedash.timezone}; final day partial`,game.unavailable ? [] : [['Players',game.players],['Plays',game.plays],['Time played',game.timePlayed]],game.unavailable ? 'No verified figures available; this does not mean zero activity.' : 'Dated snapshot, not lifetime totals.'));
