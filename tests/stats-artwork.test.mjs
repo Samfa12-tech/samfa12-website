@@ -18,3 +18,9 @@ test('unknown or missing artwork has a graceful non-image fallback', () => {
  assert.match(statsThumbnail('Reef Sweep','Wavedash',catalogue), /loading="lazy"/);
  assert.match(statsThumbnail('Reef Sweep','Wavedash',catalogue), /alt="" width="64" height="64"/);
 });
+
+test('Spawn covers never substitute another edition artwork', () => {
+ assert.match(statsArtwork('Chrome Coalition: Spawn Edition','Spawn',catalogue).src, /game-chrome-coalition-spawn-stats/);
+ assert.notEqual(statsArtwork('Chrome Coalition: Spawn Edition','Spawn',catalogue).src,statsArtwork('Chrome Coalition','Wavedash',catalogue).src);
+ assert.equal(statsArtwork('Reef Sweep','Spawn',catalogue),null);
+});

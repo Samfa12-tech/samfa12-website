@@ -1,0 +1,42 @@
+[
+  {
+    "projectId": "game-the-last-guard",
+    "page": "https://www.spawn.co/@samfa12/samfa12-s-the-last-guard-spawn-edition",
+    "imageSource": "https://www.spawn.co/api/og/box?owner=samfa12&game=samfa12-s-the-last-guard-spawn-edition&pic=face&k=1wgnll3",
+    "asset": "assets/thumbnails/game-the-last-guard-spawn-stats.jpg",
+    "reviewedAt": "2026-11-15",
+    "purpose": "Official Spawn edition cover art, not gameplay capture"
+  },
+  {
+    "projectId": "app-pocket-chordsmith",
+    "page": "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn",
+    "imageSource": "https://www.spawn.co/api/og/box?owner=samfa12&game=samfa12-s-pocket-chordsmith-make-music-in-spawn&pic=face&k=x99lpv",
+    "asset": "assets/thumbnails/app-pocket-chordsmith-spawn-stats.jpg",
+    "reviewedAt": "2026-11-15",
+    "purpose": "Official Spawn edition cover art, not gameplay capture"
+  },
+  {
+    "projectId": "game-spin-vector",
+    "page": "https://www.spawn.co/@samfa12/samfa12-s-spin-vector-spawn-edition",
+    "imageSource": "https://www.spawn.co/api/og/box?owner=samfa12&game=samfa12-s-spin-vector-spawn-edition&pic=face&k=z1bcj0",
+    "asset": "assets/thumbnails/game-spin-vector-spawn-stats.jpg",
+    "reviewedAt": "2026-11-15",
+    "purpose": "Official Spawn edition cover art, not gameplay capture"
+  },
+  {
+    "projectId": "game-briarhold",
+    "page": "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence",
+    "imageSource": "https://www.spawn.co/api/og/box?owner=samfa12&game=samfa12-s-briarhold-fortress-defence&pic=face&k=h5uyj2",
+    "asset": "assets/thumbnails/game-briarhold-spawn-stats.jpg",
+    "reviewedAt": "2026-11-15",
+    "purpose": "Official Spawn edition cover art, not gameplay capture"
+  },
+  {
+    "projectId": "game-chrome-coalition",
+    "page": "https://www.spawn.co/@samfa12/samfa12-s-chrome-coalition-spawn-edition",
+    "imageSource": "https://www.spawn.co/api/og/box?owner=samfa12&game=samfa12-s-chrome-coalition-spawn-edition&pic=face&k=qvn5vl",
+    "asset": "assets/thumbnails/game-chrome-coalition-spawn-stats.jpg",
+    "reviewedAt": "2026-11-15",
+    "purpose": "Official Spawn edition cover art, not gameplay capture"
+  }
+]

@@ -326,5 +326,25 @@
   "assets/thumbnails/red-line-spawn.webp": [
     1024,
     1536
+  ],
+  "assets/thumbnails/game-the-last-guard-spawn-stats.jpg": [
+    1200,
+    630
+  ],
+  "assets/thumbnails/app-pocket-chordsmith-spawn-stats.jpg": [
+    1200,
+    630
+  ],
+  "assets/thumbnails/game-spin-vector-spawn-stats.jpg": [
+    1200,
+    630
+  ],
+  "assets/thumbnails/game-briarhold-spawn-stats.jpg": [
+    1200,
+    630
+  ],
+  "assets/thumbnails/game-chrome-coalition-spawn-stats.jpg": [
+    1200,
+    630
   ]
 }

@@ -1,6 +1,7 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
+const spawnArt = JSON.parse(readFileSync(new URL('../content/stats-artwork.json', import.meta.url), 'utf8'));
 const aliases = {
   'backwater (vertical slice prototype)': 'book-backwater',
   'sober: a novel set in the world of drink (amazon)': 'book-sober',
@@ -18,7 +19,9 @@ export function statsArtwork(title, platform, catalogue) {
   const matches = catalogue.filter(project => normalise(project.title) === name);
   const project = explicit ? catalogue.find(project => project.id === explicit)
     : matches.find(project => platform === 'Amazon KDP' ? project.category === 'Books' : project.category !== 'Books') || (matches.length === 1 ? matches[0] : null);
-  const asset = project?.thumbnail;
+  const asset = platform === 'Spawn'
+    ? (spawnArt.find(entry => entry.projectId === project?.id)?.asset || (project?.id === 'game-red-line' ? project.thumbnail : null))
+    : project?.thumbnail;
   if (!asset || !/^assets\/thumbnails\/[a-zA-Z0-9._-]+$/.test(asset) || !existsSync(fileURLToPath(new URL(`../${asset}`, import.meta.url)))) return null;
   return { src: `/${asset}`, projectId: project.id };
 }
