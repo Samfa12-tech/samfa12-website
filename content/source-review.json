@@ -803,6 +803,13 @@
           "url": "https://samfa12.itch.io/party-bus",
           "identity": "samfa12.itch.io /party-bus",
           "access": "read-public-source"
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/p-a-r-t-y-bus-wasteland-run?c=17vdf92",
+          "identity": "P.A.R.T.Y. Bus: Wasteland Run on Samfa12’s Spawn profile",
+          "access": "read-public-source",
+          "reviewedAt": "2026-11-18",
+          "notes": "Exact share URL returned HTTP 200 and the matching game title and description. The owner described Spawn as the full vision and itch.io as the original prototype."
         }
       ],
       "engineReview": {

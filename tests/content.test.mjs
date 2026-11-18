@@ -361,7 +361,7 @@ test('withdrawn book itch links stay out of public pages while exceptions remain
 
 test("Spawn labels include the verified editions and Red Line", () => {
   const ids=catalogue.filter(p=>catalogueContext.deriveGameCatalogueLabels(p,p.links||[]).includes("Spawn.co")).map(p=>p.id).sort();
-  assert.deepEqual(ids, ["app-pocket-chordsmith","game-briarhold","game-chrome-coalition","game-red-line","game-spin-vector","game-the-last-guard"]);
+  assert.deepEqual(ids, ["app-pocket-chordsmith","game-briarhold","game-chrome-coalition","game-party-bus","game-red-line","game-spin-vector","game-the-last-guard"]);
   const briar=catalogue.find(p=>p.id==="game-briarhold");
   assert.match(briar.links[0].url,/spawn\.co/);
   assert.match(briar.status,/Active edition/);

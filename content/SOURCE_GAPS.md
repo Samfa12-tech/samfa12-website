@@ -8,6 +8,8 @@ The four Amazon-only books initially appeared blocked to the public web reader. 
 
 ## Remaining conflicts and limits
 
+- The public **P.A.R.T.Y. Bus: Wasteland Run** listings on itch.io and Spawn both returned the expected game pages on 2026-11-18. Sam describes itch.io as the original prototype and Spawn as the full vision. The v0.9 details apply to the itch.io build; the listing check does not establish feature parity or a Spawn release date.
+
 - The current Google Play Tower Defense Pack description lists five named games, while its What's New says “all six included games.” Page copy names the independently catalogued, verified components and avoids a total count.
 - The itch page for **Spin Vector** retains old closed-testing language. The current Google Play listing governs Android availability claims.
 - **Pocket DJ** is an early browser performance prototype and **Pocket DAW** an early Windows alpha on their itch pages. Their catalogue statuses were corrected from “Published.” **Ship Blockade** is marked Released on itch but its description calls it an early prototype; the catalogue surfaces that caveat.

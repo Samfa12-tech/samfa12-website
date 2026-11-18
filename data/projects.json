@@ -1203,8 +1203,8 @@
     "title": "P.A.R.T.Y. Bus: Wasteland Run",
     "category": "Games",
     "type": "Game",
-    "status": "Playable prototype",
-    "description": "A playable browser driving-survival prototype about rescuing people and returning to a wasteland base.",
+    "status": "Playable on Spawn and itch.io",
+    "description": "Drive a battered yellow bus into the wasteland, rescue survivors and bring them home. Play the full vision on Spawn or try the original itch.io prototype.",
     "tags": [
       "Game",
       "Adventure",
@@ -1214,8 +1214,12 @@
     "featured": false,
     "links": [
       {
+        "url": "https://www.spawn.co/@samfa12/p-a-r-t-y-bus-wasteland-run?c=17vdf92",
+        "label": "Play on Spawn"
+      },
+      {
         "url": "https://samfa12.itch.io/party-bus",
-        "label": "Play on itch.io"
+        "label": "Play the itch.io prototype"
       }
     ],
     "sortOrder": 23,

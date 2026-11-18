@@ -1363,7 +1363,7 @@
     ]
   },
   "game-party-bus": {
-    "intro": "P.A.R.T.Y. Bus: Wasteland Run is a 3D browser driving-survival prototype about taking a battered yellow bus into hostile territory and getting survivors and supplies back to base. Damage, cargo weight, enemies and fuel all add pressure to the return trip.",
+    "intro": "Take a battered yellow bus into the wasteland and get your survivors and supplies back to base. Damage, cargo weight, enemies and fuel all add pressure to the return trip. I made the itch.io version as a prototype. The version on Spawn is the full vision for P.A.R.T.Y. Bus.",
     "details": [
       {
         "heading": "Scavenge and bring people home",
@@ -1373,8 +1373,8 @@
         ]
       },
       {
-        "heading": "Prototype status",
-        "text": "This is an in-development browser prototype. Future roadmap features are not confirmed parts of the playable build.",
+        "heading": "The original prototype",
+        "text": "The v0.9 build on itch.io is still playable. It captures the early rescue runs and the scramble to make it back to base.",
         "sources": [
           "https://samfa12.itch.io/party-bus"
         ]
@@ -1382,15 +1382,15 @@
     ],
     "faqs": [
       {
-        "question": "Can I choose when to head back?",
+        "question": "Can I choose when to head back in the itch.io prototype?",
         "answer": "Yes. Turn back manually when you're ready, then survive the ride home.",
         "sources": [
           "https://samfa12.itch.io/party-bus"
         ]
       },
       {
-        "question": "Is this a finished release?",
-        "answer": "No. The current described build is the v0.9 browser prototype.",
+        "question": "Do I need to download the itch.io prototype?",
+        "answer": "You can launch the v0.9 prototype right in your browser from its itch.io page.",
         "sources": [
           "https://samfa12.itch.io/party-bus"
         ]
@@ -1881,7 +1881,7 @@
     ],
     "relatedLabels": {
       "game-wonky-vehicle-lab": "Try another Samfa12 vehicle physics experiment",
-      "game-party-bus": "Try P.A.R.T.Y. Bus, a driving-survival prototype"
+      "game-party-bus": "Try P.A.R.T.Y. Bus, a wasteland driving-survival game"
     }
   },
   "game-reef-sweep": {
