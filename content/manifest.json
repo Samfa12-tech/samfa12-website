@@ -451,10 +451,11 @@
       "path": "/games/party-bus/",
       "action": "create",
       "officialSources": [
-        "https://samfa12.itch.io/party-bus"
+        "https://samfa12.itch.io/party-bus",
+        "https://www.spawn.co/@samfa12/p-a-r-t-y-bus-wasteland-run?c=17vdf92"
       ],
-      "notes": "Verify actual published/prototype status; do not promise roadmap concepts as shipped mechanics.",
-      "pageModified": "2026-11-11"
+      "notes": "Distinguish the original itch.io prototype from the owner-described full vision on Spawn. Keep v0.9 mechanics scoped to itch.io.",
+      "pageModified": "2026-11-18"
     },
     {
       "id": "game-pocket-ant-farm",
@@ -637,7 +638,7 @@
       "officialSources": [
         "https://samfa12.itch.io/towtal-chaos"
       ],
-      "pageModified": "2026-11-11",
+      "pageModified": "2026-11-18",
       "notes": "Owner-confirmed itch launch. Live listing and owner-supplied 0.3.1 notes support a playable HTML5 alpha. Promotional artwork is not a gameplay screenshot. No Android download, offline engine or device performance claim."
     },
     {
