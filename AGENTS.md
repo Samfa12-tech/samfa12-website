@@ -113,12 +113,7 @@ manifest, file hashes and complete inventory before replacing this route.
 Keep relative assets and content-addressed directories intact; do not edit
 the hosted game by hand. The Pages workflow verifies the staged artifact too.
 
-The current public tester release (2026-09-20) is Alpha.101 at
-`/games/briarhold/`, with browser play at `/games/briarhold/play/`, immutable
-prerelease tag `briarhold-alpha.101` and updater
-manifest `games/briarhold/releases/latest.json` at versionCode 101. Recheck the
-live page, release, and repository history before treating those values as
-current in a later task.
+Read `games/briarhold/releases/latest.json`, the download page and the GitHub release receipt for the current version. Verify the live page and updater separately before making a public release claim.
 
 Publish future Briarhold Android versions in this order:
 
@@ -139,6 +134,6 @@ The `.codex-remote-attachments/` folder is local working material and should not
 be committed unless the user explicitly asks for it. Do not overwrite unrelated
 user changes in this repo.
 
-## Reef Sweep campaign sources
+## Reef Sweep website route
 
-`game-sources/reef-sweep/` is the canonical editable TypeScript source. Build with `npm run build:reef-sweep`, export with `npm run sync:reef-sweep`, and verify with `npm run verify:reef-sweep-pages`. The retired `games/reef-sweep/play/` entry is generated from `scripts/reef-sweep-redirect.html` and redirects to Wavedash; the older demo remains recoverable in Git history. Read `ops/releases/REEF_SWEEP.md`; source/tooling stays excluded from Pages. Preserve schema-1 saves, portrait/touch/controller controls, the local renderer and High shadow settings. Draft campaign changes do not authorize merging or publication.
+The editable campaign moved to the private `Samfa12-tech/Reef-Sweep` repository. Preserve `game-sources/reef-sweep/` as a historical website snapshot. Keep the published play route as the Wavedash redirect generated from `scripts/reef-sweep-redirect.html`; do not regenerate or hand-edit the archived demo to work on the current game. See [the website release record](ops/releases/REEF_SWEEP.md#retired-website-demo-2026-10-28) for the redirect and verification details. Source and tooling stay excluded from Pages.
