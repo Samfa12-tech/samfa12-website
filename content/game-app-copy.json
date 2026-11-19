@@ -510,6 +510,18 @@
           "https://samfa12.com/apps/what-would-win/",
           "https://github.com/Samfa12-tech/What-Would-Win/commit/2b6ca912ff2d96882878193633b3269f253fc60e"
         ]
+      },
+      {
+        "id": "what-would-win-spawn-creature-battle-simulator-november-2026",
+        "kind": "release",
+        "date": "2026-11-17",
+        "dateMeaning": "Spawn public release and changelog date",
+        "title": "Watch the matchups play out on Spawn",
+        "summary": "The separate Spawn edition turns matchups into animated battles. Its expanded roster includes superheroes, anime fighters and video game characters. The camera follows the action automatically, and titan fights get a city scaled to fit. The original Samfa12.com simulator still presents written battles.",
+        "platform": "Spawn edition",
+        "sources": [
+          "https://www.spawn.co/@samfa12/samfa12-s-what-would-win-creature-battle-simulator?c=tseah"
+        ]
       }
     ]
   },
@@ -1396,7 +1408,20 @@
         ]
       }
     ],
-    "updates": []
+    "updates": [
+      {
+        "id": "party-bus-spawn-mama-rust-november-2026",
+        "kind": "release",
+        "date": "2026-11-19",
+        "dateMeaning": "Spawn public changelog date",
+        "title": "Mama Rust brings the bus back",
+        "summary": "Stranded on foot in the Spawn edition? Call an empty bus and Mama Rust will bring it to you, repairing a wrecked bus along the way. Roadblock crews now react when you approach on foot, and the phone HUD is tidier. The original itch.io prototype is unchanged.",
+        "platform": "Spawn edition",
+        "sources": [
+          "https://www.spawn.co/@samfa12/p-a-r-t-y-bus-wasteland-run?c=17vdf92"
+        ]
+      }
+    ]
   },
   "game-pocket-ant-farm": {
     "intro": "Pocket Ant Farm is a relaxing voxel ant-colony simulation in a glass-sided dirt slab. Watch ants dig, explore and forage; drop food, suggest digging areas and make the soil translucent to see the tunnels.",
@@ -1530,6 +1555,18 @@
         "dateMeaning": "GitHub prerelease publication date",
         "date": "2026-09-20",
         "summary": "The release notes describe fixes for recurring Mason repair and New Run freezes, improvements to auto-fire and enemy presentation, and co-op recovery/input changes. The notes also say the intermittent Night 5 freeze remains under investigation; cross-network co-op and sustained performance remain active test areas."
+      },
+      {
+        "id": "briarhold-spawn-stalls-shut-at-night-november-2026",
+        "kind": "release",
+        "date": "2026-11-17",
+        "dateMeaning": "Spawn public changelog date",
+        "title": "The fortress stalls close at night",
+        "summary": "In the Spawn edition, shop stalls close when the bell rings and reopen at dawn. A war horn and a brief red flash mark the start of the night, so you know when to leave the stalls and get back to the defence.",
+        "platform": "Spawn edition",
+        "sources": [
+          "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence"
+        ]
       }
     ],
     "relatedIds": [
@@ -2288,7 +2325,20 @@
         ]
       }
     ],
-    "updates": [],
+    "updates": [
+      {
+        "id": "red-line-spawn-release-november-2026",
+        "kind": "release",
+        "date": "2026-11-15",
+        "dateMeaning": "Spawn public publication date",
+        "title": "Red Line brings rooftop parkour and surfing to Spawn",
+        "summary": "Sprint over rooftops, vault and climb, then carry your speed onto steep surf ramps. Chase your best time or the room-record ghost. A fall returns you to the last checkpoint, so you can take another shot at the section.",
+        "platform": "Spawn browser game",
+        "sources": [
+          "https://www.spawn.co/@samfa12/red-line-parkour-and-surf"
+        ]
+      }
+    ],
     "relatedIds": [
       "game-spin-vector"
     ]
