@@ -2,14 +2,14 @@
   "version": 1,
   "site": "https://samfa12.com",
   "summary": {
-    "htmlPages": 81,
-    "indexableRoutes": 75,
-    "sitemapRoutes": 75,
+    "htmlPages": 82,
+    "indexableRoutes": 76,
+    "sitemapRoutes": 76,
     "explicitlyExcluded": 6,
     "routesWithFindings": 0,
     "siteFindings": 0,
-    "oneContextualIncoming": 5,
-    "relationshipEdges": 82
+    "oneContextualIncoming": 6,
+    "relationshipEdges": 83
   },
   "excluded": [
     {
@@ -330,6 +330,11 @@
       "kind": "editorial-related"
     },
     {
+      "from": "/games/the-last-guard-2/",
+      "to": "/games/the-last-guard/",
+      "kind": "editorial-related"
+    },
+    {
       "from": "/games/the-last-guard/",
       "to": "/games/briarhold/",
       "kind": "editorial-related"
@@ -510,6 +515,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -576,6 +582,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -657,6 +664,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -745,6 +753,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -962,6 +971,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -1583,6 +1593,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -1634,11 +1645,12 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/"
       ],
-      "localAssetCount": 39,
+      "localAssetCount": 40,
       "jsonLdStatus": "parsed",
       "jsonLdTypes": [
         "Organization",
@@ -2579,6 +2591,36 @@
       "advisories": []
     },
     {
+      "route": "/games/the-last-guard-2/",
+      "kind": "product",
+      "canonical": "https://samfa12.com/games/the-last-guard-2/",
+      "title": "The Last Guard 2: Hold the Wall | Samfa12",
+      "description": "40,000 orcs. One wall. A city behind it. Man the heavy gun in a free single-player browser horde defence game. Play on Wavedash with WebGPU.",
+      "h1": [
+        "The Last Guard 2: Hold the Wall"
+      ],
+      "inSitemap": true,
+      "incoming": [
+        "/games/"
+      ],
+      "incomingMain": [
+        "/games/"
+      ],
+      "localAssetCount": 9,
+      "jsonLdStatus": "parsed",
+      "jsonLdTypes": [
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "VideoGame",
+        "BreadcrumbList"
+      ],
+      "findings": [],
+      "advisories": [
+        "one contextual incoming page; review only when a genuine relationship exists"
+      ]
+    },
+    {
       "route": "/games/the-last-guard/",
       "kind": "product",
       "canonical": "https://samfa12.com/games/the-last-guard/",
@@ -2591,11 +2633,13 @@
       "incoming": [
         "/games/",
         "/games/briarhold/",
+        "/games/the-last-guard-2/",
         "/updates/"
       ],
       "incomingMain": [
         "/games/",
         "/games/briarhold/",
+        "/games/the-last-guard-2/",
         "/updates/"
       ],
       "localAssetCount": 9,
@@ -2729,6 +2773,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -2822,6 +2867,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -2917,6 +2963,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -3147,6 +3194,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -3398,6 +3446,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -3520,6 +3569,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",
@@ -3644,6 +3694,7 @@
         "/games/spin-vector/",
         "/games/td-pack/",
         "/games/the-horde/",
+        "/games/the-last-guard-2/",
         "/games/the-last-guard/",
         "/games/towtal-chaos/",
         "/games/wonky-vehicle-lab/",

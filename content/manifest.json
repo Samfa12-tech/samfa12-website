@@ -58,6 +58,18 @@
       "pageModified": "2026-11-13"
     },
     {
+      "id": "game-the-last-guard-2",
+      "category": "Games",
+      "title": "The Last Guard 2: Hold the Wall",
+      "path": "/games/the-last-guard-2/",
+      "action": "create",
+      "officialSources": [
+        "https://wavedash.com/games/the-last-guard-2-hold-the-wall"
+      ],
+      "notes": "Separate sequel. Keep the selectable 40,000-orc siege distinct from the standard-kit First Stand leaderboard.",
+      "pageModified": "2026-11-22"
+    },
+    {
       "id": "game-the-horde",
       "category": "Games",
       "title": "The Horde — Ray Tracing Tech Demo",

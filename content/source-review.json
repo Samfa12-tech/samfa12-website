@@ -117,6 +117,19 @@
         "basis": "Owner confirmation in ChatGPT; repository confirmation where recorded in SOURCE_GAPS.md"
       }
     },
+    "game-the-last-guard-2": {
+      "disposition": "create",
+      "landingPath": "/games/the-last-guard-2/",
+      "sources": [
+        {
+          "url": "https://wavedash.com/games/the-last-guard-2-hold-the-wall",
+          "identity": "The Last Guard 2: Hold the Wall by Samfa12 on Wavedash",
+          "access": "read-public-source",
+          "reviewedAt": "2026-11-22",
+          "notes": "Public listing and structured data confirm the free browser release and the WebGPU requirement. Sam confirmed the Build 2 scope, selectable siege size, standard-kit leaderboard conditions, and persistent Arsenal upgrades."
+        }
+      ]
+    },
     "game-the-horde": {
       "disposition": "create",
       "landingPath": "/games/the-horde/",

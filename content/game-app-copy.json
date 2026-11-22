@@ -268,6 +268,42 @@
       "game-gremlin-grenade-pinball": "Try Gremlin Grenade Pinball, a horde-defence prototype"
     }
   },
+  "game-the-last-guard-2": {
+    "intro": "40,000 orcs. One wall. A city behind it. You’re one of a handful of guards still standing on the city’s final line. Then the horn blows, and the valley lights up with torches.",
+    "metaDescription": "40,000 orcs. One wall. A city behind it. Man the heavy gun in a free single-player browser horde defence game. Play on Wavedash with WebGPU.",
+    "demoNotice": "Free to play in your browser. WebGPU is required, and a desktop PC is recommended.",
+    "details": [
+      {
+        "heading": "Pick your targets",
+        "text": "Take the mounted heavy gun. Powder runners charge the wall with lit fuses, brutes close on the gate, and jetpack raiders come in from above. Fire a rocket into a packed column or call down lightning when the horde bunches up.",
+        "sources": [
+          "https://wavedash.com/games/the-last-guard-2-hold-the-wall"
+        ]
+      },
+      {
+        "heading": "Spend your salvage",
+        "text": "Take your salvage to the Arsenal and upgrade your kit. Those upgrades carry into later runs, and you can bring surviving defenders into the fight.",
+        "sources": [
+          "https://wavedash.com/games/the-last-guard-2-hold-the-wall"
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How big is the siege?",
+        "answer": "You can select a siege of up to 40,000 orcs. The First Stand leaderboard uses a 2,000-orc run with the standard kit.",
+        "sources": [
+          "https://wavedash.com/games/the-last-guard-2-hold-the-wall"
+        ]
+      }
+    ],
+    "relatedIds": [
+      "game-the-last-guard"
+    ],
+    "relatedLabels": {
+      "game-the-last-guard": "Play the original The Last Guard"
+    }
+  },
   "game-the-horde": {
     "intro": "The Horde 1.7 is a short native Vulkan hardware-ray-tracing action showcase for Windows and compatible Android phones. Carry a torch and lantern through a gothic ruin, confront its skeletons and Lich, and follow Kit into a denser forest toward Bellwether.",
     "details": [
