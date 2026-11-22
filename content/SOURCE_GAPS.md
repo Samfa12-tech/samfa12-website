@@ -8,7 +8,7 @@ The four Amazon-only books initially appeared blocked to the public web reader. 
 
 ## Remaining conflicts and limits
 
-- **The Last Guard 2: Hold the Wall** has a separate Wavedash listing. The owner confirmed that 40,000 is a selectable siege size and the First Stand leaderboard uses the 2,000-orc standard kit. No cross-device progress or hardware performance guarantees are documented. The two local WebP covers are derived from the approved 1920×1080 Wavedash artwork.
+- **The Last Guard 2: Hold the Wall** has a separate Wavedash listing. The owner confirmed that Build 4 has separate fastest-clear leaderboards for the 2,000-, 10,000- and 40,000-orc sieges and that Arsenal upgrades can help improve clear times. No cross-device progress or hardware performance guarantees are documented. The two local WebP covers are derived from the approved 1920×1080 Wavedash artwork.
 
 - The public **P.A.R.T.Y. Bus: Wasteland Run** listings on itch.io and Spawn both returned the expected game pages on 2026-11-18. Sam describes itch.io as the original prototype and Spawn as the full vision. The v0.9 details apply to the itch.io build; the listing check does not establish feature parity or a Spawn release date.
 
