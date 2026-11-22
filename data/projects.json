@@ -164,6 +164,42 @@
     "engine": "Babylon.js"
   },
   {
+    "title": "The Last Guard 2: Hold the Wall",
+    "category": "Games",
+    "type": "Browser game",
+    "status": "Free on Wavedash",
+    "description": "40,000 orcs. One wall. A city behind it. Take the heavy gun in a single-player horde defence game. WebGPU required.",
+    "tags": [
+      "Game",
+      "Action",
+      "Horde defence"
+    ],
+    "featured": false,
+    "accent": "spark",
+    "imageFit": "contain",
+    "links": [
+      {
+        "label": "Play on Wavedash",
+        "url": "https://wavedash.com/games/the-last-guard-2-hold-the-wall"
+      }
+    ],
+    "sortOrder": 2.2,
+    "thumbnail": "assets/thumbnails/the-last-guard-2.webp",
+    "thumbnailVariants": [
+      {
+        "path": "assets/thumbnails/the-last-guard-2-640.webp",
+        "width": 640
+      },
+      {
+        "path": "assets/thumbnails/the-last-guard-2.webp",
+        "width": 1200
+      }
+    ],
+    "thumbnailAlt": "The Last Guard 2 cover showing a guard at a mounted gun, facing an orc army beneath a lightning storm",
+    "id": "game-the-last-guard-2",
+    "detailUrl": "/games/the-last-guard-2/"
+  },
+  {
     "title": "The Horde — Ray Tracing Tech Demo",
     "category": "Games",
     "type": "Tech demo",
