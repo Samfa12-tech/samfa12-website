@@ -319,6 +319,206 @@
         "method": "ASCII-only text; each URL counts as 23 characters",
         "hashtags": 2
       }
+    },
+    "briarhold-spawn-night-stalls-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-17",
+      "sources": [
+        "https://www.spawn.co/@samfa12/samfa12-s-briarhold-fortress-defence",
+        "https://samfa12.com/updates/"
+      ],
+      "status": "Released on Spawn in The Stalls Shut at Night, dated 17 November 2026. The shop-hours rule and cues describe only the Spawn edition.",
+      "rationale": "Turns the shop-hours change into a clear preparation-to-combat cue. Separate from the old generic defence-pressure, bug diagnostics and Alpha release posts.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 270,
+        "xWeightedCharacters": 227,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "party-bus-spawn-mama-rust-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-19",
+      "sources": [
+        "https://www.spawn.co/@samfa12/p-a-r-t-y-bus-wasteland-run",
+        "https://samfa12.com/games/party-bus/"
+      ],
+      "status": "Mama Rust's Run, public Spawn changelog 19 November 2026: calling an empty bus brings it to the on-foot player and patches a wreck. No claim that the itch.io prototype has this feature.",
+      "rationale": "A concrete recovery action when a run goes wrong, rather than repeating the older risk-versus-return premise.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 247,
+        "xWeightedCharacters": 234,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "www-spawn-titan-city-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-17",
+      "sources": [
+        "https://www.spawn.co/@samfa12/samfa12-s-what-would-win-creature-battle-simulator",
+        "https://samfa12.com/updates/"
+      ],
+      "status": "Public Spawn Heroes, Games and Titans update dated 17 November 2026. The Spawn visualisation has scaled titan arenas and an automatic camera; the original hosted tool remains a written-battle simulator.",
+      "rationale": "Shows how scale changes the visual staging of a matchup, distinct from the original tool's percentages and written stories.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 255,
+        "xWeightedCharacters": 198,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "red-line-reduced-motion-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-15",
+      "sources": [
+        "https://www.spawn.co/@samfa12/red-line-parkour-and-surf",
+        "https://samfa12.com/games/red-line/"
+      ],
+      "status": "Released Spawn Body In Motion update, dated 15 November 2026. The public changelog and website explicitly list the four effects disabled by the reduced-motion switch.",
+      "rationale": "An actionable camera option for players who want a calmer view while learning the parkour routes.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 261,
+        "xWeightedCharacters": 229,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "ship-blockade-build-delay-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-22",
+      "sources": [
+        "https://samfa12.itch.io/ship-blockade",
+        "https://samfa12.com/games/ship-blockade/"
+      ],
+      "status": "Existing playable browser prototype, rechecked against the public itch listing. Mid-wave placement has a build delay. Not presented as a new update or finished game.",
+      "rationale": "Highlights the timing decision behind a build delay, separate from the existing shipping-lane and tower-roster post.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 254,
+        "xWeightedCharacters": 240,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "pocket-daw-collect-media-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-22",
+      "sources": [
+        "https://samfa12.itch.io/pocket-daw",
+        "https://samfa12.com/pocket-audio/pocket-daw/"
+      ],
+      "status": "Existing Windows early alpha. Current itch listing confirms project save/reopen and external-media collection tools. No automatic backup, lossless migration or finished-DAW claim.",
+      "rationale": "Explains why external media collection matters when moving an arrangement. Different from the previously used A/B comparison and export-pack angle.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 268,
+        "xWeightedCharacters": 257,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "article18-wrong-patterns-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-22",
+      "sources": [
+        "https://samfa12.itch.io/article-18",
+        "https://samfa12.com/books/article-18/"
+      ],
+      "status": "Existing comic-noir novella. Public itch description and current first-party catalogue corroborate Austin Crowd's mistaken pattern reading and sealed packet. No new-edition or format claim.",
+      "rationale": "Leads with the detective's specific weakness instead of another formats-and-storefront post.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 271,
+        "xWeightedCharacters": 257,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "place-of-his-own-listening-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-22",
+      "sources": [
+        "https://samfa12.com/books/a-place-of-his-own/",
+        "https://github.com/Samfa12-tech/samfa12-website/blob/9ac01ca998fc24123a1b19033d1586262f544024/content/book-music-copy.json"
+      ],
+      "status": "Existing sequel in the first-party book catalogue. Current copy establishes Jonah's age and the difficulty of supporting him without deciding for him. Amazon's live listing could not be independently read; no availability, edition, price or release-date claim.",
+      "rationale": "Gives an older book its own central dilemma, separate from the generic paired-novels post.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 263,
+        "xWeightedCharacters": 241,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "pocket-pattern-colour-symbols-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-22",
+      "sources": [
+        "https://samfa12.itch.io/pocket-pattern",
+        "https://samfa12.com/games/pocket-pattern/"
+      ],
+      "status": "Existing released browser puzzle, public itch listing explicitly confirms colour symbols. No new accessibility update claimed.",
+      "rationale": "A specific readability choice in a colour-matching puzzle. The 19 November recorded post described the general puzzle loop; this focuses on a different design detail.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 237,
+        "xWeightedCharacters": 222,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
+    },
+    "towtal-chaos-phone-camera-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-22",
+      "sources": [
+        "https://samfa12.itch.io/towtal-chaos",
+        "https://samfa12.com/games/towtal-chaos/"
+      ],
+      "status": "Existing playable browser alpha. The itch controls explicitly support pinching and rotating the camera on mobile. No simulation accuracy or real-world driving-safety claim.",
+      "rationale": "A useful mobile control tip that helps players inspect their approach, distinct from the earlier hitch-angle and game-mode overview.",
+      "media": {
+        "asset": null,
+        "publishing": "Current publisher verified as text-only. No matching image or clip proposed for this bank entry."
+      },
+      "validation": {
+        "rawCharacters": 258,
+        "xWeightedCharacters": 245,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
     }
   },
   "manualCandidates": {
@@ -396,6 +596,28 @@
         "method": "ASCII-only text; each URL counts as 23 characters",
         "hashtags": 2
       }
+    },
+    "reef-sweep-sunlit-gardens-dev-still-1": {
+      "reviewedAt": "2026-11-22",
+      "evidenceDate": "2026-11-11",
+      "sources": [
+        "https://samfa12.com/games/reef-sweep/",
+        "https://wavedash.com/games/reef-sweep"
+      ],
+      "status": "Historical development screenshot from the actual game renderer with a staged camera, verified in the owner-supplied pack. The pack is not public-release evidence. No ordinary player progression or current-build visual-parity claim.",
+      "media": {
+        "asset": null,
+        "publishing": "Verified owner-provided 1200x760 still, SHA-256 f7db2dbd649158640c3e80c89bbe8c8b483730f5c3534db96bc6e4403a7eaeb9. No public asset locator stored. Current publisher is text-only; manual upload needed."
+      },
+      "rationale": "An underwater environment detail rather than another island-resident or general campaign post. Suitable as a labelled development still.",
+      "approval": "Manual suggestion only, withheld from automatic scheduling. Confirm the caption and asset and check recent manual X posts and the live Buffer queue before posting.",
+      "caption": "From fish height, Sunlit Gardens is all seagrass, rocks and little gaps to peer through. A staged Reef Sweep development capture from the actual game renderer. https://wavedash.com/games/reef-sweep #ReefSweep #GameDev",
+      "validation": {
+        "rawCharacters": 217,
+        "xWeightedCharacters": 203,
+        "method": "ASCII-only copy; URL spans counted as 23. No installed twitter-text validator found.",
+        "hashtags": 2
+      }
     }
   },
   "withheld": {
@@ -410,6 +632,10 @@
     },
     "horde-17-release-20261101": {
       "reason": "Testing progress is not evidence of a public 1.7 release or measured mobile performance improvement; no release post added."
+    },
+    "chrome-pack-historical-clip-20261122": {
+      "reviewedAt": "2026-11-22",
+      "reason": "No automatic post added from the inspected historical prototype footage: the terrain/tunnel angle overlaps recent launch material and the CTF terrain post recorded for 20 November. The actual renderer clip is a directed local bot session from 10 November, 40 seconds with capture pauses removed; it is not current-release, online-human-play or performance evidence. Promotional cover artwork is AI-generated and must not be described as gameplay."
     }
   }
 }
