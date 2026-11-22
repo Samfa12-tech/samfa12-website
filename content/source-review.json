@@ -126,7 +126,7 @@
           "identity": "The Last Guard 2: Hold the Wall by Samfa12 on Wavedash",
           "access": "read-public-source",
           "reviewedAt": "2026-11-22",
-          "notes": "Public listing and structured data confirm the free browser release and the WebGPU requirement. Sam confirmed the Build 2 scope, selectable siege size, standard-kit leaderboard conditions, and persistent Arsenal upgrades."
+          "notes": "Public listing and structured data confirm the free browser release and the WebGPU requirement. Sam confirmed the original Build 2 scope. After Build 4 went live, Sam approved the updated FAQ covering the three siege sizes, separate fastest-clear leaderboards, and Arsenal upgrades."
         }
       ]
     },
