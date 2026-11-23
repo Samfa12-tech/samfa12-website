@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-16T00:40:30.756Z",
+  "generatedAt": "2026-11-23T01:22:00.279Z",
   "totals": {
     "itch": {
-      "views": 6419,
-      "downloads": 207,
+      "views": 6658,
+      "downloads": 222,
       "purchases": 2
     },
     "steam": {
@@ -28,18 +28,18 @@
   "change": {
     "sincePreviousSnapshot": {
       "itch": {
-        "views": 258,
-        "downloads": 10,
+        "views": 239,
+        "downloads": 15,
         "purchases": 0
       },
       "steam": {
         "netUnits": 0
       },
       "googlePlay": {
-        "netPaidAppPurchases": 6
+        "netPaidAppPurchases": 0
       },
       "combined": {
-        "paidUnits": 6
+        "paidUnits": 0
       },
       "amazon": {
         "netUnits": 0
@@ -77,7 +77,7 @@
         "id": "4466459",
         "title": "Breakfast Beat",
         "url": "https://samfa12.itch.io/breakfast-beat",
-        "views": 122,
+        "views": 123,
         "downloads": 0,
         "purchases": 1
       },
@@ -85,7 +85,7 @@
         "id": "4484691",
         "title": "Bug Maze TD",
         "url": "https://samfa12.itch.io/bug-maze-td",
-        "views": 136,
+        "views": 140,
         "downloads": 0,
         "purchases": 0
       },
@@ -111,7 +111,7 @@
         "id": "4230275",
         "title": "Drink",
         "url": "https://samfa12.itch.io/drink",
-        "views": 949,
+        "views": 960,
         "downloads": 9,
         "purchases": 0
       },
@@ -119,7 +119,7 @@
         "id": "4616838",
         "title": "Dust on the River",
         "url": "https://samfa12.itch.io/dust-on-the-river",
-        "views": 265,
+        "views": 269,
         "downloads": 2,
         "purchases": 0
       },
@@ -144,7 +144,7 @@
         "id": "4469088",
         "title": "Hop Bunny",
         "url": "https://samfa12.itch.io/hop-bunny",
-        "views": 121,
+        "views": 123,
         "downloads": 4,
         "purchases": 1
       },
@@ -152,7 +152,7 @@
         "id": "4603629",
         "title": "Mandible Wars",
         "url": "https://samfa12.itch.io/mandible-wars",
-        "views": 182,
+        "views": 185,
         "downloads": 5,
         "purchases": 0
       },
@@ -160,7 +160,7 @@
         "id": "4636769",
         "title": "Moon Mower",
         "url": "https://samfa12.itch.io/moon-mower",
-        "views": 146,
+        "views": 148,
         "downloads": 2,
         "purchases": 0
       },
@@ -168,7 +168,7 @@
         "id": "4497195",
         "title": "Night Shift at Possum's Cafe",
         "url": "https://samfa12.itch.io/possum-cafe",
-        "views": 486,
+        "views": 498,
         "downloads": 6,
         "purchases": 0
       },
@@ -176,7 +176,7 @@
         "id": "4638406",
         "title": "P.A.R.T.Y. Bus: Wasteland Run",
         "url": "https://samfa12.itch.io/party-bus",
-        "views": 121,
+        "views": 125,
         "downloads": 4,
         "purchases": 0
       },
@@ -184,7 +184,7 @@
         "id": "4632588",
         "title": "Pocket Ant Farm",
         "url": "https://samfa12.itch.io/ant-farm",
-        "views": 202,
+        "views": 217,
         "downloads": 0,
         "purchases": 0
       },
@@ -192,7 +192,7 @@
         "id": "4477883",
         "title": "Pocket Chordsmith Godot addon",
         "url": "https://samfa12.itch.io/pocket-chordsmith",
-        "views": 625,
+        "views": 632,
         "downloads": 27,
         "purchases": 0
       },
@@ -200,7 +200,7 @@
         "id": "4657904",
         "title": "Pocket DAW",
         "url": "https://samfa12.itch.io/pocket-daw",
-        "views": 292,
+        "views": 306,
         "downloads": 29,
         "purchases": 0
       },
@@ -216,7 +216,7 @@
         "id": "4617627",
         "title": "Pocket Fish Tank",
         "url": "https://samfa12.itch.io/fish-tank",
-        "views": 224,
+        "views": 236,
         "downloads": 9,
         "purchases": 0
       },
@@ -232,7 +232,7 @@
         "id": "4503097",
         "title": "Reckless Dentist",
         "url": "https://samfa12.itch.io/reckless-dentist",
-        "views": 218,
+        "views": 223,
         "downloads": 8,
         "purchases": 0
       },
@@ -240,7 +240,7 @@
         "id": "4463386",
         "title": "Ship Blockade",
         "url": "https://samfa12.itch.io/ship-blockade",
-        "views": 126,
+        "views": 128,
         "downloads": 0,
         "purchases": 0
       },
@@ -256,7 +256,7 @@
         "id": "4509981",
         "title": "Spin Vector",
         "url": "https://samfa12.itch.io/spin-vector",
-        "views": 308,
+        "views": 314,
         "downloads": 0,
         "purchases": 0
       },
@@ -264,15 +264,15 @@
         "id": "4779911",
         "title": "The Horde — Ray Tracing Tech Demo",
         "url": "https://samfa12.itch.io/the-horde",
-        "views": 628,
-        "downloads": 91,
+        "views": 678,
+        "downloads": 106,
         "purchases": 0
       },
       {
         "id": "4776930",
         "title": "The Last Guard",
         "url": "https://samfa12.itch.io/the-last-guard",
-        "views": 522,
+        "views": 579,
         "downloads": 0,
         "purchases": 0
       },
@@ -298,7 +298,7 @@
         "id": "5147541",
         "title": "Towtal Chaos",
         "url": "https://samfa12.itch.io/towtal-chaos",
-        "views": 102,
+        "views": 126,
         "downloads": 0,
         "purchases": 0
       },
@@ -306,7 +306,7 @@
         "id": "4567222",
         "title": "Wonky Vehicle Lab",
         "url": "https://samfa12.itch.io/wonky-vehicle-lab",
-        "views": 215,
+        "views": 219,
         "downloads": 0,
         "purchases": 0
       }
