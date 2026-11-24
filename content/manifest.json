@@ -118,10 +118,11 @@
       "action": "create",
       "officialSources": [
         "https://samfa12.com/apps/what-would-win/",
-        "https://github.com/Samfa12-tech/What-Would-Win"
+        "https://github.com/Samfa12-tech/What-Would-Win",
+        "https://www.spawn.co/mods/what-would-win"
       ],
       "notes": "Cross-listed in Games but one entity and one marketing page. Leave the generated app, manifest, service worker, legal notices, assets and share URLs unchanged. Explain simulation assumptions, not scientific predictive accuracy.",
-      "pageModified": "2026-11-20"
+      "pageModified": "2026-11-24"
     },
     {
       "id": "app-pocket-chordsmith",
@@ -133,10 +134,11 @@
         "https://samfa12.itch.io/pocket-chordsmith",
         "https://github.com/Samfa12-tech/Pocket-Chordsmith",
         "https://samfa12.com/apps/pocket-chordsmith/",
-        "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn"
+        "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn",
+        "https://www.spawn.co/mods/pocket-chordsmith"
       ],
       "notes": "Separate marketing page outside protected release-copy directory. Verify actual export formats, browser behaviour and licensing.",
-      "pageModified": "2026-11-14"
+      "pageModified": "2026-11-24"
     },
     {
       "id": "asset-pocket-chordsmith-godot",

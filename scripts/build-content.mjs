@@ -117,7 +117,10 @@ function productPage(plan, project, content) {
   const image = content.heroScreenshot?.src || `/${project.thumbnail}`;
   const actions = (project.links || []).map((l) => link(l.label, l.url, "project-link"+(l===project.links[0]?" project-link-primary":""))).join(" ");
   const audioPreview = content.audioPreview ? `<section class="product-prose" data-theme-player><h2>${html(content.audioPreview.title)}</h2><audio id="product-theme-audio" controls preload="none" aria-label="${html(content.audioPreview.title)}" src="${html(safeUrl(content.audioPreview.src))}"><a href="${html(safeUrl(content.audioPreview.src))}">Listen to the island theme</a></audio><div hidden data-theme-controls><div class="product-actions"><button type="button" class="project-link" data-theme-toggle aria-controls="product-theme-audio" aria-pressed="false">${html(content.audioPreview.title)}</button></div></div><p data-theme-status role="status" aria-live="polite"></p><script src="/assets/reef-sweep-theme-player.js" defer></script></section>` : "";
-  const prose = (item) => `<section class="product-prose"><h2>${html(item.heading)}</h2><p>${html(item.text)}</p></section>`;
+  const prose = (item) => {
+    const actions = (item.links || []).map(({ label, url }) => link(label, url)).join(" ");
+    return `<section class="product-prose"><h2>${html(item.heading)}</h2><p>${html(item.text)}</p>${actions ? `<div class="product-actions">${actions}</div>` : ""}</section>`;
+  };
   const details = (content.details || []).filter((item)=>item.kind!=="planned").map(prose).join("\n");
   const planned = (content.details || []).filter((item)=>item.kind==="planned").map(prose).join("\n");
   const secondary = content.secondaryInfo ? `<section class="section section-tight"><div class="container product-narrow"><details><summary>Detailed demo features and controls</summary>${(content.technicalDetails || []).map((item)=>`<section class="product-prose"><h3>${html(item.heading)}</h3><p>${html(item.text)}</p></section>`).join("")}</details><details><summary>Music from Lantern Bay</summary>${audioPreview}</details></div></section>` : "";

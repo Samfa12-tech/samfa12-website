@@ -228,6 +228,18 @@
           "url": "https://samfa12.com/apps/what-would-win/",
           "identity": "samfa12.com /apps/what-would-win/",
           "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://www.spawn.co/mods/what-would-win",
+          "identity": "What Would Win mod by Samfa12 on Spawn",
+          "access": "read-public-source",
+          "reviewedAt": "2026-11-24",
+          "notes": "The public listing identifies the roster and battle engine as a mod for games on Spawn."
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/samfa12-s-what-would-win-creature-battle-simulator?c=tseah",
+          "identity": "Playable What Would Win visualiser on Spawn",
+          "access": "read-public-source"
         }
       ]
     },
@@ -260,6 +272,13 @@
           "identity": "Pocket Chordsmith Spawn edition; separate social music-making game",
           "access": "read-public-source-and-owner-authorized-source-review",
           "notes": "Public Spawn listing checked 2026-11-14 confirms the shared music studio, song sharing, fanbase and bedroom setting. Authorized source review identifies village commissions and gigs. Multiplayer feel and parity with the standalone sketchpad were not verified; no claim of shared saves or export compatibility. Public Chordsmith Import release (spec 254, commit c2d5c54b283a0f285b5f0370d6209106361b8d57) verified 2026-11-14. Source and fixture checks support PCS1/project JSON import for A/B/C only, skipping unsupported sections; no lossless whole-song or all-eight-section compatibility claim."
+        },
+        {
+          "url": "https://www.spawn.co/mods/pocket-chordsmith",
+          "identity": "Pocket Chordsmith mod by Samfa12 on Spawn",
+          "access": "read-public-source",
+          "reviewedAt": "2026-11-24",
+          "notes": "The public listing identifies the composer and shared room playback. Sam confirmed PCS1 share-code import for the mod."
         }
       ]
     },
