@@ -515,6 +515,24 @@
         "sources": [
           "https://github.com/Samfa12-tech/What-Would-Win"
         ]
+      },
+      {
+        "heading": "Build with What Would Win on Spawn",
+        "text": "I’ve made the full What Would Win roster and battle engine available as a mod. You can reuse them in your own Spawn games. To watch matchups play out, open the playable Spawn visualiser.",
+        "links": [
+          {
+            "label": "Get the What Would Win mod",
+            "url": "https://www.spawn.co/mods/what-would-win"
+          },
+          {
+            "label": "Play the Spawn visualiser",
+            "url": "https://www.spawn.co/@samfa12/samfa12-s-what-would-win-creature-battle-simulator?c=tseah"
+          }
+        ],
+        "sources": [
+          "https://www.spawn.co/mods/what-would-win",
+          "https://www.spawn.co/@samfa12/samfa12-s-what-would-win-creature-battle-simulator?c=tseah"
+        ]
       }
     ],
     "faqs": [
@@ -594,6 +612,19 @@
         "text": "The Spawn edition can import a PCS1 share code or Pocket Chordsmith project JSON, taking supported sections A, B and C into its studio. Unsupported sections are skipped: this does not import all eight sections or promise a lossless copy of an entire song.",
         "sources": [
           "https://www.spawn.co/@samfa12/samfa12-s-pocket-chordsmith-make-music-in-spawn"
+        ]
+      },
+      {
+        "heading": "Add Pocket Chordsmith to your Spawn game",
+        "text": "The mod adds an in-game music studio and song composer. Import a PCS1 share code, then play your song for everyone in the room.",
+        "links": [
+          {
+            "label": "Get the Spawn mod",
+            "url": "https://www.spawn.co/mods/pocket-chordsmith"
+          }
+        ],
+        "sources": [
+          "https://www.spawn.co/mods/pocket-chordsmith"
         ]
       }
     ],
