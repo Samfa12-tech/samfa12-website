@@ -12,22 +12,30 @@
       },
       {
         "heading": "Work, ride and explore",
-        "text": "Take station jobs, move livestock, ride between Crossing and nearby stations, fish and pan for gold in the Android game. Play in your browser on Wavedash, or find the Android version on Google Play. The older itch.io browser build remains unfinished.",
+        "text": "Take station jobs, move livestock, ride between Crossing and nearby stations, fish and pan for gold in the Android game. Play in your browser on Wavedash, or find the Android version on Google Play. The older itch.io browser build remains unfinished. A separate remake is playable on Spawn.",
+        "links": [
+          {
+            "label": "Play the Spawn remake",
+            "url": "https://www.spawn.co/@samfa12/dust-on-the-river"
+          }
+        ],
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
           "https://samfa12.itch.io/dust-on-the-river",
-          "https://wavedash.com/games/dust-on-the-river"
+          "https://wavedash.com/games/dust-on-the-river",
+          "https://www.spawn.co/@samfa12/dust-on-the-river"
         ]
       }
     ],
     "faqs": [
       {
         "question": "Where can I play?",
-        "answer": "Play in your browser on Wavedash or find the Android version on Google Play. The older itch.io browser build remains unfinished.",
+        "answer": "Play in your browser on Wavedash or find the Android version on Google Play. The older itch.io browser build remains unfinished. A separate remake is playable on Spawn.",
         "sources": [
           "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
           "https://samfa12.itch.io/dust-on-the-river",
-          "https://wavedash.com/games/dust-on-the-river"
+          "https://wavedash.com/games/dust-on-the-river",
+          "https://www.spawn.co/@samfa12/dust-on-the-river"
         ]
       }
     ],
