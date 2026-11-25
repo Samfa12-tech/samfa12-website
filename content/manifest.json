@@ -11,10 +11,11 @@
       "action": "create",
       "officialSources": [
         "https://samfa12.itch.io/dust-on-the-river",
-        "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver"
+        "https://play.google.com/store/apps/details?id=com.samsmall.dustontheriver",
+        "https://www.spawn.co/@samfa12/dust-on-the-river"
       ],
       "notes": "Separate VideoGame entity from the book. Cross-link the adaptation; do not use the Amazon book as the game sameAs.",
-      "pageModified": "2026-11-11"
+      "pageModified": "2026-11-25"
     },
     {
       "id": "game-drink",

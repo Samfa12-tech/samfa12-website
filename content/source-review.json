@@ -22,6 +22,13 @@
           "access": "read-public-source",
           "reviewedAt": "2026-10-28",
           "notes": "HTTP 200 public listing identifies Dust on the River and offers browser play."
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/dust-on-the-river",
+          "identity": "Dust on the River remake by Samfa12 on Spawn",
+          "access": "read-public-source",
+          "reviewedAt": "2026-11-25",
+          "notes": "The clean and supplied share URLs returned HTTP 200 with the same title, canonical URL, description and cover. Sam confirmed the remake is live."
         }
       ],
       "engineReview": {
