@@ -1113,6 +1113,20 @@
     "intro": "Gremlin Grenade Pinball is a prototype that combines pinball with a gremlin horde. Keep a live grenade moving with the flippers, hit traps and stop gremlins advancing down the board. It's still in development.",
     "details": [
       {
+        "heading": "Play the Spawn version",
+        "text": "Play the Spawn version in your browser, or try the original prototype on itch.io.",
+        "links": [
+          {
+            "label": "Play on Spawn",
+            "url": "https://www.spawn.co/@samfa12/gremlin-grenade-pinball"
+          }
+        ],
+        "sources": [
+          "https://www.spawn.co/@samfa12/gremlin-grenade-pinball",
+          "https://samfa12.itch.io/gremlin-grenade-pinball"
+        ]
+      },
+      {
         "heading": "Prototype features and plans",
         "text": "Use the spring launcher, flippers, bumpers and trap targets against gremlins moving down the board. Five themed boards and further features are planned or in development; they are not all confirmed complete.",
         "sources": [

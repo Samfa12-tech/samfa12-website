@@ -493,6 +493,13 @@
           "url": "https://samfa12.itch.io/gremlin-grenade-pinball",
           "identity": "samfa12.itch.io /gremlin-grenade-pinball",
           "access": "partial-search-snippet"
+        },
+        {
+          "url": "https://www.spawn.co/@samfa12/gremlin-grenade-pinball",
+          "identity": "Gremlin Grenade Pinball by Samfa12 on Spawn",
+          "access": "read-public-source",
+          "reviewedAt": "2026-11-27",
+          "notes": "The public listing returned HTTP 200 and identifies Gremlin Grenade Pinball. Sam confirmed the Spawn version is live. Gameplay and feature parity with the itch.io prototype were not checked."
         }
       ],
       "engineReview": {

@@ -264,10 +264,11 @@
       "path": "/games/gremlin-grenade-pinball/",
       "action": "create",
       "officialSources": [
-        "https://samfa12.itch.io/gremlin-grenade-pinball"
+        "https://samfa12.itch.io/gremlin-grenade-pinball",
+        "https://www.spawn.co/@samfa12/gremlin-grenade-pinball"
       ],
       "notes": "",
-      "pageModified": "2026-11-11"
+      "pageModified": "2026-11-27"
     },
     {
       "id": "game-wonky-vehicle-lab",
