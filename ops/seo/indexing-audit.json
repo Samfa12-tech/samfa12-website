@@ -8,7 +8,7 @@
     "explicitlyExcluded": 6,
     "routesWithFindings": 0,
     "siteFindings": 0,
-    "oneContextualIncoming": 6,
+    "oneContextualIncoming": 5,
     "relationshipEdges": 83
   },
   "excluded": [
@@ -2601,10 +2601,12 @@
       ],
       "inSitemap": true,
       "incoming": [
-        "/games/"
+        "/games/",
+        "/updates/"
       ],
       "incomingMain": [
-        "/games/"
+        "/games/",
+        "/updates/"
       ],
       "localAssetCount": 9,
       "jsonLdStatus": "parsed",
@@ -2616,9 +2618,7 @@
         "BreadcrumbList"
       ],
       "findings": [],
-      "advisories": [
-        "one contextual incoming page; review only when a genuine relationship exists"
-      ]
+      "advisories": []
     },
     {
       "route": "/games/the-last-guard/",

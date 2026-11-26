@@ -41,6 +41,18 @@
     ],
     "updates": [
       {
+        "id": "dust-on-the-river-spawn-remake-november-2026",
+        "kind": "release",
+        "date": "2026-11-25",
+        "dateMeaning": "Spawn public listing release date",
+        "title": "The Dust on the River remake is live on Spawn",
+        "summary": "Step off the train at Crossing under a borrowed name and take on stock work as an old debt catches up with you. The Spawn remake is a separate browser edition from the existing Android and Wavedash releases.",
+        "platform": "Spawn browser remake",
+        "sources": [
+          "https://www.spawn.co/@samfa12/dust-on-the-river"
+        ]
+      },
+      {
         "id": "android-crossing-polish-september-2026",
         "kind": "listing",
         "date": "2026-09-08",
@@ -310,7 +322,21 @@
     ],
     "relatedLabels": {
       "game-the-last-guard": "Play the original The Last Guard"
-    }
+    },
+    "updates": [
+      {
+        "id": "the-last-guard-2-wavedash-launch-november-2026",
+        "kind": "release",
+        "date": "2026-11-22",
+        "dateMeaning": "Wavedash public listing release date",
+        "title": "Hold the Wall comes to Wavedash",
+        "summary": "The single-player sequel is free to play in a WebGPU-capable browser. Defend the wall with a mounted gun, spend salvage on upgrades and face the War Troll in the final wave alongside 40,000 orcs.",
+        "platform": "Wavedash WebGPU browser game",
+        "sources": [
+          "https://wavedash.com/games/the-last-guard-2-hold-the-wall"
+        ]
+      }
+    ]
   },
   "game-the-horde": {
     "intro": "The Horde 1.7 is a short native Vulkan hardware-ray-tracing action showcase for Windows and compatible Android phones. Carry a torch and lantern through a gothic ruin, confront its skeletons and Lich, and follow Kit into a denser forest toward Bellwether.",
@@ -2064,6 +2090,18 @@
       }
     ],
     "updates": [
+      {
+        "id": "reef-sweep-title-first-frame-november-2026",
+        "kind": "release",
+        "date": "2026-11-26",
+        "dateMeaning": "Verified Wavedash publication observation date (UTC)",
+        "title": "The island title screen is ready sooner",
+        "summary": "The title screen still shows the live 3D island. Once the island has rendered and the menu can take input, the splash clears without waiting out a fixed timer. The island itself is unchanged.",
+        "platform": "Wavedash browser game",
+        "sources": [
+          "https://wavedash.com/games/reef-sweep"
+        ]
+      },
       {
         "id": "reef-sweep-first-dive-home-guidance-november-2026",
         "kind": "release",
