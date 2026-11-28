@@ -115,14 +115,27 @@
       },
       {
         "question": "What platforms are available?",
-        "answer": "Play in a browser or download for Windows on itch.io. The Android game is on Google Play, and the mobile and Steam versions include controller support. Check the relevant store for the version you're choosing.",
+        "answer": "Play in your browser on Wavedash or itch.io. The Windows download is available on itch.io. The Android game is on Google Play, and the mobile and Steam versions include controller support. Check the relevant store for the version you're choosing.",
         "sources": [
           "https://samfa12.itch.io/drink",
-          "https://play.google.com/store/apps/details?id=com.samsmall.drink"
+          "https://play.google.com/store/apps/details?id=com.samsmall.drink",
+          "https://wavedash.com/games/drink"
         ]
       }
     ],
     "updates": [
+      {
+        "id": "drink-wavedash-release-november-2026",
+        "kind": "release",
+        "date": "2026-11-28",
+        "dateMeaning": "Wavedash listing release date",
+        "title": "Drink launches on Wavedash",
+        "summary": "Drink is now available to play in your browser on Wavedash.",
+        "platform": "HTML5 browser on Wavedash",
+        "sources": [
+          "https://wavedash.com/games/drink"
+        ]
+      },
       {
         "id": "android-sdk-update-july-2026",
         "kind": "listing",

@@ -62,7 +62,7 @@
     "category": "Games",
     "type": "Game",
     "status": "Published",
-    "description": "A top-down pixel-art game set before the novel Sober, available on Steam and Google Play.",
+    "description": "A top-down pixel-art game set before the novel Sober. Play in your browser on itch.io or Wavedash, or find Drink on Steam and Google Play.",
     "tags": [
       "Game",
       "Top-down",
@@ -79,6 +79,10 @@
       {
         "label": "Play on itch.io",
         "url": "https://samfa12.itch.io/drink"
+      },
+      {
+        "label": "Play on Wavedash",
+        "url": "https://wavedash.com/games/drink"
       },
       {
         "label": "View on Steam",
