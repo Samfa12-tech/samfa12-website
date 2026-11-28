@@ -257,9 +257,9 @@ test("local Play actions and declared browser games keep the Browser filter", ()
   ] }), ["Browser"]);
 });
 
-test("storefront labels remain unchanged for native games", () => {
+test("Drink lists all four storefronts and an itch-only game retains its label", () => {
   const drink = catalogue.find((project) => project.id === "game-drink");
-  assert.deepEqual(gameLabels(drink), ["itch.io", "Google Play", "Steam"]);
+  assert.deepEqual(gameLabels(drink), ["itch.io", "Google Play", "Steam", "Wavedash"]);
   assert.deepEqual(gameLabels({ type: "Game", links: [
     { label: "Play on itch.io", url: "https://samfa12.itch.io/example" },
   ] }), ["itch.io"]);

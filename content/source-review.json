@@ -60,6 +60,11 @@
           "url": "https://store.steampowered.com/app/4419290/Drink/",
           "identity": "store.steampowered.com /app/4419290/Drink/",
           "access": "catalogue-destination-not-used-for-claims"
+        },
+        {
+          "url": "https://wavedash.com/games/drink",
+          "identity": "wavedash.com /games/drink",
+          "access": "read-public-source"
         }
       ],
       "engineReview": {
